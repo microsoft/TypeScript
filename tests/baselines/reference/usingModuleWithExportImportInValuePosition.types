@@ -55,7 +55,7 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : any
->a : any
->B : any
+>C : any (error)
+>a : any (error)
+>B : any (error)
 

@@ -60,11 +60,11 @@ var v = new V();
 >V : typeof V
 
 var A;
->A : any
+>A : any (auto)
 
 A = function () {
 >A = function () {    this.a = 'assignment'} : typeof A
->A : any
+>A : any (auto)
 >function () {    this.a = 'assignment'} : typeof A
 
     this.a = 'assignment'

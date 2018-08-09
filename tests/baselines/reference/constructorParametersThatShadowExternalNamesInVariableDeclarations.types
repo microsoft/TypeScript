@@ -7,8 +7,8 @@ class A {
 >A : A
 
     private a = x;
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     constructor(x: number) {
 >x : number
@@ -19,8 +19,8 @@ class B {
 >B : B
 
     private a = x;
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     constructor() {
         var x = "";

@@ -1,7 +1,7 @@
 === /src/projects/file1.ts ===
 import d = require("d.json"); // Should fail
->d : any
+>d : any (error)
 
 import e = require("e"); // Should fail
->e : any
+>e : any (error)
 

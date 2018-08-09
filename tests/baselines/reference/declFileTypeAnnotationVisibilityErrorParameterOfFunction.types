@@ -66,7 +66,7 @@ module m {
     function foo111(param: m2.public2) {
 >foo111 : (param: m2.public2) => void
 >param : m2.public2
->m2 : any
+>m2 : any (error)
     }
     function foo112(param = new m2.public2()) {
 >foo112 : (param?: m2.public2) => void
@@ -80,7 +80,7 @@ module m {
     export function foo113(param: m2.public2) {
 >foo113 : (param: m2.public2) => void
 >param : m2.public2
->m2 : any
+>m2 : any (error)
     }
     export function foo114(param = new m2.public2()) {
 >foo114 : (param?: m2.public2) => void

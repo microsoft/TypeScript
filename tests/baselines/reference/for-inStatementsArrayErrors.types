@@ -28,10 +28,10 @@ for (let x in a) {
 >1 : 1
     }
     let a3 = x.unknownProperty;
->a3 : any
->x.unknownProperty : any
+>a3 : any (error)
+>x.unknownProperty : any (error)
 >x : string
->unknownProperty : any
+>unknownProperty : any (error)
 }
 
 var i: number;

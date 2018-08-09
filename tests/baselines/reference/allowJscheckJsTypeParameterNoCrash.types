@@ -43,7 +43,7 @@ export var a = vextend({
 
     },
     data2(val) { },
->data2 : any
+>data2 : any (error)
 >val : any
   }
 });

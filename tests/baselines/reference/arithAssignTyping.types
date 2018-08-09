@@ -4,61 +4,61 @@ class f { }
 
 f += ''; // error
 >f += '' : string
->f : any
+>f : any (error)
 >'' : ""
 
 f += 1; // error
->f += 1 : any
->f : any
+>f += 1 : any (error)
+>f : any (error)
 >1 : 1
 
 f -= 1; // error
 >f -= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f *= 1; // error
 >f *= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f /= 1; // error
 >f /= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f %= 1; // error
 >f %= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f &= 1; // error
 >f &= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f |= 1; // error
 >f |= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f <<= 1; // error
 >f <<= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f >>= 1; // error
 >f >>= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f >>>= 1; // error
 >f >>>= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 
 f ^= 1; // error
 >f ^= 1 : number
->f : any
+>f : any (error)
 >1 : 1
 

@@ -1,9 +1,9 @@
 === /a/b/c/lib.ts ===
 import {x} from "foo";
->x : any
+>x : any (error)
 
 
 === /a/b/c/d/e/app.ts ===
 import {x} from "foo";
->x : any
+>x : any (error)
 

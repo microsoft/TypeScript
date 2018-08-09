@@ -91,7 +91,7 @@ function foo() {
 >foo : () => 50 | 100
 
     l0:
->l0 : any
+>l0 : any (error)
 
     for (let a of []) {
 >a : any
@@ -111,7 +111,7 @@ function foo() {
 >2 : 2
 
             break l0;
->l0 : any
+>l0 : any (error)
         }
         
         for (let b of []) {
@@ -120,7 +120,7 @@ function foo() {
 
             var [{x, y:z}] = [{x:1, y:2}];
 >x : number
->y : any
+>y : any (error)
 >z : number
 >[{x:1, y:2}] : [{ x: number; y: number; }]
 >{x:1, y:2} : { x: number; y: number; }
@@ -144,11 +144,11 @@ function foo() {
 >2 : 2
 
                 break l0;
->l0 : any
+>l0 : any (error)
             }
             
             l1:
->l1 : any
+>l1 : any (error)
 
             if (b === 3) {
 >b === 3 : boolean
@@ -156,7 +156,7 @@ function foo() {
 >3 : 3
 
                 break l1;
->l1 : any
+>l1 : any (error)
             }
             
             return 50;
@@ -169,7 +169,7 @@ function foo() {
 
             var [{x1, y:z1}] = [{x1:1, y:arguments.length}];
 >x1 : number
->y : any
+>y : any (error)
 >z1 : number
 >[{x1:1, y:arguments.length}] : [{ x1: number; y: number; }]
 >{x1:1, y:arguments.length} : { x1: number; y: number; }
@@ -194,7 +194,7 @@ function foo() {
 >2 : 2
 
                 break l0;
->l0 : any
+>l0 : any (error)
             }
             
             () => b

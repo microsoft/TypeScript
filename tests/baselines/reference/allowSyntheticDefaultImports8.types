@@ -7,18 +7,18 @@ export function bar();
 
 === tests/cases/compiler/a.ts ===
 import { default as Foo } from "./b";
->default : any
->Foo : any
+>default : any (error)
+>Foo : any (error)
 
 Foo.bar();
->Foo.bar() : any
->Foo.bar : any
->Foo : any
->bar : any
+>Foo.bar() : any (error)
+>Foo.bar : any (error)
+>Foo : any (error)
+>bar : any (error)
 
 Foo.foo();
->Foo.foo() : any
->Foo.foo : any
->Foo : any
->foo : any
+>Foo.foo() : any (error)
+>Foo.foo : any (error)
+>Foo : any (error)
+>foo : any (error)
 

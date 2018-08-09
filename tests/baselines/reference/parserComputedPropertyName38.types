@@ -4,5 +4,5 @@ class C {
 
     [public]() { }
 >[public] : () => void
->public : any
+>public : any (error)
 }

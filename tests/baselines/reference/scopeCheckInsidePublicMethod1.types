@@ -10,7 +10,7 @@ class C {
 
       s = 1; // ERR
 >s = 1 : 1
->s : any
+>s : any (error)
 >1 : 1
    }
 }

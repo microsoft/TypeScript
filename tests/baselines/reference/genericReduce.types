@@ -47,9 +47,9 @@ var n2 = b.reduceRight((x, y) => x + y);
 
 n1.x = "fail";       // should error, as 'n1' should be type 'number', not 'any'.
 >n1.x = "fail" : "fail"
->n1.x : any
+>n1.x : any (error)
 >n1 : number
->x : any
+>x : any (error)
 >"fail" : "fail"
 
 n1.toExponential(2); // should not error if 'n1' is correctly number.
@@ -61,9 +61,9 @@ n1.toExponential(2); // should not error if 'n1' is correctly number.
 
 n2.x = "fail";       // should error, as 'n2' should be type 'number', not 'any'.
 >n2.x = "fail" : "fail"
->n2.x : any
+>n2.x : any (error)
 >n2 : number
->x : any
+>x : any (error)
 >"fail" : "fail"
 
 n2.toExponential(2); // should not error if 'n2' is correctly number.
@@ -88,10 +88,10 @@ var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type str
 >"" : ""
 
 n3.toExponential(2); // should error if 'n3' is correctly type 'string'
->n3.toExponential(2) : any
->n3.toExponential : any
+>n3.toExponential(2) : any (error)
+>n3.toExponential : any (error)
 >n3 : string
->toExponential : any
+>toExponential : any (error)
 >2 : 2
 
 n3.charAt(0);        // should not error if 'n3' is correctly type 'string'

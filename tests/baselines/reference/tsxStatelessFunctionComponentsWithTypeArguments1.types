@@ -7,7 +7,7 @@ declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.El
 >l : { key1: K; value: V; }
 >key1 : K
 >value : V
->JSX : any
+>JSX : any (error)
 
 // OK
 function Baz<T,U>(key1: T, value: U) {
@@ -40,7 +40,7 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
->JSX : any
+>JSX : any (error)
 
 // OK
 function createLink(func: (a: number)=>void) {
@@ -81,7 +81,7 @@ interface InferParamProp<T> {
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
 >attr : InferParamProp<T>
->JSX : any
+>JSX : any (error)
 
 // OK
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;

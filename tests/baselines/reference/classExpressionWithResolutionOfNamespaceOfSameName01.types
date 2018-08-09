@@ -11,5 +11,5 @@ var x = class C {
 
     prop: C.type;
 >prop : C.type
->C : any
+>C : any (error)
 }

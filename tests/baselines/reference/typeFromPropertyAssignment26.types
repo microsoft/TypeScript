@@ -39,17 +39,17 @@ class C extends UI.TreeElement {
 >onpopulate : () => void
 
         this.doesNotExist
->this.doesNotExist : any
+>this.doesNotExist : any (error)
 >this : this
->doesNotExist : any
+>doesNotExist : any (error)
 
         this.treeOutline.doesntExistEither()
->this.treeOutline.doesntExistEither() : any
->this.treeOutline.doesntExistEither : any
+>this.treeOutline.doesntExistEither() : any (error)
+>this.treeOutline.doesntExistEither : any (error)
 >this.treeOutline : number
 >this : this
 >treeOutline : number
->doesntExistEither : any
+>doesntExistEither : any (error)
     }
 };
 

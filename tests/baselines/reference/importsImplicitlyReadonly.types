@@ -15,26 +15,26 @@ const a3 = a1;
 
 x = 1;     // Error
 >x = 1 : 1
->x : any
+>x : any (error)
 >1 : 1
 
 y = 1;     // Error
 >y = 1 : 1
->y : any
+>y : any (error)
 >1 : 1
 
 a1.x = 1;  // Error
 >a1.x = 1 : 1
->a1.x : any
+>a1.x : any (error)
 >a1 : typeof a1
->x : any
+>x : any (error)
 >1 : 1
 
 a1.y = 1;  // Error
 >a1.y = 1 : 1
->a1.y : any
+>a1.y : any (error)
 >a1 : typeof a1
->y : any
+>y : any (error)
 >1 : 1
 
 a2.x = 1;

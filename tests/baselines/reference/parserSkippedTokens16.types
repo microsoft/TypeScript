@@ -1,16 +1,16 @@
 === tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts ===
 foo(): Bar { }
->foo() : any
->foo : any
->Bar : any
+>foo() : any (error)
+>foo : any (error)
+>Bar : any (error)
 
 function Foo      () #   { }
 >Foo : () => any
 
 4+:5
->4+ : any
+>4+ : any (error)
 >4 : 4
-> : any
+> : any (error)
 >5 : 5
 
 module M {
@@ -23,6 +23,6 @@ function a(
 >T : any
 }
 var x       =
->x : any
-> : any
+>x : any (error)
+> : any (error)
 

@@ -1,17 +1,17 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts ===
 type typeAlias1 = typeof varOfAliasedType1;
->typeAlias1 : any
->varOfAliasedType1 : any
+>typeAlias1 : any (error)
+>varOfAliasedType1 : any (error)
 
 var varOfAliasedType1: typeAlias1;
->varOfAliasedType1 : any
+>varOfAliasedType1 : any (error)
 
 var varOfAliasedType2: typeAlias2;
->varOfAliasedType2 : any
+>varOfAliasedType2 : any (error)
 
 type typeAlias2 = typeof varOfAliasedType2;
->typeAlias2 : any
->varOfAliasedType2 : any
+>typeAlias2 : any (error)
+>varOfAliasedType2 : any (error)
 
 function func(): typeAlias3 { return null; }
 >func : () => any
@@ -23,7 +23,7 @@ var varOfAliasedType3 = func();
 >func : () => any
 
 type typeAlias3 = typeof varOfAliasedType3;
->typeAlias3 : any
+>typeAlias3 : any (error)
 >varOfAliasedType3 : any
 
 // Repro from #26104
@@ -37,7 +37,7 @@ interface Input {
 }
 
 type R = ReturnType<typeof mul>;
->R : any
+>R : any (error)
 >mul : (input: Input) => any
 
 function mul(input: Input): R {
@@ -57,7 +57,7 @@ function mul(input: Input): R {
 // Repro from #26104
 
 type R2 = ReturnType<typeof f>;
->R2 : any
+>R2 : any (error)
 >f : () => any
 
 function f(): R2 { return 0; }

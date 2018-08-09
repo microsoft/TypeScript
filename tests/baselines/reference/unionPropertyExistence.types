@@ -48,15 +48,15 @@ declare const bFoo: B | "foo";
 >bFoo : B | "foo"
 
 x.nope();
->x.nope() : any
->x.nope : any
+>x.nope() : any (error)
+>x.nope : any (error)
 >x : "foo" | "bar"
->nope : any
+>nope : any (error)
 
 bFoo.onlyInB;
->bFoo.onlyInB : any
+>bFoo.onlyInB : any (error)
 >bFoo : B | "foo"
->onlyInB : any
+>onlyInB : any (error)
 
 x.length; // Ok
 >x.length : number
@@ -64,14 +64,14 @@ x.length; // Ok
 >length : number
 
 bFoo.length;
->bFoo.length : any
+>bFoo.length : any (error)
 >bFoo : B | "foo"
->length : any
+>length : any (error)
 
 ab.onlyInB;
->ab.onlyInB : any
+>ab.onlyInB : any (error)
 >ab : AB
->onlyInB : any
+>onlyInB : any (error)
 
 ab.notInC; // Ok
 >ab.notInC : string
@@ -79,19 +79,19 @@ ab.notInC; // Ok
 >notInC : string
 
 abc.notInC;
->abc.notInC : any
+>abc.notInC : any (error)
 >abc : ABC
->notInC : any
+>notInC : any (error)
 
 ab.notInB;
->ab.notInB : any
+>ab.notInB : any (error)
 >ab : AB
->notInB : any
+>notInB : any (error)
 
 abc.notInB;
->abc.notInB : any
+>abc.notInB : any (error)
 >abc : ABC
->notInB : any
+>notInB : any (error)
 
 abc.inAll; // Ok
 >abc.inAll : string | number | boolean
@@ -99,7 +99,7 @@ abc.inAll; // Ok
 >inAll : string | number | boolean
 
 abc.inNone;
->abc.inNone : any
+>abc.inNone : any (error)
 >abc : ABC
->inNone : any
+>inNone : any (error)
 

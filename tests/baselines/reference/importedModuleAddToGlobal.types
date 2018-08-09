@@ -15,8 +15,8 @@ module B {
 >B : typeof B
 
     import a = A;
->a : any
->A : any
+>a : any (error)
+>A : any (error)
 
     export class B { }
 >B : B
@@ -26,11 +26,11 @@ module C {
 >C : typeof C
 
     import a = A;
->a : any
->A : any
+>a : any (error)
+>A : any (error)
 
     function hello(): b.B { return null; }
->hello : () => any
->b : any
+>hello : () => any (error)
+>b : any (error)
 >null : null
 }

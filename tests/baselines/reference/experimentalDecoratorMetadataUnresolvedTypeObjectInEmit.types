@@ -12,12 +12,12 @@ class Foo {
 >Foo : Foo
 
     f(@decorate user: A.B.C.D.E): void {}
->f : (user: any) => void
->decorate : any
->user : any
->A : any
->B : any
->C : any
->D : any
+>f : (user: any (error)) => void
+>decorate : any (error)
+>user : any (error)
+>A : any (error)
+>B : any (error)
+>C : any (error)
+>D : any (error)
 }
 

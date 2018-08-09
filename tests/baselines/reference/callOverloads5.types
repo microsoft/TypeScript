@@ -1,9 +1,9 @@
 === tests/cases/compiler/callOverloads5.ts ===
 function Foo():Foo; // error
->Foo : { (): any; (s: string): any; }
+>Foo : { (): any (error); (s: string): any (error); }
 
 function Foo(s:string):Foo; // error
->Foo : { (): any; (s: string): any; }
+>Foo : { (): any (error); (s: string): any (error); }
 >s : string
 
 class Foo { // error
@@ -32,7 +32,7 @@ class Foo { // error
 var f1 = new Foo("hey");
 >f1 : any
 >new Foo("hey") : any
->Foo : { (): any; (s: string): any; }
+>Foo : { (): any (error); (s: string): any (error); }
 >"hey" : "hey"
 
 
@@ -44,11 +44,11 @@ f1.bar1("a");
 >"a" : "a"
 
 Foo();
->Foo() : any
->Foo : { (): any; (s: string): any; }
+>Foo() : any (error)
+>Foo : { (): any (error); (s: string): any (error); }
 
 Foo("s");
->Foo("s") : any
->Foo : { (): any; (s: string): any; }
+>Foo("s") : any (error)
+>Foo : { (): any (error); (s: string): any (error); }
 >"s" : "s"
 

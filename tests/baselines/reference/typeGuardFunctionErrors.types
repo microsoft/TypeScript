@@ -30,7 +30,7 @@ function hasANonBooleanReturnStatement(x): x is A {
 }
 
 function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
->hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is any
+>hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is any (error)
 >x : any
 >is : any
 >A : typeof A
@@ -40,7 +40,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 }
 
 function hasMissingIsKeyword(): x {
->hasMissingIsKeyword : () => any
+>hasMissingIsKeyword : () => any (error)
 
     return true;
 >true : true
@@ -123,9 +123,9 @@ if (isB(b)) {
 >b : B
 
     a.propB;
->a.propB : any
+>a.propB : any (error)
 >a : A
->propB : any
+>propB : any (error)
 }
 
 // Parameter index and argument index for the type guard target is not matching.
@@ -136,9 +136,9 @@ if (funA(0, a)) {
 >a : A
 
     a.propB; // Error
->a.propB : any
+>a.propB : any (error)
 >a : A
->propB : any
+>propB : any (error)
 }
 
 // No type guard in if statement
@@ -148,9 +148,9 @@ if (hasNoTypeGuard(a)) {
 >a : A
 
     a.propB;
->a.propB : any
+>a.propB : any (error)
 >a : A
->propB : any
+>propB : any (error)
 }
 
 // Type predicate type is not assignable
@@ -221,13 +221,13 @@ assign3 = function(p1, p2, p3): p1 is A {
 
 // Type predicates in non-return type positions
 var b1: b is A;
->b1 : any
+>b1 : any (error)
 >is : any
 >A : any
 
 function b2(a: b is A) {};
->b2 : (a: any, is: any, A: any) => void
->a : any
+>b2 : (a: any (error), is: any, A: any) => void
+>a : any (error)
 >is : any
 >A : any
 
@@ -317,7 +317,7 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 >b7 : ({ a, b, c: { p1 } }: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
 >a : any
 >b : any
->c : any
+>c : any (error)
 >p1 : any
 >p2 : any
 >p3 : any

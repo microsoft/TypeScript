@@ -6,86 +6,86 @@ import m = require('constDeclarations_access_1');
 // Errors
 m.x = 1;
 >m.x = 1 : 1
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >1 : 1
 
 m.x += 2;
->m.x += 2 : any
->m.x : any
+>m.x += 2 : any (error)
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >2 : 2
 
 m.x -= 3;
 >m.x -= 3 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >3 : 3
 
 m.x *= 4;
 >m.x *= 4 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >4 : 4
 
 m.x /= 5;
 >m.x /= 5 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >5 : 5
 
 m.x %= 6;
 >m.x %= 6 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >6 : 6
 
 m.x <<= 7;
 >m.x <<= 7 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >7 : 7
 
 m.x >>= 8;
 >m.x >>= 8 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >8 : 8
 
 m.x >>>= 9;
 >m.x >>>= 9 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >9 : 9
 
 m.x &= 10;
 >m.x &= 10 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >10 : 10
 
 m.x |= 11;
 >m.x |= 11 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >11 : 11
 
 m.x ^= 12;
 >m.x ^= 12 : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 >12 : 12
 
 m
@@ -93,39 +93,39 @@ m
 
 m.x++;
 >m.x++ : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 
 m.x--;
 >m.x-- : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 
 ++m.x;
 >++m.x : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 
 --m.x;
 >--m.x : number
->m.x : any
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 
 ++((m.x));
 >++((m.x)) : number
->((m.x)) : any
->(m.x) : any
->m.x : any
+>((m.x)) : any (error)
+>(m.x) : any (error)
+>m.x : any (error)
 >m : typeof m
->x : any
+>x : any (error)
 
 m["x"] = 0;
 >m["x"] = 0 : 0
->m["x"] : any
+>m["x"] : any (error)
 >m : typeof m
 >"x" : "x"
 >0 : 0

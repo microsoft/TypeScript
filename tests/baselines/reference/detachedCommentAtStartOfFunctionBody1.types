@@ -13,8 +13,8 @@ class TestFile {
 >() => message + this.name : () => string
 >message + this.name : string
 >message : string
->this.name : any
+>this.name : any (error)
 >this : this
->name : any
+>name : any (error)
     }
 }

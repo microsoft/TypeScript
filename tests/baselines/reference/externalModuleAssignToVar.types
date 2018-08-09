@@ -6,7 +6,7 @@ import ext = require('externalModuleAssignToVar_core_require');
 var y1: { C: new() => ext.C; } = ext;
 >y1 : { C: new () => ext.C; }
 >C : new () => ext.C
->ext : any
+>ext : any (error)
 >ext : typeof ext
 
 y1 = ext; // ok

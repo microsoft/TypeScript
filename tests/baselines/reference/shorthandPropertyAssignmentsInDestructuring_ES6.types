@@ -417,9 +417,9 @@
 >function() {	let a = { s = 5 };} : () => void
 
 	let a = { s = 5 };
->a : { s: any; }
->{ s = 5 } : { s: any; }
->s : any
+>a : { s: any (error); }
+>{ s = 5 } : { s: any (error); }
+>s : any (error)
 >5 : 5
 
 });

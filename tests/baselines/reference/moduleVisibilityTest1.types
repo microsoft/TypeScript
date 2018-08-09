@@ -140,9 +140,9 @@ module M {
 
 var cprime : M.I = <M.I>null;
 >cprime : M.I
->M : any
+>M : any (error)
 ><M.I>null : M.I
->M : any
+>M : any (error)
 >null : null
 
 var c = new M.C();

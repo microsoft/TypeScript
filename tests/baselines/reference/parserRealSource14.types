@@ -69,8 +69,8 @@ module TypeScript {
 >AstPath : AstPath
 
         public asts: TypeScript.AST[] = [];
->asts : any[]
->TypeScript : any
+>asts : any (error)[]
+>TypeScript : any (error)
 >[] : undefined[]
 
         public top: number = -1;
@@ -116,19 +116,19 @@ module TypeScript {
 >AstPath : typeof AstPath
 
             clone.asts = this.asts.map((value) => { return value; });
->clone.asts = this.asts.map((value) => { return value; }) : any[]
->clone.asts : any[]
+>clone.asts = this.asts.map((value) => { return value; }) : any (error)[]
+>clone.asts : any (error)[]
 >clone : AstPath
->asts : any[]
->this.asts.map((value) => { return value; }) : any[]
->this.asts.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->this.asts : any[]
+>asts : any (error)[]
+>this.asts.map((value) => { return value; }) : any (error)[]
+>this.asts.map : <U>(callbackfn: (value: any (error), index: number, array: any (error)[]) => U, thisArg?: any) => U[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
->map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->(value) => { return value; } : (value: any) => any
->value : any
->value : any
+>asts : any (error)[]
+>map : <U>(callbackfn: (value: any (error), index: number, array: any (error)[]) => U, thisArg?: any) => U[]
+>(value) => { return value; } : (value: any (error)) => any (error)
+>value : any (error)
+>value : any (error)
 
             clone.top = this.top;
 >clone.top = this.top : number
@@ -144,15 +144,15 @@ module TypeScript {
         }
 
         public pop(): TypeScript.AST {
->pop : () => any
->TypeScript : any
+>pop : () => any (error)
+>TypeScript : any (error)
 
             var head = this.ast();
->head : any
->this.ast() : any
->this.ast : () => any
+>head : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 
             this.up();
 >this.up() : void
@@ -163,9 +163,9 @@ module TypeScript {
             while (this.asts.length > this.count()) {
 >this.asts.length > this.count() : boolean
 >this.asts.length : number
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >length : number
 >this.count() : number
 >this.count : () => number
@@ -173,28 +173,28 @@ module TypeScript {
 >count : () => number
 
                 this.asts.pop();
->this.asts.pop() : any
->this.asts.pop : () => any
->this.asts : any[]
+>this.asts.pop() : any (error)
+>this.asts.pop : () => any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
->pop : () => any
+>asts : any (error)[]
+>pop : () => any (error)
             }
             return head;
->head : any
+>head : any (error)
         }
 
         public push(ast: TypeScript.AST) {
->push : (ast: any) => void
->ast : any
->TypeScript : any
+>push : (ast: any (error)) => void
+>ast : any (error)
+>TypeScript : any (error)
 
             while (this.asts.length > this.count()) {
 >this.asts.length > this.count() : boolean
 >this.asts.length : number
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >length : number
 >this.count() : number
 >this.count : () => number
@@ -202,12 +202,12 @@ module TypeScript {
 >count : () => number
 
                 this.asts.pop();
->this.asts.pop() : any
->this.asts.pop : () => any
->this.asts : any[]
+>this.asts.pop() : any (error)
+>this.asts.pop : () => any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
->pop : () => any
+>asts : any (error)[]
+>pop : () => any (error)
             }
             this.top = this.asts.length;
 >this.top = this.asts.length : number
@@ -215,19 +215,19 @@ module TypeScript {
 >this : this
 >top : number
 >this.asts.length : number
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >length : number
 
             this.asts.push(ast);
 >this.asts.push(ast) : number
->this.asts.push : (...items: any[]) => number
->this.asts : any[]
+>this.asts.push : (...items: any (error)[]) => number
+>this.asts : any (error)[]
 >this : this
->asts : any[]
->push : (...items: any[]) => number
->ast : any
+>asts : any (error)[]
+>push : (...items: any (error)[]) => number
+>ast : any (error)
         }
 
         public up() {
@@ -263,9 +263,9 @@ module TypeScript {
 >top : number
 >this.ast.length - 1 : number
 >this.ast.length : number
->this.ast : () => any
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >length : number
 >1 : 1
 
@@ -282,51 +282,51 @@ module TypeScript {
         }
 
         public nodeType(): TypeScript.NodeType {
->nodeType : () => any
->TypeScript : any
+>nodeType : () => any (error)
+>TypeScript : any (error)
 
             if (this.ast() == null)
 >this.ast() == null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 
                 return TypeScript.NodeType.None;
->TypeScript.NodeType.None : any
->TypeScript.NodeType : any
+>TypeScript.NodeType.None : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->None : any
+>NodeType : any (error)
+>None : any (error)
 
             return this.ast().nodeType;
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
         }
 
         public ast() {
->ast : () => any
+>ast : () => any (error)
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
-><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
->TypeScript : any
+><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any (error)
+>TypeScript : any (error)
 >AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
 >AstPath : typeof AstPath
 >reverseIndexOf : (items: any[], index: number) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.asts.length - (this.top + 1) : number
 >this.asts.length : number
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >length : number
 >(this.top + 1) : number
 >this.top + 1 : number
@@ -337,23 +337,23 @@ module TypeScript {
         }
 
         public parent() {
->parent : () => any
+>parent : () => any (error)
 
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
-><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
->TypeScript : any
+><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any (error)
+>TypeScript : any (error)
 >AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
 >AstPath : typeof AstPath
 >reverseIndexOf : (items: any[], index: number) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.asts.length - this.top : number
 >this.asts.length : number
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >length : number
 >this.top : number
 >this : this
@@ -372,15 +372,15 @@ module TypeScript {
         }
 
         public get(index: number): TypeScript.AST {
->get : (index: number) => any
+>get : (index: number) => any (error)
 >index : number
->TypeScript : any
+>TypeScript : any (error)
 
             return this.asts[index];
->this.asts[index] : any
->this.asts : any[]
+>this.asts[index] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >index : number
         }
 
@@ -390,16 +390,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -410,49 +410,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) &&
 >(this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) : boolean
 >this.parent().nodeType === TypeScript.NodeType.ClassDeclaration : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.ClassDeclaration : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.ClassDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ClassDeclaration : any
+>NodeType : any (error)
+>ClassDeclaration : any (error)
 
                 ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
 >((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast()) : boolean
 >(<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast() : boolean
->(<TypeScript.InterfaceDeclaration>this.parent()).name : any
->(<TypeScript.InterfaceDeclaration>this.parent()) : any
-><TypeScript.InterfaceDeclaration>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.InterfaceDeclaration>this.parent()).name : any (error)
+>(<TypeScript.InterfaceDeclaration>this.parent()) : any (error)
+><TypeScript.InterfaceDeclaration>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->name : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>name : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isNameOfInterface(): boolean {
@@ -461,16 +461,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -481,49 +481,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) &&
 >(this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) : boolean
 >this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.InterfaceDeclaration : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.InterfaceDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->InterfaceDeclaration : any
+>NodeType : any (error)
+>InterfaceDeclaration : any (error)
 
                 ((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast());
 >((<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast()) : boolean
 >(<TypeScript.InterfaceDeclaration>this.parent()).name === this.ast() : boolean
->(<TypeScript.InterfaceDeclaration>this.parent()).name : any
->(<TypeScript.InterfaceDeclaration>this.parent()) : any
-><TypeScript.InterfaceDeclaration>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.InterfaceDeclaration>this.parent()).name : any (error)
+>(<TypeScript.InterfaceDeclaration>this.parent()) : any (error)
+><TypeScript.InterfaceDeclaration>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->name : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>name : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isNameOfArgument(): boolean {
@@ -532,16 +532,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -552,49 +552,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.ArgDecl) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.ArgDecl) &&
 >(this.parent().nodeType === TypeScript.NodeType.ArgDecl) : boolean
 >this.parent().nodeType === TypeScript.NodeType.ArgDecl : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.ArgDecl : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.ArgDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ArgDecl : any
+>NodeType : any (error)
+>ArgDecl : any (error)
 
                 ((<TypeScript.ArgDecl>this.parent()).id === this.ast());
 >((<TypeScript.ArgDecl>this.parent()).id === this.ast()) : boolean
 >(<TypeScript.ArgDecl>this.parent()).id === this.ast() : boolean
->(<TypeScript.ArgDecl>this.parent()).id : any
->(<TypeScript.ArgDecl>this.parent()) : any
-><TypeScript.ArgDecl>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.ArgDecl>this.parent()).id : any (error)
+>(<TypeScript.ArgDecl>this.parent()) : any (error)
+><TypeScript.ArgDecl>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->id : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>id : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isNameOfVariable(): boolean {
@@ -603,16 +603,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -623,49 +623,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.VarDecl) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.VarDecl) &&
 >(this.parent().nodeType === TypeScript.NodeType.VarDecl) : boolean
 >this.parent().nodeType === TypeScript.NodeType.VarDecl : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.VarDecl : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.VarDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->VarDecl : any
+>NodeType : any (error)
+>VarDecl : any (error)
 
                 ((<TypeScript.VarDecl>this.parent()).id === this.ast());
 >((<TypeScript.VarDecl>this.parent()).id === this.ast()) : boolean
 >(<TypeScript.VarDecl>this.parent()).id === this.ast() : boolean
->(<TypeScript.VarDecl>this.parent()).id : any
->(<TypeScript.VarDecl>this.parent()) : any
-><TypeScript.VarDecl>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.VarDecl>this.parent()).id : any (error)
+>(<TypeScript.VarDecl>this.parent()) : any (error)
+><TypeScript.VarDecl>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->id : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>id : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isNameOfModule(): boolean {
@@ -674,16 +674,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -694,49 +694,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) &&
 >(this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) : boolean
 >this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.ModuleDeclaration : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.ModuleDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ModuleDeclaration : any
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
 
                 ((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast());
 >((<TypeScript.ModuleDeclaration>this.parent()).name === this.ast()) : boolean
 >(<TypeScript.ModuleDeclaration>this.parent()).name === this.ast() : boolean
->(<TypeScript.ModuleDeclaration>this.parent()).name : any
->(<TypeScript.ModuleDeclaration>this.parent()) : any
-><TypeScript.ModuleDeclaration>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.ModuleDeclaration>this.parent()).name : any (error)
+>(<TypeScript.ModuleDeclaration>this.parent()) : any (error)
+><TypeScript.ModuleDeclaration>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->name : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>name : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isNameOfFunction(): boolean {
@@ -745,16 +745,16 @@ module TypeScript {
             if (this.ast() === null || this.parent() === null)
 >this.ast() === null || this.parent() === null : boolean
 >this.ast() === null : boolean
->this.ast() : any
->this.ast : () => any
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
 >null : null
 >this.parent() === null : boolean
->this.parent() : any
->this.parent : () => any
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
+>parent : () => any (error)
 >null : null
 
                 return false;
@@ -765,49 +765,49 @@ module TypeScript {
 >(this.ast().nodeType === TypeScript.NodeType.Name) &&                (this.parent().nodeType === TypeScript.NodeType.FuncDecl) : boolean
 >(this.ast().nodeType === TypeScript.NodeType.Name) : boolean
 >this.ast().nodeType === TypeScript.NodeType.Name : boolean
->this.ast().nodeType : any
->this.ast() : any
->this.ast : () => any
+>this.ast().nodeType : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>ast : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (this.parent().nodeType === TypeScript.NodeType.FuncDecl) &&
 >(this.parent().nodeType === TypeScript.NodeType.FuncDecl) : boolean
 >this.parent().nodeType === TypeScript.NodeType.FuncDecl : boolean
->this.parent().nodeType : any
->this.parent() : any
->this.parent : () => any
+>this.parent().nodeType : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->nodeType : any
->TypeScript.NodeType.FuncDecl : any
->TypeScript.NodeType : any
+>parent : () => any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.FuncDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->FuncDecl : any
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                 ((<TypeScript.FuncDecl>this.parent()).name === this.ast());
 >((<TypeScript.FuncDecl>this.parent()).name === this.ast()) : boolean
 >(<TypeScript.FuncDecl>this.parent()).name === this.ast() : boolean
->(<TypeScript.FuncDecl>this.parent()).name : any
->(<TypeScript.FuncDecl>this.parent()) : any
-><TypeScript.FuncDecl>this.parent() : any
->TypeScript : any
->this.parent() : any
->this.parent : () => any
+>(<TypeScript.FuncDecl>this.parent()).name : any (error)
+>(<TypeScript.FuncDecl>this.parent()) : any (error)
+><TypeScript.FuncDecl>this.parent() : any (error)
+>TypeScript : any (error)
+>this.parent() : any (error)
+>this.parent : () => any (error)
 >this : this
->parent : () => any
->name : any
->this.ast() : any
->this.ast : () => any
+>parent : () => any (error)
+>name : any (error)
+>this.ast() : any (error)
+>this.ast : () => any (error)
 >this : this
->ast : () => any
+>ast : () => any (error)
         }
 
         public isChildOfScript(): boolean {
@@ -817,9 +817,9 @@ module TypeScript {
 >ast : any
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 
             return this.count() >= 3 &&
 >this.count() >= 3 &&                this.asts[this.top] === ast &&                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script : boolean
@@ -834,10 +834,10 @@ module TypeScript {
 
                 this.asts[this.top] === ast &&
 >this.asts[this.top] === ast : boolean
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
@@ -845,41 +845,41 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script;
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.Script : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Script : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Script : any
+>NodeType : any (error)
+>Script : any (error)
         }
 
         public isChildOfModule(): boolean {
@@ -889,9 +889,9 @@ module TypeScript {
 >ast : any
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 
             return this.count() >= 3 &&
 >this.count() >= 3 &&                this.asts[this.top] === ast &&                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
@@ -906,10 +906,10 @@ module TypeScript {
 
                 this.asts[this.top] === ast &&
 >this.asts[this.top] === ast : boolean
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
@@ -917,41 +917,41 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration;
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.ModuleDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ModuleDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ModuleDeclaration : any
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
         }
 
         public isChildOfClass(): boolean {
@@ -961,9 +961,9 @@ module TypeScript {
 >ast : any
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 
             return this.count() >= 3 &&
 >this.count() >= 3 &&                this.asts[this.top] === ast &&                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration : boolean
@@ -978,10 +978,10 @@ module TypeScript {
 
                 this.asts[this.top] === ast &&
 >this.asts[this.top] === ast : boolean
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
@@ -989,41 +989,41 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration;
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.ClassDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ClassDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ClassDeclaration : any
+>NodeType : any (error)
+>ClassDeclaration : any (error)
         }
 
         public isArgumentOfClassConstructor(): boolean {
@@ -1033,9 +1033,9 @@ module TypeScript {
 >ast : any
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 
             return this.count() >= 5 &&
 >this.count() >= 5 &&                this.asts[this.top] === ast &&                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&                this.asts[this.top - 3].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 4].nodeType === TypeScript.NodeType.ClassDeclaration &&                ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&                ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&                ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]) : boolean
@@ -1055,10 +1055,10 @@ module TypeScript {
 
                 this.asts[this.top] === ast &&
 >this.asts[this.top] === ast : boolean
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
@@ -1066,118 +1066,118 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.FuncDecl : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.FuncDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->FuncDecl : any
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                 this.asts[this.top - 3].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 3].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 3].nodeType : any
->this.asts[this.top - 3] : any
->this.asts : any[]
+>this.asts[this.top - 3].nodeType : any (error)
+>this.asts[this.top - 3] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 3 : number
 >this.top : number
 >this : this
 >top : number
 >3 : 3
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 4].nodeType === TypeScript.NodeType.ClassDeclaration &&
 >this.asts[this.top - 4].nodeType === TypeScript.NodeType.ClassDeclaration : boolean
->this.asts[this.top - 4].nodeType : any
->this.asts[this.top - 4] : any
->this.asts : any[]
+>this.asts[this.top - 4].nodeType : any (error)
+>this.asts[this.top - 4] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 4 : number
 >this.top : number
 >this : this
 >top : number
 >4 : 4
->nodeType : any
->TypeScript.NodeType.ClassDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ClassDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ClassDeclaration : any
+>NodeType : any (error)
+>ClassDeclaration : any (error)
 
                 ((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) &&
->((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) : any
->(<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor : any
->(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
-><TypeScript.FuncDecl>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>((<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor) : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]).isConstructor : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any (error)
+><TypeScript.FuncDecl>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->isConstructor : any
+>isConstructor : any (error)
 
                 ((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) &&
 >((<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1]) : boolean
 >(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1] : boolean
->(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments : any
->(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
-><TypeScript.FuncDecl>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any (error)
+><TypeScript.FuncDecl>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->arguments : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>arguments : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
@@ -1187,24 +1187,24 @@ module TypeScript {
                 ((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]);
 >((<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2]) : boolean
 >(<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl === this.asts[this.top - 2] : boolean
->(<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl : any
->(<TypeScript.ClassDeclaration>this.asts[this.top - 4]) : any
-><TypeScript.ClassDeclaration>this.asts[this.top - 4] : any
->TypeScript : any
->this.asts[this.top - 4] : any
->this.asts : any[]
+>(<TypeScript.ClassDeclaration>this.asts[this.top - 4]).constructorDecl : any (error)
+>(<TypeScript.ClassDeclaration>this.asts[this.top - 4]) : any (error)
+><TypeScript.ClassDeclaration>this.asts[this.top - 4] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 4] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 4 : number
 >this.top : number
 >this : this
 >top : number
 >4 : 4
->constructorDecl : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>constructorDecl : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
@@ -1219,9 +1219,9 @@ module TypeScript {
 >ast : any
 >lastOf(this.asts) : any
 >lastOf : (items: any[]) => any
->this.asts : any[]
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 
             return this.count() >= 3 &&
 >this.count() >= 3 &&                this.asts[this.top] === ast &&                this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&                this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration : boolean
@@ -1236,10 +1236,10 @@ module TypeScript {
 
                 this.asts[this.top] === ast &&
 >this.asts[this.top] === ast : boolean
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
@@ -1247,41 +1247,41 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration;
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.InterfaceDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.InterfaceDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->InterfaceDeclaration : any
+>NodeType : any (error)
+>InterfaceDeclaration : any (error)
         }
 
         public isTopLevelImplicitModule() {
@@ -1299,43 +1299,43 @@ module TypeScript {
 
                 this.asts[this.top].nodeType === TypeScript.NodeType.ModuleDeclaration &&
 >this.asts[this.top].nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
->this.asts[this.top].nodeType : any
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top].nodeType : any (error)
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
->nodeType : any
->TypeScript.NodeType.ModuleDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ModuleDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ModuleDeclaration : any
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
 
                 TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
->TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile) : any
->TypeScript.hasFlag : any
+>TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags, TypeScript.ModuleFlags.IsWholeFile) : any (error)
+>TypeScript.hasFlag : any (error)
 >TypeScript : typeof TypeScript
->hasFlag : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top]) : any
-><TypeScript.ModuleDeclaration>this.asts[this.top] : any
->TypeScript : any
->this.asts[this.top] : any
->this.asts : any[]
+>hasFlag : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top]).modFlags : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top]) : any (error)
+><TypeScript.ModuleDeclaration>this.asts[this.top] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
->modFlags : any
->TypeScript.ModuleFlags.IsWholeFile : any
->TypeScript.ModuleFlags : any
+>modFlags : any (error)
+>TypeScript.ModuleFlags.IsWholeFile : any (error)
+>TypeScript.ModuleFlags : any (error)
 >TypeScript : typeof TypeScript
->ModuleFlags : any
->IsWholeFile : any
+>ModuleFlags : any (error)
+>IsWholeFile : any (error)
         }
 
         public isBodyOfTopLevelImplicitModule() {
@@ -1355,62 +1355,62 @@ module TypeScript {
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ModuleDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ModuleDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ModuleDeclaration : any
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
 
                  (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] &&
 >(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] : boolean
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
-><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any (error)
+><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->members : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>members : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1418,29 +1418,29 @@ module TypeScript {
 >0 : 0
 
                 TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile);
->TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile) : any
->TypeScript.hasFlag : any
+>TypeScript.hasFlag((<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags, TypeScript.ModuleFlags.IsWholeFile) : any (error)
+>TypeScript.hasFlag : any (error)
 >TypeScript : typeof TypeScript
->hasFlag : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
-><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>hasFlag : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).modFlags : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any (error)
+><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->modFlags : any
->TypeScript.ModuleFlags.IsWholeFile : any
->TypeScript.ModuleFlags : any
+>modFlags : any (error)
+>TypeScript.ModuleFlags.IsWholeFile : any (error)
+>TypeScript.ModuleFlags : any (error)
 >TypeScript : typeof TypeScript
->ModuleFlags : any
->IsWholeFile : any
+>ModuleFlags : any (error)
+>IsWholeFile : any (error)
         }
 
         public isBodyOfScript(): boolean {
@@ -1458,43 +1458,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Script &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Script : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Script : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Script : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Script : any
+>NodeType : any (error)
+>Script : any (error)
 
                  (<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
 >(<TypeScript.Script>this.asts[this.top - 1]).bod == this.asts[this.top - 0] : boolean
->(<TypeScript.Script>this.asts[this.top - 1]).bod : any
->(<TypeScript.Script>this.asts[this.top - 1]) : any
-><TypeScript.Script>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.Script>this.asts[this.top - 1]).bod : any (error)
+>(<TypeScript.Script>this.asts[this.top - 1]) : any (error)
+><TypeScript.Script>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->bod : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>bod : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1517,43 +1517,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Switch &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Switch : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Switch : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Switch : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Switch : any
+>NodeType : any (error)
+>Switch : any (error)
 
                  (<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0];
 >(<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList == this.asts[this.top - 0] : boolean
->(<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList : any
->(<TypeScript.SwitchStatement>this.asts[this.top - 1]) : any
-><TypeScript.SwitchStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.SwitchStatement>this.asts[this.top - 1]).caseList : any (error)
+>(<TypeScript.SwitchStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.SwitchStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->caseList : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>caseList : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1576,43 +1576,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ModuleDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ModuleDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ModuleDeclaration : any
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
 
                  (<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] : boolean
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members : any
->(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
-><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]).members : any (error)
+>(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any (error)
+><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->members : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>members : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1635,43 +1635,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ClassDeclaration &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ClassDeclaration : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ClassDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ClassDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ClassDeclaration : any
+>NodeType : any (error)
+>ClassDeclaration : any (error)
 
                  (<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >(<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] : boolean
->(<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members : any
->(<TypeScript.ClassDeclaration>this.asts[this.top - 1]) : any
-><TypeScript.ClassDeclaration>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.ClassDeclaration>this.asts[this.top - 1]).members : any (error)
+>(<TypeScript.ClassDeclaration>this.asts[this.top - 1]) : any (error)
+><TypeScript.ClassDeclaration>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->members : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>members : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1694,43 +1694,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.FuncDecl : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.FuncDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->FuncDecl : any
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                  (<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0];
 >(<TypeScript.FuncDecl>this.asts[this.top - 1]).bod == this.asts[this.top - 0] : boolean
->(<TypeScript.FuncDecl>this.asts[this.top - 1]).bod : any
->(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any
-><TypeScript.FuncDecl>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.FuncDecl>this.asts[this.top - 1]).bod : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any (error)
+><TypeScript.FuncDecl>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->bod : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>bod : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1753,43 +1753,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.InterfaceDeclaration &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.InterfaceDeclaration : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.InterfaceDeclaration : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.InterfaceDeclaration : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->InterfaceDeclaration : any
+>NodeType : any (error)
+>InterfaceDeclaration : any (error)
 
                  (<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0];
 >(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members == this.asts[this.top - 0] : boolean
->(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members : any
->(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]) : any
-><TypeScript.InterfaceDeclaration>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]).members : any (error)
+>(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]) : any (error)
+><TypeScript.InterfaceDeclaration>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->members : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>members : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1812,43 +1812,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Block &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Block : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Block : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Block : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Block : any
+>NodeType : any (error)
+>Block : any (error)
 
                 (<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0];
 >(<TypeScript.Block>this.asts[this.top - 1]).statements == this.asts[this.top - 0] : boolean
->(<TypeScript.Block>this.asts[this.top - 1]).statements : any
->(<TypeScript.Block>this.asts[this.top - 1]) : any
-><TypeScript.Block>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.Block>this.asts[this.top - 1]).statements : any (error)
+>(<TypeScript.Block>this.asts[this.top - 1]) : any (error)
+><TypeScript.Block>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->statements : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>statements : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1871,43 +1871,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.For &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.For : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.For : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.For : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->For : any
+>NodeType : any (error)
+>For : any (error)
 
                 (<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.ForStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.ForStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.ForStatement>this.asts[this.top - 1]) : any
-><TypeScript.ForStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.ForStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.ForStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.ForStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1930,43 +1930,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Case &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Case : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Case : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Case : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Case : any
+>NodeType : any (error)
+>Case : any (error)
 
                 (<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.CaseStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.CaseStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.CaseStatement>this.asts[this.top - 1]) : any
-><TypeScript.CaseStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.CaseStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.CaseStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.CaseStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -1989,43 +1989,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Try &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Try : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Try : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Try : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Try : any
+>NodeType : any (error)
+>Try : any (error)
 
                 (<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.Try>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.Try>this.asts[this.top - 1]).body : any
->(<TypeScript.Try>this.asts[this.top - 1]) : any
-><TypeScript.Try>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.Try>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.Try>this.asts[this.top - 1]) : any (error)
+><TypeScript.Try>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2048,43 +2048,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Catch &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Catch : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Catch : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Catch : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Catch : any
+>NodeType : any (error)
+>Catch : any (error)
 
                 (<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.Catch>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.Catch>this.asts[this.top - 1]).body : any
->(<TypeScript.Catch>this.asts[this.top - 1]) : any
-><TypeScript.Catch>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.Catch>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.Catch>this.asts[this.top - 1]) : any (error)
+><TypeScript.Catch>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2107,43 +2107,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.DoWhile &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.DoWhile : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.DoWhile : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.DoWhile : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->DoWhile : any
+>NodeType : any (error)
+>DoWhile : any (error)
 
                 (<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.DoWhileStatement>this.asts[this.top - 1]) : any
-><TypeScript.DoWhileStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.DoWhileStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.DoWhileStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.DoWhileStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2166,43 +2166,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.While &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.While : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.While : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.While : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->While : any
+>NodeType : any (error)
+>While : any (error)
 
                 (<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.WhileStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.WhileStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.WhileStatement>this.asts[this.top - 1]) : any
-><TypeScript.WhileStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.WhileStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.WhileStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.WhileStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2225,43 +2225,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ForIn : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ForIn : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ForIn : any
+>NodeType : any (error)
+>ForIn : any (error)
 
                 (<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.ForInStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.ForInStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.ForInStatement>this.asts[this.top - 1]) : any
-><TypeScript.ForInStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.ForInStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.ForInStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.ForInStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2284,43 +2284,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.With &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.With : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.With : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.With : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->With : any
+>NodeType : any (error)
+>With : any (error)
 
                 (<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.WithStatement>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.WithStatement>this.asts[this.top - 1]).body : any
->(<TypeScript.WithStatement>this.asts[this.top - 1]) : any
-><TypeScript.WithStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.WithStatement>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.WithStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.WithStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2343,43 +2343,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Finally &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Finally : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Finally : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Finally : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Finally : any
+>NodeType : any (error)
+>Finally : any (error)
 
                 (<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0];
 >(<TypeScript.Finally>this.asts[this.top - 1]).body == this.asts[this.top - 0] : boolean
->(<TypeScript.Finally>this.asts[this.top - 1]).body : any
->(<TypeScript.Finally>this.asts[this.top - 1]) : any
-><TypeScript.Finally>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.Finally>this.asts[this.top - 1]).body : any (error)
+>(<TypeScript.Finally>this.asts[this.top - 1]) : any (error)
+><TypeScript.Finally>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->body : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>body : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2403,62 +2403,62 @@ module TypeScript {
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.Switch : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Switch : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Switch : any
+>NodeType : any (error)
+>Switch : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1];
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] : boolean
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList : any
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
-><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList : any (error)
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any (error)
+><TypeScript.SwitchStatement>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->caseList : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>caseList : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
@@ -2483,62 +2483,62 @@ module TypeScript {
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.Switch : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Switch : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Switch : any
+>NodeType : any (error)
+>Switch : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] &&
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList == this.asts[this.top - 1] : boolean
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList : any
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
-><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]).caseList : any (error)
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any (error)
+><TypeScript.SwitchStatement>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->caseList : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>caseList : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
@@ -2547,24 +2547,24 @@ module TypeScript {
 
                 (<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0];
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase == this.asts[this.top - 0] : boolean
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase : any
->(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
-><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]).defaultCase : any (error)
+>(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any (error)
+><TypeScript.SwitchStatement>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->defaultCase : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>defaultCase : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2588,62 +2588,62 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ObjectLit : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ObjectLit : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ObjectLit : any
+>NodeType : any (error)
+>ObjectLit : any (error)
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] : boolean
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
-><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any (error)
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.UnaryExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->operand : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>operand : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2678,62 +2678,62 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ObjectLit : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ObjectLit : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ObjectLit : any
+>NodeType : any (error)
+>ObjectLit : any (error)
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] &&
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] : boolean
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
-><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any (error)
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.UnaryExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->operand : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>operand : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -2742,22 +2742,22 @@ module TypeScript {
 
                 (<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0;
 >(<TypeScript.ASTList>this.asts[this.top - 0]).members.length == 0 : boolean
->(<TypeScript.ASTList>this.asts[this.top - 0]).members.length : any
->(<TypeScript.ASTList>this.asts[this.top - 0]).members : any
->(<TypeScript.ASTList>this.asts[this.top - 0]) : any
-><TypeScript.ASTList>this.asts[this.top - 0] : any
->TypeScript : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>(<TypeScript.ASTList>this.asts[this.top - 0]).members.length : any (error)
+>(<TypeScript.ASTList>this.asts[this.top - 0]).members : any (error)
+>(<TypeScript.ASTList>this.asts[this.top - 0]) : any (error)
+><TypeScript.ASTList>this.asts[this.top - 0] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->members : any
->length : any
+>members : any (error)
+>length : any (error)
 >0 : 0
         }
 
@@ -2778,81 +2778,81 @@ module TypeScript {
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ObjectLit &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.ObjectLit : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.ObjectLit : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ObjectLit : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ObjectLit : any
+>NodeType : any (error)
+>ObjectLit : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Member &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.Member : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.Member : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Member : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Member : any
+>NodeType : any (error)
+>Member : any (error)
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1];
 >(<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand == this.asts[this.top - 1] : boolean
->(<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand : any
->(<TypeScript.UnaryExpression>this.asts[this.top - 2]) : any
-><TypeScript.UnaryExpression>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.UnaryExpression>this.asts[this.top - 2]).operand : any (error)
+>(<TypeScript.UnaryExpression>this.asts[this.top - 2]) : any (error)
+><TypeScript.UnaryExpression>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->operand : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>operand : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
@@ -2878,100 +2878,100 @@ module TypeScript {
 
                 this.asts[this.top - 3].nodeType === TypeScript.NodeType.ObjectLit &&
 >this.asts[this.top - 3].nodeType === TypeScript.NodeType.ObjectLit : boolean
->this.asts[this.top - 3].nodeType : any
->this.asts[this.top - 3] : any
->this.asts : any[]
+>this.asts[this.top - 3].nodeType : any (error)
+>this.asts[this.top - 3] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 3 : number
 >this.top : number
 >this : this
 >top : number
 >3 : 3
->nodeType : any
->TypeScript.NodeType.ObjectLit : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ObjectLit : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ObjectLit : any
+>NodeType : any (error)
+>ObjectLit : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Member : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Member : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Member : any
+>NodeType : any (error)
+>Member : any (error)
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Name &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.Name : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2];
 >(<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand == this.asts[this.top - 2] : boolean
->(<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand : any
->(<TypeScript.UnaryExpression>this.asts[this.top - 3]) : any
-><TypeScript.UnaryExpression>this.asts[this.top - 3] : any
->TypeScript : any
->this.asts[this.top - 3] : any
->this.asts : any[]
+>(<TypeScript.UnaryExpression>this.asts[this.top - 3]).operand : any (error)
+>(<TypeScript.UnaryExpression>this.asts[this.top - 3]) : any (error)
+><TypeScript.UnaryExpression>this.asts[this.top - 3] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 3] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 3 : number
 >this.top : number
 >this : this
 >top : number
 >3 : 3
->operand : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>operand : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
@@ -2995,62 +2995,62 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ArrayLit &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.ArrayLit : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.ArrayLit : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.ArrayLit : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->ArrayLit : any
+>NodeType : any (error)
+>ArrayLit : any (error)
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0];
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand == this.asts[this.top - 0] : boolean
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any
->(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
-><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]).operand : any (error)
+>(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.UnaryExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->operand : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>operand : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3073,43 +3073,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Member : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Member : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Member : any
+>NodeType : any (error)
+>Member : any (error)
 
                 (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0];
 >(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 === this.asts[this.top - 0] : boolean
->(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 : any
->(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any
-><TypeScript.BinaryExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand1 : any (error)
+>(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.BinaryExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->operand1 : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>operand1 : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3132,43 +3132,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Member : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Member : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Member : any
+>NodeType : any (error)
+>Member : any (error)
 
                 (<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
 >(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0] : boolean
->(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 : any
->(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any
-><TypeScript.BinaryExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.BinaryExpression>this.asts[this.top - 1]).operand2 : any (error)
+>(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.BinaryExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->operand2 : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>operand2 : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3190,22 +3190,22 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List;
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
             //(<Tools.ASTList>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
         }
@@ -3225,43 +3225,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.If : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.If : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.If : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->If : any
+>NodeType : any (error)
+>If : any (error)
 
                 (<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0];
 >(<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod == this.asts[this.top - 0] : boolean
->(<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod : any
->(<TypeScript.IfStatement>this.asts[this.top - 1]) : any
-><TypeScript.IfStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.IfStatement>this.asts[this.top - 1]).thenBod : any (error)
+>(<TypeScript.IfStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.IfStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->thenBod : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>thenBod : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3284,43 +3284,43 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.If : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.If : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.If : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->If : any
+>NodeType : any (error)
+>If : any (error)
 
                 (<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0];
 >(<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod == this.asts[this.top - 0] : boolean
->(<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod : any
->(<TypeScript.IfStatement>this.asts[this.top - 1]) : any
-><TypeScript.IfStatement>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.IfStatement>this.asts[this.top - 1]).elseBod : any (error)
+>(<TypeScript.IfStatement>this.asts[this.top - 1]) : any (error)
+><TypeScript.IfStatement>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->elseBod : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>elseBod : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3353,37 +3353,37 @@ module TypeScript {
 
                 this.asts[this.top].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top].nodeType : any
->this.asts[this.top] : any
->this.asts : any[]
+>this.asts[this.top].nodeType : any (error)
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 (<TypeScript.ASTList>this.asts[this.top]).members.length === 1;
 >(<TypeScript.ASTList>this.asts[this.top]).members.length === 1 : boolean
->(<TypeScript.ASTList>this.asts[this.top]).members.length : any
->(<TypeScript.ASTList>this.asts[this.top]).members : any
->(<TypeScript.ASTList>this.asts[this.top]) : any
-><TypeScript.ASTList>this.asts[this.top] : any
->TypeScript : any
->this.asts[this.top] : any
->this.asts : any[]
+>(<TypeScript.ASTList>this.asts[this.top]).members.length : any (error)
+>(<TypeScript.ASTList>this.asts[this.top]).members : any (error)
+>(<TypeScript.ASTList>this.asts[this.top]) : any (error)
+><TypeScript.ASTList>this.asts[this.top] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top : number
 >this : this
 >top : number
->members : any
->length : any
+>members : any (error)
+>length : any (error)
 >1 : 1
         }
 
@@ -3403,62 +3403,62 @@ module TypeScript {
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.FuncDecl : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.FuncDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->FuncDecl : any
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                 (<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >(<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments === this.asts[this.top - 0] : boolean
->(<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments : any
->(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any
-><TypeScript.FuncDecl>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.FuncDecl>this.asts[this.top - 1]).arguments : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any (error)
+><TypeScript.FuncDecl>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->arguments : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>arguments : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3482,62 +3482,62 @@ module TypeScript {
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
 >this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl : boolean
->this.asts[this.top - 2].nodeType : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>this.asts[this.top - 2].nodeType : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->nodeType : any
->TypeScript.NodeType.FuncDecl : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.FuncDecl : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->FuncDecl : any
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                 (<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1];
 >(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments === this.asts[this.top - 1] : boolean
->(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments : any
->(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
-><TypeScript.FuncDecl>this.asts[this.top - 2] : any
->TypeScript : any
->this.asts[this.top - 2] : any
->this.asts : any[]
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]).arguments : any (error)
+>(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any (error)
+><TypeScript.FuncDecl>this.asts[this.top - 2] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 2] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 2 : number
 >this.top : number
 >this : this
 >top : number
 >2 : 2
->arguments : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>arguments : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
@@ -3561,62 +3561,62 @@ module TypeScript {
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Call &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.Call : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.Call : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Call : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Call : any
+>NodeType : any (error)
+>Call : any (error)
 
                 (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0] : boolean
->(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments : any
->(<TypeScript.CallExpression>this.asts[this.top - 1]) : any
-><TypeScript.CallExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments : any (error)
+>(<TypeScript.CallExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.CallExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->arguments : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>arguments : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3640,62 +3640,62 @@ module TypeScript {
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.List : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.List : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.List : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->List : any
+>NodeType : any (error)
+>List : any (error)
 
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.New &&
 >this.asts[this.top - 1].nodeType === TypeScript.NodeType.New : boolean
->this.asts[this.top - 1].nodeType : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>this.asts[this.top - 1].nodeType : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->nodeType : any
->TypeScript.NodeType.New : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.New : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->New : any
+>NodeType : any (error)
+>New : any (error)
 
                 (<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0];
 >(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments === this.asts[this.top - 0] : boolean
->(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments : any
->(<TypeScript.CallExpression>this.asts[this.top - 1]) : any
-><TypeScript.CallExpression>this.asts[this.top - 1] : any
->TypeScript : any
->this.asts[this.top - 1] : any
->this.asts : any[]
+>(<TypeScript.CallExpression>this.asts[this.top - 1]).arguments : any (error)
+>(<TypeScript.CallExpression>this.asts[this.top - 1]) : any (error)
+><TypeScript.CallExpression>this.asts[this.top - 1] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 1] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 1 : number
 >this.top : number
 >this : this
 >top : number
 >1 : 1
->arguments : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>arguments : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
@@ -3718,51 +3718,51 @@ module TypeScript {
 
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block &&
 >this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block : boolean
->this.asts[this.top - 0].nodeType : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>this.asts[this.top - 0].nodeType : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->nodeType : any
->TypeScript.NodeType.Block : any
->TypeScript.NodeType : any
+>nodeType : any (error)
+>TypeScript.NodeType.Block : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Block : any
+>NodeType : any (error)
+>Block : any (error)
 
                 (<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false;
 >(<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock === false : boolean
->(<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock : any
->(<TypeScript.Block>this.asts[this.top - 0]) : any
-><TypeScript.Block>this.asts[this.top - 0] : any
->TypeScript : any
->this.asts[this.top - 0] : any
->this.asts : any[]
+>(<TypeScript.Block>this.asts[this.top - 0]).isStatementBlock : any (error)
+>(<TypeScript.Block>this.asts[this.top - 0]) : any (error)
+><TypeScript.Block>this.asts[this.top - 0] : any (error)
+>TypeScript : any (error)
+>this.asts[this.top - 0] : any (error)
+>this.asts : any (error)[]
 >this : this
->asts : any[]
+>asts : any (error)[]
 >this.top - 0 : number
 >this.top : number
 >this : this
 >top : number
 >0 : 0
->isStatementBlock : any
+>isStatementBlock : any (error)
 >false : false
         }
     }
 
     export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
->isValidAstNode : (ast: any) => boolean
->ast : any
->TypeScript : any
+>isValidAstNode : (ast: any (error)) => boolean
+>ast : any (error)
+>TypeScript : any (error)
 
         if (ast === null)
 >ast === null : boolean
->ast : any
+>ast : any (error)
 >null : null
 
             return false;
@@ -3771,15 +3771,15 @@ module TypeScript {
         if (ast.minChar === -1 || ast.limChar === -1)
 >ast.minChar === -1 || ast.limChar === -1 : boolean
 >ast.minChar === -1 : boolean
->ast.minChar : any
->ast : any
->minChar : any
+>ast.minChar : any (error)
+>ast : any (error)
+>minChar : any (error)
 >-1 : -1
 >1 : 1
 >ast.limChar === -1 : boolean
->ast.limChar : any
->ast : any
->limChar : any
+>ast.limChar : any (error)
+>ast : any (error)
+>limChar : any (error)
 >-1 : -1
 >1 : 1
 
@@ -3830,28 +3830,28 @@ module TypeScript {
     /// Return the stack of AST nodes containing "position"
     ///
     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
->getAstPathToPosition : (script: any, pos: number, options?: GetAstPathOptions) => AstPath
->script : any
->TypeScript : any
+>getAstPathToPosition : (script: any (error), pos: number, options?: GetAstPathOptions) => AstPath
+>script : any (error)
+>TypeScript : any (error)
 >pos : number
 >options : GetAstPathOptions
 >GetAstPathOptions.Default : GetAstPathOptions
 >GetAstPathOptions : typeof GetAstPathOptions
 >Default : GetAstPathOptions
->TypeScript : any
+>TypeScript : any (error)
 
         var lookInComments = (comments: TypeScript.Comment[]) => {
->lookInComments : (comments: any[]) => void
->(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: any[]) => void
->comments : any[]
->TypeScript : any
+>lookInComments : (comments: any (error)[]) => void
+>(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: any (error)[]) => void
+>comments : any (error)[]
+>TypeScript : any (error)
 
             if (comments && comments.length > 0) {
 >comments && comments.length > 0 : boolean
->comments : any[]
+>comments : any (error)[]
 >comments.length > 0 : boolean
 >comments.length : number
->comments : any[]
+>comments : any (error)[]
 >length : number
 >0 : 0
 
@@ -3861,57 +3861,57 @@ module TypeScript {
 >i < comments.length : boolean
 >i : number
 >comments.length : number
->comments : any[]
+>comments : any (error)[]
 >length : number
 >i++ : number
 >i : number
 
                     var minChar = comments[i].minChar;
->minChar : any
->comments[i].minChar : any
->comments[i] : any
->comments : any[]
+>minChar : any (error)
+>comments[i].minChar : any (error)
+>comments[i] : any (error)
+>comments : any (error)[]
 >i : number
->minChar : any
+>minChar : any (error)
 
                     var limChar = comments[i].limChar;
->limChar : any
->comments[i].limChar : any
->comments[i] : any
->comments : any[]
+>limChar : any (error)
+>comments[i].limChar : any (error)
+>comments[i] : any (error)
+>comments : any (error)[]
 >i : number
->limChar : any
+>limChar : any (error)
 
                     if (!comments[i].isBlockComment) {
 >!comments[i].isBlockComment : boolean
->comments[i].isBlockComment : any
->comments[i] : any
->comments : any[]
+>comments[i].isBlockComment : any (error)
+>comments[i] : any (error)
+>comments : any (error)[]
 >i : number
->isBlockComment : any
+>isBlockComment : any (error)
 
                         limChar++; // For single line comments, include 1 more character (for the newline)
 >limChar++ : number
->limChar : any
+>limChar : any (error)
                     }
                     if (pos >= minChar && pos < limChar) {
 >pos >= minChar && pos < limChar : boolean
 >pos >= minChar : boolean
 >pos : number
->minChar : any
+>minChar : any (error)
 >pos < limChar : boolean
 >pos : number
->limChar : any
+>limChar : any (error)
 
                         ctx.path.push(comments[i]);
 >ctx.path.push(comments[i]) : void
->ctx.path.push : (ast: any) => void
+>ctx.path.push : (ast: any (error)) => void
 >ctx.path : AstPath
 >ctx : AstPathContext
 >path : AstPath
->push : (ast: any) => void
->comments[i] : any
->comments : any[]
+>push : (ast: any (error)) => void
+>comments[i] : any (error)
+>comments : any (error)[]
 >i : number
                     }
                 }
@@ -3919,18 +3919,18 @@ module TypeScript {
         }
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
->pre : (cur: any, parent: any, walker: any) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
->cur : any
->TypeScript : any
->parent : any
->TypeScript : any
->walker : any
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>cur : any (error)
+>TypeScript : any (error)
+>parent : any (error)
+>TypeScript : any (error)
+>walker : any (error)
 
             if (isValidAstNode(cur)) {
 >isValidAstNode(cur) : boolean
->isValidAstNode : (ast: any) => boolean
->cur : any
+>isValidAstNode : (ast: any (error)) => boolean
+>cur : any (error)
 
                 // Add "cur" to the stack if it contains our position
                 // For "identifier" nodes, we need a special case: A position equal to "limChar" is
@@ -3945,8 +3945,8 @@ module TypeScript {
                     hasFlag(options, GetAstPathOptions.EdgeInclusive) ||
 >hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar : any
 >hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name : any
->hasFlag(options, GetAstPathOptions.EdgeInclusive) : any
->hasFlag : any
+>hasFlag(options, GetAstPathOptions.EdgeInclusive) : any (error)
+>hasFlag : any (error)
 >options : GetAstPathOptions
 >GetAstPathOptions.EdgeInclusive : GetAstPathOptions
 >GetAstPathOptions : typeof GetAstPathOptions
@@ -3954,34 +3954,34 @@ module TypeScript {
 
                     cur.nodeType === TypeScript.NodeType.Name ||
 >cur.nodeType === TypeScript.NodeType.Name : boolean
->cur.nodeType : any
->cur : any
->nodeType : any
->TypeScript.NodeType.Name : any
->TypeScript.NodeType : any
+>cur.nodeType : any (error)
+>cur : any (error)
+>nodeType : any (error)
+>TypeScript.NodeType.Name : any (error)
+>TypeScript.NodeType : any (error)
 >TypeScript : typeof TypeScript
->NodeType : any
->Name : any
+>NodeType : any (error)
+>Name : any (error)
 
                     pos === script.limChar; // Special "EOF" case
 >pos === script.limChar : boolean
 >pos : number
->script.limChar : any
->script : any
->limChar : any
+>script.limChar : any (error)
+>script : any (error)
+>limChar : any (error)
 
                 var minChar = cur.minChar;
->minChar : any
->cur.minChar : any
->cur : any
->minChar : any
+>minChar : any (error)
+>cur.minChar : any (error)
+>cur : any (error)
+>minChar : any (error)
 
                 var limChar = cur.limChar + (inclusive ? 1 : 0)
->limChar : any
->cur.limChar + (inclusive ? 1 : 0) : any
->cur.limChar : any
->cur : any
->limChar : any
+>limChar : any (error)
+>cur.limChar + (inclusive ? 1 : 0) : any (error)
+>cur.limChar : any (error)
+>cur : any (error)
+>limChar : any (error)
 >(inclusive ? 1 : 0) : 0 | 1
 >inclusive ? 1 : 0 : 0 | 1
 >inclusive : any
@@ -3992,52 +3992,52 @@ module TypeScript {
 >pos >= minChar && pos < limChar : boolean
 >pos >= minChar : boolean
 >pos : number
->minChar : any
+>minChar : any (error)
 >pos < limChar : boolean
 >pos : number
->limChar : any
+>limChar : any (error)
 
                     // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better
                     //       than top of the stack.
                     var previous = ctx.path.ast();
->previous : any
->ctx.path.ast() : any
->ctx.path.ast : () => any
+>previous : any (error)
+>ctx.path.ast() : any (error)
+>ctx.path.ast : () => any (error)
 >ctx.path : AstPath
 >ctx : AstPathContext
 >path : AstPath
->ast : () => any
+>ast : () => any (error)
 
                     if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {
 >previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar) : boolean
 >previous == null : boolean
->previous : any
+>previous : any (error)
 >null : null
 >(cur.minChar >= previous.minChar && cur.limChar <= previous.limChar) : boolean
 >cur.minChar >= previous.minChar && cur.limChar <= previous.limChar : boolean
 >cur.minChar >= previous.minChar : boolean
->cur.minChar : any
->cur : any
->minChar : any
->previous.minChar : any
->previous : any
->minChar : any
+>cur.minChar : any (error)
+>cur : any (error)
+>minChar : any (error)
+>previous.minChar : any (error)
+>previous : any (error)
+>minChar : any (error)
 >cur.limChar <= previous.limChar : boolean
->cur.limChar : any
->cur : any
->limChar : any
->previous.limChar : any
->previous : any
->limChar : any
+>cur.limChar : any (error)
+>cur : any (error)
+>limChar : any (error)
+>previous.limChar : any (error)
+>previous : any (error)
+>limChar : any (error)
 
                         ctx.path.push(cur);
 >ctx.path.push(cur) : void
->ctx.path.push : (ast: any) => void
+>ctx.path.push : (ast: any (error)) => void
 >ctx.path : AstPath
 >ctx : AstPathContext
 >path : AstPath
->push : (ast: any) => void
->cur : any
+>push : (ast: any (error)) => void
+>cur : any (error)
                     }
                     else {
                         //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");
@@ -4048,32 +4048,32 @@ module TypeScript {
                 if (pos < limChar) {
 >pos < limChar : boolean
 >pos : number
->limChar : any
+>limChar : any (error)
 
                     lookInComments(cur.preComments);
 >lookInComments(cur.preComments) : void
->lookInComments : (comments: any[]) => void
->cur.preComments : any
->cur : any
->preComments : any
+>lookInComments : (comments: any (error)[]) => void
+>cur.preComments : any (error)
+>cur : any (error)
+>preComments : any (error)
                 }
                 if (pos >= minChar) {
 >pos >= minChar : boolean
 >pos : number
->minChar : any
+>minChar : any (error)
 
                     lookInComments(cur.postComments);
 >lookInComments(cur.postComments) : void
->lookInComments : (comments: any[]) => void
->cur.postComments : any
->cur : any
->postComments : any
+>lookInComments : (comments: any (error)[]) => void
+>cur.postComments : any (error)
+>cur : any (error)
+>postComments : any (error)
                 }
 
                 if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {
 >!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition) : boolean
->hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition) : any
->hasFlag : any
+>hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition) : any (error)
+>hasFlag : any (error)
 >options : GetAstPathOptions
 >GetAstPathOptions.DontPruneSearchBasedOnPosition : GetAstPathOptions
 >GetAstPathOptions : typeof GetAstPathOptions
@@ -4082,23 +4082,23 @@ module TypeScript {
                     // Don't go further down the tree if pos is outside of [minChar, limChar]
                     walker.options.goChildren = (minChar <= pos && pos <= limChar);
 >walker.options.goChildren = (minChar <= pos && pos <= limChar) : boolean
->walker.options.goChildren : any
->walker.options : any
->walker : any
->options : any
->goChildren : any
+>walker.options.goChildren : any (error)
+>walker.options : any (error)
+>walker : any (error)
+>options : any (error)
+>goChildren : any (error)
 >(minChar <= pos && pos <= limChar) : boolean
 >minChar <= pos && pos <= limChar : boolean
 >minChar <= pos : boolean
->minChar : any
+>minChar : any (error)
 >pos : number
 >pos <= limChar : boolean
 >pos : number
->limChar : any
+>limChar : any (error)
                 }
             }
             return cur;
->cur : any
+>cur : any (error)
         }
 
         var ctx = new AstPathContext();
@@ -4107,15 +4107,15 @@ module TypeScript {
 >AstPathContext : typeof AstPathContext
 
         TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx);
->TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx) : any
->TypeScript.getAstWalkerFactory().walk : any
->TypeScript.getAstWalkerFactory() : any
->TypeScript.getAstWalkerFactory : any
+>TypeScript.getAstWalkerFactory().walk(script, pre, null, null, ctx) : any (error)
+>TypeScript.getAstWalkerFactory().walk : any (error)
+>TypeScript.getAstWalkerFactory() : any (error)
+>TypeScript.getAstWalkerFactory : any (error)
 >TypeScript : typeof TypeScript
->getAstWalkerFactory : any
->walk : any
->script : any
->pre : (cur: any, parent: any, walker: any) => any
+>getAstWalkerFactory : any (error)
+>walk : any (error)
+>script : any (error)
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
 >null : null
 >null : null
 >ctx : AstPathContext
@@ -4131,9 +4131,9 @@ module TypeScript {
     // This is used when "position" might be inside a comment or string, etc.
     //
     export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
->getTokenizationOffset : (script: any, position: number) => number
->script : any
->TypeScript : any
+>getTokenizationOffset : (script: any (error), position: number) => number
+>script : any (error)
+>TypeScript : any (error)
 >position : number
 
         var bestOffset = 0;
@@ -4141,29 +4141,29 @@ module TypeScript {
 >0 : 0
 
         var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
->pre : (cur: any, parent: any, walker: any) => any
->(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
->cur : any
->TypeScript : any
->parent : any
->TypeScript : any
->walker : any
->TypeScript : any
->TypeScript : any
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>cur : any (error)
+>TypeScript : any (error)
+>parent : any (error)
+>TypeScript : any (error)
+>walker : any (error)
+>TypeScript : any (error)
+>TypeScript : any (error)
 
             if (TypeScript.isValidAstNode(cur)) {
 >TypeScript.isValidAstNode(cur) : boolean
->TypeScript.isValidAstNode : (ast: any) => boolean
+>TypeScript.isValidAstNode : (ast: any (error)) => boolean
 >TypeScript : typeof TypeScript
->isValidAstNode : (ast: any) => boolean
->cur : any
+>isValidAstNode : (ast: any (error)) => boolean
+>cur : any (error)
 
                 // Did we find a closer offset?
                 if (cur.minChar <= position) {
 >cur.minChar <= position : boolean
->cur.minChar : any
->cur : any
->minChar : any
+>cur.minChar : any (error)
+>cur : any (error)
+>minChar : any (error)
 >position : number
 
                     bestOffset = max(bestOffset, cur.minChar);
@@ -4172,50 +4172,50 @@ module TypeScript {
 >max(bestOffset, cur.minChar) : number
 >max : (a: number, b: number) => number
 >bestOffset : number
->cur.minChar : any
->cur : any
->minChar : any
+>cur.minChar : any (error)
+>cur : any (error)
+>minChar : any (error)
                 }
 
                 // Stop the walk if this node is not related to "minChar"
                 if (cur.minChar > position || cur.limChar < bestOffset) {
 >cur.minChar > position || cur.limChar < bestOffset : boolean
 >cur.minChar > position : boolean
->cur.minChar : any
->cur : any
->minChar : any
+>cur.minChar : any (error)
+>cur : any (error)
+>minChar : any (error)
 >position : number
 >cur.limChar < bestOffset : boolean
->cur.limChar : any
->cur : any
->limChar : any
+>cur.limChar : any (error)
+>cur : any (error)
+>limChar : any (error)
 >bestOffset : number
 
                     walker.options.goChildren = false;
 >walker.options.goChildren = false : false
->walker.options.goChildren : any
->walker.options : any
->walker : any
->options : any
->goChildren : any
+>walker.options.goChildren : any (error)
+>walker.options : any (error)
+>walker : any (error)
+>options : any (error)
+>goChildren : any (error)
 >false : false
                 }
             }
 
             return cur;
->cur : any
+>cur : any (error)
         }
 
         TypeScript.getAstWalkerFactory().walk(script, pre);
->TypeScript.getAstWalkerFactory().walk(script, pre) : any
->TypeScript.getAstWalkerFactory().walk : any
->TypeScript.getAstWalkerFactory() : any
->TypeScript.getAstWalkerFactory : any
+>TypeScript.getAstWalkerFactory().walk(script, pre) : any (error)
+>TypeScript.getAstWalkerFactory().walk : any (error)
+>TypeScript.getAstWalkerFactory() : any (error)
+>TypeScript.getAstWalkerFactory : any (error)
 >TypeScript : typeof TypeScript
->getAstWalkerFactory : any
->walk : any
->script : any
->pre : (cur: any, parent: any, walker: any) => any
+>getAstWalkerFactory : any (error)
+>walk : any (error)
+>script : any (error)
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
 
         return bestOffset;
 >bestOffset : number
@@ -4225,72 +4225,72 @@ module TypeScript {
     /// Simple function to Walk an AST using a simple callback function.
     ///
     export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
->walkAST : (ast: any, callback: (path: AstPath, walker: any) => void) => void
->ast : any
->TypeScript : any
->callback : (path: AstPath, walker: any) => void
+>walkAST : (ast: any (error), callback: (path: AstPath, walker: any (error)) => void) => void
+>ast : any (error)
+>TypeScript : any (error)
+>callback : (path: AstPath, walker: any (error)) => void
 >path : AstPath
->walker : any
->TypeScript : any
+>walker : any (error)
+>TypeScript : any (error)
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
->pre : (cur: any, parent: any, walker: any) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: any, parent: any, walker: any) => any
->cur : any
->TypeScript : any
->parent : any
->TypeScript : any
->walker : any
->TypeScript : any
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>cur : any (error)
+>TypeScript : any (error)
+>parent : any (error)
+>TypeScript : any (error)
+>walker : any (error)
+>TypeScript : any (error)
 
             var path: TypeScript.AstPath = walker.state;
 >path : AstPath
->TypeScript : any
->walker.state : any
->walker : any
->state : any
+>TypeScript : any (error)
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
             path.push(cur);
 >path.push(cur) : void
->path.push : (ast: any) => void
+>path.push : (ast: any (error)) => void
 >path : AstPath
->push : (ast: any) => void
->cur : any
+>push : (ast: any (error)) => void
+>cur : any (error)
 
             callback(path, walker);
 >callback(path, walker) : void
->callback : (path: AstPath, walker: any) => void
+>callback : (path: AstPath, walker: any (error)) => void
 >path : AstPath
->walker : any
+>walker : any (error)
 
             return cur;
->cur : any
+>cur : any (error)
         }
         var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
->post : (cur: any, parent: any, walker: any) => any
->function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: any, parent: any, walker: any) => any
->cur : any
->TypeScript : any
->parent : any
->TypeScript : any
->walker : any
->TypeScript : any
+>post : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>cur : any (error)
+>TypeScript : any (error)
+>parent : any (error)
+>TypeScript : any (error)
+>walker : any (error)
+>TypeScript : any (error)
 
             var path: TypeScript.AstPath = walker.state;
 >path : AstPath
->TypeScript : any
->walker.state : any
->walker : any
->state : any
+>TypeScript : any (error)
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
             path.pop();
->path.pop() : any
->path.pop : () => any
+>path.pop() : any (error)
+>path.pop : () => any (error)
 >path : AstPath
->pop : () => any
+>pop : () => any (error)
 
             return cur;
->cur : any
+>cur : any (error)
         }
 
         var path = new AstPath();
@@ -4299,16 +4299,16 @@ module TypeScript {
 >AstPath : typeof AstPath
 
         TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path);
->TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path) : any
->TypeScript.getAstWalkerFactory().walk : any
->TypeScript.getAstWalkerFactory() : any
->TypeScript.getAstWalkerFactory : any
+>TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path) : any (error)
+>TypeScript.getAstWalkerFactory().walk : any (error)
+>TypeScript.getAstWalkerFactory() : any (error)
+>TypeScript.getAstWalkerFactory : any (error)
 >TypeScript : typeof TypeScript
->getAstWalkerFactory : any
->walk : any
->ast : any
->pre : (cur: any, parent: any, walker: any) => any
->post : (cur: any, parent: any, walker: any) => any
+>getAstWalkerFactory : any (error)
+>walk : any (error)
+>ast : any (error)
+>pre : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
+>post : (cur: any (error), parent: any (error), walker: any (error)) => any (error)
 >null : null
 >path : AstPath
     }

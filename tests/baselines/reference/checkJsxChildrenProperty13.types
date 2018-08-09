@@ -34,8 +34,8 @@ class Button extends React.Component<ButtonProp, any> {
 
             <div>Hello World</div>
 ><div>Hello World</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
             </InnerButton>);
 >InnerButton : typeof InnerButton
@@ -59,8 +59,8 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 		return (<button>Hello</button>);
 >(<button>Hello</button>) : JSX.Element
 ><button>Hello</button> : JSX.Element
->button : any
->button : any
+>button : any (error)
+>button : any (error)
 	}
 }
 

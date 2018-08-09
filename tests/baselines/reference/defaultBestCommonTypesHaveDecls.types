@@ -3,17 +3,17 @@ var obj1: {};
 >obj1 : {}
 
 obj1.length;
->obj1.length : any
+>obj1.length : any (error)
 >obj1 : {}
->length : any
+>length : any (error)
 
 var obj2: Object;
 >obj2 : Object
 
 obj2.length;
->obj2.length : any
+>obj2.length : any (error)
 >obj2 : Object
->length : any
+>length : any (error)
 
 function concat<T>(x: T, y: T): T { return null; }
 >concat : <T>(x: T, y: T) => T
@@ -22,17 +22,17 @@ function concat<T>(x: T, y: T): T { return null; }
 >null : null
 
 var result = concat(1, ""); // error
->result : any
->concat(1, "") : any
+>result : any (error)
+>concat(1, "") : any (error)
 >concat : <T>(x: T, y: T) => T
 >1 : 1
 >"" : ""
 
 var elementCount = result.length; 
->elementCount : any
->result.length : any
->result : any
->length : any
+>elementCount : any (error)
+>result.length : any (error)
+>result : any (error)
+>length : any (error)
 
 function concat2<T, U>(x: T, y: U) { return null; }
 >concat2 : <T, U>(x: T, y: U) => any
@@ -48,9 +48,9 @@ var result2 = concat2(1, ""); // result2 will be number|string
 >"" : ""
 
 var elementCount2 = result.length; 
->elementCount2 : any
->result.length : any
->result : any
->length : any
+>elementCount2 : any (error)
+>result.length : any (error)
+>result : any (error)
+>length : any (error)
 
 

@@ -77,7 +77,7 @@ interface StringIdentity {
 >s : string
 }
 let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x => x};
->stringIdentity : any
+>stringIdentity : any (error)
 >id : (s: string) => string
 >arg => arg : (arg: string) => string
 >arg : string

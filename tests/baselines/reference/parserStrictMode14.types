@@ -3,5 +3,5 @@
 >"use strict" : "use strict"
 
 with (a) {
->a : any
+>a : any (error)
 }

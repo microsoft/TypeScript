@@ -1,17 +1,17 @@
 === /a.ts ===
 import foo = require("foo");
->foo : any
+>foo : any (error)
 
 import bar = require("bar");
->bar : any
+>bar : any (error)
 
 import baz = require("baz");
->baz : any
+>baz : any (error)
 
 foo + bar + baz;
->foo + bar + baz : any
->foo + bar : any
->foo : any
->bar : any
->baz : any
+>foo + bar + baz : any (error)
+>foo + bar : any (error)
+>foo : any (error)
+>bar : any (error)
+>baz : any (error)
 

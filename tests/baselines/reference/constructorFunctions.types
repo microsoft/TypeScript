@@ -113,11 +113,11 @@ const c4_v2 = new C4();
 >C4 : typeof C4
 
 var c5_v1;
->c5_v1 : any
+>c5_v1 : any (auto)
 
 c5_v1 = function f() { };
 >c5_v1 = function f() { } : () => void
->c5_v1 : any
+>c5_v1 : any (auto)
 >function f() { } : () => void
 >f : () => void
 
@@ -126,11 +126,11 @@ new c5_v1();
 >c5_v1 : () => void
 
 var c5_v2;
->c5_v2 : any
+>c5_v2 : any (auto)
 
 c5_v2 = class { };
 >c5_v2 = class { } : typeof c5_v2
->c5_v2 : any
+>c5_v2 : any (auto)
 >class { } : typeof c5_v2
 
 new c5_v2();
@@ -178,7 +178,7 @@ function C7(num) {}
 >num : number
 
 var c7_v1 = new C7();
->c7_v1 : any
->new C7() : any
+>c7_v1 : any (error)
+>new C7() : any (error)
 >C7 : typeof C7
 

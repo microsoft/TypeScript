@@ -1,6 +1,6 @@
 === tests/cases/compiler/sourceMapValidationLabeled.ts ===
 x:
->x : any
+>x : any (error)
 
 var b = 10;
 >b : number

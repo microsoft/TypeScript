@@ -42,17 +42,17 @@ function foo3(x: any) { }
 >x : any
 
 function foo4(x: typeof b);
->foo4 : { (x: any): any; (x: any): any; }
->x : any
->b : any
+>foo4 : { (x: any (error)): any; (x: any (error)): any; }
+>x : any (error)
+>b : any (error)
 
 function foo4(x: typeof b); // error
->foo4 : { (x: any): any; (x: any): any; }
->x : any
->b : any
+>foo4 : { (x: any (error)): any; (x: any (error)): any; }
+>x : any (error)
+>b : any (error)
 
 function foo4(x: any) { }
->foo4 : { (x: any): any; (x: any): any; }
+>foo4 : { (x: any (error)): any; (x: any (error)): any; }
 >x : any
 
 function foo13(x: I);

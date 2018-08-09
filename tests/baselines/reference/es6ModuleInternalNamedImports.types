@@ -43,8 +43,8 @@ export module M {
 >v : number
 
     export {M_I as i};
->M_I : any
->i : any
+>M_I : any (error)
+>i : any (error)
 
     export {M_C as c};
 >M_C : typeof M_C
@@ -55,8 +55,8 @@ export module M {
 >m : typeof M_M
 
     export {M_MU as mu};
->M_MU : any
->mu : any
+>M_MU : any (error)
+>mu : any (error)
 
     export {M_F as f};
 >M_F : () => void

@@ -13,7 +13,7 @@ class D extends C {
     x = super(); 
 >x : void
 >super() : void
->super : any
+>super : any (error)
  
     constructor() {
         super();
@@ -26,7 +26,7 @@ class D extends C {
 
             super(); 
 >super() : void
->super : any
+>super : any (error)
         }
 
         var y2 = function() {
@@ -35,7 +35,7 @@ class D extends C {
 
             super();
 >super() : void
->super : any
+>super : any (error)
         }
     }
 }

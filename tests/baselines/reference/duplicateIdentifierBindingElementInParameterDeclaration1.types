@@ -25,13 +25,13 @@ function f3([c,[c],[[c]]]) { }
 function f4({d, d:{d}}) { }
 >f4 : ({ d, d: { d } }: { d: { d: any; }; }) => void
 >d : { d: any; }
->d : any
+>d : any (error)
 >d : any
 
 function f5({e, e: {e}}, {e}, [d,e, [[e]]], ...e) { }
 >f5 : ({ e, e: { e } }: { e: { e: any; }; }, { e }: { e: any; }, [d, e, [[e]]]: [any, any, [[any]]], ...e: any[]) => void
 >e : { e: any; }
->e : any
+>e : any (error)
 >e : any
 >e : any
 >d : any

@@ -13,13 +13,13 @@ export default x;
 
 === tests/cases/compiler/user.ts ===
 import x from "./x.ts";
->x : any
+>x : any (error)
 
 import y from "./y.tsx";
->y : any
+>y : any (error)
 
 import z from "./z.d.ts";
->z : any
+>z : any (error)
 
 // Making sure the suggested fixes are valid:
 import x2 from "./x";

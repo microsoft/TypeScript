@@ -12,8 +12,8 @@ export module Database {
 	    public findPerson(id: number): P.Models.Person {
 >findPerson : (id: number) => P.Models.Person
 >id : number
->P : any
->Models : any
+>P : any (error)
+>Models : any (error)
 
 	        return new P.Models.Person("Rock");
 >new P.Models.Person("Rock") : P.Models.Person

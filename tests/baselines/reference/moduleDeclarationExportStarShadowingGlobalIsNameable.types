@@ -11,12 +11,12 @@ interface Account2 {
 >myAccNum : number
 }
 export { Account2 as Acc };
->Account2 : any
->Acc : any
+>Account2 : any (error)
+>Acc : any (error)
 
 === tests/cases/compiler/index.ts ===
 declare global {
->global : any
+>global : any (error)
 
     interface Account {
         someProp: number;
@@ -34,7 +34,7 @@ export const func = (account: model.Account, acc2: model.Acc) => {};
 >func : (account: model.Account, acc2: model.Acc) => void
 >(account: model.Account, acc2: model.Acc) => {} : (account: model.Account, acc2: model.Acc) => void
 >account : model.Account
->model : any
+>model : any (error)
 >acc2 : model.Acc
->model : any
+>model : any (error)
 

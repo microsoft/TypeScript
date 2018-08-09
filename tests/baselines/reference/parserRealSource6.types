@@ -11,12 +11,12 @@ module TypeScript {
 >TypeCollectionContext : TypeCollectionContext
 
         public script: Script = null;
->script : any
+>script : any (error)
 >null : null
 
         constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
->scopeChain : any
->checker : any
+>scopeChain : any (error)
+>checker : any (error)
         }
     }
 
@@ -24,25 +24,25 @@ module TypeScript {
 >MemberScopeContext : MemberScopeContext
 
         public type: Type = null;
->type : any
+>type : any (error)
 >null : null
 
         public ast: AST = null;
->ast : any
+>ast : any (error)
 >null : null
 
         public scope: SymbolScope;
->scope : any
+>scope : any (error)
 
         public options = new AstWalkOptions();
->options : any
->new AstWalkOptions() : any
->AstWalkOptions : any
+>options : any (error)
+>new AstWalkOptions() : any (error)
+>AstWalkOptions : any (error)
 
         constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
->flow : any
+>flow : any (error)
 >pos : number
->matchFlag : any
+>matchFlag : any (error)
         }
     }
 
@@ -50,15 +50,15 @@ module TypeScript {
 >EnclosingScopeContext : EnclosingScopeContext
 
         public scopeGetter: () => SymbolScope = null;
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >null : null
 
         public objectLiteralScopeGetter: () => SymbolScope = null;
->objectLiteralScopeGetter : () => any
+>objectLiteralScopeGetter : () => any (error)
 >null : null
 
         public scopeStartAST: AST = null;
->scopeStartAST : any
+>scopeStartAST : any (error)
 >null : null
 
         public skipNextFuncDeclForClass = false;
@@ -66,15 +66,15 @@ module TypeScript {
 >false : false
 
         public deepestModuleDecl: ModuleDeclaration = null;
->deepestModuleDecl : any
+>deepestModuleDecl : any (error)
 >null : null
 
         public enclosingClassDecl: TypeDeclaration = null;
->enclosingClassDecl : any
+>enclosingClassDecl : any (error)
 >null : null
 
         public enclosingObjectLit: UnaryExpression = null;
->enclosingObjectLit : any
+>enclosingObjectLit : any (error)
 >null : null
 
         public publicsOnly = true;
@@ -86,16 +86,16 @@ module TypeScript {
 >false : false
 
         private scriptFragment: Script;
->scriptFragment : any
+>scriptFragment : any (error)
 
         constructor (public logger: ILogger,
->logger : any
+>logger : any (error)
 
                     public script: Script,
->script : any
+>script : any (error)
 
                     public text: ISourceText,
->text : any
+>text : any (error)
 
                     public pos: number,
 >pos : number
@@ -105,88 +105,88 @@ module TypeScript {
         }
 
         public getScope(): SymbolScope {
->getScope : () => any
+>getScope : () => any (error)
 
             return this.scopeGetter();
->this.scopeGetter() : any
->this.scopeGetter : () => any
+>this.scopeGetter() : any (error)
+>this.scopeGetter : () => any (error)
 >this : this
->scopeGetter : () => any
+>scopeGetter : () => any (error)
         }
 
         public getObjectLiteralScope(): SymbolScope {
->getObjectLiteralScope : () => any
+>getObjectLiteralScope : () => any (error)
 
             return this.objectLiteralScopeGetter();
->this.objectLiteralScopeGetter() : any
->this.objectLiteralScopeGetter : () => any
+>this.objectLiteralScopeGetter() : any (error)
+>this.objectLiteralScopeGetter : () => any (error)
 >this : this
->objectLiteralScopeGetter : () => any
+>objectLiteralScopeGetter : () => any (error)
         }
 
         public getScopeAST() {
->getScopeAST : () => any
+>getScopeAST : () => any (error)
 
             return this.scopeStartAST;
->this.scopeStartAST : any
+>this.scopeStartAST : any (error)
 >this : this
->scopeStartAST : any
+>scopeStartAST : any (error)
         }
 
         public getScopePosition() {
->getScopePosition : () => any
+>getScopePosition : () => any (error)
 
             return this.scopeStartAST.minChar;
->this.scopeStartAST.minChar : any
->this.scopeStartAST : any
+>this.scopeStartAST.minChar : any (error)
+>this.scopeStartAST : any (error)
 >this : this
->scopeStartAST : any
->minChar : any
+>scopeStartAST : any (error)
+>minChar : any (error)
         }
 
         public getScriptFragmentStartAST(): AST {
->getScriptFragmentStartAST : () => any
+>getScriptFragmentStartAST : () => any (error)
 
             return this.scopeStartAST;
->this.scopeStartAST : any
+>this.scopeStartAST : any (error)
 >this : this
->scopeStartAST : any
+>scopeStartAST : any (error)
         }
 
         public getScriptFragmentPosition(): number {
 >getScriptFragmentPosition : () => number
 
             return this.getScriptFragmentStartAST().minChar;
->this.getScriptFragmentStartAST().minChar : any
->this.getScriptFragmentStartAST() : any
->this.getScriptFragmentStartAST : () => any
+>this.getScriptFragmentStartAST().minChar : any (error)
+>this.getScriptFragmentStartAST() : any (error)
+>this.getScriptFragmentStartAST : () => any (error)
 >this : this
->getScriptFragmentStartAST : () => any
->minChar : any
+>getScriptFragmentStartAST : () => any (error)
+>minChar : any (error)
         }
 
         public getScriptFragment(): Script {
->getScriptFragment : () => any
+>getScriptFragment : () => any (error)
 
             if (this.scriptFragment == null) {
 >this.scriptFragment == null : boolean
->this.scriptFragment : any
+>this.scriptFragment : any (error)
 >this : this
->scriptFragment : any
+>scriptFragment : any (error)
 >null : null
 
                 var ast = this.getScriptFragmentStartAST();
->ast : any
->this.getScriptFragmentStartAST() : any
->this.getScriptFragmentStartAST : () => any
+>ast : any (error)
+>this.getScriptFragmentStartAST() : any (error)
+>this.getScriptFragmentStartAST : () => any (error)
 >this : this
->getScriptFragmentStartAST : () => any
+>getScriptFragmentStartAST : () => any (error)
 
                 var minChar = ast.minChar;
->minChar : any
->ast.minChar : any
->ast : any
->minChar : any
+>minChar : any (error)
+>ast.minChar : any (error)
+>ast : any (error)
+>minChar : any (error)
 
                 var limChar = (this.isMemberCompletion ? this.pos : this.pos + 1);
 >limChar : number
@@ -205,56 +205,56 @@ module TypeScript {
 >1 : 1
 
                 this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script;
->this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any
->this.scriptFragment : any
+>this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any (error)
+>this.scriptFragment : any (error)
 >this : this
->scriptFragment : any
->TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any
->TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/) : any
->TypeScript.quickParse : any
+>scriptFragment : any (error)
+>TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/).Script : any (error)
+>TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null/*errorCapture*/) : any (error)
+>TypeScript.quickParse : any (error)
 >TypeScript : typeof TypeScript
->quickParse : any
->this.logger : any
+>quickParse : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->ast : any
->this.text : any
+>logger : any (error)
+>ast : any (error)
+>this.text : any (error)
 >this : this
->text : any
->minChar : any
+>text : any (error)
+>minChar : any (error)
 >limChar : number
 >null : null
->Script : any
+>Script : any (error)
             }
             return this.scriptFragment;
->this.scriptFragment : any
+>this.scriptFragment : any (error)
 >this : this
->scriptFragment : any
+>scriptFragment : any (error)
         }
     }
 
     export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
->preFindMemberScope : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>preFindMemberScope : (ast: any (error), parent: any (error), walker: any (error)) => any (error)
+>ast : any (error)
+>parent : any (error)
+>walker : any (error)
 
         var memScope: MemberScopeContext = walker.state;
 >memScope : MemberScopeContext
->walker.state : any
->walker : any
->state : any
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
         if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
 >hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar)) : boolean
->hasFlag(ast.flags, memScope.matchFlag) : any
->hasFlag : any
->ast.flags : any
->ast : any
->flags : any
->memScope.matchFlag : any
+>hasFlag(ast.flags, memScope.matchFlag) : any (error)
+>hasFlag : any (error)
+>ast.flags : any (error)
+>ast : any (error)
+>flags : any (error)
+>memScope.matchFlag : any (error)
 >memScope : MemberScopeContext
->matchFlag : any
+>matchFlag : any (error)
 >((memScope.pos < 0) || (memScope.pos == ast.limChar)) : boolean
 >(memScope.pos < 0) || (memScope.pos == ast.limChar) : boolean
 >(memScope.pos < 0) : boolean
@@ -268,24 +268,24 @@ module TypeScript {
 >memScope.pos : number
 >memScope : MemberScopeContext
 >pos : number
->ast.limChar : any
->ast : any
->limChar : any
+>ast.limChar : any (error)
+>ast : any (error)
+>limChar : any (error)
 
             memScope.ast = ast;
->memScope.ast = ast : any
->memScope.ast : any
+>memScope.ast = ast : any (error)
+>memScope.ast : any (error)
 >memScope : MemberScopeContext
->ast : any
->ast : any
+>ast : any (error)
+>ast : any (error)
 
             if ((ast.type == null) && (memScope.pos >= 0)) {
 >(ast.type == null) && (memScope.pos >= 0) : boolean
 >(ast.type == null) : boolean
 >ast.type == null : boolean
->ast.type : any
->ast : any
->type : any
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
 >null : null
 >(memScope.pos >= 0) : boolean
 >memScope.pos >= 0 : boolean
@@ -295,114 +295,114 @@ module TypeScript {
 >0 : 0
 
                 memScope.flow.inScopeTypeCheck(ast, memScope.scope);
->memScope.flow.inScopeTypeCheck(ast, memScope.scope) : any
->memScope.flow.inScopeTypeCheck : any
->memScope.flow : any
+>memScope.flow.inScopeTypeCheck(ast, memScope.scope) : any (error)
+>memScope.flow.inScopeTypeCheck : any (error)
+>memScope.flow : any (error)
 >memScope : MemberScopeContext
->flow : any
->inScopeTypeCheck : any
->ast : any
->memScope.scope : any
+>flow : any (error)
+>inScopeTypeCheck : any (error)
+>ast : any (error)
+>memScope.scope : any (error)
 >memScope : MemberScopeContext
->scope : any
+>scope : any (error)
             }
             memScope.type = ast.type;
->memScope.type = ast.type : any
->memScope.type : any
+>memScope.type = ast.type : any (error)
+>memScope.type : any (error)
 >memScope : MemberScopeContext
->type : any
->ast.type : any
->ast : any
->type : any
+>type : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
 
             memScope.options.stopWalk();
->memScope.options.stopWalk() : any
->memScope.options.stopWalk : any
->memScope.options : any
+>memScope.options.stopWalk() : any (error)
+>memScope.options.stopWalk : any (error)
+>memScope.options : any (error)
 >memScope : MemberScopeContext
->options : any
->stopWalk : any
+>options : any (error)
+>stopWalk : any (error)
         }
         return ast;
->ast : any
+>ast : any (error)
     }
 
     export function pushTypeCollectionScope(container: Symbol,
->pushTypeCollectionScope : (container: Symbol, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
+>pushTypeCollectionScope : (container: Symbol, valueMembers: any (error), ambientValueMembers: any (error), enclosedTypes: any (error), ambientEnclosedTypes: any (error), context: TypeCollectionContext, thisType: any (error), classType: any (error), moduleDecl: any (error)) => void
 >container : Symbol
 
         valueMembers: ScopedMembers,
->valueMembers : any
+>valueMembers : any (error)
 
         ambientValueMembers: ScopedMembers,
->ambientValueMembers : any
+>ambientValueMembers : any (error)
 
         enclosedTypes: ScopedMembers,
->enclosedTypes : any
+>enclosedTypes : any (error)
 
         ambientEnclosedTypes: ScopedMembers,
->ambientEnclosedTypes : any
+>ambientEnclosedTypes : any (error)
 
         context: TypeCollectionContext,
 >context : TypeCollectionContext
 
         thisType: Type,
->thisType : any
+>thisType : any (error)
 
         classType: Type,
->classType : any
+>classType : any (error)
 
         moduleDecl: ModuleDeclaration) {
->moduleDecl : any
+>moduleDecl : any (error)
 
         var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
->builder : any
->new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container) : any
->SymbolScopeBuilder : any
->valueMembers : any
->ambientValueMembers : any
->enclosedTypes : any
->ambientEnclosedTypes : any
+>builder : any (error)
+>new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container) : any (error)
+>SymbolScopeBuilder : any (error)
+>valueMembers : any (error)
+>ambientValueMembers : any (error)
+>enclosedTypes : any (error)
+>ambientEnclosedTypes : any (error)
 >null : null
 >container : Symbol
 
         var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
->chain : any
->new ScopeChain(container, context.scopeChain, builder) : any
->ScopeChain : any
+>chain : any (error)
+>new ScopeChain(container, context.scopeChain, builder) : any (error)
+>ScopeChain : any (error)
 >container : Symbol
->context.scopeChain : any
+>context.scopeChain : any (error)
 >context : TypeCollectionContext
->scopeChain : any
->builder : any
+>scopeChain : any (error)
+>builder : any (error)
 
         chain.thisType = thisType;
->chain.thisType = thisType : any
->chain.thisType : any
->chain : any
->thisType : any
->thisType : any
+>chain.thisType = thisType : any (error)
+>chain.thisType : any (error)
+>chain : any (error)
+>thisType : any (error)
+>thisType : any (error)
 
         chain.classType = classType;
->chain.classType = classType : any
->chain.classType : any
->chain : any
->classType : any
->classType : any
+>chain.classType = classType : any (error)
+>chain.classType : any (error)
+>chain : any (error)
+>classType : any (error)
+>classType : any (error)
 
         chain.moduleDecl = moduleDecl;
->chain.moduleDecl = moduleDecl : any
->chain.moduleDecl : any
->chain : any
->moduleDecl : any
->moduleDecl : any
+>chain.moduleDecl = moduleDecl : any (error)
+>chain.moduleDecl : any (error)
+>chain : any (error)
+>moduleDecl : any (error)
+>moduleDecl : any (error)
 
         context.scopeChain = chain;
->context.scopeChain = chain : any
->context.scopeChain : any
+>context.scopeChain = chain : any (error)
+>context.scopeChain : any (error)
 >context : TypeCollectionContext
->scopeChain : any
->chain : any
+>scopeChain : any (error)
+>chain : any (error)
     }
 
     export function popTypeCollectionScope(context: TypeCollectionContext) {
@@ -410,61 +410,61 @@ module TypeScript {
 >context : TypeCollectionContext
 
         context.scopeChain = context.scopeChain.previous;
->context.scopeChain = context.scopeChain.previous : any
->context.scopeChain : any
+>context.scopeChain = context.scopeChain.previous : any (error)
+>context.scopeChain : any (error)
 >context : TypeCollectionContext
->scopeChain : any
->context.scopeChain.previous : any
->context.scopeChain : any
+>scopeChain : any (error)
+>context.scopeChain.previous : any (error)
+>context.scopeChain : any (error)
 >context : TypeCollectionContext
->scopeChain : any
->previous : any
+>scopeChain : any (error)
+>previous : any (error)
     }
 
     export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
->preFindEnclosingScope : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>preFindEnclosingScope : (ast: any (error), parent: any (error), walker: any (error)) => any (error)
+>ast : any (error)
+>parent : any (error)
+>walker : any (error)
 
         var context: EnclosingScopeContext = walker.state;
 >context : EnclosingScopeContext
->walker.state : any
->walker : any
->state : any
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
         var minChar = ast.minChar;
->minChar : any
->ast.minChar : any
->ast : any
->minChar : any
+>minChar : any (error)
+>ast.minChar : any (error)
+>ast : any (error)
+>minChar : any (error)
 
         var limChar = ast.limChar;
->limChar : any
->ast.limChar : any
->ast : any
->limChar : any
+>limChar : any (error)
+>ast.limChar : any (error)
+>ast : any (error)
+>limChar : any (error)
 
         // Account for the fact completion list may be called at the end of a file which
         // is has not been fully re-parsed yet.
         if (ast.nodeType == NodeType.Script && context.pos > limChar)
 >ast.nodeType == NodeType.Script && context.pos > limChar : boolean
 >ast.nodeType == NodeType.Script : boolean
->ast.nodeType : any
->ast : any
->nodeType : any
->NodeType.Script : any
->NodeType : any
->Script : any
+>ast.nodeType : any (error)
+>ast : any (error)
+>nodeType : any (error)
+>NodeType.Script : any (error)
+>NodeType : any (error)
+>Script : any (error)
 >context.pos > limChar : boolean
 >context.pos : number
 >context : EnclosingScopeContext
 >pos : number
->limChar : any
+>limChar : any (error)
 
             limChar = context.pos;
 >limChar = context.pos : number
->limChar : any
+>limChar : any (error)
 >context.pos : number
 >context : EnclosingScopeContext
 >pos : number
@@ -473,7 +473,7 @@ module TypeScript {
 >(minChar <= context.pos) &&            (limChar >= context.pos) : boolean
 >(minChar <= context.pos) : boolean
 >minChar <= context.pos : boolean
->minChar : any
+>minChar : any (error)
 >context.pos : number
 >context : EnclosingScopeContext
 >pos : number
@@ -481,67 +481,67 @@ module TypeScript {
             (limChar >= context.pos)) {
 >(limChar >= context.pos) : boolean
 >limChar >= context.pos : boolean
->limChar : any
+>limChar : any (error)
 >context.pos : number
 >context : EnclosingScopeContext
 >pos : number
 
             switch (ast.nodeType) {
->ast.nodeType : any
->ast : any
->nodeType : any
+>ast.nodeType : any (error)
+>ast : any (error)
+>nodeType : any (error)
 
                 case NodeType.Script:
->NodeType.Script : any
->NodeType : any
->Script : any
+>NodeType.Script : any (error)
+>NodeType : any (error)
+>Script : any (error)
 
                     var script = <Script>ast;
->script : any
-><Script>ast : any
->ast : any
+>script : any (error)
+><Script>ast : any (error)
+>ast : any (error)
 
                     context.scopeGetter = function () {
 >context.scopeGetter = function () {                        return script.bod === null ? null : script.bod.enclosingScope;                    } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >function () {                        return script.bod === null ? null : script.bod.enclosingScope;                    } : () => any
 
                         return script.bod === null ? null : script.bod.enclosingScope;
 >script.bod === null ? null : script.bod.enclosingScope : any
 >script.bod === null : boolean
->script.bod : any
->script : any
->bod : any
+>script.bod : any (error)
+>script : any (error)
+>bod : any (error)
 >null : null
 >null : null
->script.bod.enclosingScope : any
->script.bod : any
->script : any
->bod : any
->enclosingScope : any
+>script.bod.enclosingScope : any (error)
+>script.bod : any (error)
+>script : any (error)
+>bod : any (error)
+>enclosingScope : any (error)
 
                     };
                     context.scopeStartAST = script;
->context.scopeStartAST = script : any
->context.scopeStartAST : any
+>context.scopeStartAST = script : any (error)
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
->script : any
+>scopeStartAST : any (error)
+>script : any (error)
 
                     break;
 
                 case NodeType.ClassDeclaration:
->NodeType.ClassDeclaration : any
->NodeType : any
->ClassDeclaration : any
+>NodeType.ClassDeclaration : any (error)
+>NodeType : any (error)
+>ClassDeclaration : any (error)
 
                     context.scopeGetter = function () {
 >context.scopeGetter = function () {                        return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;                    } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >function () {                        return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;                    } : () => any
 
                         return (ast.type === null || ast.type.instanceType.containedScope === null) ? null : ast.type.instanceType.containedScope;
@@ -549,190 +549,190 @@ module TypeScript {
 >(ast.type === null || ast.type.instanceType.containedScope === null) : boolean
 >ast.type === null || ast.type.instanceType.containedScope === null : boolean
 >ast.type === null : boolean
->ast.type : any
->ast : any
->type : any
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
 >null : null
 >ast.type.instanceType.containedScope === null : boolean
->ast.type.instanceType.containedScope : any
->ast.type.instanceType : any
->ast.type : any
->ast : any
->type : any
->instanceType : any
->containedScope : any
+>ast.type.instanceType.containedScope : any (error)
+>ast.type.instanceType : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>instanceType : any (error)
+>containedScope : any (error)
 >null : null
 >null : null
->ast.type.instanceType.containedScope : any
->ast.type.instanceType : any
->ast.type : any
->ast : any
->type : any
->instanceType : any
->containedScope : any
+>ast.type.instanceType.containedScope : any (error)
+>ast.type.instanceType : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>instanceType : any (error)
+>containedScope : any (error)
 
                     };
                     context.scopeStartAST = ast;
->context.scopeStartAST = ast : any
->context.scopeStartAST : any
+>context.scopeStartAST = ast : any (error)
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
->ast : any
+>scopeStartAST : any (error)
+>ast : any (error)
 
                     context.enclosingClassDecl = <TypeDeclaration>ast;
->context.enclosingClassDecl = <TypeDeclaration>ast : any
->context.enclosingClassDecl : any
+>context.enclosingClassDecl = <TypeDeclaration>ast : any (error)
+>context.enclosingClassDecl : any (error)
 >context : EnclosingScopeContext
->enclosingClassDecl : any
-><TypeDeclaration>ast : any
->ast : any
+>enclosingClassDecl : any (error)
+><TypeDeclaration>ast : any (error)
+>ast : any (error)
 
                     break;
 
                 case NodeType.ObjectLit:
->NodeType.ObjectLit : any
->NodeType : any
->ObjectLit : any
+>NodeType.ObjectLit : any (error)
+>NodeType : any (error)
+>ObjectLit : any (error)
 
                     var objectLit = <UnaryExpression>ast;
->objectLit : any
-><UnaryExpression>ast : any
->ast : any
+>objectLit : any (error)
+><UnaryExpression>ast : any (error)
+>ast : any (error)
 
                     // Only consider target-typed object literals
                     if (objectLit.targetType) {
->objectLit.targetType : any
->objectLit : any
->targetType : any
+>objectLit.targetType : any (error)
+>objectLit : any (error)
+>targetType : any (error)
 
                         context.scopeGetter = function () {
->context.scopeGetter = function () {                            return objectLit.targetType.containedScope;                        } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter = function () {                            return objectLit.targetType.containedScope;                        } : () => any (error)
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
->function () {                            return objectLit.targetType.containedScope;                        } : () => any
+>scopeGetter : () => any (error)
+>function () {                            return objectLit.targetType.containedScope;                        } : () => any (error)
 
                             return objectLit.targetType.containedScope;
->objectLit.targetType.containedScope : any
->objectLit.targetType : any
->objectLit : any
->targetType : any
->containedScope : any
+>objectLit.targetType.containedScope : any (error)
+>objectLit.targetType : any (error)
+>objectLit : any (error)
+>targetType : any (error)
+>containedScope : any (error)
 
                         };
                         context.objectLiteralScopeGetter = function () {
->context.objectLiteralScopeGetter = function () {                            return objectLit.targetType.memberScope;                        } : () => any
->context.objectLiteralScopeGetter : () => any
+>context.objectLiteralScopeGetter = function () {                            return objectLit.targetType.memberScope;                        } : () => any (error)
+>context.objectLiteralScopeGetter : () => any (error)
 >context : EnclosingScopeContext
->objectLiteralScopeGetter : () => any
->function () {                            return objectLit.targetType.memberScope;                        } : () => any
+>objectLiteralScopeGetter : () => any (error)
+>function () {                            return objectLit.targetType.memberScope;                        } : () => any (error)
 
                             return objectLit.targetType.memberScope;
->objectLit.targetType.memberScope : any
->objectLit.targetType : any
->objectLit : any
->targetType : any
->memberScope : any
+>objectLit.targetType.memberScope : any (error)
+>objectLit.targetType : any (error)
+>objectLit : any (error)
+>targetType : any (error)
+>memberScope : any (error)
                         }
                         context.enclosingObjectLit = objectLit;
->context.enclosingObjectLit = objectLit : any
->context.enclosingObjectLit : any
+>context.enclosingObjectLit = objectLit : any (error)
+>context.enclosingObjectLit : any (error)
 >context : EnclosingScopeContext
->enclosingObjectLit : any
->objectLit : any
+>enclosingObjectLit : any (error)
+>objectLit : any (error)
                     }
                     break;
 
                 case NodeType.ModuleDeclaration:
->NodeType.ModuleDeclaration : any
->NodeType : any
->ModuleDeclaration : any
+>NodeType.ModuleDeclaration : any (error)
+>NodeType : any (error)
+>ModuleDeclaration : any (error)
 
                     context.deepestModuleDecl = <ModuleDeclaration>ast;
->context.deepestModuleDecl = <ModuleDeclaration>ast : any
->context.deepestModuleDecl : any
+>context.deepestModuleDecl = <ModuleDeclaration>ast : any (error)
+>context.deepestModuleDecl : any (error)
 >context : EnclosingScopeContext
->deepestModuleDecl : any
-><ModuleDeclaration>ast : any
->ast : any
+>deepestModuleDecl : any (error)
+><ModuleDeclaration>ast : any (error)
+>ast : any (error)
 
                     context.scopeGetter = function () {
 >context.scopeGetter = function () {                        return ast.type === null ? null : ast.type.containedScope;                    } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >function () {                        return ast.type === null ? null : ast.type.containedScope;                    } : () => any
 
                         return ast.type === null ? null : ast.type.containedScope;
 >ast.type === null ? null : ast.type.containedScope : any
 >ast.type === null : boolean
->ast.type : any
->ast : any
->type : any
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
 >null : null
 >null : null
->ast.type.containedScope : any
->ast.type : any
->ast : any
->type : any
->containedScope : any
+>ast.type.containedScope : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>containedScope : any (error)
 
                     };
                     context.scopeStartAST = ast;
->context.scopeStartAST = ast : any
->context.scopeStartAST : any
+>context.scopeStartAST = ast : any (error)
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
->ast : any
+>scopeStartAST : any (error)
+>ast : any (error)
 
                     break;
 
                 case NodeType.InterfaceDeclaration:
->NodeType.InterfaceDeclaration : any
->NodeType : any
->InterfaceDeclaration : any
+>NodeType.InterfaceDeclaration : any (error)
+>NodeType : any (error)
+>InterfaceDeclaration : any (error)
 
                     context.scopeGetter = function () {
 >context.scopeGetter = function () {                        return (ast.type === null) ? null : ast.type.containedScope;                    } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >function () {                        return (ast.type === null) ? null : ast.type.containedScope;                    } : () => any
 
                         return (ast.type === null) ? null : ast.type.containedScope;
 >(ast.type === null) ? null : ast.type.containedScope : any
 >(ast.type === null) : boolean
 >ast.type === null : boolean
->ast.type : any
->ast : any
->type : any
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
 >null : null
 >null : null
->ast.type.containedScope : any
->ast.type : any
->ast : any
->type : any
->containedScope : any
+>ast.type.containedScope : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>containedScope : any (error)
 
                     };
                     context.scopeStartAST = ast;
->context.scopeStartAST = ast : any
->context.scopeStartAST : any
+>context.scopeStartAST = ast : any (error)
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
->ast : any
+>scopeStartAST : any (error)
+>ast : any (error)
 
                     break;
 
                 case NodeType.FuncDecl: {
->NodeType.FuncDecl : any
->NodeType : any
->FuncDecl : any
+>NodeType.FuncDecl : any (error)
+>NodeType : any (error)
+>FuncDecl : any (error)
 
                     var funcDecl = <FuncDecl>ast;
->funcDecl : any
-><FuncDecl>ast : any
->ast : any
+>funcDecl : any (error)
+><FuncDecl>ast : any (error)
+>ast : any (error)
 
                     if (context.skipNextFuncDeclForClass) {
 >context.skipNextFuncDeclForClass : boolean
@@ -749,108 +749,108 @@ module TypeScript {
                     else {
                         context.scopeGetter = function () {
 >context.scopeGetter = function () {                            // The scope of a class constructor is hidden somewhere we don't expect :-S                            if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {                                if (ast.type && ast.type.enclosingType) {                                    return ast.type.enclosingType.constructorScope;                                }                            }                            if (funcDecl.scopeType) {                                return funcDecl.scopeType.containedScope;                            }                            if (funcDecl.type) {                                return funcDecl.type.containedScope;                            }                            return null;                        } : () => any
->context.scopeGetter : () => any
+>context.scopeGetter : () => any (error)
 >context : EnclosingScopeContext
->scopeGetter : () => any
+>scopeGetter : () => any (error)
 >function () {                            // The scope of a class constructor is hidden somewhere we don't expect :-S                            if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {                                if (ast.type && ast.type.enclosingType) {                                    return ast.type.enclosingType.constructorScope;                                }                            }                            if (funcDecl.scopeType) {                                return funcDecl.scopeType.containedScope;                            }                            if (funcDecl.type) {                                return funcDecl.type.containedScope;                            }                            return null;                        } : () => any
 
                             // The scope of a class constructor is hidden somewhere we don't expect :-S
                             if (funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod)) {
 >funcDecl.isConstructor && hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
->funcDecl.isConstructor : any
->funcDecl : any
->isConstructor : any
->hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any
->hasFlag : any
->funcDecl.fncFlags : any
->funcDecl : any
->fncFlags : any
->FncFlags.ClassMethod : any
->FncFlags : any
->ClassMethod : any
+>funcDecl.isConstructor : any (error)
+>funcDecl : any (error)
+>isConstructor : any (error)
+>hasFlag(funcDecl.fncFlags, FncFlags.ClassMethod) : any (error)
+>hasFlag : any (error)
+>funcDecl.fncFlags : any (error)
+>funcDecl : any (error)
+>fncFlags : any (error)
+>FncFlags.ClassMethod : any (error)
+>FncFlags : any (error)
+>ClassMethod : any (error)
 
                                 if (ast.type && ast.type.enclosingType) {
 >ast.type && ast.type.enclosingType : any
->ast.type : any
->ast : any
->type : any
->ast.type.enclosingType : any
->ast.type : any
->ast : any
->type : any
->enclosingType : any
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>ast.type.enclosingType : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>enclosingType : any (error)
 
                                     return ast.type.enclosingType.constructorScope;
->ast.type.enclosingType.constructorScope : any
->ast.type.enclosingType : any
->ast.type : any
->ast : any
->type : any
->enclosingType : any
->constructorScope : any
+>ast.type.enclosingType.constructorScope : any (error)
+>ast.type.enclosingType : any (error)
+>ast.type : any (error)
+>ast : any (error)
+>type : any (error)
+>enclosingType : any (error)
+>constructorScope : any (error)
                                 }
                             }
 
                             if (funcDecl.scopeType) {
->funcDecl.scopeType : any
->funcDecl : any
->scopeType : any
+>funcDecl.scopeType : any (error)
+>funcDecl : any (error)
+>scopeType : any (error)
 
                                 return funcDecl.scopeType.containedScope;
->funcDecl.scopeType.containedScope : any
->funcDecl.scopeType : any
->funcDecl : any
->scopeType : any
->containedScope : any
+>funcDecl.scopeType.containedScope : any (error)
+>funcDecl.scopeType : any (error)
+>funcDecl : any (error)
+>scopeType : any (error)
+>containedScope : any (error)
                             }
 
                             if (funcDecl.type) {
->funcDecl.type : any
->funcDecl : any
->type : any
+>funcDecl.type : any (error)
+>funcDecl : any (error)
+>type : any (error)
 
                                 return funcDecl.type.containedScope;
->funcDecl.type.containedScope : any
->funcDecl.type : any
->funcDecl : any
->type : any
->containedScope : any
+>funcDecl.type.containedScope : any (error)
+>funcDecl.type : any (error)
+>funcDecl : any (error)
+>type : any (error)
+>containedScope : any (error)
                             }
                             return null;
 >null : null
 
                         };
                         context.scopeStartAST = ast;
->context.scopeStartAST = ast : any
->context.scopeStartAST : any
+>context.scopeStartAST = ast : any (error)
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
->ast : any
+>scopeStartAST : any (error)
+>ast : any (error)
                     }
                 }
                     break;
             }
             walker.options.goChildren = true;
 >walker.options.goChildren = true : true
->walker.options.goChildren : any
->walker.options : any
->walker : any
->options : any
->goChildren : any
+>walker.options.goChildren : any (error)
+>walker.options : any (error)
+>walker : any (error)
+>options : any (error)
+>goChildren : any (error)
 >true : true
         }
         else {
             walker.options.goChildren = false;
 >walker.options.goChildren = false : false
->walker.options.goChildren : any
->walker.options : any
->walker : any
->options : any
->goChildren : any
+>walker.options.goChildren : any (error)
+>walker.options : any (error)
+>walker : any (error)
+>options : any (error)
+>goChildren : any (error)
 >false : false
         }
         return ast;
->ast : any
+>ast : any (error)
     }
 
     //
@@ -859,10 +859,10 @@ module TypeScript {
     // Return "null" if the enclosing scope can't be found.
     //
     export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
->findEnclosingScopeAt : (logger: any, script: any, text: any, pos: number, isMemberCompletion: boolean) => EnclosingScopeContext
->logger : any
->script : any
->text : any
+>findEnclosingScopeAt : (logger: any (error), script: any (error), text: any (error), pos: number, isMemberCompletion: boolean) => EnclosingScopeContext
+>logger : any (error)
+>script : any (error)
+>text : any (error)
 >pos : number
 >isMemberCompletion : boolean
 
@@ -870,31 +870,31 @@ module TypeScript {
 >context : EnclosingScopeContext
 >new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion) : EnclosingScopeContext
 >EnclosingScopeContext : typeof EnclosingScopeContext
->logger : any
->script : any
->text : any
+>logger : any (error)
+>script : any (error)
+>text : any (error)
 >pos : number
 >isMemberCompletion : boolean
 
         TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context);
->TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context) : any
->TypeScript.getAstWalkerFactory().walk : any
->TypeScript.getAstWalkerFactory() : any
->TypeScript.getAstWalkerFactory : any
+>TypeScript.getAstWalkerFactory().walk(script, preFindEnclosingScope, null, null, context) : any (error)
+>TypeScript.getAstWalkerFactory().walk : any (error)
+>TypeScript.getAstWalkerFactory() : any (error)
+>TypeScript.getAstWalkerFactory : any (error)
 >TypeScript : typeof TypeScript
->getAstWalkerFactory : any
->walk : any
->script : any
->preFindEnclosingScope : (ast: any, parent: any, walker: any) => any
+>getAstWalkerFactory : any (error)
+>walk : any (error)
+>script : any (error)
+>preFindEnclosingScope : (ast: any (error), parent: any (error), walker: any (error)) => any (error)
 >null : null
 >null : null
 >context : EnclosingScopeContext
 
         if (context.scopeStartAST === null)
 >context.scopeStartAST === null : boolean
->context.scopeStartAST : any
+>context.scopeStartAST : any (error)
 >context : EnclosingScopeContext
->scopeStartAST : any
+>scopeStartAST : any (error)
 >null : null
 
             return null;

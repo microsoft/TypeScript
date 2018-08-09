@@ -2,21 +2,21 @@
 // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({x: [a, b], y: {c, d, e}}) { }
 >foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
->x : any
+>x : any (error)
 >a : any
 >b : any
->y : any
+>y : any (error)
 >c : any
 >d : any
 >e : any
 
 function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
 >bar : ({ x: [a, b], y: { c, d, e } }: { x: [any, number?]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
->x : any
+>x : any (error)
 >a : any
 >b : number
 >10 : 10
->y : any
+>y : any (error)
 >c : any
 >d : any
 >e : { f: number; }

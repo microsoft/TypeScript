@@ -16,10 +16,10 @@ var x = Colors.Red; // type of 'x' should be 'Colors'
 >Red : Colors.Red
 
 var p = x.Green; // error
->p : any
->x.Green : any
+>p : any (error)
+>x.Green : any (error)
 >x : Colors.Red
->Green : any
+>Green : any (error)
 
 x.toFixed(); // ok
 >x.toFixed() : string
@@ -33,9 +33,9 @@ function fill<B extends Colors>(f: B) {
 >f : B
 
     f.Green; // error
->f.Green : any
+>f.Green : any (error)
 >f : B
->Green : any
+>Green : any (error)
 
     f.toFixed(); // ok
 >f.toFixed() : string

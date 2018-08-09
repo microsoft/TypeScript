@@ -25,12 +25,12 @@ export { c as c2 };
 >c2 : typeof c
 
 export { i, m as instantiatedModule };
->i : any
+>i : any (error)
 >m : typeof m
 >instantiatedModule : typeof m
 
 export { uninstantiated };
->uninstantiated : any
+>uninstantiated : any (error)
 
 export { x };
 >x : number

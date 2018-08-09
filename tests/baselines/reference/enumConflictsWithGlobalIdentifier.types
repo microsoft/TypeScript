@@ -7,12 +7,12 @@ enum Position {
 >0 : 0
 }
 var x = IgnoreRulesSpecific.
->x : any
->IgnoreRulesSpecific. : any
->IgnoreRulesSpecific : any
+>x : any (error)
+>IgnoreRulesSpecific. : any (error)
+>IgnoreRulesSpecific : any (error)
 
 var y = Position.IgnoreRulesSpecific;
-> : any
+> : any (error)
 >y : Position
 >Position.IgnoreRulesSpecific : Position
 >Position : typeof Position

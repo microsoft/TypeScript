@@ -9,15 +9,15 @@ function f<T, U>(x: T, y: U): T { return null; }
 >null : null
 
 var r1 = f<number>(1, '');
->r1 : any
->f<number>(1, '') : any
+>r1 : any (error)
+>f<number>(1, '') : any (error)
 >f : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
 
 var r1b = f<number, string, number>(1, '');
->r1b : any
->f<number, string, number>(1, '') : any
+>r1b : any (error)
+>f<number, string, number>(1, '') : any (error)
 >f : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
@@ -30,15 +30,15 @@ var f2 = <T, U>(x: T, y: U): T => { return null; }
 >null : null
 
 var r2 = f2<number>(1, '');
->r2 : any
->f2<number>(1, '') : any
+>r2 : any (error)
+>f2<number>(1, '') : any (error)
 >f2 : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
 
 var r2b = f2<number, string, number>(1, '');
->r2b : any
->f2<number, string, number>(1, '') : any
+>r2b : any (error)
+>f2<number, string, number>(1, '') : any (error)
 >f2 : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
@@ -49,15 +49,15 @@ var f3: { <T, U>(x: T, y: U): T; }
 >y : U
 
 var r3 = f3<number>(1, '');
->r3 : any
->f3<number>(1, '') : any
+>r3 : any (error)
+>f3<number>(1, '') : any (error)
 >f3 : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
 
 var r3b = f3<number, string, number>(1, '');
->r3b : any
->f3<number, string, number>(1, '') : any
+>r3b : any (error)
+>f3<number, string, number>(1, '') : any (error)
 >f3 : <T, U>(x: T, y: U) => T
 >1 : 1
 >'' : ""
@@ -75,8 +75,8 @@ class C {
     }
 }
 var r4 = (new C()).f<number>(1, '');
->r4 : any
->(new C()).f<number>(1, '') : any
+>r4 : any (error)
+>(new C()).f<number>(1, '') : any (error)
 >(new C()).f : <T, U>(x: T, y: U) => T
 >(new C()) : C
 >new C() : C
@@ -86,8 +86,8 @@ var r4 = (new C()).f<number>(1, '');
 >'' : ""
 
 var r4b = (new C()).f<number, string, number>(1, '');
->r4b : any
->(new C()).f<number, string, number>(1, '') : any
+>r4b : any (error)
+>(new C()).f<number, string, number>(1, '') : any (error)
 >(new C()).f : <T, U>(x: T, y: U) => T
 >(new C()) : C
 >new C() : C
@@ -106,8 +106,8 @@ var i: I;
 >i : I
 
 var r5 = i.f<number>(1, '');
->r5 : any
->i.f<number>(1, '') : any
+>r5 : any (error)
+>i.f<number>(1, '') : any (error)
 >i.f : <T, U>(x: T, y: U) => T
 >i : I
 >f : <T, U>(x: T, y: U) => T
@@ -115,8 +115,8 @@ var r5 = i.f<number>(1, '');
 >'' : ""
 
 var r5b = i.f<number, string, number>(1, '');
->r5b : any
->i.f<number, string, number>(1, '') : any
+>r5b : any (error)
+>i.f<number, string, number>(1, '') : any (error)
 >i.f : <T, U>(x: T, y: U) => T
 >i : I
 >f : <T, U>(x: T, y: U) => T

@@ -10,9 +10,9 @@ class D<T> extends C {
 
     constructor() {
         super<T>();
->super<T>() : any
->super : any
+>super<T>() : any (error)
+>super : any (error)
 >super : C
-> : any
+> : any (error)
     }
 }

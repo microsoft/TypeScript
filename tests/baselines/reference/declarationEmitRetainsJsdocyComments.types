@@ -55,7 +55,7 @@ export let {
 >null : null
 
 declare global {
->global : any
+>global : any (error)
 
     interface ExtFunc {
         /**

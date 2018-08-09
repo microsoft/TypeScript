@@ -39,7 +39,7 @@ function bar() {
 }
 
 label1:  var x2 = 10;
->label1 : any
+>label1 : any (error)
 >x2 : number
 >10 : 10
 

@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ModuleElements/parserErrorRecovery_ModuleElement1.ts ===
 return foo;
->foo : any
+>foo : any (error)
 }
 return bar;
->bar : any
+>bar : any (error)
 }

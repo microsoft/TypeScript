@@ -1,7 +1,7 @@
 === tests/cases/compiler/propertyAccess4.ts ===
 null.toBAZ();
->null.toBAZ() : any
->null.toBAZ : any
+>null.toBAZ() : any (error)
+>null.toBAZ : any (error)
 >null : null
->toBAZ : any
+>toBAZ : any (error)
 

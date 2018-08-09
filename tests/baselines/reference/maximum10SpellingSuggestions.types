@@ -5,18 +5,18 @@ var blob;
 >blob : any
 
 bob; bob; bob; bob; bob; bob; bob; bob; bob; bob;
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
->bob : any
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
+>bob : any (error)
 
 bob; bob;
->bob : any
->bob : any
+>bob : any (error)
+>bob : any (error)
 

@@ -73,9 +73,9 @@ const o = Object.freeze({ a: 1, b: "string" });
 
 o.b = o.a.toString();
 >o.b = o.a.toString() : string
->o.b : any
+>o.b : any (error)
 >o : Readonly<{ a: number; b: string; }>
->b : any
+>b : any (error)
 >o.a.toString() : string
 >o.a.toString : (radix?: number) => string
 >o.a : number

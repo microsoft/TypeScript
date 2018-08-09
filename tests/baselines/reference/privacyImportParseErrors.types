@@ -190,114 +190,114 @@ export module m1 {
 >f1 : () => m1_im2_private.c1
 
     import m1_im3_private = require("m1_M3_public");
->m1_im3_private : any
+>m1_im3_private : any (error)
 
     export var m1_im3_private_v1_public = m1_im3_private.c1;
->m1_im3_private_v1_public : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v1_public : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     export var m1_im3_private_v2_public = new m1_im3_private.c1();
->m1_im3_private_v2_public : any
->new m1_im3_private.c1() : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v2_public : any (error)
+>new m1_im3_private.c1() : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     export var m1_im3_private_v3_public = m1_im3_private.f1;
->m1_im3_private_v3_public : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v3_public : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     export var m1_im3_private_v4_public = m1_im3_private.f1();
->m1_im3_private_v4_public : any
->m1_im3_private.f1() : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v4_public : any (error)
+>m1_im3_private.f1() : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     var m1_im3_private_v1_private = m1_im3_private.c1;
->m1_im3_private_v1_private : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v1_private : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     var m1_im3_private_v2_private = new m1_im3_private.c1();
->m1_im3_private_v2_private : any
->new m1_im3_private.c1() : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v2_private : any (error)
+>new m1_im3_private.c1() : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     var m1_im3_private_v3_private = m1_im3_private.f1;
->m1_im3_private_v3_private : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v3_private : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     var m1_im3_private_v4_private = m1_im3_private.f1();
->m1_im3_private_v4_private : any
->m1_im3_private.f1() : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v4_private : any (error)
+>m1_im3_private.f1() : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     import m1_im4_private = require("m1_M4_private");
->m1_im4_private : any
+>m1_im4_private : any (error)
 
     export var m1_im4_private_v1_public = m1_im4_private.c1;
->m1_im4_private_v1_public : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v1_public : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     export var m1_im4_private_v2_public = new m1_im4_private.c1();
->m1_im4_private_v2_public : any
->new m1_im4_private.c1() : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v2_public : any (error)
+>new m1_im4_private.c1() : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     export var m1_im4_private_v3_public = m1_im4_private.f1;
->m1_im4_private_v3_public : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v3_public : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     export var m1_im4_private_v4_public = m1_im4_private.f1();
->m1_im4_private_v4_public : any
->m1_im4_private.f1() : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v4_public : any (error)
+>m1_im4_private.f1() : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     var m1_im4_private_v1_private = m1_im4_private.c1;
->m1_im4_private_v1_private : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v1_private : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     var m1_im4_private_v2_private = new m1_im4_private.c1();
->m1_im4_private_v2_private : any
->new m1_im4_private.c1() : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v2_private : any (error)
+>new m1_im4_private.c1() : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     var m1_im4_private_v3_private = m1_im4_private.f1;
->m1_im4_private_v3_private : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v3_private : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     var m1_im4_private_v4_private = m1_im4_private.f1();
->m1_im4_private_v4_private : any
->m1_im4_private.f1() : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v4_private : any (error)
+>m1_im4_private.f1() : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     export import m1_im1_public = m1_M1_public;
 >m1_im1_public : typeof m1_M1_public
@@ -308,10 +308,10 @@ export module m1 {
 >m1_M2_private : typeof m1_M2_private
 
     export import m1_im3_public = require("m1_M3_public");
->m1_im3_public : any
+>m1_im3_public : any (error)
 
     export import m1_im4_public = require("m1_M4_private");
->m1_im4_public : any
+>m1_im4_public : any (error)
 }
 
 module m2 {
@@ -505,114 +505,114 @@ module m2 {
 >f1 : () => m1_im2_private.c1
 
     import m1_im3_private = require("m2_M3_public");
->m1_im3_private : any
+>m1_im3_private : any (error)
 
     export var m1_im3_private_v1_public = m1_im3_private.c1;
->m1_im3_private_v1_public : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v1_public : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     export var m1_im3_private_v2_public = new m1_im3_private.c1();
->m1_im3_private_v2_public : any
->new m1_im3_private.c1() : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v2_public : any (error)
+>new m1_im3_private.c1() : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     export var m1_im3_private_v3_public = m1_im3_private.f1;
->m1_im3_private_v3_public : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v3_public : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     export var m1_im3_private_v4_public = m1_im3_private.f1();
->m1_im3_private_v4_public : any
->m1_im3_private.f1() : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v4_public : any (error)
+>m1_im3_private.f1() : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     var m1_im3_private_v1_private = m1_im3_private.c1;
->m1_im3_private_v1_private : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v1_private : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     var m1_im3_private_v2_private = new m1_im3_private.c1();
->m1_im3_private_v2_private : any
->new m1_im3_private.c1() : any
->m1_im3_private.c1 : any
->m1_im3_private : any
->c1 : any
+>m1_im3_private_v2_private : any (error)
+>new m1_im3_private.c1() : any (error)
+>m1_im3_private.c1 : any (error)
+>m1_im3_private : any (error)
+>c1 : any (error)
 
     var m1_im3_private_v3_private = m1_im3_private.f1;
->m1_im3_private_v3_private : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v3_private : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     var m1_im3_private_v4_private = m1_im3_private.f1();
->m1_im3_private_v4_private : any
->m1_im3_private.f1() : any
->m1_im3_private.f1 : any
->m1_im3_private : any
->f1 : any
+>m1_im3_private_v4_private : any (error)
+>m1_im3_private.f1() : any (error)
+>m1_im3_private.f1 : any (error)
+>m1_im3_private : any (error)
+>f1 : any (error)
 
     import m1_im4_private = require("m2_M4_private");
->m1_im4_private : any
+>m1_im4_private : any (error)
 
     export var m1_im4_private_v1_public = m1_im4_private.c1;
->m1_im4_private_v1_public : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v1_public : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     export var m1_im4_private_v2_public = new m1_im4_private.c1();
->m1_im4_private_v2_public : any
->new m1_im4_private.c1() : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v2_public : any (error)
+>new m1_im4_private.c1() : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     export var m1_im4_private_v3_public = m1_im4_private.f1;
->m1_im4_private_v3_public : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v3_public : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     export var m1_im4_private_v4_public = m1_im4_private.f1();
->m1_im4_private_v4_public : any
->m1_im4_private.f1() : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v4_public : any (error)
+>m1_im4_private.f1() : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     var m1_im4_private_v1_private = m1_im4_private.c1;
->m1_im4_private_v1_private : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v1_private : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     var m1_im4_private_v2_private = new m1_im4_private.c1();
->m1_im4_private_v2_private : any
->new m1_im4_private.c1() : any
->m1_im4_private.c1 : any
->m1_im4_private : any
->c1 : any
+>m1_im4_private_v2_private : any (error)
+>new m1_im4_private.c1() : any (error)
+>m1_im4_private.c1 : any (error)
+>m1_im4_private : any (error)
+>c1 : any (error)
 
     var m1_im4_private_v3_private = m1_im4_private.f1;
->m1_im4_private_v3_private : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v3_private : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     var m1_im4_private_v4_private = m1_im4_private.f1();
->m1_im4_private_v4_private : any
->m1_im4_private.f1() : any
->m1_im4_private.f1 : any
->m1_im4_private : any
->f1 : any
+>m1_im4_private_v4_private : any (error)
+>m1_im4_private.f1() : any (error)
+>m1_im4_private.f1 : any (error)
+>m1_im4_private : any (error)
+>f1 : any (error)
 
     // Parse error to export module
     export import m1_im1_public = m2_M1_public;
@@ -624,10 +624,10 @@ module m2 {
 >m2_M2_private : typeof m2_M2_private
 
     export import m1_im3_public = require("m2_M3_public");
->m1_im3_public : any
+>m1_im3_public : any (error)
 
     export import m1_im4_public = require("m2_M4_private");
->m1_im4_public : any
+>m1_im4_public : any (error)
 }
 
 export module glo_M1_public {
@@ -763,59 +763,59 @@ var glo_im1_private_v4_private = glo_im1_private.f1();
 
 
 import glo_im2_private = require("glo_M2_public");
->glo_im2_private : any
+>glo_im2_private : any (error)
 
 export var glo_im2_private_v1_public = glo_im2_private.c1;
->glo_im2_private_v1_public : any
->glo_im2_private.c1 : any
->glo_im2_private : any
->c1 : any
+>glo_im2_private_v1_public : any (error)
+>glo_im2_private.c1 : any (error)
+>glo_im2_private : any (error)
+>c1 : any (error)
 
 export var glo_im2_private_v2_public = new glo_im2_private.c1();
->glo_im2_private_v2_public : any
->new glo_im2_private.c1() : any
->glo_im2_private.c1 : any
->glo_im2_private : any
->c1 : any
+>glo_im2_private_v2_public : any (error)
+>new glo_im2_private.c1() : any (error)
+>glo_im2_private.c1 : any (error)
+>glo_im2_private : any (error)
+>c1 : any (error)
 
 export var glo_im2_private_v3_public = glo_im2_private.f1;
->glo_im2_private_v3_public : any
->glo_im2_private.f1 : any
->glo_im2_private : any
->f1 : any
+>glo_im2_private_v3_public : any (error)
+>glo_im2_private.f1 : any (error)
+>glo_im2_private : any (error)
+>f1 : any (error)
 
 export var glo_im2_private_v4_public = glo_im2_private.f1();
->glo_im2_private_v4_public : any
->glo_im2_private.f1() : any
->glo_im2_private.f1 : any
->glo_im2_private : any
->f1 : any
+>glo_im2_private_v4_public : any (error)
+>glo_im2_private.f1() : any (error)
+>glo_im2_private.f1 : any (error)
+>glo_im2_private : any (error)
+>f1 : any (error)
 
 var glo_im2_private_v1_private = glo_im2_private.c1;
->glo_im2_private_v1_private : any
->glo_im2_private.c1 : any
->glo_im2_private : any
->c1 : any
+>glo_im2_private_v1_private : any (error)
+>glo_im2_private.c1 : any (error)
+>glo_im2_private : any (error)
+>c1 : any (error)
 
 var glo_im2_private_v2_private = new glo_im2_private.c1();
->glo_im2_private_v2_private : any
->new glo_im2_private.c1() : any
->glo_im2_private.c1 : any
->glo_im2_private : any
->c1 : any
+>glo_im2_private_v2_private : any (error)
+>new glo_im2_private.c1() : any (error)
+>glo_im2_private.c1 : any (error)
+>glo_im2_private : any (error)
+>c1 : any (error)
 
 var glo_im2_private_v3_private = glo_im2_private.f1;
->glo_im2_private_v3_private : any
->glo_im2_private.f1 : any
->glo_im2_private : any
->f1 : any
+>glo_im2_private_v3_private : any (error)
+>glo_im2_private.f1 : any (error)
+>glo_im2_private : any (error)
+>f1 : any (error)
 
 var glo_im2_private_v4_private = glo_im2_private.f1();
->glo_im2_private_v4_private : any
->glo_im2_private.f1() : any
->glo_im2_private.f1 : any
->glo_im2_private : any
->f1 : any
+>glo_im2_private_v4_private : any (error)
+>glo_im2_private.f1() : any (error)
+>glo_im2_private.f1 : any (error)
+>glo_im2_private : any (error)
+>f1 : any (error)
 
 import glo_im3_private = glo_M3_private;
 >glo_im3_private : typeof glo_M3_private
@@ -874,59 +874,59 @@ var glo_im3_private_v4_private = glo_im3_private.f1();
 >f1 : () => glo_im3_private.c1
 
 import glo_im4_private = require("glo_M4_private");
->glo_im4_private : any
+>glo_im4_private : any (error)
 
 export var glo_im4_private_v1_public = glo_im4_private.c1;
->glo_im4_private_v1_public : any
->glo_im4_private.c1 : any
->glo_im4_private : any
->c1 : any
+>glo_im4_private_v1_public : any (error)
+>glo_im4_private.c1 : any (error)
+>glo_im4_private : any (error)
+>c1 : any (error)
 
 export var glo_im4_private_v2_public = new glo_im4_private.c1();
->glo_im4_private_v2_public : any
->new glo_im4_private.c1() : any
->glo_im4_private.c1 : any
->glo_im4_private : any
->c1 : any
+>glo_im4_private_v2_public : any (error)
+>new glo_im4_private.c1() : any (error)
+>glo_im4_private.c1 : any (error)
+>glo_im4_private : any (error)
+>c1 : any (error)
 
 export var glo_im4_private_v3_public = glo_im4_private.f1;
->glo_im4_private_v3_public : any
->glo_im4_private.f1 : any
->glo_im4_private : any
->f1 : any
+>glo_im4_private_v3_public : any (error)
+>glo_im4_private.f1 : any (error)
+>glo_im4_private : any (error)
+>f1 : any (error)
 
 export var glo_im4_private_v4_public = glo_im4_private.f1();
->glo_im4_private_v4_public : any
->glo_im4_private.f1() : any
->glo_im4_private.f1 : any
->glo_im4_private : any
->f1 : any
+>glo_im4_private_v4_public : any (error)
+>glo_im4_private.f1() : any (error)
+>glo_im4_private.f1 : any (error)
+>glo_im4_private : any (error)
+>f1 : any (error)
 
 var glo_im4_private_v1_private = glo_im4_private.c1;
->glo_im4_private_v1_private : any
->glo_im4_private.c1 : any
->glo_im4_private : any
->c1 : any
+>glo_im4_private_v1_private : any (error)
+>glo_im4_private.c1 : any (error)
+>glo_im4_private : any (error)
+>c1 : any (error)
 
 var glo_im4_private_v2_private = new glo_im4_private.c1();
->glo_im4_private_v2_private : any
->new glo_im4_private.c1() : any
->glo_im4_private.c1 : any
->glo_im4_private : any
->c1 : any
+>glo_im4_private_v2_private : any (error)
+>new glo_im4_private.c1() : any (error)
+>glo_im4_private.c1 : any (error)
+>glo_im4_private : any (error)
+>c1 : any (error)
 
 var glo_im4_private_v3_private = glo_im4_private.f1;
->glo_im4_private_v3_private : any
->glo_im4_private.f1 : any
->glo_im4_private : any
->f1 : any
+>glo_im4_private_v3_private : any (error)
+>glo_im4_private.f1 : any (error)
+>glo_im4_private : any (error)
+>f1 : any (error)
 
 var glo_im4_private_v4_private = glo_im4_private.f1();
->glo_im4_private_v4_private : any
->glo_im4_private.f1() : any
->glo_im4_private.f1 : any
->glo_im4_private : any
->f1 : any
+>glo_im4_private_v4_private : any (error)
+>glo_im4_private.f1() : any (error)
+>glo_im4_private.f1 : any (error)
+>glo_im4_private : any (error)
+>f1 : any (error)
 
 // Parse error to export module
 export import glo_im1_public = glo_M1_public;
@@ -938,10 +938,10 @@ export import glo_im2_public = glo_M3_private;
 >glo_M3_private : typeof glo_M3_private
 
 export import glo_im3_public = require("glo_M2_public");
->glo_im3_public : any
+>glo_im3_public : any (error)
 
 export import glo_im4_public = require("glo_M4_private");
->glo_im4_public : any
+>glo_im4_public : any (error)
 
 
 export declare module "use_glo_M1_public" {
@@ -953,54 +953,54 @@ export declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_public : new () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     export var use_glo_M1_public_v2_public: use_glo_M1_public;
->use_glo_M1_public_v2_public : any
+>use_glo_M1_public_v2_public : any (error)
 
     export var use_glo_M1_public_v3_public: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_public : () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_private : new () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     var use_glo_M1_public_v2_private: use_glo_M1_public;
->use_glo_M1_public_v2_private : any
+>use_glo_M1_public_v2_private : any (error)
 
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_private : () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     import use_glo_M2_public = require("glo_M2_public");
->use_glo_M2_public : any
+>use_glo_M2_public : any (error)
 
     export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
->use_glo_M2_public_v1_public : new () => any
->use_glo_M2_public : any
+>use_glo_M2_public_v1_public : new () => any (error)
+>use_glo_M2_public : any (error)
 
     export var use_glo_M2_public_v2_public: use_glo_M2_public;
->use_glo_M2_public_v2_public : any
+>use_glo_M2_public_v2_public : any (error)
 
     export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
->use_glo_M2_public_v3_public : () => any
->use_glo_M2_public : any
+>use_glo_M2_public_v3_public : () => any (error)
+>use_glo_M2_public : any (error)
 
     var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
->use_glo_M2_public_v1_private : new () => any
->use_glo_M2_public : any
+>use_glo_M2_public_v1_private : new () => any (error)
+>use_glo_M2_public : any (error)
 
     var use_glo_M2_public_v2_private: use_glo_M2_public;
->use_glo_M2_public_v2_private : any
+>use_glo_M2_public_v2_private : any (error)
 
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
->use_glo_M2_public_v3_private : () => any
->use_glo_M2_public : any
+>use_glo_M2_public_v3_private : () => any (error)
+>use_glo_M2_public : any (error)
 
     module m2 {
         import errorImport = require("glo_M2_public");
->errorImport : any
+>errorImport : any (error)
 
         import nonerrorImport = glo_M1_public;
 >nonerrorImport : typeof nonerrorImport
@@ -1008,7 +1008,7 @@ export declare module "use_glo_M1_public" {
 
         module m5 {
             import m5_errorImport = require("glo_M2_public");
->m5_errorImport : any
+>m5_errorImport : any (error)
 
             import m5_nonerrorImport = glo_M1_public;
 >m5_nonerrorImport : typeof m5_nonerrorImport
@@ -1027,54 +1027,54 @@ declare module "use_glo_M3_private" {
 
     export var use_glo_M3_private_v1_public: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_public : new () => use_glo_M3_private.c1
->use_glo_M3_private : any
+>use_glo_M3_private : any (error)
 
     export var use_glo_M3_private_v2_public: use_glo_M3_private;
->use_glo_M3_private_v2_public : any
+>use_glo_M3_private_v2_public : any (error)
 
     export var use_glo_M3_private_v3_public: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_public : () => use_glo_M3_private.c1
->use_glo_M3_private : any
+>use_glo_M3_private : any (error)
 
     var use_glo_M3_private_v1_private: { new (): use_glo_M3_private.c1; };
 >use_glo_M3_private_v1_private : new () => use_glo_M3_private.c1
->use_glo_M3_private : any
+>use_glo_M3_private : any (error)
 
     var use_glo_M3_private_v2_private: use_glo_M3_private;
->use_glo_M3_private_v2_private : any
+>use_glo_M3_private_v2_private : any (error)
 
     var use_glo_M3_private_v3_private: () => use_glo_M3_private.c1;
 >use_glo_M3_private_v3_private : () => use_glo_M3_private.c1
->use_glo_M3_private : any
+>use_glo_M3_private : any (error)
 
     import use_glo_M4_private = require("glo_M4_private");
->use_glo_M4_private : any
+>use_glo_M4_private : any (error)
 
     export var use_glo_M4_private_v1_public: { new (): use_glo_M4_private.c1; };
->use_glo_M4_private_v1_public : new () => any
->use_glo_M4_private : any
+>use_glo_M4_private_v1_public : new () => any (error)
+>use_glo_M4_private : any (error)
 
     export var use_glo_M4_private_v2_public: use_glo_M4_private;
->use_glo_M4_private_v2_public : any
+>use_glo_M4_private_v2_public : any (error)
 
     export var use_glo_M4_private_v3_public: () => use_glo_M4_private.c1;
->use_glo_M4_private_v3_public : () => any
->use_glo_M4_private : any
+>use_glo_M4_private_v3_public : () => any (error)
+>use_glo_M4_private : any (error)
 
     var use_glo_M4_private_v1_private: { new (): use_glo_M4_private.c1; };
->use_glo_M4_private_v1_private : new () => any
->use_glo_M4_private : any
+>use_glo_M4_private_v1_private : new () => any (error)
+>use_glo_M4_private : any (error)
 
     var use_glo_M4_private_v2_private: use_glo_M4_private;
->use_glo_M4_private_v2_private : any
+>use_glo_M4_private_v2_private : any (error)
 
     var use_glo_M4_private_v3_private: () => use_glo_M4_private.c1;
->use_glo_M4_private_v3_private : () => any
->use_glo_M4_private : any
+>use_glo_M4_private_v3_private : () => any (error)
+>use_glo_M4_private : any (error)
 
     module m2 {
         import errorImport = require("glo_M4_private");
->errorImport : any
+>errorImport : any (error)
 
         import nonerrorImport = glo_M3_private;
 >nonerrorImport : typeof nonerrorImport
@@ -1082,7 +1082,7 @@ declare module "use_glo_M3_private" {
 
         module m5 {
             import m5_errorImport = require("glo_M4_private");
->m5_errorImport : any
+>m5_errorImport : any (error)
 
             import m5_nonerrorImport = glo_M3_private;
 >m5_nonerrorImport : typeof m5_nonerrorImport
@@ -1092,7 +1092,7 @@ declare module "use_glo_M3_private" {
 }
 
 declare module "anotherParseError" {
->"anotherParseError" : any
+>"anotherParseError" : any (error)
 
     module m2 {
         declare module "abc" {
@@ -1111,7 +1111,7 @@ declare module "anotherParseError" {
 }
 
 declare export module "anotherParseError2" {
->"anotherParseError2" : any
+>"anotherParseError2" : any (error)
 
     module m2 {
         declare module "abc" {
@@ -1133,7 +1133,7 @@ module m2 {
 >m2 : typeof m2
 
     import m3 = require("use_glo_M1_public");
->m3 : any
+>m3 : any (error)
 
     module m4 {
 >m4 : typeof m4
@@ -1143,7 +1143,7 @@ module m2 {
 >10 : 10
 
         import m2 = require("use_glo_M1_public");
->m2 : any
+>m2 : any (error)
     }
 
 }
@@ -1152,7 +1152,7 @@ export module m3 {
 >m3 : typeof import("tests/cases/compiler/privacyImportParseErrors").m3
 
     import m3 = require("use_glo_M1_public");
->m3 : any
+>m3 : any (error)
 
     module m4 {
 >m4 : typeof m4
@@ -1162,7 +1162,7 @@ export module m3 {
 >10 : 10
 
         import m2 = require("use_glo_M1_public");
->m2 : any
+>m2 : any (error)
     }
 
 }

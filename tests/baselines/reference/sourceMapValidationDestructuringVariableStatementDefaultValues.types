@@ -34,25 +34,25 @@ var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >"trimming" : "trimming"
 
 var { name: nameA = "<NoName>" } = robotA;
->name : any
+>name : any (error)
 >nameA : string
 >"<NoName>" : "<NoName>"
 >robotA : Robot
 
 var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
->name : any
+>name : any (error)
 >nameB : string
 >"<NoName>" : "<NoName>"
->skill : any
+>skill : any (error)
 >skillB : string
 >"<skillUnspecified>" : "<skillUnspecified>"
 >robotB : Robot
 
 var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" };
->name : any
+>name : any (error)
 >nameC : string
 >"<NoName>" : "<NoName>"
->skill : any
+>skill : any (error)
 >skillC : string
 >"<skillUnspecified>" : "<skillUnspecified>"
 >{ name: "Edger", skill: "cutting edges" } : { name?: string; skill?: string; }

@@ -15,20 +15,20 @@ mod1.justExport.toFixed()
 >toFixed : (fractionDigits?: number) => string
 
 mod1.bothBefore.toFixed() // error, 'toFixed' not on 'string | number'
->mod1.bothBefore.toFixed() : any
->mod1.bothBefore.toFixed : any
+>mod1.bothBefore.toFixed() : any (error)
+>mod1.bothBefore.toFixed : any (error)
 >mod1.bothBefore : string | number
 >mod1 : { justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
 >bothBefore : string | number
->toFixed : any
+>toFixed : any (error)
 
 mod1.bothAfter.toFixed() // error, 'toFixed' not on 'string | number'
->mod1.bothAfter.toFixed() : any
->mod1.bothAfter.toFixed : any
+>mod1.bothAfter.toFixed() : any (error)
+>mod1.bothAfter.toFixed : any (error)
 >mod1.bothAfter : string | number
 >mod1 : { justExport: number; bothBefore: string | number; bothAfter: string | number; justProperty: string; }
 >bothAfter : string | number
->toFixed : any
+>toFixed : any (error)
 
 mod1.justProperty.length
 >mod1.justProperty.length : number

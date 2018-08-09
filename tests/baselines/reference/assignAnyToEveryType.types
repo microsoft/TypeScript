@@ -99,7 +99,7 @@ module M {
 
 M = x;
 >M = x : any
->M : any
+>M : any (error)
 >x : any
 
 function k<T>(a: T) {

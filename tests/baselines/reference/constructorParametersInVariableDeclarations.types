@@ -3,19 +3,19 @@ class A {
 >A : A
 
     private a = x;
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     private b = { p: x };
->b : { p: any; }
->{ p: x } : { p: any; }
->p : any
->x : any
+>b : { p: any (error); }
+>{ p: x } : { p: any (error); }
+>p : any (error)
+>x : any (error)
 
     private c = () => x;
->c : () => any
->() => x : () => any
->x : any
+>c : () => any (error)
+>() => x : () => any (error)
+>x : any (error)
 
     constructor(x: number) {
 >x : number
@@ -26,19 +26,19 @@ class B {
 >B : B
 
     private a = x;
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     private b = { p: x };
->b : { p: any; }
->{ p: x } : { p: any; }
->p : any
->x : any
+>b : { p: any (error); }
+>{ p: x } : { p: any (error); }
+>p : any (error)
+>x : any (error)
 
     private c = () => x;
->c : () => any
->() => x : () => any
->x : any
+>c : () => any (error)
+>() => x : () => any (error)
+>x : any (error)
 
     constructor() {
         var x = 1;

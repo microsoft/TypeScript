@@ -9,7 +9,7 @@
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/3.ts ===
 0_B0101
 >0_ : 0
->B0101 : any
+>B0101 : any (error)
 
 === tests/cases/conformance/parser/ecmascriptnext/numericSeparators/4.ts ===
 0b01__11

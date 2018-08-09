@@ -98,10 +98,10 @@ module U {
 }
 
 var f6 = (t = T) => { };
->f6 : (t?: any) => void
->(t = T) => { } : (t?: any) => void
->t : any
->T : any
+>f6 : (t?: any (error)) => void
+>(t = T) => { } : (t?: any (error)) => void
+>t : any (error)
+>T : any (error)
 
 var f7 = (t = U) => { return t; };
 >f7 : (t?: typeof U) => typeof U

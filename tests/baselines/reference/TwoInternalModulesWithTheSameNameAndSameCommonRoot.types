@@ -66,7 +66,7 @@ var o: { x: number; y: number };
 
 var o: A.Point;
 >o : { x: number; y: number; }
->A : any
+>A : any (error)
 
 var o = A.Origin;
 >o : { x: number; y: number; }
@@ -87,14 +87,14 @@ var o = A.Utils.mirror(o);
 var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
 >tl : A.Point
->A : any
+>A : any (error)
 >br : A.Point
->A : any
+>A : any (error)
 
 var p: A.Utils.Plane;
 >p : { tl: A.Point; br: A.Point; }
->A : any
->Utils : any
+>A : any (error)
+>Utils : any (error)
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >p : { tl: A.Point; br: A.Point; }

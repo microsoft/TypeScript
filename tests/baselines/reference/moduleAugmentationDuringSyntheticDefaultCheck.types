@@ -7,7 +7,7 @@ import moment = require("moment-timezone");
 === tests/cases/compiler/node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
 >moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
->moment : any
+>moment : any (error)
 
 declare namespace moment {
   interface Moment extends Object {

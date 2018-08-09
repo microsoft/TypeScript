@@ -132,7 +132,7 @@ interface I {
     //Index Signature
     [p];
 >[p] : any
->p : any
+>p : any (error)
 
     [p1: string];
 >p1 : string
@@ -298,7 +298,7 @@ module M {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string
@@ -497,7 +497,7 @@ module M {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string
@@ -793,7 +793,7 @@ export interface eI {
     //Index Signature
     [p];
 >[p] : any
->p : any
+>p : any (error)
 
     [p1: string];
 >p1 : string
@@ -959,7 +959,7 @@ export module eM {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string
@@ -1158,7 +1158,7 @@ export module eM {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string
@@ -1479,7 +1479,7 @@ export declare module eaM {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string
@@ -1633,7 +1633,7 @@ export declare module eaM {
         //Index Signature
         [p];
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string

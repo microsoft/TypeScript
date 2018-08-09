@@ -24,6 +24,6 @@ module A {
 
 var x: A.B = null;
 >x : A.B
->A : any
+>A : any (error)
 >null : null
 

@@ -3,19 +3,19 @@ abstract class A {}
 >A : A
 
 abstract
->abstract : any
+>abstract : any (error)
 
 class B {}
 >B : B
 
 abstract
->abstract : any
+>abstract : any (error)
 
 class C {}
 >C : C
 
 new A;
->new A : any
+>new A : any (error)
 >A : typeof A
 
 new B;

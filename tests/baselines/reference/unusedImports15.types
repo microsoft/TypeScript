@@ -3,10 +3,10 @@ import Element = require("react");
 >Element : typeof Element
 
 export const FooComponent = <div></div>
->FooComponent : any
-><div></div> : any
->div : any
->div : any
+>FooComponent : any (error)
+><div></div> : any (error)
+>div : any (error)
+>div : any (error)
 
 === tests/cases/compiler/node_modules/@types/react/index.d.ts ===
 export = React;
@@ -23,7 +23,7 @@ declare namespace React {
 >spec : any
 }
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
     }

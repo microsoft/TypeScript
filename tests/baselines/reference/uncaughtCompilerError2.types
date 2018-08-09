@@ -3,10 +3,10 @@ function getObj() {
 >getObj : () => void
 
    ().toString();
->().toString() : any
->().toString : any
->() : any
-> : any
->toString : any
+>().toString() : any (error)
+>().toString : any (error)
+>() : any (error)
+> : any (error)
+>toString : any (error)
 }
 

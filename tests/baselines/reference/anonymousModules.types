@@ -1,13 +1,13 @@
 === tests/cases/compiler/anonymousModules.ts ===
 module {
->module : any
+>module : any (error)
 
 	export var foo = 1;
 >foo : number
 >1 : 1
 
 	module {
->module : any
+>module : any (error)
 
 		export var bar = 1;
 >bar : number
@@ -19,7 +19,7 @@ module {
 >2 : 2
 
 	module {
->module : any
+>module : any (error)
 
 		var x = bar;
 >x : number

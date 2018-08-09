@@ -1,6 +1,6 @@
 === tests/cases/compiler/objectBindingPattern_restElementWithPropertyName.ts ===
 const { ...a: b } = {};
->a : any
+>a : any (error)
 >b : {}
 >{} : {}
 

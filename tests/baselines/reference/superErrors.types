@@ -4,26 +4,26 @@ function foo() {
 
     // super in a non class context
     var x = super;
->x : any
->super : any
->super : any
-> : any
+>x : any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
 
     var y = () => super;
->y : () => any
->() => super : () => any
->super : any
->super : any
-> : any
+>y : () => any (error)
+>() => super : () => any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
 
     var z = () => () => () => super;
->z : () => () => () => any
->() => () => () => super : () => () => () => any
->() => () => super : () => () => any
->() => super : () => any
->super : any
->super : any
-> : any
+>z : () => () => () => any (error)
+>() => () => () => super : () => () => () => any (error)
+>() => () => super : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
 }
 
 class User {
@@ -58,10 +58,10 @@ class RegisteredUser extends User {
 >inner : () => void
 
             super.sayHello();
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
         }
 
         // super call in a lambda in an inner function in a constructor 
@@ -69,23 +69,23 @@ class RegisteredUser extends User {
 >inner2 : () => void
 
             var x = () => super.sayHello();
->x : () => any
->() => super.sayHello() : () => any
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>x : () => any (error)
+>() => super.sayHello() : () => any (error)
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
         }
 
         // super call in a lambda in a function expression in a constructor 
         (function() { return () => super; })();
->(function() { return () => super; })() : () => any
->(function() { return () => super; }) : () => () => any
->function() { return () => super; } : () => () => any
->() => super : () => any
->super : any
->super : any
-> : any
+>(function() { return () => super; })() : () => any (error)
+>(function() { return () => super; }) : () => () => any (error)
+>function() { return () => super; } : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
     }
     sayHello(): void {
 >sayHello : () => void
@@ -102,48 +102,48 @@ class RegisteredUser extends User {
 >inner : () => void
 
             var x = () => super.sayHello();
->x : () => any
->() => super.sayHello() : () => any
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>x : () => any (error)
+>() => super.sayHello() : () => any (error)
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
         }
 
         // super call in a lambda in a function expression in a constructor 
         (function() { return () => super; })();
->(function() { return () => super; })() : () => any
->(function() { return () => super; }) : () => () => any
->function() { return () => super; } : () => () => any
->() => super : () => any
->super : any
->super : any
-> : any
+>(function() { return () => super; })() : () => any (error)
+>(function() { return () => super; }) : () => () => any (error)
+>function() { return () => super; } : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
     }
     static staticFunction(): void {
 >staticFunction : () => void
 
         // super in static functions
         var s = super;
->s : any
->super : any
+>s : any (error)
+>super : any (error)
 >super : typeof User
-> : any
+> : any (error)
 
         var x = () => super;
->x : () => any
->() => super : () => any
->super : any
+>x : () => any (error)
+>() => super : () => any (error)
+>super : any (error)
 >super : typeof User
-> : any
+> : any (error)
 
         var y = () => () => () => super;
->y : () => () => () => any
->() => () => () => super : () => () => () => any
->() => () => super : () => () => any
->() => super : () => any
->super : any
+>y : () => () => () => any (error)
+>() => () => () => super : () => () => () => any (error)
+>() => () => super : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
 >super : typeof User
-> : any
+> : any (error)
     }
 }

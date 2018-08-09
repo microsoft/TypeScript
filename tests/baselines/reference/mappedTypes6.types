@@ -441,9 +441,9 @@ x3.a = 1;
 
 x3.b = 1;  // Error
 >x3.b = 1 : 1
->x3.b : any
+>x3.b : any (error)
 >x3 : Bar
->b : any
+>b : any (error)
 >1 : 1
 
 declare let x4: Readonly<Bar>;
@@ -451,16 +451,16 @@ declare let x4: Readonly<Bar>;
 
 x4.a = 1;  // Error
 >x4.a = 1 : 1
->x4.a : any
+>x4.a : any (error)
 >x4 : Readonly<Bar>
->a : any
+>a : any (error)
 >1 : 1
 
 x4.b = 1;  // Error
 >x4.b = 1 : 1
->x4.b : any
+>x4.b : any (error)
 >x4 : Readonly<Bar>
->b : any
+>b : any (error)
 >1 : 1
 
 declare let x5: Readwrite<Bar>;

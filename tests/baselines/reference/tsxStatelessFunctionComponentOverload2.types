@@ -4,14 +4,14 @@ import React = require('react')
 
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->JSX : any
+>JSX : any (error)
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string
->JSX : any
+>JSX : any (error)
 
 let obj = {
 >obj : { yy: number; yy1: string; }

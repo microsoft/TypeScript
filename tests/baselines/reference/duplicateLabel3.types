@@ -1,6 +1,6 @@
 === tests/cases/compiler/duplicateLabel3.ts ===
 target:
->target : any
+>target : any (error)
 
 while (true) {
 >true : true
@@ -9,7 +9,7 @@ while (true) {
 >f : () => void
 
     target:
->target : any
+>target : any (error)
 
     while (true) {
 >true : true

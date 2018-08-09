@@ -1,12 +1,12 @@
 === tests/cases/conformance/parser/ecmascript5/parserNoASIOnCallAfterFunctionExpression1.ts ===
 var x = function () { }
->x : any
->function () { }(<any>window).foo : any
+>x : any (error)
+>function () { }(<any>window).foo : any (error)
 >function () { }(<any>window) : void
 >function () { } : () => void
 
 (<any>window).foo;
 ><any>window : any
 >window : Window
->foo : any
+>foo : any (error)
 

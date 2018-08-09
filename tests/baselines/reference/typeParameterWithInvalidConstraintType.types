@@ -9,15 +9,15 @@ class A<T extends T> {
 >x : T
 
         var a = x.foo();
->a : any
->x.foo() : any
->x.foo : any
+>a : any (error)
+>x.foo() : any (error)
+>x.foo : any (error)
 >x : T
->foo : any
+>foo : any (error)
 
         var b = new x(123);
->b : any
->new x(123) : any
+>b : any (error)
+>new x(123) : any (error)
 >x : T
 >123 : 123
 
@@ -28,8 +28,8 @@ class A<T extends T> {
 >1 : 1
 
         var d = x();
->d : any
->x() : any
+>d : any (error)
+>x() : any (error)
 >x : T
     }
 }

@@ -3,6 +3,6 @@ class C {
 >C : C
 
    [e]: Type
->[e] : any
->e : any
+>[e] : any (error)
+>e : any (error)
 }

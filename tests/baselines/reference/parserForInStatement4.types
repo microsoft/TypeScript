@@ -2,5 +2,5 @@
 for (var a = 1 in X) {
 >a : string
 >1 : 1
->X : any
+>X : any (error)
 }

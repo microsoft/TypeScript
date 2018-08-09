@@ -7,10 +7,10 @@ declare module "m" {
         }
     }
     export import a = x.c;
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 >c : a
 
     export = x;
->x : any
+>x : any (error)
 }

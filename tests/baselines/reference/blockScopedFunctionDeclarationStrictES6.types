@@ -13,6 +13,6 @@ if (true) {
 >foo : () => void
 }
 foo(); // Cannot find name since foo is block scoped
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 

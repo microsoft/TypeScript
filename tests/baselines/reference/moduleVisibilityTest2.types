@@ -127,23 +127,23 @@ module M {
 >M : typeof M
 
 	export var c = x;
->c : any
->x : any
+>c : any (error)
+>x : any (error)
 
 	export var meb = M.E.B;
->meb : any
->M.E.B : any
->M.E : any
+>meb : any (error)
+>M.E.B : any (error)
+>M.E : any (error)
 >M : typeof M
->E : any
->B : any
+>E : any (error)
+>B : any (error)
 }
 
 var cprime : M.I = <M.I>null;
->cprime : any
->M : any
-><M.I>null : any
->M : any
+>cprime : any (error)
+>M : any (error)
+><M.I>null : any (error)
+>M : any (error)
 >null : null
 
 var c = new M.C();
@@ -154,18 +154,18 @@ var c = new M.C();
 >C : typeof M.C
 
 var z = M.x;
->z : any
->M.x : any
+>z : any (error)
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 var alpha = M.E.A;
->alpha : any
->M.E.A : any
->M.E : any
+>alpha : any (error)
+>M.E.A : any (error)
+>M.E : any (error)
 >M : typeof M
->E : any
->A : any
+>E : any (error)
+>A : any (error)
 
 var omega = M.exported_var;
 >omega : any

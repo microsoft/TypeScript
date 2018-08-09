@@ -3,5 +3,5 @@
 >"use strict" : "use strict"
 
 import public = require("1");
->public : any
+>public : any (error)
 

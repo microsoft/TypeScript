@@ -6,9 +6,9 @@ declare const i: I;
 >i : I
 
 i.foo;
->i.foo : any
+>i.foo : any (error)
 >i : I
->foo : any
+>foo : any (error)
 
 i["foo"];
 >i["foo"] : any

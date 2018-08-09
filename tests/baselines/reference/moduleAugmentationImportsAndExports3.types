@@ -16,11 +16,11 @@ import {A} from "./f1";
 
 A.prototype.foo = function () { return undefined; }
 >A.prototype.foo = function () { return undefined; } : () => any
->A.prototype.foo : () => any
+>A.prototype.foo : () => any (error)
 >A.prototype : A
 >A : typeof A
 >prototype : A
->foo : () => any
+>foo : () => any (error)
 >function () { return undefined; } : () => any
 >undefined : undefined
 
@@ -36,21 +36,21 @@ declare module "./f1" {
 >"./f1" : typeof import("tests/cases/compiler/f1")
 
     import {B} from "./f2";
->B : any
+>B : any (error)
 
     import I = N.Ifc;
->I : any
->N : any
+>I : any (error)
+>N : any (error)
 >Ifc : I
 
     import C = N.Cls;
->C : any
->N : any
+>C : any (error)
+>N : any (error)
 >Cls : C
 
     interface A {
         foo(): B;
->foo : () => any
+>foo : () => any (error)
 
         bar(): I;
 >bar : () => I
@@ -70,11 +70,11 @@ let a: A;
 >a : A
 
 let b = a.foo().n;
->b : any
->a.foo().n : any
->a.foo() : any
->a.foo : () => any
+>b : any (error)
+>a.foo().n : any (error)
+>a.foo() : any (error)
+>a.foo : () => any (error)
 >a : A
->foo : () => any
->n : any
+>foo : () => any (error)
+>n : any (error)
 

@@ -49,9 +49,9 @@ my.app.Application()
 var min = window.min || {};
 >min : typeof min
 >window.min || {} : any
->window.min : any
+>window.min : any (error)
 >window : Window
->min : any
+>min : any (error)
 >{} : {}
 
 min.app = min.app || {};

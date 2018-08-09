@@ -1,7 +1,7 @@
 === tests/cases/compiler/cloduleAndTypeParameters.ts ===
 class Foo<T extends Foo.Bar> {
 >Foo : Foo<T>
->Foo : any
+>Foo : any (error)
 
   constructor() {
   }

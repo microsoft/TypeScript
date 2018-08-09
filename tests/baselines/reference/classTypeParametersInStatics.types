@@ -19,31 +19,31 @@ module Editor {
         }
 
         public static MakeHead(): List<T> { // should error
->MakeHead : () => List<any>
+>MakeHead : () => List<any (error)>
 
             var entry: List<T> = new List<T>(true, null);
->entry : List<any>
->new List<T>(true, null) : List<any>
+>entry : List<any (error)>
+>new List<T>(true, null) : List<any (error)>
 >List : typeof List
 >true : true
 >null : null
 
             entry.prev = entry;
->entry.prev = entry : List<any>
->entry.prev : List<any>
->entry : List<any>
->prev : List<any>
->entry : List<any>
+>entry.prev = entry : List<any (error)>
+>entry.prev : List<any (error)>
+>entry : List<any (error)>
+>prev : List<any (error)>
+>entry : List<any (error)>
 
             entry.next = entry;
->entry.next = entry : List<any>
->entry.next : List<any>
->entry : List<any>
->next : List<any>
->entry : List<any>
+>entry.next = entry : List<any (error)>
+>entry.next : List<any (error)>
+>entry : List<any (error)>
+>next : List<any (error)>
+>entry : List<any (error)>
 
             return entry;
->entry : List<any>
+>entry : List<any (error)>
         }        
 
         public static MakeHead2<T>(): List<T> { // should not error

@@ -1,31 +1,31 @@
 === /c.ts ===
 import foo, { bar } from "foo";
->foo : any
->bar : any
+>foo : any (error)
+>bar : any (error)
 
 import "./a";
 import "./b";
 foo(bar());
->foo(bar()) : any
->foo : any
->bar() : any
->bar : any
+>foo(bar()) : any (error)
+>foo : any (error)
+>bar() : any (error)
+>bar : any (error)
 
 === /a.ts ===
 import * as foo from "foo";
->foo : any
+>foo : any (error)
 
 foo.bar();
->foo.bar() : any
->foo.bar : any
->foo : any
->bar : any
+>foo.bar() : any (error)
+>foo.bar : any (error)
+>foo : any (error)
+>bar : any (error)
 
 === /b.ts ===
 import foo = require("foo");
->foo : any
+>foo : any (error)
 
 foo();
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 

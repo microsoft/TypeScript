@@ -32,8 +32,8 @@ var v5: G<any, any>;           // Error, any does not satisfy constraint B
 >v5 : G<any, any>
 
 var v6: G<any>;                // Error, wrong number of arguments
->v6 : any
+>v6 : any (error)
 
 var v7: G;                     // Error, no type arguments
->v7 : any
+>v7 : any (error)
 

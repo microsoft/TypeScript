@@ -21,8 +21,8 @@ export module c {
 }
 
 export var z = c.b;
->z : any
->c.b : any
+>z : any (error)
+>c.b : any (error)
 >c : typeof c
->b : any
+>b : any (error)
 

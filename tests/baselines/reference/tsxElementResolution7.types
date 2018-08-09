@@ -21,9 +21,9 @@ module my {
 // Error
 <my.other />;
 ><my.other /> : JSX.Element
->my.other : any
+>my.other : any (error)
 >my : typeof my
->other : any
+>other : any (error)
 
 module q {
 >q : typeof q
@@ -43,8 +43,8 @@ module q {
     // Error
     <mine.non />;
 ><mine.non /> : JSX.Element
->mine.non : any
+>mine.non : any (error)
 >mine : typeof mine
->non : any
+>non : any (error)
 }
 

@@ -29,7 +29,7 @@ class ELocVar extends C {
 >super(0, loc) : void
 >super : typeof C
 >0 : 0
->loc : any
+>loc : any (error)
     }
 
     m() {
@@ -78,18 +78,18 @@ function f() {
 
     if (x<10) {
 >x<10 : boolean
->x : any
+>x : any (error)
 >10 : 10
 
       x=11;
 >x=11 : 11
->x : any
+>x : any (error)
 >11 : 11
     }
     else {
         x=12;
 >x=12 : 12
->x : any
+>x : any (error)
 >12 : 12
     }
 }

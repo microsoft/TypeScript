@@ -12,7 +12,7 @@ module B {
 >1 : 1
 
     import Y = A;
->Y : any
->A : any
+>Y : any (error)
+>A : any (error)
 }
 

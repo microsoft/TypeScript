@@ -1,17 +1,17 @@
 === tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode1.ts ===
 foo1();
->foo1() : any
->foo1 : any
+>foo1() : any (error)
+>foo1 : any (error)
 
 foo1();
->foo1() : any
->foo1 : any
+>foo1() : any (error)
+>foo1 : any (error)
 
 foo1();
->foo1() : any
->foo1 : any
+>foo1() : any (error)
+>foo1 : any (error)
 
 static();
->static() : any
->static : any
+>static() : any (error)
+>static : any (error)
 

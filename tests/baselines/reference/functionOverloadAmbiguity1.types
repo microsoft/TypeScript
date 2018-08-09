@@ -18,9 +18,9 @@ callb((a) => { a.length; } ); // error, chose first overload
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
 >(a) => { a.length; } : (a: number) => void
 >a : number
->a.length : any
+>a.length : any (error)
 >a : number
->length : any
+>length : any (error)
 
 function callb2(lam: (n: string) => void );
 >callb2 : { (lam: (n: string) => void): any; (lam: (l: number) => void): any; }

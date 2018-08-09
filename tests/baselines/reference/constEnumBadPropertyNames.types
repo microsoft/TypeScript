@@ -4,8 +4,8 @@ const enum E { A }
 >A : E
 
 var x = E["B"]
->x : any
->E["B"] : any
+>x : any (error)
+>E["B"] : any (error)
 >E : typeof E
 >"B" : "B"
 

@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/parserNotRegex1.ts ===
   if (a.indexOf(-(4/3)))      // We should not get a regex here becuase of the / in the comment.
->a.indexOf(-(4/3)) : any
->a.indexOf : any
->a : any
->indexOf : any
+>a.indexOf(-(4/3)) : any (error)
+>a.indexOf : any (error)
+>a : any (error)
+>indexOf : any (error)
 >-(4/3) : number
 >(4/3) : number
 >4/3 : number

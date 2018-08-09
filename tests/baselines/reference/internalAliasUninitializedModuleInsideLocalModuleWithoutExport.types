@@ -12,13 +12,13 @@ export module c {
 >c : typeof c
 
     import b = a.b;
->b : any
->a : any
->b : any
+>b : any (error)
+>a : any (error)
+>b : any (error)
 
     export var x: b.I;
 >x : b.I
->b : any
+>b : any (error)
 
     x.foo();
 >x.foo() : any

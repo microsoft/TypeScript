@@ -9,10 +9,10 @@ class B {
 
     constructor() {
         this.y: any;
->this.y : any
+>this.y : any (error)
 >this : this
->y : any
->any : any
+>y : any (error)
+>any : any (error)
     }
 }
 
@@ -22,23 +22,23 @@ class C extends B implements I {
 
     constructor() {
         this.x: any;
->this.x : any
+>this.x : any (error)
 >this : this
->x : any
->any : any
+>x : any (error)
+>any : any (error)
     }
 }
 
 new C().x;
->new C().x : any
+>new C().x : any (error)
 >new C() : C
 >C : typeof C
->x : any
+>x : any (error)
 
 new C().y;
->new C().y : any
+>new C().y : any (error)
 >new C() : C
 >C : typeof C
->y : any
+>y : any (error)
 
 

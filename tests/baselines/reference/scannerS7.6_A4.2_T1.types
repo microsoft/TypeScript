@@ -20,8 +20,8 @@ if (А !== 1) {
 >1 : 1
 
   $ERROR('#А');
->$ERROR('#А') : any
->$ERROR : any
+>$ERROR('#А') : any (error)
+>$ERROR : any (error)
 >'#А' : "#А"
 }
 var \u0411 = 1;
@@ -34,8 +34,8 @@ if (Б !== 1) {
 >1 : 1
 
   $ERROR('#Б');
->$ERROR('#Б') : any
->$ERROR : any
+>$ERROR('#Б') : any (error)
+>$ERROR : any (error)
 >'#Б' : "#Б"
 }
 var \u0412 = 1;
@@ -48,8 +48,8 @@ if (В !== 1) {
 >1 : 1
 
   $ERROR('#В');
->$ERROR('#В') : any
->$ERROR : any
+>$ERROR('#В') : any (error)
+>$ERROR : any (error)
 >'#В' : "#В"
 }
 var \u0413 = 1;
@@ -62,8 +62,8 @@ if (Г !== 1) {
 >1 : 1
 
   $ERROR('#Г');
->$ERROR('#Г') : any
->$ERROR : any
+>$ERROR('#Г') : any (error)
+>$ERROR : any (error)
 >'#Г' : "#Г"
 }
 var \u0414 = 1;
@@ -76,8 +76,8 @@ if (Д !== 1) {
 >1 : 1
 
   $ERROR('#Д');
->$ERROR('#Д') : any
->$ERROR : any
+>$ERROR('#Д') : any (error)
+>$ERROR : any (error)
 >'#Д' : "#Д"
 }
 var \u0415 = 1;
@@ -90,8 +90,8 @@ if (Е !== 1) {
 >1 : 1
 
   $ERROR('#Е');
->$ERROR('#Е') : any
->$ERROR : any
+>$ERROR('#Е') : any (error)
+>$ERROR : any (error)
 >'#Е' : "#Е"
 }
 var \u0416 = 1;
@@ -104,8 +104,8 @@ if (Ж !== 1) {
 >1 : 1
 
   $ERROR('#Ж');
->$ERROR('#Ж') : any
->$ERROR : any
+>$ERROR('#Ж') : any (error)
+>$ERROR : any (error)
 >'#Ж' : "#Ж"
 }
 var \u0417 = 1;
@@ -118,8 +118,8 @@ if (З !== 1) {
 >1 : 1
 
   $ERROR('#З');
->$ERROR('#З') : any
->$ERROR : any
+>$ERROR('#З') : any (error)
+>$ERROR : any (error)
 >'#З' : "#З"
 }
 var \u0418 = 1;
@@ -132,8 +132,8 @@ if (И !== 1) {
 >1 : 1
 
   $ERROR('#И');
->$ERROR('#И') : any
->$ERROR : any
+>$ERROR('#И') : any (error)
+>$ERROR : any (error)
 >'#И' : "#И"
 }
 var \u0419 = 1;
@@ -146,8 +146,8 @@ if (Й !== 1) {
 >1 : 1
 
   $ERROR('#Й');
->$ERROR('#Й') : any
->$ERROR : any
+>$ERROR('#Й') : any (error)
+>$ERROR : any (error)
 >'#Й' : "#Й"
 }
 var \u041A = 1;
@@ -160,8 +160,8 @@ if (К !== 1) {
 >1 : 1
 
   $ERROR('#К');
->$ERROR('#К') : any
->$ERROR : any
+>$ERROR('#К') : any (error)
+>$ERROR : any (error)
 >'#К' : "#К"
 }
 var \u041B = 1;
@@ -174,8 +174,8 @@ if (Л !== 1) {
 >1 : 1
 
   $ERROR('#Л');
->$ERROR('#Л') : any
->$ERROR : any
+>$ERROR('#Л') : any (error)
+>$ERROR : any (error)
 >'#Л' : "#Л"
 }
 var \u041C = 1;
@@ -188,8 +188,8 @@ if (М !== 1) {
 >1 : 1
 
   $ERROR('#М');
->$ERROR('#М') : any
->$ERROR : any
+>$ERROR('#М') : any (error)
+>$ERROR : any (error)
 >'#М' : "#М"
 }
 var \u041D = 1;
@@ -202,8 +202,8 @@ if (Н !== 1) {
 >1 : 1
 
   $ERROR('#Н');
->$ERROR('#Н') : any
->$ERROR : any
+>$ERROR('#Н') : any (error)
+>$ERROR : any (error)
 >'#Н' : "#Н"
 }
 var \u041E = 1;
@@ -216,8 +216,8 @@ if (О !== 1) {
 >1 : 1
 
   $ERROR('#О');
->$ERROR('#О') : any
->$ERROR : any
+>$ERROR('#О') : any (error)
+>$ERROR : any (error)
 >'#О' : "#О"
 }
 var \u041F = 1;
@@ -230,8 +230,8 @@ if (П !== 1) {
 >1 : 1
 
   $ERROR('#П');
->$ERROR('#П') : any
->$ERROR : any
+>$ERROR('#П') : any (error)
+>$ERROR : any (error)
 >'#П' : "#П"
 }
 var \u0420 = 1;
@@ -244,8 +244,8 @@ if (Р !== 1) {
 >1 : 1
 
   $ERROR('#Р');
->$ERROR('#Р') : any
->$ERROR : any
+>$ERROR('#Р') : any (error)
+>$ERROR : any (error)
 >'#Р' : "#Р"
 }
 var \u0421 = 1;
@@ -258,8 +258,8 @@ if (С !== 1) {
 >1 : 1
 
   $ERROR('#С');
->$ERROR('#С') : any
->$ERROR : any
+>$ERROR('#С') : any (error)
+>$ERROR : any (error)
 >'#С' : "#С"
 }
 var \u0422 = 1;
@@ -272,8 +272,8 @@ if (Т !== 1) {
 >1 : 1
 
   $ERROR('#Т');
->$ERROR('#Т') : any
->$ERROR : any
+>$ERROR('#Т') : any (error)
+>$ERROR : any (error)
 >'#Т' : "#Т"
 }
 var \u0423 = 1;
@@ -286,8 +286,8 @@ if (У !== 1) {
 >1 : 1
 
   $ERROR('#У');
->$ERROR('#У') : any
->$ERROR : any
+>$ERROR('#У') : any (error)
+>$ERROR : any (error)
 >'#У' : "#У"
 }
 var \u0424 = 1;
@@ -300,8 +300,8 @@ if (Ф !== 1) {
 >1 : 1
 
   $ERROR('#Ф');
->$ERROR('#Ф') : any
->$ERROR : any
+>$ERROR('#Ф') : any (error)
+>$ERROR : any (error)
 >'#Ф' : "#Ф"
 }
 var \u0425 = 1;
@@ -314,8 +314,8 @@ if (Х !== 1) {
 >1 : 1
 
   $ERROR('#Х');
->$ERROR('#Х') : any
->$ERROR : any
+>$ERROR('#Х') : any (error)
+>$ERROR : any (error)
 >'#Х' : "#Х"
 }
 var \u0426 = 1;
@@ -328,8 +328,8 @@ if (Ц !== 1) {
 >1 : 1
 
   $ERROR('#Ц');
->$ERROR('#Ц') : any
->$ERROR : any
+>$ERROR('#Ц') : any (error)
+>$ERROR : any (error)
 >'#Ц' : "#Ц"
 }
 var \u0427 = 1;
@@ -342,8 +342,8 @@ if (Ч !== 1) {
 >1 : 1
 
   $ERROR('#Ч');
->$ERROR('#Ч') : any
->$ERROR : any
+>$ERROR('#Ч') : any (error)
+>$ERROR : any (error)
 >'#Ч' : "#Ч"
 }
 var \u0428 = 1;
@@ -356,8 +356,8 @@ if (Ш !== 1) {
 >1 : 1
 
   $ERROR('#Ш');
->$ERROR('#Ш') : any
->$ERROR : any
+>$ERROR('#Ш') : any (error)
+>$ERROR : any (error)
 >'#Ш' : "#Ш"
 }
 var \u0429 = 1;
@@ -370,8 +370,8 @@ if (Щ !== 1) {
 >1 : 1
 
   $ERROR('#Щ');
->$ERROR('#Щ') : any
->$ERROR : any
+>$ERROR('#Щ') : any (error)
+>$ERROR : any (error)
 >'#Щ' : "#Щ"
 }
 var \u042A = 1;
@@ -384,8 +384,8 @@ if (Ъ !== 1) {
 >1 : 1
 
   $ERROR('#Ъ');
->$ERROR('#Ъ') : any
->$ERROR : any
+>$ERROR('#Ъ') : any (error)
+>$ERROR : any (error)
 >'#Ъ' : "#Ъ"
 }
 var \u042B = 1;
@@ -398,8 +398,8 @@ if (Ы !== 1) {
 >1 : 1
 
   $ERROR('#Ы');
->$ERROR('#Ы') : any
->$ERROR : any
+>$ERROR('#Ы') : any (error)
+>$ERROR : any (error)
 >'#Ы' : "#Ы"
 }
 var \u042C = 1;
@@ -412,8 +412,8 @@ if (Ь !== 1) {
 >1 : 1
 
   $ERROR('#Ь');
->$ERROR('#Ь') : any
->$ERROR : any
+>$ERROR('#Ь') : any (error)
+>$ERROR : any (error)
 >'#Ь' : "#Ь"
 }
 var \u042D = 1;
@@ -426,8 +426,8 @@ if (Э !== 1) {
 >1 : 1
 
   $ERROR('#Э');
->$ERROR('#Э') : any
->$ERROR : any
+>$ERROR('#Э') : any (error)
+>$ERROR : any (error)
 >'#Э' : "#Э"
 }
 var \u042E = 1;
@@ -440,8 +440,8 @@ if (Ю !== 1) {
 >1 : 1
 
   $ERROR('#Ю');
->$ERROR('#Ю') : any
->$ERROR : any
+>$ERROR('#Ю') : any (error)
+>$ERROR : any (error)
 >'#Ю' : "#Ю"
 }
 var \u042F = 1;
@@ -454,8 +454,8 @@ if (Я !== 1) {
 >1 : 1
 
   $ERROR('#Я');
->$ERROR('#Я') : any
->$ERROR : any
+>$ERROR('#Я') : any (error)
+>$ERROR : any (error)
 >'#Я' : "#Я"
 }
 var \u0401 = 1;
@@ -468,8 +468,8 @@ if (Ё !== 1) {
 >1 : 1
 
   $ERROR('#Ё');
->$ERROR('#Ё') : any
->$ERROR : any
+>$ERROR('#Ё') : any (error)
+>$ERROR : any (error)
 >'#Ё' : "#Ё"
 }
 

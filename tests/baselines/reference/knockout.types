@@ -89,10 +89,10 @@
 >r : string
 
  var dd_v = o.name.d;
->dd_v : any
->o.name.d : any
+>dd_v : any (error)
+>o.name.d : any (error)
 >o.name : ko.Observable<string>
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }
 >name : ko.Observable<string>
->d : any
+>d : any (error)
 

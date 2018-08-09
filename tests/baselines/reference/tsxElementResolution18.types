@@ -6,6 +6,6 @@ declare module JSX {
 // Error under implicit any
 <div n='x' />;
 ><div n='x' /> : JSX.Element
->div : any
+>div : any (error)
 >n : string
 

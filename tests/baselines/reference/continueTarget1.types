@@ -1,7 +1,7 @@
 === tests/cases/compiler/continueTarget1.ts ===
 target:
->target : any
+>target : any (error)
 
   continue target;
->target : any
+>target : any (error)
 

@@ -14,44 +14,44 @@ enum ENUM1 { A, B, "" };
 var ResultIsNumber1 = --ENUM;
 >ResultIsNumber1 : number
 >--ENUM : number
->ENUM : any
+>ENUM : any (error)
 
 var ResultIsNumber2 = --ENUM1;
 >ResultIsNumber2 : number
 >--ENUM1 : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 var ResultIsNumber3 = ENUM--;
 >ResultIsNumber3 : number
 >ENUM-- : number
->ENUM : any
+>ENUM : any (error)
 
 var ResultIsNumber4 = ENUM1--;
 >ResultIsNumber4 : number
 >ENUM1-- : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 // enum type expressions
 var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
 >ResultIsNumber5 : number
 >--(ENUM["A"] + ENUM.B) : number
->(ENUM["A"] + ENUM.B) : any
->ENUM["A"] + ENUM.B : any
+>(ENUM["A"] + ENUM.B) : any (error)
+>ENUM["A"] + ENUM.B : any (error)
 >ENUM["A"] : any
 >ENUM : typeof ENUM
 >"A" : "A"
->ENUM.B : any
+>ENUM.B : any (error)
 >ENUM : typeof ENUM
->B : any
+>B : any (error)
 
 var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 >ResultIsNumber6 : number
 >(ENUM.A + ENUM["B"])-- : number
->(ENUM.A + ENUM["B"]) : any
->ENUM.A + ENUM["B"] : any
->ENUM.A : any
+>(ENUM.A + ENUM["B"]) : any (error)
+>ENUM.A + ENUM["B"] : any (error)
+>ENUM.A : any (error)
 >ENUM : typeof ENUM
->A : any
+>A : any (error)
 >ENUM["B"] : any
 >ENUM : typeof ENUM
 >"B" : "B"
@@ -59,17 +59,17 @@ var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 // miss assignment operator
 --ENUM;
 >--ENUM : number
->ENUM : any
+>ENUM : any (error)
 
 --ENUM1;
 >--ENUM1 : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 ENUM--;
 >ENUM-- : number
->ENUM : any
+>ENUM : any (error)
 
 ENUM1--;
 >ENUM1-- : number
->ENUM1 : any
+>ENUM1 : any (error)
 

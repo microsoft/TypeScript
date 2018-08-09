@@ -19,9 +19,9 @@ import importInst = Outer.instantiated;
 >instantiated : typeof importInst
 
 import importUninst = Outer.uninstantiated;
->importUninst : any
+>importUninst : any (error)
 >Outer : typeof Outer
->uninstantiated : any
+>uninstantiated : any (error)
 
 var x1: typeof importInst.C = importInst.C;
 >x1 : typeof importInst.C
@@ -34,18 +34,18 @@ var x1: typeof importInst.C = importInst.C;
 
 var x2: importInst.C = new x1();
 >x2 : importInst.C
->importInst : any
+>importInst : any (error)
 >new x1() : importInst.C
 >x1 : typeof importInst.C
 
 var x3: typeof importUninst.P; // Error again
->x3 : any
->importUninst.P : any
->importUninst : any
->P : any
+>x3 : any (error)
+>importUninst.P : any (error)
+>importUninst : any (error)
+>P : any (error)
 
 var x4: Outer = Outer;
->x4 : any
+>x4 : any (error)
 >Outer : typeof Outer
 
 var x5: typeof importInst;
@@ -65,8 +65,8 @@ x5 = Outer.instantiated;
 >instantiated : typeof importInst
 
 var x6: typeof importUninst;
->x6 : any
->importUninst : any
+>x6 : any (error)
+>importUninst : any (error)
 
 var x7: typeof Outer = Outer;
 >x7 : typeof Outer

@@ -53,7 +53,7 @@ module m {
 
     var x3: m2.public2;
 >x3 : m2.public2
->m2 : any
+>m2 : any (error)
 
     var y3 = new m2.public2();
 >y3 : m2.public2
@@ -64,7 +64,7 @@ module m {
 
     export var k3: m2.public2;
 >k3 : m2.public2
->m2 : any
+>m2 : any (error)
 
     export var l3 = new m2.public2();
 >l3 : m2.public2

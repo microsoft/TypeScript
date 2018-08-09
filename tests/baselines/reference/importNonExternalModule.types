@@ -1,13 +1,13 @@
 === tests/cases/conformance/externalModules/foo_1.ts ===
 import foo = require("./foo_0");
->foo : any
+>foo : any (error)
 
 // Import should fail.  foo_0 not an external module
 if(foo.answer === 42){
 >foo.answer === 42 : boolean
->foo.answer : any
->foo : any
->answer : any
+>foo.answer : any (error)
+>foo : any (error)
+>answer : any (error)
 >42 : 42
 
 }

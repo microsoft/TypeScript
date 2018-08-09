@@ -6,12 +6,12 @@ export namespace Library {
 }
 var x: Library.Bar; // should work
 >x : Library.Bar
->Library : any
+>Library : any (error)
 
 Library.foo; // should be an error
->Library.foo : any
->Library : any
->foo : any
+>Library.foo : any (error)
+>Library : any (error)
+>foo : any (error)
 
 === tests/cases/compiler/file2.ts ===
 import * as Lib from './file1';
@@ -30,8 +30,8 @@ Lib.foo; // should work
 >foo : string
 
 var x: Lib.Bar; // should be an error
->x : any
->Lib : any
+>x : any (error)
+>Lib : any (error)
 
 export { Lib }
 >Lib : typeof Lib

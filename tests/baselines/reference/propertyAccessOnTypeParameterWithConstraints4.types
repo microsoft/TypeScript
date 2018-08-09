@@ -3,7 +3,7 @@ class C<T extends Date> {
 >C : C<T>
 
     f() {
->f : () => any
+>f : () => any (error)
 
         var x: T;
 >x : T
@@ -16,23 +16,23 @@ class C<T extends Date> {
 >'notHere' : "notHere"
 
         return a + x.notHere();
->a + x.notHere() : any
+>a + x.notHere() : any (error)
 >a : any
->x.notHere() : any
->x.notHere : any
+>x.notHere() : any (error)
+>x.notHere : any (error)
 >x : T
->notHere : any
+>notHere : any (error)
     }
 }
 
 var r = (new C<Date>()).f();
->r : any
->(new C<Date>()).f() : any
->(new C<Date>()).f : () => any
+>r : any (error)
+>(new C<Date>()).f() : any (error)
+>(new C<Date>()).f : () => any (error)
 >(new C<Date>()) : C<Date>
 >new C<Date>() : C<Date>
 >C : typeof C
->f : () => any
+>f : () => any (error)
 
 interface I<T extends Date> {
     foo: T;
@@ -42,13 +42,13 @@ var i: I<Date>;
 >i : I<Date>
 
 var r2 = i.foo.notHere();
->r2 : any
->i.foo.notHere() : any
->i.foo.notHere : any
+>r2 : any (error)
+>i.foo.notHere() : any (error)
+>i.foo.notHere : any (error)
 >i.foo : Date
 >i : I<Date>
 >foo : Date
->notHere : any
+>notHere : any (error)
 
 var r2b = i.foo['notHere']();
 >r2b : any
@@ -66,11 +66,11 @@ var a: {
 }
 var r3: string = a().notHere();
 >r3 : string
->a().notHere() : any
->a().notHere : any
+>a().notHere() : any (error)
+>a().notHere : any (error)
 >a() : Date
 >a : <T extends Date>() => T
->notHere : any
+>notHere : any (error)
 
 var r3b: string = a()['notHere']();
 >r3b : string
@@ -82,7 +82,7 @@ var r3b: string = a()['notHere']();
 
 var b = {
 >b : any
->{    foo: <T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    },    bar: b.foo().notHere()} : { foo: <T extends Date>(x: T) => T; bar: any; }
+>{    foo: <T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    },    bar: b.foo().notHere()} : { foo: <T extends Date>(x: T) => T; bar: any (error); }
 
     foo: <T extends Date>(x: T): T => {
 >foo : <T extends Date>(x: T) => T
@@ -97,23 +97,23 @@ var b = {
 >'notHere' : "notHere"
 
         return a + x.notHere();
->a + x.notHere() : any
+>a + x.notHere() : any (error)
 >a : any
->x.notHere() : any
->x.notHere : any
+>x.notHere() : any (error)
+>x.notHere : any (error)
 >x : T
->notHere : any
+>notHere : any (error)
 
     },
     bar: b.foo().notHere()
->bar : any
->b.foo().notHere() : any
->b.foo().notHere : any
->b.foo() : any
+>bar : any (error)
+>b.foo().notHere() : any (error)
+>b.foo().notHere : any (error)
+>b.foo() : any (error)
 >b.foo : any
 >b : any
 >foo : any
->notHere : any
+>notHere : any (error)
 }
 
 var r4 = b.foo(new Date());

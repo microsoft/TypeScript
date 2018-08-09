@@ -17,7 +17,7 @@ interface Base {
 interface A extends Base {
     kind: Kind.A;
 >kind : Kind.A
->Kind : any
+>Kind : any (error)
 
     yar: any;
 >yar : any
@@ -26,7 +26,7 @@ interface A extends Base {
 interface B extends Base {
     kind: Kind.B;
 >kind : Kind.B
->Kind : any
+>Kind : any (error)
 
     gar: any;
 >gar : any

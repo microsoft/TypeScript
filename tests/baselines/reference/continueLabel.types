@@ -1,6 +1,6 @@
 === tests/cases/compiler/continueLabel.ts ===
 label1: for(var i = 0; i < 1; i++) {
->label1 : any
+>label1 : any (error)
 >i : number
 >0 : 0
 >i < 1 : boolean
@@ -10,5 +10,5 @@ label1: for(var i = 0; i < 1; i++) {
 >i : number
 
     continue label1;
->label1 : any
+>label1 : any (error)
 }

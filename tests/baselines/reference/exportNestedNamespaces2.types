@@ -17,11 +17,11 @@ exports = require('./mod')
 
 exports.formatters.j = function (v) {
 >exports.formatters.j = function (v) {    return v} : (v: any) => any
->exports.formatters.j : any
->exports.formatters : any
+>exports.formatters.j : any (error)
+>exports.formatters : any (error)
 >exports : typeof import("tests/cases/conformance/salsa/first")
->formatters : any
->j : any
+>formatters : any (error)
+>j : any (error)
 >function (v) {    return v} : (v: any) => any
 >v : any
 
@@ -38,11 +38,11 @@ exports = require('./mod')
 
 exports.formatters.o = function (v) {
 >exports.formatters.o = function (v) {    return v} : (v: any) => any
->exports.formatters.o : any
->exports.formatters : any
+>exports.formatters.o : any (error)
+>exports.formatters : any (error)
 >exports : typeof import("tests/cases/conformance/salsa/second")
->formatters : any
->o : any
+>formatters : any (error)
+>o : any (error)
 >function (v) {    return v} : (v: any) => any
 >v : any
 

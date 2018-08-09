@@ -38,18 +38,18 @@
 >a : any
 
     var { p1: {}, p2: [] } = a;
->p1 : any
->p2 : any
+>p1 : any (error)
+>p2 : any (error)
 >a : any
 
     let { p1: {}, p2: [] } = a;
->p1 : any
->p2 : any
+>p1 : any (error)
+>p2 : any (error)
 >a : any
 
     const { p1: {}, p2: [] } = a;
->p1 : any
->p2 : any
+>p1 : any (error)
+>p2 : any (error)
 >a : any
 
     for (var {} = {}, {} = {}; false; void 0) {
@@ -64,7 +64,7 @@
 >f : ({}?: any, []?: any, { p: {} }?: any) => ({}?: any, []?: any, { p: {} }?: any) => any
 >a : any
 >a : any
->p : any
+>p : any (error)
 >a : any
 >a : any
 
@@ -72,7 +72,7 @@
 >({} = a, [] = a, { p: {} = a } = a) => a : ({}?: any, []?: any, { p: {} }?: any) => any
 >a : any
 >a : any
->p : any
+>p : any (error)
 >a : any
 >a : any
 >a : any

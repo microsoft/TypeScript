@@ -22,7 +22,7 @@ x.prop;
  * @property {string} yes
  */
 declare const myType: MyType; // should error, no such type
->myType : any
+>myType : any (error)
 
 // @param type has no effect.
 /**
@@ -41,11 +41,11 @@ f(1); f(true).length;
 >f(1) : number
 >f : (x: boolean) => number
 >1 : 1
->f(true).length : any
+>f(true).length : any (error)
 >f(true) : number
 >f : (x: boolean) => number
 >true : true
->length : any
+>length : any (error)
 
 // @type has no effect either.
 /** @type {{ x?: number }} */
@@ -55,9 +55,9 @@ const z = {};
 
 z.x = 1; // Error
 >z.x = 1 : 1
->z.x : any
+>z.x : any (error)
 >z : {}
->x : any
+>x : any (error)
 >1 : 1
 
 // @template tag should not interfere with constraint or default.
@@ -75,8 +75,8 @@ let i: I; // Should succeed thanks to type parameter default
 
 /** @typedef {string} N.Str */
 import M = N; // Error: @typedef does not create namespaces in TypeScript code.
->M : any
->N : any
+>M : any (error)
+>N : any (error)
 
 // Not legal JSDoc, but that shouldn't matter in TypeScript.
 /**

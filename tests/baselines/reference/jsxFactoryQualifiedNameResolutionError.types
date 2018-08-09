@@ -10,11 +10,11 @@ export class AppComponent {
 >AppComponent : AppComponent
 
     render(createElement) {
->render : (createElement: any) => any
+>render : (createElement: any) => any (error)
 >createElement : any
 
         return <div />;
-><div /> : any
->div : any
+><div /> : any (error)
+>div : any (error)
     }
 }

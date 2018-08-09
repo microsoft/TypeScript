@@ -15,27 +15,27 @@ let s: S;
 
 let str: string = n[undefined];
 >str : string
->n[undefined] : any
+>n[undefined] : any (error)
 >n : N
 >undefined : undefined
 
 str = n[null];
->str = n[null] : any
+>str = n[null] : any (error)
 >str : string
->n[null] : any
+>n[null] : any (error)
 >n : N
 >null : null
 
 let num: number = s[undefined];
 >num : number
->s[undefined] : any
+>s[undefined] : any (error)
 >s : S
 >undefined : undefined
 
 num = s[null];
->num = s[null] : any
+>num = s[null] : any (error)
 >num : number
->s[null] : any
+>s[null] : any (error)
 >s : S
 >null : null
 

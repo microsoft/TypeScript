@@ -6,15 +6,15 @@ continue;
 
 // non-existent label
 ONE:
->ONE : any
+>ONE : any (error)
 
 while (true) continue TWO;
 >true : true
->TWO : any
+>TWO : any (error)
 
 // continue from inside function
 TWO:
->TWO : any
+>TWO : any (error)
 
 while (true){
 >true : true
@@ -24,12 +24,12 @@ while (true){
 >() => {        continue TWO;    } : () => void
 
         continue TWO;
->TWO : any
+>TWO : any (error)
     }
 }
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 while (true) {
 >true : true
@@ -39,7 +39,7 @@ while (true) {
 >function () {        continue THREE;    } : () => void
 
         continue THREE;
->THREE : any
+>THREE : any (error)
     }
 }
 
@@ -48,10 +48,10 @@ while (true) {
 >true : true
 
     continue FIVE;
->FIVE : any
+>FIVE : any (error)
 
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     while (true) { }
 >true : true
@@ -59,7 +59,7 @@ while (true) {
 
 // label on non-loop statement
 NINE:
->NINE : any
+>NINE : any (error)
 
 var y = 12;
 >y : number
@@ -69,5 +69,5 @@ while (true) {
 >true : true
 
     continue NINE;
->NINE : any
+>NINE : any (error)
 }

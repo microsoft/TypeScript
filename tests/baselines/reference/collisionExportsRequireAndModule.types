@@ -10,7 +10,7 @@ export module require {
 }
 export function foo(): require.I {
 >foo : () => require.I
->require : any
+>require : any (error)
 
     return null;
 >null : null
@@ -26,7 +26,7 @@ export module exports {
 }
 export function foo2(): exports.I {
 >foo2 : () => exports.I
->exports : any
+>exports : any (error)
 
     return null;
 >null : null

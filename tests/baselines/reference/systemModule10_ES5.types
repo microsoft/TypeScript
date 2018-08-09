@@ -1,29 +1,29 @@
 === tests/cases/compiler/systemModule10_ES5.ts ===
 import n, {x} from 'file1'
->n : any
->x : any
+>n : any (error)
+>x : any (error)
 
 import n2 = require('file2');
->n2 : any
+>n2 : any (error)
 
 export {x}
->x : any
+>x : any (error)
 
 export {x as y}
->x : any
->y : any
+>x : any (error)
+>y : any (error)
 
 export {n}
->n : any
+>n : any (error)
 
 export {n as n1}
->n : any
->n1 : any
+>n : any (error)
+>n1 : any (error)
 
 export {n2}
->n2 : any
+>n2 : any (error)
 
 export {n2 as n3}
->n2 : any
->n3 : any
+>n2 : any (error)
+>n3 : any (error)
 

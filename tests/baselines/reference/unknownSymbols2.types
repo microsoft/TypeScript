@@ -3,24 +3,24 @@ module M {
 >M : typeof M
 
     var x: asdf;
->x : any
+>x : any (error)
 
     var y = x + asdf;
->y : any
->x + asdf : any
->x : any
->asdf : any
+>y : any (error)
+>x + asdf : any (error)
+>x : any (error)
+>asdf : any (error)
 
     var z = <asdf>x; // should be an error
->z : any
-><asdf>x : any
->x : any
+>z : any (error)
+><asdf>x : any (error)
+>x : any (error)
 
     if (asdf) {
->asdf : any
+>asdf : any (error)
     }
     else if (qwerty) {
->qwerty : any
+>qwerty : any (error)
     }
 
     try {
@@ -30,10 +30,10 @@ module M {
     }
 
     switch (asdf) {
->asdf : any
+>asdf : any (error)
 
         case qwerty:
->qwerty : any
+>qwerty : any (error)
 
             break;
         default:
@@ -41,15 +41,15 @@ module M {
     }
 
     var a = () => asdf;
->a : () => any
->() => asdf : () => any
->asdf : any
+>a : () => any (error)
+>() => asdf : () => any (error)
+>asdf : any (error)
 
     var b = (asdf) => { return qwerty };
->b : (asdf: any) => any
->(asdf) => { return qwerty } : (asdf: any) => any
+>b : (asdf: any) => any (error)
+>(asdf) => { return qwerty } : (asdf: any) => any (error)
 >asdf : any
->qwerty : any
+>qwerty : any (error)
 
     module N {
 >N : typeof N
@@ -63,6 +63,6 @@ module M {
 >N : typeof N
 
     import d = asdf;
->d : any
->asdf : any
+>d : any (error)
+>asdf : any (error)
 }

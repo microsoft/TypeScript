@@ -129,12 +129,12 @@ var r: () => boolean;
 >r : () => boolean
 
 z: typeof BOOLEAN;
->z : any
+>z : any (error)
 >typeof BOOLEAN : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >BOOLEAN : boolean
 
 r: typeof foo;
->r : any
+>r : any (error)
 >typeof foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >foo : () => boolean
 
@@ -147,28 +147,28 @@ var y = { a: true, b: false};
 >false : false
 
 z: typeof y.a;
->z : any
+>z : any (error)
 >typeof y.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >y.a : boolean
 >y : { a: boolean; b: boolean; }
 >a : boolean
 
 z: typeof objA.a;
->z : any
+>z : any (error)
 >typeof objA.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >objA.a : boolean
 >objA : A
 >a : boolean
 
 z: typeof A.foo;
->z : any
+>z : any (error)
 >typeof A.foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >A.foo : () => boolean
 >A : typeof A
 >foo : () => boolean
 
 z: typeof M.n;
->z : any
+>z : any (error)
 >typeof M.n : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >M.n : boolean
 >M : typeof M

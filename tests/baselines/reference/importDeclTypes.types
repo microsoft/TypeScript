@@ -7,5 +7,5 @@ export interface Foo {
 // This should error
 === /a.ts ===
 import { Foo } from "@types/foo-bar";
->Foo : any
+>Foo : any (error)
 

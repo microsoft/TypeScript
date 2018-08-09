@@ -8,5 +8,5 @@ declare module foo {
 
 let foo: foo.Bar; 
 >foo : foo.Bar
->foo : any
+>foo : any (error)
 

@@ -13,10 +13,10 @@ export var m = a;
 
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.ts ===
 import defaultBinding1, { } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding1 : any
+>defaultBinding1 : any (error)
 
 import defaultBinding2, { a } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding2 : any
+>defaultBinding2 : any (error)
 >a : number
 
 var x1: number = a;
@@ -24,7 +24,7 @@ var x1: number = a;
 >a : number
 
 import defaultBinding3, { a as b } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding3 : any
+>defaultBinding3 : any (error)
 >a : number
 >b : number
 
@@ -33,7 +33,7 @@ var x1: number = b;
 >b : number
 
 import defaultBinding4, { x, a as y } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding4 : any
+>defaultBinding4 : any (error)
 >x : number
 >a : number
 >y : number
@@ -47,7 +47,7 @@ var x1: number = y;
 >y : number
 
 import defaultBinding5, { x as z,  } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding5 : any
+>defaultBinding5 : any (error)
 >x : number
 >z : number
 
@@ -56,7 +56,7 @@ var x1: number = z;
 >z : number
 
 import defaultBinding6, { m,  } from "./es6ImportDefaultBindingFollowedWithNamedImportInEs5_0";
->defaultBinding6 : any
+>defaultBinding6 : any (error)
 >m : number
 
 var x1: number = m;

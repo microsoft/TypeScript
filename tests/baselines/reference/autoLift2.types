@@ -5,16 +5,16 @@ class A
 {
     constructor() {
         this.foo: any;
->this.foo : any
+>this.foo : any (error)
 >this : this
->foo : any
->any : any
+>foo : any (error)
+>any : any (error)
 
         this.bar: any;
->this.bar : any
+>this.bar : any (error)
 >this : this
->bar : any
->any : any
+>bar : any (error)
+>any : any (error)
     }
 
 
@@ -23,16 +23,16 @@ class A
 
      this.foo = "foo";
 >this.foo = "foo" : "foo"
->this.foo : any
+>this.foo : any (error)
 >this : this
->foo : any
+>foo : any (error)
 >"foo" : "foo"
 
      this.bar = "bar";
 >this.bar = "bar" : "bar"
->this.bar : any
+>this.bar : any (error)
 >this : this
->bar : any
+>bar : any (error)
 >"bar" : "bar"
 
      [1, 2].forEach((p) => this.foo);
@@ -42,11 +42,11 @@ class A
 >1 : 1
 >2 : 2
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->(p) => this.foo : (p: number) => any
+>(p) => this.foo : (p: number) => any (error)
 >p : number
->this.foo : any
+>this.foo : any (error)
 >this : this
->foo : any
+>foo : any (error)
 
      [1, 2].forEach((p) => this.bar);
 >[1, 2].forEach((p) => this.bar) : void
@@ -55,11 +55,11 @@ class A
 >1 : 1
 >2 : 2
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->(p) => this.bar : (p: number) => any
+>(p) => this.bar : (p: number) => any (error)
 >p : number
->this.bar : any
+>this.bar : any (error)
 >this : this
->bar : any
+>bar : any (error)
 
   }
 

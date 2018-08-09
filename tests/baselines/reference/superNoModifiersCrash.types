@@ -6,10 +6,10 @@ class Parent {
 >initialize : (...args: any[]) => string
 
         super.initialize(...arguments)
->super.initialize(...arguments) : any
->super.initialize : any
->super : any
->initialize : any
+>super.initialize(...arguments) : any (error)
+>super.initialize : any (error)
+>super : any (error)
+>initialize : any (error)
 >...arguments : any
 >arguments : IArguments
 

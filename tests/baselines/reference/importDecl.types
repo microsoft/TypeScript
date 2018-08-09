@@ -219,6 +219,6 @@ import m4 = require("./importDecl_require");
 
 export function foo2(): m4.d { return null; }
 >foo2 : () => m4.d
->m4 : any
+>m4 : any (error)
 >null : null
 

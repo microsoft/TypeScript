@@ -3,7 +3,7 @@
 >"use strict" : "use strict"
 
 eval += 1;
->eval += 1 : any
->eval : any
+>eval += 1 : any (error)
+>eval : any (error)
 >1 : 1
 

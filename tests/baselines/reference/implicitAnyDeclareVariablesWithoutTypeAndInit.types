@@ -1,10 +1,10 @@
 === tests/cases/compiler/implicitAnyDeclareVariablesWithoutTypeAndInit.ts ===
 // this should be an error
 var x;                   // no error, control flow typed
->x : any
+>x : any (auto)
 
 var y;                   // error because captured
->y : any
+>y : any (auto)
 
 declare var foo;         // error at "foo"
 >foo : any

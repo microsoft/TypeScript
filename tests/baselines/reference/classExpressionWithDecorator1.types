@@ -1,8 +1,8 @@
 === tests/cases/compiler/classExpressionWithDecorator1.ts ===
 var v = @decorate class C { static p = 1 };
->v : any
-> : any
->decorate : any
+>v : any (error)
+> : any (error)
+>decorate : any (error)
 >C : C
 >p : number
 >1 : 1

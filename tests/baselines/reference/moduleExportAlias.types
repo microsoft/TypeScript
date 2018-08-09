@@ -175,12 +175,12 @@ multipleDeclarationAlias2.func6 = function () { };
 >function () { } : () => void
 
 var someOtherVariable;
->someOtherVariable : any
+>someOtherVariable : any (auto)
 
 var multipleDeclarationAlias3 = someOtherVariable = exports;
 >multipleDeclarationAlias3 : typeof import("tests/cases/conformance/salsa/b")
 >someOtherVariable = exports : typeof import("tests/cases/conformance/salsa/b")
->someOtherVariable : any
+>someOtherVariable : any (auto)
 >exports : typeof import("tests/cases/conformance/salsa/b")
 
 multipleDeclarationAlias3.func7 = function () { };
@@ -193,7 +193,7 @@ multipleDeclarationAlias3.func7 = function () { };
 var multipleDeclarationAlias4 = someOtherVariable = module.exports;
 >multipleDeclarationAlias4 : typeof import("tests/cases/conformance/salsa/b")
 >someOtherVariable = module.exports : typeof import("tests/cases/conformance/salsa/b")
->someOtherVariable : any
+>someOtherVariable : any (auto)
 >module.exports : typeof import("tests/cases/conformance/salsa/b")
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
@@ -247,7 +247,7 @@ exports = module.exports = someOtherVariable = {};
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
 >someOtherVariable = {} : {}
->someOtherVariable : any
+>someOtherVariable : any (auto)
 >{} : {}
 
 exports.func11 = function () { };
@@ -274,7 +274,7 @@ exports = module.exports = someOtherVariable = {};
 >module : { "tests/cases/conformance/salsa/b": typeof import("tests/cases/conformance/salsa/b"); }
 >exports : typeof import("tests/cases/conformance/salsa/b")
 >someOtherVariable = {} : {}
->someOtherVariable : any
+>someOtherVariable : any (auto)
 >{} : {}
 
 exports.func11 = function () { };

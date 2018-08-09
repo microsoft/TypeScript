@@ -16,28 +16,28 @@ var a2 = new Z[];
 >new Z[] : any
 >Z[] : any
 >Z : typeof Z
-> : any
+> : any (error)
 
 var a3 = new Z[]();
 >a3 : any
 >new Z[]() : any
 >Z[] : any
 >Z : typeof Z
-> : any
+> : any (error)
 
 var a4: Z[] = new Z[];
 >a4 : Z[]
 >new Z[] : any
 >Z[] : any
 >Z : typeof Z
-> : any
+> : any (error)
 
 var a5: Z[] = new Z[]();
 >a5 : Z[]
 >new Z[]() : any
 >Z[] : any
 >Z : typeof Z
-> : any
+> : any (error)
 
 var a6: Z[][] = new   Z     [      ]   [  ];
 >a6 : Z[][]
@@ -45,6 +45,6 @@ var a6: Z[][] = new   Z     [      ]   [  ];
 >Z     [      ]   [  ] : any
 >Z     [      ] : any
 >Z : typeof Z
-> : any
-> : any
+> : any (error)
+> : any (error)
 

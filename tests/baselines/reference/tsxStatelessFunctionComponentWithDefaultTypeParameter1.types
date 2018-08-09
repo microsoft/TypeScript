@@ -13,8 +13,8 @@ function MyComponent<T = MyComponentProp>(attr: T) {
 
     return <div>attr.values</div>
 ><div>attr.values</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 }
 
 // OK

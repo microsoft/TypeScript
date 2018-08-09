@@ -28,14 +28,14 @@ class SubSub1 extends Sub1 {
 >Sub1 : Sub1
 
     public bar() {
->bar : () => any
+>bar : () => any (error)
 
         return super.super.foo;
->super.super.foo : any
->super.super : any
+>super.super.foo : any (error)
+>super.super : any (error)
 >super : Sub1
->super : any
->foo : any
+>super : any (error)
+>foo : any (error)
     }
 }
 
@@ -60,11 +60,11 @@ class SubE2 extends Base2 {
 
         return super.prototype.foo = null;
 >super.prototype.foo = null : null
->super.prototype.foo : any
->super.prototype : any
+>super.prototype.foo : any (error)
+>super.prototype : any (error)
 >super : Base2
->prototype : any
->foo : any
+>prototype : any (error)
+>foo : any (error)
 >null : null
     }
 }
@@ -86,13 +86,13 @@ class SubE3 extends Base3 {
 >Base3 : Base3
 
     public bar() {
->bar : () => any
+>bar : () => any (error)
 
         return super.bar();
->super.bar() : any
->super.bar : any
+>super.bar() : any (error)
+>super.bar : any (error)
 >super : Base3
->bar : any
+>bar : any (error)
     }
 }
 
@@ -130,13 +130,13 @@ module Base4 {
 >Sub4E : Sub4E
 
         public x() {
->x : () => any
+>x : () => any (error)
 
             return super.x();
->super.x() : any
->super.x : any
->super : any
->x : any
+>super.x() : any (error)
+>super.x : any (error)
+>super : any (error)
+>x : any (error)
         }
     }
 }

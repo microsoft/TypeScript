@@ -2,12 +2,12 @@
 b.src ? 1 : 2, c && d;
 >b.src ? 1 : 2, c && d : any
 >b.src ? 1 : 2 : 1 | 2
->b.src : any
->b : any
->src : any
+>b.src : any (error)
+>b : any (error)
+>src : any (error)
 >1 : 1
 >2 : 2
 >c && d : any
->c : any
->d : any
+>c : any (error)
+>d : any (error)
 

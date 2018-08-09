@@ -1,19 +1,19 @@
 === tests/cases/compiler/world.ts ===
 import HelloInterface = require("helloInterface");
->HelloInterface : any
+>HelloInterface : any (error)
 
 import HelloNamespace = require("helloNamespace");
->HelloNamespace : any
+>HelloNamespace : any (error)
 
 HelloInterface.world;
->HelloInterface.world : any
->HelloInterface : any
->world : any
+>HelloInterface.world : any (error)
+>HelloInterface : any (error)
+>world : any (error)
 
 HelloNamespace.world;
->HelloNamespace.world : any
->HelloNamespace : any
->world : any
+>HelloNamespace.world : any (error)
+>HelloNamespace : any (error)
+>world : any (error)
 
 === tests/cases/compiler/helloInterface.ts ===
 interface HelloInterface {
@@ -31,5 +31,5 @@ namespace HelloNamespace {
 }
 
 export = HelloNamespace;
->HelloNamespace : any
+>HelloNamespace : any (error)
 

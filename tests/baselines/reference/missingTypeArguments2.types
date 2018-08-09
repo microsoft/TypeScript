@@ -3,16 +3,16 @@ class A<T> { }
 >A : A<T>
 
 var x: () => A;
->x : () => any
+>x : () => any (error)
 
 (a: A) => { };
->(a: A) => { } : (a: any) => void
->a : any
+>(a: A) => { } : (a: any (error)) => void
+>a : any (error)
 
 var y: A<A>;
->y : A<any>
+>y : A<any (error)>
 
 (): A => null;
->(): A => null : () => any
+>(): A => null : () => any (error)
 >null : null
 

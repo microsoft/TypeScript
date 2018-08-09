@@ -17,6 +17,6 @@ module Foo {
 >Foo : typeof Foo
 
     export var x = b
->x : any
->b : any
+>x : any (error)
+>b : any (error)
 }

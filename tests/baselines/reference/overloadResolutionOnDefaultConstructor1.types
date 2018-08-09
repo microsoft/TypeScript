@@ -3,10 +3,10 @@ class Bar {
 >Bar : Bar
 
     public clone() {
->clone : () => any
+>clone : () => any (error)
 
         return new Bar(0);
->new Bar(0) : any
+>new Bar(0) : any (error)
 >Bar : typeof Bar
 >0 : 0
     }

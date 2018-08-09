@@ -1,6 +1,6 @@
 === tests/cases/compiler/breakTarget5.ts ===
 target:
->target : any
+>target : any (error)
 
 while (true) {
 >true : true
@@ -12,7 +12,7 @@ while (true) {
 >true : true
 
       break target;
->target : any
+>target : any (error)
     }
   }
 }

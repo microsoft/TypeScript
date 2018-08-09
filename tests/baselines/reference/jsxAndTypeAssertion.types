@@ -9,60 +9,60 @@ var x: any;
 >x : any
 
 x = <any> { test: <any></any> };
->x = <any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>x = <any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >x : any
-><any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
->any : any
->test : any
-><any></any> : any
->any : any
->any : any
+><any> { test: <any></any> };x = <any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
+>any : any (error)
+>test : any (error)
+><any></any> : any (error)
+>any : any (error)
+>any : any (error)
 
 x = <any><any></any>;
-><any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
->any : any
-><any></any> : any
->any : any
->any : any
+><any><any></any>; x = <foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
+>any : any (error)
+><any></any> : any (error)
+>any : any (error)
+>any : any (error)
  
 x = <foo>hello {<foo>{}} </foo>;
-><foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+><foo>hello {<foo>{}} </foo>;x = <foo test={<foo>{}}>hello</foo>;x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
-><foo>{}} </foo> : any
+><foo>{}} </foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
 
 x = <foo test={<foo>{}}>hello</foo>;
-><foo test={<foo>{}}>hello</foo>; : any
+><foo test={<foo>{}}>hello</foo>; : any (error)
 >foo : typeof foo
->test : any
-><foo>{}}>hello</foo> : any
+>test : any (error)
+><foo>{}}>hello</foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
 
 x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
-><foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+><foo test={<foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
->test : any
-><foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+>test : any (error)
+><foo>{}}>hello{<foo>{}}</foo>;x = <foo>x</foo>, x = <foo/>;<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
-><foo>{}}</foo> : any
+><foo>{}}</foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
 
 x = <foo>x</foo>, x = <foo/>;
-><foo>x</foo> : any
+><foo>x</foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
-><foo/> : any
+><foo/> : any (error)
 >foo : typeof foo
 
 <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
-><foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+><foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
-><foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+><foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
-><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any
+><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>     : any (error)
 >foo : typeof foo
 >/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
 >/foo/.test(x) : boolean
@@ -70,14 +70,14 @@ x = <foo>x</foo>, x = <foo/>;
 >/foo/ : RegExp
 >test : (string: string) => boolean
 >x : any
-><foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any
+><foo><foo></foo> : <foo><foo></foo>}</foo>}</foo> : any (error)
 >foo : typeof foo
-><foo></foo> : any
+><foo></foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
-><foo><foo></foo>}</foo> : any
+><foo><foo></foo>}</foo> : any (error)
 >foo : typeof foo
-><foo></foo> : any
+><foo></foo> : any (error)
 >foo : typeof foo
 >foo : typeof foo
 >foo : typeof foo
@@ -85,12 +85,12 @@ x = <foo>x</foo>, x = <foo/>;
 
     
 
-> : any
-> : any
-> : any
-> : any
-> : any
-> : any
-> : any
-> : any
+> : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
 

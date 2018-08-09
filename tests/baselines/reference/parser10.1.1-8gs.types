@@ -19,7 +19,7 @@
 >"use strict" : "use strict"
 
 throw NotEarlyError;
->NotEarlyError : any
+>NotEarlyError : any (error)
 
 var public = 1;
 >public : number

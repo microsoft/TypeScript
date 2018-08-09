@@ -1,7 +1,7 @@
 === tests/cases/compiler/continueStatementInternalComments.ts ===
 foo: for (;;) {
->foo : any
+>foo : any (error)
 
     /*1*/ continue /*2*/ foo /*3*/;
->foo : any
+>foo : any (error)
 }

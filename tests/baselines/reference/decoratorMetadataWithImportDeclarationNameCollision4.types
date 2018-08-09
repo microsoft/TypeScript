@@ -9,7 +9,7 @@ export class db {
 
 === tests/cases/compiler/service.ts ===
 import db from './db'; // error no default export
->db : any
+>db : any (error)
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
@@ -25,27 +25,27 @@ class MyClass {
 >MyClass : MyClass
 
     db: db.db;
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
     constructor(db: db.db) {
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
         this.db = db;
->this.db = db : any
->this.db : any
+>this.db = db : any (error)
+>this.db : any (error)
 >this : this
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
         this.db.doSomething();
->this.db.doSomething() : any
->this.db.doSomething : any
->this.db : any
+>this.db.doSomething() : any (error)
+>this.db.doSomething : any (error)
+>this.db : any (error)
 >this : this
->db : any
->doSomething : any
+>db : any (error)
+>doSomething : any (error)
     }
 }
 export {MyClass};

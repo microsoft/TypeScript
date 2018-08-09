@@ -1,36 +1,36 @@
 === tests/cases/compiler/unknownSymbols1.ts ===
 var x = asdf;
->x : any
->asdf : any
+>x : any (error)
+>asdf : any (error)
 
 var y: asdf;
->y : any
+>y : any (error)
 
 function foo(x: asdf, y: number): asdf { }
->foo : (x: any, y: number) => any
->x : any
+>foo : (x: any (error), y: number) => any (error)
+>x : any (error)
 >y : number
 
 function foo2() {
->foo2 : () => any
+>foo2 : () => any (error)
 
     return asdf;
->asdf : any
+>asdf : any (error)
 }
 
 var z = <asdf>x; // should be an error
->z : any
-><asdf>x : any
->x : any
+>z : any (error)
+><asdf>x : any (error)
+>x : any (error)
 
 class C<T> {
 >C : C<T>
 
     foo: asdf;
->foo : any
+>foo : any (error)
 
     bar: C<asdf>;
->bar : C<any>
+>bar : C<any (error)>
 }
 
 class C2 implements asdf { }
@@ -50,7 +50,7 @@ class C4 extends C3 {
         super(asdf);
 >super(asdf) : void
 >super : typeof C3
->asdf : any
+>asdf : any (error)
     }
 }
 
@@ -65,10 +65,10 @@ class C5 {
 
     constructor() {
         this.asdf = asdf;
->this.asdf = asdf : any
->this.asdf : any
+>this.asdf = asdf : any (error)
+>this.asdf : any (error)
 >this : this
->asdf : any
->asdf : any
+>asdf : any (error)
+>asdf : any (error)
     }
 }

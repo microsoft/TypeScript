@@ -11,8 +11,8 @@ module A.B.C {
 
     export class W implements A.C.Z {
 >W : W
->A.C : any
+>A.C : any (error)
 >A : typeof A
->C : any
+>C : any (error)
     }
 }

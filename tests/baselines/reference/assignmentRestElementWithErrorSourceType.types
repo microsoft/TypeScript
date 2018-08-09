@@ -3,9 +3,9 @@ var tuple: [string, number];
 >tuple : [string, number]
 
 [...c] = tupel; // intentionally misspelled
->[...c] = tupel : any
+>[...c] = tupel : any (error)
 >[...c] : undefined[]
->...c : any
->c : any
->tupel : any
+>...c : any (error)
+>c : any (error)
+>tupel : any (error)
 

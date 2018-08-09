@@ -14,10 +14,10 @@ class bar extends foo {
 >test : () => void
 
         this.
->this. : any
+>this. : any (error)
 >this : this
     }
-> : any
+> : any (error)
 }
 var x = new bar();
 >x : bar

@@ -1,8 +1,8 @@
 === tests/cases/compiler/second.d.ts ===
 // Fixes #15094
 export import Component = CompletelyMissing;
->Component : any
->CompletelyMissing : any
+>Component : any (error)
+>CompletelyMissing : any (error)
 
 === tests/cases/compiler/first.d.ts ===
 import * as Second from './second';
@@ -13,9 +13,9 @@ export = Second;
 
 === tests/cases/compiler/crash.ts ===
 import { Component } from './first';
->Component : any
+>Component : any (error)
 
 class C extends Component { }
 >C : C
->Component : any
+>Component : any (error)
 

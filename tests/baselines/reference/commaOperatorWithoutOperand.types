@@ -17,70 +17,70 @@ var OBJECT: Object;
 // Expect to have compiler errors
 // Missing the second operand
 (ANY, );
->(ANY, ) : any
->ANY, : any
+>(ANY, ) : any (error)
+>ANY, : any (error)
 >ANY : any
-> : any
+> : any (error)
 
 (BOOLEAN, );
->(BOOLEAN, ) : any
->BOOLEAN, : any
+>(BOOLEAN, ) : any (error)
+>BOOLEAN, : any (error)
 >BOOLEAN : boolean
-> : any
+> : any (error)
 
 (NUMBER, );
->(NUMBER, ) : any
->NUMBER, : any
+>(NUMBER, ) : any (error)
+>NUMBER, : any (error)
 >NUMBER : number
-> : any
+> : any (error)
 
 (STRING, );
->(STRING, ) : any
->STRING, : any
+>(STRING, ) : any (error)
+>STRING, : any (error)
 >STRING : string
-> : any
+> : any (error)
 
 (OBJECT, );
->(OBJECT, ) : any
->OBJECT, : any
+>(OBJECT, ) : any (error)
+>OBJECT, : any (error)
 >OBJECT : Object
-> : any
+> : any (error)
 
 // Missing the first operand
 (, ANY);
 >(, ANY) : any
 >, ANY : any
-> : any
+> : any (error)
 >ANY : any
 
 (, BOOLEAN);
 >(, BOOLEAN) : boolean
 >, BOOLEAN : boolean
-> : any
+> : any (error)
 >BOOLEAN : boolean
 
 (, NUMBER);
 >(, NUMBER) : number
 >, NUMBER : number
-> : any
+> : any (error)
 >NUMBER : number
 
 (, STRING);
 >(, STRING) : string
 >, STRING : string
-> : any
+> : any (error)
 >STRING : string
 
 (, OBJECT);
 >(, OBJECT) : Object
 >, OBJECT : Object
-> : any
+> : any (error)
 >OBJECT : Object
 
 // Missing all operands
 ( , );
->( , ) : any
->, : any
-> : any
-> : any
+>( , ) : any (error)
+>, : any (error)
+> : any (error)
+> : any (error)
 

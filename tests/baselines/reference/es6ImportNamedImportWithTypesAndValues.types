@@ -25,7 +25,7 @@ export class C2 implements I2 {
 === tests/cases/compiler/client.ts ===
 import { C, I, C2 } from "./server"; // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 >C : typeof C
->I : any
+>I : any (error)
 >C2 : typeof C2
 
 export type cValInterface = I;

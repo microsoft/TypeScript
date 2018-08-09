@@ -8,11 +8,11 @@ import m2 = require('mod2');
 
 var x: m1.Foo;
 >x : m1.Foo
->m1 : any
+>m1 : any (error)
 
 var x: m2.Foo; // Should be error (mod1.Foo !== mod2.Foo)
 >x : m1.Foo
->m2 : any
+>m2 : any (error)
 
 class Foo1 {
 >Foo1 : Foo1

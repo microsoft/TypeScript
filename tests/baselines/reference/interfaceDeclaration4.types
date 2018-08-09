@@ -62,5 +62,5 @@ class C3 implements Foo.I1 { }
 
 // Negative case 
 interface Foo.I1 { }
->I1 : any
+>I1 : any (error)
 

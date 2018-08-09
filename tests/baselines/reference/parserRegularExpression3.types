@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpression3.ts ===
 Foo(!/(\\?|&)adurl=/);
->Foo(!/(\\?|&)adurl=/) : any
->Foo : any
+>Foo(!/(\\?|&)adurl=/) : any (error)
+>Foo : any (error)
 >!/(\\?|&)adurl=/ : boolean
 >/(\\?|&)adurl=/ : RegExp
 

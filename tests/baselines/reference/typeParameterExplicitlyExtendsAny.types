@@ -6,9 +6,9 @@ function fee<T>() {
 >t : T
 
     t.blah; // Error
->t.blah : any
+>t.blah : any (error)
 >t : T
->blah : any
+>blah : any (error)
 
     t.toString; // ok
 >t.toString : () => string

@@ -5,7 +5,7 @@ import React = require('react')
 declare function Component<U>(l: U): JSX.Element;
 >Component : <U>(l: U) => JSX.Element
 >l : U
->JSX : any
+>JSX : any (error)
 
 function createComponent<T extends { prop: number }>(arg: T) {
 >createComponent : <T extends { prop: number; }>(arg: T) => void
@@ -30,14 +30,14 @@ declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
 >ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
 >l : { prop: U; }
 >prop : U
->JSX : any
+>JSX : any (error)
 
 declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
 >l : { prop: U; "ignore-prop": number; }
 >prop : U
 >"ignore-prop" : number
->JSX : any
+>JSX : any (error)
 
 function Bar<T extends { prop: number }>(arg: T) {
 >Bar : <T extends { prop: number; }>(arg: T) => void

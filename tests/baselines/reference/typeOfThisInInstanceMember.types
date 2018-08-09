@@ -30,9 +30,9 @@ class C {
 >y : this
 
         t.z;
->t.z : any
+>t.z : any (error)
 >t : this
->z : any
+>z : any (error)
 
         var r = t.foo();
 >r : this

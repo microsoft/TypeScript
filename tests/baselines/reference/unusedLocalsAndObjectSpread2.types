@@ -7,7 +7,7 @@ const {
 >children : any
 
     active: _a, // here!
->active : any
+>active : any (error)
 >_a : any
 
   ...rest
@@ -24,7 +24,7 @@ function foo() {
 >children : any
 
         active: _a,
->active : any
+>active : any (error)
 >_a : any
 
         ...rest

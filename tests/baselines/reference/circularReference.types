@@ -10,8 +10,8 @@ export module M1 {
 
 		m1: foo1.M1.C1;
 >m1 : foo1.M1.C1
->foo1 : any
->M1 : any
+>foo1 : any (error)
+>M1 : any (error)
 
 		y: number
 >y : number
@@ -31,11 +31,11 @@ export module M1 {
 
 			this.m1.y = 10; // Error
 >this.m1.y = 10 : 10
->this.m1.y : any
+>this.m1.y : any (error)
 >this.m1 : foo1.M1.C1
 >this : this
 >m1 : foo1.M1.C1
->y : any
+>y : any (error)
 >10 : 10
 
 			this.m1.x = 20; // OK
@@ -63,9 +63,9 @@ export module M1 {
 
 			tmp.x = 20; // Error			
 >tmp.x = 20 : 20
->tmp.x : any
+>tmp.x : any (error)
 >tmp : C1
->x : any
+>x : any (error)
 >20 : 20
 		}
 	}
@@ -83,8 +83,8 @@ export module M1 {
 
 		m1: foo2.M1.C1;
 >m1 : foo2.M1.C1
->foo2 : any
->M1 : any
+>foo2 : any (error)
+>M1 : any (error)
 
 		x: number;
 >x : number
@@ -113,11 +113,11 @@ export module M1 {
 
 			this.m1.x = 20; // Error
 >this.m1.x = 20 : 20
->this.m1.x : any
+>this.m1.x : any (error)
 >this.m1 : foo2.M1.C1
 >this : this
 >m1 : foo2.M1.C1
->x : any
+>x : any (error)
 >20 : 20
 		}
 	}

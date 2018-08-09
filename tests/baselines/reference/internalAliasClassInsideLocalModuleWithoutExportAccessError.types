@@ -42,11 +42,11 @@ export module m2 {
 }
 
 export var d = new m2.m3.c();
->d : any
->new m2.m3.c() : any
->m2.m3.c : any
+>d : any (error)
+>new m2.m3.c() : any (error)
+>m2.m3.c : any (error)
 >m2.m3 : typeof m2.m3
 >m2 : typeof m2
 >m3 : typeof m2.m3
->c : any
+>c : any (error)
 

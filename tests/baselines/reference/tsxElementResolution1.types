@@ -10,10 +10,10 @@ declare module JSX {
 // OK
 <div />;
 ><div /> : JSX.Element
->div : any
+>div : any (error)
 
 // Fail
 <span />;
 ><span /> : JSX.Element
->span : any
+>span : any (error)
 

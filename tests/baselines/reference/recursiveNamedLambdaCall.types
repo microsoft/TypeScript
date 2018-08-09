@@ -6,42 +6,42 @@ var promise = function( obj ) {
 	
 		if ( top && top.doScroll ) {
 >top && top.doScroll : any
->top : any
->top.doScroll : any
->top : any
->doScroll : any
+>top : any (error)
+>top.doScroll : any (error)
+>top : any (error)
+>doScroll : any (error)
 
 			(function doScrollCheck() {
->(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			})() : any
->(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			}) : () => any
->function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			} : () => any
->doScrollCheck : () => any
+>(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			})() : any (error)
+>(function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			}) : () => any (error)
+>function doScrollCheck() {				if ( false ) {					try {						top.doScroll("left");					} catch(e) {						return setTimeout( doScrollCheck, 50 );					}					// detach all dom ready events					detach();				}			} : () => any (error)
+>doScrollCheck : () => any (error)
 
 				if ( false ) {
 >false : false
 
 					try {
 						top.doScroll("left");
->top.doScroll("left") : any
->top.doScroll : any
->top : any
->doScroll : any
+>top.doScroll("left") : any (error)
+>top.doScroll : any (error)
+>top : any (error)
+>doScroll : any (error)
 >"left" : "left"
 
 					} catch(e) {
 >e : any
 
 						return setTimeout( doScrollCheck, 50 );
->setTimeout( doScrollCheck, 50 ) : any
->setTimeout : any
->doScrollCheck : () => any
+>setTimeout( doScrollCheck, 50 ) : any (error)
+>setTimeout : any (error)
+>doScrollCheck : () => any (error)
 >50 : 50
 					}
 
 					// detach all dom ready events
 					detach();
->detach() : any
->detach : any
+>detach() : any (error)
+>detach : any (error)
 
 				}
 			})();

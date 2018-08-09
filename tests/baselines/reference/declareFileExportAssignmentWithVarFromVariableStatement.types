@@ -24,15 +24,15 @@ var x = 10, m2: {
 >m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
     (): m2.connectExport;
->m2 : any
+>m2 : any (error)
 
     test1: m2.connectModule;
 >test1 : m2.connectModule
->m2 : any
+>m2 : any (error)
 
     test2(): m2.connectModule;
 >test2 : () => m2.connectModule
->m2 : any
+>m2 : any (error)
 
 };
 

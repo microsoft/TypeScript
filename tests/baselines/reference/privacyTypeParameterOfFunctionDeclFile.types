@@ -176,65 +176,65 @@ function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 
 export interface publicInterfaceWithPrivatModuleTypeParameters {
     new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
     <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 >myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 }
 export class publicClassWithWithPrivateModuleTypeParameters {
 >publicClassWithWithPrivateModuleTypeParameters : publicClassWithWithPrivateModuleTypeParameters
 
     static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicStaticMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
     myPublicMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
 }
 export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
 >publicFunctionWithPrivateMopduleTypeParameters : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
 }
 
 
 interface privateInterfaceWithPrivatModuleTypeParameters {
     new <T extends privateModule.publicClass>(): privateModule.publicClass;
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
     <T extends privateModule.publicClass>(): privateModule.publicClass;
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
     myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
 >myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 }
 class privateClassWithWithPrivateModuleTypeParameters {
 >privateClassWithWithPrivateModuleTypeParameters : privateClassWithWithPrivateModuleTypeParameters
 
     static myPublicStaticMethod<T extends privateModule.publicClass>() {
 >myPublicStaticMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
     myPublicMethod<T extends privateModule.publicClass>() {
 >myPublicMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
 }
 function privateFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {
 >privateFunctionWithPrivateMopduleTypeParameters : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
 }
 
 
@@ -418,65 +418,65 @@ export module publicModule {
 
     export interface publicInterfaceWithPrivatModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
         <T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 >myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
     }
     export class publicClassWithWithPrivateModuleTypeParameters {
 >publicClassWithWithPrivateModuleTypeParameters : publicClassWithWithPrivateModuleTypeParameters
 
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicStaticMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
         }
         myPublicMethod<T extends privateModule.publicClass>() {  // Error
 >myPublicMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
         }
     }
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() {  // Error
 >publicFunctionWithPrivateMopduleTypeParameters : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
 
 
     interface privateInterfaceWithPrivatModuleTypeParameters {
         new <T extends privateModule.publicClass>(): privateModule.publicClass;  
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
         <T extends privateModule.publicClass>(): privateModule.publicClass;  
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
 
         myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  
 >myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
->privateModule : any
->privateModule : any
+>privateModule : any (error)
+>privateModule : any (error)
     }
     class privateClassWithWithPrivateModuleTypeParameters {
 >privateClassWithWithPrivateModuleTypeParameters : privateClassWithWithPrivateModuleTypeParameters
 
         static myPublicStaticMethod<T extends privateModule.publicClass>() {  
 >myPublicStaticMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
         }
         myPublicMethod<T extends privateModule.publicClass>() { 
 >myPublicMethod : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
         }
     }
     function privateFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>() { 
 >privateFunctionWithPrivateMopduleTypeParameters : <T extends privateModule.publicClass>() => void
->privateModule : any
+>privateModule : any (error)
     }
 
 }

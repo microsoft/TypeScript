@@ -19,17 +19,17 @@ export default class B<T: BaseA> {
 >B : B<T, BaseA>
 
     _AClass: Class<T>;
->_AClass : any
+>_AClass : any (error)
 
     constructor(AClass: Class<T>) {
->AClass : any
+>AClass : any (error)
 
         this._AClass = AClass;
->this._AClass = AClass : any
->this._AClass : any
+>this._AClass = AClass : any (error)
+>this._AClass : any (error)
 >this : this
->_AClass : any
->AClass : any
+>_AClass : any (error)
+>AClass : any (error)
     }
 }
 === tests/cases/compiler/SubB.js ===

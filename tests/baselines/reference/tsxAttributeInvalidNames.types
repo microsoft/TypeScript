@@ -15,23 +15,23 @@ declare module JSX {
 // Invalid names
 <test1 32data={32} />;
 ><test1 : JSX.Element
->test1 : any
+>test1 : any (error)
 >32 : 32
 >data={32} /> : boolean
->data : any
+>data : any (error)
 >{32} /> : boolean
 >{32} / : number
->{32} : { 32: any; }
->32 : any
-> : any
-> : any
-> : any
+>{32} : { 32: any (error); }
+>32 : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
 
 <test2 -data={32} />;
 ><test2 -data : number
 ><test2 : JSX.Element
->test2 : any
->data : any
+>test2 : any (error)
+>data : any (error)
 >32 : 32
 >/>; : RegExp
 

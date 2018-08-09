@@ -7,14 +7,14 @@ function test() {
 >0 : 0
 
     testLoop: do {
->testLoop : any
+>testLoop : any (error)
 
         foo++;
 >foo++ : number
 >foo : number
 
         continue testLoop;
->testLoop : any
+>testLoop : any (error)
 
     } while (function() {
 >function() {        var x = 1;        return false;    }() : boolean

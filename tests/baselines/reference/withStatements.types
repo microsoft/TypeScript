@@ -7,12 +7,12 @@ with (x) {
 >x : number
 
     name = 'twelve'
->name = 'twelve' : any
->name : any
->'twelve' : any
+>name = 'twelve' : any (error)
+>name : any (error)
+>'twelve' : any (error)
 
     id = 12
->id = 12 : any
->id : any
->12 : any
+>id = 12 : any (error)
+>id : any (error)
+>12 : any (error)
 }

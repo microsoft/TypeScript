@@ -10,7 +10,7 @@ var i: I;
 
 var r2: number = i();
 >r2 : number
->i() : any
+>i() : any (error)
 >i : I
 
 var r2b: number = new i();
@@ -34,7 +34,7 @@ var b: {
 
 var r4: number = b();
 >r4 : number
->b() : any
+>b() : any (error)
 >b : new () => number
 
 var r4b: number = new b();

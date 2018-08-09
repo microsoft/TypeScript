@@ -4,6 +4,6 @@ class C {
 
     set [e](v) { }
 >[e] : any
->e : any
+>e : any (error)
 >v : any
 }

@@ -1,20 +1,20 @@
 === tests/cases/compiler/undeclaredModuleError.ts ===
 import fs = require('fs');
->fs : any
+>fs : any (error)
 
 function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void ) {}
->readdir : (path: string, accept: (stat: any, name: string) => boolean, callback: (error: Error, results: { name: string; stat: any; }[]) => void) => void
+>readdir : (path: string, accept: (stat: any (error), name: string) => boolean, callback: (error: Error, results: { name: string; stat: any (error); }[]) => void) => void
 >path : string
->accept : (stat: any, name: string) => boolean
->stat : any
->fs : any
+>accept : (stat: any (error), name: string) => boolean
+>stat : any (error)
+>fs : any (error)
 >name : string
->callback : (error: Error, results: { name: string; stat: any; }[]) => void
+>callback : (error: Error, results: { name: string; stat: any (error); }[]) => void
 >error : Error
->results : { name: string; stat: any; }[]
+>results : { name: string; stat: any (error); }[]
 >name : string
->stat : any
->fs : any
+>stat : any (error)
+>fs : any (error)
 
 function join(...paths: string[]) {}
 >join : (...paths: string[]) => void
@@ -27,16 +27,16 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >originalFilePath : string
 
     fs.readFile(originalFilePath, () => {       
->fs.readFile(originalFilePath, () => {               readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } );    } ) : any
->fs.readFile : any
->fs : any
->readFile : any
+>fs.readFile(originalFilePath, () => {               readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } );    } ) : any (error)
+>fs.readFile : any (error)
+>fs : any (error)
+>readFile : any (error)
 >originalFilePath : string
 >() => {               readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } );    } : () => void
 
         readdir(covFileDir, () => {
 >readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } ) : void
->readdir : (path: string, accept: (stat: any, name: string) => boolean, callback: (error: Error, results: { name: string; stat: any; }[]) => void) => void
+>readdir : (path: string, accept: (stat: any (error), name: string) => boolean, callback: (error: Error, results: { name: string; stat: any (error); }[]) => void) => void
 >covFileDir : string
 >() => {        } : () => void
 
@@ -57,7 +57,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >fullPath : void
 >join(IDoNotExist) : void
 >join : (...paths: string[]) => void
->IDoNotExist : any
+>IDoNotExist : any (error)
 
                 } );
             } );

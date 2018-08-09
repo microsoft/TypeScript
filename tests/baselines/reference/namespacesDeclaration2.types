@@ -20,14 +20,14 @@ declare namespace ns {
 }
 
 var foge: N.S;
->foge : any
->N : any
+>foge : any (error)
+>N : any (error)
 
 var foo: M.F;
->foo : any
->M : any
+>foo : any (error)
+>M : any (error)
 
 let x: ns.A;
->x : any
->ns : any
+>x : any (error)
+>ns : any (error)
 

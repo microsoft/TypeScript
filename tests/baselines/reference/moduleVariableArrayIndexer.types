@@ -7,9 +7,9 @@ module Bar {
 >1 : 1
 
     var t = undefined[a][a]; // CG: var t = undefined[Bar.a][a];
->t : any
->undefined[a][a] : any
->undefined[a] : any
+>t : any (error)
+>undefined[a][a] : any (error)
+>undefined[a] : any (error)
 >undefined : undefined
 >a : number
 >a : number

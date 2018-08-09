@@ -153,8 +153,8 @@ var array1 = <number[]>numStrTuple;
 
 t4[2] = 10;
 >t4[2] = 10 : 10
->t4[2] : any
->t4 : any
+>t4[2] : any (error)
+>t4 : any (error)
 >2 : 2
 >10 : 10
 

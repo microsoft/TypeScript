@@ -23,9 +23,9 @@ while (0) {
 >methodB : () => void
 
             this.methodA; // error
->this.methodA : any
+>this.methodA : any (error)
 >this : this
->methodA : any
+>methodA : any (error)
 
             this.methodB; // ok
 >this.methodB : () => void

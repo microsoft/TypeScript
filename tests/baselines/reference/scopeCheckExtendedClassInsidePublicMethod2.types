@@ -14,7 +14,7 @@ class D extends C {
 
       v = 1;
 >v = 1 : 1
->v : any
+>v : any (error)
 >1 : 1
 
       this.p = 1;
@@ -26,7 +26,7 @@ class D extends C {
 
       s = 1;
 >s = 1 : 1
->s : any
+>s : any (error)
 >1 : 1
    }
 }

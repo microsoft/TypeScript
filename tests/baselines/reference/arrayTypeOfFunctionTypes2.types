@@ -54,7 +54,7 @@ var r6 = new r5();
 >r5 : new () => string
 
 var r6b = r5();
->r6b : any
->r5() : any
+>r6b : any (error)
+>r5() : any (error)
 >r5 : new () => string
 

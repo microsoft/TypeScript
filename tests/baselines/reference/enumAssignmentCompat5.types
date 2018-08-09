@@ -47,7 +47,7 @@ e = 4; // ok, out of range, but allowed computed enums don't have all members
 
 let a: E.A = 0; // ok, A === 0
 >a : E.A
->E : any
+>E : any (error)
 >0 : 0
 
 a = 2; // error, 2 !== 0
@@ -76,7 +76,7 @@ c = 4; // ok
 
 let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Computed has no enum literals
 >ca : Computed
->Computed : any
+>Computed : any (error)
 >1 : 1
 
 

@@ -9,7 +9,7 @@ function test({
 >'z' : "z"
 
     nested: { p = 'c' }
->nested : any
+>nested : any (error)
 >p : "a" | "b"
 >'c' : "c"
 

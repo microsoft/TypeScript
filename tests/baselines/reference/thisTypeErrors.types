@@ -1,20 +1,20 @@
 === tests/cases/conformance/types/thisType/thisTypeErrors.ts ===
 var x1: this;
->x1 : any
+>x1 : any (error)
 
 var x2: { a: this };
->x2 : { a: any; }
->a : any
+>x2 : { a: any (error); }
+>a : any (error)
 
 var x3: this[];
->x3 : any[]
+>x3 : any (error)[]
 
 function f1(x: this): this {
->f1 : (x: any) => any
->x : any
+>f1 : (x: any (error)) => any (error)
+>x : any (error)
 
     var y: this;
->y : any
+>y : any (error)
 
     return this;
 >this : any
@@ -22,62 +22,62 @@ function f1(x: this): this {
 
 interface I1 {
     a: { x: this };
->a : { x: any; }
->x : any
+>a : { x: any (error); }
+>x : any (error)
 
     b: { (): this };
->b : () => any
+>b : () => any (error)
 
     c: { new (): this };
->c : new () => any
+>c : new () => any (error)
 
     d: { [x: string]: this };
->d : { [x: string]: any; }
+>d : { [x: string]: any (error); }
 >x : string
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->f : (x: any) => any
->x : any
+>e : { f(x: any (error)): any (error); }
+>f : (x: any (error)) => any (error)
+>x : any (error)
 }
 
 class C1 {
 >C1 : C1
 
     a: { x: this };
->a : { x: any; }
->x : any
+>a : { x: any (error); }
+>x : any (error)
 
     b: { (): this };
->b : () => any
+>b : () => any (error)
 
     c: { new (): this };
->c : new () => any
+>c : new () => any (error)
 
     d: { [x: string]: this };
->d : { [x: string]: any; }
+>d : { [x: string]: any (error); }
 >x : string
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->f : (x: any) => any
->x : any
+>e : { f(x: any (error)): any (error); }
+>f : (x: any (error)) => any (error)
+>x : any (error)
 }
 
 class C2 {
 >C2 : C2
 
     static x: this;
->x : any
+>x : any (error)
 
     static y = <this>undefined;
->y : any
-><this>undefined : any
+>y : any (error)
+><this>undefined : any (error)
 >undefined : undefined
 
     static foo(x: this): this {
->foo : (x: any) => any
->x : any
+>foo : (x: any (error)) => any (error)
+>x : any (error)
 
         return undefined;
 >undefined : undefined
@@ -88,7 +88,7 @@ namespace N1 {
 >N1 : typeof N1
 
     export var x: this;
->x : any
+>x : any (error)
 
     export var y = this;
 >y : any
@@ -99,12 +99,12 @@ class C3 {
 >C3 : C3
 
     x1 = {
->x1 : { g(x: any): any; }
->{        g(x: this): this {            return undefined;        }    } : { g(x: any): any; }
+>x1 : { g(x: any (error)): any (error); }
+>{        g(x: this): this {            return undefined;        }    } : { g(x: any (error)): any (error); }
 
         g(x: this): this {
->g : (x: any) => any
->x : any
+>g : (x: any (error)) => any (error)
+>x : any (error)
 
             return undefined;
 >undefined : undefined
@@ -114,19 +114,19 @@ class C3 {
 >f : () => void
 
         function g(x: this): this {
->g : (x: any) => any
->x : any
+>g : (x: any (error)) => any (error)
+>x : any (error)
 
             return undefined;
 >undefined : undefined
         }
         let x2 = {
->x2 : { h(x: any): any; }
->{            h(x: this): this {                return undefined;            }        } : { h(x: any): any; }
+>x2 : { h(x: any (error)): any (error); }
+>{            h(x: this): this {                return undefined;            }        } : { h(x: any (error)): any (error); }
 
             h(x: this): this {
->h : (x: any) => any
->x : any
+>h : (x: any (error)) => any (error)
+>x : any (error)
 
                 return undefined;
 >undefined : undefined

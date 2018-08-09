@@ -77,7 +77,7 @@ var p6 = ({ a }) => { };
 var p7 = ({ a: { b } }) => { };
 >p7 : ({ a: { b } }: { a: { b: any; }; }) => void
 >({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
->a : any
+>a : any (error)
 >b : any
 
 var p8 = ({ a = 1 }) => { };
@@ -89,7 +89,7 @@ var p8 = ({ a = 1 }) => { };
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
 >({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
->a : any
+>a : any (error)
 >b : number
 >1 : 1
 >{ b: 1 } : { b?: number; }

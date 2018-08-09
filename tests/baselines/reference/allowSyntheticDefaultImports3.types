@@ -1,13 +1,13 @@
 === tests/cases/compiler/a.ts ===
 import Namespace from "./b";
->Namespace : any
+>Namespace : any (error)
 
 export var x = new Namespace.Foo();
->x : any
->new Namespace.Foo() : any
->Namespace.Foo : any
->Namespace : any
->Foo : any
+>x : any (error)
+>new Namespace.Foo() : any (error)
+>Namespace.Foo : any (error)
+>Namespace : any (error)
+>Foo : any (error)
 
 === tests/cases/compiler/b.ts ===
 export class Foo {

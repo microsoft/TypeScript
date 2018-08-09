@@ -1,19 +1,19 @@
 === tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts ===
 import { yield } from "somemodule"; // Allowed
->yield : any
+>yield : any (error)
 
 import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier
->default : any
+>default : any (error)
 
 import { yield as default } from "somemodule"; // error to use default as binding name
->yield : any
->default : any
+>yield : any (error)
+>default : any (error)
 
 import { default as yield } from "somemodule"; // no error 
->default : any
->yield : any
+>default : any (error)
+>yield : any (error)
 
 import { default as default } from "somemodule"; // default as is ok, error of default binding name
->default : any
->default : any
+>default : any (error)
+>default : any (error)
 

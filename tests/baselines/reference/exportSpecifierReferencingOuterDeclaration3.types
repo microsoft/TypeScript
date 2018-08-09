@@ -5,13 +5,13 @@ declare module "m" {
 
     module X { export interface foo { } }
     export { X };
->X : any
+>X : any (error)
 
     export function foo(): X.foo;
 >foo : () => X.foo
->X : any
+>X : any (error)
 
     export function bar(): X.bar; // error
->bar : () => any
->X : any
+>bar : () => any (error)
+>X : any (error)
 }

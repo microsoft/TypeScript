@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringInObjectLiteral.ts ===
 var x = {
->x : any
->{    a: `abc${ 123 }def`,    `b` : any
+>x : any (error)
+>{    a: `abc${ 123 }def`,    `b` : any (error)
 >{    a: `abc${ 123 }def`, : { a: string; }
 
     a: `abc${ 123 }def`,

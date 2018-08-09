@@ -60,9 +60,9 @@ m.foo = 'hi'
 >'hi' : "hi"
 
 m.bar
->m.bar : any
+>m.bar : any (error)
 >m : Missing
->bar : any
+>bar : any (error)
 
 type RO = { foo: number } | { readonly [s: string]: string }
 >RO : RO
@@ -74,9 +74,9 @@ declare var ro: RO
 
 ro.foo = 'not allowed'
 >ro.foo = 'not allowed' : "not allowed"
->ro.foo : any
+>ro.foo : any (error)
 >ro : RO
->foo : any
+>foo : any (error)
 >'not allowed' : "not allowed"
 
 type Num = { '0': string } | { [n: number]: number }

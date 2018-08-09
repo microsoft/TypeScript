@@ -11,7 +11,7 @@ function* f() {
     // Unlike await, yield is not allowed to appear in a simple unary expression.
     <number> yield 0;
 ><number> : number
-> : any
+> : any (error)
 >yield 0 : any
 >0 : 0
 }

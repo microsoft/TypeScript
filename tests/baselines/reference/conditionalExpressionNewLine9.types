@@ -2,21 +2,21 @@
 var v = a 
 >v : any
 >a   ? b    ? d : e  : c    ? f : g : any
->a : any
+>a : any (error)
 
   ? b
 >b    ? d : e : any
->b : any
+>b : any (error)
 
     ? d : e
->d : any
->e : any
+>d : any (error)
+>e : any (error)
 
   : c
 >c    ? f : g : any
->c : any
+>c : any (error)
 
     ? f : g;
->f : any
->g : any
+>f : any (error)
+>g : any (error)
 

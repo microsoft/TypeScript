@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/Expressions/parserUnaryExpression5.ts ===
 ++ delete foo.bar
 >++ : number
-> : any
+> : any (error)
 >delete foo.bar : boolean
->foo.bar : any
->foo : any
->bar : any
+>foo.bar : any (error)
+>foo : any (error)
+>bar : any (error)
 

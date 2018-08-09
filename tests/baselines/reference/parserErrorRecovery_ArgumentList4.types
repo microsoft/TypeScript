@@ -3,10 +3,10 @@ function foo() {
 >foo : () => void
 
    bar(a,b
->bar(a,b : any
->bar : any
->a : any
->b : any
+>bar(a,b : any (error)
+>bar : any (error)
+>a : any (error)
+>b : any (error)
 
    return;
 }

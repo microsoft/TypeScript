@@ -18,7 +18,7 @@ var { a, ...justB } = o;
 
 var { a, b: renamed, ...empty } = o;
 >a : number
->b : any
+>b : any (error)
 >renamed : string
 >empty : {}
 >o : { a: number; b: string; }
@@ -35,7 +35,7 @@ var { 'b': renamed, ...justA } = o;
 >o : { a: number; b: string; }
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
->b : any
+>b : any (error)
 >n : string
 >oooo : string
 >justA : { a: number; }
@@ -50,7 +50,7 @@ let o2 = { c: 'terrible idea?', d: 'yes' };
 >'yes' : "yes"
 
 var { d: renamed, ...d } = o2;
->d : any
+>d : any (error)
 >renamed : string
 >d : { c: string; }
 >o2 : { c: string; d: string; }
@@ -69,11 +69,11 @@ let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number 
 
 var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >x : number
->n1 : any
+>n1 : any (error)
 >y : number
->n2 : any
+>n2 : any (error)
 >z : number
->n3 : any
+>n3 : any (error)
 >nr : { n4: number; }
 >restrest : { rest: number; restrest: number; }
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
@@ -86,10 +86,10 @@ let complex: { x: { ka, ki }, y: number };
 >y : number
 
 var { x: { ka, ...nested }, y: other, ...rest } = complex;
->x : any
+>x : any (error)
 >ka : any
 >nested : { ki: any; }
->y : any
+>y : any (error)
 >other : number
 >rest : {}
 >complex : { x: { ka: any; ki: any; }; y: number; }

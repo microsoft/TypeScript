@@ -10,23 +10,23 @@ const enum Choice { Unknown = "", Yes = "yes", No = "no" };
 
 type Yes = Choice.Yes;
 >Yes : Choice.Yes
->Choice : any
+>Choice : any (error)
 
 type YesNo = Choice.Yes | Choice.No;
 >YesNo : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 
 type NoYes = Choice.No | Choice.Yes;
 >NoYes : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
 >UnknownYesNo : Choice
->Choice : any
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
+>Choice : any (error)
 
 function f1(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
 >f1 : (a: Choice.Yes, b: YesNo, c: Choice, d: Choice) => void

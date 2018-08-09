@@ -1,4 +1,4 @@
 === /a.ts ===
 import jsx from "./jsx";
->jsx : any
+>jsx : any (error)
 

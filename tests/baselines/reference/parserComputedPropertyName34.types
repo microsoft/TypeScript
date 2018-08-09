@@ -5,12 +5,12 @@ enum E {
     // no ASI, comma expected
     [e] = id++,
 >[e] : E
->e : any
+>e : any (error)
 >id++ : number
->id : any
+>id : any (error)
 
     [e2] = 1
 >[e2] : E
->e2 : any
+>e2 : any (error)
 >1 : 1
 }

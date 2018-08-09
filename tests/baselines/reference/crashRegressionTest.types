@@ -41,9 +41,9 @@ module MsPortal.Util.TemplateEngine {
 >this : this
 >_templateStorage : TemplateStorage
 >templateSources : TemplateKeyValue
->this._name : any
+>this._name : any (error)
 >this : this
->_name : any
+>_name : any (error)
 >value : string
         }
     }

@@ -43,8 +43,8 @@ let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
 >"c" : "c"
 
 let b = x.b;  // Error
->b : any
->x.b : any
+>b : any (error)
+>x.b : any (error)
 >x : Pick<{ a: number; b: number; c: number; }, "a" | "c">
->b : any
+>b : any (error)
 

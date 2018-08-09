@@ -25,11 +25,11 @@ var v = new V()
 >V : typeof V
 
 var A;
->A : any
+>A : any (auto)
 
 A = class {
 >A = class {} : typeof A
->A : any
+>A : any (auto)
 >class {} : typeof A
 }
 var a = new A()

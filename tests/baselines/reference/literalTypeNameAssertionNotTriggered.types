@@ -8,15 +8,15 @@ declare function f<T>(obj: T, key: keyof T): void;
 >key : keyof T
 
 f(a, "");
->f(a, "") : any
+>f(a, "") : any (error)
 >f : <T>(obj: T, key: keyof T) => void
 >a : typeof a
 >"" : ""
 
 === /a.ts ===
 import x = require("something");
->x : any
+>x : any (error)
 
 export { x };
->x : any
+>x : any (error)
 

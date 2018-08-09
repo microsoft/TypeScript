@@ -88,7 +88,7 @@ class H {
 
 	constructor() { super(); } // ERROR - no super call allowed
 >super() : void
->super : any
+>super : any (error)
 }
 
 class I extends Object {

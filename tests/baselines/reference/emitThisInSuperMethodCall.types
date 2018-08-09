@@ -21,10 +21,10 @@ class RegisteredUser extends User {
 >inner : () => void
 
                 super.sayHello();
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
             }
         };
     }
@@ -38,10 +38,10 @@ class RegisteredUser extends User {
 >() => {                super.sayHello();            } : () => void
 
                 super.sayHello();
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
             }
         }
     }
@@ -52,10 +52,10 @@ class RegisteredUser extends User {
 >inner : () => void
 
             super.sayHello();
->super.sayHello() : any
->super.sayHello : any
->super : any
->sayHello : any
+>super.sayHello() : any (error)
+>super.sayHello : any (error)
+>super : any (error)
+>sayHello : any (error)
         }
     }
 }

@@ -1,11 +1,11 @@
 === /a.ts ===
 import Foo from "foo";
->Foo : any
+>Foo : any (error)
 
 import Bar from "bar"; // error: unused
->Bar : any
+>Bar : any (error)
 
 export class A extends Foo { }
 >A : A
->Foo : any
+>Foo : any (error)
 

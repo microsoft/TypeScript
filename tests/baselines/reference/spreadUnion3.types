@@ -30,9 +30,9 @@ function g(t?: { a: number } | null): void {
 
     let c: number = b.a;  // might not have 'a'
 >c : number
->b.a : any
+>b.a : any (error)
 >b : {}
->a : any
+>a : any (error)
 }
 g()
 >g() : void
@@ -54,13 +54,13 @@ declare const nullAndUndefinedUnion: null | undefined;
 >null : null
 
 var x = { ...nullAndUndefinedUnion, ...nullAndUndefinedUnion };
->x : any
->{ ...nullAndUndefinedUnion, ...nullAndUndefinedUnion } : any
+>x : any (error)
+>{ ...nullAndUndefinedUnion, ...nullAndUndefinedUnion } : any (error)
 >nullAndUndefinedUnion : null | undefined
 >nullAndUndefinedUnion : null | undefined
 
 var y = { ...nullAndUndefinedUnion };
->y : any
->{ ...nullAndUndefinedUnion } : any
+>y : any (error)
+>{ ...nullAndUndefinedUnion } : any (error)
 >nullAndUndefinedUnion : null | undefined
 

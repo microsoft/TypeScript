@@ -1,15 +1,15 @@
 === tests/cases/compiler/importAnImport.ts ===
 module c.a.b {
     import ma = a;
->ma : any
->a : any
+>ma : any (error)
+>a : any (error)
 }
 
 module m0 {
     import m8 = c.a.b.ma;
->m8 : any
->c : any
->a : any
->b : any
->ma : any
+>m8 : any (error)
+>c : any (error)
+>a : any (error)
+>b : any (error)
+>ma : any (error)
 }

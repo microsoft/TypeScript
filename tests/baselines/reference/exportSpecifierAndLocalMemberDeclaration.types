@@ -14,13 +14,13 @@ declare module "m2" {
 
     function Z(): X.I;
 >Z : () => X.I
->X : any
+>X : any (error)
 }
 
 declare module "m2" {
 >"m2" : typeof import("m2")
 
     function Z2(): X.I;
->Z2 : () => any
->X : any
+>Z2 : () => any (error)
+>X : any (error)
 }

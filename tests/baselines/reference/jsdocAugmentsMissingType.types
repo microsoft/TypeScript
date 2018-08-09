@@ -16,9 +16,9 @@ class B extends A {
 >m : () => void
 
         this.x
->this.x : any
+>this.x : any (error)
 >this : this
->x : any
+>x : any (error)
     }
 }
 

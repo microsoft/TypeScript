@@ -4,7 +4,7 @@ export interface Event { title: string };
 
 === tests/cases/compiler/test.ts ===
 import { Event } from './event';
->Event : any
+>Event : any (error)
 
 function Input(target: any, key: string): void { }
 >Input : (target: any, key: string) => void

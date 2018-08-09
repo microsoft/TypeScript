@@ -34,9 +34,9 @@ let o2 = { ...publicX, ...privateOptionalX };
 
 let sn: number = o2.x; // error, x is private
 >sn : number
->o2.x : any
+>o2.x : any (error)
 >o2 : {}
->x : any
+>x : any (error)
 
 let optionalString: { sn?: string };
 >optionalString : { sn?: string; }
@@ -111,54 +111,54 @@ let duplicatedSpread = { ...o, ...o }
 
 // primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };
->spreadNum : any
->{ ...12 } : any
+>spreadNum : any (error)
+>{ ...12 } : any (error)
 >12 : 12
 
 let spreadSum = { ...1 + 1 };
->spreadSum : any
->{ ...1 + 1 } : any
+>spreadSum : any (error)
+>{ ...1 + 1 } : any (error)
 >1 + 1 : number
 >1 : 1
 >1 : 1
 
 let spreadZero = { ...0 };
->spreadZero : any
->{ ...0 } : any
+>spreadZero : any (error)
+>{ ...0 } : any (error)
 >0 : 0
 
 spreadZero.toFixed(); // error, no methods even from a falsy number
->spreadZero.toFixed() : any
->spreadZero.toFixed : any
->spreadZero : any
->toFixed : any
+>spreadZero.toFixed() : any (error)
+>spreadZero.toFixed : any (error)
+>spreadZero : any (error)
+>toFixed : any (error)
 
 let spreadBool = { ...true };
->spreadBool : any
->{ ...true } : any
+>spreadBool : any (error)
+>{ ...true } : any (error)
 >true : true
 
 spreadBool.valueOf();
->spreadBool.valueOf() : any
->spreadBool.valueOf : any
->spreadBool : any
->valueOf : any
+>spreadBool.valueOf() : any (error)
+>spreadBool.valueOf : any (error)
+>spreadBool : any (error)
+>valueOf : any (error)
 
 let spreadStr = { ...'foo' };
->spreadStr : any
->{ ...'foo' } : any
+>spreadStr : any (error)
+>{ ...'foo' } : any (error)
 >'foo' : "foo"
 
 spreadStr.length; // error, no 'length'
->spreadStr.length : any
->spreadStr : any
->length : any
+>spreadStr.length : any (error)
+>spreadStr : any (error)
+>length : any (error)
 
 spreadStr.charAt(1); // error, no methods either
->spreadStr.charAt(1) : any
->spreadStr.charAt : any
->spreadStr : any
->charAt : any
+>spreadStr.charAt(1) : any (error)
+>spreadStr.charAt : any (error)
+>spreadStr : any (error)
+>charAt : any (error)
 >1 : 1
 
 // functions are skipped
@@ -168,7 +168,7 @@ let spreadFunc = { ...function () { } }
 >function () { } : () => void
 
 spreadFunc(); // error, no call signature
->spreadFunc() : any
+>spreadFunc() : any (error)
 >spreadFunc : {}
 
 // write-only properties get skipped
@@ -181,9 +181,9 @@ let setterOnly = { ...{ set b (bad: number) { } } };
 
 setterOnly.b = 12; // error, 'b' does not exist
 >setterOnly.b = 12 : 12
->setterOnly.b : any
+>setterOnly.b : any (error)
 >setterOnly : {}
->b : any
+>b : any (error)
 >12 : 12
 
 // methods are skipped because they aren't enumerable
@@ -204,10 +204,10 @@ let spreadC = { ...c }
 >c : C
 
 spreadC.m(); // error 'm' is not in '{ ... c }'
->spreadC.m() : any
->spreadC.m : any
+>spreadC.m() : any (error)
+>spreadC.m : any (error)
 >spreadC : { p: number; }
->m : any
+>m : any (error)
 
 // non primitive
 let obj: object = { a: 123 };
@@ -222,18 +222,18 @@ let spreadObj = { ...obj };
 >obj : object
 
 spreadObj.a; // error 'a' is not in {}
->spreadObj.a : any
+>spreadObj.a : any (error)
 >spreadObj : {}
->a : any
+>a : any (error)
 
 // generics
 function f<T, U>(t: T, u: U) {
->f : <T, U>(t: T, u: U) => any
+>f : <T, U>(t: T, u: U) => any (error)
 >t : T
 >u : U
 
     return { ...t, ...u, id: 'id' };
->{ ...t, ...u, id: 'id' } : any
+>{ ...t, ...u, id: 'id' } : any (error)
 >t : T
 >u : U
 >id : string
@@ -245,7 +245,7 @@ function override<U>(initial: U, override: U): U {
 >override : U
 
     return { ...initial, ...override };
->{ ...initial, ...override } : any
+>{ ...initial, ...override } : any (error)
 >initial : U
 >override : U
 }
@@ -258,8 +258,8 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >d : boolean
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : any (error)
+>f : <T, U>(t: T, u: U) => any (error)
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -278,8 +278,8 @@ let overlap: { id: string, a: number, b: string } =
 >b : string
 
     f({ a: 1 }, { a: 2, b: 'extra' })
->f({ a: 1 }, { a: 2, b: 'extra' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1 }, { a: 2, b: 'extra' }) : any (error)
+>f : <T, U>(t: T, u: U) => any (error)
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -295,8 +295,8 @@ let overlapConflict: { id:string, a: string } =
 >a : string
 
     f({ a: 1 }, { a: 'mismatch' })
->f({ a: 1 }, { a: 'mismatch' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1 }, { a: 'mismatch' }) : any (error)
+>f : <T, U>(t: T, u: U) => any (error)
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -312,8 +312,8 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >d : string
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : any (error)
+>f : <T, U>(t: T, u: U) => any (error)
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number
 >1 : 1

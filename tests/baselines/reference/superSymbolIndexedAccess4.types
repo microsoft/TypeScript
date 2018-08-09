@@ -11,13 +11,13 @@ class Bar {
 >Bar : Bar
 
     [symbol]() {
->[symbol] : () => any
+>[symbol] : () => any (error)
 >symbol : symbol
 
         return super[symbol]();
->super[symbol]() : any
->super[symbol] : any
->super : any
+>super[symbol]() : any (error)
+>super[symbol] : any (error)
+>super : any (error)
 >symbol : symbol
     }
 }

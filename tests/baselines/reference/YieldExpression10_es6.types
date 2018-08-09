@@ -1,13 +1,13 @@
 === tests/cases/conformance/es6/yieldExpressions/YieldExpression10_es6.ts ===
 var v = { * foo() {
->v : { foo(): IterableIterator<any>; }
->{ * foo() {    yield(foo);  }} : { foo(): IterableIterator<any>; }
->foo : () => IterableIterator<any>
+>v : { foo(): IterableIterator<any (error)>; }
+>{ * foo() {    yield(foo);  }} : { foo(): IterableIterator<any (error)>; }
+>foo : () => IterableIterator<any (error)>
 
     yield(foo);
 >yield(foo) : any
->(foo) : any
->foo : any
+>(foo) : any (error)
+>foo : any (error)
   }
 }
 

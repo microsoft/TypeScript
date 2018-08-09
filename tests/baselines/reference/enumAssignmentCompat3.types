@@ -131,43 +131,43 @@ namespace Merged2 {
 
 var abc: First.E;
 >abc : First.E
->First : any
+>First : any (error)
 
 var secondAbc: Abc.E;
 >secondAbc : Abc.E
->Abc : any
+>Abc : any (error)
 
 var secondAbcd: Abcd.E;
 >secondAbcd : Abcd.E
->Abcd : any
+>Abcd : any (error)
 
 var secondAb: Ab.E;
 >secondAb : Ab.E
->Ab : any
+>Ab : any (error)
 
 var secondCd: Cd.E;
 >secondCd : Cd.E
->Cd : any
+>Cd : any (error)
 
 var nope: Abc.Nope;
 >nope : Abc.Nope
->Abc : any
+>Abc : any (error)
 
 var k: Const.E;
 >k : Const.E
->Const : any
+>Const : any (error)
 
 var decl: Decl.E;
 >decl : Decl.E
->Decl : any
+>Decl : any (error)
 
 var merged: Merged.E;
 >merged : Merged.E
->Merged : any
+>Merged : any (error)
 
 var merged2: Merged2.E;
 >merged2 : Merged2.E
->Merged2 : any
+>Merged2 : any (error)
 
 abc = secondAbc; // ok
 >abc = secondAbc : Abc.E

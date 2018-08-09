@@ -24,16 +24,16 @@ var c: C2;
 >c : C2
 
 a.bar(); // static off an instance - should be an error
->a.bar() : any
->a.bar : any
+>a.bar() : any (error)
+>a.bar : any (error)
 >a : A
->bar : any
+>bar : any (error)
 
 c.bar(); // static off an instance - should be an error
->c.bar() : any
->c.bar : any
+>c.bar() : any (error)
+>c.bar : any (error)
 >c : C2
->bar : any
+>bar : any (error)
 
 A.bar(); // valid
 >A.bar() : string

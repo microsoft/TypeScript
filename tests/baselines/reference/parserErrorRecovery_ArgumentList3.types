@@ -3,9 +3,9 @@ function foo() {
 >foo : () => void
 
    bar(a,
->bar(a, : any
->bar : any
->a : any
+>bar(a, : any (error)
+>bar : any (error)
+>a : any (error)
 
    return;
 }

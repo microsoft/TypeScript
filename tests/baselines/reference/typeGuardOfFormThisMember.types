@@ -103,9 +103,9 @@ namespace Test {
 >isFile : true
 
 		file.content;
->file.content : any
+>file.content : any (error)
 >file : FileSystemObject
->content : any
+>content : any (error)
 
 		if (file.isNetworked) {
 >file.isNetworked : false
@@ -113,14 +113,14 @@ namespace Test {
 >isNetworked : false
 
 			file.host;
->file.host : any
+>file.host : any (error)
 >file : FileSystemObject
->host : any
+>host : any (error)
 
 			file.content;
->file.content : any
+>file.content : any (error)
 >file : FileSystemObject
->content : any
+>content : any (error)
 		}
 	}
 	else if (file.isDirectory) {
@@ -129,9 +129,9 @@ namespace Test {
 >isDirectory : boolean
 
 		file.children;
->file.children : any
+>file.children : any (error)
 >file : FileSystemObject
->children : any
+>children : any (error)
 	}
 	else if (file.isNetworked) {
 >file.isNetworked : false
@@ -139,9 +139,9 @@ namespace Test {
 >isNetworked : false
 
 		file.host;
->file.host : any
+>file.host : any (error)
 >file : FileSystemObject
->host : any
+>host : any (error)
 	}
 	
 	interface GenericLeadGuard<T> extends GenericGuard<T> {
@@ -174,10 +174,10 @@ namespace Test {
 >isLeader : boolean
 
 		guard.lead();
->guard.lead() : any
->guard.lead : any
+>guard.lead() : any (error)
+>guard.lead : any (error)
 >guard : GenericGuard<File>
->lead : any
+>lead : any (error)
 	}
 	else if (guard.isFollower) {
 >guard.isFollower : boolean
@@ -185,10 +185,10 @@ namespace Test {
 >isFollower : boolean
 
 		guard.follow();
->guard.follow() : any
->guard.follow : any
+>guard.follow() : any (error)
+>guard.follow : any (error)
 >guard : GenericGuard<File>
->follow : any
+>follow : any (error)
 	}
 
 	interface SpecificGuard {
@@ -210,10 +210,10 @@ namespace Test {
 >isMoreSpecific : boolean
 
 		general.do();
->general.do() : any
->general.do : any
+>general.do() : any (error)
+>general.do : any (error)
 >general : SpecificGuard
->do : any
+>do : any (error)
 	}
 }
 

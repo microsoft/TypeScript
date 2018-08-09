@@ -17,10 +17,10 @@ function dupeAndGetDist<U>(x: U): U {
 >x : U
 
   y.getDist();     //<-- this requires a missing constraint, but it's not caught
->y.getDist() : any
->y.getDist : any
+>y.getDist() : any (error)
+>y.getDist : any (error)
 >y : U
->getDist : any
+>getDist : any (error)
 
   return y;
 >y : U

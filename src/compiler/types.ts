@@ -3154,6 +3154,9 @@ namespace ts {
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
         InReverseMappedType                     = 1 << 25,
+
+        // Debug Options
+        /** @internal */ DistinguishAnyVariants                  = 1 << 26,    // Mark non-base `any`s
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -3189,12 +3192,15 @@ namespace ts {
         InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
         InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
 
+        // Debug Options
+        /** @internal */ DistinguishAnyVariants                  = 1 << 26,    // Mark non-base `any`s
+
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask =
             NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
-            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias,
+            UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias | DistinguishAnyVariants,
     }
 
     export const enum SymbolFormatFlags {

@@ -12,7 +12,7 @@ y = x;
 
 var a: String = Object.create<Object>("");
 >a : String
->Object.create<Object>("") : any
+>Object.create<Object>("") : any (error)
 >Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
@@ -20,7 +20,7 @@ var a: String = Object.create<Object>("");
 
 var c: String = Object.create<Number>(1);
 >c : String
->Object.create<Number>(1) : any
+>Object.create<Number>(1) : any (error)
 >Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >Object : ObjectConstructor
 >create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }

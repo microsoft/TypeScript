@@ -21,10 +21,10 @@ module m {
 
         y: m2.public1;
 >y : m2.public1
->m2 : any
+>m2 : any (error)
 
         (): m2.public1[];
->m2 : any
+>m2 : any (error)
 
         method(): private1;
 >method : () => private1
@@ -34,7 +34,7 @@ module m {
 
         [s: string]: m2.public1;
 >s : string
->m2 : any
+>m2 : any (error)
 
     };
     export var x2 = {
@@ -69,7 +69,7 @@ module m {
     export var y: (a: private1) => m2.public1;
 >y : (a: private1) => m2.public1
 >a : private1
->m2 : any
+>m2 : any (error)
 
     export var y2 = y;
 >y2 : (a: private1) => m2.public1
@@ -79,7 +79,7 @@ module m {
     export var z: new (a: private1) => m2.public1;
 >z : new (a: private1) => m2.public1
 >a : private1
->m2 : any
+>m2 : any (error)
 
     export var z2 = z;
 >z2 : new (a: private1) => m2.public1

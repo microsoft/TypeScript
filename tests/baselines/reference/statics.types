@@ -34,9 +34,9 @@ module M {
 
             this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
 >this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
->this.g : any
+>this.g : any (error)
 >this : this
->g : any
+>g : any (error)
 >(v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
 >v : number
 >C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : string
@@ -148,15 +148,15 @@ module M {
         result+=(new C(5,10,20).g(C.y));
 >result+=(new C(5,10,20).g(C.y)) : string
 >result : string
->(new C(5,10,20).g(C.y)) : any
->new C(5,10,20).g(C.y) : any
->new C(5,10,20).g : any
+>(new C(5,10,20).g(C.y)) : any (error)
+>new C(5,10,20).g(C.y) : any (error)
+>new C(5,10,20).g : any (error)
 >new C(5,10,20) : C
 >C : typeof C
 >5 : 5
 >10 : 10
 >20 : 20
->g : any
+>g : any (error)
 >C.y : number
 >C : typeof C
 >y : number

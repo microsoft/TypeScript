@@ -8,9 +8,9 @@ class C<T> extends A<T> { }
 >A : typeof A
 
 (new C).blah;
->(new C).blah : any
+>(new C).blah : any (error)
 >(new C) : C<{}>
 >new C : C<{}>
 >C : typeof C
->blah : any
+>blah : any (error)
 

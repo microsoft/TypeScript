@@ -9,15 +9,15 @@ declare module JSX {
 var x = <div><div><span><div></div></span></div></div>;
 >x : JSX.Element
 ><div><div><span><div></div></span></div></div> : JSX.Element
->div : any
+>div : any (error)
 ><div><span><div></div></span></div> : JSX.Element
->div : any
+>div : any (error)
 ><span><div></div></span> : JSX.Element
->span : any
+>span : any (error)
 ><div></div> : JSX.Element
->div : any
->div : any
->span : any
->div : any
->div : any
+>div : any (error)
+>div : any (error)
+>span : any (error)
+>div : any (error)
+>div : any (error)
 

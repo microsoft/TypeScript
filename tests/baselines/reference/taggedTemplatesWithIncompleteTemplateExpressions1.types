@@ -11,5 +11,5 @@ f `123qdawdrqw${
 >f `123qdawdrqw${ : void
 >f : (x: TemplateStringsArray, y: string, z: string) => void
 >`123qdawdrqw${ : string
-> : any
+> : any (error)
 

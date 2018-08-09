@@ -19,7 +19,7 @@ declare namespace React {
 }
 
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
         interface ElementAttributesProperty { }
@@ -53,14 +53,14 @@ import TabBar from '../../components/TabBar';
 >TabBar : import("tests/cases/compiler/react").ClassicComponentClass
 
 import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
->layout : any
+>layout : any (error)
 
 const x = <TabBar height={layout.footerHeight} />;
->x : any
-><TabBar height={layout.footerHeight} /> : any
+>x : any (error)
+><TabBar height={layout.footerHeight} /> : any (error)
 >TabBar : import("tests/cases/compiler/react").ClassicComponentClass
->height : any
->layout.footerHeight : any
->layout : any
->footerHeight : any
+>height : any (error)
+>layout.footerHeight : any (error)
+>layout : any (error)
+>footerHeight : any (error)
 

@@ -14,10 +14,10 @@ mod1.toFixed(12)
 >12 : 12
 
 mod1.f() // error, 'f' is not a property on 'number'
->mod1.f() : any
->mod1.f : any
+>mod1.f() : any (error)
+>mod1.f : any (error)
 >mod1 : number
->f : any
+>f : any (error)
 
 === tests/cases/conformance/salsa/requires.d.ts ===
 declare var module: { exports: any };
@@ -39,10 +39,10 @@ module.exports = 1
 
 module.exports.f = function () { }
 >module.exports.f = function () { } : () => void
->module.exports.f : any
+>module.exports.f : any (error)
 >module.exports : number
 >module : { "tests/cases/conformance/salsa/mod1": number; }
 >exports : number
->f : any
+>f : any (error)
 >function () { } : () => void
 

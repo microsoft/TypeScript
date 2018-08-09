@@ -1,13 +1,13 @@
 === tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts ===
 var x = {
->x : { [x: number]: any; "": any; }
->{    [s: symbol]: ""} : { [x: number]: any; "": any; }
+>x : { [x: number]: any (error); "": any (error); }
+>{    [s: symbol]: ""} : { [x: number]: any (error); "": any (error); }
 
     [s: symbol]: ""
->[s : any
->s : any
->symbol : any
->"" : any
+>[s : any (error)
+>s : any (error)
+>symbol : any (error)
+>"" : any (error)
 }
-> : any
+> : any (error)
 

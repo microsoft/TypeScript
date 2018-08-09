@@ -79,21 +79,21 @@
 >12 : 12
 
 ((k?) => k + 1)();
->((k?) => k + 1)() : any
->((k?) => k + 1) : (k?: undefined) => any
->(k?) => k + 1 : (k?: undefined) => any
+>((k?) => k + 1)() : any (error)
+>((k?) => k + 1) : (k?: undefined) => any (error)
+>(k?) => k + 1 : (k?: undefined) => any (error)
 >k : undefined
->k + 1 : any
+>k + 1 : any (error)
 >k : undefined
 >1 : 1
 
 ((l, o?) => l + o)(12); // o should be any
->((l, o?) => l + o)(12) : any
->((l, o?) => l + o) : (l: number, o?: undefined) => any
->(l, o?) => l + o : (l: number, o?: undefined) => any
+>((l, o?) => l + o)(12) : any (error)
+>((l, o?) => l + o) : (l: number, o?: undefined) => any (error)
+>(l, o?) => l + o : (l: number, o?: undefined) => any (error)
 >l : number
 >o : undefined
->l + o : any
+>l + o : any (error)
 >l : number
 >o : undefined
 >12 : 12

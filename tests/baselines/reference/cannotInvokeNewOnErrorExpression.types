@@ -6,11 +6,11 @@ module M
 >ClassA : ClassA
 }
 var t = new M.ClassA[];
->t : any
->new M.ClassA[] : any
->M.ClassA[] : any
->M.ClassA : any
+>t : any (error)
+>new M.ClassA[] : any (error)
+>M.ClassA[] : any (error)
+>M.ClassA : any (error)
 >M : typeof M
->ClassA : any
-> : any
+>ClassA : any (error)
+> : any (error)
 

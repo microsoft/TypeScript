@@ -15,7 +15,7 @@ function blah () {
     }
 
     export = M;
->M : any
+>M : any (error)
 
     var v;
 >v : any
@@ -28,8 +28,8 @@ function blah () {
 >foo : () => void
 
     export { baz as b } from "ambient";
->baz : any
->b : any
+>baz : any (error)
+>b : any (error)
 
     export default v;
 >v : any
@@ -41,20 +41,20 @@ function blah () {
 >bee : () => void
 
     import I = M;
->I : any
->M : any
+>I : any (error)
+>M : any (error)
 
     import I2 = require("foo");
->I2 : any
+>I2 : any (error)
 
     import * as Foo from "ambient";
->Foo : any
+>Foo : any (error)
 
     import bar from "ambient";
->bar : any
+>bar : any (error)
 
     import { baz } from "ambient";
->baz : any
+>baz : any (error)
 
     import "ambient";
 }

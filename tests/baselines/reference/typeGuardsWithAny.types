@@ -29,9 +29,9 @@ if (typeof x === "string") {
 >"string" : "string"
 
     x.p; // Error, type any narrowed by primitive type check
->x.p : any
+>x.p : any (error)
 >x : string
->p : any
+>p : any (error)
 }
 else {
     x.p; // No error, type unaffected in this branch
@@ -47,9 +47,9 @@ if (typeof x === "number") {
 >"number" : "number"
 
     x.p; // Error, type any narrowed by primitive type check
->x.p : any
+>x.p : any (error)
 >x : number
->p : any
+>p : any (error)
 }
 else {
     x.p; // No error, type unaffected in this branch
@@ -65,9 +65,9 @@ if (typeof x === "boolean") {
 >"boolean" : "boolean"
 
     x.p; // Error, type any narrowed by primitive type check
->x.p : any
+>x.p : any (error)
 >x : boolean
->p : any
+>p : any (error)
 }
 else {
     x.p; // No error, type unaffected in this branch

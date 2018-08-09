@@ -25,27 +25,27 @@ class MyClass {
 >MyClass : MyClass
 
     db: db.db; //error
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
     constructor(db: db.db) { // error
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
         this.db = db;
->this.db = db : any
->this.db : any
+>this.db = db : any (error)
+>this.db : any (error)
 >this : this
->db : any
->db : any
+>db : any (error)
+>db : any (error)
 
         this.db.doSomething();
->this.db.doSomething() : any
->this.db.doSomething : any
->this.db : any
+>this.db.doSomething() : any (error)
+>this.db.doSomething : any (error)
+>this.db : any (error)
 >this : this
->db : any
->doSomething : any
+>db : any (error)
+>doSomething : any (error)
     }
 }
 export {MyClass};

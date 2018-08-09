@@ -6,16 +6,16 @@ function Class()
 
 // error: 'Class' doesn't have property 'notPresent'
 Class.prototype.containsError = function () { return this.notPresent; };
->Class.prototype.containsError = function () { return this.notPresent; } : () => any
+>Class.prototype.containsError = function () { return this.notPresent; } : () => any (error)
 >Class.prototype.containsError : any
 >Class.prototype : any
 >Class : typeof Class
 >prototype : any
 >containsError : any
->function () { return this.notPresent; } : () => any
->this.notPresent : any
+>function () { return this.notPresent; } : () => any (error)
+>this.notPresent : any (error)
 >this : Class
->notPresent : any
+>notPresent : any (error)
 
 // lots of methods that return this, which caused out-of-memory in #9527
 Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };

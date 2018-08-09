@@ -10,25 +10,25 @@ f10('', () => a => a.foo, ''); // a is ""
 >f10('', () => a => a.foo, '') : string
 >f10 : <T>(x: T, b: () => (a: T) => void, y: T) => T
 >'' : ""
->() => a => a.foo : () => (a: string) => any
->a => a.foo : (a: string) => any
+>() => a => a.foo : () => (a: string) => any (error)
+>a => a.foo : (a: string) => any (error)
 >a : string
->a.foo : any
+>a.foo : any (error)
 >a : string
->foo : any
+>foo : any (error)
 >'' : ""
 
 var r9 = f10('', () => (a => a.foo), 1); // error
->r9 : any
->f10('', () => (a => a.foo), 1) : any
+>r9 : any (error)
+>f10('', () => (a => a.foo), 1) : any (error)
 >f10 : <T>(x: T, b: () => (a: T) => void, y: T) => T
 >'' : ""
->() => (a => a.foo) : () => (a: "") => any
->(a => a.foo) : (a: "") => any
->a => a.foo : (a: "") => any
+>() => (a => a.foo) : () => (a: "") => any (error)
+>(a => a.foo) : (a: "") => any (error)
+>a => a.foo : (a: "") => any (error)
 >a : ""
->a.foo : any
+>a.foo : any (error)
 >a : ""
->foo : any
+>foo : any (error)
 >1 : 1
 

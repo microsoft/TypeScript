@@ -1,20 +1,20 @@
 === tests/cases/compiler/errorsOnImportedSymbol_1.ts ===
 import Sammy = require("./errorsOnImportedSymbol_0");
->Sammy : any
+>Sammy : any (error)
 
 var x = new Sammy.Sammy();
->x : any
->new Sammy.Sammy() : any
->Sammy.Sammy : any
->Sammy : any
->Sammy : any
+>x : any (error)
+>new Sammy.Sammy() : any (error)
+>Sammy.Sammy : any (error)
+>Sammy : any (error)
+>Sammy : any (error)
 
 var y = Sammy.Sammy(); 
->y : any
->Sammy.Sammy() : any
->Sammy.Sammy : any
->Sammy : any
->Sammy : any
+>y : any (error)
+>Sammy.Sammy() : any (error)
+>Sammy.Sammy : any (error)
+>Sammy : any (error)
+>Sammy : any (error)
 
 
 === tests/cases/compiler/errorsOnImportedSymbol_0.ts ===

@@ -67,7 +67,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var {...r1} = p1;   // Error, generic type paramterre
->r1 : any
+>r1 : any (error)
 >p1 : T
 
     var {...r2} = p2;   // OK
@@ -75,19 +75,19 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 
     var {...r3} = t;   // Error, generic type paramter
->r3 : any
+>r3 : any (error)
 >t : T
 
     var {...r4} = i;   // Error, index access
->r4 : any
+>r4 : any (error)
 >i : T["b"]
 
     var {...r5} = k;   // Error, index
->r5 : any
+>r5 : any (error)
 >k : keyof T
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
->r6 : any
+>r6 : any (error)
 >mapped_generic : { [P in keyof T]: T[P]; }
 
     var {...r7} = mapped;  // OK, non-generic mapped type
@@ -95,35 +95,35 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >mapped : { b: T["b"]; }
 
     var {...r8} = union_generic;  // Error, union with generic type parameter
->r8 : any
+>r8 : any (error)
 >union_generic : T | { a: number; }
 
     var {...r9} = union_primitive;  // Error, union with generic type parameter
->r9 : any
+>r9 : any (error)
 >union_primitive : number | { a: number; }
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
->r10 : any
+>r10 : any (error)
 >intersection_generic : T & { a: number; }
 
     var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter
->r11 : any
+>r11 : any (error)
 >intersection_primitive : { a: number; } & string
 
     var {...r12} = num;  // Error
->r12 : any
+>r12 : any (error)
 >num : number
 
     var {...r13} = str;  // Error
->r13 : any
+>r13 : any (error)
 >str : string
 
     var {...r14} = u;  // error, undefined-only not allowed
->r14 : any
+>r14 : any (error)
 >u : undefined
 
     var {...r15} = n;  // error, null-only not allowed
->r15 : any
+>r15 : any (error)
 >n : null
 
     var {...r16} = a;  // OK
@@ -131,15 +131,15 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var {...r17} = literal_string;  // Error
->r17 : any
+>r17 : any (error)
 >literal_string : "string"
 
     var {...r18} = literal_number;  // Error
->r18 : any
+>r18 : any (error)
 >literal_number : 42
 
     var {...r19} = e;  // Error, enum
->r19 : any
+>r19 : any (error)
 >e : E
 }
 

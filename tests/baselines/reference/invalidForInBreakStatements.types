@@ -6,16 +6,16 @@ break;
 
 // non-existent label
 ONE:
->ONE : any
+>ONE : any (error)
 
 for (var x in {}) break TWO;
 >x : string
 >{} : {}
->TWO : any
+>TWO : any (error)
 
 // break from inside function
 TWO:
->TWO : any
+>TWO : any (error)
 
 for (var x in {}) {
 >x : string
@@ -26,12 +26,12 @@ for (var x in {}) {
 >() => {        break TWO;    } : () => void
 
         break TWO;
->TWO : any
+>TWO : any (error)
     }
 }
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 for (var x in {}) {
 >x : string
@@ -42,7 +42,7 @@ for (var x in {}) {
 >function () {        break THREE;    } : () => void
 
         break THREE;
->THREE : any
+>THREE : any (error)
     }
 }
 
@@ -52,10 +52,10 @@ for (var x in {}) {
 >{} : {}
 
     break FIVE;
->FIVE : any
+>FIVE : any (error)
 
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     for (var x in {}) { }
 >x : string
@@ -64,7 +64,7 @@ for (var x in {}) {
 
 // label on non-loop statement
 NINE:
->NINE : any
+>NINE : any (error)
 
 var y = 12;
 >y : number
@@ -75,5 +75,5 @@ for (var x in {}) {
 >{} : {}
 
     break NINE;
->NINE : any
+>NINE : any (error)
 }

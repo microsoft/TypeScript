@@ -44,41 +44,41 @@ type T10 = Shape["name"];
 >T10 : string
 
 type T11 = Shape["foo"];  // Error
->T11 : any
+>T11 : any (error)
 
 type T12 = Shape["name" | "foo"];  // Error
->T12 : any
+>T12 : any (error)
 
 type T13 = Shape[any];  // Error
->T13 : any
+>T13 : any (error)
 
 type T14 = Shape[string];  // Error
->T14 : any
+>T14 : any (error)
 
 type T15 = Shape[number];  // Error
->T15 : any
+>T15 : any (error)
 
 type T16 = Shape[boolean];  // Error
->T16 : any
+>T16 : any (error)
 
 type T17 = Shape[void];  // Error
->T17 : any
+>T17 : any (error)
 
 type T18 = Shape[undefined];  // Error
->T18 : any
+>T18 : any (error)
 
 type T19 = Shape[{ x: string }];  // Error
->T19 : any
+>T19 : any (error)
 >x : string
 
 type T20 = Shape[string | number];  // Error
->T20 : any
+>T20 : any (error)
 
 type T21 = Shape[string & number];  // Error
->T21 : any
+>T21 : any (error)
 
 type T22 = Shape[string | boolean];  // Error
->T22 : any
+>T22 : any (error)
 
 type T30 = string[]["length"];
 >T30 : number
@@ -87,10 +87,10 @@ type T31 = string[][number];
 >T31 : string
 
 type T32 = string[][string];  // Error
->T32 : any
+>T32 : any (error)
 
 type T33 = string[][boolean];  // Error
->T33 : any
+>T33 : any (error)
 
 type T40 = Dictionary<string>[any];
 >T40 : string
@@ -102,7 +102,7 @@ type T42 = Dictionary<string>[string];
 >T42 : string
 
 type T43 = Dictionary<string>[boolean];  // Error
->T43 : any
+>T43 : any (error)
 
 type T50 = any[any];
 >T50 : any
@@ -114,7 +114,7 @@ type T52 = any[string];
 >T52 : any
 
 type T53 = any[boolean];  // Error
->T53 : any
+>T53 : any (error)
 
 type T60 = {}["toString"];
 >T60 : () => string
@@ -162,15 +162,15 @@ function f10(shape: Shape) {
 >"name" : "name"
 
     let x2 = getProperty(shape, "size");  // Error
->x2 : any
->getProperty(shape, "size") : any
+>x2 : any (error)
+>getProperty(shape, "size") : any (error)
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >"size" : "size"
 
     let x3 = getProperty(shape, cond ? "name" : "size");  // Error
->x3 : any
->getProperty(shape, cond ? "name" : "size") : any
+>x3 : any (error)
+>getProperty(shape, cond ? "name" : "size") : any (error)
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -186,14 +186,14 @@ function f10(shape: Shape) {
 >"rectangle" : "rectangle"
 
     setProperty(shape, "size", 10);  // Error
->setProperty(shape, "size", 10) : any
+>setProperty(shape, "size", 10) : any (error)
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >"size" : "size"
 >10 : 10
 
     setProperty(shape, cond ? "name" : "size", 10);  // Error
->setProperty(shape, cond ? "name" : "size", 10) : any
+>setProperty(shape, cond ? "name" : "size", 10) : any (error)
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"

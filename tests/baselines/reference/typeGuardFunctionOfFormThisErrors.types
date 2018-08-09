@@ -145,15 +145,15 @@ if (detached()) {
 >detached : () => this is FollowerGuard
 
     a.follow();
->a.follow() : any
->a.follow : any
+>a.follow() : any (error)
+>a.follow : any (error)
 >a : RoyalGuard
->follow : any
+>follow : any (error)
 }
 else {
     a.lead();
->a.lead() : any
->a.lead : any
+>a.lead() : any (error)
+>a.lead : any (error)
 >a : RoyalGuard
->lead : any
+>lead : any (error)
 }

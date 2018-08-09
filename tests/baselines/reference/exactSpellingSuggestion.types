@@ -24,7 +24,7 @@ enum U8 {
 }
 
 U8.bit_2
->U8.bit_2 : any
+>U8.bit_2 : any (error)
 >U8 : typeof U8
->bit_2 : any
+>bit_2 : any (error)
 

@@ -7,9 +7,9 @@ class C {
 
         super.foo = 1
 >super.foo = 1 : 1
->super.foo : any
->super : any
->foo : any
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
 >1 : 1
     }
 }
@@ -26,9 +26,9 @@ module M1.M2 {
 
             super.foo = 1
 >super.foo = 1 : 1
->super.foo : any
->super : any
->foo : any
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
 >1 : 1
         }
     }

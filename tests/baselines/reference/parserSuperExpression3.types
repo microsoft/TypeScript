@@ -6,10 +6,10 @@ class C {
 >M : () => void
 
     this.super<T>(0);
->this.super<T>(0) : any
->this.super : any
+>this.super<T>(0) : any (error)
+>this.super : any (error)
 >this : this
->super : any
+>super : any (error)
 >0 : 0
   }
 }

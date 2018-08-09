@@ -8,7 +8,7 @@ class CCC {
 
     y: number = aaa;
 >y : number
->aaa : any
+>aaa : any (error)
 
     static staticY: number = aaa; // This shouldnt be error
 >staticY : number

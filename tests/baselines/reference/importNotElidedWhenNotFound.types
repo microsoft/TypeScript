@@ -1,38 +1,38 @@
 === tests/cases/compiler/importNotElidedWhenNotFound.ts ===
 import X from 'file';
->X : any
+>X : any (error)
 
 import Z from 'other_file';
->Z : any
+>Z : any (error)
 
 class Y extends Z {
 >Y : Y
->Z : any
+>Z : any (error)
 
   constructor() {
     super(X);
 >super(X) : void
->super : any
->X : any
+>super : any (error)
+>X : any (error)
   }
 }
 
 import X2 from 'file2';
->X2 : any
+>X2 : any (error)
 
 import X3 from 'file3';
->X3 : any
+>X3 : any (error)
 
 class Q extends Z {
 >Q : Q
->Z : any
+>Z : any (error)
 
   constructor() {
     super(X2, X3);
 >super(X2, X3) : void
->super : any
->X2 : any
->X3 : any
+>super : any (error)
+>X2 : any (error)
+>X3 : any (error)
   }
 }
 

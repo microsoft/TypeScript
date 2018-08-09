@@ -1,36 +1,36 @@
 === tests/cases/compiler/deduplicateImportsInSystem.ts ===
 import {A} from "f1";
->A : any
+>A : any (error)
 
 import {B} from "f2";
->B : any
+>B : any (error)
 
 import {C} from "f3";
->C : any
+>C : any (error)
 
 import {D} from 'f2';
->D : any
+>D : any (error)
 
 import {E} from "f2";
->E : any
+>E : any (error)
 
 import {F} from 'f1';
->F : any
+>F : any (error)
 
 console.log(A + B + C + D + E + F)
 >console.log(A + B + C + D + E + F) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->A + B + C + D + E + F : any
->A + B + C + D + E : any
->A + B + C + D : any
->A + B + C : any
->A + B : any
->A : any
->B : any
->C : any
->D : any
->E : any
->F : any
+>A + B + C + D + E + F : any (error)
+>A + B + C + D + E : any (error)
+>A + B + C + D : any (error)
+>A + B + C : any (error)
+>A + B : any (error)
+>A : any (error)
+>B : any (error)
+>C : any (error)
+>D : any (error)
+>E : any (error)
+>F : any (error)
 

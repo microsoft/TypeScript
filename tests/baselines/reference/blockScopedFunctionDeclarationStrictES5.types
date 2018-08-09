@@ -13,6 +13,6 @@ if (true) {
 >foo : () => void
 }
 foo(); // Error to find name foo
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 

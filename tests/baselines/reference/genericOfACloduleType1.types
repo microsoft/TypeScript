@@ -39,5 +39,5 @@ var g2 = new G<M.C>() // was: error Type reference cannot refer to container 'M.
 >g2 : G<M.C>
 >new G<M.C>() : G<M.C>
 >G : typeof G
->M : any
+>M : any (error)
 

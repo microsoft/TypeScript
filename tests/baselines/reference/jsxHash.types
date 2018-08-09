@@ -1,89 +1,89 @@
 === tests/cases/compiler/jsxHash.tsx ===
 var t02 = <a>{0}#</a>;
->t02 : any
-><a>{0}#</a> : any
->a : any
+>t02 : any (error)
+><a>{0}#</a> : any (error)
+>a : any (error)
 >0 : 0
->a : any
+>a : any (error)
 
 var t03 = <a>#{0}</a>;
->t03 : any
-><a>#{0}</a> : any
->a : any
+>t03 : any (error)
+><a>#{0}</a> : any (error)
+>a : any (error)
 >0 : 0
->a : any
+>a : any (error)
 
 var t04 = <a>#{0}#</a>;
->t04 : any
-><a>#{0}#</a> : any
->a : any
+>t04 : any (error)
+><a>#{0}#</a> : any (error)
+>a : any (error)
 >0 : 0
->a : any
+>a : any (error)
 
 var t05 = <a>#<i></i></a>;
->t05 : any
-><a>#<i></i></a> : any
->a : any
-><i></i> : any
->i : any
->i : any
->a : any
+>t05 : any (error)
+><a>#<i></i></a> : any (error)
+>a : any (error)
+><i></i> : any (error)
+>i : any (error)
+>i : any (error)
+>a : any (error)
 
 var t06 = <a>#<i></i></a>;
->t06 : any
-><a>#<i></i></a> : any
->a : any
-><i></i> : any
->i : any
->i : any
->a : any
+>t06 : any (error)
+><a>#<i></i></a> : any (error)
+>a : any (error)
+><i></i> : any (error)
+>i : any (error)
+>i : any (error)
+>a : any (error)
 
 var t07 = <a>#<i>#</i></a>;
->t07 : any
-><a>#<i>#</i></a> : any
->a : any
-><i>#</i> : any
->i : any
->i : any
->a : any
+>t07 : any (error)
+><a>#<i>#</i></a> : any (error)
+>a : any (error)
+><i>#</i> : any (error)
+>i : any (error)
+>i : any (error)
+>a : any (error)
 
 var t08 = <a><i></i>#</a>;
->t08 : any
-><a><i></i>#</a> : any
->a : any
-><i></i> : any
->i : any
->i : any
->a : any
+>t08 : any (error)
+><a><i></i>#</a> : any (error)
+>a : any (error)
+><i></i> : any (error)
+>i : any (error)
+>i : any (error)
+>a : any (error)
 
 var t09 = <a>#<i></i>#</a>;
->t09 : any
-><a>#<i></i>#</a> : any
->a : any
-><i></i> : any
->i : any
->i : any
->a : any
+>t09 : any (error)
+><a>#<i></i>#</a> : any (error)
+>a : any (error)
+><i></i> : any (error)
+>i : any (error)
+>i : any (error)
+>a : any (error)
 
 var t10 = <a><i/>#</a>;
->t10 : any
-><a><i/>#</a> : any
->a : any
-><i/> : any
->i : any
->a : any
+>t10 : any (error)
+><a><i/>#</a> : any (error)
+>a : any (error)
+><i/> : any (error)
+>i : any (error)
+>a : any (error)
 
 var t11 = <a>#<i/></a>;
->t11 : any
-><a>#<i/></a> : any
->a : any
-><i/> : any
->i : any
->a : any
+>t11 : any (error)
+><a>#<i/></a> : any (error)
+>a : any (error)
+><i/> : any (error)
+>i : any (error)
+>a : any (error)
 
 var t12 = <a>#</a>;
->t12 : any
-><a>#</a> : any
->a : any
->a : any
+>t12 : any (error)
+><a>#</a> : any (error)
+>a : any (error)
+>a : any (error)
 

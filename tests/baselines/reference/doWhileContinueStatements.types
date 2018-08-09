@@ -5,38 +5,38 @@ do {
 >true : true
 
 ONE:
->ONE : any
+>ONE : any (error)
 
 do {
     continue ONE;
->ONE : any
+>ONE : any (error)
 }
 while (true)
 >true : true
 
 TWO:
->TWO : any
+>TWO : any (error)
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 do {
     continue THREE;
->THREE : any
+>THREE : any (error)
 
 }while (true)
 >true : true
 
 FOUR:
->FOUR : any
+>FOUR : any (error)
 
 do {
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     do {
         continue FOUR;
->FOUR : any
+>FOUR : any (error)
 
     }while (true)
 >true : true
@@ -46,26 +46,26 @@ do {
 
 do {
     SIX:
->SIX : any
+>SIX : any (error)
 
     do continue SIX; while(true)
->SIX : any
+>SIX : any (error)
 >true : true
 
 }while (true)
 >true : true
 
 SEVEN:
->SEVEN : any
+>SEVEN : any (error)
 
 do do do continue SEVEN; while (true) while (true)  while (true)
->SEVEN : any
+>SEVEN : any (error)
 >true : true
 >true : true
 >true : true
 
 EIGHT:
->EIGHT : any
+>EIGHT : any (error)
 
 do{
     var fn = function () { }
@@ -73,7 +73,7 @@ do{
 >function () { } : () => void
 
     continue EIGHT;
->EIGHT : any
+>EIGHT : any (error)
 
 }while(true)
 >true : true

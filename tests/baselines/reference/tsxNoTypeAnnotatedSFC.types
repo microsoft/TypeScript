@@ -1,20 +1,20 @@
 === tests/cases/compiler/tsxNoTypeAnnotatedSFC.tsx ===
 // not _actually_ making react available in this test to regression test #22948
 import * as React from 'react';
->React : any
+>React : any (error)
 
 const Test123 = () => <div/>;
->Test123 : () => any
->() => <div/> : () => any
-><div/> : any
->div : any
+>Test123 : () => any (error)
+>() => <div/> : () => any (error)
+><div/> : any (error)
+>div : any (error)
 
 function testComponent(props) {
->testComponent : (props: any) => any
+>testComponent : (props: any) => any (error)
 >props : any
 
     return <Test123 {...props}/>;
-><Test123 {...props}/> : any
->Test123 : () => any
+><Test123 {...props}/> : any (error)
+>Test123 : () => any (error)
 >props : any
 }

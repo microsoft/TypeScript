@@ -2,7 +2,7 @@
 module M {}
 class C extends M {}
 >C : C
->M : any
+>M : any (error)
 
 interface I extends M { }
 class C2 implements M { }

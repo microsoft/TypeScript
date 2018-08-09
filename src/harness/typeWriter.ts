@@ -85,7 +85,7 @@ class TypeWriterWalker {
             // let type = this.checker.getTypeAtLocation(node);
             let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
             if (!type || type.flags & ts.TypeFlags.Any) type = this.checker.getTypeAtLocation(node);
-            const typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType);
+            const typeString = this.checker.typeToString(type, node.parent, ts.TypeFormatFlags.NoTruncation | ts.TypeFormatFlags.AllowUniqueESSymbolType | ts.TypeFormatFlags.DistinguishAnyVariants);
             return {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,

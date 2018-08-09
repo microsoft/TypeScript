@@ -8,9 +8,9 @@ export = a;
 
 === tests/cases/compiler/es6ImportNamedImportNoNamedExports_1.ts ===
 import { a } from "./es6ImportNamedImportNoNamedExports_0";
->a : any
+>a : any (error)
 
 import { a as x } from "./es6ImportNamedImportNoNamedExports_0";
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 

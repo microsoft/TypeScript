@@ -3,5 +3,5 @@ new Date<A
 >new Date<A : boolean
 >new Date : Date
 >Date : DateConstructor
->A : any
+>A : any (error)
 

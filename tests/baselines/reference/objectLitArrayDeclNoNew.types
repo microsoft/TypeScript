@@ -44,7 +44,7 @@ module Test {
 >tokens : any
 >Gar[] : any
 >Gar : typeof Gar
-> : any
+> : any (error)
 
        endState: state
 >endState : IState

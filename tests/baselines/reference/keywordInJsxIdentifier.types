@@ -3,22 +3,22 @@ declare var React: any;
 >React : any
 
 <foo class-id/>;
-><foo class-id/> : any
->foo : any
+><foo class-id/> : any (error)
+>foo : any (error)
 >class-id : true
 
 <foo class/>;
-><foo class/> : any
->foo : any
+><foo class/> : any (error)
+>foo : any (error)
 >class : true
 
 <foo class-id="1"/>;
-><foo class-id="1"/> : any
->foo : any
+><foo class-id="1"/> : any (error)
+>foo : any (error)
 >class-id : string
 
 <foo class="1"/>;
-><foo class="1"/> : any
->foo : any
+><foo class="1"/> : any (error)
+>foo : any (error)
 >class : string
 

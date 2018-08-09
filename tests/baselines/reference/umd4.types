@@ -10,7 +10,7 @@ Bar.fn();
 
 let x: Bar.Thing;
 >x : Bar.Thing
->Bar : any
+>Bar : any (error)
 
 let y: number = x.n;
 >y : number

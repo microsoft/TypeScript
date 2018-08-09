@@ -27,7 +27,7 @@ import IX = N.x;
 >x : number
 
 import II = N.I;
->II : any
+>II : any (error)
 >N : typeof N
 >I : II
 
@@ -35,8 +35,8 @@ import { A, A as EA, I as EI } from "f1";
 >A : typeof A
 >A : typeof A
 >EA : typeof A
->I : any
->EI : any
+>I : any (error)
+>EI : any (error)
 
 export {x};
 >x : number
@@ -46,11 +46,11 @@ export {x as x1};
 >x1 : number
 
 export {I};
->I : any
+>I : any (error)
 
 export {I as I1};
->I : any
->I1 : any
+>I : any (error)
+>I1 : any (error)
 
 export {A};
 >A : typeof A
@@ -67,11 +67,11 @@ export {EA as EA1};
 >EA1 : typeof A
 
 export {EI };
->EI : any
+>EI : any (error)
 
 export {EI as EI1};
->EI : any
->EI1 : any
+>EI : any (error)
+>EI1 : any (error)
 
 export {IX};
 >IX : number
@@ -81,9 +81,9 @@ export {IX as IX1};
 >IX1 : number
 
 export {II};
->II : any
+>II : any (error)
 
 export {II as II1};
->II : any
->II1 : any
+>II : any (error)
+>II1 : any (error)
 

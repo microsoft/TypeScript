@@ -4,14 +4,14 @@ import React = require('react')
 
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
->JSX : any
+>JSX : any (error)
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string
->JSX : any
+>JSX : any (error)
 
 let obj = {
 >obj : { yy: number; yy1: string; }
@@ -95,14 +95,14 @@ declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
 >j : { "extra-data": string; }
 >"extra-data" : string
->JSX : any
+>JSX : any (error)
 
 declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
 >n : { yy: string; direction?: number; }
 >yy : string
 >direction : number
->JSX : any
+>JSX : any (error)
 
 // Error
 const d1 = <TestingOneThing extra-data />
@@ -123,7 +123,7 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >a : { y1?: string; y2?: number; }
 >y1 : string
 >y2 : number
->JSX : any
+>JSX : any (error)
 
 declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
@@ -131,8 +131,8 @@ declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Ele
 >y1 : string
 >y2 : number
 >children : JSX.Element
->JSX : any
->JSX : any
+>JSX : any (error)
+>JSX : any (error)
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
@@ -140,7 +140,7 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 >y1 : boolean
 >y2 : number
 >y3 : boolean
->JSX : any
+>JSX : any (error)
 
 // Error
 const e1 = <TestingOptional y1 y3="hello"/>

@@ -30,9 +30,9 @@ let empty: Empty;
 >empty : Empty
 
 empty.nope;
->empty.nope : any
+>empty.nope : any (error)
 >empty : Empty
->nope : any
+>nope : any (error)
 
 empty["not allowed either"];
 >empty["not allowed either"] : any

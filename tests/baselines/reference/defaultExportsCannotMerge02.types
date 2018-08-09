@@ -18,31 +18,31 @@ export namespace Decl {
 
 === tests/cases/conformance/es6/modules/m2.ts ===
 import Entity from "m1"
->Entity : any
+>Entity : any (error)
 
 Entity();
->Entity() : any
->Entity : any
+>Entity() : any (error)
+>Entity : any (error)
 
 var x: Entity;
->x : any
+>x : any (error)
 
 var y: Entity.I;
->y : any
->Entity : any
+>y : any (error)
+>Entity : any (error)
 
 var z = new Entity();
->z : any
->new Entity() : any
->Entity : any
+>z : any (error)
+>new Entity() : any (error)
+>Entity : any (error)
 
 var sum = z.p1 + z.p2
->sum : any
->z.p1 + z.p2 : any
->z.p1 : any
->z : any
->p1 : any
->z.p2 : any
->z : any
->p2 : any
+>sum : any (error)
+>z.p1 + z.p2 : any (error)
+>z.p1 : any (error)
+>z : any (error)
+>p1 : any (error)
+>z.p2 : any (error)
+>z : any (error)
+>p2 : any (error)
 

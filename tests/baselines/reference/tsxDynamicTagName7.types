@@ -21,13 +21,13 @@ export class Text extends React.Component<{}, {}> {
 >'div' : "div"
 
   render() {
->render : () => any
+>render : () => any (error)
 
     return (
->(      <this/>  // this should be an error    ) : any
+>(      <this/>  // this should be an error    ) : any (error)
 
       <this/>  // this should be an error
-><this/> : any
+><this/> : any (error)
 >this : this
 
     );

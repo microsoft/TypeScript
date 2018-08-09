@@ -3,18 +3,18 @@
 >"use strict" : "use strict"
 
 var config = require("../config");
->config : any
->require("../config") : any
->require : any
+>config : any (error)
+>require("../config") : any (error)
+>require : any (error)
 >"../config" : "../config"
 
 module.exports.route = function (server) {
 >module.exports.route = function (server) {  // General Login Page server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); });} : (server: any) => void
->module.exports.route : any
->module.exports : any
->module : any
->exports : any
->route : any
+>module.exports.route : any (error)
+>module.exports : any (error)
+>module : any (error)
+>exports : any (error)
+>route : any (error)
 >function (server) {  // General Login Page server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); });} : (server: any) => void
 >server : any
  
@@ -25,11 +25,11 @@ module.exports.route = function (server) {
 >server : any
 >get : any
 >config.env.siteRoot + "/auth/login" : string
->config.env.siteRoot : any
->config.env : any
->config : any
->env : any
->siteRoot : any
+>config.env.siteRoot : any (error)
+>config.env : any (error)
+>config : any (error)
+>env : any (error)
+>siteRoot : any (error)
 >"/auth/login" : "/auth/login"
 >function (req, res, next) {    // TODO Should render login page that shows auth options  req.redirect("/auth/live"); } : (req: any, res: any, next: any) => void
 >req : any

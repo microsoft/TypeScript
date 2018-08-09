@@ -5,5 +5,5 @@ module m {
 }
 // Should not be emitted
 export default m;
->m : any
+>m : any (error)
 

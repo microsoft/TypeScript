@@ -16,10 +16,10 @@ class D<T> extends C<T> {
 
     constructor() {
         super<T>();
->super<T>() : any
->super : any
+>super<T>() : any (error)
+>super : any (error)
 >super : C<T>
-> : any
+> : any (error)
     }
     bar() {
 >bar : () => void

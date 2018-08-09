@@ -24,10 +24,10 @@ module M2 {
 
     private y = x;  // can't use private in modules
 >y = x : number
->y : any
+>y : any (error)
 >x : number
 
     export var z = y;  // property visible to any code
->z : any
->y : any
+>z : any (error)
+>y : any (error)
 }

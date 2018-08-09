@@ -14,16 +14,16 @@ var x: X = { a: 0 };
 
 x.a = 1;  // Error
 >x.a = 1 : 1
->x.a : any
+>x.a : any (error)
 >x : X
->a : any
+>a : any (error)
 >1 : 1
 
 x.b = 1;  // Error
 >x.b = 1 : 1
->x.b : any
+>x.b : any (error)
 >x : X
->b : any
+>b : any (error)
 >1 : 1
 
 class C {
@@ -57,9 +57,9 @@ class C {
 
         this.c = 1;  // Error
 >this.c = 1 : 1
->this.c : any
+>this.c : any (error)
 >this : this
->c : any
+>c : any (error)
 >1 : 1
 
         const f = () => {
@@ -68,23 +68,23 @@ class C {
 
             this.a = 1;  // Error
 >this.a = 1 : 1
->this.a : any
+>this.a : any (error)
 >this : this
->a : any
+>a : any (error)
 >1 : 1
 
             this.b = 1;  // Error
 >this.b = 1 : 1
->this.b : any
+>this.b : any (error)
 >this : this
->b : any
+>b : any (error)
 >1 : 1
 
             this.c = 1;  // Error
 >this.c = 1 : 1
->this.c : any
+>this.c : any (error)
 >this : this
->c : any
+>c : any (error)
 >1 : 1
         }
     }
@@ -93,23 +93,23 @@ class C {
 
         this.a = 1;  // Error
 >this.a = 1 : 1
->this.a : any
+>this.a : any (error)
 >this : this
->a : any
+>a : any (error)
 >1 : 1
 
         this.b = 1;  // Error
 >this.b = 1 : 1
->this.b : any
+>this.b : any (error)
 >this : this
->b : any
+>b : any (error)
 >1 : 1
 
         this.c = 1;  // Error
 >this.c = 1 : 1
->this.c : any
+>this.c : any (error)
 >this : this
->c : any
+>c : any (error)
 >1 : 1
     }
 }
@@ -133,9 +133,9 @@ var o = {
 };
 o.a = 1;  // Error
 >o.a = 1 : 1
->o.a : any
+>o.a : any (error)
 >o : { readonly a: number; b: number; }
->a : any
+>a : any (error)
 >1 : 1
 
 o.b = 1;
@@ -157,9 +157,9 @@ var p: { readonly a: number, b: number } = { a: 1, b: 1 };
 
 p.a = 1;  // Error
 >p.a = 1 : 1
->p.a : any
+>p.a : any (error)
 >p : { readonly a: number; b: number; }
->a : any
+>a : any (error)
 >1 : 1
 
 p.b = 1;
@@ -199,9 +199,9 @@ enum E {
 }
 E.A = 1;  // Error
 >E.A = 1 : 1
->E.A : any
+>E.A : any (error)
 >E : typeof E
->A : any
+>A : any (error)
 >1 : 1
 
 namespace N {
@@ -221,9 +221,9 @@ namespace N {
 }
 N.a = 1;  // Error
 >N.a = 1 : 1
->N.a : any
+>N.a : any (error)
 >N : typeof N
->a : any
+>a : any (error)
 >1 : 1
 
 N.b = 1;

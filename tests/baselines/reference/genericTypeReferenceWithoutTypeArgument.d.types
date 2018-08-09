@@ -10,23 +10,23 @@ declare class C<T> {
 }
 
 declare var c: C;
->c : any
+>c : any (error)
 
 declare var a: { x: C };
->a : { x: any; }
->x : any
+>a : { x: any (error); }
+>x : any (error)
 
 declare var b: { (x: C): C };
->b : (x: any) => any
->x : any
+>b : (x: any (error)) => any (error)
+>x : any (error)
 
 declare var d: { [x: C]: C };
 >d : {}
->x : any
+>x : any (error)
 
 declare function f(x: C): C;
->f : (x: any) => any
->x : any
+>f : (x: any (error)) => any (error)
+>x : any (error)
 
 declare class D extends C {}
 >D : D
@@ -42,20 +42,20 @@ declare module M {
 
 declare class D2 extends M.C { }
 >D2 : D2
->M.C : any
+>M.C : any (error)
 >M : typeof M
->C : any
+>C : any (error)
 
 declare class D3<T extends M.E> { }
 >D3 : D3<T>
->M : any
+>M : any (error)
 
 declare function h<T extends C>(x: T);
->h : <T extends any>(x: T) => any
+>h : <T extends any (error)>(x: T) => any
 >x : T
 
 declare function i<T extends M.E>(x: T);
->i : <T extends any>(x: T) => any
->M : any
+>i : <T extends any (error)>(x: T) => any
+>M : any (error)
 >x : T
 

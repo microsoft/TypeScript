@@ -10,7 +10,7 @@ module M {
 >x : number
 >2*x : number
 >2 : 2
->x : any
+>x : any (error)
 
 	export module X.Y.Z {
 >X : typeof X

@@ -34,34 +34,34 @@ export class BuildResult<A, B, C>{
 
     a.b.c.d.e.f.g = 0;
 >a.b.c.d.e.f.g = 0 : 0
->a.b.c.d.e.f.g : any
->a.b.c.d.e.f : any
->a.b.c.d.e : any
->a.b.c.d : any
->a.b.c : any
->a.b : any
->a : any
->b : any
->c : any
->d : any
->e : any
->f : any
->g : any
+>a.b.c.d.e.f.g : any (error)
+>a.b.c.d.e.f : any (error)
+>a.b.c.d.e : any (error)
+>a.b.c.d : any (error)
+>a.b.c : any (error)
+>a.b : any (error)
+>a : any (error)
+>b : any (error)
+>c : any (error)
+>d : any (error)
+>e : any (error)
+>f : any (error)
+>g : any (error)
 >0 : 0
 
     removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {
->removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    }) : any
->removedFiles.forEach : any
->removedFiles : any
->forEach : any
+>removedFiles.forEach(<A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    }) : any (error)
+>removedFiles.forEach : any (error)
+>removedFiles : any (error)
+>forEach : any (error)
 ><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A, B extends A, C>(each: FileWithErrors<A, B, C>) => void
 >each : FileWithErrors<A, B, C>
 
       this.removeFile(each);
->this.removeFile(each) : any
->this.removeFile : any
+>this.removeFile(each) : any (error)
+>this.removeFile : any (error)
 >this : this
->removeFile : any
+>removeFile : any (error)
 >each : FileWithErrors<A, B, C>
 
     });

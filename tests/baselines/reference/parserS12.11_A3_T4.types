@@ -22,7 +22,7 @@ function SwitchTest(value){
 >value : any
 
     case:
-> : any
+> : any (error)
 
       result += 2;
 >result += 2 : number

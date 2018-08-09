@@ -44,14 +44,14 @@ c2 = c;
 >c : C
 
 c.bar(); // error
->c.bar() : any
->c.bar : any
+>c.bar() : any (error)
+>c.bar : any (error)
 >c : C
->bar : any
+>bar : any (error)
 
 c2.bar(); // should error
->c2.bar() : any
->c2.bar : any
+>c2.bar() : any (error)
+>c2.bar : any (error)
 >c2 : C2
->bar : any
+>bar : any (error)
 

@@ -30,8 +30,8 @@ a[Symbol.isConcatSpreadable] = false;
 >a[Symbol.isConcatSpreadable] = false : false
 >a[Symbol.isConcatSpreadable] : string
 >a : string[]
->Symbol.isConcatSpreadable : any
->Symbol : any
->isConcatSpreadable : any
+>Symbol.isConcatSpreadable : any (error)
+>Symbol : any (error)
+>isConcatSpreadable : any (error)
 >false : false
 

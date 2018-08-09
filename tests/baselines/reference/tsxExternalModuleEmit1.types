@@ -21,10 +21,10 @@ export class App extends React.Component<any, any> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => any (error)
 
         return <Button />;
-><Button /> : any
+><Button /> : any (error)
 >Button : typeof Button
     }
 
@@ -41,12 +41,12 @@ export class Button extends React.Component<any, any> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => any (error)
 
         return <button>Some button</button>;
-><button>Some button</button> : any
->button : any
->button : any
+><button>Some button</button> : any (error)
+>button : any (error)
+>button : any (error)
     }
 
 }

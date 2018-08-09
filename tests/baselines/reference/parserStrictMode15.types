@@ -4,5 +4,5 @@
 
 delete a;
 >delete a : boolean
->a : any
+>a : any (error)
 

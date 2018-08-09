@@ -1,14 +1,14 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/parserX_TypeArgumentList1.ts ===
 Foo<A,B,\ C>(4, 5, 6);
->Foo<A,B, : any
->Foo<A,B : any
+>Foo<A,B, : any (error)
+>Foo<A,B : any (error)
 >Foo<A : boolean
->Foo : any
->A : any
->B : any
-> : any
+>Foo : any (error)
+>A : any (error)
+>B : any (error)
+> : any (error)
 >C>(4, 5, 6) : boolean
->C : any
+>C : any (error)
 >(4, 5, 6) : 6
 >4, 5, 6 : 6
 >4, 5 : 5

@@ -113,13 +113,13 @@ async function f14() {
 >f14 : () => Promise<void>
 
     block: {
->block : any
+>block : any (error)
 
         await 1;
 >await 1 : 1
 >1 : 1
 
         break block;
->block : any
+>block : any (error)
     }
 }

@@ -4,9 +4,9 @@
 >(1) /notregexp : number
 >(1) : 1
 >1 : 1
->notregexp : any
->a.foo() : any
->a.foo : any
->a : any
->foo : any
+>notregexp : any (error)
+>a.foo() : any (error)
+>a.foo : any (error)
+>a : any (error)
+>foo : any (error)
 

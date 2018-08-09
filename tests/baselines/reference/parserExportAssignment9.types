@@ -3,12 +3,12 @@ namespace Foo {
 >Foo : typeof Foo
 
   export default foo;
->foo : any
+>foo : any (error)
 }
 
 module Bar {
 >Bar : typeof Bar
 
   export default bar;
->bar : any
+>bar : any (error)
 }

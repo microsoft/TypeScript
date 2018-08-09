@@ -5,7 +5,7 @@ function* foo() {
     yield a ? b : c;
 >yield a ? b : c : any
 >a ? b : c : any
->a : any
->b : any
->c : any
+>a : any (error)
+>b : any (error)
+>c : any (error)
 }

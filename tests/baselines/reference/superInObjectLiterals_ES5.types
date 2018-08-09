@@ -15,20 +15,20 @@ var obj = {
 >method : () => void
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
     },
     get prop() {
 >prop : number
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
         return 10;
 >10 : 10
@@ -39,10 +39,10 @@ var obj = {
 >value : number
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
     },
     p1: function () {
@@ -50,10 +50,10 @@ var obj = {
 >function () {        super.method();    } : () => void
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
     },
     p2: function f() {
@@ -62,10 +62,10 @@ var obj = {
 >f : () => void
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
     },
     p3: () => {
@@ -73,10 +73,10 @@ var obj = {
 >() => {        super.method();    } : () => void
 
         super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
     }
 };
 
@@ -110,20 +110,20 @@ class B extends A {
 >method : () => void
 
                 super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
             },
             get prop() {
 >prop : number
 
                 super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
                 return 10;
 >10 : 10
@@ -134,10 +134,10 @@ class B extends A {
 >value : number
 
                 super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
             },
             p1: function () {
@@ -145,10 +145,10 @@ class B extends A {
 >function () {                super.method();            } : () => void
 
                 super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
             },
             p2: function f() {
@@ -157,10 +157,10 @@ class B extends A {
 >f : () => void
 
                 super.method();
->super.method() : any
->super.method : any
->super : any
->method : any
+>super.method() : any (error)
+>super.method : any (error)
+>super : any (error)
+>method : any (error)
 
             },
             p3: () => {

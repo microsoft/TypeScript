@@ -1,6 +1,6 @@
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType4_moduleA.ts ===
 import moduleC = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
->moduleC : any
+>moduleC : any (error)
 
 import ClassB = require("recursiveExportAssignmentAndFindAliasedType4_moduleB");
 >ClassB : typeof ClassB
@@ -10,10 +10,10 @@ export var b: ClassB; // This should result in type ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType4_moduleC.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
->self : any
+>self : any (error)
 
 export = self;
->self : any
+>self : any (error)
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType4_moduleB.ts ===
 class ClassB { }

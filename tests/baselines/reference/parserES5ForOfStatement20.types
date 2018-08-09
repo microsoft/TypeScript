@@ -2,5 +2,5 @@
 for (var of = 0 in of) { }
 >of : any
 >0 : 0
->of : any
+>of : any (error)
 

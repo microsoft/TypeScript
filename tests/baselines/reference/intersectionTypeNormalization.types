@@ -206,7 +206,7 @@ type Foo = {
 
     genreId: enums.Genre;
 >genreId : enums.Genre
->enums : any
+>enums : any (error)
 
 };
 
@@ -215,7 +215,7 @@ type Bar = {
 
     genreId: enums.Genre;
 >genreId : enums.Genre
->enums : any
+>enums : any (error)
 
 };
 

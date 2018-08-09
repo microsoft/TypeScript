@@ -5,8 +5,8 @@ import React = require('react');
 interface ComponentProps {
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
 >AnyComponent : React.StatelessComponent<any> | React.ComponentClass<any>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 }
 
 class MyComponent extends React.Component<ComponentProps, {}> {
@@ -38,8 +38,8 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 >AnyComponent : () => JSX.Element
 >() => <button>test</button> : () => JSX.Element
 ><button>test</button> : JSX.Element
->button : any
->button : any
+>button : any (error)
+>button : any (error)
 
 // Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {

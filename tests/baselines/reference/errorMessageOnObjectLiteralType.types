@@ -10,15 +10,15 @@ var x: {
 
 };
 x.getOwnPropertyNamess();
->x.getOwnPropertyNamess() : any
->x.getOwnPropertyNamess : any
+>x.getOwnPropertyNamess() : any (error)
+>x.getOwnPropertyNamess : any (error)
 >x : { a: string; b: number; }
->getOwnPropertyNamess : any
+>getOwnPropertyNamess : any (error)
 
 Object.getOwnPropertyNamess(null);
->Object.getOwnPropertyNamess(null) : any
->Object.getOwnPropertyNamess : any
+>Object.getOwnPropertyNamess(null) : any (error)
+>Object.getOwnPropertyNamess : any (error)
 >Object : ObjectConstructor
->getOwnPropertyNamess : any
+>getOwnPropertyNamess : any (error)
 >null : null
 

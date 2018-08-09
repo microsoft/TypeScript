@@ -7,7 +7,7 @@ import process = require('process');
 
 export default function parseArgs(): minimist.ParsedArgs {
 >parseArgs : () => minimist.ParsedArgs
->minimist : any
+>minimist : any (error)
 
   return minimist(process.argv.slice(2));
 >minimist(process.argv.slice(2)) : minimist.ParsedArgs
@@ -28,7 +28,7 @@ declare namespace thing {
 declare function thing(x: any): thing.ParsedArgs;
 >thing : (x: any) => thing.ParsedArgs
 >x : any
->thing : any
+>thing : any (error)
 
 export = thing;
 >thing : (x: any) => thing.ParsedArgs

@@ -4,5 +4,5 @@ for (var a = 1, b = 2 in X) {
 >1 : 1
 >b : string
 >2 : 2
->X : any
+>X : any (error)
 }

@@ -5,6 +5,6 @@ class C {
   constructor() {
      yield foo
 >yield foo : any
->foo : any
+>foo : any (error)
   }
 }

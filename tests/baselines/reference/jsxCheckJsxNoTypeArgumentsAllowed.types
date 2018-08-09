@@ -23,7 +23,7 @@ export interface Prop {
 === tests/cases/conformance/jsx/file.jsx ===
 import { MyComp, Prop } from "./component";
 >MyComp : typeof MyComp
->Prop : any
+>Prop : any (error)
 
 import * as React from "react";
 >React : typeof React

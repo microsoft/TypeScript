@@ -6,7 +6,7 @@
  * @property {string} icons.image64
  */
 var ex;
->ex : any
+>ex : any (auto)
 
 /** @type {App} */
 const app = {

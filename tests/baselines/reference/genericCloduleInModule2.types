@@ -26,12 +26,12 @@ module A {
 }
 
 var b: A.B;
->b : any
->A : any
+>b : any (error)
+>A : any (error)
 
 b.foo();
->b.foo() : any
->b.foo : any
->b : any
->foo : any
+>b.foo() : any (error)
+>b.foo : any (error)
+>b : any (error)
+>foo : any (error)
 

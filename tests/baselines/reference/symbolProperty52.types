@@ -5,9 +5,9 @@ var obj = {
 
     [Symbol.nonsense]: 0
 >[Symbol.nonsense] : number
->Symbol.nonsense : any
+>Symbol.nonsense : any (error)
 >Symbol : SymbolConstructor
->nonsense : any
+>nonsense : any (error)
 >0 : 0
 
 };
@@ -20,7 +20,7 @@ obj = {};
 obj[Symbol.nonsense];
 >obj[Symbol.nonsense] : any
 >obj : { [Symbol.nonsense]: number; }
->Symbol.nonsense : any
+>Symbol.nonsense : any (error)
 >Symbol : SymbolConstructor
->nonsense : any
+>nonsense : any (error)
 

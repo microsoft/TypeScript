@@ -71,7 +71,7 @@ async function fn8(x) {
 >x : any
 
     var { z: x } = y;
->z : any
+>z : any (error)
 >x : any
 >y : any
 }
@@ -81,7 +81,7 @@ async function fn9(x) {
 >x : any
 
     var { z: { x } } = y;
->z : any
+>z : any (error)
 >x : any
 >y : any
 }
@@ -91,7 +91,7 @@ async function fn10(x) {
 >x : any
 
     var { z: { x } = y } = y;
->z : any
+>z : any (error)
 >x : any
 >y : any
 >y : any
@@ -414,13 +414,13 @@ async function fn39(x) {
 >x : any
 
     foo: {
->foo : any
+>foo : any (error)
 
         var x;
 >x : any
 
         break foo;
->foo : any
+>foo : any (error)
     }
 }
 

@@ -15,10 +15,10 @@
         }
 
         MUnit.test(a);
->MUnit.test(a) : any
->MUnit.test : any
->MUnit : any
->test : any
->a : any
+>MUnit.test(a) : any (error)
+>MUnit.test : any (error)
+>MUnit : any (error)
+>test : any (error)
+>a : any (error)
 
 })();

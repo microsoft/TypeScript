@@ -4,8 +4,8 @@ export = modObj;
 
 declare const modObj: modObj.A & modObj.B;
 >modObj : modObj.A & modObj.B
->modObj : any
->modObj : any
+>modObj : any (error)
+>modObj : any (error)
 
 declare namespace modObj {
     interface A { (): void; a: string; }

@@ -18,7 +18,7 @@ declare module Q {
 function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 >promiseWithCancellation : <T>(promise: Q.Promise<T>) => void
 >promise : Q.Promise<T>
->Q : any
+>Q : any (error)
 
     var deferred = Q.defer<T>(); // used to be an error
 >deferred : string

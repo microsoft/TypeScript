@@ -14,5 +14,5 @@ export function assertNever(x: never, msg: string) {
 
 === tests/cases/conformance/es6/modules/b.ts ===
 import { assertNevar } from "./a";
->assertNevar : any
+>assertNevar : any (error)
 

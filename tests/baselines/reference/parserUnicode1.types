@@ -10,8 +10,8 @@ try {
 >6 : 6
 
     $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
->$ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
->$ERROR : any
+>$ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any (error)
+>$ERROR : any (error)
 >'#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
 >'#6.1: var \\u0078x = 1; xx === 6. Actual: ' : "#6.1: var \\u0078x = 1; xx === 6. Actual: "
 >(xx) : number
@@ -22,8 +22,8 @@ catch (e) {
 >e : any
 
     $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
->$ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any
->$ERROR : any
+>$ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx)) : any (error)
+>$ERROR : any (error)
 >'#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx) : string
 >'#6.2: var \\u0078x = 1; xx === 6. Actual: ' : "#6.2: var \\u0078x = 1; xx === 6. Actual: "
 >(xx) : number

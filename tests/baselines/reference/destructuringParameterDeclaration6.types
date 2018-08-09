@@ -8,7 +8,7 @@
 // Error
 function a({while}) { }
 >a : ({ while:  }: { while: any; }) => void
->while : any
+>while : any (error)
 > : any
 
 function a1({public}) { }
@@ -17,20 +17,20 @@ function a1({public}) { }
 
 function a4([while, for, public]){ }
 >a4 : ([]: any[]) => any
->, : any
-> : any
-> : any
->, public : any
-> : any
->public : any
-> : any
-> : any
-> : any
+>, : any (error)
+> : any (error)
+> : any (error)
+>, public : any (error)
+> : any (error)
+>public : any (error)
+> : any (error)
+> : any (error)
+> : any (error)
 
 function a5(...while) { }
 >a5 : (...: any[]) => any
 > : any[]
-> : any
+> : any (error)
 
 function a6(...public) { }
 >a6 : (...public: any[]) => void
@@ -50,12 +50,12 @@ a({ while: 1 });
 // No Error
 function b1({public: x}) { }
 >b1 : ({ public: x }: { public: any; }) => void
->public : any
+>public : any (error)
 >x : any
 
 function b2({while: y}) { }
 >b2 : ({ while: y }: { while: any; }) => void
->while : any
+>while : any (error)
 >y : any
 
 b1({ public: 1 });

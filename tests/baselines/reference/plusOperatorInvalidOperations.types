@@ -5,14 +5,14 @@ var b;
 
 // operand before +
 var result1 = b+;   //expect error
->result1 : any
->b+ : any
+>result1 : any (error)
+>b+ : any (error)
 >b : any
-> : any
+> : any (error)
 
 // miss  an operand
 var result2 =+;
 >result2 : number
 >+ : number
-> : any
+> : any (error)
 

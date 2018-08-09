@@ -8,15 +8,15 @@ module B {
 >B : typeof B
 
     export import A1 = A
->A1 : any
->A : any
+>A1 : any (error)
+>A : any (error)
     
 }
 
 var x: B.A1.I = { x: 1 };
 >x : A.I
->B : any
->A1 : any
+>B : any (error)
+>A1 : any (error)
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1

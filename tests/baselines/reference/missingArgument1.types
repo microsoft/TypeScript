@@ -1,7 +1,7 @@
 === tests/cases/compiler/missingArgument1.ts ===
 foo(a,,b);
->foo(a,,b) : any
->foo : any
->a : any
->b : any
+>foo(a,,b) : any (error)
+>foo : any (error)
+>a : any (error)
+>b : any (error)
 

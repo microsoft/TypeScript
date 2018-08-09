@@ -21,7 +21,7 @@ module M
 
 	      name=value;
 >name=value : string
->name : any
+>name : any (error)
 >value : string
 
 	  })();
@@ -31,7 +31,7 @@ module M
 >function(): string {          return name;      } : () => string
 
           return name;
->name : any
+>name : any (error)
       }
     }
 }

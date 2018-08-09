@@ -3,14 +3,14 @@
 
 var x = {
 >x : any
->{    private [x: string]: string;} : { [x: number]: any; string: any; }
+>{    private [x: string]: string;} : { [x: number]: any (error); string: any (error); }
 
     private [x: string]: string;
->[x : any
+>[x : any (error)
 >x : any
->string : any
->string : any
-> : any
+>string : any (error)
+>string : any (error)
+> : any (error)
 }
 
 var y: {

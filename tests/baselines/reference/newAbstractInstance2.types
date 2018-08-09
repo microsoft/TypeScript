@@ -6,6 +6,6 @@ import A from "./a";
 >A : typeof A
 
 new A();
->new A() : any
+>new A() : any (error)
 >A : typeof A
 

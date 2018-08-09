@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringInPropertyNameES6_1.ts ===
 var x = {
->x : any
->{    `a` : any
+>x : any (error)
+>{    `a` : any (error)
 >{ : {}
 
     `a`: 321

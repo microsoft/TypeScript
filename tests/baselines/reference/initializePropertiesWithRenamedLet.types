@@ -29,7 +29,7 @@ if (true) {
 >true : true
 
     let { x: x } = { x: 0 };
->x : any
+>x : any (error)
 >x : number
 >{ x: 0 } : { x: number; }
 >x : number

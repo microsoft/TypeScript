@@ -1,11 +1,11 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts ===
 var v = { a
->v : { a: any; return: any; }
->{ areturn; : { a: any; return: any; }
->a : any
+>v : { a: any (error); return: any (error); }
+>{ areturn; : { a: any (error); return: any (error); }
+>a : any (error)
 
 return;
-> : any
->return : any
-> : any
+> : any (error)
+>return : any (error)
+> : any (error)
 

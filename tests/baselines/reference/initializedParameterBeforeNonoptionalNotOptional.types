@@ -20,7 +20,7 @@ export declare function foo2({a}: {
 export declare function foo3({a, b: {c}}: {
 >foo3 : ({ a, b: { c } }: { a?: string | undefined; b?: { c?: string | undefined; } | undefined; } | undefined, b: string) => void
 >a : string | undefined
->b : any
+>b : any (error)
 >c : string | undefined
 
     a?: string | undefined;

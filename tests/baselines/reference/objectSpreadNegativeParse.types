@@ -3,27 +3,27 @@ let o7 = { ...o? };
 >o7 : any
 >{ ...o? } : any
 >o? : any
->o : any
-> : any
-> : any
+>o : any (error)
+> : any (error)
+> : any (error)
 
 let o8 = { ...*o };
->o8 : any
->{ ...*o } : any
+>o8 : any (error)
+>{ ...*o } : any (error)
 >*o : number
-> : any
->o : any
+> : any (error)
+>o : any (error)
 
 let o9 = { ...matchMedia() { }};
 >o9 : any
 >{ ...matchMedia() : any
->matchMedia() : any
->matchMedia : any
+>matchMedia() : any (error)
+>matchMedia : any (error)
 
 let o10 = { ...get x() { return 12; }};
 >o10 : any
 >{ ...get x() { return 12; }} : any
->get : any
+>get : any (error)
 >x : () => number
 >12 : 12
 

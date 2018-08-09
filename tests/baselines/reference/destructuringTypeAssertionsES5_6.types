@@ -2,6 +2,6 @@
 var { x } = <any>new Foo;
 >x : any
 ><any>new Foo : any
->new Foo : any
->Foo : any
+>new Foo : any (error)
+>Foo : any (error)
 

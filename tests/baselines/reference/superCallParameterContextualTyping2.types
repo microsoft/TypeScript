@@ -21,6 +21,6 @@ class C extends A<number, string> {
 >value : number
 >String(value<string>()) : string
 >String : StringConstructor
->value<string>() : any
+>value<string>() : any (error)
 >value : number
 }

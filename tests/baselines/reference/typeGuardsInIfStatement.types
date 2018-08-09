@@ -390,9 +390,9 @@ function foo12(x: number | string | boolean) {
 >toString : (radix?: number) => string
 
             : x.toString(); // boolean | string
->x.toString() : any
->x.toString : any
+>x.toString() : any (error)
+>x.toString : any (error)
 >x : never
->toString : any
+>toString : any (error)
     }
 }

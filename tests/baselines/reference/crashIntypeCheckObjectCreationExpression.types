@@ -11,8 +11,8 @@ export class BuildWorkspaceService {
 >this.injectBuildService : <P0>(service: P0) => void
 >this : this
 >injectBuildService : <P0>(service: P0) => void
->new X(service) : any
->X : any
+>new X(service) : any (error)
+>X : any (error)
 >service : P0
     }
     public injectBuildService<P0>(service: P0) {

@@ -17,11 +17,11 @@ class MyClass {
 
     db: database.db;
 >db : database.db
->database : any
+>database : any (error)
 
     constructor(db: database.db) { // no collision
 >db : database.db
->database : any
+>database : any (error)
 
         this.db = db;
 >this.db = db : database.db

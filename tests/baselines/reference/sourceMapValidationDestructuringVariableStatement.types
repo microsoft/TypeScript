@@ -34,21 +34,21 @@ var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >"trimming" : "trimming"
 
 var { name: nameA } = robotA;
->name : any
+>name : any (error)
 >nameA : string
 >robotA : Robot
 
 var { name: nameB, skill: skillB } = robotB;
->name : any
+>name : any (error)
 >nameB : string
->skill : any
+>skill : any (error)
 >skillB : string
 >robotB : Robot
 
 var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
->name : any
+>name : any (error)
 >nameC : string
->skill : any
+>skill : any (error)
 >skillC : string
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string

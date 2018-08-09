@@ -215,13 +215,13 @@ function f11(x) {
 >x : any
 
     test:
->test : any
+>test : any (error)
 
     try {
         do {
             do {
                 break test;
->test : any
+>test : any (error)
 
             } while (true);
 >true : true

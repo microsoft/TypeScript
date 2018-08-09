@@ -36,18 +36,18 @@ function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 >b : string
 }
 function generic<T extends { x, y }>(t: T) {
->generic : <T extends { x: any; y: any; }>(t: T) => any
+>generic : <T extends { x: any; y: any; }>(t: T) => any (error)
 >x : any
 >y : any
 >t : T
 
     let { x, ...rest } = t;
 >x : any
->rest : any
+>rest : any (error)
 >t : T
 
     return rest;
->rest : any
+>rest : any (error)
 }
 
 let rest: { b: string }
@@ -57,7 +57,7 @@ let rest: { b: string }
 ({a, ...rest.b + rest.b} = o);
 >({a, ...rest.b + rest.b} = o) : { a: number; b: string; }
 >{a, ...rest.b + rest.b} = o : { a: number; b: string; }
->{a, ...rest.b + rest.b} : any
+>{a, ...rest.b + rest.b} : any (error)
 >a : number
 >rest.b + rest.b : string
 >rest.b : string

@@ -15,17 +15,17 @@ var functions = [function () {
 >Object : ObjectConstructor
 
     [1, 2, 3].NonexistantMethod();
->[1, 2, 3].NonexistantMethod() : any
->[1, 2, 3].NonexistantMethod : any
+>[1, 2, 3].NonexistantMethod() : any (error)
+>[1, 2, 3].NonexistantMethod : any (error)
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->NonexistantMethod : any
+>NonexistantMethod : any (error)
 
     derp();
->derp() : any
->derp : any
+>derp() : any (error)
+>derp : any (error)
 
 }];
 

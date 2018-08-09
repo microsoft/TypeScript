@@ -1,108 +1,108 @@
 === tests/cases/conformance/es6/newTarget/invalidNewTarget.es5.ts ===
 const a = new.target;
->a : any
->new.target : any
->target : any
+>a : any (error)
+>new.target : any (error)
+>target : any (error)
 
 const b = () => new.target;
->b : () => any
->() => new.target : () => any
->new.target : any
->target : any
+>b : () => any (error)
+>() => new.target : () => any (error)
+>new.target : any (error)
+>target : any (error)
 
 class C {
 >C : C
 
     [new.target]() { }
 >[new.target] : () => void
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 
     c() { return new.target; }
->c : () => any
->new.target : any
->target : any
+>c : () => any (error)
+>new.target : any (error)
+>target : any (error)
 
     get d() { return new.target; }
->d : any
->new.target : any
->target : any
+>d : any (error)
+>new.target : any (error)
+>target : any (error)
 
     set e(_) { _ = new.target; }
 >e : any
 >_ : any
->_ = new.target : any
+>_ = new.target : any (error)
 >_ : any
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 
     f = () => new.target;
->f : () => any
->() => new.target : () => any
->new.target : any
->target : any
+>f : () => any (error)
+>() => new.target : () => any (error)
+>new.target : any (error)
+>target : any (error)
 
     static [new.target]() { }
 >[new.target] : () => void
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 
     static g() { return new.target; }
->g : () => any
->new.target : any
->target : any
+>g : () => any (error)
+>new.target : any (error)
+>target : any (error)
 
     static get h() { return new.target; }
->h : any
->new.target : any
->target : any
+>h : any (error)
+>new.target : any (error)
+>target : any (error)
 
     static set i(_) { _ = new.target; }
 >i : any
 >_ : any
->_ = new.target : any
+>_ = new.target : any (error)
 >_ : any
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 
     static j = () => new.target;
->j : () => any
->() => new.target : () => any
->new.target : any
->target : any
+>j : () => any (error)
+>() => new.target : () => any (error)
+>new.target : any (error)
+>target : any (error)
 }
 
 const O = {
->O : { [x: number]: any; k(): any; readonly l: any; m: any; n: any; }
->{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k(): any; readonly l: any; m: any; n: any; }
+>O : { [x: number]: any; k(): any (error); readonly l: any (error); m: any; n: any (error); }
+>{    [new.target]: undefined,    k() { return new.target; },    get l() { return new.target; },    set m(_) { _ = new.target; },    n: new.target,} : { [x: number]: undefined; k(): any (error); readonly l: any (error); m: any; n: any (error); }
 
     [new.target]: undefined,
 >[new.target] : undefined
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 >undefined : undefined
 
     k() { return new.target; },
->k : () => any
->new.target : any
->target : any
+>k : () => any (error)
+>new.target : any (error)
+>target : any (error)
 
     get l() { return new.target; },
->l : any
->new.target : any
->target : any
+>l : any (error)
+>new.target : any (error)
+>target : any (error)
 
     set m(_) { _ = new.target; },
 >m : any
 >_ : any
->_ = new.target : any
+>_ = new.target : any (error)
 >_ : any
->new.target : any
->target : any
+>new.target : any (error)
+>target : any (error)
 
     n: new.target,
->n : any
->new.target : any
->target : any
+>n : any (error)
+>new.target : any (error)
+>target : any (error)
 
 };

@@ -10,11 +10,11 @@ export var b: ClassB; // This should result in type ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType7_moduleC.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType7_moduleD");
->self : any
+>self : any (error)
 
 var selfVar = self;
 >selfVar : any
->self : any
+>self : any (error)
 
 export = selfVar;
 >selfVar : any

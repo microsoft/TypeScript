@@ -71,8 +71,8 @@ async function doStatement7() {
 >doStatement7 : () => Promise<void>
 
     A: do { continue A; } while (y);
->A : any
->A : any
+>A : any (error)
+>A : any (error)
 >y : any
 }
 
@@ -80,10 +80,10 @@ async function doStatement8() {
 >doStatement8 : () => Promise<void>
 
     B: do { await x; continue B; } while (y);
->B : any
+>B : any (error)
 >await x : any
 >x : any
->B : any
+>B : any (error)
 >y : any
 }
 
@@ -91,9 +91,9 @@ async function doStatement9() {
 >doStatement9 : () => Promise<void>
 
     C: do { if (1) continue C; await x; } while (y);
->C : any
+>C : any (error)
 >1 : 1
->C : any
+>C : any (error)
 >await x : any
 >x : any
 >y : any
@@ -103,8 +103,8 @@ async function doStatement10() {
 >doStatement10 : () => Promise<void>
 
     D: do { continue D; } while (await y);
->D : any
->D : any
+>D : any (error)
+>D : any (error)
 >await y : any
 >y : any
 }
@@ -147,8 +147,8 @@ async function doStatement15() {
 >doStatement15 : () => Promise<void>
 
     E: do { break E; } while (y);
->E : any
->E : any
+>E : any (error)
+>E : any (error)
 >y : any
 }
 
@@ -156,10 +156,10 @@ async function doStatement16() {
 >doStatement16 : () => Promise<void>
 
     F: do { await x; break F; } while (y);
->F : any
+>F : any (error)
 >await x : any
 >x : any
->F : any
+>F : any (error)
 >y : any
 }
 
@@ -167,9 +167,9 @@ async function doStatement17() {
 >doStatement17 : () => Promise<void>
 
     G: do { if (1) break G; await x; } while (y);
->G : any
+>G : any (error)
 >1 : 1
->G : any
+>G : any (error)
 >await x : any
 >x : any
 >y : any
@@ -179,8 +179,8 @@ async function doStatement18() {
 >doStatement18 : () => Promise<void>
 
     H: do { break H; } while (await y);
->H : any
->H : any
+>H : any (error)
+>H : any (error)
 >await y : any
 >y : any
 }

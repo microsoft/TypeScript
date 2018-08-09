@@ -28,54 +28,54 @@ class Three<T, U, V>{
 }
 
 function A1(): One { return null; }
->A1 : () => any
+>A1 : () => any (error)
 >null : null
 
 function A2(): Two { return null; }
->A2 : () => any
+>A2 : () => any (error)
 >null : null
 
 function A3(): Three { return null; }
->A3 : () => any
+>A3 : () => any (error)
 >null : null
 
 function B1(): Two<number> { return null; }
->B1 : () => any
+>B1 : () => any (error)
 >null : null
 
 function B2(): Three<string> { return null; }
->B2 : () => any
+>B2 : () => any (error)
 >null : null
 
 function B3(): Three<string, number> { return null; }
->B3 : () => any
+>B3 : () => any (error)
 >null : null
 
 class C {
 >C : C
 
     A1(): One { return null; }
->A1 : () => any
+>A1 : () => any (error)
 >null : null
 
     A2(): Two { return null; }
->A2 : () => any
+>A2 : () => any (error)
 >null : null
 
     A3(): Three { return null; }
->A3 : () => any
+>A3 : () => any (error)
 >null : null
 
     B1(): Two<number> { return null; }
->B1 : () => any
+>B1 : () => any (error)
 >null : null
 
     B2(): Three<string> { return null; }
->B2 : () => any
+>B2 : () => any (error)
 >null : null
 
     B3(): Three<string, number> { return null; }
->B3 : () => any
+>B3 : () => any (error)
 >null : null
 }
 
@@ -83,23 +83,23 @@ class D<T> {
 >D : D<T>
 
     A2(): Two<T> { return null; }
->A2 : () => any
+>A2 : () => any (error)
 >null : null
 
     A3(): Three<T> { return null; }
->A3 : () => any
+>A3 : () => any (error)
 >null : null
 
     B1(): Two<T> { return null; }
->B1 : () => any
+>B1 : () => any (error)
 >null : null
 
     B2(): Three<T> { return null; }
->B2 : () => any
+>B2 : () => any (error)
 >null : null
 
     B3(): Three<string, T> { return null; }
->B3 : () => any
+>B3 : () => any (error)
 >null : null
 }
 
@@ -119,72 +119,72 @@ class X<T>
 >X : X<T>
 {
     p1: () => X;
->p1 : () => any
+>p1 : () => any (error)
 
     p2: { [idx: number]: X }
->p2 : { [idx: number]: any; }
+>p2 : { [idx: number]: any (error); }
 >idx : number
 
     p3: X[]
->p3 : any[]
+>p3 : any (error)[]
 
     p4: I<X>
->p4 : I<any>
+>p4 : I<any (error)>
 
     p5: X
->p5 : any
+>p5 : any (error)
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => any (error)
 
     p7: { [idx: number]: Y }
->p7 : { [idx: number]: any; }
+>p7 : { [idx: number]: any (error); }
 >idx : number
 
     p8: Y[]
->p8 : any[]
+>p8 : any (error)[]
 
     p9: I<Y>
->p9 : I<any>
+>p9 : I<any (error)>
 
     pa: Y
->pa : any
+>pa : any (error)
 }
 
 declare var a: {
->a : { p1: () => any; p2: { [idx: number]: any; }; p3: any[]; p4: I<any>; p5: any; p6: () => any; p7: { [idx: number]: any; }; p8: any[]; p9: I<any>; pa: any; }
+>a : { p1: () => any (error); p2: { [idx: number]: any (error); }; p3: any (error)[]; p4: I<any (error)>; p5: any (error); p6: () => any (error); p7: { [idx: number]: any (error); }; p8: any (error)[]; p9: I<any (error)>; pa: any (error); }
 
     p1: () => X;
->p1 : () => any
+>p1 : () => any (error)
 
     p2: { [idx: number]: X }
->p2 : { [idx: number]: any; }
+>p2 : { [idx: number]: any (error); }
 >idx : number
 
     p3: X[]
->p3 : any[]
+>p3 : any (error)[]
 
     p4: I<X>
->p4 : I<any>
+>p4 : I<any (error)>
 
     p5: X
->p5 : any
+>p5 : any (error)
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => any (error)
 
     p7: { [idx: number]: Y }
->p7 : { [idx: number]: any; }
+>p7 : { [idx: number]: any (error); }
 >idx : number
 
     p8: Y[]
->p8 : any[]
+>p8 : any (error)[]
 
     p9: I<Y>
->p9 : I<any>
+>p9 : I<any (error)>
 
     pa: Y
->pa : any
+>pa : any (error)
 
 };
 

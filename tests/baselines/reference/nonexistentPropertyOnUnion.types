@@ -4,9 +4,9 @@ function f(x: string | Promise<string>) {
 >x : string | Promise<string>
 
     x.toLowerCase();
->x.toLowerCase() : any
->x.toLowerCase : any
+>x.toLowerCase() : any (error)
+>x.toLowerCase : any (error)
 >x : string | Promise<string>
->toLowerCase : any
+>toLowerCase : any (error)
 }
 

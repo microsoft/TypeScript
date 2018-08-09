@@ -52,7 +52,7 @@ module M { export var x = 1; }
 
 M = x;
 >M = x : string
->M : any
+>M : any (error)
 >x : string
 
 function i<T>(a: T) {
@@ -66,7 +66,7 @@ function i<T>(a: T) {
 }
 i = x;
 >i = x : string
->i : any
+>i : any (error)
 >x : string
 
 enum E { A }

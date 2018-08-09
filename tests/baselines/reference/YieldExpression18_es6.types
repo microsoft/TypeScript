@@ -3,7 +3,7 @@
 >"use strict" : "use strict"
 
 yield(foo);
->yield(foo) : any
->yield : any
->foo : any
+>yield(foo) : any (error)
+>yield : any (error)
+>foo : any (error)
 

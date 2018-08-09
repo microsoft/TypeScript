@@ -24,10 +24,10 @@ class MyDerived extends MyBase {
 >foo : () => void
 
         var l3 = super.S1;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
->l3 : any
->super.S1 : any
+>l3 : any (error)
+>super.S1 : any (error)
 >super : MyBase
->S1 : any
+>S1 : any (error)
 
         var l4 = super.S2;    // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword
 >l4 : string

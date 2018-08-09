@@ -9,10 +9,10 @@ export let [x,y,z] = [1, 2, 3];
 >3 : 3
 
 export const {a: z0, b: {c: z1}} = {a: true, b: {c: "123"}};
->a : any
+>a : any (error)
 >z0 : boolean
->b : any
->c : any
+>b : any (error)
+>c : any (error)
 >z1 : string
 >{a: true, b: {c: "123"}} : { a: boolean; b: { c: string; }; }
 >a : boolean

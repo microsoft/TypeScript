@@ -64,13 +64,13 @@ with (obj) {
 >obj : any
 
     const c = 0;
->c : any
->0 : any
+>c : any (error)
+>0 : any (error)
 
     n = c;
->n = c : any
->n : any
->c : any
+>n = c : any (error)
+>n : any (error)
+>c : any (error)
 }
 
 for (var i = 0; i < 10; i++) {
@@ -110,7 +110,7 @@ if (true) {
 >true : true
 
     label: const c = 0;
->label : any
+>label : any (error)
 >c : 0
 >0 : 0
 
@@ -124,9 +124,9 @@ while (false) {
 >false : false
 
     label2: label3: label4: const c = 0;
->label2 : any
->label3 : any
->label4 : any
+>label2 : any (error)
+>label3 : any (error)
+>label4 : any (error)
 >c : 0
 >0 : 0
 

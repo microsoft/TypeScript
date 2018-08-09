@@ -4,10 +4,10 @@ class C {
 
     [e]: number = 0;
 >[e] : number
->e : any
+>e : any (error)
 >0 : 0
 
     [e2]: number
 >[e2] : number
->e2 : any
+>e2 : any (error)
 }

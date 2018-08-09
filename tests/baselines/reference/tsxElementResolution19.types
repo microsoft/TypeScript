@@ -20,6 +20,6 @@ import {MyClass} from './file1';
 >MyClass : typeof MyClass
 
 <MyClass />;
-><MyClass /> : any
+><MyClass /> : any (error)
 >MyClass : typeof MyClass
 

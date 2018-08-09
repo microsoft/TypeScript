@@ -19,8 +19,8 @@ const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >children : (t: T) => T
 >t : T
 ><div></div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : JSX.Element
@@ -80,8 +80,8 @@ const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 ><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
 >p : LitProps<T>
 ><div></div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 ElemLit({prop: "x", children: () => "x"});
 >ElemLit({prop: "x", children: () => "x"}) : JSX.Element

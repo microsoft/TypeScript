@@ -21,7 +21,7 @@ const { e } = o;
 >o : any
 
 const { f: g } = o;
->f : any
+>f : any (error)
 >g : any
 >o : any
 

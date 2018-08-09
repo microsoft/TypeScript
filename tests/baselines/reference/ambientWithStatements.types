@@ -22,7 +22,7 @@ declare module M {
 >1 : 1
 
     L: var y;
->L : any
+>L : any (error)
 >y : any
 
     return;

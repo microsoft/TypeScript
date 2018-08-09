@@ -66,7 +66,7 @@ module m1 {
     {
     [number]: C1; // Used to be indexer, now it is a computed property
 >[number] : C1
->number : any
+>number : any (error)
 
     }) {
     }
@@ -127,8 +127,8 @@ module m2 {
 
         export class c_pr  implements mglo5.i5, mglo5.i6 {
 >c_pr : c_pr
->mglo5 : any
->mglo5 : any
+>mglo5 : any (error)
+>mglo5 : any (error)
 
             f1() {
 >f1 : () => string

@@ -5,9 +5,9 @@ class S18<A> extends S18<{ S19: A; }>{ }
 >S19 : A
 
 (new S18()).blah;
->(new S18()).blah : any
+>(new S18()).blah : any (error)
 >(new S18()) : S18<{}>
 >new S18() : S18<{}>
 >S18 : typeof S18
->blah : any
+>blah : any (error)
 

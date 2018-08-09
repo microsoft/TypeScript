@@ -1,6 +1,6 @@
 === tests/cases/compiler/intrinsics.ts ===
 var hasOwnProperty: hasOwnProperty; // Error
->hasOwnProperty : any
+>hasOwnProperty : any (error)
 
 module m1 {
 >m1 : typeof m1
@@ -17,7 +17,7 @@ module m1 {
 
 __proto__ = 0; // Error, __proto__ not defined
 >__proto__ = 0 : 0
->__proto__ : any
+>__proto__ : any (error)
 >0 : 0
 
 m1.__proto__ = 0;

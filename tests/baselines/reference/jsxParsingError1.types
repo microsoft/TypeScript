@@ -19,7 +19,7 @@ const class2 = "bar";
 const elem = <div className={class1, class2}/>;
 >elem : JSX.Element
 ><div className={class1, class2 : JSX.Element
->div : any
+>div : any (error)
 >className : string
 >class1 : "foo"
 >class2 : true

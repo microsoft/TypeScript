@@ -30,7 +30,7 @@ var $: JQueryStatic;
 
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
 >instanceOfClassSammy : Sammy
->new $.sammy() : any
+>new $.sammy() : any (error)
 >$.sammy : Sammy
 >$ : JQueryStatic
 >sammy : Sammy
@@ -52,21 +52,21 @@ var r2 = $.sammy.foo();
 >foo : () => string
 
 var r3 = $.sammy.bar(); // error
->r3 : any
->$.sammy.bar() : any
->$.sammy.bar : any
+>r3 : any (error)
+>$.sammy.bar() : any (error)
+>$.sammy.bar : any (error)
 >$.sammy : Sammy
 >$ : JQueryStatic
 >sammy : Sammy
->bar : any
+>bar : any (error)
 
 var r4 = $.sammy.x; // error
->r4 : any
->$.sammy.x : any
+>r4 : any (error)
+>$.sammy.x : any (error)
 >$.sammy : Sammy
 >$ : JQueryStatic
 >sammy : Sammy
->x : any
+>x : any (error)
 
 Sammy.bar();
 >Sammy.bar() : number

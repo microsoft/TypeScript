@@ -15,10 +15,10 @@ class C extends B {
 >B : B
 
   constructor(a = super.foo()) {
->a : any
->super.foo() : any
->super.foo : any
->super : any
->foo : any
+>a : any (error)
+>super.foo() : any (error)
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
   }
 }

@@ -38,9 +38,9 @@ var obj = {
 >f : () => any
 
         return this.spaaace;
->this.spaaace : any
+>this.spaaace : any (error)
 >this : { f(): any; }
->spaaace : any
+>spaaace : any (error)
     }
 };
 var obj: { f: () => any; };

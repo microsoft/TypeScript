@@ -4,7 +4,7 @@ import React = require('react');
 
 type Invalid1 = React.ComponentClass<any> | number;
 >Invalid1 : Invalid1
->React : any
+>React : any (error)
 
 const X: Invalid1 = 1;
 >X : Invalid1

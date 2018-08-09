@@ -8,7 +8,7 @@ class Vector {
 
   // 'foo' cannot be called in an unqualified manner.
   foo();
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
  }
 }

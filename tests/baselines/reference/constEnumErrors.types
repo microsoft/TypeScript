@@ -26,13 +26,13 @@ const enum E1 {
     // forward reference to the element of the same enum
     Y = E1.Z,
 >Y : E1
->E1.Z : any
+>E1.Z : any (error)
 >E1 : typeof E1
->Z : any
+>Z : any (error)
 
     Y1 = E1["Z"]
 >Y1 : E1
->E1["Z"] : any
+>E1["Z"] : any (error)
 >E1 : typeof E1
 >"Z" : "Z"
 }
@@ -45,8 +45,8 @@ const enum E2 {
 }
 
 var y0 = E2[1]
->y0 : any
->E2[1] : any
+>y0 : any (error)
+>E2[1] : any (error)
 >E2 : typeof E2
 >1 : 1
 
@@ -55,8 +55,8 @@ var name = "A";
 >"A" : "A"
 
 var y1 = E2[name];
->y1 : any
->E2[name] : any
+>y1 : any (error)
+>E2[name] : any (error)
 >E2 : typeof E2
 >name : string
 

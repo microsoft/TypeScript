@@ -9,7 +9,7 @@ type U = number;
 >U : number
 
 export type Z = U<N>;
->Z : any
+>Z : any (error)
 
 === /classReference.ts ===
 type N = number;
@@ -25,32 +25,32 @@ export class D extends C<N> {}
 
 === /interface.ts ===
 import { Foo } from "unknown";
->Foo : any
+>Foo : any (error)
 
 export interface I<T> { x: Foo<T>; }
->x : any
+>x : any (error)
 
 === /call.ts ===
 import { foo } from "unknown";
->foo : any
+>foo : any (error)
 
 type T = number;
 >T : number
 
 foo<T>();
->foo<T>() : any
->foo : any
+>foo<T>() : any (error)
+>foo : any (error)
 
 === /new.ts ===
 import { Foo } from "unkown";
->Foo : any
+>Foo : any (error)
 
 type T = number;
 >T : number
 
 new Foo<T>();
->new Foo<T>() : any
->Foo : any
+>new Foo<T>() : any (error)
+>Foo : any (error)
 
 === /callAny.ts ===
 declare var g: any;
@@ -69,31 +69,31 @@ g<InvalidReference>(); // Should get error for type argument
 
 === /super.ts ===
 import { A, B } from "unknown";
->A : any
->B : any
+>A : any (error)
+>B : any (error)
 
 type T = number;
 >T : number
 
 export class C extends A<B> {
 >C : C
->A : any
+>A : any (error)
 
     m() {
 >m : () => void
 
         super.m<T>(1);
->super.m<T>(1) : any
->super.m : any
->super : any
->m : any
+>super.m<T>(1) : any (error)
+>super.m : any (error)
+>super : any (error)
+>m : any (error)
 >1 : 1
 
         super.m<InvalidReference>(); // Should get error for type argument
->super.m<InvalidReference>() : any
->super.m : any
->super : any
->m : any
+>super.m<InvalidReference>() : any (error)
+>super.m : any (error)
+>super : any (error)
+>m : any (error)
     }
 }
 

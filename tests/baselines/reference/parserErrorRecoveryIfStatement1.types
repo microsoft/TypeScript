@@ -7,8 +7,8 @@ class Foo {
 
     if (
   }
-> : any
-> : any
+> : any (error)
+> : any (error)
 
   f2() {
 >f2 : () => void

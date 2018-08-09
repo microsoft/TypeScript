@@ -113,5 +113,5 @@ W.D;
 
 var p: W.D;
 >p : W.D
->W : any
+>W : any (error)
 

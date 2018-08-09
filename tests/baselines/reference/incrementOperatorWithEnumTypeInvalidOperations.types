@@ -14,22 +14,22 @@ enum ENUM1 { A, B, "" };
 var ResultIsNumber1 = ++ENUM;
 >ResultIsNumber1 : number
 >++ENUM : number
->ENUM : any
+>ENUM : any (error)
 
 var ResultIsNumber2 = ++ENUM1;
 >ResultIsNumber2 : number
 >++ENUM1 : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 var ResultIsNumber3 = ENUM++;
 >ResultIsNumber3 : number
 >ENUM++ : number
->ENUM : any
+>ENUM : any (error)
 
 var ResultIsNumber4 = ENUM1++;
 >ResultIsNumber4 : number
 >ENUM1++ : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 // enum type expressions
 var ResultIsNumber5 = ++(ENUM[1] + ENUM[2]);
@@ -59,17 +59,17 @@ var ResultIsNumber6 = (ENUM[1] + ENUM[2])++;
 // miss assignment operator
 ++ENUM;
 >++ENUM : number
->ENUM : any
+>ENUM : any (error)
 
 ++ENUM1;
 >++ENUM1 : number
->ENUM1 : any
+>ENUM1 : any (error)
 
 ENUM++;
 >ENUM++ : number
->ENUM : any
+>ENUM : any (error)
 
 ENUM1++;
 >ENUM1++ : number
->ENUM1 : any
+>ENUM1 : any (error)
 

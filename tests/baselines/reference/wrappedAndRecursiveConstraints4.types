@@ -39,8 +39,8 @@ var r = c.foo('');
 >'' : ""
 
 var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
->r2 : any
->r({ length: 3, charAt: (x: number) => { '' } }) : any
+>r2 : any (error)
+>r({ length: 3, charAt: (x: number) => { '' } }) : any (error)
 >r : <V extends string>(x: V) => V
 >{ length: 3, charAt: (x: number) => { '' } } : { length: number; charAt: (x: number) => void; }
 >length : number

@@ -3,6 +3,6 @@ function foo() {
 >foo : () => void
 
    bar(;
->bar( : any
->bar : any
+>bar( : any (error)
+>bar : any (error)
 }

@@ -98,52 +98,52 @@ v5.member;
 >member : string
 
 v6.member;
->v6.member : any
+>v6.member : any (error)
 >v6 : Default | Protected
->member : any
+>member : any (error)
 
 v7.member;
->v7.member : any
+>v7.member : any (error)
 >v7 : Default | Private
->member : any
+>member : any (error)
 
 v8.member;
->v8.member : any
+>v8.member : any (error)
 >v8 : Public | Protected
->member : any
+>member : any (error)
 
 v9.member;
->v9.member : any
+>v9.member : any (error)
 >v9 : Public | Private
->member : any
+>member : any (error)
 
 v10.member;
->v10.member : any
+>v10.member : any (error)
 >v10 : Protected | Private
->member : any
+>member : any (error)
 
 v11.member;
->v11.member : any
+>v11.member : any (error)
 >v11 : Default | Public | Protected
->member : any
+>member : any (error)
 
 v12.member;
->v12.member : any
+>v12.member : any (error)
 >v12 : Default | Public | Private
->member : any
+>member : any (error)
 
 v13.member;
->v13.member : any
+>v13.member : any (error)
 >v13 : Default | Protected | Private
->member : any
+>member : any (error)
 
 v14.member;
->v14.member : any
+>v14.member : any (error)
 >v14 : Public | Protected | Private
->member : any
+>member : any (error)
 
 v15.member;
->v15.member : any
+>v15.member : any (error)
 >v15 : Default | Public | Protected | Private
->member : any
+>member : any (error)
 

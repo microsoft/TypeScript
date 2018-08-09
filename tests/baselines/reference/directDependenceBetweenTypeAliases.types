@@ -3,64 +3,64 @@
 
 // A type alias directly depends on the type it aliases.
 type T0 = T0
->T0 : any
+>T0 : any (error)
 
 type T0_1 = T0_2
->T0_1 : any
+>T0_1 : any (error)
 
 type T0_2 = T0_3
->T0_2 : any
+>T0_2 : any (error)
 
 type T0_3 = T0_1
->T0_3 : any
+>T0_3 : any (error)
 
 // A type reference directly depends on the referenced type and each of the type arguments, if any.
 interface I<T> {}
 type T1 = I<T1>
->T1 : any
+>T1 : any (error)
 
 // A union type directly depends on each of the constituent types.
 type T2 = T2 | string
->T2 : any
+>T2 : any (error)
 
 class C<T> {}
 >C : C<T>
 
 type T2_1 = T2_1[] | number
->T2_1 : any
+>T2_1 : any (error)
 
 // An array type directly depends on its element type.
 type T3 = T3[]
->T3 : any
+>T3 : any (error)
 
 // A tuple type directly depends on each of its element types.
 type T4 = [number, T4]
->T4 : any
+>T4 : any (error)
 
 // A type query directly depends on the type of the referenced entity.
 var x: T5[] = []
->x : any
+>x : any (error)
 >[] : undefined[]
 
 type T5 = typeof x
->T5 : any
->x : any
+>T5 : any (error)
+>x : any (error)
 
 class C1<T> {}
 >C1 : C1<T>
 
 type T6 = T7 | number
->T6 : any
+>T6 : any (error)
 
 type T7 = typeof yy
->T7 : any
->yy : any
+>T7 : any (error)
+>yy : any (error)
 
 var yy: [string, T8[]];
->yy : any
+>yy : any (error)
 
 type T8 = C<T6>
->T8 : any
+>T8 : any (error)
 
 // legal cases
 type T9 = () => T9

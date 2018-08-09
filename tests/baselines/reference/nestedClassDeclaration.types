@@ -21,12 +21,12 @@ function foo() {
 }
 
 var x = {
->x : { class: any; }
->{    class C4 : { class: any; }
+>x : { class: any (error); }
+>{    class C4 : { class: any (error); }
 
     class C4 {
->class : any
->C4 : any
+>class : any (error)
+>C4 : any (error)
     }
 }
 

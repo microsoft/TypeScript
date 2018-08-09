@@ -36,7 +36,7 @@ var z0, z1, z2, z3;
 >z0 : number
 
     const [{a: z1}] = [{a: 1}]
->a : any
+>a : any (error)
 >z1 : number
 >[{a: 1}] : [{ a: number; }]
 >{a: 1} : { a: number; }
@@ -49,7 +49,7 @@ var z0, z1, z2, z3;
 >z1 : number
 
     const {a: z2} = { a: 1 };
->a : any
+>a : any (error)
 >z2 : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -61,8 +61,8 @@ var z0, z1, z2, z3;
 >z2 : number
 
     const {a: {b: z3}} = { a: {b: 1} };
->a : any
->b : any
+>a : any (error)
+>b : any (error)
 >z3 : number
 >{ a: {b: 1} } : { a: { b: number; }; }
 >a : { b: number; }
@@ -121,7 +121,7 @@ var y = true;
 >1 : 1
 
         const {a: z6} = { a: 1 }
->a : any
+>a : any (error)
 >z6 : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -179,7 +179,7 @@ var z5 = 1;
 >1 : 1
 
         const {a: _z5} = { a: 1 };
->a : any
+>a : any (error)
 >_z5 : number
 >{ a: 1 } : { a: number; }
 >a : number

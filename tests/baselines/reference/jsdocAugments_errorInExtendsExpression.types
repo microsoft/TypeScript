@@ -6,5 +6,5 @@ class A {}
 class B extends err() {}
 >B : B
 >err() : A
->err : any
+>err : any (error)
 

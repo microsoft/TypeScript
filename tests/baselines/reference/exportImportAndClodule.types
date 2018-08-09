@@ -51,6 +51,6 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->M : any
->D : any
+>M : any (error)
+>D : any (error)
 

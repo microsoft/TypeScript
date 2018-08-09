@@ -13,7 +13,7 @@ export interface ClickableProps {
 export interface ButtonProps extends ClickableProps {
     onClick: React.MouseEventHandler<any>;
 >onClick : React.EventHandler<React.MouseEvent<any>>
->React : any
+>React : any (error)
 }
 
 export interface LinkProps extends ClickableProps {
@@ -53,22 +53,22 @@ let obj2 = {
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >buttonProps : ButtonProps
->JSX : any
+>JSX : any (error)
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >linkProps : LinkProps
->JSX : any
+>JSX : any (error)
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >hyphenProps : HyphenProps
->JSX : any
+>JSX : any (error)
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >props : ButtonProps | LinkProps | HyphenProps
->JSX : any
+>JSX : any (error)
 
     const linkProps = props as LinkProps;
 >linkProps : LinkProps

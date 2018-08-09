@@ -15,8 +15,8 @@ module clodule1 {
 >clodule1 : typeof clodule1
 
     function f(x: T) { }
->f : (x: any) => void
->x : any
+>f : (x: any (error)) => void
+>x : any (error)
 }
 
 class clodule2<T>{
@@ -33,7 +33,7 @@ module clodule2 {
 >clodule2 : typeof clodule2
 
     var x: T;
->x : any
+>x : any (error)
 
     class D<U extends T>{
 >D : D<U>
@@ -60,10 +60,10 @@ module clodule3 {
 >clodule3 : typeof clodule3
 
     export var y = { id: T };
->y : { id: any; }
->{ id: T } : { id: any; }
->id : any
->T : any
+>y : { id: any (error); }
+>{ id: T } : { id: any (error); }
+>id : any (error)
+>T : any (error)
 }
 
 class clodule4<T>{
@@ -83,7 +83,7 @@ module clodule4 {
 >D : D
 
         name: T;
->name : any
+>name : any (error)
     }
 }
 

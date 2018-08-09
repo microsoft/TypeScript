@@ -10,21 +10,21 @@ export function foo(target: Object, propertyKey: string | symbol, parameterIndex
 
 === tests/cases/conformance/decorators/class/constructor/2.ts ===
 import {base} from "./0.ts"
->base : any
+>base : any (error)
 
 import {foo} from "./0.ts"
->foo : any
+>foo : any (error)
 
 export class C  extends base{
 >C : C
->base : any
+>base : any (error)
 
     constructor(@foo prop: any) {
->foo : any
+>foo : any (error)
 >prop : any
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 }

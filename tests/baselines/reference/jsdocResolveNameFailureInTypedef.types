@@ -3,8 +3,8 @@
  * @param {Ty} x
  */
 function f(x) {}
->f : (x: any) => void
->x : any
+>f : (x: any (error)) => void
+>x : any (error)
 
 /**
  * @typedef {CantResolveThis} Ty

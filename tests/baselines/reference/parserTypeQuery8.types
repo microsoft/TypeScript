@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/Types/parserTypeQuery8.ts ===
 var v: typeof A<B>
->v : any
->A : any
-><B> : any
-> : any
+>v : any (error)
+>A : any (error)
+><B> : any (error)
+> : any (error)
 

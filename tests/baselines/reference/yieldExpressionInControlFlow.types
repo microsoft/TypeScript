@@ -3,14 +3,14 @@ function* f() {
 >f : () => IterableIterator<any>
 
     var o
->o : any
+>o : any (auto)
 
     while (true) {
 >true : true
 
         o = yield o
 >o = yield o : any
->o : any
+>o : any (auto)
 >yield o : any
 >o : any
     }
@@ -22,7 +22,7 @@ function* g() {
 >g : () => IterableIterator<any>
 
     var o = []
->o : any[]
+>o : any (auto)[]
 >[] : undefined[]
 
     while (true) {
@@ -30,7 +30,7 @@ function* g() {
 
         o = yield* o
 >o = yield* o : any
->o : any[]
+>o : any (auto)[]
 >yield* o : any
 >o : any
     }

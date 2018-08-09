@@ -4,8 +4,8 @@ class C<T> { }
 >C : C<T>
 
 var i: I;
->i : any
+>i : any (error)
 
 var c: C<I>;
->c : C<any>
+>c : C<any (error)>
 

@@ -8,8 +8,8 @@ export function MyComponent(props: any) {
 
     return <span>my component</span>;
 ><span>my component</span> : JSX.Element
->span : any
->span : any
+>span : any (error)
+>span : any (error)
 }
 
 === tests/cases/compiler/file1.tsx ===
@@ -48,13 +48,13 @@ class RenderString extends React.PureComponent<any, any> {
 
         <span>{ MY_STRING }</span>
 ><span>{ MY_STRING }</span> : JSX.Element
->span : any
+>span : any (error)
 >MY_STRING : string
->span : any
+>span : any (error)
 
         <span className={ MY_CLASSNAME } />
 ><span className={ MY_CLASSNAME } /> : JSX.Element
->span : any
+>span : any (error)
 >className : string
 >MY_CLASSNAME : string
 

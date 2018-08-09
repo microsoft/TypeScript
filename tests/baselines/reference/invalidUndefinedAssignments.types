@@ -9,14 +9,14 @@ enum E { A }
 
 E = x;
 >E = x : any
->E : any
+>E : any (error)
 >x : any
 
 E.A = x;
 >E.A = x : any
->E.A : any
+>E.A : any (error)
 >E : typeof E
->A : any
+>A : any (error)
 >x : any
 
 class C { foo: string }
@@ -28,7 +28,7 @@ var f: C;
 
 C = x;
 >C = x : any
->C : any
+>C : any (error)
 >x : any
 
 interface I { foo: string }
@@ -44,7 +44,7 @@ g = x;
 
 I = x;
 >I = x : any
->I : any
+>I : any (error)
 >x : any
 
 module M { export var x = 1; }
@@ -54,7 +54,7 @@ module M { export var x = 1; }
 
 M = x;
 >M = x : any
->M : any
+>M : any (error)
 >x : any
 
 function i<T>(a: T) { }
@@ -64,6 +64,6 @@ function i<T>(a: T) { }
 // BUG 767030
 i = x; 
 >i = x : any
->i : any
+>i : any (error)
 >x : any
 

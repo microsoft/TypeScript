@@ -13,38 +13,38 @@ interface I<T> {
 }
 
 var c1: C;
->c1 : any
+>c1 : any (error)
 
 var i1: I;
->i1 : any
+>i1 : any (error)
 
 var c2: C<I>;
->c2 : C<any>
+>c2 : C<any (error)>
 
 var i2: I<C>;
->i2 : I<any>
+>i2 : I<any (error)>
 
 function foo(x: C, y: I) { }
->foo : (x: any, y: any) => void
->x : any
->y : any
+>foo : (x: any (error), y: any (error)) => void
+>x : any (error)
+>y : any (error)
 
 function foo2(x: C<I>, y: I<C>) { }
->foo2 : (x: C<any>, y: I<any>) => void
->x : C<any>
->y : I<any>
+>foo2 : (x: C<any (error)>, y: I<any (error)>) => void
+>x : C<any (error)>
+>y : I<any (error)>
 
 var x: { a: C } = { a: new C<number>() };
->x : { a: any; }
->a : any
+>x : { a: any (error); }
+>a : any (error)
 >{ a: new C<number>() } : { a: C<number>; }
 >a : C<number>
 >new C<number>() : C<number>
 >C : typeof C
 
 var x2: { a: I } = { a: { bar() { return 1 } } };
->x2 : { a: any; }
->a : any
+>x2 : { a: any (error); }
+>a : any (error)
 >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
 >a : { bar(): number; }
 >{ bar() { return 1 } } : { bar(): number; }
@@ -55,25 +55,25 @@ class D<T> {
 >D : D<T>
 
     x: C;
->x : any
+>x : any (error)
 
     y: D;
->y : any
+>y : any (error)
 }
 
 interface J<T> {
     x: I;
->x : any
+>x : any (error)
 
     y: J;
->y : any
+>y : any (error)
 }
 
 class A<T> { }
 >A : A<T>
 
 function f<T>(x: T): A {
->f : <T>(x: T) => any
+>f : <T>(x: T) => any (error)
 >x : T
 
     return null;

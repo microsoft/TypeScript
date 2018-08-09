@@ -5,6 +5,6 @@ class f { }
 
 f += '';
 >f += '' : string
->f : any
+>f : any (error)
 >'' : ""
 

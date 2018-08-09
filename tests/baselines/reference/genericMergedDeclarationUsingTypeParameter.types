@@ -9,11 +9,11 @@ module foo {
 >foo : typeof foo
 
     export var x: T;
->x : any
+>x : any (error)
 
     var y = <T>1;
->y : any
-><T>1 : any
+>y : any (error)
+><T>1 : any (error)
 >1 : 1
 }
 

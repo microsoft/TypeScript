@@ -10,7 +10,7 @@ declare module "A" {
 >"A" : typeof import("A")
 
     global {
->global : any
+>global : any (error)
 
         interface Something {x}
 >x : any
@@ -21,7 +21,7 @@ declare module "B" {
 >"B" : typeof import("B")
 
     global {
->global : any
+>global : any (error)
 
         interface Something {y}
 >y : any

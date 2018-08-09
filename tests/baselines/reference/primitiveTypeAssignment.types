@@ -1,13 +1,13 @@
 === tests/cases/compiler/primitiveTypeAssignment.ts ===
 var x = any;
->x : any
->any : any
+>x : any (error)
+>any : any (error)
 
 var y = number;
->y : any
->number : any
+>y : any (error)
+>number : any (error)
 
 var z = boolean;
->z : any
->boolean : any
+>z : any (error)
+>boolean : any (error)
 

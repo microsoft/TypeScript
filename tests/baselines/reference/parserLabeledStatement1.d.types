@@ -1,8 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/parserLabeledStatement1.d.ts ===
 foo:
->foo : any
+>foo : any (error)
 
   bar();
->bar() : any
->bar : any
+>bar() : any (error)
+>bar : any (error)
 

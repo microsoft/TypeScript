@@ -76,7 +76,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 }
 
 loop:
->loop : any
+>loop : any (error)
 
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
@@ -107,7 +107,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 >1 : 1
 
         break loop;
->loop : any
+>loop : any (error)
     }
     else {
         y = 5;
@@ -118,7 +118,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 }
 
 loop:
->loop : any
+>loop : any (error)
 
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
@@ -149,7 +149,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 >1 : 1
 
         continue loop;
->loop : any
+>loop : any (error)
     }
     else {
         y = 5;

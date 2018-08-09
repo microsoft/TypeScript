@@ -2,9 +2,9 @@
 new <T>Foo()
 >new <T>Foo() : boolean
 >new <T : boolean
->new : any
-> : any
->T : any
->Foo() : any
->Foo : any
+>new : any (error)
+> : any (error)
+>T : any (error)
+>Foo() : any (error)
+>Foo : any (error)
 

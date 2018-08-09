@@ -39,7 +39,7 @@ module C {
 
     var p: a.Point;
 >p : a.Point
->a : any
+>a : any (error)
 
     var p = {x:0, y:0 };
 >p : a.Point
@@ -78,7 +78,7 @@ module E {
     export function xDist(x: a.Point) {
 >xDist : (x: a.Point) => number
 >x : a.Point
->a : any
+>a : any (error)
 
         return (a.Origin.x - x.x);
 >(a.Origin.x - x.x) : number

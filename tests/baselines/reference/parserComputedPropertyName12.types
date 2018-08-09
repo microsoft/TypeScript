@@ -4,5 +4,5 @@ class C {
 
    [e]() { }
 >[e] : () => void
->e : any
+>e : any (error)
 }

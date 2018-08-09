@@ -1,6 +1,6 @@
 === tests/cases/compiler/nullKeyword.ts ===
 null.foo;
->null.foo : any
+>null.foo : any (error)
 >null : null
->foo : any
+>foo : any (error)
 

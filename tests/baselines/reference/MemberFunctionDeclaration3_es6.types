@@ -4,5 +4,5 @@ class C {
 
    *[foo]() { }
 >[foo] : () => IterableIterator<any>
->foo : any
+>foo : any (error)
 }

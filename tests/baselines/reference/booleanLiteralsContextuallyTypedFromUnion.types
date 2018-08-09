@@ -72,8 +72,8 @@ let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
 >_props : ComponentProps
 ><div>Hello</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
 >Fail1 : () => JSX.Element

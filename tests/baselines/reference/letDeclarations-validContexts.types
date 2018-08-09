@@ -36,8 +36,8 @@ with (obj) {
 >obj : any
 
     let l5 = 0;
->l5 : any
->0 : any
+>l5 : any (error)
+>0 : any (error)
 }
 
 for (var i = 0; i < 10; i++) {
@@ -67,7 +67,7 @@ if (true) {
 >true : true
 
     label: let l8 = 0;
->label : any
+>label : any (error)
 >l8 : number
 >0 : 0
 }
@@ -76,9 +76,9 @@ while (false) {
 >false : false
 
     label2: label3: label4: let l9 = 0;
->label2 : any
->label3 : any
->label4 : any
+>label2 : any (error)
+>label3 : any (error)
+>label4 : any (error)
 >l9 : number
 >0 : 0
 }
@@ -133,7 +133,7 @@ switch (0) {
 >0 : 0
 
         label17: let l17 = 0;
->label17 : any
+>label17 : any (error)
 >l17 : number
 >0 : 0
     }
@@ -252,12 +252,12 @@ var o = {
 
 // labels
 label: let l30 = 0;
->label : any
+>label : any (error)
 >l30 : number
 >0 : 0
 {
     label2: let l31 = 0;
->label2 : any
+>label2 : any (error)
 >l31 : number
 >0 : 0
 }
@@ -266,12 +266,12 @@ function f3() {
 >f3 : () => void
 
     label: let l32 = 0;
->label : any
+>label : any (error)
 >l32 : number
 >0 : 0
     {
         label2: let l33 = 0;
->label2 : any
+>label2 : any (error)
 >l33 : number
 >0 : 0
     }
@@ -281,12 +281,12 @@ module m3 {
 >m3 : typeof m3
 
     label: let l34 = 0;
->label : any
+>label : any (error)
 >l34 : number
 >0 : 0
     {
         label2: let l35 = 0;
->label2 : any
+>label2 : any (error)
 >l35 : number
 >0 : 0
     }

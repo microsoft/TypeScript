@@ -17,7 +17,7 @@ declare class Component<P, S> {
 }
 
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
         interface Element  { }

@@ -22,7 +22,7 @@ let magnitude = m.getLength(v);
 
 let p: m.Point = v.translate(5, 5);
 >p : m.Point
->m : any
+>m : any (error)
 >v.translate(5, 5) : m.Vector
 >v.translate : (dx: number, dy: number) => m.Vector
 >v : m.Vector
@@ -100,7 +100,7 @@ declare module 'math2d' {
 	interface Vector {
 		reverse(): Math2d.Point;
 >reverse : () => Point
->Math2d : any
+>Math2d : any (error)
 	}
 }
 

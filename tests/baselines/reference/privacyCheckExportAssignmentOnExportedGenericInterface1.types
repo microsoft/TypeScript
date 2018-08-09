@@ -7,7 +7,7 @@ interface Foo<T> {
 }
 var Foo: new () => Foo.A<Foo<string>>;
 >Foo : new () => Foo.A<Foo<string>>
->Foo : any
+>Foo : any (error)
 
 export = Foo;
 >Foo : Foo<T>

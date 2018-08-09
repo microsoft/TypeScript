@@ -21,18 +21,18 @@ let c = new C();
 >C : typeof C
 
 c.known.length; // error, 'known' has no 'length' property
->c.known.length : any
+>c.known.length : any (error)
 >c.known : number
 >c : C
 >known : number
->length : any
+>length : any (error)
 
 C.sknown.length; // error, 'sknown' has no 'length' property
->C.sknown.length : any
+>C.sknown.length : any (error)
 >C.sknown : number
 >C : typeof C
 >sknown : number
->length : any
+>length : any (error)
 
 c.unknown.length; // ok, unknown: any
 >c.unknown.length : any

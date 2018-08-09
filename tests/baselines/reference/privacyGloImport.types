@@ -251,7 +251,7 @@ declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v1_public: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_public : new () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     export var use_glo_M1_public_v2_public: typeof use_glo_M1_public;
 >use_glo_M1_public_v2_public : typeof use_glo_M1_public
@@ -259,11 +259,11 @@ declare module "use_glo_M1_public" {
 
     export var use_glo_M1_public_v3_public: ()=> use_glo_M1_public.c1;
 >use_glo_M1_public_v3_public : () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     var use_glo_M1_public_v1_private: { new (): use_glo_M1_public.c1; };
 >use_glo_M1_public_v1_private : new () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     var use_glo_M1_public_v2_private: typeof use_glo_M1_public;
 >use_glo_M1_public_v2_private : typeof use_glo_M1_public
@@ -271,14 +271,14 @@ declare module "use_glo_M1_public" {
 
     var use_glo_M1_public_v3_private: () => use_glo_M1_public.c1;
 >use_glo_M1_public_v3_private : () => use_glo_M1_public.c1
->use_glo_M1_public : any
+>use_glo_M1_public : any (error)
 
     import use_glo_M2_public = require("glo_M2_public");
 >use_glo_M2_public : typeof use_glo_M2_public
 
     export var use_glo_M2_public_v1_public: { new (): use_glo_M2_public.c1; };
 >use_glo_M2_public_v1_public : new () => use_glo_M2_public.c1
->use_glo_M2_public : any
+>use_glo_M2_public : any (error)
 
     export var use_glo_M2_public_v2_public: typeof use_glo_M2_public;
 >use_glo_M2_public_v2_public : typeof use_glo_M2_public
@@ -286,11 +286,11 @@ declare module "use_glo_M1_public" {
 
     export var use_glo_M2_public_v3_public: () => use_glo_M2_public.c1;
 >use_glo_M2_public_v3_public : () => use_glo_M2_public.c1
->use_glo_M2_public : any
+>use_glo_M2_public : any (error)
 
     var use_glo_M2_public_v1_private: { new (): use_glo_M2_public.c1; };
 >use_glo_M2_public_v1_private : new () => use_glo_M2_public.c1
->use_glo_M2_public : any
+>use_glo_M2_public : any (error)
 
     var use_glo_M2_public_v2_private: typeof use_glo_M2_public;
 >use_glo_M2_public_v2_private : typeof use_glo_M2_public
@@ -298,7 +298,7 @@ declare module "use_glo_M1_public" {
 
     var use_glo_M2_public_v3_private: () => use_glo_M2_public.c1;
 >use_glo_M2_public_v3_private : () => use_glo_M2_public.c1
->use_glo_M2_public : any
+>use_glo_M2_public : any (error)
 
     module m2 {
         //import errorImport = require("glo_M2_public");

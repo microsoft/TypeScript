@@ -1,6 +1,6 @@
 === tests/cases/compiler/continueNotInIterationStatement4.ts ===
 TWO:
->TWO : any
+>TWO : any (error)
 
 while (true){
 >true : true
@@ -10,7 +10,7 @@ while (true){
 >() => {    continue TWO;  } : () => void
 
     continue TWO;
->TWO : any
+>TWO : any (error)
   }
 }
 

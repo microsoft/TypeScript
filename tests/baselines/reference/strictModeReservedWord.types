@@ -59,38 +59,38 @@ function foo() {
 >public : number
 
     var b: public.bar;
->b : any
->public : any
+>b : any (error)
+>public : any (error)
 
     function foo(x: private.x) { }
->foo : (x: any) => void
->x : any
->private : any
+>foo : (x: any (error)) => void
+>x : any (error)
+>private : any (error)
 
     function foo1(x: private.package.x) { }
->foo1 : (x: any) => void
->x : any
->private : any
->package : any
+>foo1 : (x: any (error)) => void
+>x : any (error)
+>private : any (error)
+>package : any (error)
 
     function foo2(x: private.package.protected) { }
->foo2 : (x: any) => void
->x : any
->private : any
->package : any
+>foo2 : (x: any (error)) => void
+>x : any (error)
+>private : any (error)
+>package : any (error)
 
     let b: interface.package.implements.B;
->b : any
->interface : any
->package : any
->implements : any
+>b : any (error)
+>interface : any (error)
+>package : any (error)
+>implements : any (error)
 
     ublic();
->ublic() : any
->ublic : any
+>ublic() : any (error)
+>ublic : any (error)
 
     static();
->static() : any
+>static() : any (error)
 >static : string
 }
 

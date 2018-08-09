@@ -16,9 +16,9 @@ var test2 = new <any>Test2();
 >test2 : boolean
 >new <any>Test2() : boolean
 >new <any : boolean
->new : any
-> : any
->any : any
+>new : any (error)
+> : any (error)
+>any : any (error)
 >Test2() : void
 >Test2 : () => void
 

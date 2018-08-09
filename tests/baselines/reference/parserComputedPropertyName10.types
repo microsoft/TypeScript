@@ -4,6 +4,6 @@ class C {
 
    [e] = 1
 >[e] : number
->e : any
+>e : any (error)
 >1 : 1
 }

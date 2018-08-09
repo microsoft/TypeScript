@@ -5,19 +5,19 @@ var elemA = 42;
 
 === tests/cases/compiler/b.jsx ===
 var elemB = <b>{"test"}</b>;
->elemB : any
-><b>{"test"}</b> : any
->b : any
+>elemB : any (error)
+><b>{"test"}</b> : any (error)
+>b : any (error)
 >"test" : "test"
->b : any
+>b : any (error)
 
 === tests/cases/compiler/c.js ===
 var elemC = <c>{42}</c>;
->elemC : any
-><c>{42}</c> : any
->c : any
+>elemC : any (error)
+><c>{42}</c> : any (error)
+>c : any (error)
 >42 : 42
->c : any
+>c : any (error)
 
 === tests/cases/compiler/d.ts ===
 var elemD = 42;
@@ -26,9 +26,9 @@ var elemD = 42;
 
 === tests/cases/compiler/e.tsx ===
 var elemE = <e>{true}</e>;
->elemE : any
-><e>{true}</e> : any
->e : any
+>elemE : any (error)
+><e>{true}</e> : any (error)
+>e : any (error)
 >true : true
->e : any
+>e : any (error)
 

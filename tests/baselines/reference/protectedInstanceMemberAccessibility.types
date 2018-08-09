@@ -43,10 +43,10 @@ class B extends A {
 >y : string
 
         var t4 = this.z;     // error
->t4 : any
->this.z : any
+>t4 : any (error)
+>this.z : any (error)
 >this : this
->z : any
+>z : any (error)
 
         var s1 = super.x;    // error
 >s1 : string
@@ -62,16 +62,16 @@ class B extends A {
 >f : () => string
 
         var s3 = super.y;    // error
->s3 : any
->super.y : any
+>s3 : any (error)
+>super.y : any (error)
 >super : A
->y : any
+>y : any (error)
 
         var s4 = super.z;    // error
->s4 : any
->super.z : any
+>s4 : any (error)
+>super.z : any (error)
 >super : A
->z : any
+>z : any (error)
 
         var a: A;
 >a : A
@@ -90,16 +90,16 @@ class B extends A {
 >f : () => string
 
         var a3 = a.y;    // error
->a3 : any
->a.y : any
+>a3 : any (error)
+>a.y : any (error)
 >a : A
->y : any
+>y : any (error)
 
         var a4 = a.z;    // error
->a4 : any
->a.z : any
+>a4 : any (error)
+>a.z : any (error)
 >a : A
->z : any
+>z : any (error)
 
         var b: B;
 >b : B
@@ -124,10 +124,10 @@ class B extends A {
 >y : string
 
         var b4 = b.z;    // error
->b4 : any
->b.z : any
+>b4 : any (error)
+>b.z : any (error)
 >b : B
->z : any
+>z : any (error)
 
         var c: C;
 >c : C
@@ -146,10 +146,10 @@ class B extends A {
 >f : () => string
 
         var c3 = c.y;    // error
->c3 : any
->c.y : any
+>c3 : any (error)
+>c.y : any (error)
 >c : C
->y : any
+>y : any (error)
 
         var c4 = c.z;    // error
 >c4 : string

@@ -12,7 +12,7 @@ interface HTMLElement {
 >isDisabled : boolean
 }
 function getMaxWidth(elementNames: string[]) {
->getMaxWidth : (elementNames: string[]) => any
+>getMaxWidth : (elementNames: string[]) => any (error)
 >elementNames : string[]
 
     var elements = elementNames.map(function (name) {
@@ -49,40 +49,40 @@ function getMaxWidth(elementNames: string[]) {
 
     });
     var widths = enabled.map(function (e) {
->widths : any[]
->enabled.map(function (e) {        return e.xyxyxyx;  // error expected here    }) : any[]
+>widths : any (error)[]
+>enabled.map(function (e) {        return e.xyxyxyx;  // error expected here    }) : any (error)[]
 >enabled.map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
 >enabled : HTMLElement[]
 >map : <U>(callbackfn: (value: HTMLElement, index: number, array: HTMLElement[]) => U, thisArg?: any) => U[]
->function (e) {        return e.xyxyxyx;  // error expected here    } : (e: HTMLElement) => any
+>function (e) {        return e.xyxyxyx;  // error expected here    } : (e: HTMLElement) => any (error)
 >e : HTMLElement
 
         return e.xyxyxyx;  // error expected here
->e.xyxyxyx : any
+>e.xyxyxyx : any (error)
 >e : HTMLElement
->xyxyxyx : any
+>xyxyxyx : any (error)
 
     });
     var maxWidth = widths.reduce(function (a, b) {
->maxWidth : any
->widths.reduce(function (a, b) {        return a > b ? a : b;    }) : any
->widths.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->widths : any[]
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->function (a, b) {        return a > b ? a : b;    } : (a: any, b: any) => any
->a : any
->b : any
+>maxWidth : any (error)
+>widths.reduce(function (a, b) {        return a > b ? a : b;    }) : any (error)
+>widths.reduce : { (callbackfn: (previousValue: any (error), currentValue: any (error), currentIndex: number, array: any (error)[]) => any (error)): any (error); (callbackfn: (previousValue: any (error), currentValue: any (error), currentIndex: number, array: any (error)[]) => any (error), initialValue: any (error)): any (error); <U>(callbackfn: (previousValue: U, currentValue: any (error), currentIndex: number, array: any (error)[]) => U, initialValue: U): U; }
+>widths : any (error)[]
+>reduce : { (callbackfn: (previousValue: any (error), currentValue: any (error), currentIndex: number, array: any (error)[]) => any (error)): any (error); (callbackfn: (previousValue: any (error), currentValue: any (error), currentIndex: number, array: any (error)[]) => any (error), initialValue: any (error)): any (error); <U>(callbackfn: (previousValue: U, currentValue: any (error), currentIndex: number, array: any (error)[]) => U, initialValue: U): U; }
+>function (a, b) {        return a > b ? a : b;    } : (a: any (error), b: any (error)) => any
+>a : any (error)
+>b : any (error)
 
         return a > b ? a : b;
 >a > b ? a : b : any
 >a > b : boolean
->a : any
->b : any
->a : any
->b : any
+>a : any (error)
+>b : any (error)
+>a : any (error)
+>b : any (error)
 
     });
     return maxWidth;
->maxWidth : any
+>maxWidth : any (error)
 }
 

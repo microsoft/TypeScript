@@ -9,9 +9,9 @@ foo.x // found in index.d.ts
 >x : number
 
 foo.y // ignored from shortid/index.js
->foo.y : any
+>foo.y : any (error)
 >foo : typeof foo
->y : any
+>y : any (error)
 
 
 === /typings/index.d.ts ===

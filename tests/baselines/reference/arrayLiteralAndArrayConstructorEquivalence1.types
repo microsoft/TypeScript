@@ -11,7 +11,7 @@ var myCars3 = new Array({});
 >{} : {}
 
 var myCars4: Array; // error
->myCars4 : any
+>myCars4 : any (error)
 
 var myCars5: Array<any>[];
 >myCars5 : any[][]
@@ -22,9 +22,9 @@ myCars = myCars3;
 >myCars3 : {}[]
 
 myCars = myCars4;
->myCars = myCars4 : any
+>myCars = myCars4 : any (error)
 >myCars : any[]
->myCars4 : any
+>myCars4 : any (error)
 
 myCars = myCars5;
 >myCars = myCars5 : any[][]
@@ -37,9 +37,9 @@ myCars3 = myCars;
 >myCars : any[]
 
 myCars3 = myCars4;
->myCars3 = myCars4 : any
+>myCars3 = myCars4 : any (error)
 >myCars3 : {}[]
->myCars4 : any
+>myCars4 : any (error)
 
 myCars3 = myCars5;   
 >myCars3 = myCars5 : any[][]

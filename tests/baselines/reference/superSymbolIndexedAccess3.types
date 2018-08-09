@@ -24,12 +24,12 @@ class Bar extends Foo {
 >Foo : Foo
 
     [symbol]() {
->[symbol] : () => any
+>[symbol] : () => any (error)
 >symbol : symbol
 
         return super[Bar]();
->super[Bar]() : any
->super[Bar] : any
+>super[Bar]() : any (error)
+>super[Bar] : any (error)
 >super : Foo
 >Bar : typeof Bar
     }

@@ -6,10 +6,10 @@ module M {
 }
 
 var m = M; // Error, not instantiated can not be used as var
->m : any
->M : any
+>m : any (error)
+>M : any (error)
 
 var x: typeof M; // Error only a namespace
->x : any
->M : any
+>x : any (error)
+>M : any (error)
 

@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/0.js ===
 // @ts-check
 var lol;
->lol : any
+>lol : any (auto)
 
 const obj = {
 >obj : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
@@ -44,7 +44,7 @@ const obj = {
 }
 lol = "string"
 >lol = "string" : "string"
->lol : any
+>lol : any (auto)
 >"string" : "string"
 
 /** @type {string} */

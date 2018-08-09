@@ -4,5 +4,5 @@ class C {
 
     [public ]: string;
 >[public ] : string
->public : any
+>public : any (error)
 }

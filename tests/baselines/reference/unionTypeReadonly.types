@@ -24,9 +24,9 @@ let base: Base;
 
 base.value = 12 // error, lhs can't be a readonly property
 >base.value = 12 : 12
->base.value : any
+>base.value : any (error)
 >base : Base
->value : any
+>value : any (error)
 >12 : 12
 
 let identical: Base | Identical;
@@ -34,9 +34,9 @@ let identical: Base | Identical;
 
 identical.value = 12; // error, lhs can't be a readonly property
 >identical.value = 12 : 12
->identical.value : any
+>identical.value : any (error)
 >identical : Base | Identical
->value : any
+>value : any (error)
 >12 : 12
 
 let mutable: Base | Mutable;
@@ -44,9 +44,9 @@ let mutable: Base | Mutable;
 
 mutable.value = 12; // error, lhs can't be a readonly property
 >mutable.value = 12 : 12
->mutable.value : any
+>mutable.value : any (error)
 >mutable : Base | Mutable
->value : any
+>value : any (error)
 >12 : 12
 
 let differentType: Base | DifferentType;
@@ -54,9 +54,9 @@ let differentType: Base | DifferentType;
 
 differentType.value = 12; // error, lhs can't be a readonly property
 >differentType.value = 12 : 12
->differentType.value : any
+>differentType.value : any (error)
 >differentType : Base | DifferentType
->value : any
+>value : any (error)
 >12 : 12
 
 let differentName: Base | DifferentName;
@@ -64,9 +64,9 @@ let differentName: Base | DifferentName;
 
 differentName.value = 12; // error, property 'value' doesn't exist
 >differentName.value = 12 : 12
->differentName.value : any
+>differentName.value : any (error)
 >differentName : Base | DifferentName
->value : any
+>value : any (error)
 >12 : 12
 
 

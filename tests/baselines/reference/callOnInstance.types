@@ -13,9 +13,9 @@ var s1: string = D(); // OK
 
 var s2: string = (new D(1))();
 >s2 : string
->(new D(1))() : any
->(new D(1)) : any
->new D(1) : any
+>(new D(1))() : any (error)
+>(new D(1)) : any (error)
+>new D(1) : any (error)
 >D : () => string
 >1 : 1
 
@@ -24,7 +24,7 @@ declare class C { constructor(value: number); }
 >value : number
 
 (new C(1))(); // Error for calling an instance
->(new C(1))() : any
+>(new C(1))() : any (error)
 >(new C(1)) : C
 >new C(1) : C
 >C : typeof C

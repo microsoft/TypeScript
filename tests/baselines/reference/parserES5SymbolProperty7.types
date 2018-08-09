@@ -4,7 +4,7 @@ class C {
 
     [Symbol.toStringTag](): void { }
 >[Symbol.toStringTag] : () => void
->Symbol.toStringTag : any
->Symbol : any
->toStringTag : any
+>Symbol.toStringTag : any (error)
+>Symbol : any (error)
+>toStringTag : any (error)
 }

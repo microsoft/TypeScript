@@ -9,10 +9,10 @@ var array = [{ x: "", y: 0 }]
 >0 : 0
 
 for (var {x: a = "", y: b = true} of array) {
->x : any
+>x : any (error)
 >a : string
 >"" : ""
->y : any
+>y : any (error)
 >b : number | true
 >true : true
 >array : { x: string; y: number; }[]

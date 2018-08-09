@@ -15,6 +15,6 @@ function x3(callback: (x: any) => number) {
 >x : any
 
     cb();
->cb() : any
->cb : any
+>cb() : any (error)
+>cb : any (error)
 }

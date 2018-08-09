@@ -6,9 +6,9 @@ class Foo {
 >f1 : () => void
 
     if (a
->a : any
+>a : any (error)
   }
-> : any
+> : any (error)
 
   f2() {
 >f2 : () => void

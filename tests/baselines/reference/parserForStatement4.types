@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement4.ts ===
 for (a = 1 in b) {
 >a = 1 : 1
->a : any
+>a : any (error)
 >1 : 1
->b : any
+>b : any (error)
 }

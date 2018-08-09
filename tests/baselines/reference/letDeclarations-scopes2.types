@@ -15,7 +15,7 @@ let global = 0;
 >global : number
 
     local2; // Error
->local2 : any
+>local2 : any (error)
 
     {
         let local2 = 0;
@@ -39,15 +39,15 @@ let global = 0;
 >global : number
 
     local2; // Error
->local2 : any
+>local2 : any (error)
 }
 
 local;  // Error
->local : any
+>local : any (error)
 
 global; // OK
 >global : number
 
 local2; // Error
->local2 : any
+>local2 : any (error)
 

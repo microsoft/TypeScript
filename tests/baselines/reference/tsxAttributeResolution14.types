@@ -24,8 +24,8 @@ function VerticalNavMenuItem(prop: IProps) {
 
   return <div>props.primaryText</div>
 ><div>props.primaryText</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 }
 
 function VerticalNav() {
@@ -36,7 +36,7 @@ function VerticalNav() {
 
     <div>
 ><div>      <VerticalNavMenuItem primaryText={2} />  // error      <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok      <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error    </div> : JSX.Element
->div : any
+>div : any (error)
 
       <VerticalNavMenuItem primaryText={2} />  // error
 ><VerticalNavMenuItem primaryText={2} /> : JSX.Element
@@ -61,7 +61,7 @@ function VerticalNav() {
 >"hello" : "hello"
 
     </div>
->div : any
+>div : any (error)
 
   )
 } 

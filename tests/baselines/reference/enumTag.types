@@ -104,11 +104,11 @@ function consume(t,s,f) {
 >START : string
 
     v = Target.UNKNOWN // error, can't find 'UNKNOWN'
->v = Target.UNKNOWN : any
+>v = Target.UNKNOWN : any (error)
 >v : string
->Target.UNKNOWN : any
+>Target.UNKNOWN : any (error)
 >Target : { START: string; MIDDLE: string; END: string; MISTAKE: number; OK_I_GUESS: number; }
->UNKNOWN : any
+>UNKNOWN : any (error)
 
     v = Second.MISTAKE // meh..ok, I guess?
 >v = Second.MISTAKE : string

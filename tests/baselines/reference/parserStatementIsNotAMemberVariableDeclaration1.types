@@ -11,8 +11,8 @@ return {
     // 'private' should not be considered a member variable here.
     private[key] = value;
 >private[key] = value : any
->private[key] : any
->private : any
+>private[key] : any (error)
+>private : any (error)
 >key : any
 >value : any
 

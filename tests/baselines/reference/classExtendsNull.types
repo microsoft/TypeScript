@@ -6,7 +6,7 @@ class C extends null {
     constructor() {
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return Object.create(null);
 >Object.create(null) : any

@@ -3,13 +3,13 @@ if (true)
 >true : true
 
     f();
->f() : any
->f : any
+>f() : any (error)
+>f : any (error)
 
 else
     f();
->f() : any
->f : any
+>f() : any (error)
+>f : any (error)
 
 function foo(): boolean {
 >foo : () => boolean

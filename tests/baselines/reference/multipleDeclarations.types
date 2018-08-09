@@ -19,10 +19,10 @@ C.prototype.m = function() {
 >function() {    this.nothing();} : () => void
 
     this.nothing();
->this.nothing() : any
->this.nothing : any
+>this.nothing() : any (error)
+>this.nothing : any (error)
 >this : C
->nothing : any
+>nothing : any (error)
 }
 class X {
 >X : X

@@ -11,7 +11,7 @@ module M {
 }
 
 new M.A;
->new M.A : any
+>new M.A : any (error)
 >M.A : typeof M.A
 >M : typeof M
 >A : typeof M.A

@@ -4,9 +4,9 @@ declare module "m" {
 >"m" : typeof import("m")
 
     export { X };
->X : any
+>X : any (error)
 
     export function foo(): X.bar;
 >foo : () => X.bar
->X : any
+>X : any (error)
 }

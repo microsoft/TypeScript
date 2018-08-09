@@ -37,15 +37,15 @@ function foo1(
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }?: Robot) => void
     {
         skills: {
->skills : any
+>skills : any (error)
 
             primary: primaryA = "primary",
->primary : any
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
 
             secondary: secondaryA = "secondary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -70,20 +70,20 @@ function foo2(
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }?: Robot) => void
     {
         name: nameC = "name",
->name : any
+>name : any (error)
 >nameC : string
 >"name" : "name"
 
         skills: {
->skills : any
+>skills : any (error)
 
             primary: primaryB = "primary",
->primary : any
+>primary : any (error)
 >primaryB : string
 >"primary" : "primary"
 
             secondary: secondaryB = "secondary"
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 >"secondary" : "secondary"
 

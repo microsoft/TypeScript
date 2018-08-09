@@ -211,8 +211,8 @@ module Services {
         makeRequest(options: WinJS.IXHROptions): WinJS.Promise;
 >makeRequest : (options: WinJS.IXHROptions) => WinJS.Promise
 >options : WinJS.IXHROptions
->WinJS : any
->WinJS : any
+>WinJS : any (error)
+>WinJS : any (error)
     }
 }
 
@@ -255,12 +255,12 @@ class FileService {
 
     private requestService: Services.IRequestService;
 >requestService : Services.IRequestService
->Services : any
+>Services : any (error)
 
     public uploadData(): WinJS.TPromise<Files.IUploadResult> {
 >uploadData : () => WinJS.TPromise<Files.IUploadResult>
->WinJS : any
->Files : any
+>WinJS : any (error)
+>Files : any (error)
 
         var path = "";
 >path : string
@@ -306,16 +306,16 @@ class FileService {
 >response : XMLHttpRequest
 
                 var result: IUploadResult = { // This should be error
->result : any
->{ // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                } : { stat: any; isNew: boolean; }
+>result : any (error)
+>{ // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                } : { stat: any (error); isNew: boolean; }
 
                     stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
->stat : any
->this.jsonToStat(newFilePath, "someString") : any
->this.jsonToStat : any
+>stat : any (error)
+>this.jsonToStat(newFilePath, "someString") : any (error)
+>this.jsonToStat : any (error)
 >this : this
->jsonToStat : any
->newFilePath : any
+>jsonToStat : any (error)
+>newFilePath : any (error)
 >"someString" : "someString"
 
                     isNew: response.status === 201
@@ -335,8 +335,8 @@ class FileService {
 >WinJS : typeof WinJS
 >TPromise : typeof WinJS.TPromise
 >as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
->Files : any
->result : any
+>Files : any (error)
+>result : any (error)
 
             }, (xhr: XMLHttpRequest) => {
 >(xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            } : (xhr: XMLHttpRequest) => WinJS.Promise

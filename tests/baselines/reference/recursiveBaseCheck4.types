@@ -4,9 +4,9 @@ class M<T> extends M<string> { }
 >M : typeof M
 
 (new M).blah;
->(new M).blah : any
+>(new M).blah : any (error)
 >(new M) : M<{}>
 >new M : M<{}>
 >M : typeof M
->blah : any
+>blah : any (error)
 

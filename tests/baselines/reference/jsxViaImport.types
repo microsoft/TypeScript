@@ -10,10 +10,10 @@ class TestComponent extends React.Component<any, {}> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => any (error)
 
         return <BaseComponent />;
-><BaseComponent /> : any
+><BaseComponent /> : any (error)
 >BaseComponent : React.Component<any, {}>
     }
 }
@@ -34,7 +34,7 @@ declare module "BaseComponent" {
 
     var base: React.Component<any, {}>;
 >base : React.Component<any, {}>
->React : any
+>React : any (error)
 
     export = base;
 >base : React.Component<any, {}>

@@ -3,5 +3,5 @@ var v = { [e]() { } };
 >v : { [x: number]: () => void; }
 >{ [e]() { } } : { [x: number]: () => void; }
 >[e] : () => void
->e : any
+>e : any (error)
 

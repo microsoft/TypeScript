@@ -54,12 +54,12 @@ module M {
         }
 
         public fonly(...rest:string[]) {
->fonly : (...rest: string[]) => any
+>fonly : (...rest: string[]) => any (error)
 >rest : string[]
 
             builder="";
 >builder="" : ""
->builder : any
+>builder : any (error)
 >"" : ""
 
             for (var i=0;i<rest.length;i++) {
@@ -75,13 +75,13 @@ module M {
 
                 builder+=rest[i];
 >builder+=rest[i] : string
->builder : any
+>builder : any (error)
 >rest[i] : string
 >rest : string[]
 >i : number
             }
             return builder;
->builder : any
+>builder : any (error)
         }
     }
 }
@@ -145,37 +145,37 @@ result+=x.f("hello"); // ok varargs length 0
 result+=x.fonly(3); // ok conversion
 >result+=x.fonly(3) : string
 >result : string
->x.fonly(3) : any
->x.fonly : (...rest: string[]) => any
+>x.fonly(3) : any (error)
+>x.fonly : (...rest: string[]) => any (error)
 >x : M.C
->fonly : (...rest: string[]) => any
+>fonly : (...rest: string[]) => any (error)
 >3 : 3
 
 result+=x.fonly(x); // bad param
 >result+=x.fonly(x) : string
 >result : string
->x.fonly(x) : any
->x.fonly : (...rest: string[]) => any
+>x.fonly(x) : any (error)
+>x.fonly : (...rest: string[]) => any (error)
 >x : M.C
->fonly : (...rest: string[]) => any
+>fonly : (...rest: string[]) => any (error)
 >x : M.C
 
 result+=x.fonly("a"); // ok 
 >result+=x.fonly("a") : string
 >result : string
->x.fonly("a") : any
->x.fonly : (...rest: string[]) => any
+>x.fonly("a") : any (error)
+>x.fonly : (...rest: string[]) => any (error)
 >x : M.C
->fonly : (...rest: string[]) => any
+>fonly : (...rest: string[]) => any (error)
 >"a" : "a"
 
 result+=x.fonly("a","b","c","d"); //ok 
 >result+=x.fonly("a","b","c","d") : string
 >result : string
->x.fonly("a","b","c","d") : any
->x.fonly : (...rest: string[]) => any
+>x.fonly("a","b","c","d") : any (error)
+>x.fonly : (...rest: string[]) => any (error)
 >x : M.C
->fonly : (...rest: string[]) => any
+>fonly : (...rest: string[]) => any (error)
 >"a" : "a"
 >"b" : "b"
 >"c" : "c"

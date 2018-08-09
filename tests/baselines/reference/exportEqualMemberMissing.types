@@ -9,10 +9,10 @@ connect().use(connect.static('foo')); // Error	1	The property 'static' does not 
 >connect() : connect.connectExport
 >connect : { (): connect.connectExport; foo: Date; }
 >use : (mod: connect.connectModule) => connect.connectExport
->connect.static('foo') : any
->connect.static : any
+>connect.static('foo') : any (error)
+>connect.static : any (error)
 >connect : { (): connect.connectExport; foo: Date; }
->static : any
+>static : any (error)
 >'foo' : "foo"
 
 === tests/cases/compiler/exportEqualMemberMissing_0.ts ===
@@ -33,7 +33,7 @@ var server: {
 >server : { (): server.connectExport; foo: Date; }
 
     (): server.connectExport;
->server : any
+>server : any (error)
 
     foo: Date;
 >foo : Date

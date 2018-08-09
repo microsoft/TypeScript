@@ -3,7 +3,7 @@
 const a = b = () => 0;
 >a : () => number
 >b = () => 0 : () => number
->b : any
+>b : any (error)
 >() => 0 : () => number
 >0 : 0
 

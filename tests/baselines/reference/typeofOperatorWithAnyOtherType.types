@@ -253,43 +253,43 @@ var r: () => any;
 >r : () => any
 
 z: typeof ANY;
->z : any
+>z : any (error)
 >typeof ANY : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ANY : any
 
 x: typeof ANY2;
->x : any
+>x : any (error)
 >typeof ANY2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ANY2 : any[]
 
 r: typeof foo;
->r : any
+>r : any (error)
 >typeof foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >foo : () => any
 
 z: typeof objA.a;
->z : any
+>z : any (error)
 >typeof objA.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >objA.a : any
 >objA : A
 >a : any
 
 z: typeof A.foo;
->z : any
+>z : any (error)
 >typeof A.foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >A.foo : () => any
 >A : typeof A
 >foo : () => any
 
 z: typeof M.n;
->z : any
+>z : any (error)
 >typeof M.n : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >M.n : any
 >M : typeof M
 >n : any
 
 z: typeof obj1.x;
->z : any
+>z : any (error)
 >typeof obj1.x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >obj1.x : string
 >obj1 : { x: string; y: () => void; }

@@ -14,32 +14,32 @@ class Q extends P {
 >P : P
 
     xx = super;
->xx : any
->super : any
+>xx : any (error)
+>super : any (error)
 >super : P
-> : any
+> : any (error)
 
     static yy = super; // error for static initializer accessing super
->yy : any
->super : any
->super : any
-> : any
+>yy : any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
 
     // Super is not allowed in constructor args
     constructor(public z = super, zz = super, zzz = () => super) {
->z : any
->super : any
->super : any
-> : any
->zz : any
->super : any
->super : any
-> : any
->zzz : () => any
->() => super : () => any
->super : any
->super : any
-> : any
+>z : any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
+>zz : any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
+>zzz : () => any (error)
+>() => super : () => any (error)
+>super : any (error)
+>super : any (error)
+> : any (error)
 
         super();
 >super() : void
@@ -47,11 +47,11 @@ class Q extends P {
     }
 
     foo(zz = super) {
->foo : (zz?: any) => void
->zz : any
->super : any
+>foo : (zz?: any (error)) => void
+>zz : any (error)
+>super : any (error)
 >super : P
-> : any
+> : any (error)
 
         super.x();
 >super.x() : void
@@ -60,24 +60,24 @@ class Q extends P {
 >x : () => void
 
         super.y(); // error
->super.y() : any
->super.y : any
+>super.y() : any (error)
+>super.y : any (error)
 >super : P
->y : any
+>y : any (error)
     }
 
     static bar(zz = super) {
->bar : (zz?: any) => void
->zz : any
->super : any
+>bar : (zz?: any (error)) => void
+>zz : any (error)
+>super : any (error)
 >super : typeof P
-> : any
+> : any (error)
 
         super.x(); // error
->super.x() : any
->super.x : any
+>super.x() : any (error)
+>super.x : any (error)
 >super : typeof P
->x : any
+>x : any (error)
 
         super.y();
 >super.y() : void

@@ -35,9 +35,9 @@ try {
 try {
 
 } catch ({ a: x, b: x }) {
->a : any
+>a : any (error)
 >x : any
->b : any
+>b : any (error)
 >x : any
 
 }

@@ -4,19 +4,19 @@ declare module "foobar" { export const x: number; }
 >x : number
 
 foobar;
->foobar : any
+>foobar : any (error)
 
 declare module 'barfoo' { export const x: number; }
 >'barfoo' : typeof import("barfoo")
 >x : number
 
 barfoo;
->barfoo : any
+>barfoo : any (error)
 
 declare module farboo { export const x: number; }
 >farboo : typeof farboo
 >x : number
 
 faroo;
->faroo : any
+>faroo : any (error)
 

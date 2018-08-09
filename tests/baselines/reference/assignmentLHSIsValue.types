@@ -43,12 +43,12 @@ module M { export var a; }
 
 M = value;
 >M = value : any
->M : any
+>M : any (error)
 >value : any
 
 C = value;
 >C = value : any
->C : any
+>C : any (error)
 >value : any
 
 enum E { }
@@ -56,12 +56,12 @@ enum E { }
 
 E = value;
 >E = value : any
->E : any
+>E : any (error)
 >value : any
 
 foo = value;
 >foo = value : any
->foo : any
+>foo : any (error)
 >value : any
 
 // literals
@@ -97,7 +97,7 @@ false = value;
 
 // object literals
 { a: 0} = value;
->a : any
+>a : any (error)
 >0 : 0
 >value : any
 
@@ -118,25 +118,25 @@ class Derived extends C {
 >super() : void
 >super : typeof C
 >super = value : any
->super : any
+>super : any (error)
 >super : C
-> : any
+> : any (error)
 >value : any
 
     foo() { super = value }
 >foo : () => void
 >super = value : any
->super : any
+>super : any (error)
 >super : C
-> : any
+> : any (error)
 >value : any
 
     static sfoo() { super = value; }
 >sfoo : () => void
 >super = value : any
->super : any
+>super : any (error)
 >super : typeof C
-> : any
+> : any (error)
 >value : any
 }
 
@@ -165,26 +165,26 @@ foo() = value;
 
 (M) = value;
 >(M) = value : any
->(M) : any
->M : any
+>(M) : any (error)
+>M : any (error)
 >value : any
 
 (C) = value;
 >(C) = value : any
->(C) : any
->C : any
+>(C) : any (error)
+>C : any (error)
 >value : any
 
 (E) = value;
 >(E) = value : any
->(E) : any
->E : any
+>(E) : any (error)
+>E : any (error)
 >value : any
 
 (foo) = value;
 >(foo) = value : any
->(foo) : any
->foo : any
+>(foo) : any (error)
+>foo : any (error)
 >value : any
 
 (null) = value;

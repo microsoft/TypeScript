@@ -143,10 +143,10 @@ var bb = obj.hasOwnProperty;
 
 // Dotted property access of property that doesn't exist on value's apparent type
 var cc = obj.qqq; // error
->cc : any
->obj.qqq : any
+>cc : any (error)
+>obj.qqq : any (error)
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
->qqq : any
+>qqq : any (error)
 
 // Bracket notation property access using string literal value on type with property of that literal name
 var dd = obj['literal property'];
@@ -232,8 +232,8 @@ var kk: any;
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature
 var ll = numIndex[someObject]; // Error
->ll : any
->numIndex[someObject] : any
+>ll : any (error)
+>numIndex[someObject] : any (error)
 >numIndex : { [n: number]: string; }
 >someObject : { name: string; }
 
@@ -334,8 +334,8 @@ var tt: any;
 
 // Bracket notation property access using values of other types on type with no index signatures
 var uu = noIndex[someObject]; // Error
->uu : any
->noIndex[someObject] : any
+>uu : any (error)
+>noIndex[someObject] : any (error)
 >noIndex : () => void
 >someObject : { name: string; }
 
@@ -394,8 +394,8 @@ var zz: A;
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
 var zzzz = bothIndex[someObject]; // Error
->zzzz : any
->bothIndex[someObject] : any
+>zzzz : any (error)
+>bothIndex[someObject] : any (error)
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >someObject : { name: string; }
 

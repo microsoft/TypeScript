@@ -5,10 +5,10 @@ class Foo {
     try {
 
         public bar = someInitThatMightFail();
->bar = someInitThatMightFail() : any
->bar : any
->someInitThatMightFail() : any
->someInitThatMightFail : any
+>bar = someInitThatMightFail() : any (error)
+>bar : any (error)
+>someInitThatMightFail() : any (error)
+>someInitThatMightFail : any (error)
 
     } catch(e) {}
 >e : any
@@ -16,8 +16,8 @@ class Foo {
 
 
     public baz() {
->baz() : any
->baz : any
+>baz() : any (error)
+>baz : any (error)
 
         return this.bar; // doesn't get rewritten to Foo.bar.
 >this.bar : any

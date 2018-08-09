@@ -1,14 +1,14 @@
 === tests/cases/compiler/fatarrowfunctionsErrors.ts ===
 foo((...Far:any[])=>{return 0;})
->foo((...Far:any[])=>{return 0;}) : any
->foo : any
+>foo((...Far:any[])=>{return 0;}) : any (error)
+>foo : any (error)
 >(...Far:any[])=>{return 0;} : (...Far: any[]) => number
 >Far : any[]
 >0 : 0
 
 foo((1)=>{return 0;}); 
->foo((1)=>{return 0;}) : any
->foo : any
+>foo((1)=>{return 0;}) : any (error)
+>foo : any (error)
 >(1) : 1
 >1 : 1
 >{return 0;} : { return: number; }
@@ -16,27 +16,27 @@ foo((1)=>{return 0;});
 >0 : 0
 
 foo((x?)=>{return x;})
->foo((x?)=>{return x;}) : any
->foo : any
+>foo((x?)=>{return x;}) : any (error)
+>foo : any (error)
 >(x?)=>{return x;} : (x?: any) => any
 >x : any
 >x : any
 
 foo((x=0)=>{return x;})
->foo((x=0)=>{return x;}) : any
->foo : any
+>foo((x=0)=>{return x;}) : any (error)
+>foo : any (error)
 >(x=0)=>{return x;} : (x?: number) => number
 >x : number
 >0 : 0
 >x : number
 
 var y = x:number => x*x;
->y : any
->x : any
+>y : any (error)
+>x : any (error)
 >number : any
 >x*x : number
->x : any
->x : any
+>x : any (error)
+>x : any (error)
 
 false? (() => null): null;
 >false? (() => null): null : () => any

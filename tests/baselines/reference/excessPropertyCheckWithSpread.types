@@ -1,7 +1,7 @@
 === tests/cases/compiler/excessPropertyCheckWithSpread.ts ===
 declare function f({ a: number }): void
 >f : ({ a: number }: { a: any; }) => void
->a : any
+>a : any (error)
 >number : any
 
 interface I {

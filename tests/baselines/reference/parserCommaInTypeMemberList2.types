@@ -1,10 +1,10 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts ===
 var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {});
->s : any
->$.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {}) : any
->$.extend : any
->$ : any
->extend : any
+>s : any (error)
+>$.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {}) : any (error)
+>$.extend : any (error)
+>$ : any (error)
+>extend : any (error)
 >workItem : any
 >workItem : any
 >width : string

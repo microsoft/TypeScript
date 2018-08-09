@@ -15,7 +15,7 @@ interface Attribs1 {
 // OK
 <test1 {... {x: (n) => 0} } />;
 ><test1 {... {x: (n) => 0} } /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >{x: (n) => 0} : { x: (n: string) => number; }
 >x : (n: string) => number
 >(n) => 0 : (n: string) => number
@@ -25,12 +25,12 @@ interface Attribs1 {
 // Error, no member 'len' on 'string'
 <test1 {... {x: (n) => n.len} } />;
 ><test1 {... {x: (n) => n.len} } /> : JSX.Element
->test1 : any
->{x: (n) => n.len} : { x: (n: string) => any; }
->x : (n: string) => any
->(n) => n.len : (n: string) => any
+>test1 : any (error)
+>{x: (n) => n.len} : { x: (n: string) => any (error); }
+>x : (n: string) => any (error)
+>(n) => n.len : (n: string) => any (error)
 >n : string
->n.len : any
+>n.len : any (error)
 >n : string
->len : any
+>len : any (error)
 

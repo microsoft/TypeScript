@@ -51,10 +51,10 @@ function f2() {
 >f2 : () => void
 
     for (let [{a: x, b: {c: y}}] = [{a: 1, b: {c: 2}}]; x < y; ++x, --y) {
->a : any
+>a : any (error)
 >x : number
->b : any
->c : any
+>b : any (error)
+>c : any (error)
 >y : number
 >[{a: 1, b: {c: 2}}] : [{ a: number; b: { c: number; }; }]
 >{a: 1, b: {c: 2}} : { a: number; b: { c: number; }; }

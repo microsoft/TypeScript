@@ -25,5 +25,5 @@ export class Test {
 >method : (input: things.ThingA) => void
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
 >input : things.ThingA
->things : any
+>things : any (error)
 }

@@ -106,7 +106,7 @@ import im_private_v_private = m_private.v_private;
 >v_private : im_private_c_private
 
 import im_private_i_private = m_private.i_private;
->im_private_i_private : any
+>im_private_i_private : any (error)
 >m_private : typeof m_private
 >i_private : im_private_i_private
 
@@ -116,9 +116,9 @@ import im_private_mi_private = m_private.mi_private;
 >mi_private : typeof im_private_mi_private
 
 import im_private_mu_private = m_private.mu_private;
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 >m_private : typeof m_private
->mu_private : any
+>mu_private : any (error)
 
 // Usage of above decls
 var privateUse_im_private_c_private = new im_private_c_private();
@@ -183,11 +183,11 @@ export var publicUse_im_private_mi_private = new im_private_mi_private.c();
 
 var privateUse_im_private_mu_private: im_private_mu_private.i;
 >privateUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
 export var publicUse_im_private_mu_private: im_private_mu_private.i;
 >publicUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
 
 // No Privacy errors - importing public elements
@@ -212,7 +212,7 @@ import im_private_v_public = m_public.v_public;
 >v_public : number
 
 import im_private_i_public = m_public.i_public;
->im_private_i_public : any
+>im_private_i_public : any (error)
 >m_public : typeof m_public
 >i_public : im_private_i_public
 
@@ -222,9 +222,9 @@ import im_private_mi_public = m_public.mi_public;
 >mi_public : typeof im_private_mi_public
 
 import im_private_mu_public = m_public.mu_public;
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 >m_public : typeof m_public
->mu_public : any
+>mu_public : any (error)
 
 // Usage of above decls
 var privateUse_im_private_c_public = new im_private_c_public();
@@ -289,9 +289,9 @@ export var publicUse_im_private_mi_public = new im_private_mi_public.c();
 
 var privateUse_im_private_mu_public: im_private_mu_public.i;
 >privateUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 
 export var publicUse_im_private_mu_public: im_private_mu_public.i;
 >publicUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 

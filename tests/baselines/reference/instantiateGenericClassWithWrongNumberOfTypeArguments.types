@@ -10,8 +10,8 @@ class C<T> {
 }
 
 var c = new C<number, number>();
->c : any
->new C<number, number>() : any
+>c : any (error)
+>new C<number, number>() : any (error)
 >C : typeof C
 
 class D<T, U> {
@@ -26,7 +26,7 @@ class D<T, U> {
 
 // BUG 794238
 var d = new D<number>();
->d : any
->new D<number>() : any
+>d : any (error)
+>new D<number>() : any (error)
 >D : typeof D
 

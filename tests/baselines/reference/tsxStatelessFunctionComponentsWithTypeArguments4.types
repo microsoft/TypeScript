@@ -4,7 +4,7 @@ import React = require('react')
 
 declare function OverloadComponent<U>(): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
->JSX : any
+>JSX : any (error)
 
 declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
@@ -12,14 +12,14 @@ declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boo
 >b : U
 >a : string
 >"ignore-prop" : boolean
->JSX : any
+>JSX : any (error)
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >attr : { b: U; a: T; }
 >b : U
 >a : T
->JSX : any
+>JSX : any (error)
 
 // Error
 function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {

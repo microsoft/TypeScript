@@ -17,12 +17,12 @@ function NewA(Factory: typeof A) {
 }
 
 function NewB(Factory: typeof B) {
->NewB : (Factory: typeof B) => any
+>NewB : (Factory: typeof B) => any (error)
 >Factory : typeof B
 >B : typeof B
 
     return new B;
->new B : any
+>new B : any (error)
 >B : typeof B
 }
 
@@ -37,12 +37,12 @@ NewA(B);
 >B : typeof B
 
 NewB(A);
->NewB(A) : any
->NewB : (Factory: typeof B) => any
+>NewB(A) : any (error)
+>NewB : (Factory: typeof B) => any (error)
 >A : typeof A
 
 NewB(B);
->NewB(B) : any
->NewB : (Factory: typeof B) => any
+>NewB(B) : any (error)
+>NewB : (Factory: typeof B) => any (error)
 >B : typeof B
 

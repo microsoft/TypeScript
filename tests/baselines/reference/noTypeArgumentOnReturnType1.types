@@ -3,7 +3,7 @@ class A<T>{
 >A : A<T>
  
  foo(): A{
->foo : () => any
+>foo : () => any (error)
 
   return null;
 >null : null

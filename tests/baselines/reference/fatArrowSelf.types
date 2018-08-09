@@ -25,7 +25,7 @@ module Consumer {
 
         constructor (private emitter: Events.EventEmitter) { }
 >emitter : Events.EventEmitter
->Events : any
+>Events : any (error)
 
         private register() {
 >register : () => void

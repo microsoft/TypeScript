@@ -77,7 +77,7 @@ interface i4 {
     // Used to be indexer, now it is a computed property
     [p];
 >[p] : any
->p : any
+>p : any (error)
 
     //Index Signatures
     [p1: string];
@@ -147,7 +147,7 @@ interface i11 {
     // Used to be indexer, now it is a computed property
     [p];
 >[p] : any
->p : any
+>p : any (error)
 
     //Index Signatures
     [p1: string];
@@ -234,7 +234,7 @@ var obj2: i1 = new Object();
 
 var obj3: i1 = new obj0;
 >obj3 : i1
->new obj0 : any
+>new obj0 : any (error)
 >obj0 : i1
 
 var obj4: i1 = new Base;
@@ -260,14 +260,14 @@ var obj9: i1 = new <i1> anyVar;
 >obj9 : i1
 >new <i1> anyVar : boolean
 >new <i1 : boolean
->new : any
-> : any
->i1 : any
+>new : any (error)
+> : any (error)
+>i1 : any (error)
 >anyVar : any
 
 var obj10: i1 = new {};
 >obj10 : i1
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -314,14 +314,14 @@ var obj20: i2 = new <i2> anyVar;
 >obj20 : i2
 >new <i2> anyVar : boolean
 >new <i2 : boolean
->new : any
-> : any
->i2 : any
+>new : any (error)
+> : any (error)
+>i2 : any (error)
 >anyVar : any
 
 var obj21: i2 = new {};
 >obj21 : i2
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -367,14 +367,14 @@ var obj31: i3 = new <i3> anyVar;
 >obj31 : i3
 >new <i3> anyVar : boolean
 >new <i3 : boolean
->new : any
-> : any
->i3 : any
+>new : any (error)
+> : any (error)
+>i3 : any (error)
 >anyVar : any
 
 var obj32: i3 = new {};
 >obj32 : i3
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -394,7 +394,7 @@ var obj35: i4 = new Object();
 
 var obj36: i4 = new obj33;
 >obj36 : i4
->new obj33 : any
+>new obj33 : any (error)
 >obj33 : i4
 
 var obj37: i4 = new Base;
@@ -420,14 +420,14 @@ var obj42: i4 = new <i4> anyVar;
 >obj42 : i4
 >new <i4> anyVar : boolean
 >new <i4 : boolean
->new : any
-> : any
->i4 : any
+>new : any (error)
+> : any (error)
+>i4 : any (error)
 >anyVar : any
 
 var obj43: i4 = new {};
 >obj43 : i4
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -447,7 +447,7 @@ var obj46: i5 = new Object();
 
 var obj47: i5 = new obj44;
 >obj47 : i5
->new obj44 : any
+>new obj44 : any (error)
 >obj44 : i5
 
 var obj48: i5 = new Base;
@@ -473,14 +473,14 @@ var obj53: i5 = new <i5> anyVar;
 >obj53 : i5
 >new <i5> anyVar : boolean
 >new <i5 : boolean
->new : any
-> : any
->i5 : any
+>new : any (error)
+> : any (error)
+>i5 : any (error)
 >anyVar : any
 
 var obj54: i5 = new {};
 >obj54 : i5
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -526,14 +526,14 @@ var obj64: i6 = new <i6> anyVar;
 >obj64 : i6
 >new <i6> anyVar : boolean
 >new <i6 : boolean
->new : any
-> : any
->i6 : any
+>new : any (error)
+> : any (error)
+>i6 : any (error)
 >anyVar : any
 
 var obj65: i6 = new {};
 >obj65 : i6
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -580,14 +580,14 @@ var obj75: i7 = new <i7> anyVar;
 >obj75 : i7
 >new <i7> anyVar : boolean
 >new <i7 : boolean
->new : any
-> : any
->i7 : any
+>new : any (error)
+> : any (error)
+>i7 : any (error)
 >anyVar : any
 
 var obj76: i7 = new {};
 >obj76 : i7
->new {} : any
+>new {} : any (error)
 >{} : {}
 
 //
@@ -607,7 +607,7 @@ var obj79: i8 = new Object();
 
 var obj80: i8 = new obj77;
 >obj80 : i8
->new obj77 : any
+>new obj77 : any (error)
 >obj77 : i8
 
 var obj81: i8 = new Base;
@@ -633,13 +633,13 @@ var obj86: i8 = new <i8> anyVar;
 >obj86 : i8
 >new <i8> anyVar : boolean
 >new <i8 : boolean
->new : any
-> : any
->i8 : any
+>new : any (error)
+> : any (error)
+>i8 : any (error)
 >anyVar : any
 
 var obj87: i8 = new {};
 >obj87 : i8
->new {} : any
+>new {} : any (error)
 >{} : {}
 

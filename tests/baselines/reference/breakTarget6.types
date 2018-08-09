@@ -3,5 +3,5 @@ while (true) {
 >true : true
 
   break target;
->target : any
+>target : any (error)
 }

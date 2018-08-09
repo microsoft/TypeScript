@@ -1,7 +1,7 @@
 === tests/cases/compiler/breakTarget1.ts ===
 target:
->target : any
+>target : any (error)
 
   break target;
->target : any
+>target : any (error)
 

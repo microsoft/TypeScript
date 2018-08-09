@@ -56,13 +56,13 @@ f2({ toString: (s: string) => s }) // error, missing property value from ArgsStr
 f2({ value: '', toString: (s) => s.uhhh }) // error
 >f2({ value: '', toString: (s) => s.uhhh }) : void
 >f2 : (args: I) => void
->{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: string) => any; }
+>{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: string) => any (error); }
 >value : string
 >'' : ""
->toString : (s: string) => any
->(s) => s.uhhh : (s: string) => any
+>toString : (s: string) => any (error)
+>(s) => s.uhhh : (s: string) => any (error)
 >s : string
->s.uhhh : any
+>s.uhhh : any (error)
 >s : string
->uhhh : any
+>uhhh : any (error)
 

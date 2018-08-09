@@ -3,26 +3,26 @@ declare module ng {
 >ng : typeof ng
 
     interfaceICompiledExpression {
->interfaceICompiledExpression : any
+>interfaceICompiledExpression : any (error)
 
         (context: any, locals?: any): any;
 >(context: any, locals?: any): any : (context: any, locals?: any) => any
 >context : any
 >locals : any
-> : any
+> : any (error)
 
         assign(context: any, value: any): any;
->assign(context: any, value: any) : any
->assign : any
->context : any
->any : any
->value : any
->any : any
->any : any
+>assign(context: any, value: any) : any (error)
+>assign : any (error)
+>context : any (error)
+>any : any (error)
+>value : any (error)
+>any : any (error)
+>any : any (error)
     }
 
     interface IQService {
         all(promises: IPromise < any > []): IPromise<
->all : (promises: any[]) => any
->promises : any[]
+>all : (promises: any (error)[]) => any (error)
+>promises : any (error)[]
 

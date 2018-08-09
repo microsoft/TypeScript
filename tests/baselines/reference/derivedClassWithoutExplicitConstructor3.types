@@ -57,13 +57,13 @@ class Derived2 extends Derived {
 }
 
 var r = new Derived(); // error
->r : any
->new Derived() : any
+>r : any (error)
+>new Derived() : any (error)
 >Derived : typeof Derived
 
 var r2 = new Derived2(1); // error
->r2 : any
->new Derived2(1) : any
+>r2 : any (error)
+>new Derived2(1) : any (error)
 >Derived2 : typeof Derived2
 >1 : 1
 
@@ -130,13 +130,13 @@ class D2<T extends Date> extends D<T> {
 }
 
 var d = new D2(); // error
->d : any
->new D2() : any
+>d : any (error)
+>new D2() : any (error)
 >D2 : typeof D2
 
 var d2 = new D2(new Date()); // error
->d2 : any
->new D2(new Date()) : any
+>d2 : any (error)
+>new D2(new Date()) : any (error)
 >D2 : typeof D2
 >new Date() : Date
 >Date : DateConstructor

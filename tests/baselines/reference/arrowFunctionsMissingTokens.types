@@ -82,37 +82,37 @@ module missingCurliesWithArrow {
         var a = () => };
 >a : () => any
 >() => : () => any
-> : any
+> : any (error)
 
         var b = (): void => }
 >b : () => void
 >(): void => : () => void
-> : any
+> : any (error)
 
         var c = (x) => };
 >c : (x: any) => any
 >(x) => : (x: any) => any
 >x : any
-> : any
+> : any (error)
 
         var d = (x: number, y: string) => };
 >d : (x: number, y: string) => any
 >(x: number, y: string) => : (x: number, y: string) => any
 >x : number
 >y : string
-> : any
+> : any (error)
 
         var e = (x: number, y: string): void => };
 >e : (x: number, y: string) => void
 >(x: number, y: string): void => : (x: number, y: string) => void
 >x : number
 >y : string
-> : any
+> : any (error)
 
         var f = () => }
 >f : () => any
 >() => : () => any
-> : any
+> : any (error)
     }
 }
 
@@ -120,33 +120,33 @@ module ce_nEst_pas_une_arrow_function {
 >ce_nEst_pas_une_arrow_function : typeof ce_nEst_pas_une_arrow_function
 
     var a = ();
->a : any
->() : any
-> : any
+>a : any (error)
+>() : any (error)
+> : any (error)
 
     var b = (): void;
 >b : () => void
 >(): void : () => void
-> : any
+> : any (error)
 
     var c = (x);
->c : any
->(x) : any
->x : any
+>c : any (error)
+>(x) : any (error)
+>x : any (error)
 
     var d = (x: number, y: string);
 >d : (x: number, y: string) => any
 >(x: number, y: string) : (x: number, y: string) => any
 >x : number
 >y : string
-> : any
+> : any (error)
 
     var e = (x: number, y: string): void;
 >e : (x: number, y: string) => void
 >(x: number, y: string): void : (x: number, y: string) => void
 >x : number
 >y : string
-> : any
+> : any (error)
 }
 
 module okay {

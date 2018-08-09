@@ -7,6 +7,6 @@ module bar {
 
     export class Foo<T> implements foo.IFoo<T> { }
 >Foo : Foo<T>
->foo : any
+>foo : any (error)
 }
 

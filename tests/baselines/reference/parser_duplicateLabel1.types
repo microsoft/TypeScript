@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel1.ts ===
 target:
->target : any
+>target : any (error)
 
 target:
->target : any
+>target : any (error)
 
 while (true) {
 >true : true

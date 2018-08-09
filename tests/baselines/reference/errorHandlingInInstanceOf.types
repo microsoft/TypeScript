@@ -1,7 +1,7 @@
 === tests/cases/compiler/errorHandlingInInstanceOf.ts ===
 if (x instanceof String) {
 >x instanceof String : boolean
->x : any
+>x : any (error)
 >String : StringConstructor
 }
 
@@ -11,5 +11,5 @@ var y: any;
 if (y instanceof UnknownType) {
 >y instanceof UnknownType : boolean
 >y : any
->UnknownType : any
+>UnknownType : any (error)
 }

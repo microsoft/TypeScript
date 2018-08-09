@@ -19,10 +19,10 @@ s.substring(3,4);
 >4 : 4
 
 s.subby(12);   // error unresolved
->s.subby(12) : any
->s.subby : any
+>s.subby(12) : any (error)
+>s.subby : any (error)
 >s : string
->subby : any
+>subby : any (error)
 >12 : 12
 
 String.fromCharCode(12);
@@ -43,7 +43,7 @@ module M {
 >new C[] : any
 >C[] : any
 >C : typeof C
-> : any
+> : any (error)
 
     a.length;
 >a.length : any
@@ -59,11 +59,11 @@ module M {
 >C : typeof C
 
     (new C()).prototype;
->(new C()).prototype : any
+>(new C()).prototype : any (error)
 >(new C()) : C
 >new C() : C
 >C : typeof C
->prototype : any
+>prototype : any (error)
 }
 
 

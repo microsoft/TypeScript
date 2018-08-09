@@ -31,9 +31,9 @@ enum E { A }
 
 E.A = null; // error
 >E.A = null : null
->E.A : any
+>E.A : any (error)
 >E : typeof E
->A : any
+>A : any (error)
 >null : null
 
 class C { foo: string }
@@ -50,7 +50,7 @@ f = null; // ok
 
 C = null; // error
 >C = null : null
->C : any
+>C : any (error)
 >null : null
 
 interface I { foo: string }
@@ -66,7 +66,7 @@ g = null; // ok
 
 I = null; // error
 >I = null : null
->I : any
+>I : any (error)
 >null : null
 
 module M { export var x = 1; }
@@ -76,7 +76,7 @@ module M { export var x = 1; }
 
 M = null; // error
 >M = null : null
->M : any
+>M : any (error)
 >null : null
 
 var h: { f(): void } = null;
@@ -95,6 +95,6 @@ function i<T>(a: T) {
 }
 i = null; // error
 >i = null : null
->i : any
+>i : any (error)
 >null : null
 

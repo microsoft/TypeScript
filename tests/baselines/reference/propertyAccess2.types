@@ -3,8 +3,8 @@ var foo: number;
 >foo : number
 
 foo.toBAZ();
->foo.toBAZ() : any
->foo.toBAZ : any
+>foo.toBAZ() : any (error)
+>foo.toBAZ : any (error)
 >foo : number
->toBAZ : any
+>toBAZ : any (error)
 

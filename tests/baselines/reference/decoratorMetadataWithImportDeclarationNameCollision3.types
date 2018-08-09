@@ -17,11 +17,11 @@ class MyClass {
 
     db: db.db;
 >db : db.db
->db : any
+>db : any (error)
 
     constructor(db: db.db) { // collision with namespace of external module db
 >db : db.db
->db : any
+>db : any (error)
 
         this.db = db;
 >this.db = db : db.db

@@ -6,14 +6,14 @@ class C {
 >bar : () => void
 
         var v = foo(
->v : any
->foo(            public blaz() {}            ) : any
->foo : any
+>v : any (error)
+>foo(            public blaz() {}            ) : any (error)
+>foo : any (error)
 
             public blaz() {}
->public : any
->blaz() : any
->blaz : any
+>public : any (error)
+>blaz() : any (error)
+>blaz : any (error)
 >{} : {}
 
             );

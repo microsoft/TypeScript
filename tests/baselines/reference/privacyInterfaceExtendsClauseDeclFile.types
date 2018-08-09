@@ -16,10 +16,10 @@ export module publicModule {
     }
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateModule : any
+>privateModule : any (error)
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
->privateModule : any
+>privateModule : any (error)
     }
 
     export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
@@ -44,10 +44,10 @@ module privateModule {
     }
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateModule : any
+>privateModule : any (error)
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateModule : any
+>privateModule : any (error)
     }
 }
 
@@ -68,10 +68,10 @@ export interface publicInterfaceImplementingPrivateInterface extends privateInte
 }
 
 interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateModule : any
+>privateModule : any (error)
 }
 export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
->privateModule : any
+>privateModule : any (error)
 }
 
 === tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===

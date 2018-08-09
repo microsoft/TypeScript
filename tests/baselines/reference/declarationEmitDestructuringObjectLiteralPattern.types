@@ -32,7 +32,7 @@ var { x6, y6 } = { x6: 5, y6: "hello" };
 >"hello" : "hello"
 
 var { x7: a1 } = { x7: 5, y7: "hello" };
->x7 : any
+>x7 : any (error)
 >a1 : number
 >{ x7: 5, y7: "hello" } : { x7: number; y7: string; }
 >x7 : number
@@ -41,7 +41,7 @@ var { x7: a1 } = { x7: 5, y7: "hello" };
 >"hello" : "hello"
 
 var { y8: b1 } = { x8: 5, y8: "hello" };
->y8 : any
+>y8 : any (error)
 >b1 : string
 >{ x8: 5, y8: "hello" } : { x8: number; y8: string; }
 >x8 : number
@@ -50,9 +50,9 @@ var { y8: b1 } = { x8: 5, y8: "hello" };
 >"hello" : "hello"
 
 var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
->x9 : any
+>x9 : any (error)
 >a2 : number
->y9 : any
+>y9 : any (error)
 >b2 : string
 >{ x9: 5, y9: "hello" } : { x9: number; y9: string; }
 >x9 : number
@@ -61,13 +61,13 @@ var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
 >"hello" : "hello"
 
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
->a : any
+>a : any (error)
 >x11 : number
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >y11 : string
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >z11 : boolean
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
 >a : number

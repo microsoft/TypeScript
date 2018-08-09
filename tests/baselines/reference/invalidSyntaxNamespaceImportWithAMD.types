@@ -4,8 +4,8 @@ export class C { }
 
 === tests/cases/conformance/externalModules/1.ts ===
 import * from Zero from "./0"
->from : any
->Zero : any
->from : any
+>from : any (error)
+>Zero : any (error)
+>from : any (error)
 >"./0" : "./0"
 

@@ -4,7 +4,7 @@ class C {
 
     [Symbol.isRegExp]: string;
 >[Symbol.isRegExp] : string
->Symbol.isRegExp : any
->Symbol : any
->isRegExp : any
+>Symbol.isRegExp : any (error)
+>Symbol : any (error)
+>isRegExp : any (error)
 }

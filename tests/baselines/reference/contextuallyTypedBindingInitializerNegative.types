@@ -6,7 +6,7 @@ interface Show {
 }
 function f({ show: showRename = v => v }: Show) {}
 >f : ({ show: showRename }: Show) => void
->show : any
+>show : any (error)
 >showRename : (x: number) => string
 >v => v : (v: number) => number
 >v : number
@@ -33,7 +33,7 @@ interface Nested {
 }
 function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
 >ff : ({ nested: nestedRename }: Nested) => void
->nested : any
+>nested : any (error)
 >nestedRename : Show
 >{ show: v => v } : { show: (v: number) => number; }
 >show : (v: number) => number
@@ -47,7 +47,7 @@ interface StringIdentity {
 >s : string
 }
 let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentity: x => x};
->stringIdentity : any
+>stringIdentity : any (error)
 >id : (s: string) => string
 >arg => arg.length : (arg: string) => number
 >arg : string

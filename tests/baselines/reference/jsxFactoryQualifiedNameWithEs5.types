@@ -16,11 +16,11 @@ class Component {
 >Component : Component
 
     renderCallback() {
->renderCallback : () => any
+>renderCallback : () => any (error)
 
         return <div>test</div>;
-><div>test</div> : any
->div : any
->div : any
+><div>test</div> : any (error)
+>div : any (error)
+>div : any (error)
     }
 };

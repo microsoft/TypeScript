@@ -17,8 +17,8 @@ module A {
 }
 
 var b: A.B;
->b : any
->A : any
+>b : any (error)
+>A : any (error)
 
 A.B(1);
 >A.B(1) : 1

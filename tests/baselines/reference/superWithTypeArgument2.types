@@ -14,10 +14,10 @@ class D<T> extends C<T> {
 >x : any
 
         super<T>(x);
->super<T>(x) : any
->super : any
+>super<T>(x) : any (error)
+>super : any (error)
 >super : C<T>
-> : any
+> : any (error)
 >x : any
     }
 }

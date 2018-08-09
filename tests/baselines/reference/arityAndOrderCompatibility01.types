@@ -32,19 +32,19 @@ var z: {
 var [a, b, c] = x;
 >a : string
 >b : number
->c : any
+>c : any (error)
 >x : [string, number]
 
 var [d, e, f] = y;
 >d : string
 >e : number
->f : any
+>f : any (error)
 >y : StrNum
 
 var [g, h, i] = z;
 >g : string
 >h : number
->i : any
+>i : any (error)
 >z : { 0: string; 1: number; length: 2; }
 
 var j1: [number, number, number] = x;

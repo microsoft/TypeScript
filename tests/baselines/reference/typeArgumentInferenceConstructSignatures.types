@@ -57,7 +57,7 @@ new someGenerics1(3, 4);
 >4 : 4
 
 new someGenerics1<string, number>(3, 4); // Error
->new someGenerics1<string, number>(3, 4) : any
+>new someGenerics1<string, number>(3, 4) : any (error)
 >someGenerics1 : someGenerics1
 >3 : 3
 >4 : 4
@@ -192,7 +192,7 @@ new someGenerics4<string, number>('', () => 3);
 >3 : 3
 
 new someGenerics4<string, number>('', (x: string) => ''); // Error
->new someGenerics4<string, number>('', (x: string) => '') : any
+>new someGenerics4<string, number>('', (x: string) => '') : any (error)
 >someGenerics4 : someGenerics4
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -230,7 +230,7 @@ new someGenerics5<number, string>('', () => 3);
 >3 : 3
 
 new someGenerics5<number, string>('', (x: string) => ''); // Error
->new someGenerics5<number, string>('', (x: string) => '') : any
+>new someGenerics5<number, string>('', (x: string) => '') : any (error)
 >someGenerics5 : someGenerics5
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -283,7 +283,7 @@ new someGenerics6<number>(n => n, n => n, n => n);
 >n : number
 
 new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
->new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : any
+>new someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : any (error)
 >someGenerics6 : someGenerics6
 >(n: number) => n : (n: number) => number
 >n : number
@@ -392,15 +392,15 @@ var someGenerics9: someGenerics9;
 >someGenerics9 : someGenerics9
 
 var a9a = new someGenerics9('', 0, []);
->a9a : any
->new someGenerics9('', 0, []) : any
+>a9a : any (error)
+>new someGenerics9('', 0, []) : any (error)
 >someGenerics9 : someGenerics9
 >'' : ""
 >0 : 0
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : any (error)
 
 var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
@@ -456,8 +456,8 @@ var a9e: {};
 >a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9f : any
->new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
+>a9f : any (error)
+>new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any (error)
 >someGenerics9 : someGenerics9
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: Window; }
@@ -472,7 +472,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >'' : ""
 
 var a9f: A92;
->a9f : any
+>a9f : any (error)
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });

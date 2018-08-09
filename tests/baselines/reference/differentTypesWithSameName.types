@@ -11,7 +11,7 @@ module m {
   export function doSomething(v: m.variable) {
 >doSomething : (v: variable) => void
 >v : variable
->m : any
+>m : any (error)
     
   }
 }

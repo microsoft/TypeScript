@@ -3,7 +3,7 @@ export class C<TypeVariable> {
 >C : C<TypeVariable>
 
   @Decorate
->Decorate : any
+>Decorate : any (error)
 
   member: TypeVariable;
 >member : TypeVariable

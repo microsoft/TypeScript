@@ -13,10 +13,10 @@ r.source;
 >source : string
 
 x.toBAZ();
->x.toBAZ() : any
->x.toBAZ : any
+>x.toBAZ() : any (error)
+>x.toBAZ : any (error)
 >x : number
->toBAZ : any
+>toBAZ : any (error)
 
 x.toString();
 >x.toString() : string

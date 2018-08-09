@@ -3,5 +3,5 @@ module M {
 >M : typeof M
 
     export = A;
->A : any
+>A : any (error)
 }

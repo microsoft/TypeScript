@@ -3,7 +3,7 @@ function f() {
 >f : () => () => IArguments
 
     var { arguments: args } = { arguments };
->arguments : any
+>arguments : any (error)
 >args : IArguments
 >{ arguments } : { arguments: IArguments; }
 >arguments : IArguments

@@ -129,21 +129,21 @@ function f10(x: unknown) {
 >0 : 0
 
     x.foo;  // Error
->x.foo : any
+>x.foo : any (error)
 >x : unknown
->foo : any
+>foo : any (error)
 
     x[10];  // Error
->x[10] : any
+>x[10] : any (error)
 >x : unknown
 >10 : 10
 
     x();  // Error
->x() : any
+>x() : any (error)
 >x : unknown
 
     x + 1;  // Error
->x + 1 : any
+>x + 1 : any (error)
 >x : unknown
 >1 : 1
 
@@ -168,21 +168,21 @@ function f11(x: unknown) {
 >x : unknown
 
     x.foo;  // Error
->x.foo : any
+>x.foo : any (error)
 >x : unknown
->foo : any
+>foo : any (error)
 
     x[5];  // Error
->x[5] : any
+>x[5] : any (error)
 >x : unknown
 >5 : 5
 
     x();  // Error
->x() : any
+>x() : any (error)
 >x : unknown
 
     new x();  // Error
->new x() : any
+>new x() : any (error)
 >x : unknown
 }
 
@@ -434,7 +434,7 @@ function f28(x: unknown) {
 >x : unknown
 
     let { ...a } = x;  // Error
->a : any
+>a : any (error)
 >x : unknown
 }
 

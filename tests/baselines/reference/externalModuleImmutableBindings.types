@@ -14,23 +14,23 @@ var n = 'baz';
 
 stuff.x = 0;
 >stuff.x = 0 : 0
->stuff.x : any
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >0 : 0
 
 stuff['x'] = 1;
 >stuff['x'] = 1 : 1
->stuff['x'] : any
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >1 : 1
 
 stuff.blah = 2;
 >stuff.blah = 2 : 2
->stuff.blah : any
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >2 : 2
 
 stuff[n] = 3;
@@ -42,13 +42,13 @@ stuff[n] = 3;
 
 stuff.x++;
 >stuff.x++ : number
->stuff.x : any
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 
 stuff['x']++;
 >stuff['x']++ : number
->stuff['x'] : any
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 
@@ -66,26 +66,26 @@ stuff[n]++;
 
 (stuff.x) = 0;
 >(stuff.x) = 0 : 0
->(stuff.x) : any
->stuff.x : any
+>(stuff.x) : any (error)
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >0 : 0
 
 (stuff['x']) = 1;
 >(stuff['x']) = 1 : 1
->(stuff['x']) : any
->stuff['x'] : any
+>(stuff['x']) : any (error)
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >1 : 1
 
 (stuff.blah) = 2;
 >(stuff.blah) = 2 : 2
->(stuff.blah) : any
->stuff.blah : any
+>(stuff.blah) : any (error)
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >2 : 2
 
 (stuff[n]) = 3;
@@ -98,15 +98,15 @@ stuff[n]++;
 
 (stuff.x)++;
 >(stuff.x)++ : number
->(stuff.x) : any
->stuff.x : any
+>(stuff.x) : any (error)
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 
 (stuff['x'])++;
 >(stuff['x'])++ : number
->(stuff['x']) : any
->stuff['x'] : any
+>(stuff['x']) : any (error)
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 
@@ -125,39 +125,39 @@ stuff[n]++;
 >n : string
 
 for (stuff.x in []) {}
->stuff.x : any
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >[] : undefined[]
 
 for (stuff.x of []) {}
->stuff.x : any
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >[] : undefined[]
 
 for (stuff['x'] in []) {}
->stuff['x'] : any
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >[] : undefined[]
 
 for (stuff['x'] of []) {}
->stuff['x'] : any
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >[] : undefined[]
 
 for (stuff.blah in []) {}
->stuff.blah : any
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >[] : undefined[]
 
 for (stuff.blah of []) {}
->stuff.blah : any
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >[] : undefined[]
 
 for (stuff[n] in []) {}
@@ -173,45 +173,45 @@ for (stuff[n] of []) {}
 >[] : undefined[]
 
 for ((stuff.x) in []) {}
->(stuff.x) : any
->stuff.x : any
+>(stuff.x) : any (error)
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >[] : undefined[]
 
 for ((stuff.x) of []) {}
->(stuff.x) : any
->stuff.x : any
+>(stuff.x) : any (error)
+>stuff.x : any (error)
 >stuff : typeof stuff
->x : any
+>x : any (error)
 >[] : undefined[]
 
 for ((stuff['x']) in []) {}
->(stuff['x']) : any
->stuff['x'] : any
+>(stuff['x']) : any (error)
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >[] : undefined[]
 
 for ((stuff['x']) of []) {}
->(stuff['x']) : any
->stuff['x'] : any
+>(stuff['x']) : any (error)
+>stuff['x'] : any (error)
 >stuff : typeof stuff
 >'x' : "x"
 >[] : undefined[]
 
 for ((stuff.blah) in []) {}
->(stuff.blah) : any
->stuff.blah : any
+>(stuff.blah) : any (error)
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >[] : undefined[]
 
 for ((stuff.blah) of []) {}
->(stuff.blah) : any
->stuff.blah : any
+>(stuff.blah) : any (error)
+>stuff.blah : any (error)
 >stuff : typeof stuff
->blah : any
+>blah : any (error)
 >[] : undefined[]
 
 for ((stuff[n]) in []) {}

@@ -3,7 +3,7 @@ type T1 = {
 >T1 : T1
 
     x: T1["x"];  // Error
->x : any
+>x : any (error)
 
 };
 
@@ -21,10 +21,10 @@ declare let x2: T2<"x">;
 >x2 : T2<"x">
 
 let x2x = x2.x;
->x2x : any
->x2.x : any
+>x2x : any (error)
+>x2.x : any (error)
 >x2 : T2<"x">
->x : any
+>x : any (error)
 
 interface T3<T extends T3<T>> {
     x: T["x"];
@@ -33,14 +33,14 @@ interface T3<T extends T3<T>> {
 
 interface T4<T extends T4<T>> {
     x: T4<T>["x"];  // Error
->x : any
+>x : any (error)
 }
 
 class C1 {
 >C1 : C1
 
     x: C1["x"];  // Error
->x : any
+>x : any (error)
 }
 
 class C2 {

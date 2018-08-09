@@ -8,10 +8,10 @@ function f(x: TemplateStringsArray, y: string, z: string) {
 
 // Incomplete call, but too many parameters.
 f `123qdawdrqw${ 1 }${ }${ 
->f `123qdawdrqw${ 1 }${ }${ : any
+>f `123qdawdrqw${ 1 }${ }${ : any (error)
 >f : (x: TemplateStringsArray, y: string, z: string) => void
 >`123qdawdrqw${ 1 }${ }${ : string
 >1 : 1
-> : any
-> : any
+> : any (error)
+> : any (error)
 

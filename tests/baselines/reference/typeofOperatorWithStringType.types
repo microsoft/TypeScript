@@ -181,17 +181,17 @@ var r: () => string;
 >r : () => string
 
 z: typeof STRING;
->z : any
+>z : any (error)
 >typeof STRING : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >STRING : string
 
 x: typeof STRING1;
->x : any
+>x : any (error)
 >typeof STRING1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >STRING1 : string[]
 
 r: typeof foo;
->r : any
+>r : any (error)
 >typeof foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >foo : () => string
 
@@ -204,28 +204,28 @@ var y = { a: "", b: "" };
 >"" : ""
 
 z: typeof y.a;
->z : any
+>z : any (error)
 >typeof y.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >y.a : string
 >y : { a: string; b: string; }
 >a : string
 
 z: typeof objA.a;
->z : any
+>z : any (error)
 >typeof objA.a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >objA.a : string
 >objA : A
 >a : string
 
 z: typeof A.foo;
->z : any
+>z : any (error)
 >typeof A.foo : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >A.foo : () => string
 >A : typeof A
 >foo : () => string
 
 z: typeof M.n;
->z : any
+>z : any (error)
 >typeof M.n : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >M.n : string
 >M : typeof M

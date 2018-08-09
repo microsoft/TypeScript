@@ -20,10 +20,10 @@ function a3({j, k, l: {m, n}, q: [a, b, c]}: { j: number, k: string, l: { m: boo
 >a3 : ({ j, k, l: { m, n }, q: [a, b, c] }: { j: number; k: string; l: { m: boolean; n: number; }; q: (string | number)[]; }) => void
 >j : number
 >k : string
->l : any
+>l : any (error)
 >m : boolean
 >n : number
->q : any
+>q : any (error)
 >a : string | number
 >b : string | number
 >c : string | number
@@ -86,9 +86,9 @@ function b2(z = null, o = { x: 0, y: undefined }) { }
 
 function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 >b3 : ({ z: { x, y: { j } } }?: { z: { x: string; y: { j: number; }; }; }) => void
->z : any
+>z : any (error)
 >x : string
->y : any
+>y : any (error)
 >j : number
 >{ z: { x: "hi", y: { j: 1 } } } : { z: { x: string; y: { j: number; }; }; }
 >z : { x: string; y: { j: number; }; }
@@ -109,7 +109,7 @@ interface F1 {
 >a : any
 >b : any
 >p : any
->m : any
+>m : any (error)
 >q : any
 >r : any
 }
@@ -195,9 +195,9 @@ enum Foo { a }
 
 function c0({z: {x, y: {j}}}) { }
 >c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
->z : any
+>z : any (error)
 >x : any
->y : any
+>y : any (error)
 >j : any
 
 function c1({z} = { z: 10 }) { }
@@ -403,7 +403,7 @@ d5();  // Parameter is optional as its declaration included an initializer
 
 function e1({x: number}) { }  // x has type any NOT number
 >e1 : ({ x: number }: { x: any; }) => void
->x : any
+>x : any (error)
 >number : any
 
 function e2({x}: { x: number }) { }  // x is type number
@@ -418,14 +418,14 @@ function e3({x}: { x?: number }) { }  // x is an optional with type number
 
 function e4({x: [number,string,any] }) { }  // x has type [any, any, any]
 >e4 : ({ x: [number, string, any] }: { x: [any, any, any]; }) => void
->x : any
+>x : any (error)
 >number : any
 >string : any
 >any : any
 
 function e5({x: [a, b, c]}: { x: [number, number, number] }) { }  // x has type [any, any, any]
 >e5 : ({ x: [a, b, c] }: { x: [number, number, number]; }) => void
->x : any
+>x : any (error)
 >a : number
 >b : number
 >c : number

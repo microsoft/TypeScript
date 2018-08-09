@@ -26,7 +26,7 @@ var obj1 = { x: 'foo' };
 
 <test1 {...obj1} />
 ><test1 {...obj1} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >obj1 : { x: string; }
 
 // Error, x is not string
@@ -38,7 +38,7 @@ var obj2 = { x: 32 };
 
 <test1 {...obj2} />
 ><test1 {...obj2} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >obj2 : { x: number; }
 
 // Error, x is missing
@@ -50,7 +50,7 @@ var obj3 = { y: 32 };
 
 <test1 {...obj3} />
 ><test1 {...obj3} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >obj3 : { y: number; }
 
 // OK
@@ -64,7 +64,7 @@ var obj4 = { x: 32, y: 32 };
 
 <test1 {...obj4} x="ok" />
 ><test1 {...obj4} x="ok" /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >obj4 : { x: number; y: number; }
 >x : string
 
@@ -79,7 +79,7 @@ var obj5 = { x: 32, y: 32 };
 
 <test1 x="ok" {...obj5} />
 ><test1 x="ok" {...obj5} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >x : string
 >obj5 : { x: number; y: number; }
 
@@ -96,7 +96,7 @@ var obj6 = { x: 'ok', y: 32, extra: 100 };
 
 <test1 {...obj6} />
 ><test1 {...obj6} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >obj6 : { x: string; y: number; extra: number; }
 
 // OK (spread override)
@@ -108,7 +108,7 @@ var obj7 = { x: 'foo' };
 
 <test1 x={32} {...obj7} />
 ><test1 x={32} {...obj7} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >x : number
 >32 : 32
 >obj7 : { x: string; }

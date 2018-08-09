@@ -24,7 +24,7 @@ for(const c8 = 0; c8 < 1; c8++) { }
 >c8 : 0
 >1 : 1
 >c8++ : number
->c8 : any
+>c8 : any (error)
 
 // error, can not be unintalized
 for(const c9; c9 < 1;) { }

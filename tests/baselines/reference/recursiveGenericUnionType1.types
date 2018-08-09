@@ -25,15 +25,15 @@ declare module Test2 {
 
 var x: Test1.Container<number>;
 >x : Test1.Container<number>
->Test1 : any
+>Test1 : any (error)
 
 var s1: Test1.IStringContainer;
 >s1 : Test1.Container<string>
->Test1 : any
+>Test1 : any (error)
 
 var s2: Test2.IStringContainer;
 >s2 : Test2.Container<string>
->Test2 : any
+>Test2 : any (error)
 
 s1 = s2;
 >s1 = s2 : Test2.Container<string>

@@ -4,15 +4,15 @@ declare namespace React {
     export interface HTMLAttributes<T> {}
 }
 export = React;
->React : any
+>React : any (error)
 
 export as namespace React;
->React : any
+>React : any (error)
 
 === tests/cases/compiler/node_modules/create-emotion-styled/types/react/index.d.ts ===
 /// <reference types="react" />
 declare module 'react' { // augment
->'react' : any
+>'react' : any (error)
 
     interface HTMLAttributes<T> {
         css?: unknown;
@@ -22,8 +22,8 @@ declare module 'react' { // augment
 export interface StyledOtherComponentList {
     "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 >"div" : import("tests/cases/compiler/node_modules/react/index.d.ts").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index.d.ts").HTMLAttributes<HTMLDivElement>, HTMLDivElement>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 }
 export interface StyledOtherComponent<A, B, C> {}
 
@@ -32,8 +32,8 @@ export * from "./types/react";
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/node_modules/react-emotion/index.d.ts ===
 import {StyledOtherComponent, StyledOtherComponentList} from "create-emotion-styled";
->StyledOtherComponent : any
->StyledOtherComponentList : any
+>StyledOtherComponent : any (error)
+>StyledOtherComponentList : any (error)
 
 export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
 >styled : (tag: string) => (o: object) => StyledOtherComponent<{}, import("tests/cases/compiler/node_modules/react/index.d.ts").DetailedHTMLProps<import("tests/cases/compiler/node_modules/react/index.d.ts").HTMLAttributes<HTMLDivElement>, HTMLDivElement>, any>

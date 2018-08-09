@@ -6,28 +6,28 @@ enum A { foo, bar }
 
 A = undefined;  // invalid LHS
 >A = undefined : undefined
->A : any
+>A : any (error)
 >undefined : undefined
 
 A = A.bar;      // invalid LHS
 >A = A.bar : A.bar
->A : any
+>A : any (error)
 >A.bar : A.bar
 >A : typeof A
 >bar : A.bar
 
 A.foo = 1;      // invalid LHS
 >A.foo = 1 : 1
->A.foo : any
+>A.foo : any (error)
 >A : typeof A
->foo : any
+>foo : any (error)
 >1 : 1
 
 A.foo = A.bar;  // invalid LHS
 >A.foo = A.bar : A.bar
->A.foo : any
+>A.foo : any (error)
 >A : typeof A
->foo : any
+>foo : any (error)
 >A.bar : A.bar
 >A : typeof A
 >bar : A.bar

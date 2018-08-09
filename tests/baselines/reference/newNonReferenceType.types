@@ -1,11 +1,11 @@
 === tests/cases/compiler/newNonReferenceType.ts ===
 var a = new any();
->a : any
->new any() : any
->any : any
+>a : any (error)
+>new any() : any (error)
+>any : any (error)
 
 var b = new boolean(); // error
->b : any
->new boolean() : any
->boolean : any
+>b : any (error)
+>new boolean() : any (error)
+>boolean : any (error)
 

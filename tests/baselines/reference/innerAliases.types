@@ -39,18 +39,18 @@ module D {
 }
 
 var c: D.inner.Class1;
->c : any
->D : any
->inner : any
+>c : any (error)
+>D : any (error)
+>inner : any (error)
 
 c = new D.inner.Class1();
->c = new D.inner.Class1() : any
->c : any
->new D.inner.Class1() : any
->D.inner.Class1 : any
->D.inner : any
+>c = new D.inner.Class1() : any (error)
+>c : any (error)
+>new D.inner.Class1() : any (error)
+>D.inner.Class1 : any (error)
+>D.inner : any (error)
 >D : typeof D
->inner : any
->Class1 : any
+>inner : any (error)
+>Class1 : any (error)
 
 

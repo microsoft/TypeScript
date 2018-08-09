@@ -1,8 +1,8 @@
 === tests/cases/compiler/declarationEmitNameConflictsWithAlias.ts ===
 export module C { export interface I { } }
 export import v = C;
->v : any
->C : any
+>v : any (error)
+>C : any (error)
 
 export module M {
 >M : typeof M
@@ -10,5 +10,5 @@ export module M {
     export module C { export interface I { } }
     export var w: v.I; // Gets emitted as C.I, which is the wrong interface
 >w : v.I
->v : any
+>v : any (error)
 }

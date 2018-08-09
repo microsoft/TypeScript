@@ -9,7 +9,7 @@ switch ('') {
 }
 
 ONE:
->ONE : any
+>ONE : any (error)
 
 switch ('') {
 >'' : ""
@@ -18,14 +18,14 @@ switch ('') {
 >'a' : "a"
 
         break ONE;
->ONE : any
+>ONE : any (error)
 }
 
 TWO:
->TWO : any
+>TWO : any (error)
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 switch ('') {
 >'' : ""
@@ -34,11 +34,11 @@ switch ('') {
 >'a' : "a"
 
         break THREE;
->THREE : any
+>THREE : any (error)
 }
 
 FOUR:
->FOUR : any
+>FOUR : any (error)
 
 switch ('') {
 >'' : ""
@@ -47,7 +47,7 @@ switch ('') {
 >'a' : "a"
 
         FIVE:
->FIVE : any
+>FIVE : any (error)
 
         switch ('') {
 >'' : ""
@@ -56,7 +56,7 @@ switch ('') {
 >'a' : "a"
 
                 break FOUR;
->FOUR : any
+>FOUR : any (error)
         }
 }
 
@@ -67,7 +67,7 @@ switch ('') {
 >'a' : "a"
 
         SIX:
->SIX : any
+>SIX : any (error)
 
         switch ('') {
 >'' : ""
@@ -76,12 +76,12 @@ switch ('') {
 >'a' : "a"
 
                 break SIX;
->SIX : any
+>SIX : any (error)
         }
 }
 
 SEVEN:
->SEVEN : any
+>SEVEN : any (error)
 
 switch ('') {
 >'' : ""
@@ -102,10 +102,10 @@ switch ('') {
 >'a' : "a"
 
                         break SEVEN;
->SEVEN : any
+>SEVEN : any (error)
 
                         EIGHT:
->EIGHT : any
+>EIGHT : any (error)
 
                         switch ('') {
 >'' : ""
@@ -118,7 +118,7 @@ switch ('') {
 >function () { } : () => void
 
                                 break EIGHT;
->EIGHT : any
+>EIGHT : any (error)
                         }
                 }
         }

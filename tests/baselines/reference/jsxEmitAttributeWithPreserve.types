@@ -3,7 +3,7 @@ declare var React: any;
 >React : any
 
 <foo data/>
-><foo data/> : any
->foo : any
+><foo data/> : any (error)
+>foo : any (error)
 >data : true
 

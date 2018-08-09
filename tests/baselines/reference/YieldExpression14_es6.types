@@ -7,6 +7,6 @@ class C {
 
      yield foo
 >yield foo : any
->foo : any
+>foo : any (error)
   }
 }

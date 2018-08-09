@@ -2,17 +2,17 @@
 var [a], {b}, c, d; // error
 >a : any
 >b : any
->c : any
->d : any
+>c : any (auto)
+>d : any (auto)
 
 var [a1 = undefined], {b1 = null}, c1 = undefined, d1 = null; // error
 >a1 : any
 >undefined : undefined
 >b1 : any
 >null : null
->c1 : any
+>c1 : any (auto)
 >undefined : undefined
->d1 : any
+>d1 : any (auto)
 >null : null
 
 var [a2]: [any], {b2}: { b2: any }, c2: any, d2: any;
@@ -36,9 +36,9 @@ var [a4] = [undefined], {b4} = { b4: null }, c4 = undefined, d4 = null; // error
 >{ b4: null } : { b4: null; }
 >b4 : null
 >null : null
->c4 : any
+>c4 : any (auto)
 >undefined : undefined
->d4 : any
+>d4 : any (auto)
 >null : null
 
 var [a5 = undefined] = []; // error

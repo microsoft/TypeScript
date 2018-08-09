@@ -84,9 +84,9 @@ class Point3D extends Point {
 >this.z : number
 >this : this
 >z : number
->this.m : any
+>this.m : any (error)
 >this : this
->m : any
+>m : any (error)
     }        
 }
 

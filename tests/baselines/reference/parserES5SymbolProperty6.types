@@ -4,8 +4,8 @@ class C {
 
     [Symbol.toStringTag]: string = "";
 >[Symbol.toStringTag] : string
->Symbol.toStringTag : any
->Symbol : any
->toStringTag : any
+>Symbol.toStringTag : any (error)
+>Symbol : any (error)
+>toStringTag : any (error)
 >"" : ""
 }

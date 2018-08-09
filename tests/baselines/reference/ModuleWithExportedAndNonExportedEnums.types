@@ -16,7 +16,7 @@ module A {
 // not an error since exported
 var a: A.Color = A.Color.Red;
 >a : A.Color
->A : any
+>A : any (error)
 >A.Color.Red : A.Color.Red
 >A.Color : typeof A.Color
 >A : typeof A
@@ -25,10 +25,10 @@ var a: A.Color = A.Color.Red;
 
 // error not exported
 var b = A.Day.Monday;
->b : any
->A.Day.Monday : any
->A.Day : any
+>b : any (error)
+>A.Day.Monday : any (error)
+>A.Day : any (error)
 >A : typeof A
->Day : any
->Monday : any
+>Day : any (error)
+>Monday : any (error)
 

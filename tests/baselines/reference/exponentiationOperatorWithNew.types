@@ -26,7 +26,7 @@ new a ** new b ** c;
 >c : any
 
 new (a ** b ** c);
->new (a ** b ** c) : any
+>new (a ** b ** c) : any (error)
 >(a ** b ** c) : number
 >a ** b ** c : number
 >a : any

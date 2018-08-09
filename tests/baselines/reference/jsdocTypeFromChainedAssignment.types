@@ -48,24 +48,24 @@ A.prototype.y = A.prototype.z = function f(n) {
 }
 /** @param {number} m */
 A.s = A.t = function g(m) {
->A.s = A.t = function g(m) {    return m + this.x} : (m: number) => any
->A.s : (m: number) => any
+>A.s = A.t = function g(m) {    return m + this.x} : (m: number) => any (error)
+>A.s : (m: number) => any (error)
 >A : typeof A
->s : (m: number) => any
->A.t = function g(m) {    return m + this.x} : (m: number) => any
->A.t : (m: number) => any
+>s : (m: number) => any (error)
+>A.t = function g(m) {    return m + this.x} : (m: number) => any (error)
+>A.t : (m: number) => any (error)
 >A : typeof A
->t : (m: number) => any
->function g(m) {    return m + this.x} : (m: number) => any
->g : (m: number) => any
+>t : (m: number) => any (error)
+>function g(m) {    return m + this.x} : (m: number) => any (error)
+>g : (m: number) => any (error)
 >m : number
 
     return m + this.x
->m + this.x : any
+>m + this.x : any (error)
 >m : number
->this.x : any
+>this.x : any (error)
 >this : typeof A
->x : any
+>x : any (error)
 }
 var a = new A()
 >a : A
@@ -87,17 +87,17 @@ a.z('not really') // error
 >'not really' : "not really"
 
 A.s('still no') // error
->A.s('still no') : any
->A.s : (m: number) => any
+>A.s('still no') : any (error)
+>A.s : (m: number) => any (error)
 >A : typeof A
->s : (m: number) => any
+>s : (m: number) => any (error)
 >'still no' : "still no"
 
 A.t('not here either') // error
->A.t('not here either') : any
->A.t : (m: number) => any
+>A.t('not here either') : any (error)
+>A.t : (m: number) => any (error)
 >A : typeof A
->t : (m: number) => any
+>t : (m: number) => any (error)
 >'not here either' : "not here either"
 
 a.first = 10 // error: '10' isn't assignable to '1'

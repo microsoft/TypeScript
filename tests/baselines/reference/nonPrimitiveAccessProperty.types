@@ -9,13 +9,13 @@ a.toString();
 >toString : () => string
 
 a.nonExist(); // error
->a.nonExist() : any
->a.nonExist : any
+>a.nonExist() : any (error)
+>a.nonExist : any (error)
 >a : object
->nonExist : any
+>nonExist : any (error)
 
 var { destructuring } = a; // error
->destructuring : any
+>destructuring : any (error)
 >a : object
 
 var { ...rest } = a; // ok

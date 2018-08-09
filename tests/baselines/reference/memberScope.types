@@ -7,10 +7,10 @@ module Salt {
 
   export module Basil { }
   var z = Basil.Pepper;
->z : any
->Basil.Pepper : any
->Basil : any
->Pepper : any
+>z : any (error)
+>Basil.Pepper : any (error)
+>Basil : any (error)
+>Pepper : any (error)
 }
 
 

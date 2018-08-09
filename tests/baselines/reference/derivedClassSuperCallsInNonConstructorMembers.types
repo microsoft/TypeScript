@@ -13,74 +13,74 @@ class Derived extends Base {
 >Base : Base
 
     a: super();
->a : any
->() : any
-> : any
+>a : any (error)
+>() : any (error)
+> : any (error)
 
     b() {
->b() : any
->b : any
+>b() : any (error)
+>b : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
     get C() {
->get : any
->C() : any
->C : any
+>get : any (error)
+>C() : any (error)
+>C : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return 1;
 >1 : 1
     }
     set C(v) {
->set : any
->C(v) : any
->C : any
->v : any
+>set : any (error)
+>C(v) : any (error)
+>C : any (error)
+>v : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     static a: super();
->a : any
+>a : any (error)
 >super() : void
->super : any
+>super : any (error)
 
     static b() {
->b() : any
->b : any
+>b() : any (error)
+>b : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
     static get C() {
->get : any
->C() : any
->C : any
+>get : any (error)
+>C() : any (error)
+>C : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return 1;
 >1 : 1
     }
     static set C(v) {
->set : any
->C(v) : any
->C : any
->v : any
+>set : any (error)
+>C(v) : any (error)
+>C : any (error)
+>v : any (error)
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 }

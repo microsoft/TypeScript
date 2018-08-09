@@ -1,7 +1,7 @@
 === tests/cases/compiler/externModule.ts ===
 declare module {
->declare : any
->module : any
+>declare : any (error)
+>module : any (error)
 
     export class XDate {
 >XDate : XDate
@@ -119,45 +119,45 @@ declare module {
 }
 
 var d=new XDate();
->d : any
->new XDate() : any
->XDate : any
+>d : any (error)
+>new XDate() : any (error)
+>XDate : any (error)
 
 d.getDay();
->d.getDay() : any
->d.getDay : any
->d : any
->getDay : any
+>d.getDay() : any (error)
+>d.getDay : any (error)
+>d : any (error)
+>getDay : any (error)
 
 d=new XDate(1978,2);
->d=new XDate(1978,2) : any
->d : any
->new XDate(1978,2) : any
->XDate : any
+>d=new XDate(1978,2) : any (error)
+>d : any (error)
+>new XDate(1978,2) : any (error)
+>XDate : any (error)
 >1978 : 1978
 >2 : 2
 
 d.getXDate();
->d.getXDate() : any
->d.getXDate : any
->d : any
->getXDate : any
+>d.getXDate() : any (error)
+>d.getXDate : any (error)
+>d : any (error)
+>getXDate : any (error)
 
 var n=XDate.parse("3/2/2004");
->n : any
->XDate.parse("3/2/2004") : any
->XDate.parse : any
->XDate : any
->parse : any
+>n : any (error)
+>XDate.parse("3/2/2004") : any (error)
+>XDate.parse : any (error)
+>XDate : any (error)
+>parse : any (error)
 >"3/2/2004" : "3/2/2004"
 
 n=XDate.UTC(1964,2,1);
->n=XDate.UTC(1964,2,1) : any
->n : any
->XDate.UTC(1964,2,1) : any
->XDate.UTC : any
->XDate : any
->UTC : any
+>n=XDate.UTC(1964,2,1) : any (error)
+>n : any (error)
+>XDate.UTC(1964,2,1) : any (error)
+>XDate.UTC : any (error)
+>XDate : any (error)
+>UTC : any (error)
 >1964 : 1964
 >2 : 2
 >1 : 1

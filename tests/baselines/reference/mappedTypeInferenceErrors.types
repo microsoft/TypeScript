@@ -14,7 +14,7 @@ declare function foo<P, C>(options: { props: P, computed: ComputedOf<C> } & This
 >computed : ComputedOf<C>
 
 foo({
->foo({    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }}) : any
+>foo({    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }}) : any (error)
 >foo : <P, C>(options: { props: P; computed: ComputedOf<C>; } & ThisType<P & C>) => void
 >{    props: { x: 10, y: 20 },    computed: {        bar(): number {            let z = this.bar;            return 42;        },        baz: 42    }} : { props: { x: number; y: number; }; computed: { bar(): number; baz: number; }; }
 

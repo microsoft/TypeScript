@@ -100,7 +100,7 @@ module M {
 >Green : Color.Green
 
         x=x.sort(CompareYeux); // parameter mismatch
->x=x.sort(CompareYeux) : any
+>x=x.sort(CompareYeux) : any (error)
 >x : IEye[]
 >x.sort(CompareYeux) : IEye[]
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
@@ -135,11 +135,11 @@ module M {
 >result : string
 >((Color._map[z[i].color])+"\r\n") : string
 >(Color._map[z[i].color])+"\r\n" : string
->(Color._map[z[i].color]) : any
->Color._map[z[i].color] : any
->Color._map : any
+>(Color._map[z[i].color]) : any (error)
+>Color._map[z[i].color] : any (error)
+>Color._map : any (error)
 >Color : typeof Color
->_map : any
+>_map : any (error)
 >z[i].color : number
 >z[i] : IEye
 >z : IEye[]

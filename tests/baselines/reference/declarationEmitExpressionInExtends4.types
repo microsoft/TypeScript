@@ -16,14 +16,14 @@ class C extends getSomething()<number, string> {
 
 class C2 extends SomeUndefinedFunction()<number, string> {
 >C2 : C2
->SomeUndefinedFunction() : any
->SomeUndefinedFunction : any
+>SomeUndefinedFunction() : any (error)
+>SomeUndefinedFunction : any (error)
 
 }
 
 
 class C3 extends SomeUndefinedFunction {
 >C3 : C3
->SomeUndefinedFunction : any
+>SomeUndefinedFunction : any (error)
 
 }

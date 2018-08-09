@@ -2,7 +2,7 @@
 interface I {
         [p]; // Used to be indexer, now it is a computed property
 >[p] : any
->p : any
+>p : any (error)
 
         [p1: string];
 >p1 : string

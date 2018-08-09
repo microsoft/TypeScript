@@ -19,10 +19,10 @@ export class x11 { }
 
 === tests/cases/compiler/client.ts ===
 import defaultBinding1, { } from "./server";
->defaultBinding1 : any
+>defaultBinding1 : any (error)
 
 import defaultBinding2, { a } from "./server";
->defaultBinding2 : any
+>defaultBinding2 : any (error)
 >a : typeof a
 
 export var x1 = new a();
@@ -31,7 +31,7 @@ export var x1 = new a();
 >a : typeof a
 
 import defaultBinding3, { a11 as b } from "./server";
->defaultBinding3 : any
+>defaultBinding3 : any (error)
 >a11 : typeof b
 >b : typeof b
 
@@ -41,7 +41,7 @@ export var x2 = new b();
 >b : typeof b
 
 import defaultBinding4, { x, a12 as y } from "./server";
->defaultBinding4 : any
+>defaultBinding4 : any (error)
 >x : typeof x
 >a12 : typeof y
 >y : typeof y
@@ -57,7 +57,7 @@ export var x5 = new y();
 >y : typeof y
 
 import defaultBinding5, { x11 as z,  } from "./server";
->defaultBinding5 : any
+>defaultBinding5 : any (error)
 >x11 : typeof z
 >z : typeof z
 
@@ -67,7 +67,7 @@ export var x3 = new z();
 >z : typeof z
 
 import defaultBinding6, { m,  } from "./server";
->defaultBinding6 : any
+>defaultBinding6 : any (error)
 >m : typeof m
 
 export var x6 = new m();

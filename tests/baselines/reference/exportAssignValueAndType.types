@@ -6,7 +6,7 @@ declare module http {
 
 interface server {
     (): http.Server;
->http : any
+>http : any (error)
 
     startTime: Date;
 >startTime : Date

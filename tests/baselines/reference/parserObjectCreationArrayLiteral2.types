@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral2.ts ===
 new Foo[1];
->new Foo[1] : any
->Foo[1] : any
->Foo : any
+>new Foo[1] : any (error)
+>Foo[1] : any (error)
+>Foo : any (error)
 >1 : 1
 

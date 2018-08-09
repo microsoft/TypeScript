@@ -10,123 +10,123 @@ module M {
 // Errors
 M.x = 1;
 >M.x = 1 : 1
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >1 : 1
 
 M.x += 2;
->M.x += 2 : any
->M.x : any
+>M.x += 2 : any (error)
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >2 : 2
 
 M.x -= 3;
 >M.x -= 3 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >3 : 3
 
 M.x *= 4;
 >M.x *= 4 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >4 : 4
 
 M.x /= 5;
 >M.x /= 5 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >5 : 5
 
 M.x %= 6;
 >M.x %= 6 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >6 : 6
 
 M.x <<= 7;
 >M.x <<= 7 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >7 : 7
 
 M.x >>= 8;
 >M.x >>= 8 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >8 : 8
 
 M.x >>>= 9;
 >M.x >>>= 9 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >9 : 9
 
 M.x &= 10;
 >M.x &= 10 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >10 : 10
 
 M.x |= 11;
 >M.x |= 11 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >11 : 11
 
 M.x ^= 12;
 >M.x ^= 12 : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 >12 : 12
 
 M.x++;
 >M.x++ : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 M.x--;
 >M.x-- : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 ++M.x;
 >++M.x : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 --M.x;
 >--M.x : number
->M.x : any
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 ++((M.x));
 >++((M.x)) : number
->((M.x)) : any
->(M.x) : any
->M.x : any
+>((M.x)) : any (error)
+>(M.x) : any (error)
+>M.x : any (error)
 >M : typeof M
->x : any
+>x : any (error)
 
 M["x"] = 0;
 >M["x"] = 0 : 0
->M["x"] : any
+>M["x"] : any (error)
 >M : typeof M
 >"x" : "x"
 >0 : 0

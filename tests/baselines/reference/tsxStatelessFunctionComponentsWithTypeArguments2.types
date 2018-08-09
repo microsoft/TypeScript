@@ -7,13 +7,13 @@ declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX
 >l : { prop: U; "ignore-prop": string; }
 >prop : U
 >"ignore-prop" : string
->JSX : any
+>JSX : any (error)
 
 declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
 >ComponentSpecific2 : <U>(l: { prop: U; }) => JSX.Element
 >l : { prop: U; }
 >prop : U
->JSX : any
+>JSX : any (error)
 
 // Error
 function Bar<T extends {prop: number}>(arg: T) {
@@ -47,7 +47,7 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
->JSX : any
+>JSX : any (error)
 
 // Error
 function createLink(func: (a: number, b: string)=>void) {
@@ -76,7 +76,7 @@ interface InferParamProp<T> {
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
 >attr : InferParamProp<T>
->JSX : any
+>JSX : any (error)
 
 // Error
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;

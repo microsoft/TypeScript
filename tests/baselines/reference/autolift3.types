@@ -59,10 +59,10 @@ var b = new B();
 >B : typeof B
 
 b.foo();
->b.foo() : any
->b.foo : any
+>b.foo() : any (error)
+>b.foo : any (error)
 >b : B
->foo : any
+>foo : any (error)
 
 
 

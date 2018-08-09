@@ -1,13 +1,13 @@
 === tests/cases/compiler/duplicateLabel4.ts ===
 target:
->target : any
+>target : any (error)
 
 while (true) {
 >true : true
 }
 
 target: 
->target : any
+>target : any (error)
 
 while (true) {
 >true : true

@@ -8,14 +8,14 @@ namespace Test1 {
     }
 
     var x: Foo.bar = "";
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 >"" : ""
 
     var y: Test1.Foo.bar = "";
->y : any
->Test1 : any
->Foo : any
+>y : any (error)
+>Test1 : any (error)
+>Foo : any (error)
 >"" : ""
 }
 
@@ -30,14 +30,14 @@ namespace Test2 {
     }
 
     var x: Foo.bar = "";
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 >"" : ""
 
     var y: Test2.Foo.bar = "";
->y : any
->Test2 : any
->Foo : any
+>y : any (error)
+>Test2 : any (error)
+>Foo : any (error)
 >"" : ""
 }
 
@@ -52,14 +52,14 @@ namespace Test3 {
     }
 
     var x: Foo.bar = "";
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 >"" : ""
 
     var y: Test3.Foo.bar = "";
->y : any
->Test3 : any
->Foo : any
+>y : any (error)
+>Test3 : any (error)
+>Foo : any (error)
 >"" : ""
 }
 
@@ -74,14 +74,14 @@ namespace Test4 {
 >bar : string
 
     var x: Foo.bar = "";
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 >"" : ""
 
     var y: Test4.Foo.bar = "";
->y : any
->Test4 : any
->Foo : any
+>y : any (error)
+>Test4 : any (error)
+>Foo : any (error)
 >"" : ""
 }
 
@@ -96,20 +96,20 @@ namespace Test5 {
 >wat : string
 
     var x: Foo.bar = "";
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 >"" : ""
 
     var y: Test5.Foo.bar = "";
->y : any
->Test5 : any
->Foo : any
+>y : any (error)
+>Test5 : any (error)
+>Foo : any (error)
 >"" : ""
 }
 
 import lol = Test5.Foo.
->lol : any
+>lol : any (error)
 >Test5 : typeof Test5
->Foo : any
-> : any
+>Foo : any (error)
+> : any (error)
 

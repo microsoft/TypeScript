@@ -1,20 +1,20 @@
 === tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity5.ts ===
 model.rotate(0, rotateY * Math.PI / 180, rotateZ * Math.PI / 180);
->model.rotate(0, rotateY * Math.PI / 180, rotateZ * Math.PI / 180) : any
->model.rotate : any
->model : any
->rotate : any
+>model.rotate(0, rotateY * Math.PI / 180, rotateZ * Math.PI / 180) : any (error)
+>model.rotate : any (error)
+>model : any (error)
+>rotate : any (error)
 >0 : 0
 >rotateY * Math.PI / 180 : number
 >rotateY * Math.PI : number
->rotateY : any
+>rotateY : any (error)
 >Math.PI : number
 >Math : Math
 >PI : number
 >180 : 180
 >rotateZ * Math.PI / 180 : number
 >rotateZ * Math.PI : number
->rotateZ : any
+>rotateZ : any (error)
 >Math.PI : number
 >Math : Math
 >PI : number

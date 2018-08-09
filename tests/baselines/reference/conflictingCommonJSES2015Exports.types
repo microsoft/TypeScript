@@ -7,10 +7,10 @@ export function abc(a, b, c) { return 5; }
 >5 : 5
 
 module.exports = { abc };
->module.exports = { abc } : any
->module.exports : any
->module : any
->exports : any
+>module.exports = { abc } : any (error)
+>module.exports : any (error)
+>module : any (error)
+>exports : any (error)
 >{ abc } : { abc: (a: any, b: any, c: any) => number; }
 >abc : (a: any, b: any, c: any) => number
 

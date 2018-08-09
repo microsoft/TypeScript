@@ -231,7 +231,7 @@ var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 >0 : 0
 
 _.all([true, 1, null, 'yes'], _.identity);
->_.all([true, 1, null, 'yes'], _.identity) : any
+>_.all([true, 1, null, 'yes'], _.identity) : any (error)
 >_.all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
@@ -4140,5 +4140,5 @@ module Underscore {
 
 declare var _: Underscore.Static;
 >_ : Underscore.Static
->Underscore : any
+>Underscore : any (error)
 

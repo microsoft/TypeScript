@@ -12,8 +12,8 @@ const [, a = ''] = ''.match('') || [];
 >[] : [undefined?, ""?]
 
 a.toFixed()
->a.toFixed() : any
->a.toFixed : any
+>a.toFixed() : any (error)
+>a.toFixed : any (error)
 >a : string
->toFixed : any
+>toFixed : any (error)
 

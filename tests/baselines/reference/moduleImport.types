@@ -5,10 +5,10 @@ module A.B.C {
 >C : typeof C
 
 	import XYZ = X.Y.Z;
->XYZ : any
+>XYZ : any (error)
 >X : typeof X
->Y : any
->Z : any
+>Y : any (error)
+>Z : any (error)
 
 	export function ping(x: number) {
 >ping : (x: number) => void
@@ -18,10 +18,10 @@ module A.B.C {
 >x>0 : boolean
 >x : number
 >0 : 0
->XYZ.pong (x-1) : any
->XYZ.pong : any
->XYZ : any
->pong : any
+>XYZ.pong (x-1) : any (error)
+>XYZ.pong : any (error)
+>XYZ : any (error)
+>pong : any (error)
 >x-1 : number
 >x : number
 >1 : 1

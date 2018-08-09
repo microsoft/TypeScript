@@ -6,9 +6,9 @@ declare var o: any;
 >o : any
 
 export const x = <span {...o} />
->x : any
-><span {...o} /> : any
->span : any
+>x : any (error)
+><span {...o} /> : any (error)
+>span : any (error)
 >o : any
 
 === tests/cases/compiler/script.tsx ===
@@ -19,9 +19,9 @@ declare var o: any;
 >o : any
 
 const x = <span {...o} />
->x : any
-><span {...o} /> : any
->span : any
+>x : any (error)
+><span {...o} /> : any (error)
+>span : any (error)
 >o : any
 
 === tests/cases/compiler/tslib.d.ts ===

@@ -10,64 +10,64 @@ declare module JSX {
 var m = <div x-y="val"></div>;
 >m : JSX.Element
 ><div x-y="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >x-y : string
->div : any
+>div : any (error)
 
 var n = <div xx-y="val"></div>;
 >n : JSX.Element
 ><div xx-y="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xx-y : string
->div : any
+>div : any (error)
 
 var o = <div x-yy="val"></div>;
 >o : JSX.Element
 ><div x-yy="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >x-yy : string
->div : any
+>div : any (error)
 
 var p = <div xx-yy="val"></div>;
 >p : JSX.Element
 ><div xx-yy="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xx-yy : string
->div : any
+>div : any (error)
 
 // Investigation
 var a = <div x="val"></div>;
 >a : JSX.Element
 ><div x="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >x : string
->div : any
+>div : any (error)
 
 var b = <div xx="val"></div>;
 >b : JSX.Element
 ><div xx="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xx : string
->div : any
+>div : any (error)
 
 var c = <div xxx="val"></div>;
 >c : JSX.Element
 ><div xxx="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xxx : string
->div : any
+>div : any (error)
 
 var d = <div xxxx="val"></div>;
 >d : JSX.Element
 ><div xxxx="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xxxx : string
->div : any
+>div : any (error)
 
 var e = <div xxxxx="val"></div>;
 >e : JSX.Element
 ><div xxxxx="val"></div> : JSX.Element
->div : any
+>div : any (error)
 >xxxxx : string
->div : any
+>div : any (error)
 

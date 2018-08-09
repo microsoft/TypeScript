@@ -1,7 +1,7 @@
 === /app.ts ===
 /// <reference types="lib"/>
 import {$} from "./ref";
->$ : any
+>$ : any (error)
 
 export interface A {
     x: typeof $;

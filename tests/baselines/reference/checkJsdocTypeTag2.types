@@ -49,10 +49,10 @@ const x3 = (a) => a.concat("hi");
 >x3 : (arg0: number) => number
 >(a) => a.concat("hi") : (a: number) => number
 >a : number
->a.concat("hi") : any
->a.concat : any
+>a.concat("hi") : any (error)
+>a.concat : any (error)
 >a : number
->concat : any
+>concat : any (error)
 >"hi" : "hi"
 
 x3(0);

@@ -26,10 +26,10 @@ function tryCatch() {
 >dontPanic : () => any
 
             err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
->err.doPanic() : any
->err.doPanic : any
+>err.doPanic() : any (error)
+>err.doPanic : any (error)
 >err : { type: "foo"; dontPanic(): any; }
->doPanic : any
+>doPanic : any (error)
         }
 
         else if (err instanceof Error) {
@@ -43,9 +43,9 @@ function tryCatch() {
 >message : string
 
             err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
->err.massage : any
+>err.massage : any (error)
 >err : Error
->massage : any
+>massage : any (error)
         }
 
         else {

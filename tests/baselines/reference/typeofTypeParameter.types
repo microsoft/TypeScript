@@ -8,8 +8,8 @@ function f<T>(x: T): T {
 >x : T
 
     var y: typeof T;
->y : any
->T : any
+>y : any (error)
+>T : any (error)
 
     return a;
 >a : T

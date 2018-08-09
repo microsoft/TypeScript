@@ -26,7 +26,7 @@ class Test1 {
 >console.log : (msg?: any) => void
 >console : { log(msg?: any): void; }
 >log : (msg?: any) => void
->field1 : any
+>field1 : any (error)
 
                              // but since this code would be generated inside constructor, in generated js
                              // it would resolve to private field1 and thats not what user intended here. 

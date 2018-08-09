@@ -17,8 +17,8 @@ class C extends Base {
     // use of super in static properties initializers.
     [super.bar()]() { }
 >[super.bar()] : () => void
->super.bar() : any
->super.bar : any
->super : any
->bar : any
+>super.bar() : any (error)
+>super.bar : any (error)
+>super : any (error)
+>bar : any (error)
 }

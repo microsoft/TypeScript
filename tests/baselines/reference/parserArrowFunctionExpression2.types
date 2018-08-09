@@ -1,9 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression2.ts ===
 a = () => { } || a
 >a = () => { } : () => void
->a : any
+>a : any (error)
 >() => { } : () => void
 >|| a : any
-> : any
->a : any
+> : any (error)
+>a : any (error)
 

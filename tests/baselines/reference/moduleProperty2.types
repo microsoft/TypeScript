@@ -15,8 +15,8 @@ module M {
 >z : any
 
     var test1=x;
->test1 : any
->x : any
+>test1 : any (error)
+>x : any (error)
 
     var test2=y; // y visible because same module
 >test2 : any
@@ -27,10 +27,10 @@ module N {
 >N : typeof N
 
     var test3=M.y; // nope y private property of M
->test3 : any
->M.y : any
+>test3 : any (error)
+>M.y : any (error)
 >M : typeof M
->y : any
+>y : any (error)
 
     var test4=M.z; // ok public property of M
 >test4 : any

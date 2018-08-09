@@ -3,8 +3,8 @@ module ObjectLiteral {
 >ObjectLiteral : typeof ObjectLiteral
 
     var ThisInObjectLiteral = {
->ThisInObjectLiteral : { _foo: string; foo: string; test: () => any; }
->{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; foo: string; test: () => any; }
+>ThisInObjectLiteral : { _foo: string; foo: string; test: () => any (error); }
+>{        _foo: '1',        get foo(): string {            return super._foo;        },        set foo(value: string) {            super._foo = value;        },        test: function () {            return super._foo;        }    } : { _foo: string; foo: string; test: () => any (error); }
 
         _foo: '1',
 >_foo : string
@@ -14,9 +14,9 @@ module ObjectLiteral {
 >foo : string
 
             return super._foo;
->super._foo : any
->super : any
->_foo : any
+>super._foo : any (error)
+>super : any (error)
+>_foo : any (error)
 
         },
         set foo(value: string) {
@@ -25,20 +25,20 @@ module ObjectLiteral {
 
             super._foo = value;
 >super._foo = value : string
->super._foo : any
->super : any
->_foo : any
+>super._foo : any (error)
+>super : any (error)
+>_foo : any (error)
 >value : string
 
         },
         test: function () {
->test : () => any
->function () {            return super._foo;        } : () => any
+>test : () => any (error)
+>function () {            return super._foo;        } : () => any (error)
 
             return super._foo;
->super._foo : any
->super : any
->_foo : any
+>super._foo : any (error)
+>super : any (error)
+>_foo : any (error)
         }
     }
 }
@@ -56,17 +56,17 @@ class SuperObjectTest extends F {
 >testing : () => void
 
         var test = {
->test : { readonly F: any; }
->{            get F() {                return super.test();            }        } : { readonly F: any; }
+>test : { readonly F: any (error); }
+>{            get F() {                return super.test();            }        } : { readonly F: any (error); }
 
             get F() {
->F : any
+>F : any (error)
 
                 return super.test();
->super.test() : any
->super.test : any
->super : any
->test : any
+>super.test() : any (error)
+>super.test : any (error)
+>super : any (error)
+>test : any (error)
             }
         };
     }

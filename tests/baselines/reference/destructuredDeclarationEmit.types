@@ -49,14 +49,14 @@ export { foo, arr };
 >arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 
 const { bar: baz, bat, bam: { bork: { bar: ibar, baz: ibaz } } } = foo;
->bar : any
+>bar : any (error)
 >baz : string
 >bat : string
->bam : any
->bork : any
->bar : any
+>bam : any (error)
+>bork : any (error)
+>bar : any (error)
 >ibar : string
->baz : any
+>baz : any (error)
 >ibaz : string
 >foo : { bar: string; bat: string; bam: { bork: { bar: string; baz: string; }; }; }
 
@@ -93,7 +93,7 @@ const getFoo = () => ({
 });
 
 const { foo: foo2 } = getFoo();
->foo : any
+>foo : any (error)
 >foo2 : string
 >getFoo() : { foo: string; }
 >getFoo : () => { foo: string; }

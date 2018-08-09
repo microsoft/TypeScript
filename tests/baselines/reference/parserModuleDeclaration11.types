@@ -16,5 +16,5 @@ string.foo("abc");
 
 var x: string.X;
 >x : string.X
->string : any
+>string : any (error)
 

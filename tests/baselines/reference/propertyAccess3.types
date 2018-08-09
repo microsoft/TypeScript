@@ -3,8 +3,8 @@ var foo: boolean;
 >foo : boolean
 
 foo.toBAZ();
->foo.toBAZ() : any
->foo.toBAZ : any
+>foo.toBAZ() : any (error)
+>foo.toBAZ : any (error)
 >foo : boolean
->toBAZ : any
+>toBAZ : any (error)
 

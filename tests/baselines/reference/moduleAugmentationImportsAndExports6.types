@@ -35,13 +35,13 @@ export namespace N {
 >b : number
 }
 import I = N.Ifc;
->I : any
->N : any
+>I : any (error)
+>N : any (error)
 >Ifc : I
 
 import C = N.Cls;
->C : any
->N : any
+>C : any (error)
+>N : any (error)
 >Cls : C
 
 declare module "./f1" {

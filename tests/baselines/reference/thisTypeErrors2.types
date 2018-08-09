@@ -3,7 +3,7 @@ class Base {
 >Base : Base
 
     constructor(a: this) {
->a : any
+>a : any (error)
     }
 }
 class Generic<T> {
@@ -16,7 +16,7 @@ class Derived {
 >n : number
 
     constructor(public host: Generic<this>) {
->host : Generic<any>
+>host : Generic<any (error)>
 
         let self: this = this;
 >self : this

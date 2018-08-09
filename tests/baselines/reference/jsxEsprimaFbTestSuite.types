@@ -21,7 +21,7 @@ declare var props;
 >props : any
 
 <a />;
-><a /> : any
+><a /> : any (error)
 >a : any
 
 //<n:a n:v />; Namespace unsuported
@@ -29,7 +29,7 @@ declare var props;
 //<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
 
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
-><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any
+><a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" /> : any (error)
 >a : any
 >b : string
 >" " : " "
@@ -41,23 +41,23 @@ declare var props;
 >h : string
 
 <a b="&notanentity;" />;
-><a b="&notanentity;" /> : any
+><a b="&notanentity;" /> : any (error)
 >a : any
 >b : string
 
 <a
-><a/> : any
+><a/> : any (error)
 >a : any
 
 />;
 
 <日本語></日本語>;
-><日本語></日本語> : any
+><日本語></日本語> : any (error)
 >日本語 : any
 >日本語 : any
 
 <AbC_def
-><AbC_def  test="&#x0026;&#38;">barbaz</AbC_def> : any
+><AbC_def  test="&#x0026;&#38;">barbaz</AbC_def> : any (error)
 >AbC_def : any
 
   test="&#x0026;&#38;">
@@ -69,57 +69,57 @@ baz
 >AbC_def : any
 
 <a b={x ? <c /> : <d />} />;
-><a b={x ? <c /> : <d />} /> : any
+><a b={x ? <c /> : <d />} /> : any (error)
 >a : any
 >b : any
 >x ? <c /> : <d /> : any
 >x : any
-><c /> : any
->c : any
-><d /> : any
->d : any
+><c /> : any (error)
+>c : any (error)
+><d /> : any (error)
+>d : any (error)
 
 <a>{}</a>;
-><a>{}</a> : any
+><a>{}</a> : any (error)
 >a : any
 >a : any
 
 <a>{/* this is a comment */}</a>;
-><a>{/* this is a comment */}</a> : any
+><a>{/* this is a comment */}</a> : any (error)
 >a : any
 >a : any
 
 <div>@test content</div>;
-><div>@test content</div> : any
->div : any
->div : any
+><div>@test content</div> : any (error)
+>div : any (error)
+>div : any (error)
 
 <div><br />7x invalid-js-identifier</div>;
-><div><br />7x invalid-js-identifier</div> : any
->div : any
-><br /> : any
->br : any
->div : any
+><div><br />7x invalid-js-identifier</div> : any (error)
+>div : any (error)
+><br /> : any (error)
+>br : any (error)
+>div : any (error)
 
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
-><LeftRight left=<a /> : any
-><LeftRight left= : any
+><LeftRight left=<a /> : any (error)
+><LeftRight left= : any (error)
 >LeftRight : any
 >left : true
-><a /> : any
+><a /> : any (error)
 >a : any
 >right=<b>monkeys /> gorillas</b> /> : boolean
->right : any
+>right : any (error)
 ><b>monkeys /> gorillas</b> /> : boolean
 ><b>monkeys /> gorillas</b> / : number
-><b>monkeys /> gorillas</b> : any
->b : any
->b : any
-> : any
-> : any
+><b>monkeys /> gorillas</b> : any (error)
+>b : any (error)
+>b : any (error)
+> : any (error)
+> : any (error)
 
 <a.b></a.b>;
-><a.b></a.b> : any
+><a.b></a.b> : any (error)
 >a.b : any
 >a : any
 >b : any
@@ -128,7 +128,7 @@ baz
 >b : any
 
 <a.b.c></a.b.c>;
-><a.b.c></a.b.c> : any
+><a.b.c></a.b.c> : any (error)
 >a.b.c : any
 >a.b : any
 >a : any
@@ -142,32 +142,32 @@ baz
 
 (<div />) < x;
 >(<div />) < x : boolean
->(<div />) : any
-><div /> : any
->div : any
+>(<div />) : any (error)
+><div /> : any (error)
+>div : any (error)
 >x : any
 
 <div {...props} />;
-><div {...props} /> : any
->div : any
+><div {...props} /> : any (error)
+>div : any (error)
 >props : any
 
 <div {...props} post="attribute" />;
-><div {...props} post="attribute" /> : any
->div : any
+><div {...props} post="attribute" /> : any (error)
+>div : any (error)
 >props : any
 >post : string
 
 <div pre="leading" pre2="attribute" {...props}></div>;
-><div pre="leading" pre2="attribute" {...props}></div> : any
->div : any
+><div pre="leading" pre2="attribute" {...props}></div> : any (error)
+>div : any (error)
 >pre : string
 >pre2 : string
 >props : any
->div : any
+>div : any (error)
 
 <a>    </a>;
-><a>    </a> : any
+><a>    </a> : any (error)
 >a : any
 >a : any
 

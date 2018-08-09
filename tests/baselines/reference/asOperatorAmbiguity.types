@@ -15,11 +15,11 @@ var y = x as A<B>[];
 >x : any
 
 var z = y[0].m; // z should be string
->z : any
->y[0].m : any
+>z : any (error)
+>y[0].m : any (error)
 >y[0] : A<B>
 >y : A<B>[]
 >0 : 0
->m : any
+>m : any (error)
 
 

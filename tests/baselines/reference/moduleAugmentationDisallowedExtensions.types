@@ -27,10 +27,10 @@ declare module "./observable" {
     let {x1, y1, z0: {n}, z1: {arr: [el1, el2, el3]}}: {x1: number, y1: string, z0: {n: number}, z1: {arr: number[]} }
 >x1 : number
 >y1 : string
->z0 : any
+>z0 : any (error)
 >n : number
->z1 : any
->arr : any
+>z1 : any (error)
+>arr : any (error)
 >el1 : number
 >el2 : number
 >el3 : number
@@ -60,14 +60,14 @@ declare module "./observable" {
 >T : number
 
     import * as all from "./x0";
->all : any
+>all : any (error)
 
     import {a} from "./x0";
->a : any
+>a : any (error)
 
     export * from "./x0";
     export {a} from "./x0";
->a : any
+>a : any (error)
 }
 
 declare module "./test" {

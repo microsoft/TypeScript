@@ -15,11 +15,11 @@ abstract class C extends B {}
 >B : B
 
 new A;
->new A : any
+>new A : any (error)
 >A : typeof A
 
 new A(1); // should report 1 error
->new A(1) : any
+>new A(1) : any (error)
 >A : typeof A
 >1 : 1
 
@@ -28,7 +28,7 @@ new B;
 >B : typeof B
 
 new C;
->new C : any
+>new C : any (error)
 >C : typeof C
 
 var a : A;

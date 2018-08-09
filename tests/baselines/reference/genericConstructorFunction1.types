@@ -15,7 +15,7 @@ function f1<T>(args: T) {
 >'test' : "test"
 
     v2(args); 
->v2(args) : any
+>v2(args) : any (error)
 >v2 : new (arg: T) => Date
 >args : T
 
@@ -44,8 +44,8 @@ function f2<T>(args: T) {
 >'test' : "test"
 
     var y = v2(args); 
->y : any
->v2(args) : any
+>y : any (error)
+>v2(args) : any (error)
 >v2 : I1<T>
 >args : T
 

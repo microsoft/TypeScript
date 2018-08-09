@@ -71,8 +71,8 @@ var r6 = map<Object, Object>([1, ""], (x) => x.toString());
 >toString : () => string
 
 var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
->r7 : any
->map<number, string>([1, ""], (x) => x.toString()) : any
+>r7 : any (error)
+>map<number, string>([1, ""], (x) => x.toString()) : any (error)
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
 >[1, ""] : (string | number)[]
 >1 : 1
@@ -85,8 +85,8 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >toString : any
 
 var r7b = map<number>([1, ""], (x) => x.toString()); // error
->r7b : any
->map<number>([1, ""], (x) => x.toString()) : any
+>r7b : any (error)
+>map<number>([1, ""], (x) => x.toString()) : any (error)
 >map : <T, U>(xs: T[], f: (x: T) => U) => U[]
 >[1, ""] : (string | number)[]
 >1 : 1

@@ -3,11 +3,11 @@ import foo = require("./foo_0");
 >foo : typeof foo
 
 var z1 = foo.x + 10;   // Should error, as .ts preferred over .d.ts
->z1 : any
->foo.x + 10 : any
->foo.x : any
+>z1 : any (error)
+>foo.x + 10 : any (error)
+>foo.x : any (error)
 >foo : typeof foo
->x : any
+>x : any (error)
 >10 : 10
 
 var z2 = foo.y + 10; // Should resolve

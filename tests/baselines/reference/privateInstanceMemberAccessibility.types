@@ -25,10 +25,10 @@ class Derived extends Base {
 >foo : string
     }
     z: typeof super.foo; // error
->z : any
->super.foo : any
->super : any
->foo : any
+>z : any (error)
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
 
     a: this.foo; // error
 >a : this

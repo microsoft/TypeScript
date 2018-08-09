@@ -2,6 +2,6 @@
 module A {}
 A = undefined; // invalid LHS
 >A = undefined : undefined
->A : any
+>A : any (error)
 >undefined : undefined
 

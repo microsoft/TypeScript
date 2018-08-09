@@ -6,6 +6,6 @@ declare const b: B;
 >b : B
 
 new b();
->new b() : any
+>new b() : any (error)
 >b : B
 

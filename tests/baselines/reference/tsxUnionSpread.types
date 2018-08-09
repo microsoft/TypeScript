@@ -18,7 +18,7 @@ export type AnimalInfo = CatInfo | DogInfo;
 function AnimalComponent(info: AnimalInfo): JSX.Element {
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >info : AnimalInfo
->JSX : any
+>JSX : any (error)
 
     return undefined as any;
 >undefined as any : any
@@ -43,8 +43,8 @@ var props:AnimalInfo = getProps();
 >getProps : () => AnimalInfo
 
 var component = <AnimalComponent {...props} />
->component : any
-><AnimalComponent {...props} /> : any
+>component : any (error)
+><AnimalComponent {...props} /> : any (error)
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props : AnimalInfo
 
@@ -57,8 +57,8 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 >'Large' : "Large"
 
 var component2 = <AnimalComponent {...props2} />
->component2 : any
-><AnimalComponent {...props2} /> : any
+>component2 : any (error)
+><AnimalComponent {...props2} /> : any (error)
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props2 : CatInfo
 

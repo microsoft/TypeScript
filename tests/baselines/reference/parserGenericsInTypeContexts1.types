@@ -1,36 +1,36 @@
 === tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts ===
 class C extends A<T> implements B<T> {
 >C : C
->A : any
+>A : any (error)
 }
 
 var v1: C<T>;
->v1 : any
+>v1 : any (error)
 
 var v2: D<T> = null;
->v2 : any
+>v2 : any (error)
 >null : null
 
 var v3: E.F<T>;
->v3 : any
->E : any
+>v3 : any (error)
+>E : any (error)
 
 var v3: G.H.I<T>;
->v3 : any
->G : any
->H : any
+>v3 : any (error)
+>G : any (error)
+>H : any (error)
 
 var v6: K<T>[];
->v6 : any[]
+>v6 : any (error)[]
 
 
 function f1(a: E<T>) {
->f1 : (a: any) => void
->a : any
+>f1 : (a: any (error)) => void
+>a : any (error)
 }
 
 function f2(): F<T> {
->f2 : () => any
+>f2 : () => any (error)
 }
 
 

@@ -11,7 +11,7 @@ interface Prop {
 
     children: string | JSX.Element
 >children : string | JSX.Element
->JSX : any
+>JSX : any (error)
 }
 
 function Comp(p: Prop) {
@@ -20,11 +20,11 @@ function Comp(p: Prop) {
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
->div : any
+>div : any (error)
 >p.b : string
 >p : Prop
 >b : string
->div : any
+>div : any (error)
 }
 
 // Error: missing children
@@ -87,16 +87,16 @@ let k2 =
 
         <div> My Div </div>
 ><div> My Div </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
         {(name: string) => <div> My name {name} </div>}
 >(name: string) => <div> My name {name} </div> : (name: string) => JSX.Element
 >name : string
 ><div> My name {name} </div> : JSX.Element
->div : any
+>div : any (error)
 >name : string
->div : any
+>div : any (error)
 
     </Comp>;
 >Comp : (p: Prop) => JSX.Element
@@ -113,8 +113,8 @@ let k3 =
 
         <div> My Div </div>
 ><div> My Div </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
         {1000000}
 >1000000 : 1000000
@@ -134,8 +134,8 @@ let k4 =
 
         <div> My Div </div>
 ><div> My Div </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
         hi hi hi!
     </Comp>;
@@ -153,13 +153,13 @@ let k5 =
 
         <div> My Div </div>
 ><div> My Div </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
         <div> My Div </div>
 ><div> My Div </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
     </Comp>;
 >Comp : (p: Prop) => JSX.Element

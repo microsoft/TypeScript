@@ -19,98 +19,98 @@ var p = 0;
 // Emit "   "
 <div>   </div>;
 ><div>   </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 // Emit "  ", p, "   "
 <div>  {p}    </div>;
 ><div>  {p}    </div> : JSX.Element
->div : any
+>div : any (error)
 >p : number
->div : any
+>div : any (error)
 
 // Emit only p
 <div>  
 ><div>        {p}          </div> : JSX.Element
->div : any
+>div : any (error)
 
       {p}    
 >p : number
 
       </div>;
->div : any
+>div : any (error)
 
 // Emit only p
 <div>
 ><div>  {p}    </div> : JSX.Element
->div : any
+>div : any (error)
 
   {p}
 >p : number
 
     </div>;
->div : any
+>div : any (error)
 
 // Emit "  3"
 <div>  3  
 ><div>  3    </div> : JSX.Element
->div : any
+>div : any (error)
 
   </div>;
->div : any
+>div : any (error)
 
 // Emit "  3  "
 <div>  3  </div>;
 ><div>  3  </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 // Emit "3"
 <div>   
 ><div>      3       </div> : JSX.Element
->div : any
+>div : any (error)
 
    3    
    </div>;
->div : any
+>div : any (error)
 
 // Emit no args
 <div>   
 ><div>      </div> : JSX.Element
->div : any
+>div : any (error)
 
    </div>;
->div : any
+>div : any (error)
 
 // Emit "foo bar"
 <div>  
 ><div>     foo bar     </div> : JSX.Element
->div : any
+>div : any (error)
 
    foo
 
  bar   
 
   </div>;
->div : any
+>div : any (error)
 
 // Emit "hello\\ world"
 <div>
 ><div>    hello\world</div> : JSX.Element
->div : any
+>div : any (error)
 
     hello\
 
 world
 </div>;
->div : any
+>div : any (error)
 
 // Emit "  a b  c d  "
 <div>  a
 ><div>  a    b  c    d  </div> : JSX.Element
->div : any
+>div : any (error)
 
     b  c
     d  </div>;
->div : any
+>div : any (error)
 

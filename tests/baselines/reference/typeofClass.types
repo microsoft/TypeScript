@@ -18,18 +18,18 @@ k1.foo;
 >foo : number
 
 k1.bar;
->k1.bar : any
+>k1.bar : any (error)
 >k1 : K
->bar : any
+>bar : any (error)
 
 var k2: typeof K;
 >k2 : typeof K
 >K : typeof K
 
 k2.foo;
->k2.foo : any
+>k2.foo : any (error)
 >k2 : typeof K
->foo : any
+>foo : any (error)
 
 k2.bar;
 >k2.bar : string
