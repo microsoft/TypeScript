@@ -109,3 +109,11 @@ declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
 declare const o2Test: ExpectType<{ a?: string }, O2Props>;
 declare const o1Test: ExpectType<{}, O1Props>;
 declare const o0Test: ExpectType<{}, O0Props>;
+
+// Repro from #23005
+
+type Example<T extends Record<'a', string>> = T['a'];
+
+type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
+type Res2 = Example<{ a: "x" }>;  // "x"
+type Res3 = Example<never>;  // never 
