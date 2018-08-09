@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentInES6.ts(11,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentInES6.ts (1 errors) ====
+    class B<T> {
+        x: T;
+        B: T;
+        constructor(a: T) { this.B = a;}
+        foo(): T {
+            return this.x;
+        }
+        get BB(): T {
+            return this.B;
+        }
+        set BBWith(c: T) {
+            ~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            this.B = c;
+        }
+    }

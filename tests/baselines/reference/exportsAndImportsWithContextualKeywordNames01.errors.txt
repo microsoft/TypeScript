@@ -1,9 +1,12 @@
+tests/cases/conformance/es6/modules/t1.ts(2,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1214: Identifier expected. 'yield' is a reserved word in strict mode. Modules are automatically in strict mode.
 
 
-==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
+==== tests/cases/conformance/es6/modules/t1.ts (1 errors) ====
     let set = {
         set foo(x: number) {
+            ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
         }
     }
     let get = 10;

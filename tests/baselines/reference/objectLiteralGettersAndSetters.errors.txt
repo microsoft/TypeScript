@@ -12,7 +12,9 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetter
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(7,50): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(18,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(22,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(26,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(26,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(30,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(30,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(35,23): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(35,62): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -34,7 +36,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetter
 tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts(77,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts (34 errors) ====
+==== tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetters.ts (36 errors) ====
     // Get and set accessor with the same name
     var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };
                            ~~~
@@ -90,11 +92,15 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralGettersAndSetter
     // Set accessor only, type of the property is the param type of the set accessor
     var setter1 = { set x(n: number) { } };
                         ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     var setter1: { x: number };
     
     // Set accessor only, type of the property is Any for an unannotated set accessor
     var setter2 = { set x(n) { } };
+                        ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                         ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     var setter2: { x: any };

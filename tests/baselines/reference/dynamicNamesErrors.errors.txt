@@ -7,9 +7,12 @@ tests/cases/compiler/dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not
 tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not assignable to type 'T2'.
   Types of property '[c0]' are incompatible.
     Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/dynamicNamesErrors.ts(41,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/dynamicNamesErrors.ts(46,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/dynamicNamesErrors.ts(58,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 
 
-==== tests/cases/compiler/dynamicNamesErrors.ts (5 errors) ====
+==== tests/cases/compiler/dynamicNamesErrors.ts (8 errors) ====
     const c0 = "1";
     const c1 = 1;
     
@@ -65,11 +68,15 @@ tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not
         static [y](): number { return 0; }
         static get [z](): number { return 0; }
         static set [w](value: number) { }
+                   ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     
         [x]: number;
         [y](): number { return 0; }
         get [z](): number { return 0; }
         set [w](value: number) { }
+            ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     }
     
     export type ObjectTypeVisibility = {
@@ -82,4 +89,6 @@ tests/cases/compiler/dynamicNamesErrors.ts(25,1): error TS2322: Type 'T1' is not
         [y](): number { return 0; },
         get [z](): number { return 0; },
         set [w](value: number) { },
+            ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     };

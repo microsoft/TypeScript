@@ -1,38 +1,51 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(6,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(11,26): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(16,23): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(21,12): error TS1029: 'private' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(22,12): error TS1029: 'private' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(23,12): error TS1029: 'private' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(24,12): error TS1029: 'private' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(24,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(26,12): error TS1029: 'protected' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(27,12): error TS1029: 'protected' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(28,12): error TS1029: 'protected' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(29,12): error TS1029: 'protected' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(29,26): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(31,12): error TS1029: 'public' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(32,12): error TS1029: 'public' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(33,12): error TS1029: 'public' modifier must precede 'static' modifier.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(34,12): error TS1029: 'public' modifier must precede 'static' modifier.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(34,23): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(39,13): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(40,12): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(41,13): error TS1028: Accessibility modifier already seen.
 tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(42,12): error TS1028: Accessibility modifier already seen.
+tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts(42,23): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (16 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts (23 errors) ====
     // No errors
     class C {
         private static privateProperty;
         private static privateMethod() { }
         private static get privateGetter() { return 0; }
         private static set privateSetter(a: number) { }
+                           ~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     
         protected static protectedProperty;
         protected static protectedMethod() { }
         protected static get protectedGetter() { return 0; }
         protected static set protectedSetter(a: number) { }
+                             ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     
         public static publicProperty;
         public static publicMethod() { }
         public static get publicGetter() { return 0; }
         public static set publicSetter(a: number) { }
+                          ~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     }
     
     // Errors, accessibility modifiers must precede static
@@ -49,6 +62,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
         static private set privateSetter(a: number) { }
                ~~~~~~~
 !!! error TS1029: 'private' modifier must precede 'static' modifier.
+                           ~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     
         static protected protectedProperty;
                ~~~~~~~~~
@@ -62,6 +77,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
         static protected set protectedSetter(a: number) { }
                ~~~~~~~~~
 !!! error TS1029: 'protected' modifier must precede 'static' modifier.
+                             ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     
         static public publicProperty;
                ~~~~~~
@@ -75,6 +92,8 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
         static public set publicSetter(a: number) { }
                ~~~~~~
 !!! error TS1029: 'public' modifier must precede 'static' modifier.
+                          ~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     }
     
     // Errors, multiple accessibility modifier
@@ -91,5 +110,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifier
         public public set setter(a: number) { }
                ~~~~~~
 !!! error TS1028: Accessibility modifier already seen.
+                          ~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     }
     

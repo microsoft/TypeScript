@@ -2,15 +2,17 @@ tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameN
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(2,16): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(3,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(3,16): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(7,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(7,16): error TS2300: Duplicate identifier 'x'.
+tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(8,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(8,16): error TS2300: Duplicate identifier 'x'.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(12,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts (10 errors) ====
+==== tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameName2.ts (12 errors) ====
     class C {
         static get x() { return 1; }
                    ~
@@ -27,10 +29,14 @@ tests/cases/conformance/classes/propertyMemberDeclarations/twoAccessorsWithSameN
     class D {
         static set x(v) {  }
                    ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                   ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~
 !!! error TS2300: Duplicate identifier 'x'.
         static set x(v) {  } // error
+                   ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~

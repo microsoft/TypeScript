@@ -1,8 +1,9 @@
 tests/cases/compiler/superPropertyAccess_ES5.ts(11,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/compiler/superPropertyAccess_ES5.ts(25,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/superPropertyAccess_ES5.ts(26,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/compiler/superPropertyAccess_ES5.ts (2 errors) ====
+==== tests/cases/compiler/superPropertyAccess_ES5.ts (3 errors) ====
     class MyBase {
       getValue(): number { return 1; }
       get value(): number { return 1; }
@@ -30,6 +31,8 @@ tests/cases/compiler/superPropertyAccess_ES5.ts(26,15): error TS2340: Only publi
     
     class B extends A {
         set property(value: string) {
+            ~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             super.property = value + " addition";
                   ~~~~~~~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

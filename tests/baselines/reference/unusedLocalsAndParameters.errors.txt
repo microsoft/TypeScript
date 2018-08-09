@@ -4,11 +4,14 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(15,5): error TS6133: 'farrow' 
 tests/cases/compiler/unusedLocalsAndParameters.ts(15,15): error TS6133: 'a' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(18,7): error TS6196: 'C' is declared but never used.
 tests/cases/compiler/unusedLocalsAndParameters.ts(20,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(23,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParameters.ts(23,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(27,5): error TS6133: 'E' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(29,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(32,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParameters.ts(32,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(38,12): error TS6133: 'a' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(41,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParameters.ts(41,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(48,10): error TS6133: 'i' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(52,10): error TS6133: 'i' is declared but its value is never read.
@@ -25,7 +28,7 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(84,6): error TS1005: ',' expec
 tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/unusedLocalsAndParameters.ts (25 errors) ====
+==== tests/cases/compiler/unusedLocalsAndParameters.ts (28 errors) ====
     export { };
     
     // function declaration paramter
@@ -61,6 +64,8 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expressio
         }
         // Accessor declaration paramter
         set x(v: number) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
@@ -76,6 +81,8 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expressio
         }
         // Accessor declaration paramter
         set x(v: number) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
@@ -89,6 +96,8 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expressio
         },
         // Accessor declaration paramter
         set x(v: number) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }

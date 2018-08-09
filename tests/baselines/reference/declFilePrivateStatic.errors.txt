@@ -1,0 +1,22 @@
+tests/cases/compiler/declFilePrivateStatic.ts(11,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/declFilePrivateStatic.ts(12,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/compiler/declFilePrivateStatic.ts (2 errors) ====
+    class C {
+        private static x = 1;
+        static y = 1;
+    
+        private static a() { }
+        static b() { }
+    
+        private static get c() { return 1; }
+        static get d() { return 1; }
+    
+        private static set e(v) { }
+                           ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        static set f(v) { }
+                   ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+    }

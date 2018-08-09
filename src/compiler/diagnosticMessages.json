@@ -155,6 +155,10 @@
         "category": "Error",
         "code": 1049
     },
+    "A 'set' accessor must have a corresponding 'get' accessor.": {
+        "category": "Error",
+        "code": 1050
+    },
     "A 'set' accessor cannot have an optional parameter.": {
         "category": "Error",
         "code": 1051

@@ -1,7 +1,8 @@
+tests/cases/compiler/getAndSetAsMemberNames.ts(19,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/getAndSetAsMemberNames.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/getAndSetAsMemberNames.ts (1 errors) ====
+==== tests/cases/compiler/getAndSetAsMemberNames.ts (2 errors) ====
     class C1 {
         set: boolean;
         get = 1;
@@ -21,6 +22,8 @@ tests/cases/compiler/getAndSetAsMemberNames.ts(19,9): error TS1056: Accessors ar
         public set: () => boolean = function () { return true; };
         get (): boolean { return true; }
         set t(x) { }
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

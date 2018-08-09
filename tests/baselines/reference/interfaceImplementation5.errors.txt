@@ -1,14 +1,16 @@
 tests/cases/compiler/interfaceImplementation5.ts(6,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/interfaceImplementation5.ts(10,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/interfaceImplementation5.ts(10,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/interfaceImplementation5.ts(14,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/interfaceImplementation5.ts(15,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/interfaceImplementation5.ts(19,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/interfaceImplementation5.ts(23,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/interfaceImplementation5.ts(23,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/interfaceImplementation5.ts(27,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/interfaceImplementation5.ts(28,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/interfaceImplementation5.ts (8 errors) ====
+==== tests/cases/compiler/interfaceImplementation5.ts (10 errors) ====
     interface I1 {
         getset1:number;
     }
@@ -21,6 +23,8 @@ tests/cases/compiler/interfaceImplementation5.ts(28,16): error TS1056: Accessors
     
     class C2 implements I1 {
         public set getset1(baz:number){}
+                   ~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~~~~~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }
@@ -42,6 +46,8 @@ tests/cases/compiler/interfaceImplementation5.ts(28,16): error TS1056: Accessors
     
     class C5 implements I1 {
         public set getset1(baz:any){}
+                   ~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~~~~~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     }

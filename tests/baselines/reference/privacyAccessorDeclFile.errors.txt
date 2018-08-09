@@ -1,0 +1,1371 @@
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(32,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(34,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(36,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(38,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(164,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(166,32): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(168,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(170,25): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(175,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(177,32): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(179,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(181,25): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(186,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(188,32): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(190,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(192,25): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(197,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(199,32): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(201,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(203,25): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(223,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(225,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(245,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(247,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(361,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(363,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(365,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(367,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(372,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(374,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(376,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(378,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(383,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(385,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(387,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(389,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(394,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(396,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(398,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(400,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(420,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(422,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(442,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts(444,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(116,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(118,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(120,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(122,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(127,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(129,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(131,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(133,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(138,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(140,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(142,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(144,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(149,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(151,24): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(153,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(155,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(175,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(177,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(197,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(199,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(318,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(320,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(322,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(324,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(329,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(331,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(333,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(335,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(340,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(342,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(344,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(346,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(351,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(353,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(355,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(357,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(377,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(379,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(399,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(401,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(521,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(523,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(525,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(527,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(532,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(534,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(536,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(538,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(543,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(545,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(547,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(549,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(554,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(556,28): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(558,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(560,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(580,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(582,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(602,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts(604,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/compiler/privacyAccessorDeclFile_externalModule.ts (60 errors) ====
+    class privateClass {
+    }
+    
+    export class publicClass {
+    }
+    
+    export class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod(): privateClass { // Error
+            return null;
+        }
+        private static get myPrivateStaticMethod(): privateClass {
+            return null;
+        }
+        get myPublicMethod(): privateClass { // Error
+            return null;
+        }
+        private get myPrivateMethod(): privateClass {
+            return null;
+        }
+        static get myPublicStaticMethod1() { // Error
+            return new privateClass();
+        }
+        private static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() { // Error
+            return new privateClass();
+        }
+        private get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    
+    export class publicClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod(): publicClass {
+            return null;
+        }
+        private static get myPrivateStaticMethod(): publicClass {
+            return null;
+        }
+        get myPublicMethod(): publicClass {
+            return null;
+        }
+        private get myPrivateMethod(): publicClass {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        private static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        private get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    
+    class privateClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod(): privateClass {
+            return null;
+        }
+        private static get myPrivateStaticMethod(): privateClass {
+            return null;
+        }
+        get myPublicMethod(): privateClass {
+            return null;
+        }
+        private get myPrivateMethod(): privateClass {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        private static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        private get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    
+    class privateClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod(): publicClass {
+            return null;
+        }
+        private static get myPrivateStaticMethod(): publicClass {
+            return null;
+        }
+        get myPublicMethod(): publicClass {
+            return null;
+        }
+        private get myPrivateMethod(): publicClass {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        private static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        private get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    
+    export class publicClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateClass) { // Error
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private static set myPrivateStaticMethod(param: privateClass) {
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: privateClass) { // Error
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private set myPrivateMethod(param: privateClass) {
+                    ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    export class publicClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param: publicClass) {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private static set myPrivateStaticMethod(param: publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: publicClass) {
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private set myPrivateMethod(param: publicClass) {
+                    ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    class privateClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateClass) {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private static set myPrivateStaticMethod(param: privateClass) {
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: privateClass) { 
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private set myPrivateMethod(param: privateClass) {
+                    ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    class privateClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param: publicClass) {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private static set myPrivateStaticMethod(param: publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: publicClass) {
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private set myPrivateMethod(param: publicClass) {
+                    ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    export class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod(): privateModule.publicClass { // Error
+            return null;
+        }
+        get myPublicMethod(): privateModule.publicClass { // Error
+            return null;
+        }
+        static get myPublicStaticMethod1() { // Error
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() { // Error
+            return new privateModule.publicClass();
+        }
+    }
+    
+    export class publicClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: privateModule.publicClass) { // Error
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    class privateClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod(): privateModule.publicClass {
+            return null;
+        }
+        get myPublicMethod(): privateModule.publicClass {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
+    
+    class privateClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param: privateModule.publicClass) {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: privateModule.publicClass) {
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    export module publicModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+        export class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass { // Error
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass { // Error
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() { // Error
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() { // Error
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass {
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() {
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) { // Error
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) { // Error
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass { // Error
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass { // Error
+                return null;
+            }
+            static get myPublicStaticMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+        }
+    
+        export class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) { // Error
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+    
+        class privateClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    }
+    
+    module privateModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+        export class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass { 
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass { 
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() { 
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() { 
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass {
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() {
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) { 
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) { 
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass { 
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass { 
+                return null;
+            }
+            static get myPublicStaticMethod1() { 
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() { 
+                return new privateModule.publicClass();
+            }
+        }
+    
+        export class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) { 
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) { 
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+    
+        class privateClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    }
+    
+==== tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.ts (44 errors) ====
+    class publicClassInGlobal {
+    }
+    
+    class publicClassInGlobalWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod(): publicClassInGlobal {
+            return null;
+        }
+        private static get myPrivateStaticMethod(): publicClassInGlobal {
+            return null;
+        }
+        get myPublicMethod(): publicClassInGlobal {
+            return null;
+        }
+        private get myPrivateMethod(): publicClassInGlobal {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClassInGlobal();
+        }
+        private static get myPrivateStaticMethod1() {
+            return new publicClassInGlobal();
+        }
+        get myPublicMethod1() {
+            return new publicClassInGlobal();
+        }
+        private get myPrivateMethod1() {
+            return new publicClassInGlobal();
+        }
+    }
+    
+    class publicClassInGlobalWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param: publicClassInGlobal) {
+                   ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private static set myPrivateStaticMethod(param: publicClassInGlobal) {
+                           ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set myPublicMethod(param: publicClassInGlobal) {
+            ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        private set myPrivateMethod(param: publicClassInGlobal) {
+                    ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    }
+    
+    module publicModuleInGlobal {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        module privateModule {
+            class privateClass {
+            }
+    
+            export class publicClass {
+            }
+            export class publicClassWithWithPrivateGetAccessorTypes {
+                static get myPublicStaticMethod(): privateClass {
+                    return null;
+                }
+                private static get myPrivateStaticMethod(): privateClass {
+                    return null;
+                }
+                get myPublicMethod(): privateClass {
+                    return null;
+                }
+                private get myPrivateMethod(): privateClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new privateClass();
+                }
+                private static get myPrivateStaticMethod1() {
+                    return new privateClass();
+                }
+                get myPublicMethod1() {
+                    return new privateClass();
+                }
+                private get myPrivateMethod1() {
+                    return new privateClass();
+                }
+            }
+    
+            export class publicClassWithWithPublicGetAccessorTypes {
+                static get myPublicStaticMethod(): publicClass {
+                    return null;
+                }
+                private static get myPrivateStaticMethod(): publicClass {
+                    return null;
+                }
+                get myPublicMethod(): publicClass {
+                    return null;
+                }
+                private get myPrivateMethod(): publicClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new publicClass();
+                }
+                private static get myPrivateStaticMethod1() {
+                    return new publicClass();
+                }
+                get myPublicMethod1() {
+                    return new publicClass();
+                }
+                private get myPrivateMethod1() {
+                    return new publicClass();
+                }
+            }
+    
+            class privateClassWithWithPrivateGetAccessorTypes {
+                static get myPublicStaticMethod(): privateClass {
+                    return null;
+                }
+                private static get myPrivateStaticMethod(): privateClass {
+                    return null;
+                }
+                get myPublicMethod(): privateClass {
+                    return null;
+                }
+                private get myPrivateMethod(): privateClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new privateClass();
+                }
+                private static get myPrivateStaticMethod1() {
+                    return new privateClass();
+                }
+                get myPublicMethod1() {
+                    return new privateClass();
+                }
+                private get myPrivateMethod1() {
+                    return new privateClass();
+                }
+            }
+    
+            class privateClassWithWithPublicGetAccessorTypes {
+                static get myPublicStaticMethod(): publicClass {
+                    return null;
+                }
+                private static get myPrivateStaticMethod(): publicClass {
+                    return null;
+                }
+                get myPublicMethod(): publicClass {
+                    return null;
+                }
+                private get myPrivateMethod(): publicClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new publicClass();
+                }
+                private static get myPrivateStaticMethod1() {
+                    return new publicClass();
+                }
+                get myPublicMethod1() {
+                    return new publicClass();
+                }
+                private get myPrivateMethod1() {
+                    return new publicClass();
+                }
+            }
+    
+            export class publicClassWithWithPrivateSetAccessorTypes {
+                static set myPublicStaticMethod(param: privateClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private static set myPrivateStaticMethod(param: privateClass) {
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: privateClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private set myPrivateMethod(param: privateClass) {
+                            ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+    
+            export class publicClassWithWithPublicSetAccessorTypes {
+                static set myPublicStaticMethod(param: publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private static set myPrivateStaticMethod(param: publicClass) {
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: publicClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private set myPrivateMethod(param: publicClass) {
+                            ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+    
+            class privateClassWithWithPrivateSetAccessorTypes {
+                static set myPublicStaticMethod(param: privateClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private static set myPrivateStaticMethod(param: privateClass) {
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: privateClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private set myPrivateMethod(param: privateClass) {
+                            ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+    
+            class privateClassWithWithPublicSetAccessorTypes {
+                static set myPublicStaticMethod(param: publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private static set myPrivateStaticMethod(param: publicClass) {
+                                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: publicClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                private set myPrivateMethod(param: publicClass) {
+                            ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+    
+            export class publicClassWithPrivateModuleGetAccessorTypes {
+                static get myPublicStaticMethod(): privateModule.publicClass {
+                    return null;
+                }
+                get myPublicMethod(): privateModule.publicClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new privateModule.publicClass();
+                }
+                get myPublicMethod1() {
+                    return new privateModule.publicClass();
+                }
+            }
+    
+            export class publicClassWithPrivateModuleSetAccessorTypes {
+                static set myPublicStaticMethod(param: privateModule.publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: privateModule.publicClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+    
+            class privateClassWithPrivateModuleGetAccessorTypes {
+                static get myPublicStaticMethod(): privateModule.publicClass {
+                    return null;
+                }
+                get myPublicMethod(): privateModule.publicClass {
+                    return null;
+                }
+                static get myPublicStaticMethod1() {
+                    return new privateModule.publicClass();
+                }
+                get myPublicMethod1() {
+                    return new privateModule.publicClass();
+                }
+            }
+    
+            class privateClassWithPrivateModuleSetAccessorTypes {
+                static set myPublicStaticMethod(param: privateModule.publicClass) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+                set myPublicMethod(param: privateModule.publicClass) {
+                    ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                }
+            }
+        }
+    
+        export class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass { // Error
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass { // Error
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() { // Error
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() { // Error
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod(): privateClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): privateClass {
+                return null;
+            }
+            get myPublicMethod(): privateClass {
+                return null;
+            }
+            private get myPrivateMethod(): privateClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() {
+                return new privateClass();
+            }
+            private get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod(): publicClass {
+                return null;
+            }
+            private static get myPrivateStaticMethod(): publicClass {
+                return null;
+            }
+            get myPublicMethod(): publicClass {
+                return null;
+            }
+            private get myPrivateMethod(): publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            private get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) { // Error
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) { // Error
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: privateClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: privateClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param: publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private static set myPrivateStaticMethod(param: publicClass) {
+                               ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            private set myPrivateMethod(param: publicClass) {
+                        ~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        export class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass { // Error
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass { // Error
+                return null;
+            }
+            static get myPublicStaticMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+        }
+    
+        export class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) { // Error
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    
+        class privateClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+            }
+            get myPublicMethod(): privateModule.publicClass {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+    
+        class privateClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param: privateModule.publicClass) {
+                       ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+            set myPublicMethod(param: privateModule.publicClass) {
+                ~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            }
+        }
+    }

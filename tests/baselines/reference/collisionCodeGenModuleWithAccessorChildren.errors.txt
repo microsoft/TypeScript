@@ -1,16 +1,21 @@
+tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(5,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(5,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(14,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(14,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(24,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(24,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(32,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(41,13): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts (5 errors) ====
+==== tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts (8 errors) ====
     module M {
         export var x = 3;
         class c {
             private y;
             set Z(M) {
+                ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                 ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 this.y = x;
@@ -23,6 +28,8 @@ tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(41,13): error
             private y;
             set Z(p) {
                 ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 var M = 10;
                 this.y = x;
@@ -34,6 +41,8 @@ tests/cases/compiler/collisionCodeGenModuleWithAccessorChildren.ts(41,13): error
         class e {
             private y;
             set M(p) {
+                ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                 ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                 this.y = x;

@@ -1,0 +1,15 @@
+tests/cases/conformance/es6/Symbols/symbolProperty18.ts(4,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty18.ts (1 errors) ====
+    var i = {
+        [Symbol.iterator]: 0,
+        [Symbol.toStringTag]() { return "" },
+        set [Symbol.toPrimitive](p: boolean) { }
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+    }
+    
+    var it = i[Symbol.iterator];
+    var str = i[Symbol.toStringTag]();
+    i[Symbol.toPrimitive] = false;

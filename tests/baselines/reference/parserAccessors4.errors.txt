@@ -1,0 +1,7 @@
+tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors4.ts(1,15): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors4.ts (1 errors) ====
+    var v = { set Foo(a) { } };
+                  ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.

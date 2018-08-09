@@ -1,9 +1,10 @@
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(5,9): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(9,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,13): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,13): error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
 
 
-==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (3 errors) ====
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts (4 errors) ====
     module M {
         interface I { }
         export class C {
@@ -18,6 +19,8 @@ tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts(10,13): error TS2
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
             set [Symbol.toPrimitive](x: I) { }
+                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                 ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2300: Duplicate identifier '[Symbol.toPrimitive]'.
         }

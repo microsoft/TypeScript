@@ -1,0 +1,22 @@
+tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES6.ts(10,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames11_ES6.ts (1 errors) ====
+    var s: string;
+    var n: number;
+    var a: any;
+    var v = {
+        get [s]() { return 0; },
+        set [n](v) { },
+        get [s + s]() { return 0; },
+        set [s + n](v) { },
+        get [+s]() { return 0; },
+        set [""](v) { },
+            ~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        get [0]() { return 0; },
+        set [a](v) { },
+        get [<any>true]() { return 0; },
+        set [`hello bye`](v) { },
+        get [`hello ${a} bye`]() { return 0; }
+    }

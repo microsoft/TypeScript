@@ -45,6 +45,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(103,25
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2322: Type 'true' is not assignable to type 'D'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(104,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(106,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(109,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(109,20): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(110,9): error TS2408: Setters cannot return a value.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(115,18): error TS1228: A type predicate is only allowed in return type position for functions and methods.
@@ -70,7 +71,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (56 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (57 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -267,6 +268,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
             return true;
         }
         set m2(p1: A): p1 is C {
+            ~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~~~~~
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;

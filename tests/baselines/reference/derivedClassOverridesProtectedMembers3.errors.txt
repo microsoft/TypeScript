@@ -6,6 +6,7 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
   Property 'c' is protected in type 'Derived3' but public in type 'Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(37,7): error TS2415: Class 'Derived4' incorrectly extends base class 'Base'.
   Property 'c' is protected in type 'Derived4' but public in type 'Base'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(38,19): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(42,7): error TS2415: Class 'Derived5' incorrectly extends base class 'Base'.
   Property 'd' is protected in type 'Derived5' but public in type 'Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(47,7): error TS2417: Class static side 'typeof Derived6' incorrectly extends base class static side 'typeof Base'.
@@ -16,11 +17,12 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
   Property 't' is protected in type 'typeof Derived8' but public in type 'typeof Base'.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(62,7): error TS2417: Class static side 'typeof Derived9' incorrectly extends base class static side 'typeof Base'.
   Property 't' is protected in type 'typeof Derived9' but public in type 'typeof Base'.
+tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(63,26): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side 'typeof Derived10' incorrectly extends base class static side 'typeof Base'.
   Property 'u' is protected in type 'typeof Derived10' but public in type 'typeof Base'.
 
 
-==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts (10 errors) ====
+==== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers3.ts (12 errors) ====
     var x: { foo: string; }
     var y: { foo: string; bar: string; }
     
@@ -71,6 +73,8 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS2415: Class 'Derived4' incorrectly extends base class 'Base'.
 !!! error TS2415:   Property 'c' is protected in type 'Derived4' but public in type 'Base'.
         protected set c(v: typeof x) { }
+                      ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
         constructor(a: typeof x) { super(a); }
     }
     
@@ -111,6 +115,8 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
 !!! error TS2417: Class static side 'typeof Derived9' incorrectly extends base class static side 'typeof Base'.
 !!! error TS2417:   Property 't' is protected in type 'typeof Derived9' but public in type 'typeof Base'.
         protected static set t(v: typeof x) { }
+                             ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
         constructor(a: typeof x) { super(a); }
     }
     

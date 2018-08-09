@@ -2,15 +2,18 @@ tests/cases/compiler/giant.ts(22,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(23,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(23,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(24,12): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(25,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(25,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(25,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(26,13): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(27,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(27,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(28,13): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(29,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(29,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(29,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(32,12): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(33,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(33,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(33,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(34,12): error TS2300: Duplicate identifier 'tgF'.
@@ -25,15 +28,18 @@ tests/cases/compiler/giant.ts(86,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(87,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(87,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(88,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(89,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(89,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(89,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(90,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(91,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(91,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(92,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(93,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(93,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(93,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(96,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(97,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(97,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(97,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(98,16): error TS2300: Duplicate identifier 'tgF'.
@@ -49,15 +55,18 @@ tests/cases/compiler/giant.ts(165,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(166,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(166,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(167,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(168,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(168,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(168,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(169,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(170,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(170,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(171,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(172,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(172,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(172,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(175,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(176,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(176,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(176,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(177,16): error TS2300: Duplicate identifier 'tgF'.
@@ -79,6 +88,7 @@ tests/cases/compiler/giant.ts(245,20): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(245,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(246,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(246,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(247,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(247,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(247,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(248,17): error TS2300: Duplicate identifier 'rgF'.
@@ -87,11 +97,13 @@ tests/cases/compiler/giant.ts(249,21): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(249,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(250,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(250,32): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(251,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(251,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(251,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(253,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(254,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(254,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(255,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(255,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(255,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(256,16): error TS2300: Duplicate identifier 'tgF'.
@@ -105,15 +117,18 @@ tests/cases/compiler/giant.ts(280,12): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(281,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(281,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(282,12): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(283,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(283,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(283,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(284,13): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(285,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(285,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(286,13): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(287,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(287,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(287,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(290,12): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(291,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(291,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(291,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(292,12): error TS2300: Duplicate identifier 'tgF'.
@@ -128,15 +143,18 @@ tests/cases/compiler/giant.ts(344,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(345,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(345,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(346,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(347,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(347,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(347,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(348,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(349,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(349,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(350,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(351,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(351,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(351,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(354,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(355,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(355,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(355,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(356,16): error TS2300: Duplicate identifier 'tgF'.
@@ -152,15 +170,18 @@ tests/cases/compiler/giant.ts(423,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(424,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(424,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(425,16): error TS2300: Duplicate identifier 'psF'.
+tests/cases/compiler/giant.ts(426,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(426,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(426,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(427,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(428,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(428,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(429,17): error TS2300: Duplicate identifier 'rsF'.
+tests/cases/compiler/giant.ts(430,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(430,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(430,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(433,16): error TS2300: Duplicate identifier 'tsF'.
+tests/cases/compiler/giant.ts(434,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(434,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(434,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(435,16): error TS2300: Duplicate identifier 'tgF'.
@@ -182,6 +203,7 @@ tests/cases/compiler/giant.ts(503,20): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(503,20): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(504,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(504,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(505,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(505,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(505,20): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(506,17): error TS2300: Duplicate identifier 'rgF'.
@@ -190,11 +212,13 @@ tests/cases/compiler/giant.ts(507,21): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(507,21): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(508,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(508,32): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(509,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(509,21): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(509,21): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(511,21): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(512,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(512,31): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(513,20): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(513,20): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(513,20): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(514,16): error TS2300: Duplicate identifier 'tgF'.
@@ -214,6 +238,7 @@ tests/cases/compiler/giant.ts(539,16): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(539,16): error TS2300: Duplicate identifier 'pgF'.
 tests/cases/compiler/giant.ts(540,12): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(540,27): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(541,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(541,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(541,16): error TS2300: Duplicate identifier 'psF'.
 tests/cases/compiler/giant.ts(542,13): error TS2300: Duplicate identifier 'rgF'.
@@ -222,11 +247,13 @@ tests/cases/compiler/giant.ts(543,17): error TS1056: Accessors are only availabl
 tests/cases/compiler/giant.ts(543,17): error TS2300: Duplicate identifier 'rgF'.
 tests/cases/compiler/giant.ts(544,13): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(544,28): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(545,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(545,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(545,17): error TS2300: Duplicate identifier 'rsF'.
 tests/cases/compiler/giant.ts(547,17): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/compiler/giant.ts(548,12): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(548,27): error TS1183: An implementation cannot be declared in ambient contexts.
+tests/cases/compiler/giant.ts(549,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/giant.ts(549,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/giant.ts(549,16): error TS2300: Duplicate identifier 'tsF'.
 tests/cases/compiler/giant.ts(550,12): error TS2300: Duplicate identifier 'tgF'.
@@ -265,7 +292,7 @@ tests/cases/compiler/giant.ts(671,25): error TS1036: Statements are not allowed 
 tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
-==== tests/cases/compiler/giant.ts (265 errors) ====
+==== tests/cases/compiler/giant.ts (292 errors) ====
     /*
         Prefixes
         p -> public
@@ -300,6 +327,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                   ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -316,6 +345,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -325,6 +356,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
+                   ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
@@ -410,6 +443,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -426,6 +461,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -435,6 +472,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -537,6 +576,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -553,6 +594,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -562,6 +605,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -676,6 +721,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -696,6 +743,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -709,6 +758,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -764,6 +815,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
         public set psF(param:any)
                    ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                   ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -780,6 +833,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
         private set rsF(param:any)
                     ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -789,6 +844,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
         static set tsF(param:any)
+                   ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
@@ -874,6 +931,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -890,6 +949,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -899,6 +960,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -1001,6 +1064,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'psF'.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -1017,6 +1082,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS2300: Duplicate identifier 'rsF'.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -1026,6 +1093,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                    ~~~
 !!! error TS2300: Duplicate identifier 'tsF'.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -1140,6 +1209,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             public set psF(param:any)
                        ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                       ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -1160,6 +1231,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             private set rsF(param:any)
                         ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                         ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -1173,6 +1246,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                                   ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
             static set tsF(param:any)
+                       ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                        ~~~
@@ -1240,6 +1315,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         public set psF(param:any)
                    ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                   ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~
 !!! error TS2300: Duplicate identifier 'psF'.
@@ -1260,6 +1337,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         private set rsF(param:any)
                     ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                     ~~~
 !!! error TS2300: Duplicate identifier 'rsF'.
@@ -1273,6 +1352,8 @@ tests/cases/compiler/giant.ts(675,30): error TS1183: An implementation cannot be
                               ~
 !!! error TS1183: An implementation cannot be declared in ambient contexts.
         static set tsF(param:any)
+                   ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                    ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~~

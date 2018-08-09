@@ -1,0 +1,10 @@
+tests/cases/conformance/es6/Symbols/symbolDeclarationEmit13.ts(3,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit13.ts (1 errors) ====
+    class C {
+        get [Symbol.toPrimitive]() { return ""; }
+        set [Symbol.toStringTag](x) { }
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+    }

@@ -1,9 +1,12 @@
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(41,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(41,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(64,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(64,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/unusedLocalsAndParametersDeferred.ts (3 errors) ====
+==== tests/cases/compiler/unusedLocalsAndParametersDeferred.ts (6 errors) ====
     export { };
     
     function defered<T>(a: () => T): T {
@@ -46,6 +49,8 @@ tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1056: A
         // Accessor declaration paramter
         set x(v: number) {
             ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             defered(() => {
                 v;
@@ -71,6 +76,8 @@ tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1056: A
         // Accessor declaration paramter
         set x(v: number) {
             ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             defered(() => {
                 v;
@@ -94,6 +101,8 @@ tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1056: A
         },
         // Accessor declaration paramter
         set x(v: number) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             defered(() => {

@@ -1,0 +1,42 @@
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts(19,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts(21,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts(24,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts(25,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithGetterSetterInES6.ts (4 errors) ====
+    class C {
+        _name: string;
+        get name(): string {
+            return this._name;
+        }
+        static get name2(): string {
+            return "BYE";
+        }
+        static get ["computedname"]() {
+            return "";
+        }
+        get ["computedname1"]() {
+            return "";
+        }
+        get ["computedname2"]() {
+            return "";
+        }
+    
+        set ["computedname3"](x: any) {
+            ~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+        set ["computedname4"](y: string) {
+            ~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        }
+    
+        set foo(a: string) { }
+            ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        static set bar(b: number) { }
+                   ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+        static set ["computedname"](b: string) { }
+    }

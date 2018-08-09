@@ -20,6 +20,7 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(26,40): error 
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(27,46): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(28,37): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(29,26): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(30,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(30,28): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(32,12): error TS1331: A property of a class whose type is a 'unique symbol' type must be both 'static' and 'readonly'.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(33,38): error TS1335: 'unique symbol' types are not allowed here.
@@ -30,6 +31,7 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(37,53): error 
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(38,59): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(39,50): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(40,39): error TS1335: 'unique symbol' types are not allowed here.
+tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(41,16): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(41,41): error TS1335: 'unique symbol' types are not allowed here.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(46,5): error TS1330: A property of an interface or type literal whose type is a 'unique symbol' type must be 'readonly'.
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(47,25): error TS1335: 'unique symbol' types are not allowed here.
@@ -61,7 +63,7 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(83,52): error 
 tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error TS2322: Type 'unique symbol' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (61 errors) ====
+==== tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts (63 errors) ====
     // declarations
     declare const invalidUniqueType: unique number;
                                             ~~~~~~
@@ -136,6 +138,8 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error T
                              ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.
         set invalidSetter(arg: unique symbol) { return; }
+            ~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                                ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.
     
@@ -167,6 +171,8 @@ tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts(87,7): error T
                                           ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.
         static set invalidStaticSetter(arg: unique symbol) { return; }
+                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                                             ~~~~~~~~~~~~~
 !!! error TS1335: 'unique symbol' types are not allowed here.
     }

@@ -1,7 +1,10 @@
+tests/cases/compiler/accessorWithoutBody2.ts(1,15): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/accessorWithoutBody2.ts(1,20): error TS1005: '{' expected.
 
 
-==== tests/cases/compiler/accessorWithoutBody2.ts (1 errors) ====
+==== tests/cases/compiler/accessorWithoutBody2.ts (2 errors) ====
     var v = { set foo(a) }
+                  ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
                        ~
 !!! error TS1005: '{' expected.

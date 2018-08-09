@@ -1,0 +1,11 @@
+tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor5.ts(4,21): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor5.ts (1 errors) ====
+    declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
+    
+    class C {
+        @dec public set accessor(value: number) { }
+                        ~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+    }

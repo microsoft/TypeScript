@@ -1,6 +1,7 @@
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(3,20): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(4,7): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(5,10): error TS1005: '(' expected.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(6,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(6,10): error TS1005: '(' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(7,9): error TS1005: ':' expected.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(8,10): error TS1005: ':' expected.
@@ -13,7 +14,7 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts(20,17): error TS1005: ':' expected.
 
 
-==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (13 errors) ====
+==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts (14 errors) ====
     // errors
     var y = {
         "stringLiteral",
@@ -26,6 +27,8 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
              ~
 !!! error TS1005: '(' expected.
         set f,
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
              ~
 !!! error TS1005: '(' expected.
         this,

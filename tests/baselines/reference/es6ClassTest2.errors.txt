@@ -1,8 +1,9 @@
 tests/cases/compiler/es6ClassTest2.ts(30,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/es6ClassTest2.ts(35,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/es6ClassTest2.ts(35,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/es6ClassTest2.ts (2 errors) ====
+==== tests/cases/compiler/es6ClassTest2.ts (3 errors) ====
     class BasicMonster {
         constructor(public name: string, public health: number) {
     
@@ -40,6 +41,8 @@ tests/cases/compiler/es6ClassTest2.ts(35,9): error TS1056: Accessors are only av
     
       // Likewise, "set" can be used to define setters.
         set health(value: number) {
+            ~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             ~~~~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             if (value < 0) {

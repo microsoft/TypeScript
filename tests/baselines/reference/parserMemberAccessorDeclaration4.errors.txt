@@ -1,0 +1,9 @@
+tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration4.ts(2,7): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration4.ts (1 errors) ====
+    class C {
+      set a(i) { }
+          ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+    }

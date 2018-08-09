@@ -1,0 +1,34 @@
+tests/cases/compiler/superPropertyAccess_ES6.ts(25,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/compiler/superPropertyAccess_ES6.ts (1 errors) ====
+    class MyBase {
+      getValue(): number { return 1; }
+      get value(): number { return 1; }
+    }
+    
+    class MyDerived extends MyBase {
+      constructor() {
+        super();
+    
+        const f1 = super.getValue();
+        const f2 = super.value;
+      }
+    }
+    
+    var d = new MyDerived();
+    var f3 = d.value;
+    
+    class A {
+        private _property: string;
+        get property() { return this._property; }
+        set property(value: string) { this._property = value }
+    }
+    
+    class B extends A {
+        set property(value: string) {
+            ~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            super.property = value + " addition";
+        }
+    }

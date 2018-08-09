@@ -1,7 +1,8 @@
 tests/cases/conformance/es6/computedProperties/computedPropertyNames36_ES6.ts(8,9): error TS2411: Property '["get1"]' of type 'Foo' is not assignable to string index type 'Foo2'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames36_ES6.ts(9,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames36_ES6.ts (1 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames36_ES6.ts (2 errors) ====
     class Foo { x }
     class Foo2 { x; y }
     
@@ -13,4 +14,6 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames36_ES6.ts(8,
             ~~~~~~~~
 !!! error TS2411: Property '["get1"]' of type 'Foo' is not assignable to string index type 'Foo2'.
         set ["set1"](p: Foo2) { }
+            ~~~~~~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
     }

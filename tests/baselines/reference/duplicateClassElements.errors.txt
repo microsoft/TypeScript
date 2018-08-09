@@ -4,6 +4,7 @@ tests/cases/compiler/duplicateClassElements.ts(6,12): error TS2393: Duplicate fu
 tests/cases/compiler/duplicateClassElements.ts(8,12): error TS2300: Duplicate identifier 'x'.
 tests/cases/compiler/duplicateClassElements.ts(9,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(9,9): error TS2300: Duplicate identifier 'x'.
+tests/cases/compiler/duplicateClassElements.ts(12,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/duplicateClassElements.ts(12,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(12,9): error TS2300: Duplicate identifier 'x'.
 tests/cases/compiler/duplicateClassElements.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -11,6 +12,7 @@ tests/cases/compiler/duplicateClassElements.ts(18,9): error TS1056: Accessors ar
 tests/cases/compiler/duplicateClassElements.ts(21,12): error TS2300: Duplicate identifier 'z'.
 tests/cases/compiler/duplicateClassElements.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(23,9): error TS2300: Duplicate identifier 'z'.
+tests/cases/compiler/duplicateClassElements.ts(26,9): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/duplicateClassElements.ts(26,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/duplicateClassElements.ts(26,9): error TS2300: Duplicate identifier 'z'.
 tests/cases/compiler/duplicateClassElements.ts(29,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -24,7 +26,7 @@ tests/cases/compiler/duplicateClassElements.ts(39,9): error TS2300: Duplicate id
 tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
 
 
-==== tests/cases/compiler/duplicateClassElements.ts (24 errors) ====
+==== tests/cases/compiler/duplicateClassElements.ts (26 errors) ====
     class a {
         public a;
         public a;
@@ -49,6 +51,8 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
             return 10;
         }
         set x(_x: number) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~
@@ -77,6 +81,8 @@ tests/cases/compiler/duplicateClassElements.ts(41,12): error TS2300: Duplicate i
             return "Hello";
         }
         set z(_y: string) {
+            ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~

@@ -22563,6 +22563,9 @@ namespace ts {
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getAnnotatedAccessorType, Diagnostics.get_and_set_accessor_must_have_the_same_type);
                         checkAccessorDeclarationTypesIdentical(node, otherAccessor, getThisTypeOfDeclaration, Diagnostics.get_and_set_accessor_must_have_the_same_this_type);
                     }
+                    else if (node.kind === SyntaxKind.SetAccessor) {
+                        error(node.name, Diagnostics.A_set_accessor_must_have_a_corresponding_get_accessor);
+                    }
                 }
                 const returnType = getTypeOfAccessors(getSymbolOfNode(node));
                 if (node.kind === SyntaxKind.GetAccessor) {

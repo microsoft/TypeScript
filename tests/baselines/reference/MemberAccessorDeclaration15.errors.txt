@@ -1,10 +1,13 @@
+tests/cases/compiler/MemberAccessorDeclaration15.ts(2,8): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
 tests/cases/compiler/MemberAccessorDeclaration15.ts(2,8): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/MemberAccessorDeclaration15.ts(2,12): error TS2369: A parameter property is only allowed in a constructor implementation.
 
 
-==== tests/cases/compiler/MemberAccessorDeclaration15.ts (2 errors) ====
+==== tests/cases/compiler/MemberAccessorDeclaration15.ts (3 errors) ====
     class C {
        set Foo(public a: number) { }
+           ~~~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
            ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                ~~~~~~~~~~~~~~~~

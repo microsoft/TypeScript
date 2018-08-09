@@ -1,0 +1,54 @@
+tests/cases/compiler/unusedPrivateMembers.ts(31,17): error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+
+
+==== tests/cases/compiler/unusedPrivateMembers.ts (1 errors) ====
+    class Test1 {
+        private initializeInternal() {
+        }
+    
+        public test() {
+            var x = new Test1();
+            x.initializeInternal();
+        }
+    }
+    
+    class Test2 {
+        private p = 0;
+        public test() {
+            var x = new Test2();
+            x.p;
+        }
+    }
+    
+    class Test3 {
+        private get x () {
+            return 0;
+        }
+    
+        public test() {
+            var x = new Test3();
+            x.x;
+        }
+    }
+    
+    class Test4 {
+        private set x(v) {
+                    ~
+!!! error TS1050: A 'set' accessor must have a corresponding 'get' accessor.
+            v;
+        }
+    
+        public test() {
+            var x = new Test4();
+            x.x;
+        }
+    }
+    
+    class Test5<T> {
+        private p: T;
+        public test() {
+            var x = new Test5<number>();
+            x.p;
+        }
+    }
+    
