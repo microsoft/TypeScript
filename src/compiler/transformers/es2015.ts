@@ -529,7 +529,7 @@ namespace ts {
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
@@ -837,7 +837,7 @@ namespace ts {
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
@@ -855,7 +855,7 @@ namespace ts {
             if (extendsClauseElement) {
                 statements.push(
                     setTextRange(
-                        createStatement(
+                        createExpressionStatement(
                             createExtendsHelper(context, getInternalName(node))
                         ),
                         /*location*/ extendsClauseElement
@@ -980,7 +980,7 @@ namespace ts {
                 );
             }
 
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             if (constructor) {
                 prependCaptureNewTargetIfNeeded(statements, constructor, /*copyOnWrite*/ false);
@@ -1121,7 +1121,7 @@ namespace ts {
             }
 
             // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression || createActualThis(), firstStatement);
+            captureThisForNode(statements, ctor, superCallExpression || createActualThis());
 
             // If we're actually replacing the original statement, we need to signal this to the caller.
             if (superCallExpression) {
@@ -1280,7 +1280,7 @@ namespace ts {
             else if (initializer) {
                 statements.push(
                     setEmitFlags(
-                        createStatement(
+                        createExpressionStatement(
                             createAssignment(
                                 temp,
                                 visitNode(initializer, visitor, isExpression)
@@ -1307,7 +1307,7 @@ namespace ts {
                 setEmitFlags(
                     setTextRange(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 setEmitFlags(
                                     setTextRange(
                                         createAssignment(
@@ -1409,7 +1409,7 @@ namespace ts {
                 createBlock([
                     startOnNewLine(
                         setTextRange(
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     createElementAccess(
                                         expressionName,
@@ -1443,7 +1443,7 @@ namespace ts {
             }
         }
 
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined, originalStatement?: Statement): void {
+        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = createVariableStatement(
                 /*modifiers*/ undefined,
@@ -1456,7 +1456,6 @@ namespace ts {
                 ])
             );
             setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
-            setTextRange(captureThisStatement, originalStatement);
             setSourceMapRange(captureThisStatement, node);
             statements.push(captureThisStatement);
         }
@@ -1594,7 +1593,7 @@ namespace ts {
             setSourceMapRange(memberFunction, sourceMapRange);
 
             const statement = setTextRange(
-                createStatement(
+                createExpressionStatement(
                     createAssignment(memberName, memberFunction)
                 ),
                 /*location*/ member
@@ -1619,7 +1618,7 @@ namespace ts {
          * @param accessors The set of related get/set accessors.
          */
         function transformAccessorsToStatement(receiver: LeftHandSideExpression, accessors: AllAccessorDeclarations, container: Node): Statement {
-            const statement = createStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
+            const statement = createExpressionStatement(transformAccessorsToExpression(receiver, accessors, container, /*startsOnNewLine*/ false));
             // The location for the statement is used to emit source maps only.
             // No comments should be emitted for this statement to align with the
             // old emitter.
@@ -1892,7 +1891,7 @@ namespace ts {
             }
 
             const lexicalEnvironment = context.endLexicalEnvironment();
-            prependStatements(statements, lexicalEnvironment);
+            addStatementsAfterPrologue(statements, lexicalEnvironment);
             prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
 
             // If we added any final generated statements, this must be a multi-line block
@@ -1949,9 +1948,9 @@ namespace ts {
             // If we are here it is most likely because our expression is a destructuring assignment.
             switch (node.expression.kind) {
                 case SyntaxKind.ParenthesizedExpression:
-                    return updateStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
+                    return updateExpressionStatement(node, visitParenthesizedExpression(<ParenthesizedExpression>node.expression, /*needsDestructuringValue*/ false));
                 case SyntaxKind.BinaryExpression:
-                    return updateStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
+                    return updateExpressionStatement(node, visitBinaryExpression(<BinaryExpression>node.expression, /*needsDestructuringValue*/ false));
             }
             return visitEachChild(node, visitor, context);
         }
@@ -2026,7 +2025,7 @@ namespace ts {
                     }
                 }
                 if (assignments) {
-                    updated = setTextRange(createStatement(inlineExpressions(assignments)), node);
+                    updated = setTextRange(createExpressionStatement(inlineExpressions(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -2207,7 +2206,7 @@ namespace ts {
             const statement = unwrapInnermostStatementOfLabel(node, convertedLoopState && recordLabel);
             return isIterationStatement(statement, /*lookInLabeledStatements*/ false)
                 ? visitIterationStatement(statement, /*outermostLabeledStatement*/ node)
-                : restoreEnclosingLabel(visitNode(statement, visitor, isStatement), node, convertedLoopState && resetLabel);
+                : restoreEnclosingLabel(visitNode(statement, visitor, isStatement, liftToBlock), node, convertedLoopState && resetLabel);
         }
 
         function visitIterationStatement(node: IterationStatement, outermostLabeledStatement: LabeledStatement) {
@@ -2330,11 +2329,11 @@ namespace ts {
                 const assignment = createAssignment(initializer, boundValue);
                 if (isDestructuringAssignment(assignment)) {
                     aggregateTransformFlags(assignment);
-                    statements.push(createStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
+                    statements.push(createExpressionStatement(visitBinaryExpression(assignment, /*needsDestructuringValue*/ false)));
                 }
                 else {
                     assignment.end = initializer.end;
-                    statements.push(setTextRange(createStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
+                    statements.push(setTextRange(createExpressionStatement(visitNode(assignment, visitor, isExpression)), moveRangeEnd(initializer, -1)));
                 }
             }
 
@@ -2483,7 +2482,7 @@ namespace ts {
                 createCatchClause(createVariableDeclaration(catchVariable),
                     setEmitFlags(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
@@ -2512,7 +2511,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(
+                                    createExpressionStatement(
                                         createFunctionCall(returnMethod, iterator, [])
                                     )
                                 ),
@@ -2707,7 +2706,7 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                prependStatements(statements, lexicalEnvironment);
+                addStatementsAfterPrologue(statements, lexicalEnvironment);
                 loopBody = createBlock(statements, /*multiline*/ true);
             }
 
@@ -2868,7 +2867,7 @@ namespace ts {
 
         function copyOutParameters(outParams: LoopOutParameter[], copyDirection: CopyDirection, statements: Statement[]): void {
             for (const outParam of outParams) {
-                statements.push(createStatement(copyOutParameter(outParam, copyDirection)));
+                statements.push(createExpressionStatement(copyOutParameter(outParam, copyDirection)));
             }
         }
 
@@ -2892,7 +2891,7 @@ namespace ts {
                 )
                 : call;
             if (isSimpleLoop) {
-                statements.push(createStatement(callResult));
+                statements.push(createExpressionStatement(callResult));
                 copyOutParameters(state.loopOutParameters!, CopyDirection.ToOriginal, statements);
             }
             else {
@@ -3358,7 +3357,7 @@ namespace ts {
 
                 // Add the class alias following the declaration.
                 statements.push(
-                    createStatement(
+                    createExpressionStatement(
                         createAssignment(
                             aliasAssignment.left,
                             cast(variable.name, isIdentifier)

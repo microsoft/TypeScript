@@ -4,7 +4,6 @@ class Base {
 
     constructor(public b: Base) {
 >b : Base
->Base : Base
     }
 }
 class Super extends Base {

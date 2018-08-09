@@ -1,21 +1,15 @@
 === tests/cases/compiler/genericGetter3.ts ===
 class A<T> { }
 >A : A<T>
->T : T
 
 class C<T> {
 >C : C<T>
->T : T
 
     data: A<T>;
 >data : A<T>
->A : A<T>
->T : T
 
     get x(): A<T> {
 >x : A<T>
->A : A<T>
->T : T
 
         return this.data;
 >this.data : A<T>

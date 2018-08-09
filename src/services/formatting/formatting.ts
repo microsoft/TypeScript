@@ -717,7 +717,6 @@ namespace ts.formatting {
                 Debug.assert(isNodeArray(nodes));
 
                 const listStartToken = getOpenTokenForList(parent, nodes);
-                const listEndToken = getCloseTokenForOpenToken(listStartToken);
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
@@ -752,17 +751,21 @@ namespace ts.formatting {
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
                 }
 
-                if (listEndToken !== SyntaxKind.Unknown) {
-                    if (formattingScanner.isOnToken()) {
-                        const tokenInfo = formattingScanner.readTokenInfo(parent);
-                        // consume the list end token only if it is still belong to the parent
-                        // there might be the case when current token matches end token but does not considered as one
-                        // function (x: function) <--
-                        // without this check close paren will be interpreted as list end token for function expression which is wrong
-                        if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
-                            // consume list end token
-                            consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
-                        }
+                const listEndToken = getCloseTokenForOpenToken(listStartToken);
+                if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken()) {
+                    let tokenInfo = formattingScanner.readTokenInfo(parent);
+                    if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
+                        formattingScanner.advance();
+                        tokenInfo = formattingScanner.readTokenInfo(parent);
+                    }
+
+                    // consume the list end token only if it is still belong to the parent
+                    // there might be the case when current token matches end token but does not considered as one
+                    // function (x: function) <--
+                    // without this check close paren will be interpreted as list end token for function expression which is wrong
+                    if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
+                        // consume list end token
+                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
                     }
                 }
             }
@@ -975,7 +978,6 @@ namespace ts.formatting {
             // split comment in lines
             let startLine = sourceFile.getLineAndCharacterOfPosition(commentRange.pos).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(commentRange.end).line;
-            let parts: TextRange[];
             if (startLine === endLine) {
                 if (!firstLineIsIndented) {
                     // treat as single line comment
@@ -983,19 +985,20 @@ namespace ts.formatting {
                 }
                 return;
             }
-            else {
-                parts = [];
-                let startPos = commentRange.pos;
-                for (let line = startLine; line < endLine; line++) {
-                    const endOfLine = getEndLinePosition(line, sourceFile);
-                    parts.push({ pos: startPos, end: endOfLine });
-                    startPos = getStartPositionOfLine(line + 1, sourceFile);
-                }
 
-                if (indentFinalLine) {
-                    parts.push({ pos: startPos, end: commentRange.end });
-                }
+            const parts: TextRange[] = [];
+            let startPos = commentRange.pos;
+            for (let line = startLine; line < endLine; line++) {
+                const endOfLine = getEndLinePosition(line, sourceFile);
+                parts.push({ pos: startPos, end: endOfLine });
+                startPos = getStartPositionOfLine(line + 1, sourceFile);
             }
+
+            if (indentFinalLine) {
+                parts.push({ pos: startPos, end: commentRange.end });
+            }
+
+            if (parts.length === 0) return;
 
             const startLinePos = getStartPositionOfLine(startLine, sourceFile);
 
@@ -1146,10 +1149,9 @@ namespace ts.formatting {
     export function getRangeOfEnclosingComment(
         sourceFile: SourceFile,
         position: number,
-        onlyMultiLine: boolean,
         precedingToken?: Node | null, // tslint:disable-line:no-null-keyword
         tokenAtPosition = getTokenAtPosition(sourceFile, position),
-        predicate?: (c: CommentRange) => boolean): CommentRange | undefined {
+    ): CommentRange | undefined {
         const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
         if (jsdoc) tokenAtPosition = jsdoc.parent;
         const tokenStart = tokenAtPosition.getStart(sourceFile);
@@ -1157,39 +1159,28 @@ namespace ts.formatting {
             return undefined;
         }
 
-        if (precedingToken === undefined) {
-            precedingToken = findPrecedingToken(position, sourceFile);
-        }
+        precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
 
         // Between two consecutive tokens, all comments are either trailing on the former
         // or leading on the latter (and none are in both lists).
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
         const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
-        const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
-            trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
-            trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
-        if (commentRanges) {
-            for (const range of commentRanges) {
-                // The end marker of a single-line comment does not include the newline character.
-                // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
-                //
-                //    // asdf   ^\n
-                //
-                // But for closed multi-line comments, we don't want to be inside the comment in the following case:
-                //
-                //    /* asdf */^
-                //
-                // However, unterminated multi-line comments *do* contain their end.
-                //
-                // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-                //
-                if ((range.pos < position && position < range.end ||
-                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()))) {
-                    return (range.kind === SyntaxKind.MultiLineCommentTrivia || !onlyMultiLine) && (!predicate || predicate(range)) ? range : undefined;
-                }
-            }
-        }
-        return undefined;
+        const commentRanges = concatenate(trailingRangesOfPreviousToken, leadingCommentRangesOfNextToken);
+        return commentRanges && find(commentRanges, range => rangeContainsPositionExclusive(range, position) ||
+            // The end marker of a single-line comment does not include the newline character.
+            // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
+            //
+            //    // asdf   ^\n
+            //
+            // But for closed multi-line comments, we don't want to be inside the comment in the following case:
+            //
+            //    /* asdf */^
+            //
+            // However, unterminated multi-line comments *do* contain their end.
+            //
+            // Internally, we represent the end of the comment at the newline and closing '/', respectively.
+            //
+            position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
     }
 
     function getOpenTokenForList(node: Node, list: ReadonlyArray<Node>) {

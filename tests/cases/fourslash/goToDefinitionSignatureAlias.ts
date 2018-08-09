@@ -1,5 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
+// @jsx: preserve
+
+// @Filename: /a.tsx
 ////function /*f*/f() {}
 ////const /*g*/g = f;
 ////const /*h*/h = g;
@@ -17,6 +20,13 @@
 ////const o = { m: /*m*/() => 0 };
 ////o.[|/*useM*/m|]();
 
+////class Component { /*componentCtr*/constructor(props: {}) {} }
+////class /*MyComponent*/MyComponent extends Component {}
+////<[|/*jsxMyComponent*/MyComponent|] />
+////new [|/*newMyComponent*/MyComponent|]({});
+
+verify.noErrors();
+
 verify.goToDefinition({
     useF: "f",
     useG: ["g", "f"],
@@ -25,4 +35,7 @@ verify.goToDefinition({
     useI: "i",
     useJ: ["j", "i"],
     useM: "m",
+
+    jsxMyComponent: "MyComponent",
+    newMyComponent: ["MyComponent", "componentCtr"],
 });

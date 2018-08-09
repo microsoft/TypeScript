@@ -19,7 +19,6 @@ var b: number;
 
 var c: E;
 >c : E
->E : E
 
 // operator **
 var r1 = c ** a;

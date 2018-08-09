@@ -21,8 +21,6 @@ function f1(x: this): this {
 }
 
 interface I1 {
->I1 : I1
-
     a: { x: this };
 >a : { x: any; }
 >x : any

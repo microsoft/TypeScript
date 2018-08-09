@@ -51,7 +51,6 @@ class C {
     clone(other: C) {
 >clone : (other: C) => void
 >other : C
->C : C
 
         this.x = other.x;
 >this.x = other.x : number

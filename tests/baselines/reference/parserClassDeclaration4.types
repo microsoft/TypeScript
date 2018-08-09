@@ -2,6 +2,5 @@
 class C extends A implements B extends C {
 >C : C
 >A : any
->B : No type information available!
 >C : typeof C
 }

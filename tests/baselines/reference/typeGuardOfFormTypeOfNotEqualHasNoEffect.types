@@ -14,7 +14,6 @@ var numOrBool: number | boolean
 
 var strOrC: string | C;
 >strOrC : string | C
->C : C
 
 // typeof x != s has not effect on typeguard
 if (typeof strOrNum != "string") {

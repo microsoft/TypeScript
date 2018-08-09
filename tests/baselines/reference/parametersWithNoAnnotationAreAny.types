@@ -20,7 +20,6 @@ var f2 = (x) => x;
 var f3 = <T>(x) => x;
 >f3 : <T>(x: any) => any
 ><T>(x) => x : <T>(x: any) => any
->T : T
 >x : any
 >x : any
 
@@ -37,8 +36,6 @@ class C {
 }
 
 interface I {
->I : I
-
     foo(x);
 >foo : (x: any) => any
 >x : any

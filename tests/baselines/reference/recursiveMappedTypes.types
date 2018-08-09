@@ -5,28 +5,16 @@ type Recurse = {
 >Recurse : any
 
     [K in keyof Recurse]: Recurse[K]
->K : K
->Recurse : any
->Recurse : any
->K : K
 }
 
 type Recurse1 = {
 >Recurse1 : any
 
     [K in keyof Recurse2]: Recurse2[K]
->K : K
->Recurse2 : any
->Recurse2 : any
->K : K
 }
 
 type Recurse2 = {
 >Recurse2 : any
 
     [K in keyof Recurse1]: Recurse1[K]
->K : K
->Recurse1 : any
->Recurse1 : any
->K : K
 }

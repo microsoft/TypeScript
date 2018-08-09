@@ -12,4 +12,4 @@
 ////fo/**/o()
 
 goTo.marker();
-verify.quickInfoIs("function foo<T>(x: T): void", "Do some foo things");
+verify.quickInfoIs("function foo<any>(x: any): void", "Do some foo things");

@@ -12,11 +12,9 @@ class IDirectChildrenMap {
 
     [objectId: number]: IHeapObjectProperty[]
 >objectId : number
->IHeapObjectProperty : IHeapObjectProperty
 }
 var directChildrenMap = <IDirectChildrenMap>{}; 
 >directChildrenMap : IDirectChildrenMap
 ><IDirectChildrenMap>{} : IDirectChildrenMap
->IDirectChildrenMap : IDirectChildrenMap
 >{} : {}
 

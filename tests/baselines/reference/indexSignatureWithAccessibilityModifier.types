@@ -1,7 +1,5 @@
 === tests/cases/compiler/indexSignatureWithAccessibilityModifier.ts ===
 interface I {
->I : I
-
     [public x: string]: string;
 >x : string
 }

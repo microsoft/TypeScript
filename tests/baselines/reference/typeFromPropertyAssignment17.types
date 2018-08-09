@@ -44,9 +44,9 @@ declare var module: any;
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
 >module.exports = minimatch : { (): void; M: typeof M; filter: () => void; }
->module.exports : any
->module : any
->exports : any
+>module.exports : { (): void; M: typeof M; filter: () => void; }
+>module : { "tests/cases/conformance/salsa/minimatch": { (): void; M: typeof M; filter: () => void; }; }
+>exports : { (): void; M: typeof M; filter: () => void; }
 >minimatch : { (): void; M: typeof M; filter: () => void; }
 
 minimatch.M = M

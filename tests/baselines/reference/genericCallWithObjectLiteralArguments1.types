@@ -1,14 +1,10 @@
 === tests/cases/compiler/genericCallWithObjectLiteralArguments1.ts ===
 function foo<T>(n: { x: T; y: T }, m: T) { return m; }
 >foo : <T>(n: { x: T; y: T; }, m: T) => T
->T : T
 >n : { x: T; y: T; }
 >x : T
->T : T
 >y : T
->T : T
 >m : T
->T : T
 >m : T
 
 // these are all errors

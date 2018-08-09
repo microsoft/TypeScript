@@ -29,7 +29,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
         changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall);
-        changes.deleteNode(sourceFile, superCall);
+        changes.delete(sourceFile, superCall);
     }
 
     function getNodes(sourceFile: SourceFile, pos: number): { readonly constructor: ConstructorDeclaration, readonly superCall: ExpressionStatement } | undefined {

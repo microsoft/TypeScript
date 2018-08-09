@@ -26,7 +26,7 @@ namespace ts {
                 return ModuleInstanceState.NonInstantiated;
             // 2. const enum declarations
             case SyntaxKind.EnumDeclaration:
-                if (isConst(node)) {
+                if (isEnumConst(node as EnumDeclaration)) {
                     return ModuleInstanceState.ConstEnumOnly;
                 }
                 break;
@@ -225,11 +225,11 @@ namespace ts {
             node.symbol = symbol;
             symbol.declarations = append(symbol.declarations, node);
 
-            if (symbolFlags & SymbolFlags.HasExports && !symbol.exports) {
+            if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.Module | SymbolFlags.Variable) && !symbol.exports) {
                 symbol.exports = createSymbolTable();
             }
 
-            if (symbolFlags & SymbolFlags.HasMembers && !symbol.members) {
+            if (symbolFlags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && !symbol.members) {
                 symbol.members = createSymbolTable();
             }
 
@@ -306,7 +306,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(getDeclarationName(node)!); // TODO: GH#18217
+            return isNamedDeclaration(node) ? declarationNameToString(node.name) : unescapeLeadingUnderscores(Debug.assertDefined(getDeclarationName(node)));
         }
 
         /**
@@ -383,9 +383,11 @@ namespace ts {
                         let message = symbol.flags & SymbolFlags.BlockScopedVariable
                             ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
                             : Diagnostics.Duplicate_identifier_0;
+                        let messageNeedsName = true;
 
                         if (symbol.flags & SymbolFlags.Enum || includes & SymbolFlags.Enum) {
                             message = Diagnostics.Enum_declarations_can_only_merge_with_namespace_or_other_enum_declarations;
+                            messageNeedsName = false;
                         }
 
                         if (symbol.declarations && symbol.declarations.length) {
@@ -394,6 +396,7 @@ namespace ts {
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                messageNeedsName = false;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -403,14 +406,16 @@ namespace ts {
                                 if (symbol.declarations && symbol.declarations.length &&
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
+                                    messageNeedsName = false;
                                 }
                             }
                         }
 
-                        forEach(symbol.declarations, declaration => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
-                        });
-                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message, getDisplayName(node)));
+                        const addError = (decl: Declaration): void => {
+                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
+                        };
+                        forEach(symbol.declarations, addError);
+                        addError(node);
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
@@ -1211,7 +1216,7 @@ namespace ts {
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
-                errorOrSuggestionOnFirstToken(unusedLabelIsError(options), node, Diagnostics.Unused_label);
+                errorOrSuggestionOnNode(unusedLabelIsError(options), node.label, Diagnostics.Unused_label);
             }
             if (!node.statement || node.statement.kind !== SyntaxKind.DoStatement) {
                 // do statement sets current flow inside bindDoStatement
@@ -1913,14 +1918,30 @@ namespace ts {
             }
         }
 
+        function checkStrictModeLabeledStatement(node: LabeledStatement) {
+            // Grammar checking for labeledStatement
+            if (inStrictMode && options.target! >= ScriptTarget.ES2015) {
+                if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
+                    errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
+                }
+            }
+        }
+
         function errorOnFirstToken(node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
             const span = getSpanOfTokenAtPosition(file, node.pos);
             file.bindDiagnostics.push(createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2));
         }
 
-        function errorOrSuggestionOnFirstToken(isError: boolean, node: Node, message: DiagnosticMessage, arg0?: any, arg1?: any, arg2?: any) {
-            const span = getSpanOfTokenAtPosition(file, node.pos);
-            const diag = createFileDiagnostic(file, span.start, span.length, message, arg0, arg1, arg2);
+        function errorOrSuggestionOnNode(isError: boolean, node: Node, message: DiagnosticMessage): void {
+            errorOrSuggestionOnRange(isError, node, node, message);
+        }
+
+        function errorOrSuggestionOnRange(isError: boolean, startNode: Node, endNode: Node, message: DiagnosticMessage): void {
+            addErrorOrSuggestionDiagnostic(isError, { pos: getTokenPosOfNode(startNode, file), end: endNode.end }, message);
+        }
+
+        function addErrorOrSuggestionDiagnostic(isError: boolean, range: TextRange, message: DiagnosticMessage): void {
+            const diag = createFileDiagnostic(file, range.pos, range.end - range.pos, message);
             if (isError) {
                 file.bindDiagnostics.push(diag);
             }
@@ -2051,6 +2072,13 @@ namespace ts {
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
+                    if (isInJavaScriptFile(node) &&
+                        file.commonJsModuleIndicator &&
+                        isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
+                        !lookupSymbolForNameWorker(container, "module" as __String)) {
+                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                            SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
                 case SyntaxKind.BinaryExpression:
                     const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
@@ -2092,6 +2120,8 @@ namespace ts {
                     return checkStrictModePrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.WithStatement:
                     return checkStrictModeWithStatement(<WithStatement>node);
+                case SyntaxKind.LabeledStatement:
+                    return checkStrictModeLabeledStatement(<LabeledStatement>node);
                 case SyntaxKind.ThisType:
                     seenThisKeyword = true;
                     return;
@@ -2611,7 +2641,7 @@ namespace ts {
         }
 
         function bindEnumDeclaration(node: EnumDeclaration) {
-            return isConst(node)
+            return isEnumConst(node)
                 ? bindBlockScopedDeclaration(node, SymbolFlags.ConstEnum, SymbolFlags.ConstEnumExcludes)
                 : bindBlockScopedDeclaration(node, SymbolFlags.RegularEnum, SymbolFlags.RegularEnumExcludes);
         }
@@ -2768,7 +2798,7 @@ namespace ts {
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
                     (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
                     // report error on regular enums and const enums if preserveConstEnums is set
-                    (node.kind === SyntaxKind.EnumDeclaration && (!isConstEnumDeclaration(node) || options.preserveConstEnums));
+                    (isEnumDeclaration(node) && (!isEnumConst(node) || options.preserveConstEnums));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;
@@ -2792,11 +2822,43 @@ namespace ts {
                                 node.declarationList.declarations.some(d => !!d.initializer)
                             );
 
-                        errorOrSuggestionOnFirstToken(isError, node, Diagnostics.Unreachable_code_detected);
+                        eachUnreachableRange(node, (start, end) => errorOrSuggestionOnRange(isError, start, end, Diagnostics.Unreachable_code_detected));
                     }
                 }
             }
             return true;
+        }
+    }
+
+    function eachUnreachableRange(node: Node, cb: (start: Node, last: Node) => void): void {
+        if (isStatement(node) && isExecutableStatement(node) && isBlock(node.parent)) {
+            const { statements } = node.parent;
+            const slice = sliceAfter(statements, node);
+            getRangesWhere(slice, isExecutableStatement, (start, afterEnd) => cb(slice[start], slice[afterEnd - 1]));
+        }
+        else {
+            cb(node, node);
+        }
+    }
+    // As opposed to a pure declaration like an `interface`
+    function isExecutableStatement(s: Statement): boolean {
+        // Don't remove statements that can validly be used before they appear.
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+            // `var x;` may declare a variable used above
+            !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
+    }
+
+    function isPurelyTypeDeclaration(s: Statement): boolean {
+        switch (s.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                return true;
+            case SyntaxKind.ModuleDeclaration:
+                return getModuleInstanceState(s as ModuleDeclaration) !== ModuleInstanceState.Instantiated;
+            case SyntaxKind.EnumDeclaration:
+                return hasModifier(s, ModifierFlags.Const);
+            default:
+                return false;
         }
     }
 

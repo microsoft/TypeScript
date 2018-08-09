@@ -19,7 +19,6 @@ class Bar {
 >foo : (...args: any[]) => void
 >yoha : any
 >bar : Yoha
->Yoha : Yoha
 
   //                   ^^^^
 }
@@ -40,7 +39,6 @@ class Bar {
 >foo : (...args: any[]) => void
 >yoha : any
 >bar : Yoha[]
->Yoha : Yoha
 
   //                      ^^^^
 }

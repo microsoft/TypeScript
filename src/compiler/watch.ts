@@ -475,22 +475,21 @@ namespace ts {
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
         let newLine = updateNewLine();
+        if (configFileName && host.configFileParsingResult) {
+            setConfigFileParsingResult(host.configFileParsingResult);
+            newLine = updateNewLine();
+        }
         reportWatchDiagnostic(Diagnostics.Starting_compilation_in_watch_mode);
-        if (configFileName) {
+        if (configFileName && !host.configFileParsingResult) {
             newLine = getNewLineCharacter(optionsToExtendForConfigFile, () => host.getNewLine());
-            if (host.configFileParsingResult) {
-                setConfigFileParsingResult(host.configFileParsingResult);
-            }
-            else {
-                Debug.assert(!rootFileNames);
-                parseConfigFile();
-            }
+            Debug.assert(!rootFileNames);
+            parseConfigFile();
             newLine = updateNewLine();
         }
 
         const trace = host.trace && ((s: string) => { host.trace!(s + newLine); });
         const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
-            compilerOptions.diagnostis ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+            compilerOptions.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace! : noop; // TODO: GH#18217
         const { watchFile, watchFilePath, watchDirectory } = getWatchFactory<string>(watchLogLevel, writeLog);
 

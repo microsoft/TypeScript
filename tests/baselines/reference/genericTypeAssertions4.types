@@ -27,22 +27,16 @@ class C extends A {
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: C;
 >c : C
->C : C
 
 function foo2<T extends A>(x: T) {
 >foo2 : <T extends A>(x: T) => void
->T : T
->A : A
 >x : T
->T : T
 
     var y = x;
 >y : T
@@ -67,20 +61,17 @@ function foo2<T extends A>(x: T) {
 >y = <T>a : T
 >y : T
 ><T>a : T
->T : T
 >a : A
 
     y = <T>b; // error: cannot convert B to T
 >y = <T>b : T
 >y : T
 ><T>b : T
->T : T
 >b : B
 
     y = <T>c; // error: cannot convert C to T
 >y = <T>c : T
 >y : T
 ><T>c : T
->T : T
 >c : C
 }

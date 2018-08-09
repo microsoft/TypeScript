@@ -142,7 +142,7 @@ namespace ts {
         context.startLexicalEnvironment();
         statements = visitNodes(statements, visitor, isStatement, start);
         if (ensureUseStrict && !startsWithUseStrict(statements)) {
-            statements = setTextRange(createNodeArray([createStatement(createLiteral("use strict")), ...statements]), statements);
+            statements = setTextRange(createNodeArray([createExpressionStatement(createLiteral("use strict")), ...statements]), statements);
         }
         const declarations = context.endLexicalEnvironment();
         return setTextRange(createNodeArray(concatenate(declarations, statements)), statements);
@@ -614,7 +614,7 @@ namespace ts {
                     visitNode((<VariableStatement>node).declarationList, visitor, isVariableDeclarationList));
 
             case SyntaxKind.ExpressionStatement:
-                return updateStatement(<ExpressionStatement>node,
+                return updateExpressionStatement(<ExpressionStatement>node,
                     visitNode((<ExpressionStatement>node).expression, visitor, isExpression));
 
             case SyntaxKind.IfStatement:
@@ -1476,8 +1476,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(prependStatements(statements.slice(), declarations)), statements)
-            : prependStatements(statements, declarations);
+            ? setTextRange(createNodeArray(addStatementsAfterPrologue(statements.slice(), declarations)), statements)
+            : addStatementsAfterPrologue(statements, declarations);
     }
 
     /**

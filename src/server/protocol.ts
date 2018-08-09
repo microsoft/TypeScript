@@ -34,6 +34,8 @@ namespace ts.server.protocol {
         Implementation = "implementation",
         /* @internal */
         ImplementationFull = "implementation-full",
+        /* @internal */
+        EmitOutput = "emit-output",
         Exit = "exit",
         Format = "format",
         Formatonkey = "formatonkey",
@@ -703,7 +705,7 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: ReadonlyArray<number>;
+        errorCodes: ReadonlyArray<number>;
     }
 
     export interface GetCombinedCodeFixRequestArgs {
@@ -792,6 +794,21 @@ namespace ts.server.protocol {
      */
     export interface DefinitionRequest extends FileLocationRequest {
         command: CommandTypes.Definition;
+    }
+
+    export interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
+        readonly command: CommandTypes.DefinitionAndBoundSpan;
+    }
+
+    export interface DefinitionAndBoundSpanResponse extends Response {
+        readonly body: DefinitionInfoAndBoundSpan;
+    }
+
+    /** @internal */
+    export interface EmitOutputRequest extends FileRequest {}
+    /** @internal */
+    export interface EmitOutputResponse extends Response {
+        readonly body: EmitOutput;
     }
 
     /**
@@ -1056,6 +1073,17 @@ namespace ts.server.protocol {
         arguments: RenameRequestArgs;
     }
 
+    /* @internal */
+    export interface RenameFullRequest extends FileLocationRequest {
+        readonly command: CommandTypes.RenameLocationsFull;
+        readonly arguments: RenameRequestArgs;
+    }
+
+    /* @internal */
+    export interface RenameFullResponse extends Response {
+        readonly body: ReadonlyArray<RenameLocation>;
+    }
+
     /**
      * Information about the item to be renamed.
      */
@@ -1246,7 +1274,7 @@ namespace ts.server.protocol {
     /* @internal */
     export interface ProjectFiles {
         /**
-         * Information abount project verison
+         * Information about project verison
          */
         info?: ProjectVersionInfo;
         /**
@@ -1789,6 +1817,10 @@ namespace ts.server.protocol {
          * Optional prefix to apply to possible completions.
          */
         prefix?: string;
+        /**
+         * Character that was responsible for triggering completion.
+         * Should be `undefined` if a user manually requested completion.
+         */
         triggerCharacter?: CompletionsTriggerCharacter;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
@@ -2062,10 +2094,58 @@ namespace ts.server.protocol {
         argumentCount: number;
     }
 
-    /**
-     * Arguments of a signature help request.
-     */
+    export type SignatureHelpTriggerCharacter = "," | "(" | "<";
+    export type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
+
+      /**
+       * Arguments of a signature help request.
+       */
     export interface SignatureHelpRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Reason why signature help was invoked.
+         * See each individual possible
+         */
+        triggerReason?: SignatureHelpTriggerReason;
+    }
+
+    export type SignatureHelpTriggerReason =
+        | SignatureHelpInvokedReason
+        | SignatureHelpCharacterTypedReason
+        | SignatureHelpRetriggeredReason;
+
+    /**
+     * Signals that the user manually requested signature help.
+     * The language service will unconditionally attempt to provide a result.
+     */
+    export interface SignatureHelpInvokedReason {
+        kind: "invoked";
+        triggerCharacter?: undefined;
+    }
+
+    /**
+     * Signals that the signature help request came from a user typing a character.
+     * Depending on the character and the syntactic context, the request may or may not be served a result.
+     */
+    export interface SignatureHelpCharacterTypedReason {
+        kind: "characterTyped";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter: SignatureHelpTriggerCharacter;
+    }
+
+    /**
+     * Signals that this signature help request came from typing a character or moving the cursor.
+     * This should only occur if a signature help session was already active and the editor needs to see if it should adjust.
+     * The language service will unconditionally attempt to provide a result.
+     * `triggerCharacter` can be `undefined` for a retrigger caused by a cursor move.
+     */
+    export interface SignatureHelpRetriggeredReason {
+        kind: "retrigger";
+        /**
+         * Character that was responsible for triggering signature help.
+         */
+        triggerCharacter?: SignatureHelpRetriggerCharacter;
     }
 
     /**
@@ -2458,12 +2538,12 @@ namespace ts.server.protocol {
         /**
          * exact, substring, or prefix.
          */
-        matchKind?: string;
+        matchKind: string;
 
         /**
          * If this was a case sensitive or insensitive match.
          */
-        isCaseSensitive?: boolean;
+        isCaseSensitive: boolean;
 
         /**
          * Optional modifiers for the kind (such as 'public').

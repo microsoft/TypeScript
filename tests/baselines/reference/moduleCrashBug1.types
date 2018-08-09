@@ -3,7 +3,6 @@ module _modes {
 >_modes : typeof _modes
 
  export interface IMode {
->IMode : IMode
   
  }
  
@@ -16,8 +15,6 @@ module _modes {
 //_modes. // produces an internal error - please implement in derived class
 
 module editor {
->editor : any
-
  import modes = _modes;
 >modes : typeof modes
 >_modes : typeof modes
@@ -26,7 +23,6 @@ module editor {
 
 var m : _modes;
 >m : any
->_modes : No type information available!
 
 
 

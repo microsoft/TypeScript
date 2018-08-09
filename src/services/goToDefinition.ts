@@ -28,17 +28,18 @@ namespace ts.GoToDefinition {
         }
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
-        if (calledDeclaration) {
+        // Don't go to the component constructor definition for a JSX element, just go to the component definition.
+        if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorDeclaration(calledDeclaration))) {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
             if (typeChecker.getRootSymbols(symbol).some(s => symbolMatchesSignature(s, calledDeclaration)) ||
-                // TODO: GH#23742 Following check shouldn't be necessary if 'require' is an alias
-                symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
+                // TODO: GH#25533 Following check shouldn't be necessary if 'require' is an alias
+                symbol.declarations && symbol.declarations.some(d => isVariableDeclaration(d) && !!d.initializer && isRequireCall(d.initializer, /*checkArgumentIsStringLiteralLike*/ false))) {
                 return [sigInfo];
             }
             else {
-                const defs = getDefinitionFromSymbol(typeChecker, symbol, node)!;
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node) || emptyArray;
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
             }
@@ -67,13 +68,12 @@ namespace ts.GoToDefinition {
         //      bar<Test>(({pr/*goto*/op1})=>{});
         if (isPropertyName(node) && isBindingElement(parent) && isObjectBindingPattern(parent.parent) &&
             (node === (parent.propertyName || parent.name))) {
+            const name = getNameFromPropertyName(node);
             const type = typeChecker.getTypeAtLocation(parent.parent);
-            if (type) {
-                const propSymbols = getPropertySymbolsFromType(type, node);
-                if (propSymbols) {
-                    return flatMap(propSymbols, propSymbol => getDefinitionFromSymbol(typeChecker, propSymbol, node));
-                }
-            }
+            return name === undefined ? emptyArray : flatMap(type.isUnion() ? type.types : [type], t => {
+                const prop = t.getProperty(name);
+                return prop && getDefinitionFromSymbol(typeChecker, prop, node);
+            });
         }
 
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
@@ -86,9 +86,12 @@ namespace ts.GoToDefinition {
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
         const element = getContainingObjectLiteralElement(node);
-        if (element && typeChecker.getContextualType(element.parent as Expression)) {
-            return flatMap(getPropertySymbolsFromContextualType(typeChecker, element), propertySymbol =>
-                getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+        if (element) {
+            const contextualType = element && typeChecker.getContextualType(element.parent);
+            if (contextualType) {
+                return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol =>
+                    getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            }
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
@@ -133,16 +136,30 @@ namespace ts.GoToDefinition {
         }
 
         const symbol = typeChecker.getSymbolAtLocation(node);
-        const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, node);
-        if (!type) {
-            return undefined;
-        }
+        if (!symbol) return undefined;
 
-        if (type.isUnion() && !(type.flags & TypeFlags.Enum)) {
-            return flatMap(type.types, t => t.symbol && getDefinitionFromSymbol(typeChecker, t.symbol, node));
-        }
+        const typeAtLocation = typeChecker.getTypeOfSymbolAtLocation(symbol, node);
+        const returnType = tryGetReturnTypeOfFunction(symbol, typeAtLocation, typeChecker);
+        const fromReturnType = returnType && definitionFromType(returnType, typeChecker, node);
+        // If a function returns 'void' or some other type with no definition, just return the function definition.
+        return fromReturnType && fromReturnType.length !== 0 ? fromReturnType : definitionFromType(typeAtLocation, typeChecker, node);
+    }
 
-        return type.symbol && getDefinitionFromSymbol(typeChecker, type.symbol, node);
+    function definitionFromType(type: Type, checker: TypeChecker, node: Node): DefinitionInfo[] {
+        return flatMap(type.isUnion() && !(type.flags & TypeFlags.Enum) ? type.types : [type], t =>
+            t.symbol && getDefinitionFromSymbol(checker, t.symbol, node));
+    }
+
+    function tryGetReturnTypeOfFunction(symbol: Symbol, type: Type, checker: TypeChecker): Type | undefined {
+        // If the type is just a function's inferred type,
+        // go-to-type should go to the return type instead, since go-to-definition takes you to the function anyway.
+        if (type.symbol === symbol ||
+            // At `const f = () => {}`, the symbol is `f` and the type symbol is at `() => {}`
+            symbol.valueDeclaration && type.symbol && isVariableDeclaration(symbol.valueDeclaration) && symbol.valueDeclaration.initializer === type.symbol.valueDeclaration as Node) {
+            const sigs = type.getCallSignatures();
+            if (sigs.length === 1) return checker.getReturnTypeOfSignature(first(sigs));
+        }
+        return undefined;
     }
 
     export function getDefinitionAndBoundSpan(program: Program, sourceFile: SourceFile, position: number): DefinitionInfoAndBoundSpan | undefined {
@@ -170,7 +187,7 @@ namespace ts.GoToDefinition {
     // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
         if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
-        const type = checker.getTypeAtLocation(node.parent.expression)!;
+        const type = checker.getTypeAtLocation(node.parent.expression);
         return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
             const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
             return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
@@ -228,7 +245,7 @@ namespace ts.GoToDefinition {
         }
 
         function getCallSignatureDefinition(): DefinitionInfo[] | undefined {
-            return isCallExpressionTarget(node) || isNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
+            return isCallOrNewExpressionTarget(node) || isNameOfFunctionDeclaration(node)
                 ? getSignatureDefinition(symbol.declarations, /*selectConstructors*/ false)
                 : undefined;
         }
@@ -271,7 +288,7 @@ namespace ts.GoToDefinition {
     }
 
     export function findReferenceInPosition(refs: ReadonlyArray<FileReference>, pos: number): FileReference | undefined {
-        return find(refs, ref => ref.pos <= pos && pos <= ref.end);
+        return find(refs, ref => textRangeContainsPositionInclusive(ref, pos));
     }
 
     function getDefinitionInfoForFileReference(name: string, targetFileName: string): DefinitionInfo {

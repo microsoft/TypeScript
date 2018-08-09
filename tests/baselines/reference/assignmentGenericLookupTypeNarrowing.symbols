@@ -1,0 +1,40 @@
+=== tests/cases/conformance/expressions/assignmentOperator/assignmentGenericLookupTypeNarrowing.ts ===
+// Repro from #26130
+
+let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
+>mappedObject : Symbol(mappedObject, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 3))
+>K : Symbol(K, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 20))
+>x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 41))
+>foo : Symbol(foo, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 56))
+>x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 62))
+
+declare function foo<T>(x: T): null | T;
+>foo : Symbol(foo, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 75))
+>T : Symbol(T, Decl(assignmentGenericLookupTypeNarrowing.ts, 3, 21))
+>x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 3, 24))
+>T : Symbol(T, Decl(assignmentGenericLookupTypeNarrowing.ts, 3, 21))
+>T : Symbol(T, Decl(assignmentGenericLookupTypeNarrowing.ts, 3, 21))
+
+function bar<K extends "foo">(key: K) {
+>bar : Symbol(bar, Decl(assignmentGenericLookupTypeNarrowing.ts, 3, 40))
+>K : Symbol(K, Decl(assignmentGenericLookupTypeNarrowing.ts, 5, 13))
+>key : Symbol(key, Decl(assignmentGenericLookupTypeNarrowing.ts, 5, 30))
+>K : Symbol(K, Decl(assignmentGenericLookupTypeNarrowing.ts, 5, 13))
+
+  const element = foo(mappedObject[key]);
+>element : Symbol(element, Decl(assignmentGenericLookupTypeNarrowing.ts, 6, 7))
+>foo : Symbol(foo, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 75))
+>mappedObject : Symbol(mappedObject, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 3))
+>key : Symbol(key, Decl(assignmentGenericLookupTypeNarrowing.ts, 5, 30))
+
+  if (element == null)
+>element : Symbol(element, Decl(assignmentGenericLookupTypeNarrowing.ts, 6, 7))
+
+    return;
+  const x = element.x;
+>x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 9, 7))
+>element.x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 41))
+>element : Symbol(element, Decl(assignmentGenericLookupTypeNarrowing.ts, 6, 7))
+>x : Symbol(x, Decl(assignmentGenericLookupTypeNarrowing.ts, 2, 41))
+}
+

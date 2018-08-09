@@ -154,6 +154,18 @@ events.emit('jump', 20, 'up');
 events.emit('stop', 'Bye!');
 events.emit('done');
 
+// Repro from #25871
+
+declare var ff1: (... args: any[]) => void;
+
+declare var ff2: () => void;
+declare var ff3: (...args: []) => void;
+declare var ff4: (a: never) => void;
+
+ff1 = ff2;
+ff1 = ff3;
+ff1 = ff4;  // Error
+
 
 //// [genericRestParameters1.js]
 "use strict";
@@ -256,6 +268,9 @@ events.emit('move', 10, 'left');
 events.emit('jump', 20, 'up');
 events.emit('stop', 'Bye!');
 events.emit('done');
+ff1 = ff2;
+ff1 = ff3;
+ff1 = ff4; // Error
 
 
 //// [genericRestParameters1.d.ts]
@@ -332,3 +347,7 @@ declare type EventType<T> = {
     emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void;
 };
 declare var events: EventType<Record1>;
+declare var ff1: (...args: any[]) => void;
+declare var ff2: () => void;
+declare var ff3: (...args: []) => void;
+declare var ff4: (a: never) => void;

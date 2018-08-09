@@ -387,7 +387,7 @@ interface Array<T> {}`
                 sourceFile,
                 program,
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
-                preferences: defaultPreferences,
+                preferences: emptyOptions,
                 host: notImplementedHost,
                 formatContext: formatting.getFormatContext(formatOptions)
             };

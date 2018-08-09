@@ -8,7 +8,7 @@ namespace ts {
         `;
         it("can cancel signature help mid-request", () => {
             verifyOperationCancelledAfter(file, 4, service => // Two calls are top-level in services, one is the root type, and the second should be for the parameter type
-                service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"))!,
+                service.getSignatureHelpItems("file.ts", file.lastIndexOf("f"), emptyOptions)!,
                 r => assert.exists(r.items[0])
             );
         });

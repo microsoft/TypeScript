@@ -4,6 +4,8 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
+        Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
         Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_2.code,
     ];
     registerCodeFix({
@@ -35,7 +37,7 @@ namespace ts.codefix {
         let suggestion: string | undefined;
         if (isPropertyAccessExpression(node.parent) && node.parent.name === node) {
             Debug.assert(node.kind === SyntaxKind.Identifier);
-            const containingType = checker.getTypeAtLocation(node.parent.expression)!;
+            const containingType = checker.getTypeAtLocation(node.parent.expression);
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else if (isImportSpecifier(node.parent) && node.parent.name === node) {
@@ -43,7 +45,7 @@ namespace ts.codefix {
             const importDeclaration = findAncestor(node, isImportDeclaration)!;
             const resolvedSourceFile = getResolvedSourceFileFromImportDeclaration(sourceFile, context, importDeclaration);
             if (resolvedSourceFile && resolvedSourceFile.symbol) {
-                suggestion = checker.getSuggestionForNonexistentModule(node as Identifier, resolvedSourceFile.symbol);
+                suggestion = checker.getSuggestionForNonexistentExport(node as Identifier, resolvedSourceFile.symbol);
             }
         }
         else {

@@ -1,45 +1,21 @@
 === tests/cases/compiler/promiseIdentityWithAny.ts ===
 export interface IPromise<T, V> {
->IPromise : IPromise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise<U, W>
 >x : T
->T : T
->IPromise : IPromise<T, V>
->U : U
->W : W
->IPromise : IPromise<T, V>
->U : U
->W : W
 }
 export interface Promise<T, V> {
->Promise : Promise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => Promise<any, any>): Promise<any, any>;
 >then : <U, W>(callback: (x: T) => Promise<any, any>) => Promise<any, any>
->U : U
->W : W
 >callback : (x: T) => Promise<any, any>
 >x : T
->T : T
->Promise : Promise<T, V>
->Promise : Promise<T, V>
 }
 
 // Should be ok because signature type parameters get erased to any
 var x: IPromise<string, number>;
 >x : IPromise<string, number>
->IPromise : IPromise<T, V>
 
 var x: Promise<string, boolean>;
 >x : IPromise<string, number>
->Promise : Promise<T, V>
 

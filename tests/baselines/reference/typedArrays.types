@@ -373,7 +373,6 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >CreateIntegerTypedArraysFromArrayLike : (obj: ArrayLike<number>) => any[]
 >obj : ArrayLike<number>
->ArrayLike : ArrayLike<T>
 
     var typedArrays = [];
 >typedArrays : any[]
@@ -742,7 +741,6 @@ function CreateTypedArraysOf2() {
 function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number) {
 >CreateTypedArraysFromMapFn : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number) => any[]
 >obj : ArrayLike<number>
->ArrayLike : ArrayLike<T>
 >mapFn : (n: number, v: number) => number
 >n : number
 >v : number
@@ -866,7 +864,6 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number, thisArg: {}) {
 >CreateTypedArraysFromThisObj : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number, thisArg: {}) => any[]
 >obj : ArrayLike<number>
->ArrayLike : ArrayLike<T>
 >mapFn : (n: number, v: number) => number
 >n : number
 >v : number

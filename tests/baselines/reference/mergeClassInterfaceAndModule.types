@@ -1,37 +1,24 @@
 === tests/cases/conformance/classes/classDeclarations/mergeClassInterfaceAndModule.ts ===
 interface C1 {}
->C1 : C1
-
 declare class C1 {}
 >C1 : C1
 
 module C1 {}
->C1 : typeof C1
 
 declare class C2 {}
 >C2 : C2
 
 interface C2 {}
->C2 : C2
-
 module C2 {}
->C2 : typeof C2
 
 declare class C3 {}
 >C3 : C3
 
 module C3 {}
->C3 : typeof C3
-
 interface C3 {}
->C3 : C3
 
 module C4 {}
->C4 : typeof C4
-
 declare class C4 {} // error -- class declaration must preceed module declaration
 >C4 : C4
 
 interface C4 {}
->C4 : C4
-

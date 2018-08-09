@@ -3,70 +3,48 @@ module Test {
 >Test : typeof Test
 
     interface IState {
->IState : IState
     }
     interface IToken {
->IToken : IToken
-
         startIndex: number;
 >startIndex : number
     }
     interface IStateToken extends IToken {
->IStateToken : IStateToken
->IToken : IToken
-
         state: IState;
 >state : IState
->IState : IState
     }
     interface ILineTokens {
->ILineTokens : ILineTokens
-
         tokens: IToken[];
 >tokens : IToken[]
->IToken : IToken
 
         endState: IState;
 >endState : IState
->IState : IState
     }
     interface IAction {
->IAction : IAction
     }
     interface IMode {
->IMode : IMode
-
         onEnter(line:string, state:IState, offset:number):IAction;
 >onEnter : (line: string, state: IState, offset: number) => IAction
 >line : string
 >state : IState
->IState : IState
 >offset : number
->IAction : IAction
 
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
 >line : string
 >state : IState
->IState : IState
 >includeStates : boolean
->ILineTokens : ILineTokens
     }
     export class Bug implements IMode {
 >Bug : Bug
->IMode : IMode
 
         public onEnter(line:string, state:IState, offset:number):IAction {
 >onEnter : (line: string, state: IState, offset: number) => IAction
 >line : string
 >state : IState
->IState : IState
 >offset : number
->IAction : IAction
 
             var lineTokens:ILineTokens= this.tokenize(line, state, true);
 >lineTokens : ILineTokens
->ILineTokens : ILineTokens
 >this.tokenize(line, state, true) : ILineTokens
 >this.tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
 >this : this
@@ -77,7 +55,6 @@ module Test {
 
             var tokens:IStateToken[]= lineTokens.tokens;
 >tokens : IStateToken[]
->IStateToken : IStateToken
 >lineTokens.tokens : IToken[]
 >lineTokens : ILineTokens
 >tokens : IToken[]
@@ -103,9 +80,7 @@ module Test {
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
 >line : string
 >state : IState
->IState : IState
 >includeStates : boolean
->ILineTokens : ILineTokens
 
             return null;
 >null : null

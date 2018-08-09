@@ -34,8 +34,8 @@ namespace ts.formatting {
 
             const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true, precedingToken || null); // tslint:disable-line:no-null-keyword
-            if (enclosingCommentRange) {
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null); // tslint:disable-line:no-null-keyword
+            if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
                 return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
             }
 
@@ -351,12 +351,18 @@ namespace ts.formatting {
                             getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
                     }
                     case SyntaxKind.ClassDeclaration:
-                        return getListIfStartEndIsInListRange((<ClassDeclaration>node.parent).typeParameters, node.getStart(sourceFile), end);
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.JSDocTemplateTag: {
+                        const { typeParameters } = <ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node.parent;
+                        return getListIfStartEndIsInListRange(typeParameters, node.getStart(sourceFile), end);
+                    }
                     case SyntaxKind.NewExpression:
                     case SyntaxKind.CallExpression: {
                         const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<CallExpression>node.parent).typeArguments, start, end) ||
-                            getListIfStartEndIsInListRange((<CallExpression>node.parent).arguments, start, end);
+                        return getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).typeArguments, start, end) ||
+                            getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).arguments, start, end);
                     }
                     case SyntaxKind.VariableDeclarationList:
                         return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), end);
@@ -576,17 +582,10 @@ namespace ts.formatting {
         function isControlFlowEndingStatement(kind: SyntaxKind, parent: TextRangeWithKind): boolean {
             switch (kind) {
                 case SyntaxKind.ReturnStatement:
-                case SyntaxKind.ThrowStatement: {
-                    if (parent.kind !== SyntaxKind.Block) {
-                        return true;
-                    }
-                    const grandParent = (parent as Node).parent;
-                    // In a function, we may want to write inner functions after this.
-                    return !(grandParent && grandParent.kind === SyntaxKind.FunctionExpression || grandParent.kind === SyntaxKind.FunctionDeclaration);
-                }
+                case SyntaxKind.ThrowStatement:
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
-                    return true;
+                    return parent.kind !== SyntaxKind.Block;
                 default:
                     return false;
             }

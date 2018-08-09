@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "composite": true,
-        "declaration": true
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true
     },
     "references": [
         { "path": "../core" }

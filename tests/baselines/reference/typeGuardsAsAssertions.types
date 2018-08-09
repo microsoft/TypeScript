@@ -6,37 +6,22 @@ let cond: boolean;
 
 export type Optional<a> = Some<a> | None;
 >Optional : Optional<a>
->a : a
->Some : Some<a>
->a : a
->None : None
 
 export interface None { readonly none: string; }
->None : None
 >none : string
 
 export interface Some<a> { readonly some: a; }
->Some : Some<a>
->a : a
 >some : a
->a : a
 
 export const none : None = { none: '' };
 >none : None
->None : None
 >{ none: '' } : { none: string; }
 >none : string
 >'' : ""
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->a : a
 >value : Optional<a>
->Optional : Optional<a>
->a : a
->value : any
->Some : Some<a>
->a : a
 
     return 'some' in value;
 >'some' in value : boolean
@@ -46,9 +31,7 @@ export function isSome<a>(value: Optional<a>): value is Some<a> {
 
 function someFrom<a>(some: a) {
 >someFrom : <a>(some: a) => { some: a; }
->a : a
 >some : a
->a : a
 
     return { some };
 >{ some } : { some: a; }
@@ -57,14 +40,10 @@ function someFrom<a>(some: a) {
 
 export function fn<r>(makeSome: () => r): void {
 >fn : <r>(makeSome: () => r) => void
->r : r
 >makeSome : () => r
->r : r
 
     let result: Optional<r> = none;
 >result : Optional<r>
->Optional : Optional<a>
->r : r
 >none : None
 
     result;  // None

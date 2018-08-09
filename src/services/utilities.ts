@@ -194,16 +194,20 @@ namespace ts {
     }
 
     export function isCallExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
+        return isCallOrNewExpressionTargetWorker(node, isCallExpression);
     }
 
     export function isNewExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
+        return isCallOrNewExpressionTargetWorker(node, isNewExpression);
     }
 
-    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind): boolean {
+    export function isCallOrNewExpressionTarget(node: Node): boolean {
+        return isCallOrNewExpressionTargetWorker(node, isCallOrNewExpression);
+    }
+
+    function isCallOrNewExpressionTargetWorker<T extends CallExpression | NewExpression>(node: Node, pred: (node: Node) => node is T): boolean {
         const target = climbPastPropertyAccess(node);
-        return !!target && !!target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+        return !!target && !!target.parent && pred(target.parent) && target.parent.expression === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
@@ -347,7 +351,6 @@ namespace ts {
             case SyntaxKind.Parameter: return hasModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
             case SyntaxKind.ImportEqualsDeclaration:
             case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.ImportClause:
             case SyntaxKind.ExportSpecifier:
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
@@ -371,16 +374,18 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Prototype:
                         return ScriptElementKind.localClassElement;
                     default: {
-                        assertTypeIsNever(kind);
+                        assertType<never>(kind);
                         return ScriptElementKind.unknown;
                     }
                 }
+            case SyntaxKind.Identifier:
+                return isImportClause(node.parent) ? ScriptElementKind.alias : ScriptElementKind.unknown;
             default:
                 return ScriptElementKind.unknown;
         }
 
         function getKindOfVariableDeclaration(v: VariableDeclaration): ScriptElementKind {
-            return isConst(v)
+            return isVarConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)
                     ? ScriptElementKind.letElement
@@ -678,7 +683,7 @@ namespace ts {
         let current: Node = sourceFile;
         outer: while (true) {
             // find the child that contains 'position'
-            for (const child of current.getChildren()) {
+            for (const child of current.getChildren(sourceFile)) {
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     // If this child begins after position, then all subsequent children will as well.
@@ -729,21 +734,14 @@ namespace ts {
                 // this is token that starts at the end of previous token - return it
                 return n;
             }
-
-            const children = n.getChildren();
-            for (const child of children) {
+            return firstDefined(n.getChildren(), child => {
                 const shouldDiveInChildNode =
                     // previous token is enclosed somewhere in the child
                     (child.pos <= previousToken.pos && child.end > previousToken.end) ||
                     // previous token ends exactly at the beginning of child
                     (child.pos === previousToken.end);
-
-                if (shouldDiveInChildNode && nodeHasTokens(child, sourceFile)) {
-                    return find(child);
-                }
-            }
-
-            return undefined;
+                return shouldDiveInChildNode && nodeHasTokens(child, sourceFile) ? find(child) : undefined;
+            });
         }
     }
 
@@ -923,11 +921,25 @@ namespace ts {
         }
     }
 
+    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile, checker: TypeChecker): boolean {
+        const info = getPossibleTypeArgumentsInfo(token, sourceFile);
+        return info !== undefined && (isPartOfTypeNode(info.called) ||
+            getPossibleGenericSignatures(info.called, info.nTypeArguments, checker).length !== 0 ||
+            isPossiblyTypeArgumentPosition(info.called, sourceFile, checker));
+    }
+
+    export function getPossibleGenericSignatures(called: Expression, typeArgumentCount: number, checker: TypeChecker): ReadonlyArray<Signature> {
+        const type = checker.getTypeAtLocation(called);
+        const signatures = isNewExpression(called.parent) ? type.getConstructSignatures() : type.getCallSignatures();
+        return signatures.filter(candidate => !!candidate.typeParameters && candidate.typeParameters.length >= typeArgumentCount);
+    }
+
     export interface PossibleTypeArgumentInfo {
         readonly called: Identifier;
         readonly nTypeArguments: number;
     }
-    export function isPossiblyTypeArgumentPosition(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
+    // Get info for an expression like `f <` that may be the start of type arguments.
+    export function getPossibleTypeArgumentsInfo(tokenIn: Node, sourceFile: SourceFile): PossibleTypeArgumentInfo | undefined {
         let token: Node | undefined = tokenIn;
         // This function determines if the node could be type argument position
         // Since during editing, when type argument list is not complete,
@@ -1024,12 +1036,8 @@ namespace ts {
      * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
      * @param predicate Additional predicate to test on the comment range.
      */
-    export function isInComment(
-        sourceFile: SourceFile,
-        position: number,
-        tokenAtPosition?: Node,
-        predicate?: (c: CommentRange) => boolean): boolean {
-        return !!formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false, /*precedingToken*/ undefined, tokenAtPosition, predicate);
+    export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
+        return formatting.getRangeOfEnclosingComment(sourceFile, position, /*precedingToken*/ undefined, tokenAtPosition);
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number): boolean {
@@ -1140,21 +1148,24 @@ namespace ts {
     }
 
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
-            const commentText = sourceFile.text.substring(c.pos, c.end);
-            return tripleSlashDirectivePrefixRegex.test(commentText);
-        });
+        return isInReferenceCommentWorker(sourceFile, position, /*shouldBeReference*/ true);
     }
 
     export function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
-            const commentText = sourceFile.text.substring(c.pos, c.end);
-            return !tripleSlashDirectivePrefixRegex.test(commentText);
-        });
+        return isInReferenceCommentWorker(sourceFile, position, /*shouldBeReference*/ false);
+    }
+
+    function isInReferenceCommentWorker(sourceFile: SourceFile, position: number, shouldBeReference: boolean): boolean {
+        const range = isInComment(sourceFile, position, /*tokenAtPosition*/ undefined);
+        return !!range && shouldBeReference === tripleSlashDirectivePrefixRegex.test(sourceFile.text.substring(range.pos, range.end));
     }
 
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
+
+    export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
+        return createTextRange(node.getStart(sourceFile), node.end);
     }
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
@@ -1176,6 +1187,7 @@ namespace ts {
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
@@ -1183,6 +1195,7 @@ namespace ts {
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
+        SyntaxKind.TrueKeyword,
         SyntaxKind.VoidKeyword,
         SyntaxKind.UndefinedKeyword,
         SyntaxKind.UniqueKeyword,
@@ -1195,8 +1208,7 @@ namespace ts {
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
-        Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
-        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+        return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
     /** Returns `true` the first time it encounters a node and `false` afterwards. */
@@ -1281,6 +1293,14 @@ namespace ts {
         }
     }
 
+    export function getQuoteFromPreference(qp: QuotePreference): string {
+        switch (qp) {
+            case QuotePreference.Single: return "'";
+            case QuotePreference.Double: return '"';
+            default: return Debug.assertNever(qp);
+        }
+    }
+
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {
         const escaped = symbolEscapedNameNoDefault(symbol);
         return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
@@ -1340,29 +1360,6 @@ namespace ts {
         return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
     }
 
-    export interface ReadonlyNodeSet {
-        has(node: Node): boolean;
-        forEach(cb: (node: Node) => void): void;
-        some(pred: (node: Node) => boolean): boolean;
-    }
-
-    export class NodeSet implements ReadonlyNodeSet {
-        private map = createMap<Node>();
-
-        add(node: Node): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-        has(node: Node): boolean {
-            return this.map.has(String(getNodeId(node)));
-        }
-        forEach(cb: (node: Node) => void): void {
-            this.map.forEach(cb);
-        }
-        some(pred: (node: Node) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
-        }
-    }
-
     export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
         if (!node) return undefined;
 
@@ -1394,6 +1391,13 @@ namespace ts {
             changes.insertNodeAtTopOfFile(sourceFile, importDecl, /*blankLineBetween*/ true);
         }
     }
+
+    export function textSpansEqual(a: TextSpan | undefined, b: TextSpan | undefined): boolean {
+        return !!a && !!b && a.start === b.start && a.length === b.length;
+    }
+    export function documentSpansEqual(a: DocumentSpan, b: DocumentSpan): boolean {
+        return a.fileName === b.fileName && textSpansEqual(a.textSpan, b.textSpan);
+    }
 }
 
 // Display-part writer helpers
@@ -1405,14 +1409,25 @@ namespace ts {
 
     const displayPartWriter = getDisplayPartWriter();
     function getDisplayPartWriter(): DisplayPartsSymbolWriter {
+        const absoluteMaximumLength = defaultMaximumTruncationLength * 10; // A hard cutoff to avoid overloading the messaging channel in worst-case scenarios
         let displayParts: SymbolDisplayPart[];
         let lineStart: boolean;
         let indent: number;
+        let length: number;
 
         resetWriter();
         const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
-            displayParts: () => displayParts,
+            displayParts: () => {
+                const finalText = displayParts.length && displayParts[displayParts.length - 1].text;
+                if (length > absoluteMaximumLength && finalText && finalText !== "...") {
+                    if (!isWhiteSpaceLike(finalText.charCodeAt(finalText.length - 1))) {
+                        displayParts.push(displayPart(" ", SymbolDisplayPartKind.space));
+                    }
+                    displayParts.push(displayPart("...", SymbolDisplayPartKind.punctuation));
+                }
+                return displayParts;
+            },
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
             writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
             writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
@@ -1442,9 +1457,11 @@ namespace ts {
         };
 
         function writeIndent() {
+            if (length > absoluteMaximumLength) return;
             if (lineStart) {
                 const indentString = getIndentString(indent);
                 if (indentString) {
+                    length += indentString.length;
                     displayParts.push(displayPart(indentString, SymbolDisplayPartKind.space));
                 }
                 lineStart = false;
@@ -1452,16 +1469,22 @@ namespace ts {
         }
 
         function writeKind(text: string, kind: SymbolDisplayPartKind) {
+            if (length > absoluteMaximumLength) return;
             writeIndent();
+            length += text.length;
             displayParts.push(displayPart(text, kind));
         }
 
         function writeSymbol(text: string, symbol: Symbol) {
+            if (length > absoluteMaximumLength) return;
             writeIndent();
+            length += text.length;
             displayParts.push(symbolPart(text, symbol));
         }
 
         function writeLine() {
+            if (length > absoluteMaximumLength) return;
+            length += 1;
             displayParts.push(lineBreakPart());
             lineStart = true;
         }
@@ -1470,6 +1493,7 @@ namespace ts {
             displayParts = [];
             lineStart = true;
             indent = 0;
+            length = 0;
         }
     }
 

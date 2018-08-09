@@ -59,9 +59,7 @@ var rb2 = x in {};
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
->T : T
 
     var rb3 = x in t;
 >rb3 : boolean
@@ -71,25 +69,19 @@ function foo<T>(t: T) {
 }
 
 interface X { x: number }
->X : X
 >x : number
 
 interface Y { y: number }
->Y : Y
 >y : number
 
 var c1: X | Y;
 >c1 : X | Y
->X : X
->Y : Y
 
 var c2: X;
 >c2 : X
->X : X
 
 var c3: Y;
 >c3 : Y
->Y : Y
 
 var rc1 = x in c1;
 >rc1 : boolean

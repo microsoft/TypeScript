@@ -1,44 +1,30 @@
 === tests/cases/compiler/contextualTypingOfGenericFunctionTypedArguments1.ts ===
 interface Collection<T> {
->Collection : Collection<T>
->T : T
-
     length: number;
 >length : number
 
     add(x: T): void;
 >add : (x: T) => void
 >x : T
->T : T
 
     remove(x: T): boolean;
 >remove : (x: T) => boolean
 >x : T
->T : T
 }
 
 interface Combinators {
->Combinators : Combinators
-
     forEach<T>(c: Collection<T>, f: (x: T) => Date): void;
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
->T : T
 >c : Collection<T>
->Collection : Collection<T>
->T : T
 >f : (x: T) => Date
 >x : T
->T : T
->Date : Date
 }
 
 var c2: Collection<number>;
 >c2 : Collection<number>
->Collection : Collection<T>
 
 var _: Combinators;
 >_ : Combinators
->Combinators : Combinators
 
 // errors on all 3 lines, bug was that r5 was the only line with errors
 var f = (x: number) => { return x.toFixed() };

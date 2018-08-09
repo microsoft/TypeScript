@@ -1,10 +1,8 @@
 === tests/cases/compiler/typeMatch1.ts ===
 interface I { z; }
->I : I
 >z : any
 
 interface I2 { z; }
->I2 : I2
 >z : any
 
 var x1: { z: number; f(n: number): string; f(s: string): number; }
@@ -25,11 +23,9 @@ var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
 
 var i:I;
 >i : I
->I : I
 
 var i2:I2;
 >i2 : I2
->I2 : I2
 
 var x3:{ z; }= i;
 >x3 : { z: any; }
@@ -43,7 +39,6 @@ var x4:{ z; }= i2;
 
 var x5:I=i2;
 >x5 : I
->I : I
 >i2 : I2
 
 class C { private x; }

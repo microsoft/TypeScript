@@ -9,7 +9,6 @@ var x: { [index: string]: number; };
 
 var result: Foo = x["one"]; // error
 >result : Foo
->Foo : Foo
 >x["one"] : number
 >x : { [index: string]: number; }
 >"one" : "one"

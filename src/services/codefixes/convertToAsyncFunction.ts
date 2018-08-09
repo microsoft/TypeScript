@@ -1,3 +1,4 @@
+/* @internal */
 namespace ts.codefix {
     const fixId = "convertToAsyncFunction";
     const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
@@ -149,7 +150,7 @@ namespace ts.codefix {
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllExpressionsToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
-        const identsToRenameMap: Map<Identifier> = createMap(); // key is the symbol id 
+        const identsToRenameMap: Map<Identifier> = createMap(); // key is the symbol id
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
                 forEachChild(node, visit);
@@ -247,7 +248,7 @@ namespace ts.codefix {
 
         let nodeType = transformer.checker.getTypeAtLocation(node);
         if (nodeType && nodeType.flags & 1 && (<IntrinsicType>nodeType).intrinsicName === "error" && isIdentifier(node)) {
-            nodeType = transformer.originalTypeMap.get(node.text);
+            nodeType = transformer.originalTypeMap.get(node.text)!;
         }
 
         if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {

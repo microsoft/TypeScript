@@ -13,8 +13,6 @@ module A4 {
 >true : true
 
     module A {
->A : typeof A
-
         const enum E { X }
 >E : E
 >X : E

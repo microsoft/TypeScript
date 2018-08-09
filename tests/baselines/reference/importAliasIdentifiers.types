@@ -18,12 +18,10 @@ import alias = moduleA;
 var p: alias.Point;
 >p : alias.Point
 >alias : any
->Point : alias.Point
 
 var p: moduleA.Point;
 >p : alias.Point
 >moduleA : any
->Point : alias.Point
 
 var p: { x: number; y: number; };
 >p : alias.Point
@@ -41,14 +39,11 @@ module clodule {
 >clodule : typeof clodule
 
     export interface Point {
->Point : Point
-
         x: number; y: number;
 >x : number
 >y : number
     }
     var Point: Point = { x: 0, y: 0 };
->Point : Point
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -64,12 +59,10 @@ import clolias = clodule;
 var p: clolias.Point;
 >p : alias.Point
 >clolias : any
->Point : clolias.Point
 
 var p: clodule.Point;
 >p : alias.Point
 >clodule : any
->Point : clolias.Point
 
 var p: { x: number; y: number; };
 >p : alias.Point
@@ -92,14 +85,11 @@ module fundule {
 >fundule : typeof fundule
 
     export interface Point {
->Point : Point
-
         x: number; y: number;
 >x : number
 >y : number
     }
     var Point: Point = { x: 0, y: 0 };
->Point : Point
 >Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -115,12 +105,10 @@ import funlias = fundule;
 var p: funlias.Point;
 >p : alias.Point
 >funlias : any
->Point : funlias.Point
 
 var p: fundule.Point;
 >p : alias.Point
 >fundule : any
->Point : funlias.Point
 
 var p: { x: number; y: number; };
 >p : alias.Point

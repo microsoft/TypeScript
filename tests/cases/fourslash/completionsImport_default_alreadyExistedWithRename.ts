@@ -16,7 +16,7 @@ verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): vo
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from module "./a"`,
+    description: `Import default 'foo' from module "./a"`,
     newFileContent: `import f_o_o from "./a";
 import foo from "./a";
 f;`,

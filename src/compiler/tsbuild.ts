@@ -126,12 +126,12 @@ namespace ts {
          */
         export interface UpToDate {
             type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
-            newestInputFileTime: Date;
-            newestInputFileName: string;
-            newestDeclarationFileContentChangedTime: Date;
-            newestOutputFileTime: Date;
-            newestOutputFileName: string;
-            oldestOutputFileName: string;
+            newestInputFileTime?: Date;
+            newestInputFileName?: string;
+            newestDeclarationFileContentChangedTime?: Date;
+            newestOutputFileTime?: Date;
+            newestOutputFileName?: string;
+            oldestOutputFileName?: string;
         }
 
         /**
@@ -291,17 +291,20 @@ namespace ts {
     function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        return changeExtension(outputPath, (fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve) ? Extension.Jsx : Extension.Js);
+        const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
+                             fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
+        return changeExtension(outputPath, newExtension);
     }
 
     function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
-        if (configFile.options.outFile) {
+        // outFile is handled elsewhere; .d.ts files don't generate outputs
+        if (configFile.options.outFile || configFile.options.out || fileExtensionIs(inputFileName, Extension.Dts)) {
             return emptyArray;
         }
 
         const outputs: string[] = [];
         outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
-        if (configFile.options.declaration) {
+        if (getEmitDeclarations(configFile.options) && !fileExtensionIs(inputFileName, Extension.Json)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile);
             outputs.push(dts);
             if (configFile.options.declarationMap) {
@@ -317,7 +320,7 @@ namespace ts {
         }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
-        if (project.options.declaration) {
+        if (getEmitDeclarations(project.options)) {
             const dts = changeExtension(project.options.outFile, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
@@ -485,6 +488,7 @@ namespace ts {
         }
 
         if (watch) {
+            builder.buildAllProjects();
             builder.startWatching();
             return undefined;
         }
@@ -766,7 +770,10 @@ namespace ts {
             const program = createProgram(programOptions);
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
-            const syntaxDiagnostics = [...program.getOptionsDiagnostics(), ...program.getSyntacticDiagnostics()];
+            const syntaxDiagnostics = [
+                ...program.getOptionsDiagnostics(),
+                ...program.getConfigFileParsingDiagnostics(),
+                ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
                 resultFlags |= BuildResultFlags.SyntaxErrors;
                 for (const diag of syntaxDiagnostics) {
@@ -777,7 +784,7 @@ namespace ts {
             }
 
             // Don't emit .d.ts if there are decl file errors
-            if (program.getCompilerOptions().declaration) {
+            if (getEmitDeclarations(program.getCompilerOptions())) {
                 const declDiagnostics = program.getDeclarationDiagnostics();
                 if (declDiagnostics.length) {
                     resultFlags |= BuildResultFlags.DeclarationEmitErrors;
@@ -801,14 +808,18 @@ namespace ts {
             }
 
             let newestDeclarationFileContentChangedTime = minimumDate;
+            let anyDtsChanged = false;
             program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
 
-                if (isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
+                if (!anyDtsChanged && isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
                     if (compilerHost.readFile(fileName) === content) {
                         // Check for unchanged .d.ts files
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                         priorChangeTime = compilerHost.getModifiedTime && compilerHost.getModifiedTime(fileName);
+                    }
+                    else {
+                        anyDtsChanged = true;
                     }
                 }
 
@@ -819,7 +830,11 @@ namespace ts {
                 }
             });
 
-            context.projectStatus.setValue(proj, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime } as UpToDateStatus);
+            const status: UpToDateStatus = {
+                type: UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
+            };
+            context.projectStatus.setValue(proj, status);
             return resultFlags;
         }
 
@@ -828,14 +843,18 @@ namespace ts {
                 return buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
 
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            if (context.options.verbose) {
+                buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            }
+
             const now = new Date();
             const outputs = getAllProjectOutputs(proj);
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file));
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file) || missingFileModifiedTime);
                 }
+
                 compilerHost.setModifiedTime!(file, now);
             }
 
@@ -1042,7 +1061,7 @@ namespace ts {
                 };
             }
 
-            const inputTime = host.getModifiedTime(inputFile);
+            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
             if (inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
@@ -1074,7 +1093,7 @@ namespace ts {
                 break;
             }
 
-            const outputTime = host.getModifiedTime(output);
+            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
             if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
@@ -1102,7 +1121,8 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                 }
                 else {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
+                    const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                 }
             }
         }
@@ -1134,13 +1154,13 @@ namespace ts {
 
                 // If the upstream project's newest file is older than our oldest output, we
                 // can't be out of date because of it
-                if (refStatus.newestInputFileTime <= oldestOutputFileTime) {
+                if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
                     continue;
                 }
 
                 // If the upstream project has only change .d.ts files, and we've built
                 // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                if (refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+                if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                     pseudoUpToDate = true;
                     upstreamChangedProject = ref.path;
                     continue;
@@ -1224,8 +1244,8 @@ namespace ts {
                 if (status.newestInputFileTime !== undefined) {
                     return formatMessage(Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                         relName(configFileName),
-                        relName(status.newestInputFileName),
-                        relName(status.oldestOutputFileName));
+                        relName(status.newestInputFileName || ""),
+                        relName(status.oldestOutputFileName || ""));
                 }
                 // Don't report anything for "up to date because it was already built" -- too verbose
                 break;
@@ -1248,7 +1268,7 @@ namespace ts {
                 // Don't report status on "solution" projects
                 break;
             default:
-                assertTypeIsNever(status);
+                assertType<never>(status);
         }
     }
 }

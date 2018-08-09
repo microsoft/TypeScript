@@ -1,12 +1,8 @@
 === tests/cases/compiler/inferentialTypingWithObjectLiteralProperties.ts ===
 function f<T>(x: T, y: T): T {
 >f : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 return x;
 >x : T
