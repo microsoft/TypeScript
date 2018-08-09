@@ -29776,13 +29776,6 @@ namespace ts {
             }
             return false;
         }
-
-        function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
-            return node.constraint ? node.constraint
-                : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0]
-                ? node.parent.constraint
-                : undefined;
-        }
     }
 
     /** Like 'isDeclarationName', but returns true for LHS of `import { x as y }` or `export { x as y }`. */

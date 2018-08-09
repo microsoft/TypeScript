@@ -5106,6 +5106,13 @@ namespace ts {
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
     }
+
+    export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
+        return node.constraint ? node.constraint
+            : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0]
+            ? node.parent.constraint
+            : undefined;
+    }
 }
 
 // Simple node tests of the form `node.kind === SyntaxKind.Foo`.
