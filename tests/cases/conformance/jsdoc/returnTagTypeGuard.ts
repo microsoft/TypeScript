@@ -32,3 +32,18 @@ function f(chunk) {
     let x = chunk.isInit(chunk) ? chunk.c : chunk.d
     return x
 }
+
+/**
+ * @param {any} value
+ * @return {value is boolean}
+ */
+function isBoolean(value) {
+    return typeof value === "boolean";
+}
+
+/** @param {boolean | number} val */
+function foo(val) {
+    if (isBoolean(val)) {
+        val;
+    }
+}

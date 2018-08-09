@@ -69,3 +69,33 @@ function f(chunk) {
 >x : string | number
 }
 
+/**
+ * @param {any} value
+ * @return {value is boolean}
+ */
+function isBoolean(value) {
+>isBoolean : (value: any) => value is boolean
+>value : any
+
+    return typeof value === "boolean";
+>typeof value === "boolean" : boolean
+>typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>value : any
+>"boolean" : "boolean"
+}
+
+/** @param {boolean | number} val */
+function foo(val) {
+>foo : (val: number | boolean) => void
+>val : number | boolean
+
+    if (isBoolean(val)) {
+>isBoolean(val) : boolean
+>isBoolean : (value: any) => value is boolean
+>val : number | boolean
+
+        val;
+>val : boolean
+    }
+}
+

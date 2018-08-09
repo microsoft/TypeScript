@@ -7408,10 +7408,11 @@ namespace ts {
         function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
             const { parameterName } = node;
             const type = getTypeFromTypeNode(node.type);
+            const func = isJSDocTypeExpression(node.parent) ? getJSDocHost(node.parent) as FunctionLikeDeclaration : node.parent;
             if (parameterName.kind === SyntaxKind.Identifier) {
                 return createIdentifierTypePredicate(
                     parameterName && parameterName.escapedText as string, // TODO: GH#18217
-                    parameterName && getTypePredicateParameterIndex(node.parent.parameters, parameterName),
+                    getTypePredicateParameterIndex(func.parameters, parameterName),
                     type);
             }
             else {
@@ -22049,8 +22050,8 @@ namespace ts {
             }
         }
 
-        function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration>, parameter: Identifier): number {
-            if (parameterList) {
+        function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration> | undefined, parameter: Identifier | undefined): number {
+            if (parameterList && parameter) {
                 for (let i = 0; i < parameterList.length; i++) {
                     const param = parameterList[i];
                     if (param.name.kind === SyntaxKind.Identifier && param.name.escapedText === parameter.escapedText) {

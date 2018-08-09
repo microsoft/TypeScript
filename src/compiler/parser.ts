@@ -2374,7 +2374,7 @@ namespace ts {
 
         function parseJSDocType(): TypeNode {
             const dotdotdot = parseOptionalToken(SyntaxKind.DotDotDotToken);
-            let type = parseType();
+            let type = parseTypeOrTypePredicate();
             if (dotdotdot) {
                 const variadic = createNode(SyntaxKind.JSDocVariadicType, dotdotdot.pos) as JSDocVariadicType;
                 variadic.type = type;
