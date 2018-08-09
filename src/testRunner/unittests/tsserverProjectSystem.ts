@@ -2843,7 +2843,7 @@ namespace ts.projectSystem {
             const session = createSession(host, {
                 canUseEvents: true,
                 eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent) {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent || e.eventName === server.SurveyReady) {
                         return;
                     }
                     assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);

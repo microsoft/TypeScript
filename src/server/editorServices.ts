@@ -5,6 +5,7 @@ namespace ts.server {
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    export const SurveyReady = "surveyReady";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
@@ -14,6 +15,11 @@ namespace ts.server {
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
+    }
+
+    export interface SurveyReady {
+        eventName: typeof SurveyReady;
+        data: { surveyId: string; url: string };
     }
 
     export interface ConfigFileDiagEvent {
@@ -92,7 +98,11 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | SurveyReady;
+    // 1. notice that the survey should be ready
+    // 2. prepare the data structure
+    // 3. fire off the data structure to ???
+    // "project configuration change" might be the place I'm looking for, and Sheetal might the person who knows about it
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -640,6 +650,21 @@ namespace ts.server {
                 eventName: ProjectsUpdatedInBackgroundEvent,
                 data: {
                     openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
+                }
+            };
+            this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendSurveyReadyEvent() {
+            if (!this.eventHandler) {
+                return;
+            }
+            const event: SurveyReady = {
+                eventName: SurveyReady,
+                data: {
+                    surveyId: "checkjs",
+                    url: "https://surveymonkey.egg"
                 }
             };
             this.eventHandler(event);
