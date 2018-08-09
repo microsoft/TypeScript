@@ -262,7 +262,7 @@ namespace ts {
                 failedLookupLocations: [],
             });
             assert.isDefined(cache.get("c:/foo"));
-            assert.isUndefined(cache.get("c:/"));
+            assert.isDefined(cache.get("c:/"));
             assert.isUndefined(cache.get("d:/"));
 
             cache = resolutionCache.getOrCreateCacheForModuleName("f");

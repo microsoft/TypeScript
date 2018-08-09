@@ -407,11 +407,8 @@ namespace ts {
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
                 // commonPrefix: /a/b
-                // for failed lookups use the root directory as commonPrefix
-                const commonPrefix = resolvedFileName ? getCommonPrefix(path, resolvedFileName) : path.substr(0, getRootLength(path));
-                if (!commonPrefix) {
-                    return;
-                }
+                // for failed lookups cache the result for every directory up to root
+                const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
                 let current = path;
                 while (current !== commonPrefix) {
                     const parent = getDirectoryPath(current);
