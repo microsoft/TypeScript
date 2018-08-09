@@ -1650,7 +1650,13 @@ namespace ts {
      * WARNING: This is an expensive operation and is only intended to be used in refactorings
      * and code fixes (because those are triggered by explicit user actions).
      */
-    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+    export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
+        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        return clone;
+    }
+
+    export function getSynthesizedDeepCloneWithRenames<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
 
         let clone;
         if (node && isIdentifier(node!) && renameMap && checker) {
@@ -1674,9 +1680,9 @@ namespace ts {
 
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
-        const visited = visitEachChild(node, function wrapper(node) {
-            return getSynthesizedDeepClone(node, /*includeTrivia*/ true, renameMap, checker, callback);
-        }, nullTransformationContext);
+        const visited = (renameMap || checker || callback) ?
+        visitEachChild(node, wrapper, nullTransformationContext) :
+        visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -1695,6 +1701,10 @@ namespace ts {
         // would have made.
         visited.parent = undefined!;
         return visited;
+
+        function wrapper(node: T) {
+            return getSynthesizedDeepCloneWithRenames(node, /*includeTrivia*/ true, renameMap, checker, callback);
+        }
     }
 
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;

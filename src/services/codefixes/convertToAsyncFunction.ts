@@ -37,7 +37,7 @@ namespace ts.codefix {
         setOfExpressionsToReturn: Map<true>; // keys are the node ids of the expressions
         context: CodeFixContextBase;
         constIdentifiers: Identifier[];
-        originalTypeMap: Map<Type>; // keys are the identifier's text
+        originalTypeMap: Map<Type>; // keys are the node id of the identifier
         isInJSFile: boolean;
     }
 
@@ -199,7 +199,7 @@ namespace ts.codefix {
             }
         });
 
-        return getSynthesizedDeepClone(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
+        return getSynthesizedDeepCloneWithRenames(nodeToRename, /*includeTrivia*/ true, identsToRenameMap, checker, deepCloneCallback);
 
         function isExpressionOrCallOnTypePromise(child: Node): boolean {
             const node = child.parent;
@@ -213,7 +213,7 @@ namespace ts.codefix {
         }
 
         function deepCloneCallback(node: Node, clone: Node) {
-            if (isIdentifier) {
+            if (isIdentifier(node)) {
                 const symbol = checker.getSymbolAtLocation(node);
                 const symboldIdString = symbol && getSymbolId(symbol).toString();
                 const renameInfo = symbol && synthNamesMap.get(symboldIdString!);
@@ -221,10 +221,7 @@ namespace ts.codefix {
                 if (renameInfo) {
                     const type = checker.getTypeAtLocation(node);
                     if (type) {
-                        originalType.set(renameInfo.identifier.text, type);
-                        if (isIdentifier(node)) {
-                            originalType.set(node.text, type);
-                        }
+                        originalType.set(getNodeId(clone).toString(), type);
                     }
                 }
             }
@@ -251,10 +248,8 @@ namespace ts.codefix {
             return [];
         }
 
-        let nodeType = transformer.checker.getTypeAtLocation(node);
-        if (nodeType && nodeType.flags & TypeFlags.Any && (<IntrinsicType>nodeType).intrinsicName === "error" && isIdentifier(node)) {
-            nodeType = transformer.originalTypeMap.get(node.text)!;
-        }
+        const originalType = isIdentifier(node) && transformer.originalTypeMap.get(getNodeId(node).toString());
+        const nodeType = originalType || transformer.checker.getTypeAtLocation(node);
 
         if (isCallExpression(node) && hasPropertyAccessExpressionWithName(node, "then") && nodeType && !!transformer.checker.getPromisedTypeOfPromise(nodeType)) {
             return transformThen(node, transformer, outermostParent, prevArgName);
@@ -389,7 +384,7 @@ namespace ts.codefix {
 
                 if (!hasPrevArgName) break;
 
-                const type = transformer.originalTypeMap.get((<Identifier>func).text);
+                const type = transformer.originalTypeMap.get(getNodeId(func).toString());
                 const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
                 const returnType = callSignatures && callSignatures[0].getReturnType();
                 const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
