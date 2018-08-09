@@ -639,7 +639,7 @@ namespace ts {
     }
 
     export function getNonAugmentationDeclaration(symbol: Symbol) {
-        return forEach(symbol.declarations, d => isExternalModuleAugmentation(d) ? undefined : d);
+        return find(symbol.declarations, d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
     }
 
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {

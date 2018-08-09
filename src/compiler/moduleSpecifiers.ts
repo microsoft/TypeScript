@@ -232,17 +232,10 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
-        const decl = forEach(moduleSymbol.declarations, d => {
-            if (!isAmbientModule(d)) return;
-            if (isExternalModuleAugmentation(d)) {
-                if (!isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name))) {
-                    return d;
-                }
-                return;
-            }
-            return d;
-        });
-        if (decl && isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+        const decl = find(moduleSymbol.declarations,
+            d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
+        ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
+        if (decl) {
             return decl.name.text;
         }
     }
