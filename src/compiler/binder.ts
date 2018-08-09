@@ -2479,7 +2479,8 @@ namespace ts {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Class declarations in Typescript do not allow property declarations
             const s = lookupSymbolForPropertyAccess(lhs.expression);
-            if (s && isClassDeclaration(s.valueDeclaration) && !isInJavaScriptFile(s.valueDeclaration)) {
+            if ((!s || !s.valueDeclaration) && !isInJavaScriptFile(node) ||
+                s && s.valueDeclaration && !isInJavaScriptFile(s.valueDeclaration) && !(s.valueDeclaration.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(s.valueDeclaration) && s.valueDeclaration.initializer && isFunctionLike(s.valueDeclaration.initializer))) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them

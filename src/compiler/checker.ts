@@ -16014,9 +16014,12 @@ namespace ts {
                         if (isInJavaScriptFile(decl)) {
                             return !!getJSDocTypeTag(decl);
                         }
-                        else {
-                            return isFunctionLike(decl);
+                        else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
+                            const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
+                            const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
+                            return !(parentSymbol && parentSymbol.valueDeclaration && (parentSymbol.valueDeclaration.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(parentSymbol.valueDeclaration) && parentSymbol.valueDeclaration.initializer && isFunctionLike(parentSymbol.valueDeclaration.initializer)));
                         }
+                        return true;
                     }
                 case SpecialPropertyAssignmentKind.ThisProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:

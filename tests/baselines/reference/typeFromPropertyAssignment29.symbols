@@ -147,16 +147,16 @@ var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
 
 // Class expressions shouldn't work in typescript either
 var ExpandoExpr3 = class {
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
 
     n = 10001;
 >n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
 }
 ExpandoExpr3.prop = 3
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
 
 ExpandoExpr3.m = function(n: number) {
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 50, 26))
 
     return n + 1;
@@ -164,10 +164,10 @@ ExpandoExpr3.m = function(n: number) {
 }
 var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
 >n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
 >new ExpandoExpr3().n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
->ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3), Decl(typeFromPropertyAssignment29.ts, 49, 21))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
 >n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
 
 
