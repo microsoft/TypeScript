@@ -362,9 +362,6 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string): PerModuleNameCache {
-            if (isExternalModuleNameRelative(nonRelativeModuleName)) {
-                return undefined!; // TODO: GH#18217
-            }
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
             if (!perModuleNameCache) {
                 perModuleNameCache = createPerModuleNameCache();
@@ -492,10 +489,9 @@ namespace ts {
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);
-                // put result in per-module name cache
-                const perModuleNameCache = cache!.getOrCreateCacheForModuleName(moduleName);
-                if (perModuleNameCache) {
-                    perModuleNameCache.set(containingDirectory, result);
+                if (!isExternalModuleNameRelative(moduleName)) {
+                    // put result in per-module name cache
+                    cache!.getOrCreateCacheForModuleName(moduleName).set(containingDirectory, result);
                 }
             }
         }
@@ -1252,9 +1248,9 @@ namespace ts {
             if (resolvedUsingSettings) {
                 return { value: resolvedUsingSettings };
             }
-            const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
 
             if (!isExternalModuleNameRelative(moduleName)) {
+                const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host, failedLookupLocations);
