@@ -3880,31 +3880,34 @@ namespace ts {
                             }
                         }
                     }
-                    return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
-                }
-                else {
-                    if (!context.enclosingDeclaration || !context.tracker.moduleResolverHost) {
-                        // If there's no context declaration, we can't lookup a non-ambient specifier, so we just use the symbol name
+                    if (ambientModuleSymbolRegex.test(symbol.escapedName as string)) {
                         return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
                     }
-                    const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
-                    const links = getSymbolLinks(symbol);
-                    let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
-                    if (!specifier) {
-                        specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
-                            symbol,
-                            compilerOptions,
-                            contextFile,
-                            context.tracker.moduleResolverHost,
-                            context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
-                            { importModuleSpecifierPreference: "non-relative" },
-                            host.redirectTargetsMap,
-                        );
-                        links.specifierCache = links.specifierCache || createMap();
-                        links.specifierCache.set(contextFile.path, specifier);
-                    }
-                    return specifier;
                 }
+                if (!context.enclosingDeclaration || !context.tracker.moduleResolverHost) {
+                    // If there's no context declaration, we can't lookup a non-ambient specifier, so we just use the symbol name
+                    if (ambientModuleSymbolRegex.test(symbol.escapedName as string)) {
+                        return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
+                    }
+                    return getSourceFileOfNode(getNonAugmentationDeclaration(symbol)!).fileName; // A resolver may not be provided for baselines and errors - in those cases we use the fileName in full
+                }
+                const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
+                const links = getSymbolLinks(symbol);
+                let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
+                if (!specifier) {
+                    specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
+                        symbol,
+                        compilerOptions,
+                        contextFile,
+                        context.tracker.moduleResolverHost,
+                        context.tracker.moduleResolverHost.getSourceFiles!(), // TODO: GH#18217
+                        { importModuleSpecifierPreference: "non-relative" },
+                        host.redirectTargetsMap,
+                    );
+                    links.specifierCache = links.specifierCache || createMap();
+                    links.specifierCache.set(contextFile.path, specifier);
+                }
+                return specifier;
             }
 
             function symbolToTypeNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, overrideTypeArguments?: ReadonlyArray<TypeNode>): TypeNode {
