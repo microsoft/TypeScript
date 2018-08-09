@@ -1197,16 +1197,22 @@ namespace ts {
                                     : false;
                             }
                             if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
-                                // parameters are visible only inside function body, parameter list and return type
-                                // technically for parameter list case here we might mix parameters and variables declared in function,
-                                // however it is detected separately when checking initializers of parameters
-                                // to make sure that they reference no variables declared after them.
-                                useResult =
+                                // parameter initializer will lookup as normal variable scope when targeting es2015+
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && lastLocation.initializer === originalLocation && result.valueDeclaration !== lastLocation) {
+                                    useResult = false;
+                                }
+                                else {
+                                    // parameters are visible only inside function body, parameter list and return type
+                                    // technically for parameter list case here we might mix parameters and variables declared in function,
+                                    // however it is detected separately when checking initializers of parameters
+                                    // to make sure that they reference no variables declared after them.
+                                    useResult =
                                     lastLocation.kind === SyntaxKind.Parameter ||
                                     (
                                         lastLocation === (<FunctionLikeDeclaration>location).type &&
                                         !!findAncestor(result.valueDeclaration, isParameter)
                                     );
+                                }
                             }
                         }
                         else if (location.kind === SyntaxKind.ConditionalType) {
