@@ -149,7 +149,7 @@ namespace ts.codefix {
     */
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllExpressionsToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
-        const identsToRenameMap: Map<Identifier> = createMap();
+        const identsToRenameMap: Map<Identifier> = createMap(); // key is the symbol id 
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
                 forEachChild(node, visit);
@@ -207,16 +207,18 @@ namespace ts.codefix {
         }
 
         function deepCloneCallback(node: Node, clone: Node) {
-            const symbol = checker.getSymbolAtLocation(node);
-            const symboldIdString = symbol && getSymbolId(symbol).toString();
-            const renameInfo = symbol && synthNamesMap.get(symboldIdString!);
+            if (isIdentifier) {
+                const symbol = checker.getSymbolAtLocation(node);
+                const symboldIdString = symbol && getSymbolId(symbol).toString();
+                const renameInfo = symbol && synthNamesMap.get(symboldIdString!);
 
-            if (renameInfo) {
-                const type = checker.getTypeAtLocation(node);
-                if (type) {
-                    originalType.set(renameInfo.identifier.text, type);
-                    if (isIdentifier(node)) {
-                        originalType.set(node.text, type);
+                if (renameInfo) {
+                    const type = checker.getTypeAtLocation(node);
+                    if (type) {
+                        originalType.set(renameInfo.identifier.text, type);
+                        if (isIdentifier(node)) {
+                            originalType.set(node.text, type);
+                        }
                     }
                 }
             }
