@@ -2560,14 +2560,8 @@ namespace ts {
         return false;
     }
 
-    export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
-        const kind = node.kind;
-        return kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.NumericLiteral;
-    }
-
     export function isStringOrNumericLiteralLike(node: Node): node is StringLiteralLike | NumericLiteral {
-        return isStringOrNumericLiteral(node) || isNoSubstitutionTemplateLiteral(node);
+        return isStringLiteralLike(node) || isNumericLiteral(node);
     }
 
     /**
