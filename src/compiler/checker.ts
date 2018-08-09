@@ -4461,7 +4461,9 @@ namespace ts {
                 names.set(getTextOfPropertyName(name), true);
             }
             for (const prop of getPropertiesOfType(source)) {
-                if (!names.has(prop.escapedName) && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected)) && isSpreadableProperty(prop)) {
+                if (!names.has(prop.escapedName)
+                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
+                    && isSpreadableProperty(prop)) {
                     members.set(prop.escapedName, getNonReadonlySymbol(prop));
                 }
             }
@@ -9687,8 +9689,8 @@ namespace ts {
             return spread;
         }
 
+        /** We approximate own properties as non-methods plus methods that are inside the object literal */
         function isSpreadableProperty(prop: Symbol): boolean {
-            // We approximate own properties as non-methods plus methods that are inside the object literal
             return prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor)
                 ? !prop.declarations.some(decl => isClassLike(decl.parent))
                 : !(prop.flags & SymbolFlags.SetAccessor); // Setter without getter is not spreadable
