@@ -3547,15 +3547,10 @@ namespace ts {
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
-                if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
+                if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
                     const decl = first(propertySymbol.declarations);
-                    if (context.tracker.trackSymbol && hasLateBindableName(decl)) {
-                        // get symbol of the first identifier of the entityName
-                        const firstIdentifier = getFirstIdentifier(decl.name.expression);
-                        const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-                        if (name) {
-                            context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
-                        }
+                    if (hasLateBindableName(decl)) {
+                        trackComputedName(decl.name, saveEnclosingDeclaration, context);
                     }
                 }
                 const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3765,6 +3760,9 @@ namespace ts {
                 function cloneBindingName(node: BindingName): BindingName {
                     return <BindingName>elideInitializerAndSetEmitFlags(node);
                     function elideInitializerAndSetEmitFlags(node: Node): Node {
+                        if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
+                            trackComputedName(node, context.enclosingDeclaration, context);
+                        }
                         const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
                         if (clone.kind === SyntaxKind.BindingElement) {
@@ -3772,6 +3770,16 @@ namespace ts {
                         }
                         return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
+                }
+            }
+
+            function trackComputedName(node: LateBoundName, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
+                if (!context.tracker.trackSymbol) return;
+                // get symbol of the first identifier of the entityName
+                const firstIdentifier = getFirstIdentifier(node.expression);
+                const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+                if (name) {
+                    context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
                 }
             }
 
