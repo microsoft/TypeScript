@@ -4,9 +4,9 @@ module N {
 
     export class C4 extends M.B {
 >C4 : C4
->M.B : any
+>M.B : any (error)
 >M : typeof M
->B : any
+>B : any (error)
     }
 }
 
@@ -15,7 +15,7 @@ module M {
 
     export class C5 extends B {
 >C5 : C5
->B : any
+>B : any (error)
     }
 }
 

@@ -26,16 +26,16 @@ class Derived extends Base {
 >C : typeof C
 
             foo();
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 
             super();
->super() : any
->super : any
+>super() : any (error)
+>super : any (error)
 
             bar();
->bar() : any
->bar : any
+>bar() : any (error)
+>bar : any (error)
         }
 
         try {} catch(e) { super(); }

@@ -3,7 +3,7 @@ declare module "OuterModule" {
 >"OuterModule" : typeof import("OuterModule")
 
     import m2 = require("./SubModule");
->m2 : any
+>m2 : any (error)
 
     class SubModule {
 >SubModule : SubModule
@@ -15,8 +15,8 @@ declare module "OuterModule" {
 >InstanceVar : number
 
         public x: m2.c;
->x : any
->m2 : any
+>x : any (error)
+>m2 : any (error)
 
         constructor();
     }

@@ -11,7 +11,7 @@ interface IFetchUserProps {
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => JSX.Element
 >user : IUser
->JSX : any
+>JSX : any (error)
 }
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
@@ -65,11 +65,11 @@ function UserName0() {
 
                 <h1>{ user.Name }</h1>
 ><h1>{ user.Name }</h1> : JSX.Element
->h1 : any
+>h1 : any (error)
 >user.Name : string
 >user : IUser
 >Name : string
->h1 : any
+>h1 : any (error)
 
             ) }
         </FetchUser>
@@ -95,11 +95,11 @@ function UserName1() {
 
                 <h1>{ user.Name }</h1>
 ><h1>{ user.Name }</h1> : JSX.Element
->h1 : any
+>h1 : any (error)
 >user.Name : string
 >user : IUser
 >Name : string
->h1 : any
+>h1 : any (error)
 
             ) }
         </FetchUser>

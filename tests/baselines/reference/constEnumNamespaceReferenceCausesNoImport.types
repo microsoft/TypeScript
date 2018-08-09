@@ -22,7 +22,7 @@ import * as Foo from "./foo";
 function check(x: Foo.ConstFooEnum): void {
 >check : (x: Foo.ConstFooEnum) => void
 >x : Foo.ConstFooEnum
->Foo : any
+>Foo : any (error)
 
   switch (x) {
 >x : Foo.ConstFooEnum

@@ -6,8 +6,8 @@ var V = 12;
 >12 : 12
 
 import v = V;
->v : any
->V : any
+>v : any (error)
+>V : any (error)
 
 class C {
 >C : C
@@ -17,8 +17,8 @@ class C {
 }
 
 import c = C;
->c : any
->C : any
+>c : any (error)
+>C : any (error)
 
 enum E {
 >E : E
@@ -38,6 +38,6 @@ interface I {
 }
 
 import i = I;
->i : any
->I : any
+>i : any (error)
+>I : any (error)
 

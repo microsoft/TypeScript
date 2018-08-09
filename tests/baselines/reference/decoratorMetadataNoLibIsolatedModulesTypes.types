@@ -3,9 +3,9 @@ export class B {
 >B : B
 
     @Decorate
->Decorate : any
+>Decorate : any (error)
 
     member: Map<string, number>;
->member : any
+>member : any (error)
 }
 

@@ -27,14 +27,14 @@ var c = new C(1);
 >1 : 1
 
 var d = new D(1); // error
->d : any
->new D(1) : any
+>d : any (error)
+>new D(1) : any (error)
 >D : typeof D
 >1 : 1
 
 var e = new E(1); // error
->e : any
->new E(1) : any
+>e : any (error)
+>new E(1) : any (error)
 >E : typeof E
 >1 : 1
 
@@ -69,14 +69,14 @@ module Generic {
 >1 : 1
 
     var d = new D(1); // error
->d : any
->new D(1) : any
+>d : any (error)
+>new D(1) : any (error)
 >D : typeof D
 >1 : 1
 
     var e = new E(1); // error
->e : any
->new E(1) : any
+>e : any (error)
+>new E(1) : any (error)
 >E : typeof E
 >1 : 1
 }

@@ -20,10 +20,10 @@ class C extends Base {
 >{ [super.bar()]: 1 }[0] : number
 >{ [super.bar()]: 1 } : { [x: number]: number; }
 >[super.bar()] : number
->super.bar() : any
->super.bar : any
->super : any
->bar : any
+>super.bar() : any (error)
+>super.bar : any (error)
+>super : any (error)
+>bar : any (error)
 >1 : 1
 >0 : 0
 

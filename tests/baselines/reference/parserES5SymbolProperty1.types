@@ -2,7 +2,7 @@
 interface I {
     [Symbol.iterator]: string;
 >[Symbol.iterator] : string
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : any (error)
+>Symbol : any (error)
+>iterator : any (error)
 }

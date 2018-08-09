@@ -1,22 +1,22 @@
 === tests/cases/conformance/parser/ecmascriptnext/forAwait/topLevelWithDeclIsError.ts ===
 for await (const x of y) {
->x : any
->y : any
+>x : any (error)
+>y : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/forAwait/topLevelWithExprIsError.ts ===
 for await (x of y) {
->x : any
->y : any
+>x : any (error)
+>y : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/forAwait/forAwaitInWithDeclIsError.ts ===
 for await (const x in y) {
 >x : string
->y : any
+>y : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/forAwait/forAwaitInWithExprIsError.ts ===
 for await (x in y) {
->x : any
->y : any
+>x : any (error)
+>y : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/forAwait/inFunctionDeclWithDeclIsError.ts ===
 function f5() {

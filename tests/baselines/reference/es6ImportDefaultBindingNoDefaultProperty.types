@@ -5,5 +5,5 @@ export var a = 10;
 
 === tests/cases/compiler/es6ImportDefaultBindingNoDefaultProperty_1.ts ===
 import defaultBinding from "./es6ImportDefaultBindingNoDefaultProperty_0";
->defaultBinding : any
+>defaultBinding : any (error)
 

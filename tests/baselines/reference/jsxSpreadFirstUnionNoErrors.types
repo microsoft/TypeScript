@@ -27,15 +27,15 @@ props.status === "hidden"
 
   ? <noscript />
 ><noscript /> : JSX.Element
->noscript : any
+>noscript : any (error)
 
   : <div>{props.content}</div>;
 ><div>{props.content}</div> : JSX.Element
->div : any
+>div : any (error)
 >props.content : string
 >props : { status: "visible"; content: string; }
 >content : string
->div : any
+>div : any (error)
 
 const a = <Info status="hidden" />;
 >a : JSX.Element

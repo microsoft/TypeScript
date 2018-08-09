@@ -8,5 +8,5 @@ enum E {
 
     @dec A
 >dec : <T>(target: T) => T
->A : any
+>A : any (error)
 }

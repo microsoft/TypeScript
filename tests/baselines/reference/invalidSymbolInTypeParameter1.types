@@ -3,8 +3,8 @@ function test() {
 >test : () => void
 
     var cats = new Array<WAWA>(); // WAWA is not a valid type
->cats : any[]
->new Array<WAWA>() : any[]
+>cats : any (error)[]
+>new Array<WAWA>() : any (error)[]
 >Array : ArrayConstructor
 }
 

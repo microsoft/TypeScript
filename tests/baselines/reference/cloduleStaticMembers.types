@@ -20,8 +20,8 @@ module Clod {
 >x : number
 
     var q = x;
->q : any
->x : any
+>q : any (error)
+>x : any (error)
 
     var s = Clod.y;
 >s : number
@@ -30,7 +30,7 @@ module Clod {
 >y : number
 
     var t = y; 
->t : any
->y : any
+>t : any (error)
+>y : any (error)
 }
 

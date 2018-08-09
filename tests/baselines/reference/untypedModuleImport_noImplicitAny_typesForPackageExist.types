@@ -3,19 +3,19 @@ import * as foo from "foo";
 >foo : typeof foo
 
 import * as fooSub from "foo/sub";
->fooSub : any
+>fooSub : any (error)
 
 import * as barSub from "bar/sub";
->barSub : any
+>barSub : any (error)
 
 import * as scopeFoo from "@scope/foo";
 >scopeFoo : typeof scopeFoo
 
 import * as scopeFooSub from "@scope/foo/sub";
->scopeFooSub : any
+>scopeFooSub : any (error)
 
 import * as scopeBarSub from "@scope/bar/sub";
->scopeBarSub : any
+>scopeBarSub : any (error)
 
 === /node_modules/@types/foo/index.d.ts ===
 export const foo: number;

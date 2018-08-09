@@ -54,8 +54,8 @@ declare namespace Windows.Foundation {
 async function sample(promise: Windows.Foundation.IPromise<number>) {
 >sample : (promise: Windows.Foundation.IPromise<number>) => Promise<void>
 >promise : Windows.Foundation.IPromise<number>
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
     var number = await promise;
 >number : number
@@ -71,8 +71,8 @@ declare function resolve1<T>(value: T): Promise<T>;
 declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
 >resolve2 : <T>(value: T) => Windows.Foundation.IPromise<T>
 >value : T
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
 async function sample2(x?: number) {
 >sample2 : (x?: number | undefined) => Promise<void>

@@ -4,8 +4,8 @@ declare function dec<T>(target: T): T;
 >target : T
 
 var F = @dec function () {
->F : any
-> : any
+>F : any (error)
+> : any (error)
 >dec : <T>(target: T) => T
 > : () => void
 }

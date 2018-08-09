@@ -64,10 +64,10 @@ if (typeof b !== 'object') {
 >'object' : "object"
 
     b.toString(); // error, never
->b.toString() : any
->b.toString : any
+>b.toString() : any (error)
+>b.toString : any (error)
 >b : never
->toString : any
+>toString : any (error)
 }
 
 if (typeof b === 'object') {
@@ -101,10 +101,10 @@ if (typeof d === 'object') {
 
 } else {
     d.toString(); // error, undefined
->d.toString() : any
->d.toString : any
+>d.toString() : any (error)
+>d.toString : any (error)
 >d : undefined
->toString : any
+>toString : any (error)
 }
 
 if (d == null) {
@@ -113,10 +113,10 @@ if (d == null) {
 >null : null
 
     d.toString(); // error, undefined | null
->d.toString() : any
->d.toString : any
+>d.toString() : any (error)
+>d.toString : any (error)
 >d : null | undefined
->toString : any
+>toString : any (error)
 
 } else {
     d.toString(); // object
@@ -132,10 +132,10 @@ if (d === null) {
 >null : null
 
     d.toString(); // error, null
->d.toString() : any
->d.toString : any
+>d.toString() : any (error)
+>d.toString : any (error)
 >d : null
->toString : any
+>toString : any (error)
 
 } else {
     d.toString(); // error, object | undefined
@@ -152,10 +152,10 @@ if (typeof d === 'undefined') {
 >'undefined' : "undefined"
 
     d.toString(); // error, undefined
->d.toString() : any
->d.toString : any
+>d.toString() : any (error)
+>d.toString : any (error)
 >d : undefined
->toString : any
+>toString : any (error)
 
 } else {
     d.toString(); // error, object | null

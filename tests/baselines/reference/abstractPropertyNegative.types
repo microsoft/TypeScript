@@ -49,9 +49,9 @@ let c = new C();
 
 c.ro = "error: lhs of assignment can't be readonly";
 >c.ro = "error: lhs of assignment can't be readonly" : "error: lhs of assignment can't be readonly"
->c.ro : any
+>c.ro : any (error)
 >c : C
->ro : any
+>ro : any (error)
 >"error: lhs of assignment can't be readonly" : "error: lhs of assignment can't be readonly"
 
 abstract class WrongTypeProperty {

@@ -20,7 +20,7 @@ let magnitude = Math2d.getLength(v);
 
 let p: Math2d.Point = v.translate(5, 5);
 >p : Math2d.Point
->Math2d : any
+>Math2d : any (error)
 >v.translate(5, 5) : import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
 >v.translate : (dx: number, dy: number) => import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
 >v : import("tests/cases/conformance/externalModules/node_modules/math2d/index").Vector
@@ -89,7 +89,7 @@ declare module 'math2d' {
 	interface Vector {
 		reverse(): Math2d.Point;
 >reverse : () => Point
->Math2d : any
+>Math2d : any (error)
 	}
 }
 

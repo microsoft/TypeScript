@@ -2,8 +2,8 @@
 module M { export class C extends M.I { } }
 >M : typeof M
 >C : C
->M.I : any
+>M.I : any (error)
 >M : typeof M
->I : any
+>I : any (error)
 
 

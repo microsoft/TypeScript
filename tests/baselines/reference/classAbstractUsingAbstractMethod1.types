@@ -35,9 +35,9 @@ a.foo();
 >foo : () => number
 
 a = new C; // error, cannot instantiate abstract class.
->a = new C : any
+>a = new C : any (error)
 >a : B
->new C : any
+>new C : any (error)
 >C : typeof C
 
 a.foo();

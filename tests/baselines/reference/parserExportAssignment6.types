@@ -3,5 +3,5 @@ declare module "M" {
 >"M" : typeof import("M")
 
     export = A;
->A : any
+>A : any (error)
 }

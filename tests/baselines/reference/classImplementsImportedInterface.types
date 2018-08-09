@@ -10,8 +10,8 @@ module M2 {
 >M2 : typeof M2
 
     import T = M1.I;
->T : any
->M1 : any
+>T : any (error)
+>M1 : any (error)
 >I : T
 
     class C implements T {

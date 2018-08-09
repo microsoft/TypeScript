@@ -19,8 +19,8 @@ var a: any;
 >a : any
 
 var w = window;
->w : any
->window : any
+>w : any (error)
+>window : any (error)
 
 // Assign to expression++
 x++ = 4; // Error
@@ -67,25 +67,25 @@ x--;
 >++x : number
 >x : number
 >++ : number
-> : any
+> : any (error)
 
 --x--; // Error
 >--x : number
 >x : number
 >-- : number
-> : any
+> : any (error)
 
 ++x--; // Error
 >++x : number
 >x : number
 >-- : number
-> : any
+> : any (error)
 
 --x++; // Error
 >--x : number
 >x : number
 >++ : number
-> : any
+> : any (error)
 
 // Pre and postfix++ on enum
 e++;
@@ -108,25 +108,25 @@ e--;
 >++e : number
 >e : E
 >++ : number
-> : any
+> : any (error)
 
 --e--; // Error
 >--e : number
 >e : E
 >-- : number
-> : any
+> : any (error)
 
 ++e--; // Error
 >++e : number
 >e : E
 >-- : number
-> : any
+> : any (error)
 
 --e++; // Error
 >--e : number
 >e : E
 >++ : number
-> : any
+> : any (error)
 
 // Pre and postfix++ on value of type 'any'
 a++;
@@ -149,67 +149,67 @@ a--;
 >++a : number
 >a : any
 >++ : number
-> : any
+> : any (error)
 
 --a--; // Error
 >--a : number
 >a : any
 >-- : number
-> : any
+> : any (error)
 
 ++a--; // Error
 >++a : number
 >a : any
 >-- : number
-> : any
+> : any (error)
 
 --a++; // Error
 >--a : number
 >a : any
 >++ : number
-> : any
+> : any (error)
 
 
 // Pre and postfix++ on other types
 w++; // Error
 >w++ : number
->w : any
+>w : any (error)
 
 w--; // Error
 >w-- : number
->w : any
+>w : any (error)
 
 ++w; // Error
 >++w : number
->w : any
+>w : any (error)
 
 --w; // Error
 >--w : number
->w : any
+>w : any (error)
 
 ++w++; // Error
 >++w : number
->w : any
+>w : any (error)
 >++ : number
-> : any
+> : any (error)
 
 --w--; // Error
 >--w : number
->w : any
+>w : any (error)
 >-- : number
-> : any
+> : any (error)
 
 ++w--; // Error
 >++w : number
->w : any
+>w : any (error)
 >-- : number
-> : any
+> : any (error)
 
 --w++; // Error
 >--w : number
->w : any
+>w : any (error)
 >++ : number
-> : any
+> : any (error)
 
 
 

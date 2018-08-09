@@ -1,6 +1,6 @@
 === tests/cases/compiler/asiPublicPrivateProtected.ts ===
 public
->public : any
+>public : any (error)
 
 class NonPublicClass {
 >NonPublicClass : NonPublicClass
@@ -21,7 +21,7 @@ class NonPublicClass2 {
     }
 }
 private
->private : any
+>private : any (error)
 
 class NonPrivateClass {
 >NonPrivateClass : NonPrivateClass
@@ -42,7 +42,7 @@ class NonPrivateClass2 {
     }
 }
 protected
->protected : any
+>protected : any (error)
 
 class NonProtectedClass {
 >NonProtectedClass : NonProtectedClass

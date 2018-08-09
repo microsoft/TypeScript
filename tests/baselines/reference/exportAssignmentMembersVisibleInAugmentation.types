@@ -1,6 +1,6 @@
 === /node_modules/foo/index.d.ts ===
 export = foo;
->foo : any
+>foo : any (error)
 
 declare namespace foo {
     export type T = number;
@@ -27,6 +27,6 @@ declare module "foo" {
 
     export function g(): foo.T; // OK
 >g : () => number
->foo : any
+>foo : any (error)
 }
 

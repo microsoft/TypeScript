@@ -32,10 +32,10 @@ export module c {
 }
 
 var happyFriday = c.b.Friday;
->happyFriday : any
->c.b.Friday : any
->c.b : any
+>happyFriday : any (error)
+>c.b.Friday : any (error)
+>c.b : any (error)
 >c : typeof c
->b : any
->Friday : any
+>b : any (error)
+>Friday : any (error)
 

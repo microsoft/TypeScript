@@ -4,9 +4,9 @@ with (window) {
 >window : Window
 
     var p = () => this;
->p : any
->() => this : any
->this : any
+>p : any (error)
+>() => this : any (error)
+>this : any (error)
 }
 
 // Arrow function as argument to super call
@@ -107,9 +107,9 @@ module M2 {
 >window : Window
 
         var p = () => this;
->p : any
->() => this : any
->this : any
+>p : any (error)
+>() => this : any (error)
+>this : any (error)
     }
 
     // Arrow function as argument to super call

@@ -13,7 +13,7 @@ var obj = {
 };
 
 obj[Symbol.for];
->obj[Symbol.for] : any
+>obj[Symbol.for] : any (error)
 >obj : { [Symbol.for]: number; }
 >Symbol.for : (key: string) => symbol
 >Symbol : SymbolConstructor

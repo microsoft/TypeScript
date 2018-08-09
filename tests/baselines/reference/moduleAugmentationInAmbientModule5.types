@@ -32,7 +32,7 @@ declare module "array" {
 >A : typeof A
 
     global {
->global : any
+>global : any (error)
 
         interface Array<T> {
             getA(): A;

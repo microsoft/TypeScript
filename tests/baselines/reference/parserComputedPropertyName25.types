@@ -5,12 +5,12 @@ class C {
     // No ASI
     [e] = 0
 >[e] : number
->e : any
+>e : any (error)
 >0    [e2] = 1 : 1
 >0    [e2] : any
 >0 : 0
 
     [e2] = 1
->e2 : any
+>e2 : any (error)
 >1 : 1
 }

@@ -24,8 +24,8 @@ class TextComponent extends React.Component<TextProps, {}> {
 
         return <span>Some Text..</span>;
 ><span>Some Text..</span> : JSX.Element
->span : any
->span : any
+>span : any (error)
+>span : any (error)
     }
 }
 

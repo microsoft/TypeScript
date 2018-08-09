@@ -82,7 +82,7 @@ function f5([{[foo2()]: x}]: [{ bar: number }]) {}
 
 // report errors on type errors in computed properties used in destructuring
 let [{[foo()]: bar6}] = [{bar: "bar"}];
->foo() : any
+>foo() : any (error)
 >foo : string
 >bar6 : any
 >[{bar: "bar"}] : [{ bar: string; }]
@@ -91,10 +91,10 @@ let [{[foo()]: bar6}] = [{bar: "bar"}];
 >"bar" : "bar"
 
 let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
->foo.toExponential() : any
->foo.toExponential : any
+>foo.toExponential() : any (error)
+>foo.toExponential : any (error)
 >foo : string
->toExponential : any
+>toExponential : any (error)
 >bar7 : any
 >[{bar: "bar"}] : [{ bar: string; }]
 >{bar: "bar"} : { bar: string; }
@@ -166,7 +166,7 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 >[{[foo()]: bar4}] : [{ [x: number]: any; }]
 >{[foo()]: bar4} : { [x: number]: any; }
 >[foo()] : any
->foo() : any
+>foo() : any (error)
 >foo : string
 >bar4 : any
 >[{bar: "bar"}] : [{ bar: string; }]

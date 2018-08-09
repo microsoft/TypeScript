@@ -1,7 +1,7 @@
 === tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts ===
 // this should be errors
 var arg0 = null;  // error at "arg0"
->arg0 : any
+>arg0 : any (auto)
 >null : null
 
 var anyArray = [null, undefined];  // error at array literal

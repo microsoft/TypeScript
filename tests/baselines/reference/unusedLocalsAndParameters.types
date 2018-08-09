@@ -153,13 +153,13 @@ namespace N {
 }
 
 for (let x: y) {
->x : any
+>x : any (error)
 
     z(x);
 >z : any
->(x) : any
->x : any
+>(x) : any (error)
+>x : any (error)
 }
-> : any
-> : any
+> : any (error)
+> : any (error)
 

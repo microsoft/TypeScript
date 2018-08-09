@@ -46,9 +46,9 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 
         <span>{property1}</span>
 ><span>{property1}</span> : JSX.Element
->span : any
+>span : any (error)
 >property1 : string
->span : any
+>span : any (error)
 
     );
 }

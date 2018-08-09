@@ -71,40 +71,40 @@ async function whileStatement7() {
 >whileStatement7 : () => Promise<void>
 
     A: while (x) { continue A; }
->A : any
+>A : any (error)
 >x : any
->A : any
+>A : any (error)
 }
 
 async function whileStatement8() {
 >whileStatement8 : () => Promise<void>
 
     B: while (await x) { continue B; }
->B : any
+>B : any (error)
 >await x : any
 >x : any
->B : any
+>B : any (error)
 }
 
 async function whileStatement9() {
 >whileStatement9 : () => Promise<void>
 
     C: while (x) { await y; continue C; }
->C : any
+>C : any (error)
 >x : any
 >await y : any
 >y : any
->C : any
+>C : any (error)
 }
 
 async function whileStatement10() {
 >whileStatement10 : () => Promise<void>
 
     D: while (x) { if (1) continue D; await y; }
->D : any
+>D : any (error)
 >x : any
 >1 : 1
->D : any
+>D : any (error)
 >await y : any
 >y : any
 }
@@ -147,40 +147,40 @@ async function whileStatement15() {
 >whileStatement15 : () => Promise<void>
 
     E: while (x) { break E; }
->E : any
+>E : any (error)
 >x : any
->E : any
+>E : any (error)
 }
 
 async function whileStatement16() {
 >whileStatement16 : () => Promise<void>
 
     F: while (await x) { break F; }
->F : any
+>F : any (error)
 >await x : any
 >x : any
->F : any
+>F : any (error)
 }
 
 async function whileStatement17() {
 >whileStatement17 : () => Promise<void>
 
     G: while (x) { await y; break G; }
->G : any
+>G : any (error)
 >x : any
 >await y : any
 >y : any
->G : any
+>G : any (error)
 }
 
 async function whileStatement18() {
 >whileStatement18 : () => Promise<void>
 
     H: while (x) { if (1) break H; await y; }
->H : any
+>H : any (error)
 >x : any
 >1 : 1
->H : any
+>H : any (error)
 >await y : any
 >y : any
 }

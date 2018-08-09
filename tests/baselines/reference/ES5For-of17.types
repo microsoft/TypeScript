@@ -8,8 +8,8 @@ for (let v of []) {
 
     for (let v of [v]) {
 >v : any
->[v] : any[]
->v : any
+>[v] : any (error)[]
+>v : any (error)
 
         var x = v;
 >x : any

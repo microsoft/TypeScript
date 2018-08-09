@@ -15,13 +15,13 @@ declare class xyz extends abc {
 }
 
 var bar = new xyz(); // Error: Invalid 'new' expression.
->bar : any
->new xyz() : any
+>bar : any (error)
+>new xyz() : any (error)
 >xyz : typeof xyz
 
 var r: xyz = bar.foo;
 >r : xyz
->bar.foo : any
->bar : any
->foo : any
+>bar.foo : any (error)
+>bar : any (error)
+>foo : any (error)
 

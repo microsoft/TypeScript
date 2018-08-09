@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/inline/renderer.d.ts ===
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
         interface IntrinsicElements {
@@ -28,9 +28,9 @@ import * as React from "./renderer";
 >React : typeof React
 
 <h></h>
-><h></h> : any
->h : any
->h : any
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 
 === tests/cases/conformance/jsx/inline/other.tsx ===
 /** @jsx h */
@@ -39,8 +39,8 @@ import { dom as h } from "./renderer"
 >h : () => void
 
 export const prerendered = <h></h>;
->prerendered : any
-><h></h> : any
+>prerendered : any (error)
+><h></h> : any (error)
 >h : () => void
 >h : () => void
 
@@ -50,20 +50,20 @@ import { otherdom } from "./renderer"
 >otherdom : () => void
 
 export const prerendered2 = <h></h>;
->prerendered2 : any
-><h></h> : any
->h : any
->h : any
+>prerendered2 : any (error)
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
 import React from "./renderer"
 >React : () => void
 
 export const prerendered3 = <h></h>;
->prerendered3 : any
-><h></h> : any
->h : any
->h : any
+>prerendered3 : any (error)
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
 /** @jsx dom */
@@ -71,9 +71,9 @@ import { dom } from "./renderer"
 >dom : () => void
 
 <h></h>
-><h></h> : any
->h : any
->h : any
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 
 export * from "./other";
 export * from "./othernoalias";

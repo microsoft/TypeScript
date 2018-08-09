@@ -9,7 +9,7 @@ class C {
 >bar : () => void
 
         let k = foo;
->k : any
->foo : any
+>k : any (error)
+>foo : any (error)
     }
 }

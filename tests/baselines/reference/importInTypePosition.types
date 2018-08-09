@@ -38,7 +38,7 @@ module C {
 
     var p: a.Point;
 >p : a.Point
->a : any
+>a : any (error)
 
     var p = { x: 0, y: 0 };
 >p : a.Point

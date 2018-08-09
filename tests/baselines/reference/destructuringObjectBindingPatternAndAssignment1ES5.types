@@ -22,7 +22,7 @@ var { b1, } = { b1:1, };
 >1 : 1
 
 var { b2: { b21 } = { b21: "string" }  } = { b2: { b21: "world" } };
->b2 : any
+>b2 : any (error)
 >b21 : string
 >{ b21: "string" } : { b21: string; }
 >b21 : string
@@ -47,7 +47,7 @@ var {b4 = 1}: any = { b4: 100000 };
 >100000 : 100000
 
 var {b5: { b52 }  } = { b5: { b52 } };
->b5 : any
+>b5 : any (error)
 >b52 : any
 >{ b5: { b52 } } : { b5: { b52: any; }; }
 >b5 : { b52: any; }

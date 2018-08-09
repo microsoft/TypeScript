@@ -1,7 +1,7 @@
 === tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts ===
 var;
 let;
->let : any
+>let : any (error)
 
 const;
 

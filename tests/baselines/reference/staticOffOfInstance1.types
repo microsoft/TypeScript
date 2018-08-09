@@ -6,10 +6,10 @@ class List {
 >Blah : () => void
 
     this.Foo();
->this.Foo() : any
->this.Foo : any
+>this.Foo() : any (error)
+>this.Foo : any (error)
 >this : this
->Foo : any
+>Foo : any (error)
   }
   public static Foo() {}
 >Foo : () => void

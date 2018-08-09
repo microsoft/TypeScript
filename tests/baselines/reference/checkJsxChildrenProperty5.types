@@ -25,8 +25,8 @@ class Button extends React.Component<any, any> {
         return (<div>My Button</div>)
 >(<div>My Button</div>) : JSX.Element
 ><div>My Button</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
 }
 
@@ -36,11 +36,11 @@ function Comp(p: Prop) {
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
->div : any
+>div : any (error)
 >p.b : string
 >p : Prop
 >b : string
->div : any
+>div : any (error)
 }
 
 // Error: no children specified

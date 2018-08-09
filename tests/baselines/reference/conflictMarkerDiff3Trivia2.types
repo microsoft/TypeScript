@@ -7,8 +7,8 @@ class C {
 
 <<<<<<< B
      a();
->a() : any
->a : any
+>a() : any (error)
+>a : any (error)
   }
 ||||||| merged common ancestors
      c();

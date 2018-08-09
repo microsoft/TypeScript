@@ -1,10 +1,10 @@
 === tests/cases/compiler/parseCommaSeparatedNewlineNew.ts ===
 (a,
->(a,new) : any
->a,new : any
->a : any
+>(a,new) : any (error)
+>a,new : any (error)
+>a : any (error)
 
 new)
->new : any
-> : any
+>new : any (error)
+> : any (error)
 

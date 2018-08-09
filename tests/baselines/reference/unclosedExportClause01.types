@@ -6,21 +6,21 @@ export var x = "x";
 === tests/cases/compiler/t2.ts ===
 export { x, from "./t1"
 >x : string
->from : any
+>from : any (error)
 
 === tests/cases/compiler/t3.ts ===
 export { from "./t1"
->from : any
+>from : any (error)
 
 === tests/cases/compiler/t4.ts ===
 export { x as a from "./t1"
 >x : string
 >a : string
->from : any
+>from : any (error)
 
 === tests/cases/compiler/t5.ts ===
 export { x as a, from "./t1"
 >x : string
 >a : string
->from : any
+>from : any (error)
 

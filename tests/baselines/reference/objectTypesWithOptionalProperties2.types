@@ -39,12 +39,12 @@ class C2<T> {
 
 
 var b = {
->b : { x(): any; 1: any; }
->{    x()?: 1 // error} : { x(): any; 1: any; }
+>b : { x(): any; 1: any (error); }
+>{    x()?: 1 // error} : { x(): any; 1: any (error); }
 
     x()?: 1 // error
 >x : () => any
->1 : any
+>1 : any (error)
 }
-> : any
+> : any (error)
 

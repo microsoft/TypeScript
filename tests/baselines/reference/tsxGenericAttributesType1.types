@@ -6,8 +6,8 @@ const decorator = function <T>(Component: React.StatelessComponent<T>): React.St
 >decorator : <T>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 >function <T>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props}></Component>} : <T>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 >Component : React.StatelessComponent<T>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 
     return (props) => <Component {...props}></Component>
 >(props) => <Component {...props}></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
@@ -24,8 +24,8 @@ const decorator2 = function <T extends { x: number }>(Component: React.Stateless
 >function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} x={2} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 >x : number
 >Component : React.StatelessComponent<T>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 
     return (props) => <Component {...props} x={2} ></Component>
 >(props) => <Component {...props} x={2} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
@@ -45,8 +45,8 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 >x : number
 >x : number
 >Component : React.StatelessComponent<T>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 
     return (props) => <Component x={2} {...props} ></Component>
 >(props) => <Component x={2} {...props} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element

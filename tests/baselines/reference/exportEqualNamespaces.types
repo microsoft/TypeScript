@@ -5,7 +5,7 @@ declare module server {
 
 interface server {
     (): server.Server;
->server : any
+>server : any (error)
 
     startTime: Date;
 >startTime : Date

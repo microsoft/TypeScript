@@ -29,7 +29,7 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 
     public render(): JSX.Element {
 >render : () => JSX.Element
->JSX : any
+>JSX : any (error)
 
         if (this.props.id < 1) {
 >this.props.id < 1 : boolean
@@ -41,10 +41,10 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >1 : 1
 
             return (<div></div>);
->(<div></div>) : any
-><div></div> : any
->div : any
->div : any
+>(<div></div>) : any (error)
+><div></div> : any (error)
+>div : any (error)
+>div : any (error)
         }
     }
 }

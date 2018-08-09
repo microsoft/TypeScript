@@ -46,30 +46,30 @@ var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary:
 >"edging" : "edging"
 
 var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >robotA : Robot
 
 var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
->name : any
+>name : any (error)
 >nameB : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryB : string
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 >robotB : Robot
 
 var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
->name : any
+>name : any (error)
 >nameC : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryB : string
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string

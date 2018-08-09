@@ -12,12 +12,12 @@ let buttonProps; // any
 let k = <button {...buttonProps}>
 >k : JSX.Element
 ><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : JSX.Element
->button : any
+>button : any (error)
 >buttonProps : any
 
             <span className={cx('class1', { class2: true })} />
 ><span className={cx('class1', { class2: true })} /> : JSX.Element
->span : any
+>span : any (error)
 >className : any
 >cx('class1', { class2: true }) : any
 >cx : any
@@ -27,7 +27,7 @@ let k = <button {...buttonProps}>
 >true : true
 
         </button>;
->button : any
+>button : any (error)
 
 === tests/cases/conformance/jsx/declaration.d.ts ===
 declare module "classnames";

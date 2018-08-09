@@ -9,12 +9,12 @@ namespace A {
 >true : true
 
             B.
->B. : any
+>B. : any (error)
 >B : typeof B
             
 
         namespace B {
-> : any
+> : any (error)
 >B : typeof B
 
             export function baz() { }

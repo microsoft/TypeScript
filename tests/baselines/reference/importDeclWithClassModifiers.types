@@ -4,20 +4,20 @@ module x {
     }
 }
 export public import a = x.c;
->a : any
->x : any
->c : any
+>a : any (error)
+>x : any (error)
+>c : any (error)
 
 export private import b = x.c;
->b : any
->x : any
->c : any
+>b : any (error)
+>x : any (error)
+>c : any (error)
 
 export static import c = x.c;
->c : any
->x : any
->c : any
+>c : any (error)
+>x : any (error)
+>c : any (error)
 
 var b: a;
->b : any
+>b : any (error)
 

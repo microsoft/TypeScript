@@ -1,6 +1,6 @@
 === tests/cases/compiler/commentsAtEndOfFile1.ts ===
 Input:
->Input : any
+>Input : any (error)
 
 ;
 //Testing two

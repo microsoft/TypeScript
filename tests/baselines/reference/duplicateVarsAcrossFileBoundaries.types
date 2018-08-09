@@ -46,7 +46,7 @@ var z = 0;
 module P { }
 import p = P;
 >p : any
->P : any
+>P : any (error)
 
 var q;
 >q : any
@@ -55,7 +55,7 @@ var q;
 module Q { }
 import q = Q;
 >q : any
->Q : any
+>Q : any (error)
 
 var p;
 >p : any

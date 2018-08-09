@@ -3,7 +3,7 @@ function f({x = 10, y: [a, b, c, d] = [1, 2, 3, 4]} = { x: 10, y: [2, 4, 6, 8] }
 >f : ({ x, y: [a, b, c, d] }?: { x?: number; y?: [number, number, number, number]; }) => void
 >x : number
 >10 : 10
->y : any
+>y : any (error)
 >a : number
 >b : number
 >c : number
@@ -42,11 +42,11 @@ function h([a, [b], [[c]], {x = 10, y: [a, b, c], z: {a1, b1}}]){ }
 >c : any
 >x : number
 >10 : 10
->y : any
+>y : any (error)
 >a : any
 >b : any
 >c : any
->z : any
+>z : any (error)
 >a1 : any
 >b1 : any
 
@@ -62,7 +62,7 @@ function h1([a, [b], [[c]], {x = 10, y = [1, 2, 3], z: {a1, b1}}]){ }
 >1 : 1
 >2 : 2
 >3 : 3
->z : any
+>z : any (error)
 >a1 : any
 >b1 : any
 

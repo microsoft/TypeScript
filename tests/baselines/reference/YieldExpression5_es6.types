@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/yieldExpressions/YieldExpression5_es6.ts ===
 function* foo() {
->foo : () => IterableIterator<any>
+>foo : () => IterableIterator<any (error)>
 
   yield*
 >yield* : any
 }
-> : any
+> : any (error)
 

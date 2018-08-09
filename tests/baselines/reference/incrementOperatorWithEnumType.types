@@ -11,27 +11,27 @@ enum ENUM1 { A, B, "" };
 var ResultIsNumber1 = ++ENUM1["B"];
 >ResultIsNumber1 : number
 >++ENUM1["B"] : number
->ENUM1["B"] : any
+>ENUM1["B"] : any (error)
 >ENUM1 : typeof ENUM1
 >"B" : "B"
 
 var ResultIsNumber2 = ENUM1.B++;
 >ResultIsNumber2 : number
 >ENUM1.B++ : number
->ENUM1.B : any
+>ENUM1.B : any (error)
 >ENUM1 : typeof ENUM1
->B : any
+>B : any (error)
 
 // miss assignment operator
 ++ENUM1["B"];
 >++ENUM1["B"] : number
->ENUM1["B"] : any
+>ENUM1["B"] : any (error)
 >ENUM1 : typeof ENUM1
 >"B" : "B"
 
 ENUM1.B++;
 >ENUM1.B++ : number
->ENUM1.B : any
+>ENUM1.B : any (error)
 >ENUM1 : typeof ENUM1
->B : any
+>B : any (error)
 

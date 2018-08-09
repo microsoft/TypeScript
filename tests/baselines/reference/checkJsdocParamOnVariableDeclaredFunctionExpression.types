@@ -12,14 +12,14 @@ var x = function foo(n, s) {}
 >s : string
 
 var y;
->y : any
+>y : any (auto)
 
 /**
  * @param {boolean!} b
  */
 y = function bar(b) {}
 >y = function bar(b) {} : (b: boolean) => void
->y : any
+>y : any (auto)
 >function bar(b) {} : (b: boolean) => void
 >bar : (b: boolean) => void
 >b : boolean

@@ -3,7 +3,7 @@
 * (c) Copyright - Important
 ****************************/
 import model = require("./greeter")
->model : any
+>model : any (error)
 
 var el = document.getElementById('content');
 >el : HTMLElement
@@ -14,17 +14,17 @@ var el = document.getElementById('content');
 >'content' : "content"
 
 var greeter = new model.Greeter(el);
->greeter : any
->new model.Greeter(el) : any
->model.Greeter : any
->model : any
->Greeter : any
+>greeter : any (error)
+>new model.Greeter(el) : any (error)
+>model.Greeter : any (error)
+>model : any (error)
+>Greeter : any (error)
 >el : HTMLElement
 
 /** things */
 greeter.start();
->greeter.start() : any
->greeter.start : any
->greeter : any
->start : any
+>greeter.start() : any (error)
+>greeter.start : any (error)
+>greeter : any (error)
+>start : any (error)
 

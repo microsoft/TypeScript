@@ -33,11 +33,11 @@ class C {
 var e = E; // shouldn't error
 */
 E.A.A; // should error
->E.A.A : any
+>E.A.A : any (error)
 >E.A : E.A
 >E : typeof E
 >A : E.A
->A : any
+>A : any (error)
 
 
 enum E2 {

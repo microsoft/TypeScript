@@ -12,7 +12,7 @@ module M {
 
 var c:M.C = new M.C();
 >c : M.C
->M : any
+>M : any (error)
 >new M.C() : M.C
 >M.C : typeof M.C
 >M : typeof M
@@ -25,9 +25,9 @@ c.salt();	// cool
 >salt : () => void
 
 c.saltbar();	// crash
->c.saltbar() : any
->c.saltbar : any
+>c.saltbar() : any (error)
+>c.saltbar : any (error)
 >c : M.C
->saltbar : any
+>saltbar : any (error)
 
 

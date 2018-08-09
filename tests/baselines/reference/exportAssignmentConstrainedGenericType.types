@@ -3,8 +3,8 @@ import foo = require("./foo_0");
 >foo : typeof foo
 
 var x = new foo(true); // Should error
->x : any
->new foo(true) : any
+>x : any (error)
+>new foo(true) : any (error)
 >foo : typeof foo
 >true : true
 

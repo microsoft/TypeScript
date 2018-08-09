@@ -1,9 +1,9 @@
 === tests/cases/compiler/conflictMarkerTrivia3.tsx ===
 const x = <div>
->x : any
-><div> : any
->div : any
+>x : any (error)
+><div> : any (error)
+>div : any (error)
 
 <<<<<<< HEAD
-> : any
+> : any (error)
 

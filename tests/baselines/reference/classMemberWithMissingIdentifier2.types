@@ -6,6 +6,6 @@ class C {
 > : any
 >[name:string] : any[]
 >name : never
->string : any
->VariableDeclaration : any
+>string : any (error)
+>VariableDeclaration : any (error)
 }

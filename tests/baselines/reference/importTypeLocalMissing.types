@@ -35,18 +35,18 @@ class Bar {
 
     item: Bar.I;
 >item : Bar.I
->Bar : any
+>Bar : any (error)
 
     constructor(input: Baz.J) {}
 >input : Baz.J
->Baz : any
+>Baz : any (error)
 }
 export { Bar }
 >Bar : typeof Bar
 
 === tests/cases/conformance/types/import/usage.ts ===
 export const x: import("./fo") = { x: 0, y: 0 };
->x : any
+>x : any (error)
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -54,8 +54,8 @@ export const x: import("./fo") = { x: 0, y: 0 };
 >0 : 0
 
 export let y: import("./fo2").Bar.I = { a: "", b: 0 };
->y : any
->Bar : any
+>y : any (error)
+>Bar : any (error)
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""
@@ -63,8 +63,8 @@ export let y: import("./fo2").Bar.I = { a: "", b: 0 };
 >0 : 0
 
 export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
->z : any
->Bar : any
+>z : any (error)
+>Bar : any (error)
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""
@@ -85,7 +85,7 @@ export class Bar2 {
 }
 
 export let shim: typeof import("./fo2") = {
->shim : any
+>shim : any (error)
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 
     Bar: Bar2

@@ -1,18 +1,18 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of35.ts ===
 for (const {x: a = 0, y: b = 1} of [2, 3]) {
->x : any
->a : any
+>x : any (error)
+>a : any (error)
 >0 : 0
->y : any
->b : any
+>y : any (error)
+>b : any (error)
 >1 : 1
 >[2, 3] : number[]
 >2 : 2
 >3 : 3
 
     a;
->a : any
+>a : any (error)
 
     b;
->b : any
+>b : any (error)
 }

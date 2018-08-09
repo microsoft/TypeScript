@@ -55,15 +55,15 @@ class D {
 
     a: E.A;
 >a : E.A
->E : any
+>E : any (error)
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     b: E.B | E.C;
 >b : E.B | E.C
->E : any
->E : any
+>E : any (error)
+>E : any (error)
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void

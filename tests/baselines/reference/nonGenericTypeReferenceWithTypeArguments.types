@@ -12,16 +12,16 @@ type T = { };
 >T : T
 
 var v1: C<string>;
->v1 : any
+>v1 : any (error)
 
 var v2: I<string>;
->v2 : any
+>v2 : any (error)
 
 var v3: E<string>;
->v3 : any
+>v3 : any (error)
 
 var v4: T<string>;
->v4 : any
+>v4 : any (error)
 
 function f<U>() {
 >f : <U>() => void
@@ -37,18 +37,18 @@ function f<U>() {
 >T : {}
 
     var v1: C<string>;
->v1 : any
+>v1 : any (error)
 
     var v2: I<string>;
->v2 : any
+>v2 : any (error)
 
     var v3: E<string>;
->v3 : any
+>v3 : any (error)
 
     var v4: T<string>;
->v4 : any
+>v4 : any (error)
 
     var v5: U<string>;
->v5 : any
+>v5 : any (error)
 }
 

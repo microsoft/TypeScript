@@ -15,7 +15,7 @@ a.value.toExponential();
 
 === tests/cases/compiler/b.ts ===
 import A from './a';
->A : any
+>A : any (error)
 
 var a: A;
 >a : A

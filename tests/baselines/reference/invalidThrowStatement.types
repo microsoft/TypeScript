@@ -1,6 +1,6 @@
 === tests/cases/conformance/statements/throwStatements/invalidThrowStatement.ts ===
 throw; 
-> : any
+> : any (error)
 
 export throw null;
 >null : null

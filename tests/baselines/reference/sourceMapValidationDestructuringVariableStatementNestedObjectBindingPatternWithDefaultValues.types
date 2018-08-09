@@ -47,15 +47,15 @@ var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary:
 
 var {
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryA = "noSkill",
->primary : any
+>primary : any (error)
 >primaryA : string
 >"noSkill" : "noSkill"
 
         secondary: secondaryA = "noSkill"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"noSkill" : "noSkill"
 
@@ -71,20 +71,20 @@ var {
 
 var {
     name: nameB = "noNameSpecified",
->name : any
+>name : any (error)
 >nameB : string
 >"noNameSpecified" : "noNameSpecified"
 
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryB = "noSkill",
->primary : any
+>primary : any (error)
 >primaryB : string
 >"noSkill" : "noSkill"
 
         secondary: secondaryB = "noSkill"
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 >"noSkill" : "noSkill"
 
@@ -100,20 +100,20 @@ var {
 
 var {
     name: nameC = "noNameSpecified",
->name : any
+>name : any (error)
 >nameC : string
 >"noNameSpecified" : "noNameSpecified"
 
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryB = "noSkill",
->primary : any
+>primary : any (error)
 >primaryB : string
 >"noSkill" : "noSkill"
 
         secondary: secondaryB = "noSkill"
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 >"noSkill" : "noSkill"
 

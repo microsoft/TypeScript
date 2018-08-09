@@ -26,7 +26,7 @@ import * as X from "./exportStarFromEmptyModule_module3";
 
 var s: X.A;
 >s : X.A
->X : any
+>X : any (error)
 
 X.A.q;
 >X.A.q : any
@@ -36,9 +36,9 @@ X.A.q;
 >q : any
 
 X.A.r; // Error
->X.A.r : any
+>X.A.r : any (error)
 >X.A : typeof X.A
 >X : typeof X
 >A : typeof X.A
->r : any
+>r : any (error)
 

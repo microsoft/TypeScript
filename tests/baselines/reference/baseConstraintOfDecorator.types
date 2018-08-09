@@ -16,7 +16,7 @@ export function classExtender<TFunction>(superClass: TFunction, _instanceModifie
 
             super(...args);
 >super(...args) : void
->super : any
+>super : any (error)
 >...args : any
 >args : any[]
 

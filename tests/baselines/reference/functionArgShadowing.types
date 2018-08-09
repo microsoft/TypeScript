@@ -17,10 +17,10 @@ function foo(x: A) {
 >B : typeof B
 
      x.bar(); // the property bar does not exist on a value of type A
->x.bar() : any
->x.bar : any
+>x.bar() : any (error)
+>x.bar : any (error)
 >x : A
->bar : any
+>bar : any (error)
 }
  
 class C {

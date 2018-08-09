@@ -3,5 +3,5 @@
 
 /* not copyright */
 import foo = require('./foo');
->foo : any
+>foo : any (error)
 

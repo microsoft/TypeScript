@@ -14,7 +14,7 @@ y.foo();
 
 let z: Foo.SubThing; // OK in ns position
 >z : ff.SubThing
->Foo : any
+>Foo : any (error)
 
 let x: any = Foo; // Not OK in value position
 >x : any

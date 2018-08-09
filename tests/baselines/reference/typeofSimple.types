@@ -17,8 +17,8 @@ interface I<T> { x: T; }
 interface J { }
 
 var numberJ: typeof J; //Error, cannot reference type in typeof
->numberJ : any
->J : any
+>numberJ : any (error)
+>J : any (error)
 
 var numberI: I<typeof v2>;
 >numberI : I<number>

@@ -11,7 +11,7 @@ async function nestedLoops() {
 >nestedLoops : () => Promise<void>
 
     A: while (x) {
->A : any
+>A : any (error)
 >x : any
 
         await y;
@@ -22,7 +22,7 @@ async function nestedLoops() {
 >z : any
 
             continue A;
->A : any
+>A : any (error)
         }
         while (a) {
 >a : any

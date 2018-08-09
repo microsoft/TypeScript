@@ -57,12 +57,12 @@ async function f5() {
 >y : any
 
     outer: for await (const x of y) {
->outer : any
+>outer : any (error)
 >x : any
 >y : any
 
         continue outer;
->outer : any
+>outer : any (error)
     }
 }
 === tests/cases/conformance/emitter/esnext/forAwait/file6.ts ===
@@ -74,11 +74,11 @@ async function* f6() {
 >y : any
 
     outer: for await (const x of y) {
->outer : any
+>outer : any (error)
 >x : any
 >y : any
 
         continue outer;
->outer : any
+>outer : any (error)
     }
 }

@@ -291,7 +291,7 @@ constructorTestObject.arg4 = 2;
 // Lables
 
 l\u0061bel1: 
->l\u0061bel1 : any
+>l\u0061bel1 : any (error)
 
     while (false)
 >false : false
@@ -300,11 +300,11 @@ l\u0061bel1:
 >false : false
 
            continue label1;  // it will go to next iteration of outer loop 
->label1 : any
+>label1 : any (error)
     } 
 
 label2: 
->label2 : any
+>label2 : any (error)
 
     while (false)
 >false : false
@@ -313,11 +313,11 @@ label2:
 >false : false
 
            continue l\u0061bel2;  // it will go to next iteration of outer loop 
->l\u0061bel2 : any
+>l\u0061bel2 : any (error)
     } 
 
 label3: 
->label3 : any
+>label3 : any (error)
 
     while (false)
 >false : false
@@ -326,11 +326,11 @@ label3:
 >false : false
 
            continue label3;  // it will go to next iteration of outer loop 
->label3 : any
+>label3 : any (error)
     } 
 
 l\u0061bel4: 
->l\u0061bel4 : any
+>l\u0061bel4 : any (error)
 
     while (false)
 >false : false
@@ -339,5 +339,5 @@ l\u0061bel4:
 >false : false
 
            continue l\u0061bel4;  // it will go to next iteration of outer loop 
->l\u0061bel4 : any
+>l\u0061bel4 : any (error)
     } 

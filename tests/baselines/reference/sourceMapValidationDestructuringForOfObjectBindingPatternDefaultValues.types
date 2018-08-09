@@ -83,7 +83,7 @@ function getMultiRobots() {
 }
 
 for (let {name: nameA = "noName" } of robots) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 >robots : Robot[]
@@ -96,7 +96,7 @@ for (let {name: nameA = "noName" } of robots) {
 >nameA : string
 }
 for (let {name: nameA = "noName" } of getRobots()) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 >getRobots() : Robot[]
@@ -110,7 +110,7 @@ for (let {name: nameA = "noName" } of getRobots()) {
 >nameA : string
 }
 for (let {name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
@@ -133,11 +133,11 @@ for (let {name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { nam
 >nameA : string
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -157,11 +157,11 @@ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "sec
 >primaryA : string
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -182,11 +182,11 @@ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "sec
 >primaryA : string
 }
 for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -230,10 +230,10 @@ for (let { skills: { primary: primaryA = "primary", secondary: secondaryA = "sec
 }
 
 for (let {name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
->skill : any
+>skill : any (error)
 >skillA : string
 >"noSkill" : "noSkill"
 >robots : Robot[]
@@ -246,10 +246,10 @@ for (let {name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
 >nameA : string
 }
 for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
->skill : any
+>skill : any (error)
 >skillA : string
 >"noSkill" : "noSkill"
 >getRobots() : Robot[]
@@ -263,10 +263,10 @@ for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
 >nameA : string
 }
 for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
->skill : any
+>skill : any (error)
 >skillA : string
 >"noSkill" : "noSkill"
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
@@ -290,20 +290,20 @@ for (let {name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mowe
 }
 for (let {
     name: nameA = "noName",
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryA = "primary",
->primary : any
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
 
         secondary: secondaryA = "secondary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -326,20 +326,20 @@ for (let {
 }
 for (let {
     name: nameA = "noName",
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryA = "primary",
->primary : any
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
 
         secondary: secondaryA = "secondary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 
@@ -363,20 +363,20 @@ for (let {
 }
 for (let {
     name: nameA = "noName",
->name : any
+>name : any (error)
 >nameA : string
 >"noName" : "noName"
 
     skills: {
->skills : any
+>skills : any (error)
 
         primary: primaryA = "primary",
->primary : any
+>primary : any (error)
 >primaryA : string
 >"primary" : "primary"
 
         secondary: secondaryA = "secondary"
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >"secondary" : "secondary"
 

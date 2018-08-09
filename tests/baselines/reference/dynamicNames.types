@@ -66,10 +66,10 @@ import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
 >c0 : "a"
 >c1 : 1
 >s0 : unique symbol
->T0 : any
+>T0 : any (error)
 >T1 : typeof T1
 >T2 : typeof T2
->T3 : any
+>T3 : any (error)
 
 import * as M from "./module";
 >M : typeof M
@@ -291,35 +291,35 @@ let t3: T3;
 
 let t0_1: M.T0;
 >t0_1 : T0
->M : any
+>M : any (error)
 
 let t1_1: M.T1;
 >t1_1 : T1
->M : any
+>M : any (error)
 
 let t2_1: M.T2;
 >t2_1 : T2
->M : any
+>M : any (error)
 
 let t3_1: M.T3;
 >t3_1 : T3
->M : any
+>M : any (error)
 
 let t4: N.T4;
 >t4 : N.T4
->N : any
+>N : any (error)
 
 let t5: N.T5;
 >t5 : N.T5
->N : any
+>N : any (error)
 
 let t6: N.T6;
 >t6 : N.T6
->N : any
+>N : any (error)
 
 let t7: N.T7;
 >t7 : N.T7
->N : any
+>N : any (error)
 
 let t8: T8;
 >t8 : T8

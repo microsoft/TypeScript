@@ -31,10 +31,10 @@ sk.p;
 >p : number
 
 sk.m(); // error
->sk.m() : any
->sk.m : any
+>sk.m() : any (error)
+>sk.m : any (error)
 >sk : { p: number; }
->m : any
+>m : any (error)
 
 ssk.p;
 >ssk.p : number
@@ -42,10 +42,10 @@ ssk.p;
 >p : number
 
 ssk.m(); // error
->ssk.m() : any
->ssk.m : any
+>ssk.m() : any (error)
+>ssk.m : any (error)
 >ssk : { p: number; }
->m : any
+>m : any (error)
 
 let i: I = { p: 12, m() { } };
 >i : I

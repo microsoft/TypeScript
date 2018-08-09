@@ -8,7 +8,7 @@ Foo.fn();
 
 let x: Foo.Thing;
 >x : Foo.Thing
->Foo : any
+>Foo : any (error)
 
 let y: number = x.n;
 >y : number

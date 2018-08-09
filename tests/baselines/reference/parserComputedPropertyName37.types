@@ -5,7 +5,7 @@ var v = {
 
     [public]: 0
 >[public] : number
->public : any
+>public : any (error)
 >0 : 0
 
 };

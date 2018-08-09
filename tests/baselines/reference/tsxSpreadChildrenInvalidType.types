@@ -28,7 +28,7 @@ function Todo(prop: { key: number, todo: string }) {
 
     return <div>{prop.key.toString() + prop.todo}</div>;
 ><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
->div : any
+>div : any (error)
 >prop.key.toString() + prop.todo : string
 >prop.key.toString() : string
 >prop.key.toString : (radix?: number) => string
@@ -39,7 +39,7 @@ function Todo(prop: { key: number, todo: string }) {
 >prop.todo : string
 >prop : { key: number; todo: string; }
 >todo : string
->div : any
+>div : any (error)
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
@@ -47,7 +47,7 @@ function TodoList({ todos }: TodoListProps) {
 
     return <div>
 ><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : JSX.Element
->div : any
+>div : any (error)
 
         {...<Todo key={todos[0].id} todo={todos[0].todo} />}
 ><Todo key={todos[0].id} todo={todos[0].todo} /> : JSX.Element
@@ -66,7 +66,7 @@ function TodoList({ todos }: TodoListProps) {
 >todo : string
 
     </div>;
->div : any
+>div : any (error)
 }
 function TodoListNoError({ todos }: TodoListProps) {
 >TodoListNoError : ({ todos }: TodoListProps) => JSX.Element
@@ -75,7 +75,7 @@ function TodoListNoError({ todos }: TodoListProps) {
     // any is not checked
     return <div>
 ><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : JSX.Element
->div : any
+>div : any (error)
 
         {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
 >(<Todo key={todos[0].id} todo={todos[0].todo} /> as any) : any
@@ -96,7 +96,7 @@ function TodoListNoError({ todos }: TodoListProps) {
 >todo : string
 
     </div>;
->div : any
+>div : any (error)
 }
 let x: TodoListProps;
 >x : TodoListProps

@@ -5,33 +5,33 @@ export var x = "x";
 
 === tests/cases/compiler/t2.ts ===
 export { x, from
->x : any
->from : any
+>x : any (error)
+>from : any (error)
 
     "./t1";
 >"./t1" : "./t1"
 
 === tests/cases/compiler/t3.ts ===
 export { from
->from : any
+>from : any (error)
 
     "./t1";
 >"./t1" : "./t1"
 
 === tests/cases/compiler/t4.ts ===
 export { x as a from
->x : any
->a : any
->from : any
+>x : any (error)
+>a : any (error)
+>from : any (error)
 
     "./t1";
 >"./t1" : "./t1"
 
 === tests/cases/compiler/t5.ts ===
 export { x as a, from
->x : any
->a : any
->from : any
+>x : any (error)
+>a : any (error)
+>from : any (error)
 
     "./t1";
 >"./t1" : "./t1"

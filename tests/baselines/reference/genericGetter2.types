@@ -9,7 +9,7 @@ class C<T> {
 >data : A<T>
 
     get x(): A {
->x : any
+>x : any (error)
 
         return this.data;
 >this.data : A<T>

@@ -2,10 +2,10 @@
 class George extends class { reset() { return this.y; } } {
 >George : George
 >class { reset() { return this.y; } } : (Anonymous class)
->reset : () => any
->this.y : any
+>reset : () => any (error)
+>this.y : any (error)
 >this : this
->y : any
+>y : any (error)
 
     constructor() {
         super();

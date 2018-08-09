@@ -1,7 +1,7 @@
 === tests/cases/compiler/weird.js ===
 someFunction(function(BaseClass) {
->someFunction(function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }}) : any
->someFunction : any
+>someFunction(function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }}) : any (error)
+>someFunction : any (error)
 >function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }} : (BaseClass: any) => void
 >BaseClass : any
 

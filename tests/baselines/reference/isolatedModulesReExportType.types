@@ -1,10 +1,10 @@
 === /user.ts ===
 // Error, can't re-export something that's only a type.
 export { T } from "./exportT";
->T : any
+>T : any (error)
 
 export import T2 = require("./exportEqualsT");
->T2 : any
+>T2 : any (error)
 
 // OK, has a value side
 export { C } from "./exportValue";
@@ -23,11 +23,11 @@ export type T3 = T;
 
 // Error, not clear (to an isolated module) whether `T4` is a type.
 import { T } from "./exportT";
->T : any
+>T : any (error)
 
 export { T as T4 };
->T : any
->T4 : any
+>T : any (error)
+>T4 : any (error)
 
 === /exportT.ts ===
 export type T = number;

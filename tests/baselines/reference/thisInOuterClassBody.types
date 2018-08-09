@@ -26,10 +26,10 @@ class Foo {
 >x : this
 
         var p = this.y;
->p : any
->this.y : any
+>p : any (error)
+>this.y : any (error)
 >this : this
->y : any
+>y : any (error)
 
         return this;
 >this : this
@@ -45,9 +45,9 @@ class Foo {
 >y : typeof Foo
 
         var b = this.x;
->b : any
->this.x : any
+>b : any (error)
+>this.x : any (error)
 >this : typeof Foo
->x : any
+>x : any (error)
     }
 }

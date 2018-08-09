@@ -21,7 +21,7 @@ module m1 {
 var a: { c: m1.c; };
 >a : { c: m1.c; }
 >c : m1.c
->m1 : any
+>m1 : any (error)
 
 var b = {
 >b : { c: typeof m1.c; m1: typeof m1; }

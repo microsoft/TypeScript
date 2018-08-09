@@ -116,7 +116,7 @@ module m {
         // getter with annotation
         get foo111(): m2.public2 {
 >foo111 : m2.public2
->m2 : any
+>m2 : any (error)
 
             return;
         }
@@ -136,7 +136,7 @@ module m {
         set foo113(param: m2.public2) {
 >foo113 : m2.public2
 >param : m2.public2
->m2 : any
+>m2 : any (error)
         }
 
         // Both - getter without annotation, setter with annotation
@@ -152,20 +152,20 @@ module m {
         set foo114(param: m2.public2) {
 >foo114 : m2.public2
 >param : m2.public2
->m2 : any
+>m2 : any (error)
         }
 
         // Both - with annotation
         get foo115(): m2.public2 {
 >foo115 : m2.public2
->m2 : any
+>m2 : any (error)
 
             return;
         }
         set foo115(param: m2.public2) {
 >foo115 : m2.public2
 >param : m2.public2
->m2 : any
+>m2 : any (error)
         }
     }
 }

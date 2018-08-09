@@ -30,7 +30,7 @@ class Test {
 
     bar: foo.Foo;
 >bar : foo.Foo
->foo : any
+>foo : any (error)
 
     constructor() {
         this.bar = new foo.Foo();

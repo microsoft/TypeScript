@@ -8,14 +8,14 @@ function f1() {
 >f1 : () => void
 
     let x;
->x : any
+>x : any (auto)
 
     if (cond) {
 >cond : boolean
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -23,7 +23,7 @@ function f1() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined
@@ -36,7 +36,7 @@ function f2() {
 >f2 : () => void
 
     let x = undefined;
->x : any
+>x : any (auto)
 >undefined : undefined
 
     if (cond) {
@@ -44,7 +44,7 @@ function f2() {
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -52,7 +52,7 @@ function f2() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined
@@ -65,7 +65,7 @@ function f3() {
 >f3 : () => void
 
     let x = null;
->x : any
+>x : any (auto)
 >null : null
 
     if (cond) {
@@ -73,7 +73,7 @@ function f3() {
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -81,7 +81,7 @@ function f3() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | null
@@ -94,14 +94,14 @@ function f5() {
 >f5 : () => void
 
     var x;
->x : any
+>x : any (auto)
 
     if (cond) {
 >cond : boolean
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -109,7 +109,7 @@ function f5() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined
@@ -122,7 +122,7 @@ function f6() {
 >f6 : () => void
 
     var x = undefined;
->x : any
+>x : any (auto)
 >undefined : undefined
 
     if (cond) {
@@ -130,7 +130,7 @@ function f6() {
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -138,7 +138,7 @@ function f6() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined
@@ -151,7 +151,7 @@ function f7() {
 >f7 : () => void
 
     var x = null;
->x : any
+>x : any (auto)
 >null : null
 
     if (cond) {
@@ -159,7 +159,7 @@ function f7() {
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -167,7 +167,7 @@ function f7() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | null
@@ -180,14 +180,14 @@ function f9() {
 >f9 : () => void
 
     let x;
->x : any
+>x : any (auto)
 
     if (cond) {
 >cond : boolean
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -195,7 +195,7 @@ function f9() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined
@@ -216,14 +216,14 @@ function f10() {
 >f10 : () => void
 
     let x;
->x : any
+>x : any (auto)
 
     if (cond) {
 >cond : boolean
 
         x = 1;
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
     }
     if (cond) {
@@ -231,7 +231,7 @@ function f10() {
 
         x = "hello";
 >x = "hello" : "hello"
->x : any
+>x : any (auto)
 >"hello" : "hello"
     }
     const y = x;  // string | number | undefined

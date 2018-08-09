@@ -152,7 +152,7 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >true : true
 >true : true
 >p4 : E.A
->E : any
+>E : any (error)
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -179,7 +179,7 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 
     var v5: E.A = E.A;
 >v5 : E.A
->E : any
+>E : any (error)
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -206,7 +206,7 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 
     let x5: E.A = E.A;
 >x5 : E.A
->E : any
+>E : any (error)
 >E.A : E.A
 >E : typeof E
 >A : E.A

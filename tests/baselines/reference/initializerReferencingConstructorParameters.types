@@ -5,12 +5,12 @@ class C {
 >C : C
 
     a = x; // error
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     b: typeof x; // error
->b : any
->x : any
+>b : any (error)
+>x : any (error)
 
     constructor(x) { }
 >x : any
@@ -20,12 +20,12 @@ class D {
 >D : D
 
     a = x; // error
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 
     b: typeof x; // error
->b : any
->x : any
+>b : any (error)
+>x : any (error)
 
     constructor(public x) { }
 >x : any
@@ -41,10 +41,10 @@ class E {
 >x : any
 
     b: typeof this.x; // error
->b : any
->this.x : any
->this : any
->x : any
+>b : any (error)
+>this.x : any (error)
+>this : any (error)
+>x : any (error)
 
     constructor(public x) { }
 >x : any
@@ -60,8 +60,8 @@ class F<T> {
 >x : T
 
     b = x; // error
->b : any
->x : any
+>b : any (error)
+>x : any (error)
 
     constructor(public x: T) { }
 >x : T

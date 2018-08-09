@@ -3,9 +3,9 @@ function f() {
 >f : () => void
 
     1 + 
->1 + : any
+>1 + : any (error)
 >1 : 1
 
     return;
-> : any
+> : any (error)
 }

@@ -6,10 +6,10 @@ class C {
 >foo : () => void
 
         super.foo();
->super.foo() : any
->super.foo : any
->super : any
->foo : any
+>super.foo() : any (error)
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
     }
 }
 
@@ -24,10 +24,10 @@ module M1.M2 {
 >foo : () => void
 
             super.foo();
->super.foo() : any
->super.foo : any
->super : any
->foo : any
+>super.foo() : any (error)
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
         }
     }
 }

@@ -13,10 +13,10 @@ module X.A.B.C {
     }
     export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
 >W : W
->X.A.C : any
+>X.A.C : any (error)
 >X.A : typeof A
 >X : typeof X
 >A : typeof A
->C : any
+>C : any (error)
     }
 }

@@ -3,6 +3,6 @@ function* f(): Iterator<number> {
 >f : () => Iterator<number>
 
     return invalid;
->invalid : any
+>invalid : any (error)
 }
 

@@ -30,7 +30,7 @@ new AA;
 >AA : typeof A
 
 new BB;
->new BB : any
+>new BB : any (error)
 >BB : typeof B
 
 new CC;

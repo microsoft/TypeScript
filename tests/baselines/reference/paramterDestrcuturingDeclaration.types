@@ -1,11 +1,11 @@
 === tests/cases/compiler/paramterDestrcuturingDeclaration.ts ===
 interface C {
     ({p: name}): any;
->p : any
+>p : any (error)
 >name : any
 
     new ({p: boolean}): any;
->p : any
+>p : any (error)
 >boolean : any
 }
 

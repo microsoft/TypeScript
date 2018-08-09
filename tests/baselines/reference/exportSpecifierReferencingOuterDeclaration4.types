@@ -4,13 +4,13 @@ No type information for this code.
 No type information for this code.=== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts ===
 declare module X { export interface foo { } }
 export { X };
->X : any
+>X : any (error)
 
 export declare function foo(): X.foo;
 >foo : () => X.foo
->X : any
+>X : any (error)
 
 export declare function bar(): X.bar; // error
->bar : () => any
->X : any
+>bar : () => any (error)
+>X : any (error)
 

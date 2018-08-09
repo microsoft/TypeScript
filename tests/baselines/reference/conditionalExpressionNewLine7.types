@@ -2,11 +2,11 @@
 var v = a ? 
 >v : any
 >a ?   b :  c : any
->a : any
+>a : any (error)
 
   b :
->b : any
+>b : any (error)
 
   c;
->c : any
+>c : any (error)
 

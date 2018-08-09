@@ -79,7 +79,7 @@ k **= `2${ 3 }4`;
 
 kj **= `2${ 3 }4`;
 >kj **= `2${ 3 }4` : number
->kj : any
+>kj : any (error)
 >`2${ 3 }4` : string
 >3 : 3
 

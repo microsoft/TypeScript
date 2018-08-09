@@ -4,33 +4,33 @@
 
 ++eval;
 >++eval : number
->eval : any
+>eval : any (error)
 
 --eval;
 >--eval : number
->eval : any
+>eval : any (error)
 
 ++arguments;
 >++arguments : number
->arguments : any
+>arguments : any (error)
 
 --arguments;
 >--arguments : number
->arguments : any
+>arguments : any (error)
 
 eval++;
 >eval++ : number
->eval : any
+>eval : any (error)
 
 eval--;
 >eval-- : number
->eval : any
+>eval : any (error)
 
 arguments++;
 >arguments++ : number
->arguments : any
+>arguments : any (error)
 
 arguments--;
 >arguments-- : number
->arguments : any
+>arguments : any (error)
 

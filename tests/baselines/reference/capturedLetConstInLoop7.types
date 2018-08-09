@@ -1,7 +1,7 @@
 === tests/cases/compiler/capturedLetConstInLoop7.ts ===
 //===let
 l0:
->l0 : any
+>l0 : any (error)
 
 for (let x of []) {
 >x : any
@@ -30,7 +30,7 @@ for (let x of []) {
 >1 : 1
 
         break l0;
->l0 : any
+>l0 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -45,12 +45,12 @@ for (let x of []) {
 >2 : 2
 
         continue l0;
->l0 : any
+>l0 : any (error)
     }
 }
 
 l00:
->l00 : any
+>l00 : any (error)
 
 for (let x in []) {
 >x : string
@@ -79,7 +79,7 @@ for (let x in []) {
 >"1" : "1"
 
         break l00;
->l00 : any
+>l00 : any (error)
     }
     if (x == "2") {
 >x == "2" : boolean
@@ -94,12 +94,12 @@ for (let x in []) {
 >"2" : "2"
 
         continue l00;
->l00 : any
+>l00 : any (error)
     }
 }
 
 l1:
->l1 : any
+>l1 : any (error)
 
 for (let x = 0; x < 1; ++x) {
 >x : number
@@ -133,7 +133,7 @@ for (let x = 0; x < 1; ++x) {
 >1 : 1
 
         break l1;
->l1 : any
+>l1 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -148,12 +148,12 @@ for (let x = 0; x < 1; ++x) {
 >2 : 2
 
         continue l1;
->l1 : any
+>l1 : any (error)
     }
 }
 
 l2:
->l2 : any
+>l2 : any (error)
 
 while (1 === 1) {
 >1 === 1 : boolean
@@ -186,7 +186,7 @@ while (1 === 1) {
 >1 : 1
 
         break l2;
->l2 : any
+>l2 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -201,12 +201,12 @@ while (1 === 1) {
 >2 : 2
 
         continue l2;
->l2 : any
+>l2 : any (error)
     }
 }
 
 l3:
->l3 : any
+>l3 : any (error)
 
 do {
     let x;
@@ -235,7 +235,7 @@ do {
 >1 : 1
 
         break l3;
->l3 : any
+>l3 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -250,7 +250,7 @@ do {
 >2 : 2
 
         continue l3;
->l3 : any
+>l3 : any (error)
     }
 } while (1 === 1)
 >1 === 1 : boolean
@@ -258,7 +258,7 @@ do {
 >1 : 1
 
 l4:
->l4 : any
+>l4 : any (error)
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -296,7 +296,7 @@ for (let y = 0; y < 1; ++y) {
 >1 : 1
 
         break l4;
->l4 : any
+>l4 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -311,12 +311,12 @@ for (let y = 0; y < 1; ++y) {
 >2 : 2
 
         continue l4;
->l4 : any
+>l4 : any (error)
     }
 }
 
 l5:
->l5 : any
+>l5 : any (error)
 
 for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
@@ -356,7 +356,7 @@ for (let x = 0, y = 1; x < 1; ++x) {
 >1 : 1
 
         break l5;
->l5 : any
+>l5 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -371,12 +371,12 @@ for (let x = 0, y = 1; x < 1; ++x) {
 >2 : 2
 
         continue l5;
->l5 : any
+>l5 : any (error)
     }
 }
 
 l6:
->l6 : any
+>l6 : any (error)
 
 while (1 === 1) {
 >1 === 1 : boolean
@@ -414,7 +414,7 @@ while (1 === 1) {
 >1 : 1
 
         break l6;
->l6 : any
+>l6 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -429,13 +429,13 @@ while (1 === 1) {
 >2 : 2
 
         continue l6;
->l6 : any
+>l6 : any (error)
     }
 
 }
 
 l7:
->l7 : any
+>l7 : any (error)
 
 do {
     let x, y;
@@ -469,7 +469,7 @@ do {
 >1 : 1
 
         break l7;
->l7 : any
+>l7 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -484,7 +484,7 @@ do {
 >2 : 2
 
         continue l7;
->l7 : any
+>l7 : any (error)
     }
 } while (1 === 1)
 >1 === 1 : boolean
@@ -492,7 +492,7 @@ do {
 >1 : 1
 
 l8:
->l8 : any
+>l8 : any (error)
 
 for (let y = 0; y < 1; ++y) {
 >y : number
@@ -534,7 +534,7 @@ for (let y = 0; y < 1; ++y) {
 >1 : 1
 
         break l8;
->l8 : any
+>l8 : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -549,13 +549,13 @@ for (let y = 0; y < 1; ++y) {
 >2 : 2
 
         continue l8;
->l8 : any
+>l8 : any (error)
     }
 }
 
 //===const
 l0_c:
->l0_c : any
+>l0_c : any (error)
 
 for (const x of []) {
 >x : any
@@ -584,7 +584,7 @@ for (const x of []) {
 >1 : 1
 
         break l0_c;
->l0_c : any
+>l0_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -599,12 +599,12 @@ for (const x of []) {
 >2 : 2
 
         continue l0_c;
->l0_c : any
+>l0_c : any (error)
     }
 }
 
 l00_c:
->l00_c : any
+>l00_c : any (error)
 
 for (const x in []) {
 >x : string
@@ -633,7 +633,7 @@ for (const x in []) {
 >"1" : "1"
 
         break l00_c;
->l00_c : any
+>l00_c : any (error)
     }
     if (x == "2") {
 >x == "2" : boolean
@@ -648,12 +648,12 @@ for (const x in []) {
 >"2" : "2"
 
         continue l00_c;
->l00_c : any
+>l00_c : any (error)
     }
 }
 
 l1_c:
->l1_c : any
+>l1_c : any (error)
 
 for (const x = 0; x < 1;) {
 >x : 0
@@ -685,7 +685,7 @@ for (const x = 0; x < 1;) {
 >1 : 1
 
         break l1_c;
->l1_c : any
+>l1_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -700,12 +700,12 @@ for (const x = 0; x < 1;) {
 >2 : 2
 
         continue l1_c;
->l1_c : any
+>l1_c : any (error)
     }
 }
 
 l2_c:
->l2_c : any
+>l2_c : any (error)
 
 while (1 === 1) {
 >1 === 1 : boolean
@@ -739,7 +739,7 @@ while (1 === 1) {
 >1 : 1
 
         break l2_c;
->l2_c : any
+>l2_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -754,12 +754,12 @@ while (1 === 1) {
 >2 : 2
 
         continue l2_c;
->l2_c : any
+>l2_c : any (error)
     }
 }
 
 l3_c:
->l3_c : any
+>l3_c : any (error)
 
 do {
     const x = 1;
@@ -789,7 +789,7 @@ do {
 >1 : 1
 
         break l3_c;
->l3_c : any
+>l3_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -804,7 +804,7 @@ do {
 >2 : 2
 
         continue l3_c;
->l3_c : any
+>l3_c : any (error)
     }
 } while (1 === 1)
 >1 === 1 : boolean
@@ -812,7 +812,7 @@ do {
 >1 : 1
 
 l4_c:
->l4_c : any
+>l4_c : any (error)
 
 for (const y = 0; y < 1;) {
 >y : 0
@@ -848,7 +848,7 @@ for (const y = 0; y < 1;) {
 >1 : 1
 
         break l4_c;
->l4_c : any
+>l4_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -863,12 +863,12 @@ for (const y = 0; y < 1;) {
 >2 : 2
 
         continue l4_c;
->l4_c : any
+>l4_c : any (error)
     }
 }
 
 l5_c:
->l5_c : any
+>l5_c : any (error)
 
 for (const x = 0, y = 1; x < 1;) {
 >x : 0
@@ -906,7 +906,7 @@ for (const x = 0, y = 1; x < 1;) {
 >1 : 1
 
         break l5_c;
->l5_c : any
+>l5_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -921,12 +921,12 @@ for (const x = 0, y = 1; x < 1;) {
 >2 : 2
 
         continue l5_c;
->l5_c : any
+>l5_c : any (error)
     }
 }
 
 l6_c:
->l6_c : any
+>l6_c : any (error)
 
 while (1 === 1) {
 >1 === 1 : boolean
@@ -966,7 +966,7 @@ while (1 === 1) {
 >1 : 1
 
         break l6_c;
->l6_c : any
+>l6_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -981,13 +981,13 @@ while (1 === 1) {
 >2 : 2
 
         continue l6_c;
->l6_c : any
+>l6_c : any (error)
     }
 
 }
 
 l7_c:
->l7_c : any
+>l7_c : any (error)
 
 do {
     const x = 1, y = 1;
@@ -1023,7 +1023,7 @@ do {
 >1 : 1
 
         break l7_c;
->l7_c : any
+>l7_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -1038,7 +1038,7 @@ do {
 >2 : 2
 
         continue l7_c;
->l7_c : any
+>l7_c : any (error)
     }
 } while (1 === 1)
 >1 === 1 : boolean
@@ -1046,7 +1046,7 @@ do {
 >1 : 1
 
 l8_c:
->l8_c : any
+>l8_c : any (error)
 
 for (const y = 0; y < 1;) {
 >y : 0
@@ -1086,7 +1086,7 @@ for (const y = 0; y < 1;) {
 >1 : 1
 
         break l8_c;
->l8_c : any
+>l8_c : any (error)
     }
     if (x == 2) {
 >x == 2 : boolean
@@ -1101,6 +1101,6 @@ for (const y = 0; y < 1;) {
 >2 : 2
 
         continue l8_c;
->l8_c : any
+>l8_c : any (error)
     }
 }

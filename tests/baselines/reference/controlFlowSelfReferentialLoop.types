@@ -71,15 +71,15 @@ function md5(string:string): void {
 >Array : ArrayConstructor
 
     var k,AA,BB,CC,DD,a,b,c,d;
->k : any
->AA : any
->BB : any
->CC : any
->DD : any
->a : any
->b : any
->c : any
->d : any
+>k : any (auto)
+>AA : any (auto)
+>BB : any (auto)
+>CC : any (auto)
+>DD : any (auto)
+>a : any (auto)
+>b : any (auto)
+>c : any (auto)
+>d : any (auto)
 
     var S11=7, S12=12, S13=17, S14=22;
 >S11 : number
@@ -129,21 +129,21 @@ function md5(string:string): void {
 
     a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
 >a = 0x67452301 : 1732584193
->a : any
+>a : any (auto)
 >0x67452301 : 1732584193
 >b = 0xEFCDAB89 : 4023233417
->b : any
+>b : any (auto)
 >0xEFCDAB89 : 4023233417
 >c = 0x98BADCFE : 2562383102
->c : any
+>c : any (auto)
 >0x98BADCFE : 2562383102
 >d = 0x10325476 : 271733878
->d : any
+>d : any (auto)
 >0x10325476 : 271733878
 
     for (k=0;k<x.length;k+=16) {
 >k=0 : 0
->k : any
+>k : any (auto)
 >0 : 0
 >k<x.length : boolean
 >k : number
@@ -156,21 +156,21 @@ function md5(string:string): void {
 
         AA=a; BB=b; CC=c; DD=d;
 >AA=a : number
->AA : any
+>AA : any (auto)
 >a : number
 >BB=b : number
->BB : any
+>BB : any (auto)
 >b : number
 >CC=c : number
->CC : any
+>CC : any (auto)
 >c : number
 >DD=d : number
->DD : any
+>DD : any (auto)
 >d : number
 
         a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
 >a=FF(a,b,c,d,x[k+0], S11,0xD76AA478) : number
->a : any
+>a : any (auto)
 >FF(a,b,c,d,x[k+0], S11,0xD76AA478) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -187,7 +187,7 @@ function md5(string:string): void {
 
         d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
 >d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756) : number
->d : any
+>d : any (auto)
 >FF(d,a,b,c,x[k+1], S12,0xE8C7B756) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -204,7 +204,7 @@ function md5(string:string): void {
 
         c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
 >c=FF(c,d,a,b,x[k+2], S13,0x242070DB) : number
->c : any
+>c : any (auto)
 >FF(c,d,a,b,x[k+2], S13,0x242070DB) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -221,7 +221,7 @@ function md5(string:string): void {
 
         b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
 >b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE) : number
->b : any
+>b : any (auto)
 >FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -238,7 +238,7 @@ function md5(string:string): void {
 
         a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF);
 >a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF) : number
->a : any
+>a : any (auto)
 >FF(a,b,c,d,x[k+4], S11,0xF57C0FAF) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -255,7 +255,7 @@ function md5(string:string): void {
 
         d=FF(d,a,b,c,x[k+5], S12,0x4787C62A);
 >d=FF(d,a,b,c,x[k+5], S12,0x4787C62A) : number
->d : any
+>d : any (auto)
 >FF(d,a,b,c,x[k+5], S12,0x4787C62A) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -272,7 +272,7 @@ function md5(string:string): void {
 
         c=FF(c,d,a,b,x[k+6], S13,0xA8304613);
 >c=FF(c,d,a,b,x[k+6], S13,0xA8304613) : number
->c : any
+>c : any (auto)
 >FF(c,d,a,b,x[k+6], S13,0xA8304613) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -289,7 +289,7 @@ function md5(string:string): void {
 
         b=FF(b,c,d,a,x[k+7], S14,0xFD469501);
 >b=FF(b,c,d,a,x[k+7], S14,0xFD469501) : number
->b : any
+>b : any (auto)
 >FF(b,c,d,a,x[k+7], S14,0xFD469501) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -306,7 +306,7 @@ function md5(string:string): void {
 
         a=FF(a,b,c,d,x[k+8], S11,0x698098D8);
 >a=FF(a,b,c,d,x[k+8], S11,0x698098D8) : number
->a : any
+>a : any (auto)
 >FF(a,b,c,d,x[k+8], S11,0x698098D8) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -323,7 +323,7 @@ function md5(string:string): void {
 
         d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF);
 >d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF) : number
->d : any
+>d : any (auto)
 >FF(d,a,b,c,x[k+9], S12,0x8B44F7AF) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -340,7 +340,7 @@ function md5(string:string): void {
 
         c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1);
 >c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1) : number
->c : any
+>c : any (auto)
 >FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -357,7 +357,7 @@ function md5(string:string): void {
 
         b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE);
 >b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE) : number
->b : any
+>b : any (auto)
 >FF(b,c,d,a,x[k+11],S14,0x895CD7BE) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -374,7 +374,7 @@ function md5(string:string): void {
 
         a=FF(a,b,c,d,x[k+12],S11,0x6B901122);
 >a=FF(a,b,c,d,x[k+12],S11,0x6B901122) : number
->a : any
+>a : any (auto)
 >FF(a,b,c,d,x[k+12],S11,0x6B901122) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -391,7 +391,7 @@ function md5(string:string): void {
 
         d=FF(d,a,b,c,x[k+13],S12,0xFD987193);
 >d=FF(d,a,b,c,x[k+13],S12,0xFD987193) : number
->d : any
+>d : any (auto)
 >FF(d,a,b,c,x[k+13],S12,0xFD987193) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -408,7 +408,7 @@ function md5(string:string): void {
 
         c=FF(c,d,a,b,x[k+14],S13,0xA679438E);
 >c=FF(c,d,a,b,x[k+14],S13,0xA679438E) : number
->c : any
+>c : any (auto)
 >FF(c,d,a,b,x[k+14],S13,0xA679438E) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -425,7 +425,7 @@ function md5(string:string): void {
 
         b=FF(b,c,d,a,x[k+15],S14,0x49B40821);
 >b=FF(b,c,d,a,x[k+15],S14,0x49B40821) : number
->b : any
+>b : any (auto)
 >FF(b,c,d,a,x[k+15],S14,0x49B40821) : number
 >FF : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -442,7 +442,7 @@ function md5(string:string): void {
 
         a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
 >a=GG(a,b,c,d,x[k+1], S21,0xF61E2562) : number
->a : any
+>a : any (auto)
 >GG(a,b,c,d,x[k+1], S21,0xF61E2562) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -459,7 +459,7 @@ function md5(string:string): void {
 
         d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
 >d=GG(d,a,b,c,x[k+6], S22,0xC040B340) : number
->d : any
+>d : any (auto)
 >GG(d,a,b,c,x[k+6], S22,0xC040B340) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -476,7 +476,7 @@ function md5(string:string): void {
 
         c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
 >c=GG(c,d,a,b,x[k+11],S23,0x265E5A51) : number
->c : any
+>c : any (auto)
 >GG(c,d,a,b,x[k+11],S23,0x265E5A51) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -493,7 +493,7 @@ function md5(string:string): void {
 
         b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
 >b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA) : number
->b : any
+>b : any (auto)
 >GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -510,7 +510,7 @@ function md5(string:string): void {
 
         a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
 >a=GG(a,b,c,d,x[k+5], S21,0xD62F105D) : number
->a : any
+>a : any (auto)
 >GG(a,b,c,d,x[k+5], S21,0xD62F105D) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -527,7 +527,7 @@ function md5(string:string): void {
 
         d=GG(d,a,b,c,x[k+10],S22,0x2441453);
 >d=GG(d,a,b,c,x[k+10],S22,0x2441453) : number
->d : any
+>d : any (auto)
 >GG(d,a,b,c,x[k+10],S22,0x2441453) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -544,7 +544,7 @@ function md5(string:string): void {
 
         c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
 >c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681) : number
->c : any
+>c : any (auto)
 >GG(c,d,a,b,x[k+15],S23,0xD8A1E681) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -561,7 +561,7 @@ function md5(string:string): void {
 
         b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8);
 >b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8) : number
->b : any
+>b : any (auto)
 >GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -578,7 +578,7 @@ function md5(string:string): void {
 
         a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6);
 >a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6) : number
->a : any
+>a : any (auto)
 >GG(a,b,c,d,x[k+9], S21,0x21E1CDE6) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -595,7 +595,7 @@ function md5(string:string): void {
 
         d=GG(d,a,b,c,x[k+14],S22,0xC33707D6);
 >d=GG(d,a,b,c,x[k+14],S22,0xC33707D6) : number
->d : any
+>d : any (auto)
 >GG(d,a,b,c,x[k+14],S22,0xC33707D6) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -612,7 +612,7 @@ function md5(string:string): void {
 
         c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87);
 >c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87) : number
->c : any
+>c : any (auto)
 >GG(c,d,a,b,x[k+3], S23,0xF4D50D87) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -629,7 +629,7 @@ function md5(string:string): void {
 
         b=GG(b,c,d,a,x[k+8], S24,0x455A14ED);
 >b=GG(b,c,d,a,x[k+8], S24,0x455A14ED) : number
->b : any
+>b : any (auto)
 >GG(b,c,d,a,x[k+8], S24,0x455A14ED) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -646,7 +646,7 @@ function md5(string:string): void {
 
         a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905);
 >a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905) : number
->a : any
+>a : any (auto)
 >GG(a,b,c,d,x[k+13],S21,0xA9E3E905) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -663,7 +663,7 @@ function md5(string:string): void {
 
         d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8);
 >d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8) : number
->d : any
+>d : any (auto)
 >GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -680,7 +680,7 @@ function md5(string:string): void {
 
         c=GG(c,d,a,b,x[k+7], S23,0x676F02D9);
 >c=GG(c,d,a,b,x[k+7], S23,0x676F02D9) : number
->c : any
+>c : any (auto)
 >GG(c,d,a,b,x[k+7], S23,0x676F02D9) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -697,7 +697,7 @@ function md5(string:string): void {
 
         b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A);
 >b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A) : number
->b : any
+>b : any (auto)
 >GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A) : number
 >GG : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -714,7 +714,7 @@ function md5(string:string): void {
 
         a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942);
 >a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942) : number
->a : any
+>a : any (auto)
 >HH(a,b,c,d,x[k+5], S31,0xFFFA3942) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -731,7 +731,7 @@ function md5(string:string): void {
 
         d=HH(d,a,b,c,x[k+8], S32,0x8771F681);
 >d=HH(d,a,b,c,x[k+8], S32,0x8771F681) : number
->d : any
+>d : any (auto)
 >HH(d,a,b,c,x[k+8], S32,0x8771F681) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -748,7 +748,7 @@ function md5(string:string): void {
 
         c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122);
 >c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122) : number
->c : any
+>c : any (auto)
 >HH(c,d,a,b,x[k+11],S33,0x6D9D6122) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -765,7 +765,7 @@ function md5(string:string): void {
 
         b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C);
 >b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C) : number
->b : any
+>b : any (auto)
 >HH(b,c,d,a,x[k+14],S34,0xFDE5380C) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -782,7 +782,7 @@ function md5(string:string): void {
 
         a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44);
 >a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44) : number
->a : any
+>a : any (auto)
 >HH(a,b,c,d,x[k+1], S31,0xA4BEEA44) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -799,7 +799,7 @@ function md5(string:string): void {
 
         d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9);
 >d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9) : number
->d : any
+>d : any (auto)
 >HH(d,a,b,c,x[k+4], S32,0x4BDECFA9) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -816,7 +816,7 @@ function md5(string:string): void {
 
         c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
 >c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60) : number
->c : any
+>c : any (auto)
 >HH(c,d,a,b,x[k+7], S33,0xF6BB4B60) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -833,7 +833,7 @@ function md5(string:string): void {
 
         b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
 >b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70) : number
->b : any
+>b : any (auto)
 >HH(b,c,d,a,x[k+10],S34,0xBEBFBC70) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -850,7 +850,7 @@ function md5(string:string): void {
 
         a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
 >a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6) : number
->a : any
+>a : any (auto)
 >HH(a,b,c,d,x[k+13],S31,0x289B7EC6) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -867,7 +867,7 @@ function md5(string:string): void {
 
         d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
 >d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA) : number
->d : any
+>d : any (auto)
 >HH(d,a,b,c,x[k+0], S32,0xEAA127FA) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -884,7 +884,7 @@ function md5(string:string): void {
 
         c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
 >c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085) : number
->c : any
+>c : any (auto)
 >HH(c,d,a,b,x[k+3], S33,0xD4EF3085) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -901,7 +901,7 @@ function md5(string:string): void {
 
         b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
 >b=HH(b,c,d,a,x[k+6], S34,0x4881D05) : number
->b : any
+>b : any (auto)
 >HH(b,c,d,a,x[k+6], S34,0x4881D05) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -918,7 +918,7 @@ function md5(string:string): void {
 
         a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
 >a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039) : number
->a : any
+>a : any (auto)
 >HH(a,b,c,d,x[k+9], S31,0xD9D4D039) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -935,7 +935,7 @@ function md5(string:string): void {
 
         d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
 >d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5) : number
->d : any
+>d : any (auto)
 >HH(d,a,b,c,x[k+12],S32,0xE6DB99E5) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -952,7 +952,7 @@ function md5(string:string): void {
 
         c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
 >c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8) : number
->c : any
+>c : any (auto)
 >HH(c,d,a,b,x[k+15],S33,0x1FA27CF8) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -969,7 +969,7 @@ function md5(string:string): void {
 
         b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
 >b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665) : number
->b : any
+>b : any (auto)
 >HH(b,c,d,a,x[k+2], S34,0xC4AC5665) : number
 >HH : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -986,7 +986,7 @@ function md5(string:string): void {
 
         a=II(a,b,c,d,x[k+0], S41,0xF4292244);
 >a=II(a,b,c,d,x[k+0], S41,0xF4292244) : number
->a : any
+>a : any (auto)
 >II(a,b,c,d,x[k+0], S41,0xF4292244) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -1003,7 +1003,7 @@ function md5(string:string): void {
 
         d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
 >d=II(d,a,b,c,x[k+7], S42,0x432AFF97) : number
->d : any
+>d : any (auto)
 >II(d,a,b,c,x[k+7], S42,0x432AFF97) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -1020,7 +1020,7 @@ function md5(string:string): void {
 
         c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
 >c=II(c,d,a,b,x[k+14],S43,0xAB9423A7) : number
->c : any
+>c : any (auto)
 >II(c,d,a,b,x[k+14],S43,0xAB9423A7) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -1037,7 +1037,7 @@ function md5(string:string): void {
 
         b=II(b,c,d,a,x[k+5], S44,0xFC93A039);
 >b=II(b,c,d,a,x[k+5], S44,0xFC93A039) : number
->b : any
+>b : any (auto)
 >II(b,c,d,a,x[k+5], S44,0xFC93A039) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -1054,7 +1054,7 @@ function md5(string:string): void {
 
         a=II(a,b,c,d,x[k+12],S41,0x655B59C3);
 >a=II(a,b,c,d,x[k+12],S41,0x655B59C3) : number
->a : any
+>a : any (auto)
 >II(a,b,c,d,x[k+12],S41,0x655B59C3) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -1071,7 +1071,7 @@ function md5(string:string): void {
 
         d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92);
 >d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92) : number
->d : any
+>d : any (auto)
 >II(d,a,b,c,x[k+3], S42,0x8F0CCC92) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -1088,7 +1088,7 @@ function md5(string:string): void {
 
         c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D);
 >c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D) : number
->c : any
+>c : any (auto)
 >II(c,d,a,b,x[k+10],S43,0xFFEFF47D) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -1105,7 +1105,7 @@ function md5(string:string): void {
 
         b=II(b,c,d,a,x[k+1], S44,0x85845DD1);
 >b=II(b,c,d,a,x[k+1], S44,0x85845DD1) : number
->b : any
+>b : any (auto)
 >II(b,c,d,a,x[k+1], S44,0x85845DD1) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -1122,7 +1122,7 @@ function md5(string:string): void {
 
         a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F);
 >a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F) : number
->a : any
+>a : any (auto)
 >II(a,b,c,d,x[k+8], S41,0x6FA87E4F) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -1139,7 +1139,7 @@ function md5(string:string): void {
 
         d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0);
 >d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0) : number
->d : any
+>d : any (auto)
 >II(d,a,b,c,x[k+15],S42,0xFE2CE6E0) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -1156,7 +1156,7 @@ function md5(string:string): void {
 
         c=II(c,d,a,b,x[k+6], S43,0xA3014314);
 >c=II(c,d,a,b,x[k+6], S43,0xA3014314) : number
->c : any
+>c : any (auto)
 >II(c,d,a,b,x[k+6], S43,0xA3014314) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -1173,7 +1173,7 @@ function md5(string:string): void {
 
         b=II(b,c,d,a,x[k+13],S44,0x4E0811A1);
 >b=II(b,c,d,a,x[k+13],S44,0x4E0811A1) : number
->b : any
+>b : any (auto)
 >II(b,c,d,a,x[k+13],S44,0x4E0811A1) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number
@@ -1190,7 +1190,7 @@ function md5(string:string): void {
 
         a=II(a,b,c,d,x[k+4], S41,0xF7537E82);
 >a=II(a,b,c,d,x[k+4], S41,0xF7537E82) : number
->a : any
+>a : any (auto)
 >II(a,b,c,d,x[k+4], S41,0xF7537E82) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >a : number
@@ -1207,7 +1207,7 @@ function md5(string:string): void {
 
         d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
 >d=II(d,a,b,c,x[k+11],S42,0xBD3AF235) : number
->d : any
+>d : any (auto)
 >II(d,a,b,c,x[k+11],S42,0xBD3AF235) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >d : number
@@ -1224,7 +1224,7 @@ function md5(string:string): void {
 
         c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
 >c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB) : number
->c : any
+>c : any (auto)
 >II(c,d,a,b,x[k+2], S43,0x2AD7D2BB) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >c : number
@@ -1241,7 +1241,7 @@ function md5(string:string): void {
 
         b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
 >b=II(b,c,d,a,x[k+9], S44,0xEB86D391) : number
->b : any
+>b : any (auto)
 >II(b,c,d,a,x[k+9], S44,0xEB86D391) : number
 >II : (a: any, b: any, c: any, d: any, x: any, s: any, ac: any) => number
 >b : number

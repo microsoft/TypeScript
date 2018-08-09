@@ -19,7 +19,7 @@ module Test {
 }
 var func: Test.MyFunc;
 >func : Test.MyFunc
->Test : any
+>Test : any (error)
 
 Test.F(func); // OK
 >Test.F(func) : void

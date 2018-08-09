@@ -8,6 +8,6 @@ var x = new C(); // should be ok
 >C : typeof C
 
 new x(); // should error
->new x() : any
+>new x() : any (error)
 >x : C
 

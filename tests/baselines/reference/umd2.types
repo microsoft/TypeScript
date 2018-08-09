@@ -1,17 +1,17 @@
 === tests/cases/conformance/externalModules/a.ts ===
 Foo.fn();
->Foo.fn() : any
->Foo.fn : any
->Foo : any
->fn : any
+>Foo.fn() : any (error)
+>Foo.fn : any (error)
+>Foo : any (error)
+>fn : any (error)
 
 let x: Foo.Thing;
->x : any
->Foo : any
+>x : any (error)
+>Foo : any (error)
 
 let y: number = x.n;
 >y : number
->x.n : any
->x : any
->n : any
+>x.n : any (error)
+>x : any (error)
+>n : any (error)
 

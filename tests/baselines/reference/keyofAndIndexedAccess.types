@@ -150,15 +150,15 @@ type Q32 = [string, number][2];  // string | number
 
 type Q33 = [string, number][E.A];  // string
 >Q33 : string
->E : any
+>E : any (error)
 
 type Q34 = [string, number][E.B];  // number
 >Q34 : number
->E : any
+>E : any (error)
 
 type Q35 = [string, number][E.C];  // string | number
 >Q35 : string | number
->E : any
+>E : any (error)
 
 type Q36 = [string, number]["0"];  // string
 >Q36 : string
@@ -180,7 +180,7 @@ type Q51 = Dictionary<Shape>[123];  // Shape
 
 type Q52 = Dictionary<Shape>[E.B];  // Shape
 >Q52 : Shape
->E : any
+>E : any (error)
 
 declare let cond: boolean;
 >cond : boolean

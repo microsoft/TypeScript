@@ -10,7 +10,7 @@ interface Base<T, U> {
 // Error, no Base constructor function
 class D0 extends Base<string, string> {
 >D0 : D0
->Base : any
+>Base : any (error)
 }
 
 interface BaseConstructor {

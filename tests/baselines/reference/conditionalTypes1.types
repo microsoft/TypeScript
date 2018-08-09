@@ -355,9 +355,9 @@ function f10(part: DeepReadonly<Part>) {
 
     part.id = part.id;  // Error
 >part.id = part.id : number
->part.id : any
+>part.id : any (error)
 >part : DeepReadonlyObject<Part>
->id : any
+>id : any (error)
 >part.id : number
 >part : DeepReadonlyObject<Part>
 >id : number
@@ -377,13 +377,13 @@ function f10(part: DeepReadonly<Part>) {
 
     part.subparts[0].id = part.subparts[0].id;  // Error
 >part.subparts[0].id = part.subparts[0].id : number
->part.subparts[0].id : any
+>part.subparts[0].id : any (error)
 >part.subparts[0] : DeepReadonlyObject<Part>
 >part.subparts : DeepReadonlyArray<Part>
 >part : DeepReadonlyObject<Part>
 >subparts : DeepReadonlyArray<Part>
 >0 : 0
->id : any
+>id : any (error)
 >part.subparts[0].id : number
 >part.subparts[0] : DeepReadonlyObject<Part>
 >part.subparts : DeepReadonlyArray<Part>
@@ -393,10 +393,10 @@ function f10(part: DeepReadonly<Part>) {
 >id : number
 
     part.updatePart("hello");  // Error
->part.updatePart("hello") : any
->part.updatePart : any
+>part.updatePart("hello") : any (error)
+>part.updatePart : any (error)
 >part : DeepReadonlyObject<Part>
->updatePart : any
+>updatePart : any (error)
 >"hello" : "hello"
 }
 

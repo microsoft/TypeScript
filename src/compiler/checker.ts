@@ -3089,6 +3089,20 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Any) {
+                    if (context.flags & NodeBuilderFlags.DistinguishAnyVariants) {
+                        if (type === errorType) {
+                            context.approximateLength += 8;
+                            return createTypeReferenceNode(createIdentifier("any (error)"), /*typeArguments*/ undefined);
+                        }
+                        if (type === wildcardType) {
+                            context.approximateLength += 10;
+                            return createTypeReferenceNode(createIdentifier("any (wildcard)"), /*typeArguments*/ undefined);
+                        }
+                        if (type === autoType) {
+                            context.approximateLength += 7;
+                            return createTypeReferenceNode(createIdentifier("any (auto)"), /*typeArguments*/ undefined);
+                        }
+                    }
                     context.approximateLength += 3;
                     return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                 }

@@ -11,7 +11,7 @@ enum E {
 
 const x1: E.static = E.static;
 >x1 : E
->E : any
+>E : any (error)
 >E.static : E
 >E : typeof E
 >static : E

@@ -7,19 +7,19 @@ var {h?} = { h?: 1 };
 >1 : 1
 
 var {i}: string | number = { i: 2 };
->i : any
+>i : any (error)
 >{ i: 2 } : { i: number; }
 >i : number
 >2 : 2
 
 var {i1}: string | number| {} = { i1: 2 };
->i1 : any
+>i1 : any (error)
 >{ i1: 2 } : { i1: number; }
 >i1 : number
 >2 : 2
 
 var { f2: {f21} = { f212: "string" } }: any = undefined;
->f2 : any
+>f2 : any (error)
 >f21 : any
 >{ f212: "string" } : { f212: string; f21: any; }
 >f212 : string
@@ -27,13 +27,13 @@ var { f2: {f21} = { f212: "string" } }: any = undefined;
 >undefined : undefined
 
 var {1} = { 1 };
-> : any
->{ 1 } : { 1: any; }
->1 : any
-> : any
+> : any (error)
+>{ 1 } : { 1: any (error); }
+>1 : any (error)
+> : any (error)
 
 var {"prop"} = { "prop": 1 };
-> : any
+> : any (error)
 >{ "prop": 1 } : { "prop": number; }
 >"prop" : number
 >1 : 1

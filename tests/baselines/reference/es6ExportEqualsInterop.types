@@ -3,7 +3,7 @@
 
 // import-equals
 import z1 = require("interface");
->z1 : any
+>z1 : any (error)
 
 import z2 = require("variable");
 >z2 : { a: number; b: number; }
@@ -33,9 +33,9 @@ import z0 = require("class-module");
 >z0 : typeof z0
 
 z1.a;
->z1.a : any
->z1 : any
->a : any
+>z1.a : any (error)
+>z1 : any (error)
+>a : any (error)
 
 z2.a;
 >z2.a : number
@@ -63,9 +63,9 @@ z6.a;
 >a : number
 
 z7.a;
->z7.a : any
+>z7.a : any (error)
 >z7 : () => any
->a : any
+>a : any (error)
 
 z8.a;
 >z8.a : number
@@ -73,9 +73,9 @@ z8.a;
 >a : number
 
 z9.a;
->z9.a : any
+>z9.a : any (error)
 >z9 : typeof z9
->a : any
+>a : any (error)
 
 z0.a;
 >z0.a : number
@@ -84,38 +84,38 @@ z0.a;
 
 // default import
 import x1 from "interface";
->x1 : any
+>x1 : any (error)
 
 import x2 from "variable";
->x2 : any
+>x2 : any (error)
 
 import x3 from "interface-variable";
->x3 : any
+>x3 : any (error)
 
 import x4 from "module";
->x4 : any
+>x4 : any (error)
 
 import x5 from "interface-module";
->x5 : any
+>x5 : any (error)
 
 import x6 from "variable-module";
->x6 : any
+>x6 : any (error)
 
 import x7 from "function";
->x7 : any
+>x7 : any (error)
 
 import x8 from "function-module";
->x8 : any
+>x8 : any (error)
 
 import x9 from "class";
->x9 : any
+>x9 : any (error)
 
 import x0 from "class-module";
->x0 : any
+>x0 : any (error)
 
 // namespace import
 import * as y1 from "interface";
->y1 : any
+>y1 : any (error)
 
 import * as y2 from "variable";
 >y2 : { a: number; b: number; }
@@ -145,9 +145,9 @@ import * as y0 from "class-module";
 >y0 : typeof z0
 
 y1.a;
->y1.a : any
->y1 : any
->a : any
+>y1.a : any (error)
+>y1 : any (error)
+>a : any (error)
 
 y2.a;
 >y2.a : number
@@ -175,9 +175,9 @@ y6.a;
 >a : number
 
 y7.a;
->y7.a : any
+>y7.a : any (error)
 >y7 : () => any
->a : any
+>a : any (error)
 
 y8.a;
 >y8.a : number
@@ -185,9 +185,9 @@ y8.a;
 >a : number
 
 y9.a;
->y9.a : any
+>y9.a : any (error)
 >y9 : typeof z9
->a : any
+>a : any (error)
 
 y0.a;
 >y0.a : number
@@ -196,8 +196,8 @@ y0.a;
 
 // named import
 import { a as a1 } from "interface";
->a : any
->a1 : any
+>a : any (error)
+>a1 : any (error)
 
 import { a as a2 } from "variable";
 >a : number
@@ -220,23 +220,23 @@ import { a as a6 } from "variable-module";
 >a6 : number
 
 import { a as a7 } from "function";
->a : any
->a7 : any
+>a : any (error)
+>a7 : any (error)
 
 import { a as a8 } from "function-module";
 >a : number
 >a8 : number
 
 import { a as a9 } from "class";
->a : any
->a9 : any
+>a : any (error)
+>a9 : any (error)
 
 import { a as a0 } from "class-module";
 >a : number
 >a0 : number
 
 a1;
->a1 : any
+>a1 : any (error)
 
 a2;
 >a2 : number
@@ -254,21 +254,21 @@ a6;
 >a6 : number
 
 a7;
->a7 : any
+>a7 : any (error)
 
 a8;
 >a8 : number
 
 a9;
->a9 : any
+>a9 : any (error)
 
 a0;
 >a0 : number
 
 // named export
 export { a as a1 } from "interface";
->a : any
->a1 : any
+>a : any (error)
+>a1 : any (error)
 
 export { a as a2 } from "variable";
 >a : number
@@ -291,16 +291,16 @@ export { a as a6 } from "variable-module";
 >a6 : number
 
 export { a as a7 } from "function";
->a : any
->a7 : any
+>a : any (error)
+>a7 : any (error)
 
 export { a as a8 } from "function-module";
 >a : number
 >a8 : number
 
 export { a as a9 } from "class";
->a : any
->a9 : any
+>a : any (error)
+>a9 : any (error)
 
 export { a as a0 } from "class-module";
 >a : number

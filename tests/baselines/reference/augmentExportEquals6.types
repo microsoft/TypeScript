@@ -50,7 +50,7 @@ import * as x from "./file1";
 import "./file2";
 let a: x.A;
 >a : x.A
->x : any
+>x : any (error)
 
 let b = a.a;
 >b : number

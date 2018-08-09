@@ -7,46 +7,46 @@ for(var x in {}) {
 }
 
 ONE:
->ONE : any
+>ONE : any (error)
 
 for(var x in {}) {
 >x : string
 >{} : {}
 
     continue ONE;
->ONE : any
+>ONE : any (error)
 }
 
 TWO:
->TWO : any
+>TWO : any (error)
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 for(var x in {}) {
 >x : string
 >{} : {}
 
     continue THREE;
->THREE : any
+>THREE : any (error)
 }
 
 FOUR:
->FOUR : any
+>FOUR : any (error)
 
 for(var x in {}) {
 >x : string
 >{} : {}
 
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     for(var x in {}) {
 >x : string
 >{} : {}
 
         continue FOUR;
->FOUR : any
+>FOUR : any (error)
     }
 }
 
@@ -55,16 +55,16 @@ for(var x in {}) {
 >{} : {}
 
     SIX:
->SIX : any
+>SIX : any (error)
 
     for(var x in {}) continue SIX;
 >x : string
 >{} : {}
->SIX : any
+>SIX : any (error)
 }
 
 SEVEN:
->SEVEN : any
+>SEVEN : any (error)
 
 for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
 >x : string
@@ -73,10 +73,10 @@ for (var x in {}) for (var x in {}) for (var x in {}) continue SEVEN;
 >{} : {}
 >x : string
 >{} : {}
->SEVEN : any
+>SEVEN : any (error)
 
 EIGHT:
->EIGHT : any
+>EIGHT : any (error)
 
 for (var x in {}){
 >x : string
@@ -87,6 +87,6 @@ for (var x in {}){
 >function () { } : () => void
 
     continue EIGHT;
->EIGHT : any
+>EIGHT : any (error)
 }
 

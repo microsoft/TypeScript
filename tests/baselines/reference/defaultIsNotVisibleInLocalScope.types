@@ -4,8 +4,8 @@ export default function () {
 >true : true
 }
 export type X = typeof default;  // expect error
->X : any
->default : any
+>X : any (error)
+>default : any (error)
 
 === tests/cases/compiler/b.ts ===
 export default { a: true }
@@ -14,6 +14,6 @@ export default { a: true }
 >true : true
 
 export type X = typeof default; // expect error
->X : any
->default : any
+>X : any (error)
+>default : any (error)
 

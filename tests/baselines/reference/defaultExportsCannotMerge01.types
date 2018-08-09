@@ -31,26 +31,26 @@ export namespace Decl {
 
 === tests/cases/conformance/es6/modules/m2.ts ===
 import Entity from "m1"
->Entity : any
+>Entity : any (error)
 
 Entity();
->Entity() : any
->Entity : any
+>Entity() : any (error)
+>Entity : any (error)
 
 var x: Entity;
->x : any
+>x : any (error)
 
 var y: Entity.I;
->y : any
->Entity : any
+>y : any (error)
+>Entity : any (error)
 
 Entity.x;
->Entity.x : any
->Entity : any
->x : any
+>Entity.x : any (error)
+>Entity : any (error)
+>x : any (error)
 
 Entity.y;
->Entity.y : any
->Entity : any
->y : any
+>Entity.y : any (error)
+>Entity : any (error)
+>y : any (error)
 

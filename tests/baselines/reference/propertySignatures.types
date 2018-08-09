@@ -33,23 +33,23 @@ var foo4: { (): void; };
 >foo4 : () => void
 
 var test = foo();
->test : any
->foo() : any
->foo : any
+>test : any (error)
+>foo() : any (error)
+>foo : any (error)
 
 // Should be OK
 var foo5: {();};
 >foo5 : () => any
 
 var test = foo5();
->test : any
+>test : any (error)
 >foo5() : any
 >foo5 : () => any
 
 test.bar = 2;
 >test.bar = 2 : 2
->test.bar : any
->test : any
->bar : any
+>test.bar : any (error)
+>test : any (error)
+>bar : any (error)
 >2 : 2
 

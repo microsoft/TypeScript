@@ -6,10 +6,10 @@ $.foo(); // should OK
 >foo : () => void
 
 $2.foo(); // should error
->$2.foo() : any
->$2.foo : any
->$2 : any
->foo : any
+>$2.foo() : any (error)
+>$2.foo : any (error)
+>$2 : any (error)
+>foo : any (error)
 
 === /a/types/jquery/index.d.ts ===
 declare var $: { foo(): void };

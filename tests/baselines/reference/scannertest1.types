@@ -12,14 +12,14 @@ class CharacterInfo {
 >c >= CharacterCodes._0 && c <= CharacterCodes._9 : boolean
 >c >= CharacterCodes._0 : boolean
 >c : number
->CharacterCodes._0 : any
->CharacterCodes : any
->_0 : any
+>CharacterCodes._0 : any (error)
+>CharacterCodes : any (error)
+>_0 : any (error)
 >c <= CharacterCodes._9 : boolean
 >c : number
->CharacterCodes._9 : any
->CharacterCodes : any
->_9 : any
+>CharacterCodes._9 : any (error)
+>CharacterCodes : any (error)
+>_9 : any (error)
     }
 
     public static isHexDigit(c: number): boolean {
@@ -29,8 +29,8 @@ class CharacterInfo {
         return isDecimalDigit(c) ||
 >isDecimalDigit(c) ||               (c >= CharacterCodes.A && c <= CharacterCodes.F) ||               (c >= CharacterCodes.a && c <= CharacterCodes.f) : any
 >isDecimalDigit(c) ||               (c >= CharacterCodes.A && c <= CharacterCodes.F) : any
->isDecimalDigit(c) : any
->isDecimalDigit : any
+>isDecimalDigit(c) : any (error)
+>isDecimalDigit : any (error)
 >c : number
 
                (c >= CharacterCodes.A && c <= CharacterCodes.F) ||
@@ -38,28 +38,28 @@ class CharacterInfo {
 >c >= CharacterCodes.A && c <= CharacterCodes.F : boolean
 >c >= CharacterCodes.A : boolean
 >c : number
->CharacterCodes.A : any
->CharacterCodes : any
->A : any
+>CharacterCodes.A : any (error)
+>CharacterCodes : any (error)
+>A : any (error)
 >c <= CharacterCodes.F : boolean
 >c : number
->CharacterCodes.F : any
->CharacterCodes : any
->F : any
+>CharacterCodes.F : any (error)
+>CharacterCodes : any (error)
+>F : any (error)
 
                (c >= CharacterCodes.a && c <= CharacterCodes.f);
 >(c >= CharacterCodes.a && c <= CharacterCodes.f) : boolean
 >c >= CharacterCodes.a && c <= CharacterCodes.f : boolean
 >c >= CharacterCodes.a : boolean
 >c : number
->CharacterCodes.a : any
->CharacterCodes : any
->a : any
+>CharacterCodes.a : any (error)
+>CharacterCodes : any (error)
+>a : any (error)
 >c <= CharacterCodes.f : boolean
 >c : number
->CharacterCodes.f : any
->CharacterCodes : any
->f : any
+>CharacterCodes.f : any (error)
+>CharacterCodes : any (error)
+>f : any (error)
     }
 
     public static hexValue(c: number): number {
@@ -67,27 +67,27 @@ class CharacterInfo {
 >c : number
 
         Debug.assert(isHexDigit(c));
->Debug.assert(isHexDigit(c)) : any
->Debug.assert : any
->Debug : any
->assert : any
->isHexDigit(c) : any
->isHexDigit : any
+>Debug.assert(isHexDigit(c)) : any (error)
+>Debug.assert : any (error)
+>Debug : any (error)
+>assert : any (error)
+>isHexDigit(c) : any (error)
+>isHexDigit : any (error)
 >c : number
 
         return isDecimalDigit(c)
 >isDecimalDigit(c)            ? (c - CharacterCodes._0)            : (c >= CharacterCodes.A && c <= CharacterCodes.F)                ? c - CharacterCodes.A + 10                : c - CharacterCodes.a + 10 : number
->isDecimalDigit(c) : any
->isDecimalDigit : any
+>isDecimalDigit(c) : any (error)
+>isDecimalDigit : any (error)
 >c : number
 
             ? (c - CharacterCodes._0)
 >(c - CharacterCodes._0) : number
 >c - CharacterCodes._0 : number
 >c : number
->CharacterCodes._0 : any
->CharacterCodes : any
->_0 : any
+>CharacterCodes._0 : any (error)
+>CharacterCodes : any (error)
+>_0 : any (error)
 
             : (c >= CharacterCodes.A && c <= CharacterCodes.F)
 >(c >= CharacterCodes.A && c <= CharacterCodes.F)                ? c - CharacterCodes.A + 10                : c - CharacterCodes.a + 10 : number
@@ -95,31 +95,31 @@ class CharacterInfo {
 >c >= CharacterCodes.A && c <= CharacterCodes.F : boolean
 >c >= CharacterCodes.A : boolean
 >c : number
->CharacterCodes.A : any
->CharacterCodes : any
->A : any
+>CharacterCodes.A : any (error)
+>CharacterCodes : any (error)
+>A : any (error)
 >c <= CharacterCodes.F : boolean
 >c : number
->CharacterCodes.F : any
->CharacterCodes : any
->F : any
+>CharacterCodes.F : any (error)
+>CharacterCodes : any (error)
+>F : any (error)
 
                 ? c - CharacterCodes.A + 10
 >c - CharacterCodes.A + 10 : number
 >c - CharacterCodes.A : number
 >c : number
->CharacterCodes.A : any
->CharacterCodes : any
->A : any
+>CharacterCodes.A : any (error)
+>CharacterCodes : any (error)
+>A : any (error)
 >10 : 10
 
                 : c - CharacterCodes.a + 10;
 >c - CharacterCodes.a + 10 : number
 >c - CharacterCodes.a : number
 >c : number
->CharacterCodes.a : any
->CharacterCodes : any
->a : any
+>CharacterCodes.a : any (error)
+>CharacterCodes : any (error)
+>a : any (error)
 >10 : 10
     }
 }

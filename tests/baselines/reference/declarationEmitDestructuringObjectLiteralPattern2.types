@@ -1,12 +1,12 @@
 === tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
->a : any
+>a : any (error)
 >x11 : number
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >y11 : string
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >z11 : boolean
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
 >a : number

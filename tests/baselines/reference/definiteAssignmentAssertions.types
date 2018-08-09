@@ -136,7 +136,7 @@ function f4() {
 >f4 : () => void
 
     let a!;
->a : any
+>a : any (auto)
 
     let b! = 1;
 >b : number

@@ -134,10 +134,10 @@ var str: string;
 >str : string
 
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
-><numOrStr is : any
->is : any
+><numOrStr is : any (error)
+>is : any (error)
 >string>(numOrStr === undefined) : boolean
->string : any
+>string : any (error)
 >(numOrStr === undefined) : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number
@@ -150,13 +150,13 @@ if(<numOrStr is string>(numOrStr === undefined)) { // Error
 }
 
 if((numOrStr === undefined) as numOrStr is string) { // Error
->(numOrStr === undefined) as numOrStr : any
+>(numOrStr === undefined) as numOrStr : any (error)
 >(numOrStr === undefined) : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number
 >undefined : undefined
->is : any
->string : any
+>is : any (error)
+>string : any (error)
 }
 
 

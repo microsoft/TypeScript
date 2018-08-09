@@ -2,7 +2,7 @@
 interface Comparable {}
 class A extends Comparable {}
 >A : A
->Comparable : any
+>Comparable : any (error)
 
 class B implements Comparable {}
 >B : B
@@ -10,7 +10,7 @@ class B implements Comparable {}
 interface Comparable2<T> {}
 class A2<T> extends Comparable2<T> {}
 >A2 : A2<T>
->Comparable2 : any
+>Comparable2 : any (error)
 
 class B2<T> implements Comparable2<T> {}
 >B2 : B2<T>

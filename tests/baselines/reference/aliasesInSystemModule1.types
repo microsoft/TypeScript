@@ -1,57 +1,57 @@
 === tests/cases/compiler/aliasesInSystemModule1.ts ===
 import alias = require('foo');
->alias : any
+>alias : any (error)
 
 import cls = alias.Class;
->cls : any
->alias : any
->Class : any
+>cls : any (error)
+>alias : any (error)
+>Class : any (error)
 
 export import cls2 = alias.Class;
->cls2 : any
->alias : any
->Class : any
+>cls2 : any (error)
+>alias : any (error)
+>Class : any (error)
 
 let x = new alias.Class();
->x : any
->new alias.Class() : any
->alias.Class : any
->alias : any
->Class : any
+>x : any (error)
+>new alias.Class() : any (error)
+>alias.Class : any (error)
+>alias : any (error)
+>Class : any (error)
 
 let y = new cls();
->y : any
->new cls() : any
->cls : any
+>y : any (error)
+>new cls() : any (error)
+>cls : any (error)
 
 let z = new cls2();
->z : any
->new cls2() : any
->cls2 : any
+>z : any (error)
+>new cls2() : any (error)
+>cls2 : any (error)
 
 module M {
 >M : typeof M
 
   export import cls = alias.Class;
->cls : any
->alias : any
->Class : any
+>cls : any (error)
+>alias : any (error)
+>Class : any (error)
 
   let x = new alias.Class();
->x : any
->new alias.Class() : any
->alias.Class : any
->alias : any
->Class : any
+>x : any (error)
+>new alias.Class() : any (error)
+>alias.Class : any (error)
+>alias : any (error)
+>Class : any (error)
 
   let y = new cls(); 
->y : any
->new cls() : any
->cls : any
+>y : any (error)
+>new cls() : any (error)
+>cls : any (error)
 
   let z = new cls2();
->z : any
->new cls2() : any
->cls2 : any
+>z : any (error)
+>new cls2() : any (error)
+>cls2 : any (error)
 }
   

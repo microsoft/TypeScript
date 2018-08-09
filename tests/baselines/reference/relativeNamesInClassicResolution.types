@@ -1,6 +1,6 @@
 === tests/cases/compiler/somefolder/a.ts ===
 import {x} from "./b"
->x : any
+>x : any (error)
 
 === tests/cases/compiler/b.ts ===
 export let x = 1;

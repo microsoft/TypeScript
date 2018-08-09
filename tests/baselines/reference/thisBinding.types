@@ -19,9 +19,9 @@ module M {
 >x : I
 
 	    x.e;  // e not found
->x.e : any
+>x.e : any (error)
 >x : I
->e : any
+>e : any (error)
 
 	    x.z;  // ok 
 >x.z : any

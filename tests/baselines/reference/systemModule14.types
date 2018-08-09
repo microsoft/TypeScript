@@ -1,22 +1,22 @@
 === tests/cases/compiler/systemModule14.ts ===
 function foo() {
->foo : () => any
+>foo : () => any (error)
 
     return a;
->a : any
+>a : any (error)
 }
 
 import {a} from "foo";
->a : any
+>a : any (error)
 
 export {foo}
->foo : () => any
+>foo : () => any (error)
 
 var x = 1;
 >x : number
 >1 : 1
 
 export {foo as b}
->foo : () => any
->b : () => any
+>foo : () => any (error)
+>b : () => any (error)
 

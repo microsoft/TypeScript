@@ -27,7 +27,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 
 function foo1({ name: nameA }: Robot) {
 >foo1 : ({ name: nameA }: Robot) => void
->name : any
+>name : any (error)
 >nameA : string
 
     console.log(nameA);
@@ -39,9 +39,9 @@ function foo1({ name: nameA }: Robot) {
 }
 function foo2({ name: nameB, skill: skillB }: Robot) {
 >foo2 : ({ name: nameB, skill: skillB }: Robot) => void
->name : any
+>name : any (error)
 >nameB : string
->skill : any
+>skill : any (error)
 >skillB : string
 
     console.log(nameB);

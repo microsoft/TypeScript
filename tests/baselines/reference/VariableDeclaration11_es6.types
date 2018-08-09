@@ -3,5 +3,5 @@
 >"use strict" : "use strict"
 
 let
->let : any
+>let : any (error)
 

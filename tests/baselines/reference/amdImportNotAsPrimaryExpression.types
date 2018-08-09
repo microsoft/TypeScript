@@ -4,17 +4,17 @@ import foo = require("./foo_0");
 
 // None of the below should cause a runtime dependency on foo_0
 import f = foo.M1;
->f : any
+>f : any (error)
 >foo : typeof foo
->M1 : any
+>M1 : any (error)
 
 var i: f.I2;
 >i : f.I2
->f : any
+>f : any (error)
 
 var x: foo.C1 = <{m1: number}>{};
 >x : foo.C1
->foo : any
+>foo : any (error)
 ><{m1: number}>{} : { m1: number; }
 >m1 : number
 >{} : {}
@@ -30,13 +30,13 @@ var y: typeof foo.C1.s1 = false;
 
 var z: foo.M1.I2;
 >z : f.I2
->foo : any
->M1 : any
+>foo : any (error)
+>M1 : any (error)
 
 var e: number = <foo.E1>0;
 >e : number
 ><foo.E1>0 : foo.E1
->foo : any
+>foo : any (error)
 >0 : 0
 
 === tests/cases/conformance/externalModules/foo_0.ts ===

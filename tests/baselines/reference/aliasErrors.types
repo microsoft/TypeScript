@@ -27,32 +27,32 @@ import beez = foo.bar;
 >bar : typeof provide.bar
 
 import m = no;
->m : any
->no : any
+>m : any (error)
+>no : any (error)
 
 import m2 = no.mod;
->m2 : any
->no : any
->mod : any
+>m2 : any (error)
+>no : any (error)
+>mod : any (error)
 
 import n = 5;
->n : any
-> : any
+>n : any (error)
+> : any (error)
 >5 : 5
 
 import o = "s";
->o : any
-> : any
+>o : any (error)
+> : any (error)
 >"s" : "s"
 
 import q = null;
->q : any
-> : any
+>q : any (error)
+> : any (error)
 >null : null
 
 import r = undefined;
->r : any
->undefined : any
+>r : any (error)
+>undefined : any (error)
 
 
 var p = new provide.Provide();
@@ -74,15 +74,15 @@ function use() {
 
   var p1: provide.Provide; 
 >p1 : provide.Provide
->provide : any
+>provide : any (error)
 
   var p2: foo.Provide;
 >p2 : provide.Provide
->foo : any
+>foo : any (error)
 
   var p3:booz.bar;
->p3 : any
->booz : any
+>p3 : any (error)
+>booz : any (error)
 
   var p22 = new provide.Provide();
 >p22 : provide.Provide

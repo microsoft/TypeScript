@@ -30,7 +30,7 @@ export { zzz as default };
 
 === tests/cases/compiler/index.ts ===
 import zzz from "./a";
->zzz : any
+>zzz : any (error)
 
 const x: zzz = { x: "" };
 >x : zzz
@@ -39,7 +39,7 @@ const x: zzz = { x: "" };
 >"" : ""
 
 zzz;
->zzz : any
+>zzz : any (error)
 
 import originalZZZ from "./b";
 >originalZZZ : 123
@@ -48,6 +48,6 @@ originalZZZ;
 >originalZZZ : 123
 
 const y: originalZZZ = x;
->y : any
+>y : any (error)
 >x : zzz
 

@@ -4,6 +4,6 @@
 
 arguments = 1;
 >arguments = 1 : 1
->arguments : any
+>arguments : any (error)
 >1 : 1
 

@@ -6,7 +6,7 @@ function f1() {
 >f1 : () => void
 
     let x = [];  // Implicit any[] error in some locations
->x : any[]
+>x : any (auto)[]
 >[] : undefined[]
 
     let y = x;   // Implicit any[] error
@@ -29,11 +29,11 @@ function f2() {
 >f2 : () => void
 
     let x;       // Implicit any[] error in some locations
->x : any
+>x : any (auto)
 
     x = [];
 >x = [] : undefined[]
->x : any
+>x : any (auto)
 >[] : undefined[]
 
     let y = x;   // Implicit any[] error
@@ -56,7 +56,7 @@ function f3() {
 >f3 : () => void
 
     let x = [];  // Implicit any[] error in some locations
->x : any[]
+>x : any (auto)[]
 >[] : undefined[]
 
     x.push(5);
@@ -78,11 +78,11 @@ function f4() {
 >f4 : () => void
 
     let x;
->x : any
+>x : any (auto)
 
     x = [5, "hello"];  // Non-evolving array
 >x = [5, "hello"] : (string | number)[]
->x : any
+>x : any (auto)
 >[5, "hello"] : (string | number)[]
 >5 : 5
 >"hello" : "hello"
@@ -116,7 +116,7 @@ function f6() {
 >f6 : () => void
 
     let x;
->x : any
+>x : any (auto)
 
     if (cond()) {
 >cond() : boolean
@@ -124,7 +124,7 @@ function f6() {
 
         x = [];
 >x = [] : undefined[]
->x : any
+>x : any (auto)
 >[] : undefined[]
 
         x.push(5);
@@ -144,7 +144,7 @@ function f6() {
     else {
         x = [true];  // Non-evolving array
 >x = [true] : boolean[]
->x : any
+>x : any (auto)
 >[true] : boolean[]
 >true : true
     }
@@ -152,7 +152,7 @@ function f6() {
 >x : (string | number)[] | boolean[]
 
     x.push(99);  // Error
->x.push(99) : any
+>x.push(99) : any (error)
 >x.push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
 >x : (string | number)[] | boolean[]
 >push : ((...items: (string | number)[]) => number) | ((...items: boolean[]) => number)
@@ -163,7 +163,7 @@ function f7() {
 >f7 : () => void
 
     let x = [];       // x has evolving array value
->x : any[]
+>x : any (auto)[]
 >[] : undefined[]
 
     x.push(5);
@@ -196,7 +196,7 @@ function f8() {
 >f8 : () => void
 
     const x = [];  // Implicit any[] error in some locations
->x : any[]
+>x : any (auto)[]
 >[] : undefined[]
 
     x.push(5);

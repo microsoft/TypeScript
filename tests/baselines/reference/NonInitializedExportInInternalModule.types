@@ -4,7 +4,7 @@ module Inner {
 
     var;
     let;
->let : any
+>let : any (error)
 
     const;
     

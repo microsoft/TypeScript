@@ -1,15 +1,15 @@
 === tests/cases/conformance/es6/templates/templateStringInModuleName.ts ===
 declare module `M1` {
->declare : any
->module `M1` : any
->module : any
+>declare : any (error)
+>module `M1` : any (error)
+>module : any (error)
 >`M1` : "M1"
 }
 
 declare module `M${2}` {
->declare : any
->module `M${2}` : any
->module : any
+>declare : any (error)
+>module `M${2}` : any (error)
+>module : any (error)
 >`M${2}` : string
 >2 : 2
 }

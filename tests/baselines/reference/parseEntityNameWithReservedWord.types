@@ -5,7 +5,7 @@ enum Bool { false }
 
 const x: Bool.false = Bool.false;
 >x : Bool
->Bool : any
+>Bool : any (error)
 >Bool.false : Bool
 >Bool : typeof Bool
 >false : Bool

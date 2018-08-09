@@ -2,7 +2,7 @@
 //requireOfAnEmptyFile1
 
 import fs = require('./requireOfAnEmptyFile1_b');
->fs : any
+>fs : any (error)
 
 === tests/cases/compiler/requireOfAnEmptyFile1_b.ts ===
 

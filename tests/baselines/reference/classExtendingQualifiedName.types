@@ -8,8 +8,8 @@ module M {
 
     class D extends M.C {
 >D : D
->M.C : any
+>M.C : any (error)
 >M : typeof M
->C : any
+>C : any (error)
     }
 }

@@ -130,7 +130,7 @@ for(var aModule: typeof M = M;;){}
 
 for(var aClassInModule: M.A = new M.A();;){}
 >aClassInModule : M.A
->M : any
+>M : any (error)
 >new M.A() : M.A
 >M.A : typeof M.A
 >M : typeof M

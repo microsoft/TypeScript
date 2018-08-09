@@ -65,8 +65,8 @@ for (var l in arr) {
    // error in the body
    k[l] = 1;
 >k[l] = 1 : 1
->k[l] : any
->k : any
+>k[l] : any (error)
+>k : any (error)
 >l : string
 >1 : 1
 }

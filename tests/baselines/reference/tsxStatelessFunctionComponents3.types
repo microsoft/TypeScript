@@ -7,7 +7,7 @@ const Foo = (props: any) => <div/>;
 >(props: any) => <div/> : (props: any) => JSX.Element
 >props : any
 ><div/> : JSX.Element
->div : any
+>div : any (error)
 
 // Should be OK
 const foo = <Foo />;
@@ -19,24 +19,24 @@ const foo = <Foo />;
 // Should be OK
 var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
 >MainMenu : React.StatelessComponent<{}>
->React : any
+>React : any (error)
 >(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: React.ReactNode; }) => JSX.Element
 >props : { children?: React.ReactNode; }
 >(<div>    <h3>Main Menu</h3></div>) : JSX.Element
 ><div>    <h3>Main Menu</h3></div> : JSX.Element
->div : any
+>div : any (error)
 
     <h3>Main Menu</h3>
 ><h3>Main Menu</h3> : JSX.Element
->h3 : any
->h3 : any
+>h3 : any (error)
+>h3 : any (error)
 
 </div>);
->div : any
+>div : any (error)
 
 var App: React.StatelessComponent<{ children }> = ({children}) => (
 >App : React.StatelessComponent<{ children: any; }>
->React : any
+>React : any (error)
 >children : any
 >({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >children : any
@@ -44,13 +44,13 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 
     <div >
 ><div >        <MainMenu/>	</div> : JSX.Element
->div : any
+>div : any (error)
 
         <MainMenu/>
 ><MainMenu/> : JSX.Element
 >MainMenu : React.StatelessComponent<{}>
 
 	</div>
->div : any
+>div : any (error)
 
 );

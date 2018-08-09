@@ -3,32 +3,32 @@ function runTests() {
 >runTests : () => void
 
     var outfile = new Harness.Compiler.WriterAggregator()
->outfile : any
->new Harness.Compiler.WriterAggregator() : any
->Harness.Compiler.WriterAggregator : any
->Harness.Compiler : any
->Harness : any
->Compiler : any
->WriterAggregator : any
+>outfile : any (error)
+>new Harness.Compiler.WriterAggregator() : any (error)
+>Harness.Compiler.WriterAggregator : any (error)
+>Harness.Compiler : any (error)
+>Harness : any (error)
+>Compiler : any (error)
+>WriterAggregator : any (error)
 
       , outerr = new Harness.Compiler.WriterAggregator()
->outerr : any
->new Harness.Compiler.WriterAggregator() : any
->Harness.Compiler.WriterAggregator : any
->Harness.Compiler : any
->Harness : any
->Compiler : any
->WriterAggregator : any
+>outerr : any (error)
+>new Harness.Compiler.WriterAggregator() : any (error)
+>Harness.Compiler.WriterAggregator : any (error)
+>Harness.Compiler : any (error)
+>Harness : any (error)
+>Compiler : any (error)
+>WriterAggregator : any (error)
 
       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
->compiler : any
-><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : any
->TypeScript : any
->new TypeScript.TypeScriptCompiler(outerr) : any
->TypeScript.TypeScriptCompiler : any
->TypeScript : any
->TypeScriptCompiler : any
->outerr : any
+>compiler : any (error)
+><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : any (error)
+>TypeScript : any (error)
+>new TypeScript.TypeScriptCompiler(outerr) : any (error)
+>TypeScript.TypeScriptCompiler : any (error)
+>TypeScript : any (error)
+>TypeScriptCompiler : any (error)
+>outerr : any (error)
 
       , code;
 >code : any

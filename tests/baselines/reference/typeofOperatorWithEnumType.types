@@ -88,12 +88,12 @@ enum z { };
 >z : z
 
 z: typeof ENUM;
->z : any
+>z : any (error)
 >typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 
 z: typeof ENUM1;
->z : any
+>z : any (error)
 >typeof ENUM1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1 : typeof ENUM1
 

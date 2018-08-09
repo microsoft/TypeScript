@@ -12,8 +12,8 @@ declare namespace JSX {
     }
 }
 export default <div static={true} />;
-><div static={true} /> : any
->div : any
+><div static={true} /> : any (error)
+>div : any (error)
 >static : boolean
 >true : true
 

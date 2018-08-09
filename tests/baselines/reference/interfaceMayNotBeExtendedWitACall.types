@@ -2,8 +2,8 @@
 interface color {}
 
 interface blue extends color() { // error
->color() : any
->color : any
+>color() : any (error)
+>color : any (error)
 
 }
 

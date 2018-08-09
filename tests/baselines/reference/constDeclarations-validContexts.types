@@ -36,8 +36,8 @@ with (obj) {
 >obj : any
 
     const c5 = 0;
->c5 : any
->0 : any
+>c5 : any (error)
+>0 : any (error)
 }
 
 for (var i = 0; i < 10; i++) {
@@ -67,7 +67,7 @@ if (true) {
 >true : true
 
     label: const c8 = 0;
->label : any
+>label : any (error)
 >c8 : 0
 >0 : 0
 }
@@ -76,9 +76,9 @@ while (false) {
 >false : false
 
     label2: label3: label4: const c9 = 0;
->label2 : any
->label3 : any
->label4 : any
+>label2 : any (error)
+>label3 : any (error)
+>label4 : any (error)
 >c9 : 0
 >0 : 0
 }
@@ -133,7 +133,7 @@ switch (0) {
 >0 : 0
 
         label17: const c17 = 0;
->label17 : any
+>label17 : any (error)
 >c17 : 0
 >0 : 0
     }

@@ -56,7 +56,7 @@ for (var a in x) {
 
     // Should yield an implicit 'any' error.
     var b;
->b : any
+>b : any (auto)
 
     var c = a || b;
 >c : string

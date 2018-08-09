@@ -109,7 +109,7 @@ export module import_public {
 >v_private : im_private_c_private
 
     import im_private_i_private = m_private.i_private;
->im_private_i_private : any
+>im_private_i_private : any (error)
 >m_private : typeof m_private
 >i_private : im_private_i_private
 
@@ -119,9 +119,9 @@ export module import_public {
 >mi_private : typeof im_private_mi_private
 
     import im_private_mu_private = m_private.mu_private;
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 >m_private : typeof m_private
->mu_private : any
+>mu_private : any (error)
 
     // Usage of above decls
     var privateUse_im_private_c_private = new im_private_c_private();
@@ -186,11 +186,11 @@ export module import_public {
 
     var privateUse_im_private_mu_private: im_private_mu_private.i;
 >privateUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
     export var publicUse_im_private_mu_private: im_private_mu_private.i;
 >publicUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
 
     // No Privacy errors - importing public elements
@@ -215,7 +215,7 @@ export module import_public {
 >v_public : number
 
     import im_private_i_public = m_public.i_public;
->im_private_i_public : any
+>im_private_i_public : any (error)
 >m_public : typeof m_public
 >i_public : im_private_i_public
 
@@ -225,9 +225,9 @@ export module import_public {
 >mi_public : typeof im_private_mi_public
 
     import im_private_mu_public = m_public.mu_public;
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 >m_public : typeof m_public
->mu_public : any
+>mu_public : any (error)
 
     // Usage of above decls
     var privateUse_im_private_c_public = new im_private_c_public();
@@ -292,11 +292,11 @@ export module import_public {
 
     var privateUse_im_private_mu_public: im_private_mu_public.i;
 >privateUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 
     export var publicUse_im_private_mu_public: im_private_mu_public.i;
 >publicUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 }
 
 module import_private {
@@ -324,7 +324,7 @@ module import_private {
 >v_private : im_private_c_private
 
     import im_private_i_private = m_private.i_private;
->im_private_i_private : any
+>im_private_i_private : any (error)
 >m_private : typeof m_private
 >i_private : im_private_i_private
 
@@ -334,9 +334,9 @@ module import_private {
 >mi_private : typeof im_private_mi_private
 
     import im_private_mu_private = m_private.mu_private;
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 >m_private : typeof m_private
->mu_private : any
+>mu_private : any (error)
 
     // Usage of above decls
     var privateUse_im_private_c_private = new im_private_c_private();
@@ -401,11 +401,11 @@ module import_private {
 
     var privateUse_im_private_mu_private: im_private_mu_private.i;
 >privateUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
     export var publicUse_im_private_mu_private: im_private_mu_private.i;
 >publicUse_im_private_mu_private : im_private_mu_private.i
->im_private_mu_private : any
+>im_private_mu_private : any (error)
 
     // No privacy Error - importing public elements
     import im_private_c_public = m_public.c_public;
@@ -429,7 +429,7 @@ module import_private {
 >v_public : number
 
     import im_private_i_public = m_public.i_public;
->im_private_i_public : any
+>im_private_i_public : any (error)
 >m_public : typeof m_public
 >i_public : im_private_i_public
 
@@ -439,9 +439,9 @@ module import_private {
 >mi_public : typeof im_private_mi_public
 
     import im_private_mu_public = m_public.mu_public;
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 >m_public : typeof m_public
->mu_public : any
+>mu_public : any (error)
 
     // Usage of above decls
     var privateUse_im_private_c_public = new im_private_c_public();
@@ -506,9 +506,9 @@ module import_private {
 
     var privateUse_im_private_mu_public: im_private_mu_public.i;
 >privateUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 
     export var publicUse_im_private_mu_public: im_private_mu_public.i;
 >publicUse_im_private_mu_public : im_private_mu_public.i
->im_private_mu_public : any
+>im_private_mu_public : any (error)
 }

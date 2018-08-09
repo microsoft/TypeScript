@@ -31,7 +31,7 @@ module M {
 >M.C : typeof M.C
 >M : typeof M
 >C : typeof M.C
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : any (error)
+>Symbol : any (error)
+>iterator : any (error)
 

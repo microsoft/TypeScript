@@ -15,43 +15,43 @@ declare namespace JSX {
 // didn't work
 <div>{() => <div text="wat" />}</div>;
 ><div>{() => <div text="wat" />}</div> : JSX.Element
->div : any
+>div : any (error)
 >() => <div text="wat" /> : () => JSX.Element
 ><div text="wat" /> : JSX.Element
->div : any
+>div : any (error)
 >text : string
->div : any
+>div : any (error)
 
 // didn't work
 <div>{x => <div text="wat" />}</div>;
 ><div>{x => <div text="wat" />}</div> : JSX.Element
->div : any
+>div : any (error)
 >x => <div text="wat" /> : (x: any) => JSX.Element
 >x : any
 ><div text="wat" /> : JSX.Element
->div : any
+>div : any (error)
 >text : string
->div : any
+>div : any (error)
 
 // worked
 <div>{() => (<div text="wat" />)}</div>;
 ><div>{() => (<div text="wat" />)}</div> : JSX.Element
->div : any
+>div : any (error)
 >() => (<div text="wat" />) : () => JSX.Element
 >(<div text="wat" />) : JSX.Element
 ><div text="wat" /> : JSX.Element
->div : any
+>div : any (error)
 >text : string
->div : any
+>div : any (error)
 
 // worked (!)
 <div>{() => <div text="wat"></div>}</div>;
 ><div>{() => <div text="wat"></div>}</div> : JSX.Element
->div : any
+>div : any (error)
 >() => <div text="wat"></div> : () => JSX.Element
 ><div text="wat"></div> : JSX.Element
->div : any
+>div : any (error)
 >text : string
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 

@@ -1,7 +1,7 @@
 === tests/cases/compiler/typeofInObjectLiteralType.ts ===
 var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
->a : { b: number; c: any; }
+>a : { b: number; c: any (error); }
 >b : number
->c : any
->b : any
+>c : any (error)
+>b : any (error)
 

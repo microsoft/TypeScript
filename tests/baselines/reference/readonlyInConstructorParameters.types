@@ -7,11 +7,11 @@ class C {
 }
 new C(1).x = 2;
 >new C(1).x = 2 : 2
->new C(1).x : any
+>new C(1).x : any (error)
 >new C(1) : C
 >C : typeof C
 >1 : 1
->x : any
+>x : any (error)
 >2 : 2
 
 class E {

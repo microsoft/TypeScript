@@ -32,10 +32,10 @@ if (typeof a === 'number') {
 >'number' : "number"
 
     a.toFixed(); // error, never
->a.toFixed() : any
->a.toFixed : any
+>a.toFixed() : any (error)
+>a.toFixed : any (error)
 >a : never
->toFixed : any
+>toFixed : any (error)
 }
 
 var b: object | null
@@ -56,9 +56,9 @@ if (typeof b === 'object') {
 
 } else {
    b.toString(); // error, never
->b.toString() : any
->b.toString : any
+>b.toString() : any (error)
+>b.toString : any (error)
 >b : never
->toString : any
+>toString : any (error)
 }
 

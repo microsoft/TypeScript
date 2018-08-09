@@ -1,8 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts ===
 if (1) /regexp/a.foo();
 >1 : 1
->/regexp/a.foo() : any
->/regexp/a.foo : any
+>/regexp/a.foo() : any (error)
+>/regexp/a.foo : any (error)
 >/regexp/a : RegExp
->foo : any
+>foo : any (error)
 

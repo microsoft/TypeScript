@@ -171,7 +171,7 @@ f6({ x: 1, y: 1 });
 // (arg?: { a: { x?: number, y?: number } }) => void
 function f7({ a: { x = 0, y = 0 } } = { a: {} }) { }
 >f7 : ({ a: { x, y } }?: { a: { x?: number; y?: number; }; }) => void
->a : any
+>a : any (error)
 >x : number
 >0 : 0
 >y : number

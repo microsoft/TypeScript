@@ -13,9 +13,9 @@ class C extends (class {} as new () => Readonly<{ attrib: number }>) {
 
         this.attrib = 2
 >this.attrib = 2 : 2
->this.attrib : any
+>this.attrib : any (error)
 >this : this
->attrib : any
+>attrib : any (error)
 >2 : 2
     }
 }

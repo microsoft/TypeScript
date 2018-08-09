@@ -3,5 +3,5 @@ function * foo(a = yield => yield) {
 >foo : (a?: any) => any
 >a : any
 >yield : any
->yield : any
+>yield : any (error)
 }

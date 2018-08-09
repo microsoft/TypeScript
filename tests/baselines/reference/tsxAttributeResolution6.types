@@ -16,32 +16,32 @@ declare module JSX {
 // Error
 <test1 s />;
 ><test1 s /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >s : true
 
 <test1 n='true' />;
 ><test1 n='true' /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >n : string
 
 <test2 />;
 ><test2 /> : JSX.Element
->test2 : any
+>test2 : any (error)
 
 // OK
 <test1 n />;
 ><test1 n /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >n : true
 
 <test1 n={false} />;
 ><test1 n={false} /> : JSX.Element
->test1 : any
+>test1 : any (error)
 >n : false
 >false : false
 
 <test2 n />;
 ><test2 n /> : JSX.Element
->test2 : any
+>test2 : any (error)
 >n : true
 

@@ -4,6 +4,6 @@ var x = "filename";
 >"filename" : "filename"
 
 import foo = require(x); // invalid
->foo : any
->x : any
+>foo : any (error)
+>x : any (error)
 

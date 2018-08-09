@@ -1,11 +1,11 @@
 === tests/cases/compiler/objectLiteralWithSemicolons4.ts ===
 var v = {
->v : { a: any; }
->{  a : { a: any; }
+>v : { a: any (error); }
+>{  a : { a: any (error); }
 
   a
->a : any
+>a : any (error)
 
 ;
-> : any
+> : any (error)
 

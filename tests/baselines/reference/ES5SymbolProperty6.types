@@ -4,9 +4,9 @@ class C {
 
     [Symbol.iterator]() { }
 >[Symbol.iterator] : () => void
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : any (error)
+>Symbol : any (error)
+>iterator : any (error)
 }
 
 (new C)[Symbol.iterator]
@@ -14,7 +14,7 @@ class C {
 >(new C) : C
 >new C : C
 >C : typeof C
->Symbol.iterator : any
->Symbol : any
->iterator : any
+>Symbol.iterator : any (error)
+>Symbol : any (error)
+>iterator : any (error)
 

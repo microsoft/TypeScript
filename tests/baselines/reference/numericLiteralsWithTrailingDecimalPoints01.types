@@ -39,8 +39,8 @@ var test2 = 2.toString();
 >test2 : number
 >2. : 2
 >toString : any
->() : any
-> : any
+>() : any (error)
+> : any (error)
 
 var test3 = 3 .toString();
 >test3 : string

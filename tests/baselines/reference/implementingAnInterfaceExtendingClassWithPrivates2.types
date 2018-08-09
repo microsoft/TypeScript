@@ -147,10 +147,10 @@ module M2 {
 >x : string
 
     var r3 = b.y; // error
->r3 : any
->b.y : any
+>r3 : any (error)
+>b.y : any (error)
 >b : Bar
->y : any
+>y : any (error)
 
     class Bar2 extends Foo implements I { // error
 >Bar2 : Bar2

@@ -69,9 +69,9 @@ async function * f11() {
 
     function await() {
 > : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
@@ -103,11 +103,11 @@ async function * f14() {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingValueIsError.ts ===
 async function * f15() {
->f15 : () => AsyncIterableIterator<any>
+>f15 : () => AsyncIterableIterator<any (error)>
 
     yield *;
 >yield * : any
-> : any
+> : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
 async function * f16() {
@@ -130,8 +130,8 @@ async function * f18() {
 >f18 : () => AsyncIterableIterator<any>
 
     await;
->await : any
-> : any
+>await : any (error)
+> : any (error)
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===
 interface await {}

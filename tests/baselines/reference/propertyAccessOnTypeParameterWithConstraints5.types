@@ -43,10 +43,10 @@ class C<U extends T, T extends A> {
 >x.foo : () => string
 >x : U
 >foo : () => string
->x.notHere() : any
->x.notHere : any
+>x.notHere() : any (error)
+>x.notHere : any (error)
 >x : U
->notHere : any
+>notHere : any (error)
     }
 }
 
@@ -67,13 +67,13 @@ var i: I<B, A>;
 >i : I<B, A>
 
 var r2 = i.foo.notHere();
->r2 : any
->i.foo.notHere() : any
->i.foo.notHere : any
+>r2 : any (error)
+>i.foo.notHere() : any (error)
+>i.foo.notHere : any (error)
 >i.foo : B
 >i : I<B, A>
 >foo : B
->notHere : any
+>notHere : any (error)
 
 var r2b = i.foo['foo']();
 >r2b : string
@@ -92,11 +92,11 @@ var a: {
 // BUG 794164
 var r3: string = a().notHere();
 >r3 : string
->a().notHere() : any
->a().notHere : any
+>a().notHere() : any (error)
+>a().notHere : any (error)
 >a() : A
 >a : <U extends T, T extends A>() => U
->notHere : any
+>notHere : any (error)
 
 var r3b: string = a()['foo']();
 >r3b : string
@@ -108,7 +108,7 @@ var r3b: string = a()['foo']();
 
 var b = {
 >b : any
->{    foo: <U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    },    // BUG 794164    bar: b.foo(1).notHere()} : { foo: <U extends T, T extends A>(x: U) => U; bar: any; }
+>{    foo: <U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    },    // BUG 794164    bar: b.foo(1).notHere()} : { foo: <U extends T, T extends A>(x: U) => U; bar: any (error); }
 
     foo: <U extends T, T extends A>(x: U): U => {
 >foo : <U extends T, T extends A>(x: U) => U
@@ -125,23 +125,23 @@ var b = {
         return a + x.notHere();
 >a + x.notHere() : string
 >a : string
->x.notHere() : any
->x.notHere : any
+>x.notHere() : any (error)
+>x.notHere : any (error)
 >x : U
->notHere : any
+>notHere : any (error)
 
     },
     // BUG 794164
     bar: b.foo(1).notHere()
->bar : any
->b.foo(1).notHere() : any
->b.foo(1).notHere : any
->b.foo(1) : any
+>bar : any (error)
+>b.foo(1).notHere() : any (error)
+>b.foo(1).notHere : any (error)
+>b.foo(1) : any (error)
 >b.foo : any
 >b : any
 >foo : any
 >1 : 1
->notHere : any
+>notHere : any (error)
 }
 
 var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter

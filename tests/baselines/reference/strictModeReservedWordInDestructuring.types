@@ -8,7 +8,7 @@ var [public] = [1];
 >1 : 1
 
 var { x: public } = { x: 1 };
->x : any
+>x : any (error)
 >public : number
 >{ x: 1 } : { x: number; }
 >x : number
@@ -21,12 +21,12 @@ var [[private]] = [["hello"]];
 >"hello" : "hello"
 
 var { y: { s: static }, z: { o: { p: package } }} = { y: { s: 1 }, z: { o: { p: 'h' } } };
->y : any
->s : any
+>y : any (error)
+>s : any (error)
 >static : number
->z : any
->o : any
->p : any
+>z : any (error)
+>o : any (error)
+>p : any (error)
 >package : string
 >{ y: { s: 1 }, z: { o: { p: 'h' } } } : { y: { s: number; }; z: { o: { p: string; }; }; }
 >y : { s: number; }
@@ -50,9 +50,9 @@ var { public, protected } = { public: 1, protected: 2 };
 >2 : 2
 
 var { public: a, protected: b } = { public: 1, protected: 2 };
->public : any
+>public : any (error)
 >a : number
->protected : any
+>protected : any (error)
 >b : number
 >{ public: 1, protected: 2 } : { public: number; protected: number; }
 >public : number

@@ -5,7 +5,7 @@ export var a = 10;
 
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBinding_1.ts ===
 import defaultBinding, * as nameSpaceBinding  from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
->defaultBinding : any
+>defaultBinding : any (error)
 >nameSpaceBinding : typeof nameSpaceBinding
 
 var x: number = nameSpaceBinding.a;

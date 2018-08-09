@@ -5,31 +5,31 @@ class C {
 >C : C
 
     a = z; // error
->a : any
->z : any
+>a : any (error)
+>z : any (error)
 
     b: typeof z; // error
->b : any
->z : any
+>b : any (error)
+>z : any (error)
 
     c = this.z; // error
->c : any
->this.z : any
+>c : any (error)
+>this.z : any (error)
 >this : this
->z : any
+>z : any (error)
 
     d: typeof this.z; // error
->d : any
->this.z : any
->this : any
->z : any
+>d : any (error)
+>this.z : any (error)
+>this : any (error)
+>z : any (error)
 
     constructor(x) {
 >x : any
 
         z = 1;
 >z = 1 : 1
->z : any
+>z : any (error)
 >1 : 1
     }
 }
@@ -38,31 +38,31 @@ class D<T> {
 >D : D<T>
 
     a = z; // error
->a : any
->z : any
+>a : any (error)
+>z : any (error)
 
     b: typeof z; // error
->b : any
->z : any
+>b : any (error)
+>z : any (error)
 
     c = this.z; // error
->c : any
->this.z : any
+>c : any (error)
+>this.z : any (error)
 >this : this
->z : any
+>z : any (error)
 
     d: typeof this.z; // error
->d : any
->this.z : any
->this : any
->z : any
+>d : any (error)
+>this.z : any (error)
+>this : any (error)
+>z : any (error)
 
     constructor(x: T) {
 >x : T
 
         z = 1;
 >z = 1 : 1
->z : any
+>z : any (error)
 >1 : 1
     }
 }

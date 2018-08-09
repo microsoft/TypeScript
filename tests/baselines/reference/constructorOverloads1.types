@@ -36,19 +36,19 @@ var f2 = new Foo(0);
 >0 : 0
 
 var f3 = new Foo(f1);
->f3 : any
->new Foo(f1) : any
+>f3 : any (error)
+>new Foo(f1) : any (error)
 >Foo : typeof Foo
 >f1 : Foo
 
 var f4 = new Foo([f1,f2,f3]);
->f4 : any
->new Foo([f1,f2,f3]) : any
+>f4 : any (error)
+>new Foo([f1,f2,f3]) : any (error)
 >Foo : typeof Foo
 >[f1,f2,f3] : any[]
 >f1 : Foo
 >f2 : Foo
->f3 : any
+>f3 : any (error)
 
 f1.bar1();
 >f1.bar1() : void

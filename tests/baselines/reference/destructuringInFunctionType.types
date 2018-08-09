@@ -32,9 +32,9 @@ type T3 = ([{ a: b }, { b: a }]);
 
 type F3 = ([{ a: b }, { b: a }]) => void;
 >F3 : F3
->a : any
+>a : any (error)
 >b : any
->b : any
+>b : any (error)
 >a : any
 
 type T4 = ([{ a: [b, c] }]);
@@ -43,13 +43,13 @@ type T4 = ([{ a: [b, c] }]);
 
 type F4 = ([{ a: [b, c] }]) => void;
 >F4 : F4
->a : any
+>a : any (error)
 >b : any
 >c : any
 
 type C1 = new ([{ a: [b, c] }]) => void;
 >C1 : C1
->a : any
+>a : any (error)
 >b : any
 >c : any
 

@@ -5,6 +5,6 @@ module M {
     module N {
     }
     export import X = N;
->X : any
->N : any
+>X : any (error)
+>N : any (error)
 }

@@ -27,24 +27,24 @@ const o3 = {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts ===
 const o4 = {
->o4 : { f(): any; await: any; }
->{    async * f(await) : { f(): any; await: any; }
+>o4 : { f(): any; await: any (error); }
+>{    async * f(await) : { f(): any; await: any (error); }
 
     async * f(await) {
 >f : () => any
->await : any
-> : any
+>await : any (error)
+> : any (error)
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts ===
 const o5 = {
->o5 : { f(): any; yield: any; }
->{    async * f(yield) : { f(): any; yield: any; }
+>o5 : { f(): any; yield: any (error); }
+>{    async * f(yield) : { f(): any; yield: any (error); }
 
     async * f(yield) {
 >f : () => any
->yield : any
-> : any
+>yield : any (error)
+> : any (error)
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts ===
@@ -125,9 +125,9 @@ const o11 = {
 
         function await() {
 > : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
         }
     }
 };
@@ -142,9 +142,9 @@ const o12 = {
         const x = function await() {
 >x : () => any
 >function : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
 
         };
     }
@@ -176,15 +176,15 @@ const o14 = {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingValueIsError.ts ===
 const o15 = {
->o15 : { f(): AsyncIterableIterator<any>; }
->{    async * f() {        yield *;    }} : { f(): AsyncIterableIterator<any>; }
+>o15 : { f(): AsyncIterableIterator<any (error)>; }
+>{    async * f() {        yield *;    }} : { f(): AsyncIterableIterator<any (error)>; }
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterableIterator<any (error)>
 
         yield *;
 >yield * : any
-> : any
+> : any (error)
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
@@ -222,8 +222,8 @@ const o18 = {
 >f : () => AsyncIterableIterator<any>
 
         await;
->await : any
-> : any
+>await : any (error)
+> : any (error)
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===

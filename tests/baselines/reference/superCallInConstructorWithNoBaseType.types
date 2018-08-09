@@ -5,7 +5,7 @@ class C {
     constructor() {
         super(); // error
 >super() : void
->super : any
+>super : any (error)
     }
 }
 
@@ -17,6 +17,6 @@ class D<T> {
 
         super(); // error
 >super() : void
->super : any
+>super : any (error)
     }
 }

@@ -3,11 +3,11 @@ export module myModule {
 >myModule : typeof myModule
 
     import foo = require("importInsideModule_file1");
->foo : any
+>foo : any (error)
 
     var a = foo.x;
->a : any
->foo.x : any
->foo : any
->x : any
+>a : any (error)
+>foo.x : any (error)
+>foo : any (error)
+>x : any (error)
 }

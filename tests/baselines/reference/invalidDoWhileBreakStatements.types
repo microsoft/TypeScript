@@ -6,15 +6,15 @@ break;
 
 // non-existent label
 ONE:
->ONE : any
+>ONE : any (error)
 
 do break TWO; while (true)
->TWO : any
+>TWO : any (error)
 >true : true
 
 // break from inside function
 TWO:
->TWO : any
+>TWO : any (error)
 
 do {
     var x = () => {
@@ -22,13 +22,13 @@ do {
 >() => {        break TWO;    } : () => void
 
         break TWO;
->TWO : any
+>TWO : any (error)
     }
 }while (true)
 >true : true
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 do {
     var fn = function () {
@@ -36,7 +36,7 @@ do {
 >function () {        break THREE;    } : () => void
 
         break THREE;
->THREE : any
+>THREE : any (error)
     }
 }while (true)
 >true : true
@@ -44,10 +44,10 @@ do {
 // break forward
 do {
     break FIVE;
->FIVE : any
+>FIVE : any (error)
 
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     do { } while (true)
 >true : true
@@ -57,7 +57,7 @@ do {
 
 // label on non-loop statement
 NINE:
->NINE : any
+>NINE : any (error)
 
 var y = 12;
 >y : number
@@ -65,7 +65,7 @@ var y = 12;
 
 do {
     break NINE;
->NINE : any
+>NINE : any (error)
 
 }while (true)
 >true : true

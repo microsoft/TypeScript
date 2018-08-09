@@ -6,25 +6,25 @@ class Foo {
 >store : string
 
       public foo() {
->foo : () => any
+>foo : () => any (error)
 
             return this._store.length;   // shouldn't be an error
->this._store.length : any
->this._store : any
+>this._store.length : any (error)
+>this._store : any (error)
 >this : this
->_store : any
->length : any
+>_store : any (error)
+>length : any (error)
       }
       public _store = store; // no repro if this is first line in class body
->_store : any
->store : any
+>_store : any (error)
+>store : any (error)
 
 
       public bar() { return this.store; } // should be an error
->bar : () => any
->this.store : any
+>bar : () => any (error)
+>this.store : any (error)
 >this : this
->store : any
+>store : any (error)
 
 }
 
@@ -32,14 +32,14 @@ class Bar {
 >Bar : Bar
 
       public foo() {
->foo : () => any
+>foo : () => any (error)
 
             return this._store.length;   // shouldn't be an error
->this._store.length : any
->this._store : any
+>this._store.length : any (error)
+>this._store : any (error)
 >this : this
->_store : any
->length : any
+>_store : any (error)
+>length : any (error)
 
       }
     constructor(store: string) {
@@ -47,9 +47,9 @@ class Bar {
 
         this._store = store;
 >this._store = store : string
->this._store : any
+>this._store : any (error)
 >this : this
->_store : any
+>_store : any (error)
 >store : string
     }
 }

@@ -50,8 +50,8 @@ var c2: C;
 >c2 : C
 
 var r4 = c2<number>(); // should be an error
->r4 : any
->c2<number>() : any
+>r4 : any (error)
+>c2<number>() : any (error)
 >c2 : C
 
 class C2 extends Function { } // error

@@ -1,10 +1,10 @@
 === tests/cases/compiler/interfaceNaming1.ts ===
 interface { }
->interface : any
+>interface : any (error)
 
 interface interface{ }
 interface & { }
 >interface & { } : number
->interface : any
+>interface : any (error)
 >{ } : {}
 

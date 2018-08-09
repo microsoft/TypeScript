@@ -14,7 +14,7 @@ class A {
 >[foo<T>(a)] : <T>(a: T) => void
 >foo<T>(a) : string
 >foo : <T>(a: T) => string
->a : any
+>a : any (error)
 >a : T
     }
 }

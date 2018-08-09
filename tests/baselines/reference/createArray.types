@@ -1,10 +1,10 @@
 === tests/cases/compiler/createArray.ts ===
 var na=new number[];
->na : any
->new number[] : any
->number[] : any
->number : any
-> : any
+>na : any (error)
+>new number[] : any (error)
+>number[] : any (error)
+>number : any (error)
+> : any (error)
 
 class C {
 >C : C
@@ -14,21 +14,21 @@ new C[];
 >new C[] : any
 >C[] : any
 >C : typeof C
-> : any
+> : any (error)
 
 var ba=new boolean[];
->ba : any
->new boolean[] : any
->boolean[] : any
->boolean : any
-> : any
+>ba : any (error)
+>new boolean[] : any (error)
+>boolean[] : any (error)
+>boolean : any (error)
+> : any (error)
 
 var sa=new string[];
->sa : any
->new string[] : any
->string[] : any
->string : any
-> : any
+>sa : any (error)
+>new string[] : any (error)
+>string[] : any (error)
+>string : any (error)
+> : any (error)
 
 function f(s:string):number { return 0;
 >f : (s: string) => number
@@ -36,19 +36,19 @@ function f(s:string):number { return 0;
 >0 : 0
 }
 if (ba[14]) {
->ba[14] : any
->ba : any
+>ba[14] : any (error)
+>ba : any (error)
 >14 : 14
 
     na[2]=f(sa[3]);
 >na[2]=f(sa[3]) : number
->na[2] : any
->na : any
+>na[2] : any (error)
+>na : any (error)
 >2 : 2
 >f(sa[3]) : number
 >f : (s: string) => number
->sa[3] : any
->sa : any
+>sa[3] : any (error)
+>sa : any (error)
 >3 : 3
 }
 

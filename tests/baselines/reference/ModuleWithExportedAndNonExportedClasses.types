@@ -65,17 +65,17 @@ var AG = new A.AG<number, string>()
 
 // errors expected, these are not exported
 var a2 = new A.A2();
->a2 : any
->new A.A2() : any
->A.A2 : any
+>a2 : any (error)
+>new A.A2() : any (error)
+>A.A2 : any (error)
 >A : typeof A
->A2 : any
+>A2 : any (error)
 
 var ag2 = new A.A2<string, number>();
->ag2 : any
->new A.A2<string, number>() : any
->A.A2 : any
+>ag2 : any (error)
+>new A.A2<string, number>() : any (error)
+>A.A2 : any (error)
 >A : typeof A
->A2 : any
+>A2 : any (error)
 
 

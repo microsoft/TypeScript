@@ -7,7 +7,7 @@ function f<T, U extends { a: T }>() {
 >undefined : undefined
 }
 f<string, { a: number }>(); // should error
->f<string, { a: number }>() : any
+>f<string, { a: number }>() : any (error)
 >f : <T, U extends { a: T; }>() => any
 >a : number
 

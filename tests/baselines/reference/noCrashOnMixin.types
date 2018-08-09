@@ -40,7 +40,7 @@ class CrashTrigger extends Mixin(Empty) {
 >trigger : () => void
 
         new Concrete();
->new Concrete() : any
+>new Concrete() : any (error)
 >Concrete : typeof Concrete
     }
 }

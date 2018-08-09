@@ -1,6 +1,6 @@
 === tests/cases/compiler/Uppercased_Dir/src/index.ts ===
 import { TypeB } from './type-b';
->TypeB : any
+>TypeB : any (error)
 
 export class Broken {
 >Broken : Broken
@@ -15,10 +15,10 @@ export class Broken {
 }
 === tests/cases/compiler/Uppercased_Dir/src/type-b.ts ===
 import { Merge } from './types';
->Merge : any
+>Merge : any (error)
 
 import { TypeA } from './type-a';
->TypeA : any
+>TypeA : any (error)
 
 export type TypeB = Merge<TypeA, {
 >TypeB : Merge<TypeA, { b: string; }>

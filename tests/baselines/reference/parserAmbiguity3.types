@@ -1,12 +1,12 @@
 === tests/cases/conformance/parser/ecmascript5/Generics/parserAmbiguity3.ts ===
 f(g < A, B > +(7));
->f(g < A, B > +(7)) : any
->f : any
+>f(g < A, B > +(7)) : any (error)
+>f : any (error)
 >g < A : boolean
->g : any
->A : any
+>g : any (error)
+>A : any (error)
 >B > +(7) : boolean
->B : any
+>B : any (error)
 >+(7) : number
 >(7) : 7
 >7 : 7

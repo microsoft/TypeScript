@@ -106,9 +106,9 @@ function foo2(x: C1 | C2 | C3): string {
 >x : never
 
         return x.item;
->x.item : any
+>x.item : any (error)
 >x : never
->item : any
+>item : any (error)
     }
     return "error";
 >"error" : "error"

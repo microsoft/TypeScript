@@ -5,12 +5,12 @@ module M {
     export module N {
     }
     export import X = N;
->X : any
->N : any
+>X : any (error)
+>N : any (error)
 }
 
 import r = M.X;
->r : any
+>r : any (error)
 >M : typeof M
->X : any
+>X : any (error)
 

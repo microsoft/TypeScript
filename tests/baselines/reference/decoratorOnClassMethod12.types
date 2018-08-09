@@ -15,9 +15,9 @@ module M {
 >S : S
 
         @super.decorator
->super.decorator : any
->super : any
->decorator : any
+>super.decorator : any (error)
+>super : any (error)
+>decorator : any (error)
 
         method() { }
 >method : () => void

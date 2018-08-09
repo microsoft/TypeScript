@@ -2,18 +2,18 @@
 // Extend that DOM! (doesn't work, but shouldn't crash)
 Event.prototype.removeChildren = function () {
 >Event.prototype.removeChildren = function () {    this.textContent = 'nope, not going to happen'} : () => void
->Event.prototype.removeChildren : any
+>Event.prototype.removeChildren : any (error)
 >Event.prototype : Event
 >Event : { new (type: string, eventInitDict?: EventInit): Event; prototype: Event; readonly AT_TARGET: number; readonly BUBBLING_PHASE: number; readonly CAPTURING_PHASE: number; readonly NONE: number; }
 >prototype : Event
->removeChildren : any
+>removeChildren : any (error)
 >function () {    this.textContent = 'nope, not going to happen'} : () => void
 
     this.textContent = 'nope, not going to happen'
 >this.textContent = 'nope, not going to happen' : "nope, not going to happen"
->this.textContent : any
+>this.textContent : any (error)
 >this : Event
->textContent : any
+>textContent : any (error)
 >'nope, not going to happen' : "nope, not going to happen"
 }
 

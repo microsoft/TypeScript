@@ -32,7 +32,7 @@ declare class _<T> {
     each(iterator: _.ListIterator<T, void>, context?: any): void;
 >each : (iterator: _.ListIterator<T, void>, context?: any) => void
 >iterator : _.ListIterator<T, void>
->_ : any
+>_ : any (error)
 >context : any
 }
 

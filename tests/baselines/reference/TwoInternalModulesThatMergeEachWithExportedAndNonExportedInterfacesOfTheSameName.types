@@ -25,19 +25,19 @@ var p: { x: number; y: number; toCarth(): A.Point; };
 >x : number
 >y : number
 >toCarth : () => A.Point
->A : any
+>A : any (error)
 
 var p: A.Point;
 >p : { x: number; y: number; toCarth(): A.Point; }
->A : any
+>A : any (error)
 
 module X.Y.Z {
     export interface Line {
         new (start: A.Point, end: A.Point);
 >start : A.Point
->A : any
+>A : any (error)
 >end : A.Point
->A : any
+>A : any (error)
     }
 }
 
@@ -46,11 +46,11 @@ module X {
         interface Line {
             start: A.Point;
 >start : A.Point
->A : any
+>A : any (error)
 
             end: A.Point;
 >end : A.Point
->A : any
+>A : any (error)
         }
     }
 }
@@ -59,13 +59,13 @@ module X {
 var l: { new (s: A.Point, e: A.Point); }
 >l : new (s: A.Point, e: A.Point) => any
 >s : A.Point
->A : any
+>A : any (error)
 >e : A.Point
->A : any
+>A : any (error)
 
 var l: X.Y.Z.Line;
 >l : new (s: A.Point, e: A.Point) => any
->X : any
->Y : any
->Z : any
+>X : any (error)
+>Y : any (error)
+>Z : any (error)
 

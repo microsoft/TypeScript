@@ -13,8 +13,8 @@ class Poisoned extends React.Component<{}, {}> {
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
 }
 

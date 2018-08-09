@@ -8,8 +8,8 @@ export module c {
 >c : typeof c
 
     import b = a.I;
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >I : b
 
     export var x: b;

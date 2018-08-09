@@ -1,8 +1,8 @@
 === tests/cases/compiler/es6ClassTest9.ts ===
 declare class foo();
 >foo : foo
->() : any
-> : any
+>() : any (error)
+> : any (error)
 
 function foo() {}
 >foo : () => void

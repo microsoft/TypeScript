@@ -12,9 +12,9 @@ var array = [{x: [0], y: {p: ""}}]
 >"" : ""
 
 for (var {x: [a], y: {p}} of array) {
->x : any
+>x : any (error)
 >a : number
->y : any
+>y : any (error)
 >p : string
 >array : { x: number[]; y: { p: string; }; }[]
 

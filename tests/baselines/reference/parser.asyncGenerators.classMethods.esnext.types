@@ -28,7 +28,7 @@ class C4 {
 
     async * f(await) {
 >f : () => any
->await : any
+>await : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts ===
@@ -37,7 +37,7 @@ class C5 {
 
     async * f(yield) {
 >f : () => any
->yield : any
+>yield : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts ===
@@ -112,9 +112,9 @@ class C11 {
 
         function await() {
 > : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
         }
     }
 }
@@ -128,9 +128,9 @@ class C12 {
         const x = function await() {
 >x : () => any
 >function : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
 
         };
     }
@@ -163,11 +163,11 @@ class C15 {
 >C15 : C15
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterableIterator<any (error)>
 
         yield *;
 >yield * : any
-> : any
+> : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
@@ -202,8 +202,8 @@ class C18 {
 >f : () => AsyncIterableIterator<any>
 
         await;
->await : any
-> : any
+>await : any (error)
+> : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===
@@ -236,7 +236,7 @@ class C21 {
 
     async * [yield]() {
 >[yield] : () => AsyncIterableIterator<any>
->yield : any
+>yield : any (error)
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===

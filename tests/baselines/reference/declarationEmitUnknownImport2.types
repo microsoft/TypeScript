@@ -1,9 +1,9 @@
 === tests/cases/compiler/declarationEmitUnknownImport2.ts ===
 import Foo From './Foo'; // Syntax error
->Foo : any
->From : any
+>Foo : any (error)
+>From : any (error)
 >'./Foo' : "./Foo"
 
 export default Foo
->Foo : any
+>Foo : any (error)
 

@@ -5,17 +5,17 @@ class Foo { static bar() { return "x"; } }
 >"x" : "x"
 
 var baz = Foo.b;
->baz : any
->Foo.b : any
+>baz : any (error)
+>Foo.b : any (error)
 >Foo : typeof Foo
->b : any
+>b : any (error)
 
   // Foo.b won't bind. 
 baz.concat("y");
->baz.concat("y") : any
->baz.concat : any
->baz : any
->concat : any
+>baz.concat("y") : any (error)
+>baz.concat : any (error)
+>baz : any (error)
+>concat : any (error)
 >"y" : "y"
 
   // So we don't want an error on 'concat'.

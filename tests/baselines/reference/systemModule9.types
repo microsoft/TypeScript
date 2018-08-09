@@ -1,56 +1,56 @@
 === tests/cases/compiler/systemModule9.ts ===
 import * as ns from 'file1';
->ns : any
+>ns : any (error)
 
 import {a, b as c} from 'file2';
->a : any
->b : any
->c : any
+>a : any (error)
+>b : any (error)
+>c : any (error)
 
 import d from 'file3'
->d : any
+>d : any (error)
 
 import 'file4'
 import e, * as ns2 from 'file5';
->e : any
->ns2 : any
+>e : any (error)
+>ns2 : any (error)
 
 import ns3 = require('file6');
->ns3 : any
+>ns3 : any (error)
 
 ns.f();
->ns.f() : any
->ns.f : any
->ns : any
->f : any
+>ns.f() : any (error)
+>ns.f : any (error)
+>ns : any (error)
+>f : any (error)
 
 a();
->a() : any
->a : any
+>a() : any (error)
+>a : any (error)
 
 c();
->c() : any
->c : any
+>c() : any (error)
+>c : any (error)
 
 d();
->d() : any
->d : any
+>d() : any (error)
+>d : any (error)
 
 e();
->e() : any
->e : any
+>e() : any (error)
+>e : any (error)
 
 ns2.f();
->ns2.f() : any
->ns2.f : any
->ns2 : any
->f : any
+>ns2.f() : any (error)
+>ns2.f : any (error)
+>ns2 : any (error)
+>f : any (error)
 
 ns3.f();
->ns3.f() : any
->ns3.f : any
->ns3 : any
->f : any
+>ns3.f() : any (error)
+>ns3.f : any (error)
+>ns3 : any (error)
+>f : any (error)
 
 export * from 'file7';
 

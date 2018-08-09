@@ -3,8 +3,8 @@ export class A {
 >A : A
 
     @test
->test : any
+>test : any (error)
 
     b: import('./b').B
->b : any
+>b : any (error)
 }

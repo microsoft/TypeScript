@@ -146,16 +146,16 @@ class Slug {
 
 // ElementAccessExpressions can only contain one expression.  There should be a parse error here.
 var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
->foods : any
->new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
->PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>foods : any (error)
+>new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any (error)
+>PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any (error)
 >PetFood : typeof PetFood
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true) : Cookie
->new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any
+>new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any (error)
 >new IceCream('Mint chocolate chip') : IceCream
 >IceCream : typeof IceCream
 >'Mint chocolate chip' : "Mint chocolate chip"
->Cookie('Chocolate chip', false) : any
+>Cookie('Chocolate chip', false) : any (error)
 >Cookie : typeof Cookie
 >'Chocolate chip' : "Chocolate chip"
 >false : false
@@ -166,15 +166,15 @@ var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate 
 
 var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
 >foods2 : MonsterFood[]
->new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
->PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
+>new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any (error)
+>PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any (error)
 >PetFood : typeof PetFood
 >new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true) : Cookie
->new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any
+>new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) : any (error)
 >new IceCream('Mint chocolate chip') : IceCream
 >IceCream : typeof IceCream
 >'Mint chocolate chip' : "Mint chocolate chip"
->Cookie('Chocolate chip', false) : any
+>Cookie('Chocolate chip', false) : any (error)
 >Cookie : typeof Cookie
 >'Chocolate chip' : "Chocolate chip"
 >false : false

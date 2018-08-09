@@ -59,7 +59,7 @@ module M { export var a = 1; }
 
 M = x;
 >M = x : true
->M : any
+>M : any (error)
 >x : true
 
 function i<T>(a: T) {
@@ -73,6 +73,6 @@ function i<T>(a: T) {
 }
 i = x;
 >i = x : true
->i : any
+>i : any (error)
 >x : true
 

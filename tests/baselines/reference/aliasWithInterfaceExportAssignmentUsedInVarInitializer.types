@@ -1,12 +1,12 @@
 === tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts ===
 import moduleA = require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
->moduleA : any
+>moduleA : any (error)
 
 var d = b.q3;
->d : any
->b.q3 : any
->b : any
->q3 : any
+>d : any (error)
+>b.q3 : any (error)
+>b : any (error)
+>q3 : any (error)
 
 === tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
 interface c {

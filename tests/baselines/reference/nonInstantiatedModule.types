@@ -72,7 +72,7 @@ var p: { x: number; y: number; };
 
 var p: M2.Point;
 >p : { x: number; y: number; }
->M2 : any
+>M2 : any (error)
 
 var p2: { Origin() : { x: number; y: number; } };
 >p2 : { Origin(): { x: number; y: number; }; }

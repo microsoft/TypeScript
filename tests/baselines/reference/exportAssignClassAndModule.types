@@ -5,7 +5,7 @@ import Foo = require('./exportAssignClassAndModule_0');
 
 var z: Foo.Bar;
 >z : Foo.Bar
->Foo : any
+>Foo : any (error)
 
 var zz: Foo;
 >zz : Foo
@@ -21,7 +21,7 @@ class Foo {
 
     x: Foo.Bar;
 >x : Foo.Bar
->Foo : any
+>Foo : any (error)
 }
 module Foo {
     export interface Bar {

@@ -163,10 +163,10 @@ interface Contract<TValue> {
 
     validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->PortalFx : any
->ViewModels : any
->Controls : any
->Validators : any
+>PortalFx : any (error)
+>ViewModels : any (error)
+>Controls : any (error)
+>Validators : any (error)
 }
 
 
@@ -175,18 +175,18 @@ class ViewModel<TValue> implements Contract<TValue> {
 
     public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->PortalFx : any
->ViewModels : any
->Controls : any
->Validators : any
+>PortalFx : any (error)
+>ViewModels : any (error)
+>Controls : any (error)
+>Validators : any (error)
 >ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>() : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 >ko.observableArray : KnockoutObservableArrayStatic
 >ko : typeof ko
 >observableArray : KnockoutObservableArrayStatic
->PortalFx : any
->ViewModels : any
->Controls : any
->Validators : any
+>PortalFx : any (error)
+>ViewModels : any (error)
+>Controls : any (error)
+>Validators : any (error)
 }
 
 

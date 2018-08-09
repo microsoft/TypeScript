@@ -10,10 +10,10 @@ class TestComponent extends React.Component<any, {}> {
 >Component : typeof React.Component
 
     render() {
->render : () => any
+>render : () => any (error)
 
         return <BaseComponent />;
-><BaseComponent /> : any
+><BaseComponent /> : any (error)
 >BaseComponent : typeof BaseComponent
     }
 }

@@ -1,7 +1,7 @@
 === tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
 declare var ng: ng.IAngularStatic;
 >ng : ng.IAngularStatic
->ng : any
+>ng : any (error)
 
 declare module ng {
    export interface IModule {

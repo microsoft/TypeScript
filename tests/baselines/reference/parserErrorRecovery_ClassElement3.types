@@ -8,7 +8,7 @@ module M {
    }
    @
    enum E {
-> : any
+> : any (error)
 >E : E
 
    #

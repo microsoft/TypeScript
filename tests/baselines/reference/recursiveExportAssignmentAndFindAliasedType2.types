@@ -1,7 +1,7 @@
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType2_moduleA.ts ===
 /// <reference path="recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts"/>
 import moduleC = require("moduleC");
->moduleC : any
+>moduleC : any (error)
 
 import ClassB = require("recursiveExportAssignmentAndFindAliasedType2_moduleB");
 >ClassB : typeof ClassB
@@ -14,19 +14,19 @@ declare module "moduleC" {
 >"moduleC" : typeof import("moduleC")
 
     import self = require("moduleD");
->self : any
+>self : any (error)
 
     export = self;
->self : any
+>self : any (error)
 }
 declare module "moduleD" {
 >"moduleD" : typeof import("moduleD")
 
     import self = require("moduleC");
->self : any
+>self : any (error)
 
     export = self;
->self : any
+>self : any (error)
 }
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType2_moduleB.ts ===

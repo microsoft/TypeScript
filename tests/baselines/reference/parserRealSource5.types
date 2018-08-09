@@ -29,7 +29,7 @@ module TypeScript {
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
 >outfile : ITextWriter
->parser : any
+>parser : any (error)
         }
 
         public increaseIndent() {
@@ -65,10 +65,10 @@ module TypeScript {
 >0 : 0
 
                 CompilerDiagnostics.Alert(this.builder);
->CompilerDiagnostics.Alert(this.builder) : any
->CompilerDiagnostics.Alert : any
->CompilerDiagnostics : any
->Alert : any
+>CompilerDiagnostics.Alert(this.builder) : any (error)
+>CompilerDiagnostics.Alert : any (error)
+>CompilerDiagnostics : any (error)
+>Alert : any (error)
 >this.builder : string
 >this : this
 >builder : string
@@ -175,23 +175,23 @@ module TypeScript {
     }
 
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
->prePrintAST : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>prePrintAST : (ast: any (error), parent: any (error), walker: any (error)) => any (error)
+>ast : any (error)
+>parent : any (error)
+>walker : any (error)
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
 ><PrintContext>walker.state : PrintContext
->walker.state : any
->walker : any
->state : any
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
         ast.print(pc);
->ast.print(pc) : any
->ast.print : any
->ast : any
->print : any
+>ast.print(pc) : any (error)
+>ast.print : any (error)
+>ast : any (error)
+>print : any (error)
 >pc : PrintContext
 
         pc.increaseIndent();
@@ -201,22 +201,22 @@ module TypeScript {
 >increaseIndent : () => void
 
         return ast;
->ast : any
+>ast : any (error)
     }
 
 
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
->postPrintAST : (ast: any, parent: any, walker: any) => any
->ast : any
->parent : any
->walker : any
+>postPrintAST : (ast: any (error), parent: any (error), walker: any (error)) => any (error)
+>ast : any (error)
+>parent : any (error)
+>walker : any (error)
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
 ><PrintContext>walker.state : PrintContext
->walker.state : any
->walker : any
->state : any
+>walker.state : any (error)
+>walker : any (error)
+>state : any (error)
 
         pc.decreaseIndent();
 >pc.decreaseIndent() : void
@@ -225,6 +225,6 @@ module TypeScript {
 >decreaseIndent : () => void
 
         return ast;
->ast : any
+>ast : any (error)
     }
 }

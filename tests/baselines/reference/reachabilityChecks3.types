@@ -4,7 +4,7 @@ let x = 1;
 >1 : 1
 
 loop: while (true) {
->loop : any
+>loop : any (error)
 >true : true
 
     if (x == 100) {
@@ -22,13 +22,13 @@ loop: while (true) {
 }
 {
     x: 100
->x : any
+>x : any (error)
 >100 : 100
 }
 
 var y = () => { f: 1 }
 >y : () => void
 >() => { f: 1 } : () => void
->f : any
+>f : any (error)
 >1 : 1
 

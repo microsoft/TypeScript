@@ -3,6 +3,6 @@ var { x } = (<any>foo());
 >x : any
 >(<any>foo()) : any
 ><any>foo() : any
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 

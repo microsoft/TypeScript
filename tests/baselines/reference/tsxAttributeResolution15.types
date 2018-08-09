@@ -13,8 +13,8 @@ class BigGreeter extends React.Component<{ }, {}> {
 
         return <div>Default hi</div>;
 ><div>Default hi</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
     greeting: string;
 >greeting : string

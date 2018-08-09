@@ -14,7 +14,7 @@ function f() {
 >3 : 3
 
     L1: for (var i=0;i<19;i++) {
->L1 : any
+>L1 : any (error)
 >i : number
 >0 : 0
 >i<19 : boolean
@@ -29,7 +29,7 @@ function f() {
 >7 : 7
 
             continue L1;
->L1 : any
+>L1 : any (error)
 
             x=11;
 >x=11 : 11
@@ -89,16 +89,16 @@ function f() {
 >1 : 1
     }
     L2: try {
->L2 : any
+>L2 : any (error)
 
         L3: if (x<y) {
->L3 : any
+>L3 : any (error)
 >x<y : boolean
 >x : number
 >y : number
 
             break L2;
->L2 : any
+>L2 : any (error)
 
             x=13;
 >x=13 : 13
@@ -107,7 +107,7 @@ function f() {
         }
         else {
             break L3;
->L3 : any
+>L3 : any (error)
 
             x=14;
 >x=14 : 14

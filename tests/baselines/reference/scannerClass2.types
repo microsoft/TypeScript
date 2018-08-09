@@ -3,18 +3,18 @@
 >LoggerAdapter : LoggerAdapter
 
         constructor (public logger: ILogger) { 
->logger : any
+>logger : any (error)
 
             this._information = this.logger.information();
->this._information = this.logger.information() : any
->this._information : any
+>this._information = this.logger.information() : any (error)
+>this._information : any (error)
 >this : this
->_information : any
->this.logger.information() : any
->this.logger.information : any
->this.logger : any
+>_information : any (error)
+>this.logger.information() : any (error)
+>this.logger.information : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->information : any
+>logger : any (error)
+>information : any (error)
         }
     }

@@ -56,9 +56,9 @@ if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'O
 >message : string
 
     x.mesage;
->x.mesage : any
+>x.mesage : any (error)
 >x : Error
->mesage : any
+>mesage : any (error)
 }
 
 if (x instanceof Date) {
@@ -73,9 +73,9 @@ if (x instanceof Date) {
 >getDate : () => number
 
     x.getHuors();
->x.getHuors() : any
->x.getHuors : any
+>x.getHuors() : any (error)
+>x.getHuors : any (error)
 >x : Date
->getHuors : any
+>getHuors : any (error)
 }
 

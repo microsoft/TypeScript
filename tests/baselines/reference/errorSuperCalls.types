@@ -6,7 +6,7 @@ class NoBase {
     constructor() {
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     //super call in class member function with no base type
@@ -15,7 +15,7 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     //super call in class accessor (get and set) with no base type
@@ -24,7 +24,7 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return null;
 >null : null
@@ -35,14 +35,14 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     //super call in class member initializer with no base type
     p = super();
 >p : void
 >super() : void
->super : any
+>super : any (error)
 
     //super call in static class member function with no base type
     static fn() {
@@ -50,14 +50,14 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     //super call in static class member initializer with no base type
     static k = super();
 >k : void
 >super() : void
->super : any
+>super : any (error)
 
     //super call in static class accessor (get and set) with no base type
     static get q() {
@@ -65,7 +65,7 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return null;
 >null : null
@@ -76,7 +76,7 @@ class NoBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 }
 
@@ -91,10 +91,10 @@ class Derived<T> extends Base<T> {
     //super call with type arguments 
     constructor() {
         super<string>();
->super<string>() : any
->super : any
+>super<string>() : any (error)
+>super : any (error)
 >super : Base<T>
-> : any
+> : any (error)
 
         super();
 >super() : void
@@ -118,7 +118,7 @@ class OtherDerived extends OtherBase {
     t = super();
 >t : void
 >super() : void
->super : any
+>super : any (error)
 
     fn() {
 >fn : () => void
@@ -126,7 +126,7 @@ class OtherDerived extends OtherBase {
         //super call in class member function of derived type
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 
     //super call in class accessor (get and set) of derived type
@@ -135,7 +135,7 @@ class OtherDerived extends OtherBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
 
         return null;
 >null : null
@@ -146,7 +146,7 @@ class OtherDerived extends OtherBase {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 }
 

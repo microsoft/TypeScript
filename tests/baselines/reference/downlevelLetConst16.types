@@ -54,7 +54,7 @@ function foo1() {
 >y : number
 
     let {a: z} = {a: 1};
->a : any
+>a : any (error)
 >z : number
 >{a: 1} : { a: number; }
 >a : number
@@ -89,7 +89,7 @@ function foo2() {
 >y : number
 
         let {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -132,7 +132,7 @@ class A {
 >y : number
 
         let {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -166,7 +166,7 @@ class A {
 >y : number
 
             let {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -211,7 +211,7 @@ class B {
 >y : number
 
         const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -246,7 +246,7 @@ class B {
 >y : number
 
             const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -288,7 +288,7 @@ function bar1() {
 >y : number
 
     const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -323,7 +323,7 @@ function bar2() {
 >y : number
 
         const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -364,7 +364,7 @@ module M1 {
 >y : number
 
     let {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -399,7 +399,7 @@ module M2 {
 >y : number
 
         let {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -439,7 +439,7 @@ module M3 {
 >y : number
 
     const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -475,7 +475,7 @@ module M4 {
 >y : number
 
         const {a: z} = { a: 1 };
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -524,7 +524,7 @@ function foo3() {
 >y : any
     }
     for (let {a: z} = {a: 1}; ;) {
->a : any
+>a : any (error)
 >z : number
 >{a: 1} : { a: number; }
 >a : number
@@ -563,7 +563,7 @@ function foo4() {
 >y : any
     }
     for (const {a: z} = { a: 1 }; ;) {
->a : any
+>a : any (error)
 >z : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -656,14 +656,14 @@ function foo9() {
 >foo9 : () => void
 
     for (let {a: x} of []) {
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 >[] : undefined[]
 
         use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : any (error)
     }
     use(x);
 >use(x) : any
@@ -711,14 +711,14 @@ function foo12() {
 >foo12 : () => void
 
     for (const {a: x} of []) {
->a : any
->x : any
+>a : any (error)
+>x : any (error)
 >[] : undefined[]
 
         use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : any (error)
     }
     use(x);
 >use(x) : any

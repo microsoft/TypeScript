@@ -1,11 +1,11 @@
 === tests/cases/compiler/implicitAnyWidenToAny.ts ===
 // these should be errors
 var x = null;                        // error at "x"
->x : any
+>x : any (auto)
 >null : null
 
 var x1 = undefined;		             // error at "x1"
->x1 : any
+>x1 : any (auto)
 >undefined : undefined
 
 var widenArray = [null, undefined];  // error at "widenArray"
@@ -15,7 +15,7 @@ var widenArray = [null, undefined];  // error at "widenArray"
 >undefined : undefined
 
 var emptyArray = [];
->emptyArray : any[]
+>emptyArray : any (auto)[]
 >[] : undefined[]
 
 // these should not be error

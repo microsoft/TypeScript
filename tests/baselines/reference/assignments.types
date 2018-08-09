@@ -11,7 +11,7 @@
 module M { }
 M = null; // Error
 >M = null : null
->M : any
+>M : any (error)
 >null : null
 
 class C { }
@@ -19,7 +19,7 @@ class C { }
 
 C = null; // Error
 >C = null : null
->C : any
+>C : any (error)
 >null : null
 
 enum E { A }
@@ -28,14 +28,14 @@ enum E { A }
 
 E = null; // Error
 >E = null : null
->E : any
+>E : any (error)
 >null : null
 
 E.A = null; // OK per spec, Error per implementation (509581)
 >E.A = null : null
->E.A : any
+>E.A : any (error)
 >E : typeof E
->A : any
+>A : any (error)
 >null : null
 
 function fn() { }
@@ -43,7 +43,7 @@ function fn() { }
 
 fn = null; // Should be error
 >fn = null : null
->fn : any
+>fn : any (error)
 >null : null
 
 var v;
@@ -67,6 +67,6 @@ function fn2(p) {
 interface I { }
 I = null; // Error
 >I = null : null
->I : any
+>I : any (error)
 >null : null
 

@@ -24,7 +24,7 @@ declare module M {
 >M : typeof M
 
     export extension class C {
->extension : any
+>extension : any (error)
 >C : M.C
 
         public pe:string;
@@ -40,9 +40,9 @@ var c=new M.C();
 >C : typeof M.C
 
 c.pe;
->c.pe : any
+>c.pe : any (error)
 >c : M.C
->pe : any
+>pe : any (error)
 
 c.p;
 >c.p : number

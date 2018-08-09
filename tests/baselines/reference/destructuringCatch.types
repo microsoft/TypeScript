@@ -44,7 +44,7 @@ try {
 >1 : 1
 }
 catch ([{x: [y], z}]) {
->x : any
+>x : any (error)
 >y : any
 >z : any
 

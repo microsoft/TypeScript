@@ -1,49 +1,49 @@
 === tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel.ts ===
 label: function fn() { }
->label : any
+>label : any (error)
 >fn : () => void
 
 label: function* gen() { }
->label : any
+>label : any (error)
 >gen : () => IterableIterator<any>
 
 label: async function gen1() { }
->label : any
+>label : any (error)
 >gen1 : () => Promise<void>
 
 label: enum E {}
->label : any
+>label : any (error)
 >E : E
 
 label: interface I {}
->label : any
+>label : any (error)
 
 label: class C { }
->label : any
+>label : any (error)
 >C : C
 
 label: var a = 1;
->label : any
+>label : any (error)
 >a : number
 >1 : 1
 
 label: let b = 1;
->label : any
+>label : any (error)
 >b : number
 >1 : 1
 
 label: const c = 1;
->label : any
+>label : any (error)
 >c : 1
 >1 : 1
 
 label: module M { }
->label : any
+>label : any (error)
 
 label: namespace N {}
->label : any
+>label : any (error)
 
 label: type T = {}
->label : any
+>label : any (error)
 >T : {}
 

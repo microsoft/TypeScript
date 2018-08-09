@@ -6,13 +6,13 @@ No type information for this code.=== tests/cases/compiler/r/node_modules/foo/ot
 export interface OtherProps {}
 No type information for this code.=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
 import { OtherProps } from "./other";
->OtherProps : any
+>OtherProps : any (error)
 
 import { OtherIndexProps } from "./other/index";
->OtherIndexProps : any
+>OtherIndexProps : any (error)
 
 import { NestedProps } from "nested";
->NestedProps : any
+>NestedProps : any (error)
 
 export interface SomeProps {}
 

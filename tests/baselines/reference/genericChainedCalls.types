@@ -28,11 +28,11 @@ var r1 = v1.func(num => num.toString())
 
            .func(str => str.length) // error, number doesn't have a length
 >func : <U>(callback: (value: number) => U) => I1<number>
->str => str.length : (str: number) => any
+>str => str.length : (str: number) => any (error)
 >str : number
->str.length : any
+>str.length : any (error)
 >str : number
->length : any
+>length : any (error)
 
            .func(num => num.toString())
 >func : <U>(callback: (value: number) => U) => I1<number>
@@ -62,11 +62,11 @@ var s2 = s1.func(str => str.length) // should also error
 >s1.func : <U>(callback: (value: number) => U) => I1<number>
 >s1 : I1<number>
 >func : <U>(callback: (value: number) => U) => I1<number>
->str => str.length : (str: number) => any
+>str => str.length : (str: number) => any (error)
 >str : number
->str.length : any
+>str.length : any (error)
 >str : number
->length : any
+>length : any (error)
 
 var s3 = s2.func(num => num.toString())
 >s3 : I1<number>

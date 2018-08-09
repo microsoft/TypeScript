@@ -1,5 +1,5 @@
 === tests/cases/compiler/a.js ===
 Foo<number>();
->Foo<number>() : any
->Foo : any
+>Foo<number>() : any (error)
+>Foo : any (error)
 

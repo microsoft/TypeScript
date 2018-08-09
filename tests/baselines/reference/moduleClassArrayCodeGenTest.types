@@ -13,11 +13,11 @@ module M
 
 var t: M.A[] = [];
 >t : M.A[]
->M : any
+>M : any (error)
 >[] : undefined[]
 
 var t2: M.B[] = [];
->t2 : any[]
->M : any
+>t2 : any (error)[]
+>M : any (error)
 >[] : undefined[]
 

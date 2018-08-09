@@ -8,7 +8,7 @@ type F1 = {
 type F2 = (n: number): string; // should be => not :
 >F2 : F2
 >n : number
->string : any
+>string : any (error)
 
 // doesn't work in non-type contexts, where the return type is optional
 let f = (n: number) => string => n.toString();
@@ -29,13 +29,13 @@ let o = {
     m(n: number) => string {
 >m : (n: number) => any
 >n : number
->string : any
+>string : any (error)
 
         return n.toString();
->n.toString() : any
->n.toString : any
->n : any
->toString : any
+>n.toString() : any (error)
+>n.toString : any (error)
+>n : any (error)
+>toString : any (error)
     }
 };
 

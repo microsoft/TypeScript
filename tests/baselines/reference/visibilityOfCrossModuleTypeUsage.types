@@ -5,7 +5,7 @@ import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 function run(configuration: commands.IConfiguration) {
 >run : (configuration: commands.IConfiguration) => void
 >configuration : commands.IConfiguration
->commands : any
+>commands : any (error)
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : string
@@ -31,11 +31,11 @@ import server = require('./visibilityOfCrossModuleTypeUsage_server');
 export interface IConfiguration {
     workspace: server.IWorkspace;
 >workspace : server.IWorkspace
->server : any
+>server : any (error)
 
     server?: server.IServer;
 >server : server.IServer
->server : any
+>server : any (error)
 }
 
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===

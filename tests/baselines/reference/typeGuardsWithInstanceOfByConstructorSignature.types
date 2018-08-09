@@ -23,9 +23,9 @@ if (obj1 instanceof A) { // narrowed to A.
 >foo : string
 
     obj1.bar;
->obj1.bar : any
+>obj1.bar : any (error)
 >obj1 : A
->bar : any
+>bar : any (error)
 }
 
 var obj2: any;
@@ -42,9 +42,9 @@ if (obj2 instanceof A) {
 >foo : string
 
     obj2.bar;
->obj2.bar : any
+>obj2.bar : any (error)
 >obj2 : A
->bar : any
+>bar : any (error)
 }
 
 // a construct signature with generics
@@ -82,9 +82,9 @@ if (obj3 instanceof B) { // narrowed to B<number>.
 
     obj3.bar = "str";
 >obj3.bar = "str" : "str"
->obj3.bar : any
+>obj3.bar : any (error)
 >obj3 : B<number>
->bar : any
+>bar : any (error)
 >"str" : "str"
 }
 
@@ -112,9 +112,9 @@ if (obj4 instanceof B) {
 
     obj4.bar = "str";
 >obj4.bar = "str" : "str"
->obj4.bar : any
+>obj4.bar : any (error)
 >obj4 : B<any>
->bar : any
+>bar : any (error)
 >"str" : "str"
 }
 
@@ -173,9 +173,9 @@ if (obj5 instanceof C) { // narrowed to C1|C2.
 >bar1 : number
 
     obj5.bar2;
->obj5.bar2 : any
+>obj5.bar2 : any (error)
 >obj5 : C1
->bar2 : any
+>bar2 : any (error)
 }
 
 var obj6: any;
@@ -192,14 +192,14 @@ if (obj6 instanceof C) {
 >foo : string
 
     obj6.bar1;
->obj6.bar1 : any
+>obj6.bar1 : any (error)
 >obj6 : C1 | C2
->bar1 : any
+>bar1 : any (error)
 
     obj6.bar2;
->obj6.bar2 : any
+>obj6.bar2 : any (error)
 >obj6 : C1 | C2
->bar2 : any
+>bar2 : any (error)
 }
 
 // with object type literal
@@ -224,9 +224,9 @@ if (obj7 instanceof D) { // narrowed to D.
 >foo : string
 
     obj7.bar;
->obj7.bar : any
+>obj7.bar : any (error)
 >obj7 : D
->bar : any
+>bar : any (error)
 }
 
 var obj8: any;
@@ -243,9 +243,9 @@ if (obj8 instanceof D) {
 >foo : string
 
     obj8.bar;
->obj8.bar : any
+>obj8.bar : any (error)
 >obj8 : D
->bar : any
+>bar : any (error)
 }
 
 // a construct signature that returns a union type
@@ -288,9 +288,9 @@ if (obj9 instanceof E) { // narrowed to E1 | E2
 >bar1 : number
 
     obj9.bar2;
->obj9.bar2 : any
+>obj9.bar2 : any (error)
 >obj9 : E1
->bar2 : any
+>bar2 : any (error)
 }
 
 var obj10: any;
@@ -307,14 +307,14 @@ if (obj10 instanceof E) {
 >foo : string
 
     obj10.bar1;
->obj10.bar1 : any
+>obj10.bar1 : any (error)
 >obj10 : E1 | E2
->bar1 : any
+>bar1 : any (error)
 
     obj10.bar2;
->obj10.bar2 : any
+>obj10.bar2 : any (error)
 >obj10 : E1 | E2
->bar2 : any
+>bar2 : any (error)
 }
 
 // a construct signature that returns any
@@ -340,14 +340,14 @@ if (obj11 instanceof F) { // can't type narrowing, construct signature returns a
 >F : FConstructor
 
     obj11.foo;
->obj11.foo : any
+>obj11.foo : any (error)
 >obj11 : string | F
->foo : any
+>foo : any (error)
 
     obj11.bar;
->obj11.bar : any
+>obj11.bar : any (error)
 >obj11 : string | F
->bar : any
+>bar : any (error)
 }
 
 var obj12: any;
@@ -401,9 +401,9 @@ if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype prop
 >foo1 : number
 
     obj13.foo2;
->obj13.foo2 : any
+>obj13.foo2 : any (error)
 >obj13 : G1
->foo2 : any
+>foo2 : any (error)
 }
 
 var obj14: any;
@@ -420,9 +420,9 @@ if (obj14 instanceof G) {
 >foo1 : number
 
     obj14.foo2;
->obj14.foo2 : any
+>obj14.foo2 : any (error)
 >obj14 : G1
->foo2 : any
+>foo2 : any (error)
 }
 
 // a type with a prototype that has any type
@@ -453,9 +453,9 @@ if (obj15 instanceof H) { // narrowed to H.
 >foo : number
 
     obj15.bar;
->obj15.bar : any
+>obj15.bar : any (error)
 >obj15 : H
->bar : any
+>bar : any (error)
 }
 
 var obj16: any;
@@ -467,14 +467,14 @@ if (obj16 instanceof H) {
 >H : HConstructor
 
     obj16.foo1;
->obj16.foo1 : any
+>obj16.foo1 : any (error)
 >obj16 : H
->foo1 : any
+>foo1 : any (error)
 
     obj16.foo2;
->obj16.foo2 : any
+>obj16.foo2 : any (error)
 >obj16 : H
->foo2 : any
+>foo2 : any (error)
 }
 
 var obj17: any;

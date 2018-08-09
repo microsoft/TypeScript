@@ -7,8 +7,8 @@ module Tools {
 }
 
 var logger = Tools.NullLogger();
->logger : any
->Tools.NullLogger() : any
+>logger : any (error)
+>Tools.NullLogger() : any (error)
 >Tools.NullLogger : typeof Tools.NullLogger
 >Tools : typeof Tools
 >NullLogger : typeof Tools.NullLogger

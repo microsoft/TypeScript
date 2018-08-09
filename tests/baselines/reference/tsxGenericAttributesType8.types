@@ -5,7 +5,7 @@ import React = require('react');
 declare function Component<T>(props: T) : JSX.Element;
 >Component : <T>(props: T) => JSX.Element
 >props : T
->JSX : any
+>JSX : any (error)
 
 const decorator = function <U>(props: U) {
 >decorator : <U>(props: U) => JSX.Element

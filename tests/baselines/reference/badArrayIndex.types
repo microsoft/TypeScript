@@ -1,7 +1,7 @@
 === tests/cases/compiler/badArrayIndex.ts ===
 var results = number[];
->results : any
->number[] : any
->number : any
-> : any
+>results : any (error)
+>number[] : any (error)
+>number : any (error)
+> : any (error)
 

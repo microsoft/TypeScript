@@ -10,8 +10,8 @@ declare namespace React {
 declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
 >createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
 >factory : () => React.ComponentClass<P>
->React : any
->React : any
+>React : any (error)
+>React : any (error)
 
 class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
 >Foo : Foo
@@ -24,11 +24,11 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >Component : typeof React.Component
 
   render() {
->render : () => any
+>render : () => any (error)
 
     return <span>Hello, world!</span>;
-><span>Hello, world!</span> : any
->span : any
->span : any
+><span>Hello, world!</span> : any (error)
+>span : any (error)
+>span : any (error)
   }
 }) {}

@@ -21,21 +21,21 @@ class C1 {
 >(this.b === undefined && this.c === undefined) : boolean
 >this.b === undefined && this.c === undefined : boolean
 >this.b === undefined : boolean
->this.b : any
+>this.b : any (error)
 >this : this
->b : any
+>b : any (error)
 >undefined : undefined
 >this.c === undefined : boolean
->this.c : any
+>this.c : any (error)
 >this : this
->c : any
+>c : any (error)
 >undefined : undefined
 
             this.a = a || k;
 >this.a = a || k : number
->this.a : any
+>this.a : any (error)
 >this : this
->a : any
+>a : any (error)
 >a || k : number
 >a : number
 >k : number
@@ -43,36 +43,36 @@ class C1 {
     }
 
     public getA() {
->getA : () => any
+>getA : () => any (error)
 
         return this.a
->this.a : any
+>this.a : any (error)
 >this : this
->a : any
+>a : any (error)
     }
 
     public getB() {
->getB : () => any
+>getB : () => any (error)
 
         return this.b
->this.b : any
+>this.b : any (error)
 >this : this
->b : any
+>b : any (error)
     }
 
     public getC() {
->getC : () => any
+>getC : () => any (error)
 
         return this.c;
->this.c : any
+>this.c : any (error)
 >this : this
->c : any
+>c : any (error)
     }
 }
 
 var x = new C1(undefined, [0, undefined, ""]);
->x : any
->new C1(undefined, [0, undefined, ""]) : any
+>x : any (error)
+>new C1(undefined, [0, undefined, ""]) : any (error)
 >C1 : typeof C1
 >undefined : undefined
 >[0, undefined, ""] : (string | number)[]
@@ -81,22 +81,22 @@ var x = new C1(undefined, [0, undefined, ""]);
 >"" : ""
 
 var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
->x_a : any
->x_b : any
->x_c : any
->[x.getA(), x.getB(), x.getC()] : [any, any, any]
->x.getA() : any
->x.getA : any
->x : any
->getA : any
->x.getB() : any
->x.getB : any
->x : any
->getB : any
->x.getC() : any
->x.getC : any
->x : any
->getC : any
+>x_a : any (error)
+>x_b : any (error)
+>x_c : any (error)
+>[x.getA(), x.getB(), x.getC()] : [any (error), any (error), any (error)]
+>x.getA() : any (error)
+>x.getA : any (error)
+>x : any (error)
+>getA : any (error)
+>x.getB() : any (error)
+>x.getB : any (error)
+>x : any (error)
+>getB : any (error)
+>x.getC() : any (error)
+>x.getC : any (error)
+>x : any (error)
+>getC : any (error)
 
 var y = new C1(10, [0, "", true]);
 >y : C1
@@ -109,22 +109,22 @@ var y = new C1(10, [0, "", true]);
 >true : true
 
 var [y_a, y_b, y_c] = [y.getA(), y.getB(), y.getC()];
->y_a : any
->y_b : any
->y_c : any
->[y.getA(), y.getB(), y.getC()] : [any, any, any]
->y.getA() : any
->y.getA : () => any
+>y_a : any (error)
+>y_b : any (error)
+>y_c : any (error)
+>[y.getA(), y.getB(), y.getC()] : [any (error), any (error), any (error)]
+>y.getA() : any (error)
+>y.getA : () => any (error)
 >y : C1
->getA : () => any
->y.getB() : any
->y.getB : () => any
+>getA : () => any (error)
+>y.getB() : any (error)
+>y.getB : () => any (error)
 >y : C1
->getB : () => any
->y.getC() : any
->y.getC : () => any
+>getB : () => any (error)
+>y.getC() : any (error)
+>y.getC : () => any (error)
 >y : C1
->getC : () => any
+>getC : () => any (error)
 
 var z = new C1(10, [undefined, "", null]);
 >z : C1
@@ -137,20 +137,20 @@ var z = new C1(10, [undefined, "", null]);
 >null : null
 
 var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
->z_a : any
->z_b : any
->z_c : any
->[z.getA(), z.getB(), z.getC()] : [any, any, any]
->z.getA() : any
->z.getA : () => any
+>z_a : any (error)
+>z_b : any (error)
+>z_c : any (error)
+>[z.getA(), z.getB(), z.getC()] : [any (error), any (error), any (error)]
+>z.getA() : any (error)
+>z.getA : () => any (error)
 >z : C1
->getA : () => any
->z.getB() : any
->z.getB : () => any
+>getA : () => any (error)
+>z.getB() : any (error)
+>z.getB : () => any (error)
 >z : C1
->getB : () => any
->z.getC() : any
->z.getC : () => any
+>getB : () => any (error)
+>z.getC() : any (error)
+>z.getC : () => any (error)
 >z : C1
->getC : () => any
+>getC : () => any (error)
 

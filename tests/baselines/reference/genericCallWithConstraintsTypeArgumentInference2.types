@@ -32,8 +32,8 @@ var r3 = foo(new Object()); // {}
 >Object : ObjectConstructor
 
 var r4 = foo<Date, Date>(1); // error
->r4 : any
->foo<Date, Date>(1) : any
+>r4 : any (error)
+>foo<Date, Date>(1) : any (error)
 >foo : <T, U extends T>(t: T) => U
 >1 : 1
 

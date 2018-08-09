@@ -315,8 +315,8 @@ function foo0(e: I): void {
 function foo1(e: I1.C.E): void {
 >foo1 : (e: I1.C.E) => void
 >e : I1.C.E
->I1 : any
->C : any
+>I1 : any (error)
+>C : any (error)
 
     if (e === I1.C.E.V1) {
 >e === I1.C.E.V1 : boolean
@@ -345,8 +345,8 @@ function foo1(e: I1.C.E): void {
 function foo2(e: I2.C.E): void {
 >foo2 : (e: I2.C.E) => void
 >e : I2.C.E
->I2 : any
->C : any
+>I2 : any (error)
+>C : any (error)
 
     if (e === I2.C.E.V1) {
 >e === I2.C.E.V1 : boolean
@@ -527,9 +527,9 @@ function foo(x: Enum1) {
 function bar(e: A.B.C.E): number {
 >bar : (e: I) => number
 >e : I
->A : any
->B : any
->C : any
+>A : any (error)
+>B : any (error)
+>C : any (error)
 
     switch (e) {
 >e : I

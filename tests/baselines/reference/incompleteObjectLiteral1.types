@@ -1,11 +1,11 @@
 === tests/cases/compiler/incompleteObjectLiteral1.ts ===
 var tt = { aa; }
->tt : { aa: any; }
->{ aa; } : { aa: any; }
->aa : any
-> : any
+>tt : { aa: any (error); }
+>{ aa; } : { aa: any (error); }
+>aa : any (error)
+> : any (error)
 
 var x = tt;
->x : { aa: any; }
->tt : { aa: any; }
+>x : { aa: any (error); }
+>tt : { aa: any (error); }
 

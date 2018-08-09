@@ -4,9 +4,9 @@
 >0 : 0
 
 var v = <string>undefined;
->v : any
-><string>undefined; : any
->string : any
+>v : any (error)
+><string>undefined; : any (error)
+>string : any (error)
 
-> : any
+> : any (error)
 

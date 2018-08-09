@@ -24,48 +24,48 @@ module Formatting {
 >Indenter : Indenter
 
         private indentationBag: IndentationBag;
->indentationBag : any
+>indentationBag : any (error)
 
         private scriptBlockBeginLineNumber: number;
 >scriptBlockBeginLineNumber : number
 
         private offsetIndentationDeltas: Dictionary_int_int;
->offsetIndentationDeltas : any
+>offsetIndentationDeltas : any (error)
 
         constructor(
             public logger: TypeScript.ILogger,
->logger : any
->TypeScript : any
+>logger : any (error)
+>TypeScript : any (error)
 
             public tree: ParseTree,
->tree : any
+>tree : any (error)
 
             public snapshot: ITextSnapshot,
->snapshot : any
+>snapshot : any (error)
 
             public languageHostIndentation: string,
 >languageHostIndentation : string
 
             public editorOptions: Services.EditorOptions,
->editorOptions : any
->Services : any
+>editorOptions : any (error)
+>Services : any (error)
 
             public firstToken: TokenSpan,
->firstToken : any
+>firstToken : any (error)
 
             public smartIndent: boolean) {
 >smartIndent : boolean
 
             this.indentationBag = new IndentationBag(this.snapshot);
->this.indentationBag = new IndentationBag(this.snapshot) : any
->this.indentationBag : any
+>this.indentationBag = new IndentationBag(this.snapshot) : any (error)
+>this.indentationBag : any (error)
 >this : this
->indentationBag : any
->new IndentationBag(this.snapshot) : any
->IndentationBag : any
->this.snapshot : any
+>indentationBag : any (error)
+>new IndentationBag(this.snapshot) : any (error)
+>IndentationBag : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
+>snapshot : any (error)
 
             this.scriptBlockBeginLineNumber = -1;
 >this.scriptBlockBeginLineNumber = -1 : -1
@@ -76,70 +76,70 @@ module Formatting {
 >1 : 1
 
             this.offsetIndentationDeltas = new Dictionary_int_int();     // text offset -> indentation delta
->this.offsetIndentationDeltas = new Dictionary_int_int() : any
->this.offsetIndentationDeltas : any
+>this.offsetIndentationDeltas = new Dictionary_int_int() : any (error)
+>this.offsetIndentationDeltas : any (error)
 >this : this
->offsetIndentationDeltas : any
->new Dictionary_int_int() : any
->Dictionary_int_int : any
+>offsetIndentationDeltas : any (error)
+>new Dictionary_int_int() : any (error)
+>Dictionary_int_int : any (error)
 
             // by default the root (program) has zero indendation
             this.tree.Root.SetIndentationOverride("");
->this.tree.Root.SetIndentationOverride("") : any
->this.tree.Root.SetIndentationOverride : any
->this.tree.Root : any
->this.tree : any
+>this.tree.Root.SetIndentationOverride("") : any (error)
+>this.tree.Root.SetIndentationOverride : any (error)
+>this.tree.Root : any (error)
+>this.tree : any (error)
 >this : this
->tree : any
->Root : any
->SetIndentationOverride : any
+>tree : any (error)
+>Root : any (error)
+>SetIndentationOverride : any (error)
 >"" : ""
 
             this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree);
 >this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree) : void
->this.ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any) => void
+>this.ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any (error)) => void
 >this : this
->ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any) => void
+>ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any (error)) => void
 >this.languageHostIndentation : string
 >this : this
 >languageHostIndentation : string
->this.tree : any
+>this.tree : any (error)
 >this : this
->tree : any
+>tree : any (error)
 
             this.FillInheritedIndentation(this.tree);
 >this.FillInheritedIndentation(this.tree) : void
->this.FillInheritedIndentation : (tree: any) => void
+>this.FillInheritedIndentation : (tree: any (error)) => void
 >this : this
->FillInheritedIndentation : (tree: any) => void
->this.tree : any
+>FillInheritedIndentation : (tree: any (error)) => void
+>this.tree : any (error)
 >this : this
->tree : any
+>tree : any (error)
 
         }
 
         public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
->GetIndentationEdits : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
->token : any
->nextToken : any
->node : any
+>GetIndentationEdits : (token: any (error), nextToken: any (error), node: any (error), sameLineIndent: boolean) => any (error)
+>token : any (error)
+>nextToken : any (error)
+>node : any (error)
 >sameLineIndent : boolean
 
             if (this.logger.information()) {
->this.logger.information() : any
->this.logger.information : any
->this.logger : any
+>this.logger.information() : any (error)
+>this.logger.information : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->information : any
+>logger : any (error)
+>information : any (error)
 
                 this.logger.log("GetIndentationEdits(" +
->this.logger.log("GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")") : any
->this.logger.log : any
->this.logger : any
+>this.logger.log("GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")") : any (error)
+>this.logger.log : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->log : any
+>logger : any (error)
+>log : any (error)
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")" : string
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" : string
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) : string
@@ -153,19 +153,19 @@ module Formatting {
 
                     "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +
 >"t1=[" : "t1=["
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >"," : ","
->token.Span.endPosition() : any
->token.Span.endPosition : any
->token.Span : any
->token : any
->Span : any
->endPosition : any
+>token.Span.endPosition() : any (error)
+>token.Span.endPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>endPosition : any (error)
 >"], " : "], "
 
                     "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +
@@ -173,25 +173,25 @@ module Formatting {
 >(nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) : string
 >nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string
 >nextToken == null : boolean
->nextToken : any
+>nextToken : any (error)
 >null : null
 >"null" : "null"
 >(nextToken.Span.startPosition() + "," + nextToken.Span.endPosition()) : string
 >nextToken.Span.startPosition() + "," + nextToken.Span.endPosition() : string
 >nextToken.Span.startPosition() + "," : string
->nextToken.Span.startPosition() : any
->nextToken.Span.startPosition : any
->nextToken.Span : any
->nextToken : any
->Span : any
->startPosition : any
+>nextToken.Span.startPosition() : any (error)
+>nextToken.Span.startPosition : any (error)
+>nextToken.Span : any (error)
+>nextToken : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >"," : ","
->nextToken.Span.endPosition() : any
->nextToken.Span.endPosition : any
->nextToken.Span : any
->nextToken : any
->Span : any
->endPosition : any
+>nextToken.Span.endPosition() : any (error)
+>nextToken.Span.endPosition : any (error)
+>nextToken.Span : any (error)
+>nextToken : any (error)
+>Span : any (error)
+>endPosition : any (error)
 >"]" : "]"
 
                     ")");
@@ -199,51 +199,51 @@ module Formatting {
             }
 
             var result = this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent);
->result : any
->this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent) : any
->this.GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
+>result : any (error)
+>this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent) : any (error)
+>this.GetIndentationEditsWorker : (token: any (error), nextToken: any (error), node: any (error), sameLineIndent: boolean) => any (error)
 >this : this
->GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
->token : any
->nextToken : any
->node : any
+>GetIndentationEditsWorker : (token: any (error), nextToken: any (error), node: any (error), sameLineIndent: boolean) => any (error)
+>token : any (error)
+>nextToken : any (error)
+>node : any (error)
 >sameLineIndent : boolean
 
             if (this.logger.information()) {
->this.logger.information() : any
->this.logger.information : any
->this.logger : any
+>this.logger.information() : any (error)
+>this.logger.information : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->information : any
+>logger : any (error)
+>information : any (error)
 
                 for (var i = 0; i < result.count() ; i++) {
 >i : number
 >0 : 0
 >i < result.count() : boolean
 >i : number
->result.count() : any
->result.count : any
->result : any
->count : any
+>result.count() : any (error)
+>result.count : any (error)
+>result : any (error)
+>count : any (error)
 >i++ : number
 >i : number
 
                     var edit = result.get(i);
->edit : any
->result.get(i) : any
->result.get : any
->result : any
->get : any
+>edit : any (error)
+>result.get(i) : any (error)
+>result.get : any (error)
+>result : any (error)
+>get : any (error)
 >i : number
 
                     this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
->this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"") : any
->this.logger.log : any
->this.logger : any
+>this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"") : any (error)
+>this.logger.log : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->log : any
+>logger : any (error)
+>log : any (error)
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"" : string
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) : string
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" : string
@@ -251,49 +251,49 @@ module Formatting {
 >"edit: minChar=" + edit.position + ", limChar=" : string
 >"edit: minChar=" + edit.position : string
 >"edit: minChar=" : "edit: minChar="
->edit.position : any
->edit : any
->position : any
+>edit.position : any (error)
+>edit : any (error)
+>position : any (error)
 >", limChar=" : ", limChar="
->(edit.position + edit.length) : any
->edit.position + edit.length : any
->edit.position : any
->edit : any
->position : any
->edit.length : any
->edit : any
->length : any
+>(edit.position + edit.length) : any (error)
+>edit.position + edit.length : any (error)
+>edit.position : any (error)
+>edit : any (error)
+>position : any (error)
+>edit.length : any (error)
+>edit : any (error)
+>length : any (error)
 >", text=\"" : ", text=\""
->TypeScript.stringToLiteral(edit.replaceWith, 30) : any
->TypeScript.stringToLiteral : any
->TypeScript : any
->stringToLiteral : any
->edit.replaceWith : any
->edit : any
->replaceWith : any
+>TypeScript.stringToLiteral(edit.replaceWith, 30) : any (error)
+>TypeScript.stringToLiteral : any (error)
+>TypeScript : any (error)
+>stringToLiteral : any (error)
+>edit.replaceWith : any (error)
+>edit : any (error)
+>replaceWith : any (error)
 >30 : 30
 >"\"" : "\""
                 }
             }
 
             return result;
->result : any
+>result : any (error)
         }
 
         public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
->GetIndentationEditsWorker : (token: any, nextToken: any, node: any, sameLineIndent: boolean) => any
->token : any
->nextToken : any
->node : any
+>GetIndentationEditsWorker : (token: any (error), nextToken: any (error), node: any (error), sameLineIndent: boolean) => any (error)
+>token : any (error)
+>nextToken : any (error)
+>node : any (error)
 >sameLineIndent : boolean
 
             var result = new List_TextEditInfo();
->result : any
->new List_TextEditInfo() : any
->List_TextEditInfo : any
+>result : any (error)
+>new List_TextEditInfo() : any (error)
+>List_TextEditInfo : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             // This handles the case:
@@ -308,11 +308,11 @@ module Formatting {
             // tokens for nodes outside the span we are formatting.
             this.AdjustStartOffsetIfNeeded(token, node);
 >this.AdjustStartOffsetIfNeeded(token, node) : void
->this.AdjustStartOffsetIfNeeded : (token: any, node: any) => void
+>this.AdjustStartOffsetIfNeeded : (token: any (error), node: any (error)) => void
 >this : this
->AdjustStartOffsetIfNeeded : (token: any, node: any) => void
->token : any
->node : any
+>AdjustStartOffsetIfNeeded : (token: any (error), node: any (error)) => void
+>token : any (error)
+>node : any (error)
 
             // Don't adjust indentation on the same line of a script block
             if (this.scriptBlockBeginLineNumber == token.lineNumber()) {
@@ -320,13 +320,13 @@ module Formatting {
 >this.scriptBlockBeginLineNumber : number
 >this : this
 >scriptBlockBeginLineNumber : number
->token.lineNumber() : any
->token.lineNumber : any
->token : any
->lineNumber : any
+>token.lineNumber() : any (error)
+>token.lineNumber : any (error)
+>token : any (error)
+>lineNumber : any (error)
 
                 return result;
->result : any
+>result : any (error)
             }
 
             // Don't indent multi-line strings
@@ -335,29 +335,29 @@ module Formatting {
 >!sameLineIndent : boolean
 >sameLineIndent : boolean
 >this.IsMultiLineString(token) : boolean
->this.IsMultiLineString : (token: any) => boolean
+>this.IsMultiLineString : (token: any (error)) => boolean
 >this : this
->IsMultiLineString : (token: any) => boolean
->token : any
+>IsMultiLineString : (token: any (error)) => boolean
+>token : any (error)
 
                 return result;
->result : any
+>result : any (error)
             }
 
             // Special cases for the tokens that don't show up in the tree, such as curly braces and comments
             indentationInfo = this.GetSpecialCaseIndentation(token, node);
->indentationInfo = this.GetSpecialCaseIndentation(token, node) : any
->indentationInfo : any
->this.GetSpecialCaseIndentation(token, node) : any
->this.GetSpecialCaseIndentation : (token: any, node: any) => any
+>indentationInfo = this.GetSpecialCaseIndentation(token, node) : any (error)
+>indentationInfo : any (error)
+>this.GetSpecialCaseIndentation(token, node) : any (error)
+>this.GetSpecialCaseIndentation : (token: any (error), node: any (error)) => any (error)
 >this : this
->GetSpecialCaseIndentation : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentation : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
             if (indentationInfo == null) {
 >indentationInfo == null : boolean
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
                 //// For anything else
@@ -368,71 +368,71 @@ module Formatting {
 >!node.CanIndent() && node.Parent != null && token.Span.span.start() == node.Parent.AuthorNode.Details.StartOffset : boolean
 >!node.CanIndent() && node.Parent != null : boolean
 >!node.CanIndent() : boolean
->node.CanIndent() : any
->node.CanIndent : any
->node : any
->CanIndent : any
+>node.CanIndent() : any (error)
+>node.CanIndent : any (error)
+>node : any (error)
+>CanIndent : any (error)
 >node.Parent != null : boolean
->node.Parent : any
->node : any
->Parent : any
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 >null : null
 >token.Span.span.start() == node.Parent.AuthorNode.Details.StartOffset : boolean
->token.Span.span.start() : any
->token.Span.span.start : any
->token.Span.span : any
->token.Span : any
->token : any
->Span : any
->span : any
->start : any
->node.Parent.AuthorNode.Details.StartOffset : any
->node.Parent.AuthorNode.Details : any
->node.Parent.AuthorNode : any
->node.Parent : any
->node : any
->Parent : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>token.Span.span.start() : any (error)
+>token.Span.span.start : any (error)
+>token.Span.span : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>span : any (error)
+>start : any (error)
+>node.Parent.AuthorNode.Details.StartOffset : any (error)
+>node.Parent.AuthorNode.Details : any (error)
+>node.Parent.AuthorNode : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                     node = node.Parent;
->node = node.Parent : any
->node : any
->node.Parent : any
->node : any
->Parent : any
+>node = node.Parent : any (error)
+>node : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 
                 if (node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset) {
 >node.CanIndent() && token.Span.span.start() == node.AuthorNode.Details.StartOffset : boolean
->node.CanIndent() : any
->node.CanIndent : any
->node : any
->CanIndent : any
+>node.CanIndent() : any (error)
+>node.CanIndent : any (error)
+>node : any (error)
+>CanIndent : any (error)
 >token.Span.span.start() == node.AuthorNode.Details.StartOffset : boolean
->token.Span.span.start() : any
->token.Span.span.start : any
->token.Span.span : any
->token.Span : any
->token : any
->Span : any
->span : any
->start : any
->node.AuthorNode.Details.StartOffset : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>token.Span.span.start() : any (error)
+>token.Span.span.start : any (error)
+>token.Span.span : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>span : any (error)
+>start : any (error)
+>node.AuthorNode.Details.StartOffset : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                     indentationInfo = node.GetEffectiveIndentation(this);
->indentationInfo = node.GetEffectiveIndentation(this) : any
->indentationInfo : any
->node.GetEffectiveIndentation(this) : any
->node.GetEffectiveIndentation : any
->node : any
->GetEffectiveIndentation : any
+>indentationInfo = node.GetEffectiveIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveIndentation(this) : any (error)
+>node.GetEffectiveIndentation : any (error)
+>node : any (error)
+>GetEffectiveIndentation : any (error)
 >this : this
                 }
                 else {
@@ -443,22 +443,22 @@ module Formatting {
 >token.Token == AuthorTokenKind.atkIdentifier && nextToken != null && nextToken.Token == AuthorTokenKind.atkColon : boolean
 >token.Token == AuthorTokenKind.atkIdentifier && nextToken != null : boolean
 >token.Token == AuthorTokenKind.atkIdentifier : boolean
->token.Token : any
->token : any
->Token : any
->AuthorTokenKind.atkIdentifier : any
->AuthorTokenKind : any
->atkIdentifier : any
+>token.Token : any (error)
+>token : any (error)
+>Token : any (error)
+>AuthorTokenKind.atkIdentifier : any (error)
+>AuthorTokenKind : any (error)
+>atkIdentifier : any (error)
 >nextToken != null : boolean
->nextToken : any
+>nextToken : any (error)
 >null : null
 >nextToken.Token == AuthorTokenKind.atkColon : boolean
->nextToken.Token : any
->nextToken : any
->Token : any
->AuthorTokenKind.atkColon : any
->AuthorTokenKind : any
->atkColon : any
+>nextToken.Token : any (error)
+>nextToken : any (error)
+>Token : any (error)
+>AuthorTokenKind.atkColon : any (error)
+>AuthorTokenKind : any (error)
+>atkColon : any (error)
 
                         // This will make the label on the same level as the surrounding function/block
                         // ex: 
@@ -468,12 +468,12 @@ module Formatting {
                         //          statement;
                         // }
                         indentationInfo = node.GetEffectiveChildrenIndentation(this);
->indentationInfo = node.GetEffectiveChildrenIndentation(this) : any
->indentationInfo : any
->node.GetEffectiveChildrenIndentation(this) : any
->node.GetEffectiveChildrenIndentation : any
->node : any
->GetEffectiveChildrenIndentation : any
+>indentationInfo = node.GetEffectiveChildrenIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveChildrenIndentation(this) : any (error)
+>node.GetEffectiveChildrenIndentation : any (error)
+>node : any (error)
+>GetEffectiveChildrenIndentation : any (error)
 >this : this
                     }
                     else {
@@ -483,14 +483,14 @@ module Formatting {
                         ////        b;
                         //// The declaration 'b' would remain under 'a' even if 'var' got indented.
                         indentationInfo = this.ApplyIndentationDeltaFromParent(token, node);
->indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any
->indentationInfo : any
->this.ApplyIndentationDeltaFromParent(token, node) : any
->this.ApplyIndentationDeltaFromParent : (token: any, node: any) => any
+>indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any (error)
+>indentationInfo : any (error)
+>this.ApplyIndentationDeltaFromParent(token, node) : any (error)
+>this.ApplyIndentationDeltaFromParent : (token: any (error), node: any (error)) => any (error)
 >this : this
->ApplyIndentationDeltaFromParent : (token: any, node: any) => any
->token : any
->node : any
+>ApplyIndentationDeltaFromParent : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
                     }
                 }
             }
@@ -498,75 +498,75 @@ module Formatting {
             // Get the indent edit from the indentation info
             if (indentationInfo != null) {
 >indentationInfo != null : boolean
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
                 var edit = this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent);
->edit : any
->this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent) : any
->this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
+>edit : any (error)
+>this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent) : any (error)
+>this.GetIndentEdit : (indentInfo: any (error), tokenStartPosition: number, sameLineIndent: boolean) => any (error)
 >this : this
->GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
->indentationInfo : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>GetIndentEdit : (indentInfo: any (error), tokenStartPosition: number, sameLineIndent: boolean) => any (error)
+>indentationInfo : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >sameLineIndent : boolean
 
                 if (edit != null) {
 >edit != null : boolean
->edit : any
+>edit : any (error)
 >null : null
 
                     this.RegisterIndentation(edit, sameLineIndent);
 >this.RegisterIndentation(edit, sameLineIndent) : void
->this.RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
+>this.RegisterIndentation : (indent: any (error), sameLineIndent: boolean) => void
 >this : this
->RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
->edit : any
+>RegisterIndentation : (indent: any (error), sameLineIndent: boolean) => void
+>edit : any (error)
 >sameLineIndent : boolean
 
                     result.add(edit);
->result.add(edit) : any
->result.add : any
->result : any
->add : any
->edit : any
+>result.add(edit) : any (error)
+>result.add : any (error)
+>result : any (error)
+>add : any (error)
+>edit : any (error)
 
                     // multi-line comments, apply delta indentation to all the other lines
                     if (token.Token == AuthorTokenKind.atkComment) {
 >token.Token == AuthorTokenKind.atkComment : boolean
->token.Token : any
->token : any
->Token : any
->AuthorTokenKind.atkComment : any
->AuthorTokenKind : any
->atkComment : any
+>token.Token : any (error)
+>token : any (error)
+>Token : any (error)
+>AuthorTokenKind.atkComment : any (error)
+>AuthorTokenKind : any (error)
+>atkComment : any (error)
 
                         var commentEdits = this.GetCommentIndentationEdits(token);
->commentEdits : any
->this.GetCommentIndentationEdits(token) : any
->this.GetCommentIndentationEdits : (token: any) => any
+>commentEdits : any (error)
+>this.GetCommentIndentationEdits(token) : any (error)
+>this.GetCommentIndentationEdits : (token: any (error)) => any (error)
 >this : this
->GetCommentIndentationEdits : (token: any) => any
->token : any
+>GetCommentIndentationEdits : (token: any (error)) => any (error)
+>token : any (error)
 
                         commentEdits.foreach((item) => {
->commentEdits.foreach((item) => {                            result.add(item);                        }) : any
->commentEdits.foreach : any
->commentEdits : any
->foreach : any
+>commentEdits.foreach((item) => {                            result.add(item);                        }) : any (error)
+>commentEdits.foreach : any (error)
+>commentEdits : any (error)
+>foreach : any (error)
 >(item) => {                            result.add(item);                        } : (item: any) => void
 >item : any
 
                             result.add(item);
->result.add(item) : any
->result.add : any
->result : any
->add : any
+>result.add(item) : any (error)
+>result.add : any (error)
+>result : any (error)
+>add : any (error)
 >item : any
 
                         });
@@ -575,55 +575,55 @@ module Formatting {
             }
 
             return result;
->result : any
+>result : any (error)
         }
 
         private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
->GetCommentIndentationEdits : (token: any) => any
->token : any
+>GetCommentIndentationEdits : (token: any (error)) => any (error)
+>token : any (error)
 
             var result = new List_TextEditInfo();
->result : any
->new List_TextEditInfo() : any
->List_TextEditInfo : any
+>result : any (error)
+>new List_TextEditInfo() : any (error)
+>List_TextEditInfo : any (error)
 
             if (token.Token != AuthorTokenKind.atkComment)
 >token.Token != AuthorTokenKind.atkComment : boolean
->token.Token : any
->token : any
->Token : any
->AuthorTokenKind.atkComment : any
->AuthorTokenKind : any
->atkComment : any
+>token.Token : any (error)
+>token : any (error)
+>Token : any (error)
+>AuthorTokenKind.atkComment : any (error)
+>AuthorTokenKind : any (error)
+>atkComment : any (error)
 
                 return result;
->result : any
+>result : any (error)
 
             var commentLastLineNumber = this.snapshot.GetLineNumberFromPosition(token.Span.endPosition());
->commentLastLineNumber : any
->this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>commentLastLineNumber : any (error)
+>this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->token.Span.endPosition() : any
->token.Span.endPosition : any
->token.Span : any
->token : any
->Span : any
->endPosition : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>token.Span.endPosition() : any (error)
+>token.Span.endPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>endPosition : any (error)
 
             if (token.lineNumber() == commentLastLineNumber)
 >token.lineNumber() == commentLastLineNumber : boolean
->token.lineNumber() : any
->token.lineNumber : any
->token : any
->lineNumber : any
->commentLastLineNumber : any
+>token.lineNumber() : any (error)
+>token.lineNumber : any (error)
+>token : any (error)
+>lineNumber : any (error)
+>commentLastLineNumber : any (error)
 
                 return result;
->result : any
+>result : any (error)
 
             var commentFirstLineIndentationDelta = this.GetIndentationDelta(token.Span.startPosition(), null);
 >commentFirstLineIndentationDelta : number
@@ -631,12 +631,12 @@ module Formatting {
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
 >this : this
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >null : null
 
             if (commentFirstLineIndentationDelta != undefined) {
@@ -645,31 +645,31 @@ module Formatting {
 >undefined : undefined
 
                 for (var line = token.lineNumber() + 1; line <= commentLastLineNumber; line++) {
->line : any
->token.lineNumber() + 1 : any
->token.lineNumber() : any
->token.lineNumber : any
->token : any
->lineNumber : any
+>line : any (error)
+>token.lineNumber() + 1 : any (error)
+>token.lineNumber() : any (error)
+>token.lineNumber : any (error)
+>token : any (error)
+>lineNumber : any (error)
 >1 : 1
 >line <= commentLastLineNumber : boolean
->line : any
->commentLastLineNumber : any
+>line : any (error)
+>commentLastLineNumber : any (error)
 >line++ : number
->line : any
+>line : any (error)
 
                     var lineStartPosition = this.snapshot.GetLineFromLineNumber(line).startPosition();
->lineStartPosition : any
->this.snapshot.GetLineFromLineNumber(line).startPosition() : any
->this.snapshot.GetLineFromLineNumber(line).startPosition : any
->this.snapshot.GetLineFromLineNumber(line) : any
->this.snapshot.GetLineFromLineNumber : any
->this.snapshot : any
+>lineStartPosition : any (error)
+>this.snapshot.GetLineFromLineNumber(line).startPosition() : any (error)
+>this.snapshot.GetLineFromLineNumber(line).startPosition : any (error)
+>this.snapshot.GetLineFromLineNumber(line) : any (error)
+>this.snapshot.GetLineFromLineNumber : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromLineNumber : any
->line : any
->startPosition : any
+>snapshot : any (error)
+>GetLineFromLineNumber : any (error)
+>line : any (error)
+>startPosition : any (error)
 
                     var lineIndent = this.GetLineIndentationForOffset(lineStartPosition);
 >lineIndent : string
@@ -677,79 +677,79 @@ module Formatting {
 >this.GetLineIndentationForOffset : (offset: number) => string
 >this : this
 >GetLineIndentationForOffset : (offset: number) => string
->lineStartPosition : any
+>lineStartPosition : any (error)
 
                     var commentIndentationInfo = this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta);
->commentIndentationInfo : any
->this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta) : any
->this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
+>commentIndentationInfo : any (error)
+>this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta) : any (error)
+>this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any (error)
 >this : this
->ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
+>ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any (error)
 >lineIndent : string
 >commentFirstLineIndentationDelta : number
 
                     if (commentIndentationInfo != null) {
 >commentIndentationInfo != null : boolean
->commentIndentationInfo : any
+>commentIndentationInfo : any (error)
 >null : null
 
                         var tokenStartPosition = lineStartPosition + lineIndent.length;
->tokenStartPosition : any
->lineStartPosition + lineIndent.length : any
->lineStartPosition : any
+>tokenStartPosition : any (error)
+>lineStartPosition + lineIndent.length : any (error)
+>lineStartPosition : any (error)
 >lineIndent.length : number
 >lineIndent : string
 >length : number
 
                         var commentIndentationEdit = this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false);
->commentIndentationEdit : any
->this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false) : any
->this.GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
+>commentIndentationEdit : any (error)
+>this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false) : any (error)
+>this.GetIndentEdit : (indentInfo: any (error), tokenStartPosition: number, sameLineIndent: boolean) => any (error)
 >this : this
->GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
->commentIndentationInfo : any
->tokenStartPosition : any
+>GetIndentEdit : (indentInfo: any (error), tokenStartPosition: number, sameLineIndent: boolean) => any (error)
+>commentIndentationInfo : any (error)
+>tokenStartPosition : any (error)
 >false : false
 
                         if (commentIndentationEdit != null) {
 >commentIndentationEdit != null : boolean
->commentIndentationEdit : any
+>commentIndentationEdit : any (error)
 >null : null
 
                             result.add(commentIndentationEdit);
->result.add(commentIndentationEdit) : any
->result.add : any
->result : any
->add : any
->commentIndentationEdit : any
+>result.add(commentIndentationEdit) : any (error)
+>result.add : any (error)
+>result : any (error)
+>add : any (error)
+>commentIndentationEdit : any (error)
                         }
                     }
                 }
             }
 
             return result;
->result : any
+>result : any (error)
         }
 
         static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >indentText : string
->editorOptions : any
->Services : any
+>editorOptions : any (error)
+>Services : any (error)
 
             return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
->GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false) : any
->GetIndentSizeFromText : any
+>GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false) : any (error)
+>GetIndentSizeFromText : any (error)
 >indentText : string
->editorOptions : any
+>editorOptions : any (error)
 >false : false
         }
 
         static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
->GetIndentSizeFromText : (text: string, editorOptions: any, includeNonIndentChars: boolean) => number
+>GetIndentSizeFromText : (text: string, editorOptions: any (error), includeNonIndentChars: boolean) => number
 >text : string
->editorOptions : any
->Services : any
+>editorOptions : any (error)
+>Services : any (error)
 >includeNonIndentChars : boolean
 
             var indentSize = 0;
@@ -784,18 +784,18 @@ module Formatting {
 >indentSize = (indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize) : number
 >indentSize : number
 >(indentSize + editorOptions.TabSize) - (indentSize % editorOptions.TabSize) : number
->(indentSize + editorOptions.TabSize) : any
->indentSize + editorOptions.TabSize : any
+>(indentSize + editorOptions.TabSize) : any (error)
+>indentSize + editorOptions.TabSize : any (error)
 >indentSize : number
->editorOptions.TabSize : any
->editorOptions : any
->TabSize : any
+>editorOptions.TabSize : any (error)
+>editorOptions : any (error)
+>TabSize : any (error)
 >(indentSize % editorOptions.TabSize) : number
 >indentSize % editorOptions.TabSize : number
 >indentSize : number
->editorOptions.TabSize : any
->editorOptions : any
->TabSize : any
+>editorOptions.TabSize : any (error)
+>editorOptions : any (error)
+>TabSize : any (error)
 
                 else if (c == ' ')
 >c == ' ' : boolean
@@ -826,246 +826,246 @@ module Formatting {
         }
 
         private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
->GetSpecialCaseIndentation : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentation : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             switch (token.Token) {
->token.Token : any
->token : any
->Token : any
+>token.Token : any (error)
+>token : any (error)
+>Token : any (error)
 
                 case AuthorTokenKind.atkLCurly: // { is not part of the tree
->AuthorTokenKind.atkLCurly : any
->AuthorTokenKind : any
->atkLCurly : any
+>AuthorTokenKind.atkLCurly : any (error)
+>AuthorTokenKind : any (error)
+>atkLCurly : any (error)
 
                     indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
->indentationInfo = this.GetSpecialCaseIndentationForLCurly(node) : any
->indentationInfo : any
->this.GetSpecialCaseIndentationForLCurly(node) : any
->this.GetSpecialCaseIndentationForLCurly : (node: any) => any
+>indentationInfo = this.GetSpecialCaseIndentationForLCurly(node) : any (error)
+>indentationInfo : any (error)
+>this.GetSpecialCaseIndentationForLCurly(node) : any (error)
+>this.GetSpecialCaseIndentationForLCurly : (node: any (error)) => any (error)
 >this : this
->GetSpecialCaseIndentationForLCurly : (node: any) => any
->node : any
+>GetSpecialCaseIndentationForLCurly : (node: any (error)) => any (error)
+>node : any (error)
 
                     return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
 
                 case AuthorTokenKind.atkElse:   // else is not part of the tree
->AuthorTokenKind.atkElse : any
->AuthorTokenKind : any
->atkElse : any
+>AuthorTokenKind.atkElse : any (error)
+>AuthorTokenKind : any (error)
+>atkElse : any (error)
 
                 case AuthorTokenKind.atkRBrack: // ] is not part of the tree
->AuthorTokenKind.atkRBrack : any
->AuthorTokenKind : any
->atkRBrack : any
+>AuthorTokenKind.atkRBrack : any (error)
+>AuthorTokenKind : any (error)
+>atkRBrack : any (error)
 
                     indentationInfo = node.GetNodeStartLineIndentation(this);
->indentationInfo = node.GetNodeStartLineIndentation(this) : any
->indentationInfo : any
->node.GetNodeStartLineIndentation(this) : any
->node.GetNodeStartLineIndentation : any
->node : any
->GetNodeStartLineIndentation : any
+>indentationInfo = node.GetNodeStartLineIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetNodeStartLineIndentation(this) : any (error)
+>node.GetNodeStartLineIndentation : any (error)
+>node : any (error)
+>GetNodeStartLineIndentation : any (error)
 >this : this
 
                     return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
 
                 case AuthorTokenKind.atkRCurly: // } is not part of the tree
->AuthorTokenKind.atkRCurly : any
->AuthorTokenKind : any
->atkRCurly : any
+>AuthorTokenKind.atkRCurly : any (error)
+>AuthorTokenKind : any (error)
+>atkRCurly : any (error)
 
                     // if '}' is for a body-block, get indentation based on its parent.
                     if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock && node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody)
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock && node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkBlock : any
->AuthorParseNodeKind : any
->apnkBlock : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkBlock : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkBlock : any (error)
 >node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody : boolean
->node.AuthorNode.EdgeLabel : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->EdgeLabel : any
->AuthorParseNodeEdge.apneBody : any
->AuthorParseNodeEdge : any
->apneBody : any
+>node.AuthorNode.EdgeLabel : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>EdgeLabel : any (error)
+>AuthorParseNodeEdge.apneBody : any (error)
+>AuthorParseNodeEdge : any (error)
+>apneBody : any (error)
 
                         node = node.Parent;
->node = node.Parent : any
->node : any
->node.Parent : any
->node : any
->Parent : any
+>node = node.Parent : any (error)
+>node : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 
                     indentationInfo = node.GetNodeStartLineIndentation(this);
->indentationInfo = node.GetNodeStartLineIndentation(this) : any
->indentationInfo : any
->node.GetNodeStartLineIndentation(this) : any
->node.GetNodeStartLineIndentation : any
->node : any
->GetNodeStartLineIndentation : any
+>indentationInfo = node.GetNodeStartLineIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetNodeStartLineIndentation(this) : any (error)
+>node.GetNodeStartLineIndentation : any (error)
+>node : any (error)
+>GetNodeStartLineIndentation : any (error)
 >this : this
 
                     return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
 
                 case AuthorTokenKind.atkWhile: // while (in do-while) is not part of the tree
->AuthorTokenKind.atkWhile : any
->AuthorTokenKind : any
->atkWhile : any
+>AuthorTokenKind.atkWhile : any (error)
+>AuthorTokenKind : any (error)
+>atkWhile : any (error)
 
                     if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile) {
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkDoWhile : any
->AuthorParseNodeKind : any
->apnkDoWhile : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkDoWhile : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkDoWhile : any (error)
 
                         indentationInfo = node.GetNodeStartLineIndentation(this);
->indentationInfo = node.GetNodeStartLineIndentation(this) : any
->indentationInfo : any
->node.GetNodeStartLineIndentation(this) : any
->node.GetNodeStartLineIndentation : any
->node : any
->GetNodeStartLineIndentation : any
+>indentationInfo = node.GetNodeStartLineIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetNodeStartLineIndentation(this) : any (error)
+>node.GetNodeStartLineIndentation : any (error)
+>node : any (error)
+>GetNodeStartLineIndentation : any (error)
 >this : this
 
                         return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
                     }
 
                     return null;
 >null : null
 
                 case AuthorTokenKind.atkSColon:
->AuthorTokenKind.atkSColon : any
->AuthorTokenKind : any
->atkSColon : any
+>AuthorTokenKind.atkSColon : any (error)
+>AuthorTokenKind : any (error)
+>atkSColon : any (error)
 
                     return this.GetSpecialCaseIndentationForSemicolon(token, node);
->this.GetSpecialCaseIndentationForSemicolon(token, node) : any
->this.GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
+>this.GetSpecialCaseIndentationForSemicolon(token, node) : any (error)
+>this.GetSpecialCaseIndentationForSemicolon : (token: any (error), node: any (error)) => any (error)
 >this : this
->GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentationForSemicolon : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
                 case AuthorTokenKind.atkComment:
->AuthorTokenKind.atkComment : any
->AuthorTokenKind : any
->atkComment : any
+>AuthorTokenKind.atkComment : any (error)
+>AuthorTokenKind : any (error)
+>atkComment : any (error)
 
                     return this.GetSpecialCaseIndentationForComment(token, node);
->this.GetSpecialCaseIndentationForComment(token, node) : any
->this.GetSpecialCaseIndentationForComment : (token: any, node: any) => any
+>this.GetSpecialCaseIndentationForComment(token, node) : any (error)
+>this.GetSpecialCaseIndentationForComment : (token: any (error), node: any (error)) => any (error)
 >this : this
->GetSpecialCaseIndentationForComment : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentationForComment : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
                 default:
                     return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
             }
         }
 
         private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
->GetSpecialCaseIndentationForLCurly : (node: any) => any
->node : any
+>GetSpecialCaseIndentationForLCurly : (node: any (error)) => any (error)
+>node : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||                node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl ||                node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkFncDecl : any
->AuthorParseNodeKind : any
->apnkFncDecl : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkFncDecl : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkFncDecl : any (error)
 
                 node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen || node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse) {
 >node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneThen : boolean
->node.AuthorNode.EdgeLabel : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->EdgeLabel : any
->AuthorParseNodeEdge.apneThen : any
->AuthorParseNodeEdge : any
->apneThen : any
+>node.AuthorNode.EdgeLabel : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>EdgeLabel : any (error)
+>AuthorParseNodeEdge.apneThen : any (error)
+>AuthorParseNodeEdge : any (error)
+>apneThen : any (error)
 >node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneElse : boolean
->node.AuthorNode.EdgeLabel : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->EdgeLabel : any
->AuthorParseNodeEdge.apneElse : any
->AuthorParseNodeEdge : any
->apneElse : any
+>node.AuthorNode.EdgeLabel : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>EdgeLabel : any (error)
+>AuthorParseNodeEdge.apneElse : any (error)
+>AuthorParseNodeEdge : any (error)
+>apneElse : any (error)
 
                     // flushed with the node (function & if)
                 indentationInfo = node.GetNodeStartLineIndentation(this);
->indentationInfo = node.GetNodeStartLineIndentation(this) : any
->indentationInfo : any
->node.GetNodeStartLineIndentation(this) : any
->node.GetNodeStartLineIndentation : any
->node : any
->GetNodeStartLineIndentation : any
+>indentationInfo = node.GetNodeStartLineIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetNodeStartLineIndentation(this) : any (error)
+>node.GetNodeStartLineIndentation : any (error)
+>node : any (error)
+>GetNodeStartLineIndentation : any (error)
 >this : this
 
                 return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
             }
             else if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject && !node.CanIndent()) {
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject && !node.CanIndent() : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkObject : any
->AuthorParseNodeKind : any
->apnkObject : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkObject : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkObject : any (error)
 >!node.CanIndent() : boolean
->node.CanIndent() : any
->node.CanIndent : any
->node : any
->CanIndent : any
+>node.CanIndent() : any (error)
+>node.CanIndent : any (error)
+>node : any (error)
+>CanIndent : any (error)
 
                 // if the open curly belongs to a non-indented object, do nothing here.
                 return null;
@@ -1074,25 +1074,25 @@ module Formatting {
 
             // effective identation of the block
             indentationInfo = node.GetEffectiveIndentation(this);
->indentationInfo = node.GetEffectiveIndentation(this) : any
->indentationInfo : any
->node.GetEffectiveIndentation(this) : any
->node.GetEffectiveIndentation : any
->node : any
->GetEffectiveIndentation : any
+>indentationInfo = node.GetEffectiveIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveIndentation(this) : any (error)
+>node.GetEffectiveIndentation : any (error)
+>node : any (error)
+>GetEffectiveIndentation : any (error)
 >this : this
 
             return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
         }
 
         private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
->GetSpecialCaseIndentationForSemicolon : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentationForSemicolon : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             if (this.smartIndent) {
@@ -1101,69 +1101,69 @@ module Formatting {
 >smartIndent : boolean
 
                 indentationInfo = node.GetEffectiveChildrenIndentation(this);
->indentationInfo = node.GetEffectiveChildrenIndentation(this) : any
->indentationInfo : any
->node.GetEffectiveChildrenIndentation(this) : any
->node.GetEffectiveChildrenIndentation : any
->node : any
->GetEffectiveChildrenIndentation : any
+>indentationInfo = node.GetEffectiveChildrenIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveChildrenIndentation(this) : any (error)
+>node.GetEffectiveChildrenIndentation : any (error)
+>node : any (error)
+>GetEffectiveChildrenIndentation : any (error)
 >this : this
 
                 return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
             }
             else {
                 // Indent all semicolons except the ones that belong to the for statement parts (initalizer, condition, itnrement)
                 if (node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor) {
 >node.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkFor : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkFor : any
->AuthorParseNodeKind : any
->apnkFor : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkFor : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkFor : any (error)
 
                     // The passed node is actually either the program or the list because semicolon doesn't belong
                     // to any statement in the tree, though the statement extends up to the semicolon position.
                     // To find the correct statement, we look for the adjacent node on the left of the semicolon.
                     var semiColonStartSpan = new Span(token.Span.startPosition(), 0);
->semiColonStartSpan : any
->new Span(token.Span.startPosition(), 0) : any
->Span : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>semiColonStartSpan : any (error)
+>new Span(token.Span.startPosition(), 0) : any (error)
+>Span : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >0 : 0
 
                     node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node);
->node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node) : any
->node : any
->ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node) : any
->ParseTree.FindCommonParentNode : any
->ParseTree : any
->FindCommonParentNode : any
->semiColonStartSpan : any
->semiColonStartSpan : any
->node : any
+>node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node) : any (error)
+>node : any (error)
+>ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node) : any (error)
+>ParseTree.FindCommonParentNode : any (error)
+>ParseTree : any (error)
+>FindCommonParentNode : any (error)
+>semiColonStartSpan : any (error)
+>semiColonStartSpan : any (error)
+>node : any (error)
 
                     indentationInfo = node.GetEffectiveChildrenIndentation(this);
->indentationInfo = node.GetEffectiveChildrenIndentation(this) : any
->indentationInfo : any
->node.GetEffectiveChildrenIndentation(this) : any
->node.GetEffectiveChildrenIndentation : any
->node : any
->GetEffectiveChildrenIndentation : any
+>indentationInfo = node.GetEffectiveChildrenIndentation(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveChildrenIndentation(this) : any (error)
+>node.GetEffectiveChildrenIndentation : any (error)
+>node : any (error)
+>GetEffectiveChildrenIndentation : any (error)
 >this : this
 
                     return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
                 }
             }
 
@@ -1172,188 +1172,188 @@ module Formatting {
         }
 
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
->GetSpecialCaseIndentationForComment : (token: any, node: any) => any
->token : any
->node : any
+>GetSpecialCaseIndentationForComment : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             // Only indent line comment and the first line of block comment
             var twoCharSpan = token.Span.Intersection(new Span(token.Span.startPosition(), 2));
->twoCharSpan : any
->token.Span.Intersection(new Span(token.Span.startPosition(), 2)) : any
->token.Span.Intersection : any
->token.Span : any
->token : any
->Span : any
->Intersection : any
->new Span(token.Span.startPosition(), 2) : any
->Span : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>twoCharSpan : any (error)
+>token.Span.Intersection(new Span(token.Span.startPosition(), 2)) : any (error)
+>token.Span.Intersection : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>Intersection : any (error)
+>new Span(token.Span.startPosition(), 2) : any (error)
+>Span : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >2 : 2
 
             if (twoCharSpan != null && (twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*")) {
 >twoCharSpan != null && (twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*") : boolean
 >twoCharSpan != null : boolean
->twoCharSpan : any
+>twoCharSpan : any (error)
 >null : null
 >(twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*") : boolean
 >twoCharSpan.GetText() == "//" || twoCharSpan.GetText() == "/*" : boolean
 >twoCharSpan.GetText() == "//" : boolean
->twoCharSpan.GetText() : any
->twoCharSpan.GetText : any
->twoCharSpan : any
->GetText : any
+>twoCharSpan.GetText() : any (error)
+>twoCharSpan.GetText : any (error)
+>twoCharSpan : any (error)
+>GetText : any (error)
 >"//" : "//"
 >twoCharSpan.GetText() == "/*" : boolean
->twoCharSpan.GetText() : any
->twoCharSpan.GetText : any
->twoCharSpan : any
->GetText : any
+>twoCharSpan.GetText() : any (error)
+>twoCharSpan.GetText : any (error)
+>twoCharSpan : any (error)
+>GetText : any (error)
 >"/*" : "/*"
 
                 while (node.ChildrenIndentationDelta == null && node.Parent != null)
 >node.ChildrenIndentationDelta == null && node.Parent != null : boolean
 >node.ChildrenIndentationDelta == null : boolean
->node.ChildrenIndentationDelta : any
->node : any
->ChildrenIndentationDelta : any
+>node.ChildrenIndentationDelta : any (error)
+>node : any (error)
+>ChildrenIndentationDelta : any (error)
 >null : null
 >node.Parent != null : boolean
->node.Parent : any
->node : any
->Parent : any
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 >null : null
 
                     node = node.Parent;
->node = node.Parent : any
->node : any
->node.Parent : any
->node : any
->Parent : any
+>node = node.Parent : any (error)
+>node : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 
                 if (this.CanIndentComment(token, node)) {
 >this.CanIndentComment(token, node) : boolean
->this.CanIndentComment : (token: any, node: any) => boolean
+>this.CanIndentComment : (token: any (error), node: any (error)) => boolean
 >this : this
->CanIndentComment : (token: any, node: any) => boolean
->token : any
->node : any
+>CanIndentComment : (token: any (error), node: any (error)) => boolean
+>token : any (error)
+>node : any (error)
 
                     indentationInfo = node.GetEffectiveChildrenIndentationForComment(this);
->indentationInfo = node.GetEffectiveChildrenIndentationForComment(this) : any
->indentationInfo : any
->node.GetEffectiveChildrenIndentationForComment(this) : any
->node.GetEffectiveChildrenIndentationForComment : any
->node : any
->GetEffectiveChildrenIndentationForComment : any
+>indentationInfo = node.GetEffectiveChildrenIndentationForComment(this) : any (error)
+>indentationInfo : any (error)
+>node.GetEffectiveChildrenIndentationForComment(this) : any (error)
+>node.GetEffectiveChildrenIndentationForComment : any (error)
+>node : any (error)
+>GetEffectiveChildrenIndentationForComment : any (error)
 >this : this
                 }
                 else {
                     indentationInfo = this.ApplyIndentationDeltaFromParent(token, node);
->indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any
->indentationInfo : any
->this.ApplyIndentationDeltaFromParent(token, node) : any
->this.ApplyIndentationDeltaFromParent : (token: any, node: any) => any
+>indentationInfo = this.ApplyIndentationDeltaFromParent(token, node) : any (error)
+>indentationInfo : any (error)
+>this.ApplyIndentationDeltaFromParent(token, node) : any (error)
+>this.ApplyIndentationDeltaFromParent : (token: any (error), node: any (error)) => any (error)
 >this : this
->ApplyIndentationDeltaFromParent : (token: any, node: any) => any
->token : any
->node : any
+>ApplyIndentationDeltaFromParent : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
                 }
             }
 
             return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
         }
 
         private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
->CanIndentComment : (token: any, node: any) => boolean
->token : any
->node : any
+>CanIndentComment : (token: any (error), node: any (error)) => boolean
+>token : any (error)
+>node : any (error)
 
             switch (node.AuthorNode.Details.Kind) {
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
 
                 case AuthorParseNodeKind.apnkProg:
->AuthorParseNodeKind.apnkProg : any
->AuthorParseNodeKind : any
->apnkProg : any
+>AuthorParseNodeKind.apnkProg : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkProg : any (error)
 
                 case AuthorParseNodeKind.apnkBlock:
->AuthorParseNodeKind.apnkBlock : any
->AuthorParseNodeKind : any
->apnkBlock : any
+>AuthorParseNodeKind.apnkBlock : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkBlock : any (error)
 
                 case AuthorParseNodeKind.apnkSwitch:
->AuthorParseNodeKind.apnkSwitch : any
->AuthorParseNodeKind : any
->apnkSwitch : any
+>AuthorParseNodeKind.apnkSwitch : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkSwitch : any (error)
 
                 case AuthorParseNodeKind.apnkCase:
->AuthorParseNodeKind.apnkCase : any
->AuthorParseNodeKind : any
->apnkCase : any
+>AuthorParseNodeKind.apnkCase : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkCase : any (error)
 
                 case AuthorParseNodeKind.apnkDefaultCase:
->AuthorParseNodeKind.apnkDefaultCase : any
->AuthorParseNodeKind : any
->apnkDefaultCase : any
+>AuthorParseNodeKind.apnkDefaultCase : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkDefaultCase : any (error)
 
                 case AuthorParseNodeKind.apnkIf:
->AuthorParseNodeKind.apnkIf : any
->AuthorParseNodeKind : any
->apnkIf : any
+>AuthorParseNodeKind.apnkIf : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkIf : any (error)
 
                 case AuthorParseNodeKind.apnkFor:
->AuthorParseNodeKind.apnkFor : any
->AuthorParseNodeKind : any
->apnkFor : any
+>AuthorParseNodeKind.apnkFor : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkFor : any (error)
 
                 case AuthorParseNodeKind.apnkForIn:
->AuthorParseNodeKind.apnkForIn : any
->AuthorParseNodeKind : any
->apnkForIn : any
+>AuthorParseNodeKind.apnkForIn : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkForIn : any (error)
 
                 case AuthorParseNodeKind.apnkWhile:
->AuthorParseNodeKind.apnkWhile : any
->AuthorParseNodeKind : any
->apnkWhile : any
+>AuthorParseNodeKind.apnkWhile : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkWhile : any (error)
 
                 case AuthorParseNodeKind.apnkWith:
->AuthorParseNodeKind.apnkWith : any
->AuthorParseNodeKind : any
->apnkWith : any
+>AuthorParseNodeKind.apnkWith : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkWith : any (error)
 
                 case AuthorParseNodeKind.apnkDoWhile:
->AuthorParseNodeKind.apnkDoWhile : any
->AuthorParseNodeKind : any
->apnkDoWhile : any
+>AuthorParseNodeKind.apnkDoWhile : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkDoWhile : any (error)
 
                 case AuthorParseNodeKind.apnkObject:
->AuthorParseNodeKind.apnkObject : any
->AuthorParseNodeKind : any
->apnkObject : any
+>AuthorParseNodeKind.apnkObject : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkObject : any (error)
 
                     return true;
 >true : true
 
                 case AuthorParseNodeKind.apnkFncDecl:
->AuthorParseNodeKind.apnkFncDecl : any
->AuthorParseNodeKind : any
->apnkFncDecl : any
+>AuthorParseNodeKind.apnkFncDecl : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkFncDecl : any (error)
 
                     // Comments before arguments are not indented.
                     // This code doesn't cover the cases of comment after the last argument or 
@@ -1365,32 +1365,32 @@ module Formatting {
 >true : true
 
                     var children = ParseNodeExtensions.FindChildrenWithEdge(node, AuthorParseNodeEdge.apneArgument);
->children : any
->ParseNodeExtensions.FindChildrenWithEdge(node, AuthorParseNodeEdge.apneArgument) : any
->ParseNodeExtensions.FindChildrenWithEdge : any
->ParseNodeExtensions : any
->FindChildrenWithEdge : any
->node : any
->AuthorParseNodeEdge.apneArgument : any
->AuthorParseNodeEdge : any
->apneArgument : any
+>children : any (error)
+>ParseNodeExtensions.FindChildrenWithEdge(node, AuthorParseNodeEdge.apneArgument) : any (error)
+>ParseNodeExtensions.FindChildrenWithEdge : any (error)
+>ParseNodeExtensions : any (error)
+>FindChildrenWithEdge : any (error)
+>node : any (error)
+>AuthorParseNodeEdge.apneArgument : any (error)
+>AuthorParseNodeEdge : any (error)
+>apneArgument : any (error)
 
                     children.foreach((argumentNode) => {
->children.foreach((argumentNode) => {                        if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)                            result = false;                    }) : any
->children.foreach : any
->children : any
->foreach : any
+>children.foreach((argumentNode) => {                        if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)                            result = false;                    }) : any (error)
+>children.foreach : any (error)
+>children : any (error)
+>foreach : any (error)
 >(argumentNode) => {                        if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)                            result = false;                    } : (argumentNode: any) => void
 >argumentNode : any
 
                         if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)
 >token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset : boolean
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >argumentNode.AuthorNode.Details.StartOffset : any
 >argumentNode.AuthorNode.Details : any
 >argumentNode.AuthorNode : any
@@ -1415,9 +1415,9 @@ module Formatting {
         }
 
         private ApplyScriptBlockIndentation(languageHostIndentation: string, tree: ParseTree): void
->ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any) => void
+>ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: any (error)) => void
 >languageHostIndentation : string
->tree : any
+>tree : any (error)
         {
             if (languageHostIndentation == null || tree.StartNodeSelf == null)
 >languageHostIndentation == null || tree.StartNodeSelf == null : boolean
@@ -1425,9 +1425,9 @@ module Formatting {
 >languageHostIndentation : string
 >null : null
 >tree.StartNodeSelf == null : boolean
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
 >null : null
 
                 return;
@@ -1485,18 +1485,18 @@ module Formatting {
 
             // The root is the program.
             tree.Root.SetIndentationOverride(scriptBlockIndentation);
->tree.Root.SetIndentationOverride(scriptBlockIndentation) : any
->tree.Root.SetIndentationOverride : any
->tree.Root : any
->tree : any
->Root : any
->SetIndentationOverride : any
+>tree.Root.SetIndentationOverride(scriptBlockIndentation) : any (error)
+>tree.Root.SetIndentationOverride : any (error)
+>tree.Root : any (error)
+>tree : any (error)
+>Root : any (error)
+>SetIndentationOverride : any (error)
 >scriptBlockIndentation : string
         }
 
         private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
->GetIndentEdit : (indentInfo: any, tokenStartPosition: number, sameLineIndent: boolean) => any
->indentInfo : any
+>GetIndentEdit : (indentInfo: any (error), tokenStartPosition: number, sameLineIndent: boolean) => any (error)
+>indentInfo : any (error)
 >tokenStartPosition : number
 >sameLineIndent : boolean
 
@@ -1506,129 +1506,129 @@ module Formatting {
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
 >this : this
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->indentInfo.Prefix : any
->indentInfo : any
->Prefix : any
->indentInfo.Level : any
->indentInfo : any
->Level : any
+>indentInfo.Prefix : any (error)
+>indentInfo : any (error)
+>Prefix : any (error)
+>indentInfo.Level : any (error)
+>indentInfo : any (error)
+>Level : any (error)
 
             if (sameLineIndent) {
 >sameLineIndent : boolean
 
                 return new TextEditInfo(tokenStartPosition, 0, indentText);
->new TextEditInfo(tokenStartPosition, 0, indentText) : any
->TextEditInfo : any
+>new TextEditInfo(tokenStartPosition, 0, indentText) : any (error)
+>TextEditInfo : any (error)
 >tokenStartPosition : number
 >0 : 0
 >indentText : string
             }
             else {
                 var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
->snapshotLine : any
->this.snapshot.GetLineFromPosition(tokenStartPosition) : any
->this.snapshot.GetLineFromPosition : any
->this.snapshot : any
+>snapshotLine : any (error)
+>this.snapshot.GetLineFromPosition(tokenStartPosition) : any (error)
+>this.snapshot.GetLineFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromPosition : any
+>snapshot : any (error)
+>GetLineFromPosition : any (error)
 >tokenStartPosition : number
 
                 var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
->currentIndentSpan : any
->new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition()) : any
->Span : any
->snapshotLine.startPosition() : any
->snapshotLine.startPosition : any
->snapshotLine : any
->startPosition : any
+>currentIndentSpan : any (error)
+>new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition()) : any (error)
+>Span : any (error)
+>snapshotLine.startPosition() : any (error)
+>snapshotLine.startPosition : any (error)
+>snapshotLine : any (error)
+>startPosition : any (error)
 >tokenStartPosition - snapshotLine.startPosition() : number
 >tokenStartPosition : number
->snapshotLine.startPosition() : any
->snapshotLine.startPosition : any
->snapshotLine : any
->startPosition : any
+>snapshotLine.startPosition() : any (error)
+>snapshotLine.startPosition : any (error)
+>snapshotLine : any (error)
+>startPosition : any (error)
 
                 var currentIndentText = this.snapshot.GetText(currentIndentSpan);
->currentIndentText : any
->this.snapshot.GetText(currentIndentSpan) : any
->this.snapshot.GetText : any
->this.snapshot : any
+>currentIndentText : any (error)
+>this.snapshot.GetText(currentIndentSpan) : any (error)
+>this.snapshot.GetText : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetText : any
->currentIndentSpan : any
+>snapshot : any (error)
+>GetText : any (error)
+>currentIndentSpan : any (error)
 
                 if (currentIndentText !== indentText) {
 >currentIndentText !== indentText : boolean
->currentIndentText : any
+>currentIndentText : any (error)
 >indentText : string
 
                     if (this.logger.debug()) {
->this.logger.debug() : any
->this.logger.debug : any
->this.logger : any
+>this.logger.debug() : any (error)
+>this.logger.debug : any (error)
+>this.logger : any (error)
 >this : this
->logger : any
->debug : any
+>logger : any (error)
+>debug : any (error)
 
                         // Verify that currentIndentText is all whitespaces
                         for (var i = 0, len = currentIndentText.length; i < len; i++) {
 >i : number
 >0 : 0
->len : any
->currentIndentText.length : any
->currentIndentText : any
->length : any
+>len : any (error)
+>currentIndentText.length : any (error)
+>currentIndentText : any (error)
+>length : any (error)
 >i < len : boolean
 >i : number
->len : any
+>len : any (error)
 >i++ : number
 >i : number
 
                             var c = currentIndentText.charCodeAt(i);
->c : any
->currentIndentText.charCodeAt(i) : any
->currentIndentText.charCodeAt : any
->currentIndentText : any
->charCodeAt : any
+>c : any (error)
+>currentIndentText.charCodeAt(i) : any (error)
+>currentIndentText.charCodeAt : any (error)
+>currentIndentText : any (error)
+>charCodeAt : any (error)
 >i : number
 
                             if (!StringUtils.IsWhiteSpace(c)) {
 >!StringUtils.IsWhiteSpace(c) : boolean
->StringUtils.IsWhiteSpace(c) : any
->StringUtils.IsWhiteSpace : any
->StringUtils : any
->IsWhiteSpace : any
->c : any
+>StringUtils.IsWhiteSpace(c) : any (error)
+>StringUtils.IsWhiteSpace : any (error)
+>StringUtils : any (error)
+>IsWhiteSpace : any (error)
+>c : any (error)
 
                                 Debug.Fail("Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText());
->Debug.Fail("Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText()) : any
->Debug.Fail : any
->Debug : any
->Fail : any
+>Debug.Fail("Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText()) : any (error)
+>Debug.Fail : any (error)
+>Debug : any (error)
+>Fail : any (error)
 >"Formatting error: Will remove user code when indenting the line: " + snapshotLine.getText() : string
 >"Formatting error: Will remove user code when indenting the line: " : "Formatting error: Will remove user code when indenting the line: "
->snapshotLine.getText() : any
->snapshotLine.getText : any
->snapshotLine : any
->getText : any
+>snapshotLine.getText() : any (error)
+>snapshotLine.getText : any (error)
+>snapshotLine : any (error)
+>getText : any (error)
 
                                 break;
                             }
                         }
                     }
                     return new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText);
->new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText) : any
->TextEditInfo : any
->currentIndentSpan.start() : any
->currentIndentSpan.start : any
->currentIndentSpan : any
->start : any
->currentIndentSpan.length() : any
->currentIndentSpan.length : any
->currentIndentSpan : any
->length : any
+>new TextEditInfo(currentIndentSpan.start(), currentIndentSpan.length(), indentText) : any (error)
+>TextEditInfo : any (error)
+>currentIndentSpan.start() : any (error)
+>currentIndentSpan.start : any (error)
+>currentIndentSpan : any (error)
+>start : any (error)
+>currentIndentSpan.length() : any (error)
+>currentIndentSpan.length : any (error)
+>currentIndentSpan : any (error)
+>length : any (error)
 >indentText : string
                 }
             }
@@ -1643,28 +1643,28 @@ module Formatting {
 >level : number
 
             var indentSize = this.editorOptions.IndentSize;
->indentSize : any
->this.editorOptions.IndentSize : any
->this.editorOptions : any
+>indentSize : any (error)
+>this.editorOptions.IndentSize : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
->IndentSize : any
+>editorOptions : any (error)
+>IndentSize : any (error)
 
             var tabSize = this.editorOptions.TabSize;
->tabSize : any
->this.editorOptions.TabSize : any
->this.editorOptions : any
+>tabSize : any (error)
+>this.editorOptions.TabSize : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
->TabSize : any
+>editorOptions : any (error)
+>TabSize : any (error)
 
             var convertTabsToSpaces = this.editorOptions.ConvertTabsToSpaces;
->convertTabsToSpaces : any
->this.editorOptions.ConvertTabsToSpaces : any
->this.editorOptions : any
+>convertTabsToSpaces : any (error)
+>this.editorOptions.ConvertTabsToSpaces : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
->ConvertTabsToSpaces : any
+>editorOptions : any (error)
+>ConvertTabsToSpaces : any (error)
 
             if (level < 0) {
 >level < 0 : boolean
@@ -1672,10 +1672,10 @@ module Formatting {
 >0 : 0
 
                 if (StringUtils.IsNullOrEmpty(existingIndentation))
->StringUtils.IsNullOrEmpty(existingIndentation) : any
->StringUtils.IsNullOrEmpty : any
->StringUtils : any
->IsNullOrEmpty : any
+>StringUtils.IsNullOrEmpty(existingIndentation) : any (error)
+>StringUtils.IsNullOrEmpty : any (error)
+>StringUtils : any (error)
+>IsNullOrEmpty : any (error)
 >existingIndentation : string
 
                     return "";
@@ -1686,10 +1686,10 @@ module Formatting {
 >0 : 0
 
                 StringUtils.foreach(existingIndentation, (c) => {
->StringUtils.foreach(existingIndentation, (c) => {                    if (c == '\t')                        totalIndent += tabSize;                    else                        totalIndent++;                }) : any
->StringUtils.foreach : any
->StringUtils : any
->foreach : any
+>StringUtils.foreach(existingIndentation, (c) => {                    if (c == '\t')                        totalIndent += tabSize;                    else                        totalIndent++;                }) : any (error)
+>StringUtils.foreach : any (error)
+>StringUtils : any (error)
+>foreach : any (error)
 >existingIndentation : string
 >(c) => {                    if (c == '\t')                        totalIndent += tabSize;                    else                        totalIndent++;                } : (c: any) => void
 >c : any
@@ -1700,9 +1700,9 @@ module Formatting {
 >'\t' : "\t"
 
                         totalIndent += tabSize;
->totalIndent += tabSize : any
+>totalIndent += tabSize : any (error)
 >totalIndent : number
->tabSize : any
+>tabSize : any (error)
 
                     else
                         totalIndent++;
@@ -1716,7 +1716,7 @@ module Formatting {
 >totalIndent : number
 >level * indentSize : number
 >level : number
->indentSize : any
+>indentSize : any (error)
 
                 if (totalIndent < 0)
 >totalIndent < 0 : boolean
@@ -1734,15 +1734,15 @@ module Formatting {
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >null : null
 >totalIndent : number
->tabSize : any
->convertTabsToSpaces : any
+>tabSize : any (error)
+>convertTabsToSpaces : any (error)
             }
 
             var totalIndentSize = level * indentSize;
 >totalIndentSize : number
 >level * indentSize : number
 >level : number
->indentSize : any
+>indentSize : any (error)
 
             return this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces);
 >this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces) : string
@@ -1751,8 +1751,8 @@ module Formatting {
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >existingIndentation : string
 >totalIndentSize : number
->tabSize : any
->convertTabsToSpaces : any
+>tabSize : any (error)
+>convertTabsToSpaces : any (error)
         }
 
         private GetIndentString(prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean): string {
@@ -1766,10 +1766,10 @@ module Formatting {
 >tabString : any
 >convertTabsToSpaces ? StringUtils.create(' ', tabSize) : "\t" : any
 >convertTabsToSpaces : boolean
->StringUtils.create(' ', tabSize) : any
->StringUtils.create : any
->StringUtils : any
->create : any
+>StringUtils.create(' ', tabSize) : any (error)
+>StringUtils.create : any (error)
+>StringUtils : any (error)
+>create : any (error)
 >' ' : " "
 >tabSize : number
 >"\t" : "\t"
@@ -1780,10 +1780,10 @@ module Formatting {
 
             if (!StringUtils.IsNullOrEmpty(prefix))
 >!StringUtils.IsNullOrEmpty(prefix) : boolean
->StringUtils.IsNullOrEmpty(prefix) : any
->StringUtils.IsNullOrEmpty : any
->StringUtils : any
->IsNullOrEmpty : any
+>StringUtils.IsNullOrEmpty(prefix) : any (error)
+>StringUtils.IsNullOrEmpty : any (error)
+>StringUtils : any (error)
+>IsNullOrEmpty : any (error)
 >prefix : string
 
                 text += prefix;
@@ -1835,52 +1835,52 @@ module Formatting {
         }
 
         private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
->ApplyIndentationDeltaFromParent : (token: any, node: any) => any
->token : any
->node : any
+>ApplyIndentationDeltaFromParent : (token: any (error), node: any (error)) => any (error)
+>token : any (error)
+>node : any (error)
 
             var indentationInfo: IndentationInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             var indentableParent = node;
->indentableParent : any
->node : any
+>indentableParent : any (error)
+>node : any (error)
 
             while (indentableParent != null && !indentableParent.CanIndent())
 >indentableParent != null && !indentableParent.CanIndent() : boolean
 >indentableParent != null : boolean
->indentableParent : any
+>indentableParent : any (error)
 >null : null
 >!indentableParent.CanIndent() : boolean
->indentableParent.CanIndent() : any
->indentableParent.CanIndent : any
->indentableParent : any
->CanIndent : any
+>indentableParent.CanIndent() : any (error)
+>indentableParent.CanIndent : any (error)
+>indentableParent : any (error)
+>CanIndent : any (error)
 
                 indentableParent = indentableParent.Parent;
->indentableParent = indentableParent.Parent : any
->indentableParent : any
->indentableParent.Parent : any
->indentableParent : any
->Parent : any
+>indentableParent = indentableParent.Parent : any (error)
+>indentableParent : any (error)
+>indentableParent.Parent : any (error)
+>indentableParent : any (error)
+>Parent : any (error)
 
             if (indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
 >indentableParent != null && indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >indentableParent != null : boolean
->indentableParent : any
+>indentableParent : any (error)
 >null : null
 >indentableParent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
->indentableParent.AuthorNode.Details.Kind : any
->indentableParent.AuthorNode.Details : any
->indentableParent.AuthorNode : any
->indentableParent : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkProg : any
->AuthorParseNodeKind : any
->apnkProg : any
+>indentableParent.AuthorNode.Details.Kind : any (error)
+>indentableParent.AuthorNode.Details : any (error)
+>indentableParent.AuthorNode : any (error)
+>indentableParent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkProg : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkProg : any (error)
 
                 var parentIndentationDeltaSize = this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition());
 >parentIndentationDeltaSize : number
@@ -1888,19 +1888,19 @@ module Formatting {
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
 >this : this
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->indentableParent.AuthorNode.Details.StartOffset : any
->indentableParent.AuthorNode.Details : any
->indentableParent.AuthorNode : any
->indentableParent : any
->AuthorNode : any
->Details : any
->StartOffset : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>indentableParent.AuthorNode.Details.StartOffset : any (error)
+>indentableParent.AuthorNode.Details : any (error)
+>indentableParent.AuthorNode : any (error)
+>indentableParent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 
                 if (parentIndentationDeltaSize !== undefined) {
 >parentIndentationDeltaSize !== undefined : boolean
@@ -1908,79 +1908,79 @@ module Formatting {
 >undefined : undefined
 
                     indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize);
->indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any
->indentationInfo : any
->this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any
->this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
+>indentationInfo = this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any (error)
+>indentationInfo : any (error)
+>this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : any (error)
+>this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any (error)
 >this : this
->ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
 >parentIndentationDeltaSize : number
                 }
             }
 
             return indentationInfo;
->indentationInfo : any
+>indentationInfo : any (error)
         }
 
         private ApplyIndentationDelta1(tokenStartPosition: number, delta: number): IndentationInfo {
->ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any
+>ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => any (error)
 >tokenStartPosition : number
 >delta : number
 
             // Get current indentation
             var snapshotLine = this.snapshot.GetLineFromPosition(tokenStartPosition);
->snapshotLine : any
->this.snapshot.GetLineFromPosition(tokenStartPosition) : any
->this.snapshot.GetLineFromPosition : any
->this.snapshot : any
+>snapshotLine : any (error)
+>this.snapshot.GetLineFromPosition(tokenStartPosition) : any (error)
+>this.snapshot.GetLineFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromPosition : any
+>snapshot : any (error)
+>GetLineFromPosition : any (error)
 >tokenStartPosition : number
 
             var currentIndentSpan = new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition());
->currentIndentSpan : any
->new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition()) : any
->Span : any
->snapshotLine.startPosition() : any
->snapshotLine.startPosition : any
->snapshotLine : any
->startPosition : any
+>currentIndentSpan : any (error)
+>new Span(snapshotLine.startPosition(), tokenStartPosition - snapshotLine.startPosition()) : any (error)
+>Span : any (error)
+>snapshotLine.startPosition() : any (error)
+>snapshotLine.startPosition : any (error)
+>snapshotLine : any (error)
+>startPosition : any (error)
 >tokenStartPosition - snapshotLine.startPosition() : number
 >tokenStartPosition : number
->snapshotLine.startPosition() : any
->snapshotLine.startPosition : any
->snapshotLine : any
->startPosition : any
+>snapshotLine.startPosition() : any (error)
+>snapshotLine.startPosition : any (error)
+>snapshotLine : any (error)
+>startPosition : any (error)
 
             var currentIndent = this.snapshot.GetText(currentIndentSpan);
->currentIndent : any
->this.snapshot.GetText(currentIndentSpan) : any
->this.snapshot.GetText : any
->this.snapshot : any
+>currentIndent : any (error)
+>this.snapshot.GetText(currentIndentSpan) : any (error)
+>this.snapshot.GetText : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetText : any
->currentIndentSpan : any
+>snapshot : any (error)
+>GetText : any (error)
+>currentIndentSpan : any (error)
 
             // Calculate new indentation from current-indentation and delta
             return this.ApplyIndentationDelta2(currentIndent, delta);
->this.ApplyIndentationDelta2(currentIndent, delta) : any
->this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
+>this.ApplyIndentationDelta2(currentIndent, delta) : any (error)
+>this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any (error)
 >this : this
->ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
->currentIndent : any
+>ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any (error)
+>currentIndent : any (error)
 >delta : number
         }
 
         private ApplyIndentationDelta2(currentIndent: string, delta: number): IndentationInfo {
->ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any
+>ApplyIndentationDelta2 : (currentIndent: string, delta: number) => any (error)
 >currentIndent : string
 >delta : number
 
@@ -1995,13 +1995,13 @@ module Formatting {
             var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
 >currentIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >currentIndent : string
->this.editorOptions : any
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
+>editorOptions : any (error)
 
             var newIndentSize = currentIndentSize + delta;
 >newIndentSize : number
@@ -2028,16 +2028,16 @@ module Formatting {
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >null : null
 >newIndentSize : number
->this.editorOptions.TabSize : any
->this.editorOptions : any
+>this.editorOptions.TabSize : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
->TabSize : any
->this.editorOptions.ConvertTabsToSpaces : any
->this.editorOptions : any
+>editorOptions : any (error)
+>TabSize : any (error)
+>this.editorOptions.ConvertTabsToSpaces : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
->ConvertTabsToSpaces : any
+>editorOptions : any (error)
+>ConvertTabsToSpaces : any (error)
 
             if (newIndent != null) {
 >newIndent != null : boolean
@@ -2045,8 +2045,8 @@ module Formatting {
 >null : null
 
                 return new IndentationInfo(newIndent, 0);
->new IndentationInfo(newIndent, 0) : any
->IndentationInfo : any
+>new IndentationInfo(newIndent, 0) : any (error)
+>IndentationInfo : any (error)
 >newIndent : string
 >0 : 0
             }
@@ -2061,96 +2061,96 @@ module Formatting {
 >childTokenStartPosition : number
 
             Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position");
->Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position") : any
->Debug.Assert : any
->Debug : any
->Assert : any
+>Debug.Assert(childTokenStartPosition !== undefined, "Error: caller must pass 'null' for undefined position") : any (error)
+>Debug.Assert : any (error)
+>Debug : any (error)
+>Assert : any (error)
 >childTokenStartPosition !== undefined : boolean
 >childTokenStartPosition : number
 >undefined : undefined
 >"Error: caller must pass 'null' for undefined position" : "Error: caller must pass 'null' for undefined position"
 
             var indentationDeltaSize = this.offsetIndentationDeltas.GetValue(tokenStartPosition);
->indentationDeltaSize : any
->this.offsetIndentationDeltas.GetValue(tokenStartPosition) : any
->this.offsetIndentationDeltas.GetValue : any
->this.offsetIndentationDeltas : any
+>indentationDeltaSize : any (error)
+>this.offsetIndentationDeltas.GetValue(tokenStartPosition) : any (error)
+>this.offsetIndentationDeltas.GetValue : any (error)
+>this.offsetIndentationDeltas : any (error)
 >this : this
->offsetIndentationDeltas : any
->GetValue : any
+>offsetIndentationDeltas : any (error)
+>GetValue : any (error)
 >tokenStartPosition : number
 
             if (indentationDeltaSize === null) {
 >indentationDeltaSize === null : boolean
->indentationDeltaSize : any
+>indentationDeltaSize : any (error)
 >null : null
 
                 var indentEditInfo = this.indentationBag.FindIndent(tokenStartPosition);
->indentEditInfo : any
->this.indentationBag.FindIndent(tokenStartPosition) : any
->this.indentationBag.FindIndent : any
->this.indentationBag : any
+>indentEditInfo : any (error)
+>this.indentationBag.FindIndent(tokenStartPosition) : any (error)
+>this.indentationBag.FindIndent : any (error)
+>this.indentationBag : any (error)
 >this : this
->indentationBag : any
->FindIndent : any
+>indentationBag : any (error)
+>FindIndent : any (error)
 >tokenStartPosition : number
 
                 // No recorded indentation, return null
                 if (indentEditInfo == null)
 >indentEditInfo == null : boolean
->indentEditInfo : any
+>indentEditInfo : any (error)
 >null : null
 
                     return null;
 >null : null
 
                 var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
->origIndentText : any
->this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength())) : any
->this.snapshot.GetText : any
->this.snapshot : any
+>origIndentText : any (error)
+>this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength())) : any (error)
+>this.snapshot.GetText : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetText : any
->new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()) : any
->Span : any
->indentEditInfo.OrigIndentPosition : any
->indentEditInfo : any
->OrigIndentPosition : any
->indentEditInfo.OrigIndentLength() : any
->indentEditInfo.OrigIndentLength : any
->indentEditInfo : any
->OrigIndentLength : any
+>snapshot : any (error)
+>GetText : any (error)
+>new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()) : any (error)
+>Span : any (error)
+>indentEditInfo.OrigIndentPosition : any (error)
+>indentEditInfo : any (error)
+>OrigIndentPosition : any (error)
+>indentEditInfo.OrigIndentLength() : any (error)
+>indentEditInfo.OrigIndentLength : any (error)
+>indentEditInfo : any (error)
+>OrigIndentLength : any (error)
 
                 var newIndentText = indentEditInfo.Indentation();
->newIndentText : any
->indentEditInfo.Indentation() : any
->indentEditInfo.Indentation : any
->indentEditInfo : any
->Indentation : any
+>newIndentText : any (error)
+>indentEditInfo.Indentation() : any (error)
+>indentEditInfo.Indentation : any (error)
+>indentEditInfo : any (error)
+>Indentation : any (error)
 
                 var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true);
 >origIndentSize : number
 >Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true) : number
->Indenter.GetIndentSizeFromText : (text: string, editorOptions: any, includeNonIndentChars: boolean) => number
+>Indenter.GetIndentSizeFromText : (text: string, editorOptions: any (error), includeNonIndentChars: boolean) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromText : (text: string, editorOptions: any, includeNonIndentChars: boolean) => number
->origIndentText : any
->this.editorOptions : any
+>GetIndentSizeFromText : (text: string, editorOptions: any (error), includeNonIndentChars: boolean) => number
+>origIndentText : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
+>editorOptions : any (error)
 >true : true
 
                 var newIndentSize = Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions);
 >newIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
->newIndentText : any
->this.editorOptions : any
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
+>newIndentText : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
+>editorOptions : any (error)
 
                 // Check the child's position whether it's before the parent position
                 // if so indent the child based on the first token on the line as opposed to the parent position
@@ -2172,43 +2172,43 @@ module Formatting {
 >null : null
 
                     var childTokenLineStartPosition = this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition();
->childTokenLineStartPosition : any
->this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition() : any
->this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition : any
->this.snapshot.GetLineFromPosition(childTokenStartPosition) : any
->this.snapshot.GetLineFromPosition : any
->this.snapshot : any
+>childTokenLineStartPosition : any (error)
+>this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition() : any (error)
+>this.snapshot.GetLineFromPosition(childTokenStartPosition).startPosition : any (error)
+>this.snapshot.GetLineFromPosition(childTokenStartPosition) : any (error)
+>this.snapshot.GetLineFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromPosition : any
+>snapshot : any (error)
+>GetLineFromPosition : any (error)
 >childTokenStartPosition : number
->startPosition : any
+>startPosition : any (error)
 
                     var childIndentText = this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition));
->childIndentText : any
->this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition)) : any
->this.snapshot.GetText : any
->this.snapshot : any
+>childIndentText : any (error)
+>this.snapshot.GetText(new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition)) : any (error)
+>this.snapshot.GetText : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetText : any
->new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition) : any
->Span : any
->childTokenLineStartPosition : any
+>snapshot : any (error)
+>GetText : any (error)
+>new Span(childTokenLineStartPosition, childTokenStartPosition - childTokenLineStartPosition) : any (error)
+>Span : any (error)
+>childTokenLineStartPosition : any (error)
 >childTokenStartPosition - childTokenLineStartPosition : number
 >childTokenStartPosition : number
->childTokenLineStartPosition : any
+>childTokenLineStartPosition : any (error)
 
                     var childIndentSize = Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions);
 >childIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
->childIndentText : any
->this.editorOptions : any
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
+>childIndentText : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
+>editorOptions : any (error)
 
                     if (childIndentSize < origIndentSize)
 >childIndentSize < origIndentSize : boolean
@@ -2219,40 +2219,40 @@ module Formatting {
 >origIndentSize = Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions) : number
 >origIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: any) => number
->origIndentText : any
->this.editorOptions : any
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: any (error)) => number
+>origIndentText : any (error)
+>this.editorOptions : any (error)
 >this : this
->editorOptions : any
+>editorOptions : any (error)
                 }
 
                 indentationDeltaSize = newIndentSize - origIndentSize;
 >indentationDeltaSize = newIndentSize - origIndentSize : number
->indentationDeltaSize : any
+>indentationDeltaSize : any (error)
 >newIndentSize - origIndentSize : number
 >newIndentSize : number
 >origIndentSize : number
 
                 this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize);
->this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize) : any
->this.offsetIndentationDeltas.Add : any
->this.offsetIndentationDeltas : any
+>this.offsetIndentationDeltas.Add(tokenStartPosition, indentationDeltaSize) : any (error)
+>this.offsetIndentationDeltas.Add : any (error)
+>this.offsetIndentationDeltas : any (error)
 >this : this
->offsetIndentationDeltas : any
->Add : any
+>offsetIndentationDeltas : any (error)
+>Add : any (error)
 >tokenStartPosition : number
->indentationDeltaSize : any
+>indentationDeltaSize : any (error)
             }
 
             return indentationDeltaSize;
->indentationDeltaSize : any
+>indentationDeltaSize : any (error)
         }
 
         private FillInheritedIndentation(tree: ParseTree): void
->FillInheritedIndentation : (tree: any) => void
->tree : any
+>FillInheritedIndentation : (tree: any (error)) => void
+>tree : any (error)
         {
             var offset = -1;
 >offset : number
@@ -2260,14 +2260,14 @@ module Formatting {
 >1 : 1
 
             var indentNode: ParseNode = null;
->indentNode : any
+>indentNode : any (error)
 >null : null
 
             if (tree.StartNodeSelf != null) {
 >tree.StartNodeSelf != null : boolean
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
 >null : null
 
                 if (!this.smartIndent && tree.StartNodePreviousSibling !== null && tree.StartNodeSelf.AuthorNode.Label == 0 && tree.StartNodePreviousSibling.Label == 0) {
@@ -2279,118 +2279,118 @@ module Formatting {
 >this : this
 >smartIndent : boolean
 >tree.StartNodePreviousSibling !== null : boolean
->tree.StartNodePreviousSibling : any
->tree : any
->StartNodePreviousSibling : any
+>tree.StartNodePreviousSibling : any (error)
+>tree : any (error)
+>StartNodePreviousSibling : any (error)
 >null : null
 >tree.StartNodeSelf.AuthorNode.Label == 0 : boolean
->tree.StartNodeSelf.AuthorNode.Label : any
->tree.StartNodeSelf.AuthorNode : any
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
->AuthorNode : any
->Label : any
+>tree.StartNodeSelf.AuthorNode.Label : any (error)
+>tree.StartNodeSelf.AuthorNode : any (error)
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
+>AuthorNode : any (error)
+>Label : any (error)
 >0 : 0
 >tree.StartNodePreviousSibling.Label == 0 : boolean
->tree.StartNodePreviousSibling.Label : any
->tree.StartNodePreviousSibling : any
->tree : any
->StartNodePreviousSibling : any
->Label : any
+>tree.StartNodePreviousSibling.Label : any (error)
+>tree.StartNodePreviousSibling : any (error)
+>tree : any (error)
+>StartNodePreviousSibling : any (error)
+>Label : any (error)
 >0 : 0
 
                     indentNode = tree.StartNodeSelf;
->indentNode = tree.StartNodeSelf : any
->indentNode : any
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
+>indentNode = tree.StartNodeSelf : any (error)
+>indentNode : any (error)
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
 
                     offset = tree.StartNodePreviousSibling.Details.StartOffset;
->offset = tree.StartNodePreviousSibling.Details.StartOffset : any
+>offset = tree.StartNodePreviousSibling.Details.StartOffset : any (error)
 >offset : number
->tree.StartNodePreviousSibling.Details.StartOffset : any
->tree.StartNodePreviousSibling.Details : any
->tree.StartNodePreviousSibling : any
->tree : any
->StartNodePreviousSibling : any
->Details : any
->StartOffset : any
+>tree.StartNodePreviousSibling.Details.StartOffset : any (error)
+>tree.StartNodePreviousSibling.Details : any (error)
+>tree.StartNodePreviousSibling : any (error)
+>tree : any (error)
+>StartNodePreviousSibling : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                     // In case the sibling node is on the same line of a parent node, ex:
                     //      case 1: a++;
                     //          break;
                     // In this example, the sibling of break is a++ but a++ is on the same line of its parent.
                     var lineNum = this.snapshot.GetLineNumberFromPosition(offset);
->lineNum : any
->this.snapshot.GetLineNumberFromPosition(offset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>lineNum : any (error)
+>this.snapshot.GetLineNumberFromPosition(offset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
 >offset : number
 
                     var node = indentNode;
->node : any
->indentNode : any
+>node : any (error)
+>indentNode : any (error)
 
                     while (node.Parent != null && this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) == lineNum) {
 >node.Parent != null && this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) == lineNum : boolean
 >node.Parent != null : boolean
->node.Parent : any
->node : any
->Parent : any
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 >null : null
 >this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) == lineNum : boolean
->this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>this.snapshot.GetLineNumberFromPosition(node.Parent.AuthorNode.Details.StartOffset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->node.Parent.AuthorNode.Details.StartOffset : any
->node.Parent.AuthorNode.Details : any
->node.Parent.AuthorNode : any
->node.Parent : any
->node : any
->Parent : any
->AuthorNode : any
->Details : any
->StartOffset : any
->lineNum : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>node.Parent.AuthorNode.Details.StartOffset : any (error)
+>node.Parent.AuthorNode.Details : any (error)
+>node.Parent.AuthorNode : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
+>lineNum : any (error)
 
                         node = node.Parent;
->node = node.Parent : any
->node : any
->node.Parent : any
->node : any
->Parent : any
+>node = node.Parent : any (error)
+>node : any (error)
+>node.Parent : any (error)
+>node : any (error)
+>Parent : any (error)
 
                         if (node.CanIndent()) {
->node.CanIndent() : any
->node.CanIndent : any
->node : any
->CanIndent : any
+>node.CanIndent() : any (error)
+>node.CanIndent : any (error)
+>node : any (error)
+>CanIndent : any (error)
 
                             indentNode = node;
->indentNode = node : any
->indentNode : any
->node : any
+>indentNode = node : any (error)
+>indentNode : any (error)
+>node : any (error)
 
                             indentNode.IndentationDelta = 0;
 >indentNode.IndentationDelta = 0 : 0
->indentNode.IndentationDelta : any
->indentNode : any
->IndentationDelta : any
+>indentNode.IndentationDelta : any (error)
+>indentNode : any (error)
+>IndentationDelta : any (error)
 >0 : 0
                         }
                     }
                 }
                 else {
                     var parent: ParseNode;
->parent : any
+>parent : any (error)
 
                     // Otherwise base on parent indentation.
                     if (this.smartIndent) {
@@ -2401,99 +2401,99 @@ module Formatting {
                         // in smartIndent the self node is the parent node since it's the closest node to the new line
                         // ... unless in case if the startNodeSelf represents the firstToken then we need to choose its parent
                         parent = tree.StartNodeSelf;
->parent = tree.StartNodeSelf : any
->parent : any
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
+>parent = tree.StartNodeSelf : any (error)
+>parent : any (error)
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
 
                         while (parent != null && parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition())
 >parent != null && parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition() : boolean
 >parent != null : boolean
->parent : any
+>parent : any (error)
 >null : null
 >parent.AuthorNode.Details.StartOffset == this.firstToken.Span.startPosition() : boolean
->parent.AuthorNode.Details.StartOffset : any
->parent.AuthorNode.Details : any
->parent.AuthorNode : any
->parent : any
->AuthorNode : any
->Details : any
->StartOffset : any
->this.firstToken.Span.startPosition() : any
->this.firstToken.Span.startPosition : any
->this.firstToken.Span : any
->this.firstToken : any
+>parent.AuthorNode.Details.StartOffset : any (error)
+>parent.AuthorNode.Details : any (error)
+>parent.AuthorNode : any (error)
+>parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
+>this.firstToken.Span.startPosition() : any (error)
+>this.firstToken.Span.startPosition : any (error)
+>this.firstToken.Span : any (error)
+>this.firstToken : any (error)
 >this : this
->firstToken : any
->Span : any
->startPosition : any
+>firstToken : any (error)
+>Span : any (error)
+>startPosition : any (error)
 
                             parent = parent.Parent;
->parent = parent.Parent : any
->parent : any
->parent.Parent : any
->parent : any
->Parent : any
+>parent = parent.Parent : any (error)
+>parent : any (error)
+>parent.Parent : any (error)
+>parent : any (error)
+>Parent : any (error)
                     }
                     else {
                         // Get the parent that is really on a different line from the self node
                         var startNodeLineNumber = this.snapshot.GetLineNumberFromPosition(tree.StartNodeSelf.AuthorNode.Details.StartOffset);
->startNodeLineNumber : any
->this.snapshot.GetLineNumberFromPosition(tree.StartNodeSelf.AuthorNode.Details.StartOffset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>startNodeLineNumber : any (error)
+>this.snapshot.GetLineNumberFromPosition(tree.StartNodeSelf.AuthorNode.Details.StartOffset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->tree.StartNodeSelf.AuthorNode.Details.StartOffset : any
->tree.StartNodeSelf.AuthorNode.Details : any
->tree.StartNodeSelf.AuthorNode : any
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>tree.StartNodeSelf.AuthorNode.Details.StartOffset : any (error)
+>tree.StartNodeSelf.AuthorNode.Details : any (error)
+>tree.StartNodeSelf.AuthorNode : any (error)
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                         parent = tree.StartNodeSelf.Parent;
->parent = tree.StartNodeSelf.Parent : any
->parent : any
->tree.StartNodeSelf.Parent : any
->tree.StartNodeSelf : any
->tree : any
->StartNodeSelf : any
->Parent : any
+>parent = tree.StartNodeSelf.Parent : any (error)
+>parent : any (error)
+>tree.StartNodeSelf.Parent : any (error)
+>tree.StartNodeSelf : any (error)
+>tree : any (error)
+>StartNodeSelf : any (error)
+>Parent : any (error)
 
                         while (parent != null &&
 >parent != null &&                                startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : boolean
 >parent != null : boolean
->parent : any
+>parent : any (error)
 >null : null
 
                                 startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset)) {
 >startNodeLineNumber == this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : boolean
->startNodeLineNumber : any
->this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>startNodeLineNumber : any (error)
+>this.snapshot.GetLineNumberFromPosition(parent.AuthorNode.Details.StartOffset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->parent.AuthorNode.Details.StartOffset : any
->parent.AuthorNode.Details : any
->parent.AuthorNode : any
->parent : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>parent.AuthorNode.Details.StartOffset : any (error)
+>parent.AuthorNode.Details : any (error)
+>parent.AuthorNode : any (error)
+>parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                             parent = parent.Parent;
->parent = parent.Parent : any
->parent : any
->parent.Parent : any
->parent : any
->Parent : any
+>parent = parent.Parent : any (error)
+>parent : any (error)
+>parent.Parent : any (error)
+>parent : any (error)
+>Parent : any (error)
                         }
                     }
 
@@ -2501,62 +2501,62 @@ module Formatting {
                     while (parent != null && !parent.CanIndent()) {
 >parent != null && !parent.CanIndent() : boolean
 >parent != null : boolean
->parent : any
+>parent : any (error)
 >null : null
 >!parent.CanIndent() : boolean
->parent.CanIndent() : any
->parent.CanIndent : any
->parent : any
->CanIndent : any
+>parent.CanIndent() : any (error)
+>parent.CanIndent : any (error)
+>parent : any (error)
+>CanIndent : any (error)
 
                         parent = parent.Parent;
->parent = parent.Parent : any
->parent : any
->parent.Parent : any
->parent : any
->Parent : any
+>parent = parent.Parent : any (error)
+>parent : any (error)
+>parent.Parent : any (error)
+>parent : any (error)
+>Parent : any (error)
                     }
 
                     // Skip Program since it has no indentation
                     if (parent != null && parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg) {
 >parent != null && parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
 >parent != null : boolean
->parent : any
+>parent : any (error)
 >null : null
 >parent.AuthorNode.Details.Kind != AuthorParseNodeKind.apnkProg : boolean
->parent.AuthorNode.Details.Kind : any
->parent.AuthorNode.Details : any
->parent.AuthorNode : any
->parent : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkProg : any
->AuthorParseNodeKind : any
->apnkProg : any
+>parent.AuthorNode.Details.Kind : any (error)
+>parent.AuthorNode.Details : any (error)
+>parent.AuthorNode : any (error)
+>parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkProg : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkProg : any (error)
 
                         offset = parent.AuthorNode.Details.StartOffset;
->offset = parent.AuthorNode.Details.StartOffset : any
+>offset = parent.AuthorNode.Details.StartOffset : any (error)
 >offset : number
->parent.AuthorNode.Details.StartOffset : any
->parent.AuthorNode.Details : any
->parent.AuthorNode : any
->parent : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>parent.AuthorNode.Details.StartOffset : any (error)
+>parent.AuthorNode.Details : any (error)
+>parent.AuthorNode : any (error)
+>parent : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                         indentNode = parent;
->indentNode = parent : any
->indentNode : any
->parent : any
+>indentNode = parent : any (error)
+>indentNode : any (error)
+>parent : any (error)
                     }
                 }
             }
 
             if (indentNode != null) {
 >indentNode != null : boolean
->indentNode : any
+>indentNode : any (error)
 >null : null
 
                 var indentOverride = this.GetLineIndentationForOffset(offset);
@@ -2576,34 +2576,34 @@ module Formatting {
 >this : this
 >smartIndent : boolean
 >tree.StartNodePreviousSibling !== null : boolean
->tree.StartNodePreviousSibling : any
->tree : any
->StartNodePreviousSibling : any
+>tree.StartNodePreviousSibling : any (error)
+>tree : any (error)
+>StartNodePreviousSibling : any (error)
 >null : null
 >indentNode.Parent != null : boolean
->indentNode.Parent : any
->indentNode : any
->Parent : any
+>indentNode.Parent : any (error)
+>indentNode : any (error)
+>Parent : any (error)
 >null : null
 
                     ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {
->ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {                        if (sibling !== indentNode) {                            if (sibling.CanIndent())                                sibling.SetIndentationOverride(indentOverride);                        }                    }) : any
->ParseNodeExtensions.GetChildren(indentNode.Parent).foreach : any
->ParseNodeExtensions.GetChildren(indentNode.Parent) : any
->ParseNodeExtensions.GetChildren : any
->ParseNodeExtensions : any
->GetChildren : any
->indentNode.Parent : any
->indentNode : any
->Parent : any
->foreach : any
+>ParseNodeExtensions.GetChildren(indentNode.Parent).foreach((sibling) => {                        if (sibling !== indentNode) {                            if (sibling.CanIndent())                                sibling.SetIndentationOverride(indentOverride);                        }                    }) : any (error)
+>ParseNodeExtensions.GetChildren(indentNode.Parent).foreach : any (error)
+>ParseNodeExtensions.GetChildren(indentNode.Parent) : any (error)
+>ParseNodeExtensions.GetChildren : any (error)
+>ParseNodeExtensions : any (error)
+>GetChildren : any (error)
+>indentNode.Parent : any (error)
+>indentNode : any (error)
+>Parent : any (error)
+>foreach : any (error)
 >(sibling) => {                        if (sibling !== indentNode) {                            if (sibling.CanIndent())                                sibling.SetIndentationOverride(indentOverride);                        }                    } : (sibling: any) => void
 >sibling : any
 
                         if (sibling !== indentNode) {
 >sibling !== indentNode : boolean
 >sibling : any
->indentNode : any
+>indentNode : any (error)
 
                             if (sibling.CanIndent())
 >sibling.CanIndent() : any
@@ -2627,47 +2627,47 @@ module Formatting {
 >0 : 0
 
                 var lastLine = this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset);
->lastLine : any
->this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>lastLine : any (error)
+>this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->indentNode.AuthorNode.Details.StartOffset : any
->indentNode.AuthorNode.Details : any
->indentNode.AuthorNode : any
->indentNode : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>indentNode.AuthorNode.Details.StartOffset : any (error)
+>indentNode.AuthorNode.Details : any (error)
+>indentNode.AuthorNode : any (error)
+>indentNode : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                 do {
                     var currentLine = this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset);
->currentLine : any
->this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>currentLine : any (error)
+>this.snapshot.GetLineNumberFromPosition(indentNode.AuthorNode.Details.StartOffset) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->indentNode.AuthorNode.Details.StartOffset : any
->indentNode.AuthorNode.Details : any
->indentNode.AuthorNode : any
->indentNode : any
->AuthorNode : any
->Details : any
->StartOffset : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>indentNode.AuthorNode.Details.StartOffset : any (error)
+>indentNode.AuthorNode.Details : any (error)
+>indentNode.AuthorNode : any (error)
+>indentNode : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>StartOffset : any (error)
 
                     if (lastLine != currentLine) {
 >lastLine != currentLine : boolean
->lastLine : any
->currentLine : any
+>lastLine : any (error)
+>currentLine : any (error)
 
                         lastLine = currentLine;
->lastLine = currentLine : any
->lastLine : any
->currentLine : any
+>lastLine = currentLine : any (error)
+>lastLine : any (error)
+>currentLine : any (error)
 
                         indentOverride = this.ApplyIndentationLevel(indentOverride, -lastDelta);
 >indentOverride = this.ApplyIndentationLevel(indentOverride, -lastDelta) : string
@@ -2687,36 +2687,36 @@ module Formatting {
                     }
 
                     if (indentNode.CanIndent()) {
->indentNode.CanIndent() : any
->indentNode.CanIndent : any
->indentNode : any
->CanIndent : any
+>indentNode.CanIndent() : any (error)
+>indentNode.CanIndent : any (error)
+>indentNode : any (error)
+>CanIndent : any (error)
 
                         indentNode.SetIndentationOverride(indentOverride);
->indentNode.SetIndentationOverride(indentOverride) : any
->indentNode.SetIndentationOverride : any
->indentNode : any
->SetIndentationOverride : any
+>indentNode.SetIndentationOverride(indentOverride) : any (error)
+>indentNode.SetIndentationOverride : any (error)
+>indentNode : any (error)
+>SetIndentationOverride : any (error)
 >indentOverride : string
 
                         lastDelta = indentNode.IndentationDelta;
->lastDelta = indentNode.IndentationDelta : any
+>lastDelta = indentNode.IndentationDelta : any (error)
 >lastDelta : number
->indentNode.IndentationDelta : any
->indentNode : any
->IndentationDelta : any
+>indentNode.IndentationDelta : any (error)
+>indentNode : any (error)
+>IndentationDelta : any (error)
                     }
 
                     indentNode = indentNode.Parent;
->indentNode = indentNode.Parent : any
->indentNode : any
->indentNode.Parent : any
->indentNode : any
->Parent : any
+>indentNode = indentNode.Parent : any (error)
+>indentNode : any (error)
+>indentNode.Parent : any (error)
+>indentNode : any (error)
+>Parent : any (error)
                 }
                 while (indentNode != null);
 >indentNode != null : boolean
->indentNode : any
+>indentNode : any (error)
 >null : null
             }
         }
@@ -2726,49 +2726,49 @@ module Formatting {
 >offset : number
 
             var indentationEdit: IndentationEditInfo;
->indentationEdit : any
+>indentationEdit : any (error)
 
             // First check if we already have indentation info in our indentation bag
             indentationEdit = this.indentationBag.FindIndent(offset);
->indentationEdit = this.indentationBag.FindIndent(offset) : any
->indentationEdit : any
->this.indentationBag.FindIndent(offset) : any
->this.indentationBag.FindIndent : any
->this.indentationBag : any
+>indentationEdit = this.indentationBag.FindIndent(offset) : any (error)
+>indentationEdit : any (error)
+>this.indentationBag.FindIndent(offset) : any (error)
+>this.indentationBag.FindIndent : any (error)
+>this.indentationBag : any (error)
 >this : this
->indentationBag : any
->FindIndent : any
+>indentationBag : any (error)
+>FindIndent : any (error)
 >offset : number
 
             if (indentationEdit != null) {
 >indentationEdit != null : boolean
->indentationEdit : any
+>indentationEdit : any (error)
 >null : null
 
                 return indentationEdit.Indentation();
->indentationEdit.Indentation() : any
->indentationEdit.Indentation : any
->indentationEdit : any
->Indentation : any
+>indentationEdit.Indentation() : any (error)
+>indentationEdit.Indentation : any (error)
+>indentationEdit : any (error)
+>Indentation : any (error)
             }
             else {
                 // Otherwise, use the indentation from the textBuffer
                 var line = this.snapshot.GetLineFromPosition(offset);
->line : any
->this.snapshot.GetLineFromPosition(offset) : any
->this.snapshot.GetLineFromPosition : any
->this.snapshot : any
+>line : any (error)
+>this.snapshot.GetLineFromPosition(offset) : any (error)
+>this.snapshot.GetLineFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromPosition : any
+>snapshot : any (error)
+>GetLineFromPosition : any (error)
 >offset : number
 
                 var lineText = line.getText();
->lineText : any
->line.getText() : any
->line.getText : any
->line : any
->getText : any
+>lineText : any (error)
+>line.getText() : any (error)
+>line.getText : any (error)
+>line : any (error)
+>getText : any (error)
 
                 var index = 0;
 >index : number
@@ -2778,23 +2778,23 @@ module Formatting {
 >index < lineText.length && (lineText.charAt(index) == ' ' || lineText.charAt(index) == '\t') : boolean
 >index < lineText.length : boolean
 >index : number
->lineText.length : any
->lineText : any
->length : any
+>lineText.length : any (error)
+>lineText : any (error)
+>length : any (error)
 >(lineText.charAt(index) == ' ' || lineText.charAt(index) == '\t') : boolean
 >lineText.charAt(index) == ' ' || lineText.charAt(index) == '\t' : boolean
 >lineText.charAt(index) == ' ' : boolean
->lineText.charAt(index) : any
->lineText.charAt : any
->lineText : any
->charAt : any
+>lineText.charAt(index) : any (error)
+>lineText.charAt : any (error)
+>lineText : any (error)
+>charAt : any (error)
 >index : number
 >' ' : " "
 >lineText.charAt(index) == '\t' : boolean
->lineText.charAt(index) : any
->lineText.charAt : any
->lineText : any
->charAt : any
+>lineText.charAt(index) : any (error)
+>lineText.charAt : any (error)
+>lineText : any (error)
+>charAt : any (error)
 >index : number
 >'\t' : "\t"
 
@@ -2804,22 +2804,22 @@ module Formatting {
                 }
 
                 return lineText.substr(0, index);
->lineText.substr(0, index) : any
->lineText.substr : any
->lineText : any
->substr : any
+>lineText.substr(0, index) : any (error)
+>lineText.substr : any (error)
+>lineText : any (error)
+>substr : any (error)
 >0 : 0
 >index : number
             }
         }
 
         private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
->RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
->indent : any
+>RegisterIndentation : (indent: any (error), sameLineIndent: boolean) => void
+>indent : any (error)
 >sameLineIndent : boolean
         {
             var indentationInfo: IndentationEditInfo = null;
->indentationInfo : any
+>indentationInfo : any (error)
 >null : null
 
             if (sameLineIndent) {
@@ -2827,61 +2827,61 @@ module Formatting {
 
                 // Consider the original indentation from the beginning of the line up to the indent position (or really the token position)
                 var lineStartPosition = this.snapshot.GetLineFromPosition(indent.Position).startPosition();
->lineStartPosition : any
->this.snapshot.GetLineFromPosition(indent.Position).startPosition() : any
->this.snapshot.GetLineFromPosition(indent.Position).startPosition : any
->this.snapshot.GetLineFromPosition(indent.Position) : any
->this.snapshot.GetLineFromPosition : any
->this.snapshot : any
+>lineStartPosition : any (error)
+>this.snapshot.GetLineFromPosition(indent.Position).startPosition() : any (error)
+>this.snapshot.GetLineFromPosition(indent.Position).startPosition : any (error)
+>this.snapshot.GetLineFromPosition(indent.Position) : any (error)
+>this.snapshot.GetLineFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineFromPosition : any
->indent.Position : any
->indent : any
->Position : any
->startPosition : any
+>snapshot : any (error)
+>GetLineFromPosition : any (error)
+>indent.Position : any (error)
+>indent : any (error)
+>Position : any (error)
+>startPosition : any (error)
 
                 var lineIndentLength = indent.Position - lineStartPosition;
 >lineIndentLength : number
 >indent.Position - lineStartPosition : number
->indent.Position : any
->indent : any
->Position : any
->lineStartPosition : any
+>indent.Position : any (error)
+>indent : any (error)
+>Position : any (error)
+>lineStartPosition : any (error)
 
                 indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength);
->indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength) : any
->indentationInfo : any
->IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength) : any
->IndentationEditInfo.create2 : any
->IndentationEditInfo : any
->create2 : any
->indent.Position : any
->indent : any
->Position : any
->indent.ReplaceWith : any
->indent : any
->ReplaceWith : any
->lineStartPosition : any
+>indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength) : any (error)
+>indentationInfo : any (error)
+>IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength) : any (error)
+>IndentationEditInfo.create2 : any (error)
+>IndentationEditInfo : any (error)
+>create2 : any (error)
+>indent.Position : any (error)
+>indent : any (error)
+>Position : any (error)
+>indent.ReplaceWith : any (error)
+>indent : any (error)
+>ReplaceWith : any (error)
+>lineStartPosition : any (error)
 >lineIndentLength : number
             }
             else {
                 indentationInfo = new IndentationEditInfo(indent);
->indentationInfo = new IndentationEditInfo(indent) : any
->indentationInfo : any
->new IndentationEditInfo(indent) : any
->IndentationEditInfo : any
->indent : any
+>indentationInfo = new IndentationEditInfo(indent) : any (error)
+>indentationInfo : any (error)
+>new IndentationEditInfo(indent) : any (error)
+>IndentationEditInfo : any (error)
+>indent : any (error)
             }
 
             this.indentationBag.AddIndent(indentationInfo);
->this.indentationBag.AddIndent(indentationInfo) : any
->this.indentationBag.AddIndent : any
->this.indentationBag : any
+>this.indentationBag.AddIndent(indentationInfo) : any (error)
+>this.indentationBag.AddIndent : any (error)
+>this.indentationBag : any (error)
 >this : this
->indentationBag : any
->AddIndent : any
->indentationInfo : any
+>indentationBag : any (error)
+>AddIndent : any (error)
+>indentationInfo : any (error)
         }
 
         public RegisterIndentation2(position: number, indent: string): void
@@ -2891,11 +2891,11 @@ module Formatting {
         {
             this.RegisterIndentation(new TextEditInfo(position, 0, indent), false);
 >this.RegisterIndentation(new TextEditInfo(position, 0, indent), false) : void
->this.RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
+>this.RegisterIndentation : (indent: any (error), sameLineIndent: boolean) => void
 >this : this
->RegisterIndentation : (indent: any, sameLineIndent: boolean) => void
->new TextEditInfo(position, 0, indent) : any
->TextEditInfo : any
+>RegisterIndentation : (indent: any (error), sameLineIndent: boolean) => void
+>new TextEditInfo(position, 0, indent) : any (error)
+>TextEditInfo : any (error)
 >position : number
 >0 : 0
 >indent : string
@@ -2903,13 +2903,13 @@ module Formatting {
         }
 
         private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
->AdjustStartOffsetIfNeeded : (token: any, node: any) => void
->token : any
->node : any
+>AdjustStartOffsetIfNeeded : (token: any (error), node: any (error)) => void
+>token : any (error)
+>node : any (error)
         {
             if (token == null)
 >token == null : boolean
->token : any
+>token : any (error)
 >null : null
 
                 return;
@@ -2919,73 +2919,73 @@ module Formatting {
 >false : false
 
             switch (token.Token) {
->token.Token : any
->token : any
->Token : any
+>token.Token : any (error)
+>token : any (error)
+>Token : any (error)
 
                 case AuthorTokenKind.atkFunction:
->AuthorTokenKind.atkFunction : any
->AuthorTokenKind : any
->atkFunction : any
+>AuthorTokenKind.atkFunction : any (error)
+>AuthorTokenKind : any (error)
+>atkFunction : any (error)
 
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl;
 >updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl : boolean
 >updateStartOffset : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkFncDecl : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkFncDecl : any
->AuthorParseNodeKind : any
->apnkFncDecl : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkFncDecl : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkFncDecl : any (error)
 
                     break;
 
                 case AuthorTokenKind.atkLCurly:
->AuthorTokenKind.atkLCurly : any
->AuthorTokenKind : any
->atkLCurly : any
+>AuthorTokenKind.atkLCurly : any (error)
+>AuthorTokenKind : any (error)
+>atkLCurly : any (error)
 
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject;
 >updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject : boolean
 >updateStartOffset : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkObject : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkObject : any
->AuthorParseNodeKind : any
->apnkObject : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkObject : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkObject : any (error)
 
                     break;
 
                 case AuthorTokenKind.atkLBrack:
->AuthorTokenKind.atkLBrack : any
->AuthorTokenKind : any
->atkLBrack : any
+>AuthorTokenKind.atkLBrack : any (error)
+>AuthorTokenKind : any (error)
+>atkLBrack : any (error)
 
                     updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray;
 >updateStartOffset = node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray : boolean
 >updateStartOffset : boolean
 >node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkArray : boolean
->node.AuthorNode.Details.Kind : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->Kind : any
->AuthorParseNodeKind.apnkArray : any
->AuthorParseNodeKind : any
->apnkArray : any
+>node.AuthorNode.Details.Kind : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>Kind : any (error)
+>AuthorParseNodeKind.apnkArray : any (error)
+>AuthorParseNodeKind : any (error)
+>apnkArray : any (error)
 
                     break;
             }
@@ -2994,69 +2994,69 @@ module Formatting {
 >updateStartOffset : boolean
 
                 ParseNodeExtensions.SetNodeSpan(node, token.Span.startPosition(), node.AuthorNode.Details.EndOffset);
->ParseNodeExtensions.SetNodeSpan(node, token.Span.startPosition(), node.AuthorNode.Details.EndOffset) : any
->ParseNodeExtensions.SetNodeSpan : any
->ParseNodeExtensions : any
->SetNodeSpan : any
->node : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
->node.AuthorNode.Details.EndOffset : any
->node.AuthorNode.Details : any
->node.AuthorNode : any
->node : any
->AuthorNode : any
->Details : any
->EndOffset : any
+>ParseNodeExtensions.SetNodeSpan(node, token.Span.startPosition(), node.AuthorNode.Details.EndOffset) : any (error)
+>ParseNodeExtensions.SetNodeSpan : any (error)
+>ParseNodeExtensions : any (error)
+>SetNodeSpan : any (error)
+>node : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
+>node.AuthorNode.Details.EndOffset : any (error)
+>node.AuthorNode.Details : any (error)
+>node.AuthorNode : any (error)
+>node : any (error)
+>AuthorNode : any (error)
+>Details : any (error)
+>EndOffset : any (error)
             }
         }
 
         private IsMultiLineString(token: TokenSpan): boolean {
->IsMultiLineString : (token: any) => boolean
->token : any
+>IsMultiLineString : (token: any (error)) => boolean
+>token : any (error)
 
             return token.tokenID === TypeScript.TokenID.StringLiteral &&
 >token.tokenID === TypeScript.TokenID.StringLiteral &&                this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : boolean
 >token.tokenID === TypeScript.TokenID.StringLiteral : boolean
->token.tokenID : any
->token : any
->tokenID : any
->TypeScript.TokenID.StringLiteral : any
->TypeScript.TokenID : any
->TypeScript : any
->TokenID : any
->StringLiteral : any
+>token.tokenID : any (error)
+>token : any (error)
+>tokenID : any (error)
+>TypeScript.TokenID.StringLiteral : any (error)
+>TypeScript.TokenID : any (error)
+>TypeScript : any (error)
+>TokenID : any (error)
+>StringLiteral : any (error)
 
                 this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
 >this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : boolean
->this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->token.Span.endPosition() : any
->token.Span.endPosition : any
->token.Span : any
->token : any
->Span : any
->endPosition : any
->this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : any
->this.snapshot.GetLineNumberFromPosition : any
->this.snapshot : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>token.Span.endPosition() : any (error)
+>token.Span.endPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>endPosition : any (error)
+>this.snapshot.GetLineNumberFromPosition(token.Span.startPosition()) : any (error)
+>this.snapshot.GetLineNumberFromPosition : any (error)
+>this.snapshot : any (error)
 >this : this
->snapshot : any
->GetLineNumberFromPosition : any
->token.Span.startPosition() : any
->token.Span.startPosition : any
->token.Span : any
->token : any
->Span : any
->startPosition : any
+>snapshot : any (error)
+>GetLineNumberFromPosition : any (error)
+>token.Span.startPosition() : any (error)
+>token.Span.startPosition : any (error)
+>token.Span : any (error)
+>token : any (error)
+>Span : any (error)
+>startPosition : any (error)
         }
     }
 }

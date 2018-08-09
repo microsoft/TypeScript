@@ -2,60 +2,60 @@
 // All will be error from using ES6 features but only include ES5 library
 // Using Es6 array
 function f(x: number, y: number, z: number) {
->f : (x: number, y: number, z: number) => any
+>f : (x: number, y: number, z: number) => any (error)
 >x : number
 >y : number
 >z : number
 
     return Array.from(arguments);
->Array.from(arguments) : any
->Array.from : any
+>Array.from(arguments) : any (error)
+>Array.from : any (error)
 >Array : ArrayConstructor
->from : any
+>from : any (error)
 >arguments : IArguments
 }
 
 f(1, 2, 3);  // no error
->f(1, 2, 3) : any
->f : (x: number, y: number, z: number) => any
+>f(1, 2, 3) : any (error)
+>f : (x: number, y: number, z: number) => any (error)
 >1 : 1
 >2 : 2
 >3 : 3
 
 // Using ES6 collection
 var m = new Map<string, number>();
->m : any
->new Map<string, number>() : any
->Map : any
+>m : any (error)
+>new Map<string, number>() : any (error)
+>Map : any (error)
 
 m.clear();
->m.clear() : any
->m.clear : any
->m : any
->clear : any
+>m.clear() : any (error)
+>m.clear : any (error)
+>m : any (error)
+>clear : any (error)
 
 // Using ES6 iterable
 m.keys();
->m.keys() : any
->m.keys : any
->m : any
->keys : any
+>m.keys() : any (error)
+>m.keys : any (error)
+>m : any (error)
+>keys : any (error)
 
 // Using ES6 function
 function Baz() { }
 >Baz : () => void
 
 Baz.name;
->Baz.name : any
+>Baz.name : any (error)
 >Baz : () => void
->name : any
+>name : any (error)
 
 // Using ES6 math
 Math.sign(1);
->Math.sign(1) : any
->Math.sign : any
+>Math.sign(1) : any (error)
+>Math.sign : any (error)
 >Math : Math
->sign : any
+>sign : any (error)
 >1 : 1
 
 // Using ES6 object
@@ -69,9 +69,9 @@ var o = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->Symbol.hasInstance : any
->Symbol : any
->hasInstance : any
+>Symbol.hasInstance : any (error)
+>Symbol : any (error)
+>hasInstance : any (error)
 >value : any
 
         return false;
@@ -83,9 +83,9 @@ o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty : (v: string | number | symbol) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
 >hasOwnProperty : (v: string | number | symbol) => boolean
->Symbol.hasInstance : any
->Symbol : any
->hasInstance : any
+>Symbol.hasInstance : any (error)
+>Symbol : any (error)
+>hasInstance : any (error)
 
 // Using Es6 proxy
 var t = {}
@@ -93,18 +93,18 @@ var t = {}
 >{} : {}
 
 var p = new Proxy(t, {});
->p : any
->new Proxy(t, {}) : any
->Proxy : any
+>p : any (error)
+>new Proxy(t, {}) : any (error)
+>Proxy : any (error)
 >t : {}
 >{} : {}
 
 // Using ES6 reflect
 Reflect.isExtensible({});
->Reflect.isExtensible({}) : any
->Reflect.isExtensible : any
->Reflect : any
->isExtensible : any
+>Reflect.isExtensible({}) : any (error)
+>Reflect.isExtensible : any (error)
+>Reflect : any (error)
+>isExtensible : any (error)
 >{} : {}
 
 // Using Es6 regexp
@@ -115,9 +115,9 @@ var reg = new RegExp("/s");
 >"/s" : "/s"
 
 reg.flags;
->reg.flags : any
+>reg.flags : any (error)
 >reg : RegExp
->flags : any
+>flags : any (error)
 
 // Using ES6 string
 var str = "Hello world";
@@ -125,18 +125,18 @@ var str = "Hello world";
 >"Hello world" : "Hello world"
 
 str.includes("hello", 0);
->str.includes("hello", 0) : any
->str.includes : any
+>str.includes("hello", 0) : any (error)
+>str.includes : any (error)
 >str : string
->includes : any
+>includes : any (error)
 >"hello" : "hello"
 >0 : 0
 
 // Using ES6 symbol
 var s = Symbol();
->s : any
->Symbol() : any
->Symbol : any
+>s : any (error)
+>Symbol() : any (error)
+>Symbol : any (error)
 
 // Using ES6 wellknown-symbol
 const o1 = {
@@ -145,9 +145,9 @@ const o1 = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->Symbol.hasInstance : any
->Symbol : any
->hasInstance : any
+>Symbol.hasInstance : any (error)
+>Symbol : any (error)
+>hasInstance : any (error)
 >value : any
 
         return false;

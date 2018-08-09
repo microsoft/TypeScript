@@ -59,10 +59,10 @@ class C {
 >m : number
 
 		return this.n + m; // 'n' doesn't exist on type 'void'.
->this.n + m : any
->this.n : any
+>this.n + m : any (error)
+>this.n : any (error)
 >this : void
->n : any
+>n : any (error)
 >m : number
     }
 }
@@ -124,19 +124,19 @@ interface I {
 }
 let impl: I = {
 >impl : I
->{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
+>{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any (error); explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
 
     a: 12,
 >a : number
 >12 : 12
 
     explicitVoid1() {
->explicitVoid1 : (this: void) => any
+>explicitVoid1 : (this: void) => any (error)
 
         return this.a; // error, no 'a' in 'void'
->this.a : any
+>this.a : any (error)
 >this : void
->a : any
+>a : any (error)
 
     },
     explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object
@@ -206,11 +206,11 @@ function propertyName(this: { y: number }, x: number): number {
 >x : number
 
     return x + this.notFound;
->x + this.notFound : any
+>x + this.notFound : any (error)
 >x : number
->this.notFound : any
+>this.notFound : any (error)
 >this : { y: number; }
->notFound : any
+>notFound : any (error)
 }
 function voidThisSpecified(this: void, x: number): number {
 >voidThisSpecified : (this: void, x: number) => number
@@ -218,11 +218,11 @@ function voidThisSpecified(this: void, x: number): number {
 >x : number
 
     return x + this.notSpecified;
->x + this.notSpecified : any
+>x + this.notSpecified : any (error)
 >x : number
->this.notSpecified : any
+>this.notSpecified : any (error)
 >this : void
->notSpecified : any
+>notSpecified : any (error)
 }
 let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
 >ok : { y: number; f: (this: { y: number; }, x: number) => number; }
@@ -583,9 +583,9 @@ class Base1 {
 >explicitStatic : (this: typeof Base1) => number
 >this : typeof Base1
 >Base1 : typeof Base1
->this.x : any
+>this.x : any (error)
 >this : typeof Base1
->x : any
+>x : any (error)
 }
 class Derived1 extends Base1 {
 >Derived1 : Derived1
@@ -734,8 +734,8 @@ function optional(this?: C): number { return this.n; }
 
 function decorated(@deco() this: C): number { return this.n; }
 >decorated : (: any, this: C) => number
->deco() : any
->deco : any
+>deco() : any (error)
+>deco : any (error)
 > : any
 >this : C
 >this.n : any
@@ -747,9 +747,9 @@ function initializer(this: C = new C()): number { return this.n; }
 >this : C
 > : any
 >C : any
->() : any
-> : any
->number : any
+>() : any (error)
+> : any (error)
+>number : any (error)
 >this.n : any
 >this : any
 >n : any

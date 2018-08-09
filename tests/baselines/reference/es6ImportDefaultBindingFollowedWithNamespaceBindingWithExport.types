@@ -5,7 +5,7 @@ export var a = 10;
 
 === tests/cases/compiler/client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "./server";
->defaultBinding : any
+>defaultBinding : any (error)
 >nameSpaceBinding : typeof nameSpaceBinding
 
 export var x: number = nameSpaceBinding.a;

@@ -6,8 +6,8 @@ declare module "foo" {
 >x : number
 }
 import { x } from "foo";
->x : any
+>x : any (error)
 
 x;
->x : any
+>x : any (error)
 

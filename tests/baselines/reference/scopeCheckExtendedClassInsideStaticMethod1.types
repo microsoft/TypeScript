@@ -14,19 +14,19 @@ class D extends C {
 
       v = 1;
 >v = 1 : 1
->v : any
+>v : any (error)
 >1 : 1
 
       this.p = 1;
 >this.p = 1 : 1
->this.p : any
+>this.p : any (error)
 >this : typeof D
->p : any
+>p : any (error)
 >1 : 1
 
       s = 1;
 >s = 1 : 1
->s : any
+>s : any (error)
 >1 : 1
    }
 }

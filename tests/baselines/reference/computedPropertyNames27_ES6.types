@@ -11,6 +11,6 @@ class C extends Base {
 >(super(), "prop") : "prop"
 >super(), "prop" : "prop"
 >super() : void
->super : any
+>super : any (error)
 >"prop" : "prop"
 }

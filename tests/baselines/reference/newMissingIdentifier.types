@@ -1,7 +1,7 @@
 === tests/cases/compiler/newMissingIdentifier.ts ===
 var x = new ();
->x : any
->new () : any
->() : any
-> : any
+>x : any (error)
+>new () : any (error)
+>() : any (error)
+> : any (error)
 

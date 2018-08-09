@@ -1,47 +1,47 @@
 === tests/cases/conformance/types/specifyingTypes/typeQueries/recursiveTypesWithTypeof.ts ===
 // The following are errors because of circular references
 var c: typeof c;
->c : any
->c : any
+>c : any (error)
+>c : any (error)
 
 var c: any;
->c : any
+>c : any (error)
 
 var d: typeof e;
->d : any
->e : any
+>d : any (error)
+>e : any (error)
 
 var d: any;
->d : any
+>d : any (error)
 
 var e: typeof d;
->e : any
->d : any
+>e : any (error)
+>d : any (error)
 
 var e: any;
->e : any
+>e : any (error)
 
 interface Foo<T> { }
 var f: Array<typeof f>;
->f : any
->f : any
+>f : any (error)
+>f : any (error)
 
 var f: any;
->f : any
+>f : any (error)
 
 var f2: Foo<typeof f2>;
->f2 : any
->f2 : any
+>f2 : any (error)
+>f2 : any (error)
 
 var f2: any;
->f2 : any
+>f2 : any (error)
 
 var f3: Foo<typeof f3>[];
->f3 : any
->f3 : any
+>f3 : any (error)
+>f3 : any (error)
 
 var f3: any;
->f3 : any
+>f3 : any (error)
 
 // None of these declarations should have any errors!
 // Truly recursive types
@@ -173,11 +173,11 @@ interface Foo2<T, U> { }
 
 // This one should be an error because the first type argument is not contained inside a type literal
 var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
->hy3 : any
->hy3 : any
->x : any
->hy3 : any
+>hy3 : any (error)
+>hy3 : any (error)
+>x : any (error)
+>hy3 : any (error)
 
 var hy3: any;
->hy3 : any
+>hy3 : any (error)
 

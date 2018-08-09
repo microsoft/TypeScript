@@ -55,7 +55,7 @@ async function fn12() { return obj; } // valid: Promise<{ then: string; }>
 >obj : { then: string; }
 
 async function fn13() { return thenable; } // error
->fn13 : () => Promise<any>
+>fn13 : () => Promise<any (error)>
 >thenable : Thenable
 
 async function fn14() { await 1; } // valid: Promise<void>
@@ -85,6 +85,6 @@ async function fn18() { await obj; } // valid: Promise<void>
 
 async function fn19() { await thenable; } // error
 >fn19 : () => Promise<void>
->await thenable : any
+>await thenable : any (error)
 >thenable : Thenable
 

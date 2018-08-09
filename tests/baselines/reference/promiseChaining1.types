@@ -22,10 +22,10 @@ class Chain2<T extends { length: number }> {
 
         // should get a fresh type parameter which each then call
         var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
->z : any
->this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length) : any
->this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then : any
->this.then(x => result)/*S*/.then(x => "abc") : any
+>z : any (error)
+>this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length) : any (error)
+>this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then : any (error)
+>this.then(x => result)/*S*/.then(x => "abc") : any (error)
 >this.then(x => result)/*S*/.then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
 >this.then(x => result) : Chain2<S>
 >this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
@@ -38,7 +38,7 @@ class Chain2<T extends { length: number }> {
 >x => "abc" : (x: S) => string
 >x : S
 >"abc" : "abc"
->then : any
+>then : any (error)
 >x => x.length : (x: any) => any
 >x : any
 >x.length : any

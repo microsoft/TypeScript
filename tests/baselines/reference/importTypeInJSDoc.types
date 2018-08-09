@@ -19,7 +19,7 @@ declare class MyClass {
 
     constructor(x: MyClass.Bar);
 >x : MyClass.Bar
->MyClass : any
+>MyClass : any (error)
 }
 declare global {
 >global : typeof global

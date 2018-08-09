@@ -4,7 +4,7 @@ interface number { }
 interface string { }
 interface boolean { }
 interface void {}
->interface : any
+>interface : any (error)
 >void {} : undefined
 >{} : {}
 

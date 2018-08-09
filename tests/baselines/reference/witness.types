@@ -281,7 +281,7 @@ class C {
 >fn1 : () => any
 
         return new (this.fn1())();
->new (this.fn1())() : any
+>new (this.fn1())() : any (error)
 >(this.fn1()) : any
 >this.fn1() : any
 >this.fn1 : () => any
@@ -292,7 +292,7 @@ class C {
 >fn2 : () => any
 
         return new (this.fn2());
->new (this.fn2()) : any
+>new (this.fn2()) : any (error)
 >(this.fn2()) : any
 >this.fn2() : any
 >this.fn2 : () => any

@@ -13,12 +13,12 @@ declare class Point
 >y : number
 
       public add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => any
+>add : (dx: number, dy: number) => any (error)
 >dx : number
 >dy : number
 
       static origin: Point;
->origin : any
+>origin : any (error)
 
 }
 
@@ -68,9 +68,9 @@ var x = EF1(1,2);
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
 >Point.origin = new Point(0, 0) : any
->Point.origin : any
+>Point.origin : any (error)
 >Point : (x: any, y: any) => void
->origin : any
+>origin : any (error)
 >new Point(0, 0) : any
 >Point : (x: any, y: any) => void
 >0 : 0

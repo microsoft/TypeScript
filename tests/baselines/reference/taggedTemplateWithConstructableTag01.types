@@ -3,7 +3,7 @@ class CtorTag { }
 >CtorTag : CtorTag
 
 CtorTag `Hello world!`;
->CtorTag `Hello world!` : any
+>CtorTag `Hello world!` : any (error)
 >CtorTag : typeof CtorTag
 >`Hello world!` : "Hello world!"
 

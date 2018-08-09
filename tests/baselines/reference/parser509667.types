@@ -6,11 +6,11 @@ class Foo {
 >f1 : () => void
 
       if (this.
->this. : any
+>this. : any (error)
 >this : this
    }
-> : any
-> : any
+> : any (error)
+> : any (error)
 
    f2() {
 >f2 : () => void

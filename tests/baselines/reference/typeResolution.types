@@ -24,7 +24,7 @@ export module TopLevelModule1 {
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : ClassA
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
 >a2 : ClassA
@@ -32,8 +32,8 @@ export module TopLevelModule1 {
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : ClassA
->SubModule1 : any
->SubSubModule1 : any
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
 >a3 : ClassA
@@ -41,9 +41,9 @@ export module TopLevelModule1 {
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
 >a4 : ClassA
@@ -59,9 +59,9 @@ export module TopLevelModule1 {
 
                     var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
 >b2 : ClassB
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >b2.BisIn1_1_1() : void
 >b2.BisIn1_1_1 : () => void
 >b2 : ClassB
@@ -70,9 +70,9 @@ export module TopLevelModule1 {
                     // Type only accessible from the root
                     var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
 >c1 : SubModule2.SubSubModule2.ClassA
->TopLevelModule1 : any
->SubModule2 : any
->SubSubModule2 : any
+>TopLevelModule1 : any (error)
+>SubModule2 : any (error)
+>SubSubModule2 : any (error)
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
 >c1 : SubModule2.SubSubModule2.ClassA
@@ -88,7 +88,7 @@ export module TopLevelModule1 {
 
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
 >d2 : InterfaceX
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
 >d2 : InterfaceX
@@ -113,7 +113,7 @@ export module TopLevelModule1 {
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : ClassA
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
 >a2 : ClassA
@@ -121,8 +121,8 @@ export module TopLevelModule1 {
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : ClassA
->SubModule1 : any
->SubSubModule1 : any
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
 >a3 : ClassA
@@ -130,9 +130,9 @@ export module TopLevelModule1 {
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
 >a4 : ClassA
@@ -148,9 +148,9 @@ export module TopLevelModule1 {
 
                     var b2: TopLevelModule1.SubModule1.SubSubModule1.ClassB; b2.BisIn1_1_1();
 >b2 : ClassB
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >b2.BisIn1_1_1() : void
 >b2.BisIn1_1_1 : () => void
 >b2 : ClassB
@@ -159,9 +159,9 @@ export module TopLevelModule1 {
                     // Type only accessible from the root
                     var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
 >c1 : SubModule2.SubSubModule2.ClassA
->TopLevelModule1 : any
->SubModule2 : any
->SubSubModule2 : any
+>TopLevelModule1 : any (error)
+>SubModule2 : any (error)
+>SubSubModule2 : any (error)
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
 >c1 : SubModule2.SubSubModule2.ClassA
@@ -169,8 +169,8 @@ export module TopLevelModule1 {
 
                     var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
 >c2 : TopLevelModule2.SubModule3.ClassA
->TopLevelModule2 : any
->SubModule3 : any
+>TopLevelModule2 : any (error)
+>SubModule3 : any (error)
 >c2.AisIn2_3() : void
 >c2.AisIn2_3 : () => void
 >c2 : TopLevelModule2.SubModule3.ClassA
@@ -186,7 +186,7 @@ export module TopLevelModule1 {
 
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
 >d2 : InterfaceX
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
 >d2 : InterfaceX
@@ -206,9 +206,9 @@ export module TopLevelModule1 {
                         /* Sampling of stuff from AisIn1_1_1 */
                         var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : ClassA
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
 >a4 : ClassA
@@ -216,9 +216,9 @@ export module TopLevelModule1 {
 
                         var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
 >c1 : SubModule2.SubSubModule2.ClassA
->TopLevelModule1 : any
->SubModule2 : any
->SubSubModule2 : any
+>TopLevelModule1 : any (error)
+>SubModule2 : any (error)
+>SubSubModule2 : any (error)
 >c1.AisIn1_2_2() : void
 >c1.AisIn1_2_2 : () => void
 >c1 : SubModule2.SubSubModule2.ClassA
@@ -233,8 +233,8 @@ export module TopLevelModule1 {
 
                         var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
 >c2 : TopLevelModule2.SubModule3.ClassA
->TopLevelModule2 : any
->SubModule3 : any
+>TopLevelModule2 : any (error)
+>SubModule3 : any (error)
 >c2.AisIn2_3() : void
 >c2.AisIn2_3 : () => void
 >c2 : TopLevelModule2.SubModule3.ClassA
@@ -254,7 +254,7 @@ export module TopLevelModule1 {
 
                     var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 >a2 : SubSubModule1.ClassA
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >a2.AisIn1_1_1() : void
 >a2.AisIn1_1_1 : () => void
 >a2 : SubSubModule1.ClassA
@@ -262,8 +262,8 @@ export module TopLevelModule1 {
 
                     var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 >a3 : SubSubModule1.ClassA
->SubModule1 : any
->SubSubModule1 : any
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a3.AisIn1_1_1() : void
 >a3.AisIn1_1_1 : () => void
 >a3 : SubSubModule1.ClassA
@@ -271,9 +271,9 @@ export module TopLevelModule1 {
 
                     var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 >a4 : SubSubModule1.ClassA
->TopLevelModule1 : any
->SubModule1 : any
->SubSubModule1 : any
+>TopLevelModule1 : any (error)
+>SubModule1 : any (error)
+>SubSubModule1 : any (error)
 >a4.AisIn1_1_1() : void
 >a4.AisIn1_1_1 : () => void
 >a4 : SubSubModule1.ClassA
@@ -282,7 +282,7 @@ export module TopLevelModule1 {
                     // Interface reference
                     var d2: SubSubModule1.InterfaceX; d2.XisIn1_1_1();
 >d2 : SubSubModule1.InterfaceX
->SubSubModule1 : any
+>SubSubModule1 : any (error)
 >d2.XisIn1_1_1() : any
 >d2.XisIn1_1_1 : () => any
 >d2 : SubSubModule1.InterfaceX

@@ -3,13 +3,13 @@ class C {
 >C : C
 
     where(filter: Iterator<T, boolean>): Query<T> {
->where : (filter: any) => any
->filter : any
+>where : (filter: any (error)) => any (error)
+>filter : any (error)
 
         return fromDoWhile(test =>
->fromDoWhile(test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        }) : any
->fromDoWhile : any
->test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        } : (test: any) => any
+>fromDoWhile(test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        }) : any (error)
+>fromDoWhile : any (error)
+>test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        } : (test: any) => any (error)
 >test : any
 
             var index = 0;
@@ -17,16 +17,16 @@ class C {
 >0 : 0
 
             return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);
->this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true) : any
->this.doWhile : any
+>this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true) : any (error)
+>this.doWhile : any (error)
 >this : this
->doWhile : any
+>doWhile : any (error)
 >(item, i) => filter(item, i) ? test(item, index++) : true : (item: any, i: any) => any
 >item : any
 >i : any
 >filter(item, i) ? test(item, index++) : true : any
->filter(item, i) : any
->filter : any
+>filter(item, i) : any (error)
+>filter : any (error)
 >item : any
 >i : any
 >test(item, index++) : any

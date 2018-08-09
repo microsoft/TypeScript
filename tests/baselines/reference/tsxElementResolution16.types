@@ -10,7 +10,7 @@ var obj1: Obj1;
 >obj1 : Obj1
 
 <obj1 x={10} />; // Error (JSX.Element is implicit any)
-><obj1 x={10} /> : any
+><obj1 x={10} /> : any (error)
 >obj1 : Obj1
 >x : number
 >10 : 10

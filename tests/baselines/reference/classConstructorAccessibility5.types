@@ -19,7 +19,7 @@ class Unrelated {
 
     static fake() { new Base() } // error
 >fake : () => void
->new Base() : any
+>new Base() : any (error)
 >Base : typeof Base
 }
 

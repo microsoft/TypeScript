@@ -3,11 +3,11 @@ function doThing() {
 >doThing : () => void
 
     __call: while (true) {
->__call : any
+>__call : any (error)
 >true : true
 
         aLabel: for (let i = 0; i < 10; i++) {
->aLabel : any
+>aLabel : any (error)
 >i : number
 >0 : 0
 >i < 10 : boolean
@@ -22,7 +22,7 @@ function doThing() {
 >3 : 3
 
                 break __call;
->__call : any
+>__call : any (error)
             }
             if (i === 5) {
 >i === 5 : boolean
@@ -30,7 +30,7 @@ function doThing() {
 >5 : 5
 
                 break aLabel;
->aLabel : any
+>aLabel : any (error)
             }
         }
     }

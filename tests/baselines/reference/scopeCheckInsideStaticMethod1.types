@@ -16,7 +16,7 @@ class C {
 
       v = 1; // ERR
 >v = 1 : 1
->v : any
+>v : any (error)
 >1 : 1
 
       C.s = 1;
@@ -28,9 +28,9 @@ class C {
 
       this.p = 1; // ERR
 >this.p = 1 : 1
->this.p : any
+>this.p : any (error)
 >this : typeof C
->p : any
+>p : any (error)
 >1 : 1
    }
 }

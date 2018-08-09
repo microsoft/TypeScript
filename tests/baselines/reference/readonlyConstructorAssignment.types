@@ -31,9 +31,9 @@ class B extends A {
         // Fails, x is readonly
         this.x = 1;
 >this.x = 1 : 1
->this.x : any
+>this.x : any (error)
 >this : this
->x : any
+>x : any (error)
 >1 : 1
     }
 }

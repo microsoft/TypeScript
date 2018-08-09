@@ -3,5 +3,5 @@ var v = { get [e]() { } };
 >v : { [x: number]: void; }
 >{ get [e]() { } } : { [x: number]: void; }
 >[e] : void
->e : any
+>e : any (error)
 

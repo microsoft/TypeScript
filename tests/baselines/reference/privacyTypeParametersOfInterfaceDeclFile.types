@@ -119,11 +119,11 @@ interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
 
 
 export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateModule : any
+>privateModule : any (error)
 }
 
 interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateModule : any
+>privateModule : any (error)
 }
 
 export module publicModule {
@@ -248,11 +248,11 @@ export module publicModule {
     }
 
     export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateModule : any
+>privateModule : any (error)
     }
 
     interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateModule : any
+>privateModule : any (error)
     }
 }
 

@@ -21,8 +21,8 @@ if (x !== 1) {
 >1 : 1
 
   $ERROR('#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x));
->$ERROR('#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x)) : any
->$ERROR : any
+>$ERROR('#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x)) : any (error)
+>$ERROR : any (error)
 >'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' + (x) : string
 >'#1: eval("\\u00A0var x\\u00A0= 1\\u00A0"); x === 1. Actual: ' : "#1: eval(\"\\u00A0var x\\u00A0= 1\\u00A0\"); x === 1. Actual: "
 >(x) : number
@@ -40,8 +40,8 @@ if (x !== 1) {
 >1 : 1
 
   $ERROR('#2:  var x = 1 ; x === 1. Actual: ' + (x));
->$ERROR('#2:  var x = 1 ; x === 1. Actual: ' + (x)) : any
->$ERROR : any
+>$ERROR('#2:  var x = 1 ; x === 1. Actual: ' + (x)) : any (error)
+>$ERROR : any (error)
 >'#2:  var x = 1 ; x === 1. Actual: ' + (x) : string
 >'#2:  var x = 1 ; x === 1. Actual: ' : "#2:  var x = 1 ; x === 1. Actual: "
 >(x) : number

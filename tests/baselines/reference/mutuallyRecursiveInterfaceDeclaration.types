@@ -9,6 +9,6 @@ interface B {
 >a : A
 }
 export {A, B}
->A : any
->B : any
+>A : any (error)
+>B : any (error)
 

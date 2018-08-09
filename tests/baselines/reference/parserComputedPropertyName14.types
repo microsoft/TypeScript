@@ -2,5 +2,5 @@
 var v: { [e](): number };
 >v : {}
 >[e] : () => number
->e : any
+>e : any (error)
 

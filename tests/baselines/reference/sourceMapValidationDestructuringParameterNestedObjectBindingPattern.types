@@ -35,10 +35,10 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 
 function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 
     console.log(primaryA);
@@ -50,12 +50,12 @@ function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 }
 function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) {
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
->name : any
+>name : any (error)
 >nameC : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryB : string
->secondary : any
+>secondary : any (error)
 >secondaryB : string
 
     console.log(secondaryB);

@@ -20,7 +20,7 @@ abstract class B {
 }
 
 new B; // error
->new B : any
+>new B : any (error)
 >B : typeof B
 
 var BB: typeof B = B;
@@ -43,7 +43,7 @@ function constructB(Factory : typeof B) {
 >B : typeof B
 
     new Factory; // error -- Factory is of type typeof B.
->new Factory : any
+>new Factory : any (error)
 >Factory : typeof B
 }
 
@@ -52,7 +52,7 @@ var BB = B;
 >B : typeof B
 
 new BB; // error -- BB is of type typeof B.
->new BB : any
+>new BB : any (error)
 >BB : typeof B
 
 var x : any = C;

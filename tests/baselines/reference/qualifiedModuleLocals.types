@@ -7,10 +7,10 @@ module A {
 
   export function a(){  A.b();  } // A.b should be an unresolved symbol error
 >a : () => void
->A.b() : any
->A.b : any
+>A.b() : any (error)
+>A.b : any (error)
 >A : typeof A
->b : any
+>b : any (error)
 
 }
 

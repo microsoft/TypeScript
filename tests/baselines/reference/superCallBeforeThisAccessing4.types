@@ -14,7 +14,7 @@ class D extends null {
 
         super();
 >super() : void
->super : any
+>super : any (error)
     }
 }
 
@@ -28,7 +28,7 @@ class E extends null {
     constructor() {
         super();
 >super() : void
->super : any
+>super : any (error)
 
         this._t;
 >this._t : any

@@ -12,9 +12,9 @@ class C1 {
 >C1 : C1
 
     constructor(public [{ x1, x2, x3 }, y, z]: TupleType1) {
->x1 : any
->x2 : any
->x3 : any
+>x1 : any (error)
+>x2 : any (error)
+>x3 : any (error)
 >y : number
 >z : string
 
@@ -24,9 +24,9 @@ class C1 {
 >x1 || x2 || x3 || y : any
 >x1 || x2 || x3 : any
 >x1 || x2 : any
->x1 : any
->x2 : any
->x3 : any
+>x1 : any (error)
+>x2 : any (error)
+>x3 : any (error)
 >y : number
 >z : string
 
@@ -36,27 +36,27 @@ class C1 {
 >this.x1 || this.x2 || this.x3 || this.y : any
 >this.x1 || this.x2 || this.x3 : any
 >this.x1 || this.x2 : any
->this.x1 : any
+>this.x1 : any (error)
 >this : this
->x1 : any
->this.x2 : any
+>x1 : any (error)
+>this.x2 : any (error)
 >this : this
->x2 : any
->this.x3 : any
+>x2 : any (error)
+>this.x3 : any (error)
 >this : this
->x3 : any
->this.y : any
+>x3 : any (error)
+>this.y : any (error)
 >this : this
->y : any
->this.z : any
+>y : any (error)
+>this.z : any (error)
 >this : this
->z : any
+>z : any (error)
     }
 }
 
 var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
->a : any
->new C1([{ x1: 10, x2: "", x3: true }, "", false]) : any
+>a : any (error)
+>new C1([{ x1: 10, x2: "", x3: true }, "", false]) : any (error)
 >C1 : typeof C1
 >[{ x1: 10, x2: "", x3: true }, "", false] : (string | boolean | { x1: number; x2: string; x3: boolean; })[]
 >{ x1: 10, x2: "", x3: true } : { x1: number; x2: string; x3: boolean; }
@@ -70,25 +70,25 @@ var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
 >false : false
 
 var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];
->a_x1 : any
->a_x2 : any
->a_x3 : any
->a_y : any
->a_z : any
->[a.x1, a.x2, a.x3, a.y, a.z] : [any, any, any, any, any]
->a.x1 : any
->a : any
->x1 : any
->a.x2 : any
->a : any
->x2 : any
->a.x3 : any
->a : any
->x3 : any
->a.y : any
->a : any
->y : any
->a.z : any
->a : any
->z : any
+>a_x1 : any (error)
+>a_x2 : any (error)
+>a_x3 : any (error)
+>a_y : any (error)
+>a_z : any (error)
+>[a.x1, a.x2, a.x3, a.y, a.z] : [any (error), any (error), any (error), any (error), any (error)]
+>a.x1 : any (error)
+>a : any (error)
+>x1 : any (error)
+>a.x2 : any (error)
+>a : any (error)
+>x2 : any (error)
+>a.x3 : any (error)
+>a : any (error)
+>x3 : any (error)
+>a.y : any (error)
+>a : any (error)
+>y : any (error)
+>a.z : any (error)
+>a : any (error)
+>z : any (error)
 

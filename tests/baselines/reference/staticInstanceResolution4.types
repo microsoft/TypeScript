@@ -7,8 +7,8 @@ class A {
 }
 
 A.foo();
->A.foo() : any
->A.foo : any
+>A.foo() : any (error)
+>A.foo : any (error)
 >A : typeof A
->foo : any
+>foo : any (error)
 

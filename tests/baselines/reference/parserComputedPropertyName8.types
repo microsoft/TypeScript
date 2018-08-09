@@ -4,5 +4,5 @@ class C {
 
    public [e]
 >[e] : any
->e : any
+>e : any (error)
 }

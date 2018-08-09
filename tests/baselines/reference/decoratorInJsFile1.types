@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.js ===
 @SomeDecorator
->SomeDecorator : any
+>SomeDecorator : any (error)
 
 class SomeClass {
 >SomeClass : SomeClass

@@ -14,7 +14,7 @@ var func: {
 };
 
 func(s => ({})); // Error for no applicable overload (object type is missing a and b)
->func(s => ({})) : any
+>func(s => ({})) : any (error)
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
 >s => ({}) : (s: string) => {}
 >s : string
@@ -24,22 +24,22 @@ func(s => ({})); // Error for no applicable overload (object type is missing a a
 func(s => ({ a: blah, b: 3 })); // Only error inside the function, but not outside (since it would be applicable if not for the provisional error)
 >func(s => ({ a: blah, b: 3 })) : string
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->s => ({ a: blah, b: 3 }) : (s: string) => { a: any; b: number; }
+>s => ({ a: blah, b: 3 }) : (s: string) => { a: any (error); b: number; }
 >s : string
->({ a: blah, b: 3 }) : { a: any; b: number; }
->{ a: blah, b: 3 } : { a: any; b: number; }
->a : any
->blah : any
+>({ a: blah, b: 3 }) : { a: any (error); b: number; }
+>{ a: blah, b: 3 } : { a: any (error); b: number; }
+>a : any (error)
+>blah : any (error)
 >b : number
 >3 : 3
 
 func(s => ({ a: blah })); // Two errors here, one for blah not being defined, and one for the overload since it would not be applicable anyway
->func(s => ({ a: blah })) : any
+>func(s => ({ a: blah })) : any (error)
 >func : { (s: string): number; (lambda: (s: string) => { a: number; b: number; }): string; }
->s => ({ a: blah }) : (s: string) => { a: any; }
+>s => ({ a: blah }) : (s: string) => { a: any (error); }
 >s : string
->({ a: blah }) : { a: any; }
->{ a: blah } : { a: any; }
->a : any
->blah : any
+>({ a: blah }) : { a: any (error); }
+>{ a: blah } : { a: any (error); }
+>a : any (error)
+>blah : any (error)
 

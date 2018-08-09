@@ -1,7 +1,7 @@
 === tests/cases/compiler/assignmentToExpandingArrayType.ts ===
 // Fixes exponential time/space in #14628
 let x = []
->x : any[]
+>x : any (auto)[]
 >[] : undefined[]
 
 x[0] = { foo: 'hi' }

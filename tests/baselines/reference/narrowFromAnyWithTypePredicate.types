@@ -72,13 +72,13 @@ if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object
 >x : any
 
     x.method();
->x.method() : any
->x.method : any
+>x.method() : any (error)
+>x.method : any (error)
 >x : {}
->method : any
+>method : any (error)
 
     x();
->x() : any
+>x() : any (error)
 >x : {}
 }
 
@@ -93,9 +93,9 @@ if (isError(x)) {
 >message : string
 
     x.mesage;
->x.mesage : any
+>x.mesage : any (error)
 >x : Error
->mesage : any
+>mesage : any (error)
 }
 
 if (isDate(x)) {
@@ -110,9 +110,9 @@ if (isDate(x)) {
 >getDate : () => number
 
     x.getHuors();
->x.getHuors() : any
->x.getHuors : any
+>x.getHuors() : any (error)
+>x.getHuors : any (error)
 >x : Date
->getHuors : any
+>getHuors : any (error)
 }
 

@@ -49,9 +49,9 @@ if (aFoo.bar && aFoo.nested.b) {
   const { bar, baz, nested: {a, b: text} } = aFoo;
 >bar : number
 >baz : string
->nested : any
+>nested : any (error)
 >a : number
->b : any
+>b : any (error)
 >text : string
 >aFoo : foo
 
@@ -121,9 +121,9 @@ if (bBar.elem2 && bBar.elem2.bar && bBar.elem2.nested.b) {
   const { bar, baz, nested: {a, b: text} } = bBar.elem2;
 >bar : number
 >baz : string
->nested : any
+>nested : any (error)
 >a : number
->b : any
+>b : any (error)
 >text : string
 >bBar.elem2 : foo
 >bBar : { elem1: number; elem2: foo; }

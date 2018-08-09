@@ -1,25 +1,25 @@
 === tests/cases/compiler/superCallWithMissingBaseClass.ts ===
 class Foo extends Bar {
 >Foo : Foo
->Bar : any
+>Bar : any (error)
 
     m1() {
->m1 : () => any
+>m1 : () => any (error)
 
         return super.m1();
->super.m1() : any
->super.m1 : any
->super : any
->m1 : any
+>super.m1() : any (error)
+>super.m1 : any (error)
+>super : any (error)
+>m1 : any (error)
     }
 
     static m2() {
->m2 : () => any
+>m2 : () => any (error)
 
         return super.m2();
->super.m2() : any
->super.m2 : any
->super : any
->m2 : any
+>super.m2() : any (error)
+>super.m2 : any (error)
+>super : any (error)
+>m2 : any (error)
     }
 }

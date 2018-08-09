@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/uniqueSymbol/uniqueSymbolsErrors.ts ===
 // declarations
 declare const invalidUniqueType: unique number;
->invalidUniqueType : any
+>invalidUniqueType : any (error)
 
 declare const {}: unique symbol;
 declare let invalidLetType: unique symbol;

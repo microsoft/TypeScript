@@ -20,21 +20,21 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
 >walla : any
 
     bing = true; // no error
->bing = true : any
->bing : any
->true : any
+>bing = true : any (error)
+>bing : any (error)
+>true : any (error)
 
     bang = true; // no error
->bang = true : any
->bang : any
->true : any
+>bang = true : any (error)
+>bang : any (error)
+>true : any (error)
     
     function bar() {}
->bar : any
+>bar : any (error)
 
     bar();
->bar() : any
->bar : any
+>bar() : any (error)
+>bar : any (error)
         
 }
 

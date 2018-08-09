@@ -3,7 +3,7 @@ function Test() { }
 >Test : () => void
 
 <Test></Test>
-><Test></Test> : any
+><Test></Test> : any (error)
 >Test : () => void
 >Test : () => void
 

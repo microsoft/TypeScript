@@ -46,54 +46,54 @@ class Derived extends Base {
 }
 
 var r = Base.x; // ok
->r : any
->Base.x : any
+>r : any (error)
+>Base.x : any (error)
 >Base : typeof Base
->x : any
+>x : any (error)
 
 var r2 = Derived.x; // error
->r2 : any
->Derived.x : any
+>r2 : any (error)
+>Derived.x : any (error)
 >Derived : typeof Derived
->x : any
+>x : any (error)
 
 var r3 = Base.fn(); // ok
->r3 : any
->Base.fn() : any
->Base.fn : any
+>r3 : any (error)
+>Base.fn() : any (error)
+>Base.fn : any (error)
 >Base : typeof Base
->fn : any
+>fn : any (error)
 
 var r4 = Derived.fn(); // error
->r4 : any
->Derived.fn() : any
->Derived.fn : any
+>r4 : any (error)
+>Derived.fn() : any (error)
+>Derived.fn : any (error)
 >Derived : typeof Derived
->fn : any
+>fn : any (error)
 
 var r5 = Base.a; // ok
->r5 : any
->Base.a : any
+>r5 : any (error)
+>Base.a : any (error)
 >Base : typeof Base
->a : any
+>a : any (error)
 
 Base.a = 2; // ok
 >Base.a = 2 : 2
->Base.a : any
+>Base.a : any (error)
 >Base : typeof Base
->a : any
+>a : any (error)
 >2 : 2
 
 var r6 = Derived.a; // error
->r6 : any
->Derived.a : any
+>r6 : any (error)
+>Derived.a : any (error)
 >Derived : typeof Derived
->a : any
+>a : any (error)
 
 Derived.a = 2; // error
 >Derived.a = 2 : 2
->Derived.a : any
+>Derived.a : any (error)
 >Derived : typeof Derived
->a : any
+>a : any (error)
 >2 : 2
 

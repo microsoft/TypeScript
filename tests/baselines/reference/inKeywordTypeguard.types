@@ -18,17 +18,17 @@ function negativeClassesTest(x: A | B) {
 
         x.b = "1";
 >x.b = "1" : "1"
->x.b : any
+>x.b : any (error)
 >x : A
->b : any
+>b : any (error)
 >"1" : "1"
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
->x.a : any
+>x.a : any (error)
 >x : B
->a : any
+>a : any (error)
 >"1" : "1"
     }
 }
@@ -44,17 +44,17 @@ function positiveClassesTest(x: A | B) {
 
         x.b = "1";
 >x.b = "1" : "1"
->x.b : any
+>x.b : any (error)
 >x : A
->b : any
+>b : any (error)
 >"1" : "1"
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
->x.a : any
+>x.a : any (error)
 >x : B
->a : any
+>a : any (error)
 >"1" : "1"
     }
 }
@@ -86,9 +86,9 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
     } else {
         x.b = "1";
 >x.b = "1" : "1"
->x.b : any
+>x.b : any (error)
 >x : AWithOptionalProp | BWithOptionalProp
->b : any
+>b : any (error)
 >"1" : "1"
     }
 }
@@ -125,10 +125,10 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >a : () => string
 
         x.b();
->x.b() : any
->x.b : any
+>x.b() : any (error)
+>x.b : any (error)
 >x : AWithMethod
->b : any
+>b : any (error)
 
     } else {
     }
@@ -144,29 +144,29 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
 >x : AWithMethod | BWithMethod
 
         x.a();
->x.a() : any
->x.a : any
+>x.a() : any (error)
+>x.a : any (error)
 >x : never
->a : any
+>a : any (error)
 
         x.b();
->x.b() : any
->x.b : any
+>x.b() : any (error)
+>x.b : any (error)
 >x : never
->b : any
+>b : any (error)
 
     } else {
         x.a();
->x.a() : any
->x.a : any
+>x.a() : any (error)
+>x.a : any (error)
 >x : AWithMethod | BWithMethod
->a : any
+>a : any (error)
 
         x.b();
->x.b() : any
->x.b : any
+>x.b() : any (error)
+>x.b : any (error)
 >x : AWithMethod | BWithMethod
->b : any
+>b : any (error)
     }
 }
 
@@ -189,17 +189,17 @@ function negativeMultipleClassesTest(x: A | B | C | D) {
 
         x.b = "1";
 >x.b = "1" : "1"
->x.b : any
+>x.b : any (error)
 >x : A | C | D
->b : any
+>b : any (error)
 >"1" : "1"
 
     } else {
         x.a = "1";
 >x.a = "1" : "1"
->x.a : any
+>x.a : any (error)
 >x : B
->a : any
+>a : any (error)
 >"1" : "1"
     }
 }
@@ -221,20 +221,20 @@ function negativePropTest(x: ClassWithUnionProp) {
 
         let y: string = x.prop.b;
 >y : string
->x.prop.b : any
+>x.prop.b : any (error)
 >x.prop : A
 >x : ClassWithUnionProp
 >prop : A
->b : any
+>b : any (error)
 
     } else {
         let z: string = x.prop.a;
 >z : string
->x.prop.a : any
+>x.prop.a : any (error)
 >x.prop : B
 >x : ClassWithUnionProp
 >prop : B
->a : any
+>a : any (error)
     }
 }
 
@@ -256,20 +256,20 @@ class NegativeClassTest {
 
             let z: number = this.prop.b;
 >z : number
->this.prop.b : any
+>this.prop.b : any (error)
 >this.prop : A
 >this : this
 >prop : A
->b : any
+>b : any (error)
 
         } else {
             let y: string = this.prop.a;
 >y : string
->this.prop.a : any
+>this.prop.a : any (error)
 >this.prop : B
 >this : this
 >prop : B
->a : any
+>a : any (error)
         }
     }
 }
@@ -290,10 +290,10 @@ class UnreachableCodeDetection {
 
         } else {
             let y = this.a;
->y : any
->this.a : any
+>y : any (error)
+>this.a : any (error)
 >this : never
->a : any
+>a : any (error)
         }
     }
 }

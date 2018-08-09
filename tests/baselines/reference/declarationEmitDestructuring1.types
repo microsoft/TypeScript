@@ -23,7 +23,7 @@ function bar({a1, b1, c1}: { a1: number, b1: boolean, c1: string }): void { }
 function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }): void { } 
 >baz : ({ a2, b2: { b1, c1 } }: { a2: number; b2: { b1: boolean; c1: string; }; }) => void
 >a2 : number
->b2 : any
+>b2 : any (error)
 >b1 : boolean
 >c1 : string
 >a2 : number

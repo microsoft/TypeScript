@@ -3,22 +3,22 @@ import Foo = require("./b");
 >Foo : typeof Foo
 
 Foo.default.bar();
->Foo.default.bar() : any
->Foo.default.bar : any
->Foo.default : any
+>Foo.default.bar() : any (error)
+>Foo.default.bar : any (error)
+>Foo.default : any (error)
 >Foo : typeof Foo
->default : any
->bar : any
+>default : any (error)
+>bar : any (error)
 
 Foo.default.default.foo();
->Foo.default.default.foo() : any
->Foo.default.default.foo : any
->Foo.default.default : any
->Foo.default : any
+>Foo.default.default.foo() : any (error)
+>Foo.default.default.foo : any (error)
+>Foo.default.default : any (error)
+>Foo.default : any (error)
 >Foo : typeof Foo
->default : any
->default : any
->foo : any
+>default : any (error)
+>default : any (error)
+>foo : any (error)
 
 === tests/cases/compiler/b.d.ts ===
 export function foo();

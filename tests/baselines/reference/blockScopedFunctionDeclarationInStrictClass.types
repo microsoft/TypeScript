@@ -16,7 +16,7 @@ class c {
 >foo : () => void
         }
         foo(); // not ok
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
     }
 }

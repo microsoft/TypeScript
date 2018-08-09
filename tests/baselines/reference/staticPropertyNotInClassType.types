@@ -48,22 +48,22 @@ module NonGeneric {
 >fn : () => C
 
     var r4 = c.foo; // error
->r4 : any
->c.foo : any
+>r4 : any (error)
+>c.foo : any (error)
 >c : C
->foo : any
+>foo : any (error)
 
     var r5 = c.bar; // error
->r5 : any
->c.bar : any
+>r5 : any (error)
+>c.bar : any (error)
 >c : C
->bar : any
+>bar : any (error)
 
     var r6 = c.x; // error
->r6 : any
->c.x : any
+>r6 : any (error)
+>c.x : any (error)
 >c : C
->x : any
+>x : any (error)
 }
 
 module Generic {
@@ -89,7 +89,7 @@ module Generic {
 >b : U
 
         static foo: T; // not reflected in class type
->foo : any
+>foo : any (error)
     }
 
     module C {
@@ -115,20 +115,20 @@ module Generic {
 >fn : () => C<number, string>
 
     var r4 = c.foo; // error
->r4 : any
->c.foo : any
+>r4 : any (error)
+>c.foo : any (error)
 >c : C<number, string>
->foo : any
+>foo : any (error)
 
     var r5 = c.bar; // error
->r5 : any
->c.bar : any
+>r5 : any (error)
+>c.bar : any (error)
 >c : C<number, string>
->bar : any
+>bar : any (error)
 
     var r6 = c.x; // error
->r6 : any
->c.x : any
+>r6 : any (error)
+>c.x : any (error)
 >c : C<number, string>
->x : any
+>x : any (error)
 }

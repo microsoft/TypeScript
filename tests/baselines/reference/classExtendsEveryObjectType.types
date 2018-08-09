@@ -5,13 +5,13 @@ interface I {
 }
 class C extends I { } // error
 >C : C
->I : any
+>I : any (error)
 
 class C2 extends { foo: string; } { } // error
 >C2 : C2
->{ foo: string; } : { foo: any; }
->foo : any
->string : any
+>{ foo: string; } : { foo: any (error); }
+>foo : any (error)
+>string : any (error)
 
 var x: { foo: string; }
 >x : { foo: string; }

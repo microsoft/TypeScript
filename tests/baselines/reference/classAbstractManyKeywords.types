@@ -9,7 +9,7 @@ default abstract class C {}
 >C : C
 
 import abstract class D {}
->abstract : any
-> : any
+>abstract : any (error)
+> : any (error)
 >D : D
 

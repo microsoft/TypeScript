@@ -15,19 +15,19 @@ class Derived extends Base {
 >r2 : () => void
 >() => super() : () => void
 >super() : void
->super : any
+>super : any (error)
 
         var r3 = () => { super(); }
 >r3 : () => void
 >() => { super(); } : () => void
 >super() : void
->super : any
+>super : any (error)
 
         var r4 = function () { super(); }
 >r4 : () => void
 >function () { super(); } : () => void
 >super() : void
->super : any
+>super : any (error)
 
         var r5 = {
 >r5 : { foo: number; }
@@ -38,7 +38,7 @@ class Derived extends Base {
 
                 super();
 >super() : void
->super : any
+>super : any (error)
 
                 return 1;
 >1 : 1
@@ -50,7 +50,7 @@ class Derived extends Base {
 
                 super();
 >super() : void
->super : any
+>super : any (error)
             }
         }
     }

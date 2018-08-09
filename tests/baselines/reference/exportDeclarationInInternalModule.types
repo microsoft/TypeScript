@@ -21,10 +21,10 @@ module Bbb {
 >SomeType : SomeType
 
     export * from Aaa;      // this line causes the nullref
->Aaa : any
+>Aaa : any (error)
 }
 
 var a: Bbb.SomeType;
 >a : Bbb.SomeType
->Bbb : any
+>Bbb : any (error)
 

@@ -22,38 +22,38 @@ function acceptsSomeType(a: someType) {
 }
 
 let one = Interface;
->one : any
->Interface : any
+>one : any (error)
+>Interface : any (error)
 
 let two = InterfaceNotFound;
->two : any
->InterfaceNotFound : any
+>two : any (error)
+>InterfaceNotFound : any (error)
 
 let three = TypeAliasForSomeClass;
->three : any
->TypeAliasForSomeClass : any
+>three : any (error)
+>TypeAliasForSomeClass : any (error)
 
 let four = new TypeAliasForSomeClass();
->four : any
->new TypeAliasForSomeClass() : any
->TypeAliasForSomeClass : any
+>four : any (error)
+>new TypeAliasForSomeClass() : any (error)
+>TypeAliasForSomeClass : any (error)
 
 let five = new TypeAliasForSomeClassNotFound();
->five : any
->new TypeAliasForSomeClassNotFound() : any
->TypeAliasForSomeClassNotFound : any
+>five : any (error)
+>new TypeAliasForSomeClassNotFound() : any (error)
+>TypeAliasForSomeClassNotFound : any (error)
 
 let six = someType;
->six : any
->someType : any
+>six : any (error)
+>someType : any (error)
 
 acceptsSomeType(someType);
 >acceptsSomeType(someType) : void
 >acceptsSomeType : (a: someType) => void
->someType : any
+>someType : any (error)
 
 acceptsSomeType(someTypeNotFound);
 >acceptsSomeType(someTypeNotFound) : void
 >acceptsSomeType : (a: someType) => void
->someTypeNotFound : any
+>someTypeNotFound : any (error)
 

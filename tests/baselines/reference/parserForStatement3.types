@@ -1,19 +1,19 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/parserForStatement3.ts ===
 for(d in _.jh[a]=_.jh[a]||[],b);
->d : any
->_.jh[a]=_.jh[a]||[],b : any
+>d : any (error)
+>_.jh[a]=_.jh[a]||[],b : any (error)
 >_.jh[a]=_.jh[a]||[] : any
->_.jh[a] : any
->_.jh : any
->_ : any
->jh : any
->a : any
+>_.jh[a] : any (error)
+>_.jh : any (error)
+>_ : any (error)
+>jh : any (error)
+>a : any (error)
 >_.jh[a]||[] : any
->_.jh[a] : any
->_.jh : any
->_ : any
->jh : any
->a : any
+>_.jh[a] : any (error)
+>_.jh : any (error)
+>_ : any (error)
+>jh : any (error)
+>a : any (error)
 >[] : undefined[]
->b : any
+>b : any (error)
 

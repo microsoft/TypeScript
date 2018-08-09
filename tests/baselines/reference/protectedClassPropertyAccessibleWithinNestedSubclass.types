@@ -105,10 +105,10 @@ class C extends B {
 >bar : () => void
 
                 var c5 = c.z; // error
->c5 : any
->c.z : any
+>c5 : any (error)
+>c.z : any (error)
 >c : C
->z : any
+>z : any (error)
                 
                 var sc1 = C.x;
 >sc1 : string

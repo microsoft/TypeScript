@@ -1,22 +1,22 @@
 === tests/cases/compiler/implicitAnyFromCircularInference.ts ===
 // Error expected
 var a: typeof a;
->a : any
->a : any
+>a : any (error)
+>a : any (error)
 
 // Error expected on b or c
 var b: typeof c;
->b : any
->c : any
+>b : any (error)
+>c : any (error)
 
 var c: typeof b;
->c : any
->b : any
+>c : any (error)
+>b : any (error)
 
 // Error expected
 var d: Array<typeof d>;
->d : any
->d : any
+>d : any (error)
+>d : any (error)
 
 function f() { return f; }
 >f : () => typeof f

@@ -3,19 +3,19 @@ declare var React: any;
 >React : any
 
 <View>
-><View>    <ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView></View> : any
->View : any
+><View>    <ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView></View> : any (error)
+>View : any (error)
 
     <ListView refreshControl={
-><ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView> : any
->ListView : any
->refreshControl : any
+><ListView refreshControl={        <RefreshControl onRefresh={} refreshing={} />    } dataSource={this.state.ds} renderRow={}>    </ListView> : any (error)
+>ListView : any (error)
+>refreshControl : any (error)
 
         <RefreshControl onRefresh={} refreshing={} />
-><RefreshControl onRefresh={} refreshing={} /> : any
->RefreshControl : any
->onRefresh : any
->refreshing : any
+><RefreshControl onRefresh={} refreshing={} /> : any (error)
+>RefreshControl : any (error)
+>onRefresh : any (error)
+>refreshing : any (error)
 
     } dataSource={this.state.ds} renderRow={}>
 >dataSource : any
@@ -24,11 +24,11 @@ declare var React: any;
 >this : any
 >state : any
 >ds : any
->renderRow : any
+>renderRow : any (error)
 
     </ListView>
->ListView : any
+>ListView : any (error)
 
 </View>
->View : any
+>View : any (error)
 

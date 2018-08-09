@@ -10,10 +10,10 @@ file1.foo();
 >foo : () => void
 
 file1.bar();
->file1.bar() : any
->file1.bar : any
+>file1.bar() : any (error)
+>file1.bar : any (error)
 >file1 : typeof file1
->bar : any
+>bar : any (error)
 
 
 === tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts ===

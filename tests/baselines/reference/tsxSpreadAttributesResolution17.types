@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
         interface Element {}
@@ -22,8 +22,8 @@ export class Empty extends React.Component<{}, {}> {
 
         return <div>Hello</div>;
 ><div>Hello</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
 }
 

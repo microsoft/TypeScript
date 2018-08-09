@@ -26,7 +26,7 @@ export class Test1 {
 >console.log : (msg?: any) => void
 >console : { log(msg?: any): void; }
 >log : (msg?: any) => void
->field1 : any
+>field1 : any (error)
 
     };
 }

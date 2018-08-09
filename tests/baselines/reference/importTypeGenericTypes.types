@@ -44,11 +44,11 @@ class Bar<T> {
 
     item: Bar.I<T>;
 >item : Bar.I<T>
->Bar : any
+>Bar : any (error)
 
     constructor(input: Baz.J<T>) {}
 >input : Baz.J<T>
->Baz : any
+>Baz : any (error)
 }
 export { Bar }
 >Bar : typeof Bar
@@ -69,7 +69,7 @@ export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 
 export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
 >y : import("tests/cases/conformance/types/import/foo2").Bar.I<{ x: number; }>
->Bar : any
+>Bar : any (error)
 >x : number
 >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
 >a : string

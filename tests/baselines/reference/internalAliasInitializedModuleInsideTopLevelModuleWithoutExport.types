@@ -18,7 +18,7 @@ import b = a.b;
 
 export var x: b.c = new b.c();
 >x : b.c
->b : any
+>b : any (error)
 >new b.c() : b.c
 >b.c : typeof b.c
 >b : typeof b

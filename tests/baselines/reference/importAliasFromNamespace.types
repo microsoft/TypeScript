@@ -14,7 +14,7 @@ namespace SomeOther.Thing {
 
         private _which: Internal.WhichThing;
 >_which : Internal.WhichThing
->Internal : any
+>Internal : any (error)
 
         constructor() {
             Internal.getThing();

@@ -4,10 +4,10 @@ module x {
     }
 }
 declare export import a = x.c;
->a : any
->x : any
->c : any
+>a : any (error)
+>x : any (error)
+>c : any (error)
 
 var b: a;
->b : any
+>b : any (error)
 

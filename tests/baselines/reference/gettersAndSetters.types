@@ -86,16 +86,16 @@ C.Bar = "barv";
 >"barv" : "barv"
 
 var baz = c.Baz;
->baz : any
->c.Baz : any
+>baz : any (error)
+>c.Baz : any (error)
 >c : C
->Baz : any
+>Baz : any (error)
 
 c.Baz = "bazv";
 >c.Baz = "bazv" : "bazv"
->c.Baz : any
+>c.Baz : any (error)
 >c : C
->Baz : any
+>Baz : any (error)
 >"bazv" : "bazv"
 
 // The Foo accessors' return and param types should be contextually typed to the Foo field

@@ -3,11 +3,11 @@
 
 // operand before -
 var NUMBER1 = var NUMBER-;  //expect error
->NUMBER1 : any
-> : any
+>NUMBER1 : any (error)
+> : any (error)
 >NUMBER : any
 >- : number
-> : any
+> : any (error)
 
 // invalid expressions
 var NUMBER2 = -(null - undefined);
@@ -38,5 +38,5 @@ var NUMBER4 = -(undefined - undefined);
 var NUMBER =-;
 >NUMBER : any
 >- : number
-> : any
+> : any (error)
 

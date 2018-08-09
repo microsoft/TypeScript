@@ -4,5 +4,5 @@
 
 ++eval;
 >++eval : number
->eval : any
+>eval : any (error)
 

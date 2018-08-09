@@ -11,8 +11,8 @@ interface Prop {
 
     children: JSX.Element | JSX.Element[];
 >children : JSX.Element | JSX.Element[]
->JSX : any
->JSX : any
+>JSX : any (error)
+>JSX : any (error)
 }
 
 class Button extends React.Component<any, any> {
@@ -27,8 +27,8 @@ class Button extends React.Component<any, any> {
         return (<div>My Button</div>)
 >(<div>My Button</div>) : JSX.Element
 ><div>My Button</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
 }
 
@@ -38,8 +38,8 @@ function AnotherButton(p: any) {
 
     return <h1>Just Another Button</h1>;
 ><h1>Just Another Button</h1> : JSX.Element
->h1 : any
->h1 : any
+>h1 : any (error)
+>h1 : any (error)
 }
 
 function Comp(p: Prop) {
@@ -48,11 +48,11 @@ function Comp(p: Prop) {
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
->div : any
+>div : any (error)
 >p.b : string
 >p : Prop
 >b : string
->div : any
+>div : any (error)
 }
 
 // OK
@@ -107,7 +107,7 @@ interface SingleChildProp {
 
     children: JSX.Element;
 >children : JSX.Element
->JSX : any
+>JSX : any (error)
 }
 
 function SingleChildComp(p: SingleChildProp) {
@@ -116,11 +116,11 @@ function SingleChildComp(p: SingleChildProp) {
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
->div : any
+>div : any (error)
 >p.b : string
 >p : SingleChildProp
 >b : string
->div : any
+>div : any (error)
 }
 
 // OK

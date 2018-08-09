@@ -15,9 +15,9 @@ class K {
 >m : () => void
 
         let { priv: a, prot: b } = this; // ok
->priv : any
+>priv : any (error)
 >a : any
->prot : any
+>prot : any (error)
 >b : any
 >this : this
 
@@ -36,12 +36,12 @@ class C extends K {
 >m2 : () => void
 
         let { priv: a } = this; // error
->priv : any
+>priv : any (error)
 >a : any
 >this : this
 
         let { prot: b } = this; // ok
->prot : any
+>prot : any (error)
 >b : any
 >this : this
     }
@@ -64,11 +64,11 @@ let { privateMethod } = k; // error
 >k : K
 
 let { priv: a, prot: b, privateMethod: f } = k; // error
->priv : any
+>priv : any (error)
 >a : any
->prot : any
+>prot : any (error)
 >b : any
->privateMethod : any
+>privateMethod : any (error)
 >f : () => void
 >k : K
 

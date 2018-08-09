@@ -29,7 +29,7 @@ var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello"
 >a2 : number
 >b2 : string
 >x12 : number
->y12 : any
+>y12 : any (error)
 >c2 : boolean
 >["abc", { x12: 10, y12: false }] : [string, { x12: number; y12: boolean; }]
 >"abc" : "abc"

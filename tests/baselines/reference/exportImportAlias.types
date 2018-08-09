@@ -58,9 +58,9 @@ var c: { name: string };
 
 var c: C.a.B.Id;
 >c : { name: string; }
->C : any
->a : any
->B : any
+>C : any (error)
+>a : any (error)
+>B : any (error)
 
 module X {
 >X : typeof X
@@ -170,6 +170,6 @@ var p: { x: number; y: number; }
 
 var p: M.D.Point;
 >p : { x: number; y: number; }
->M : any
->D : any
+>M : any (error)
+>D : any (error)
 

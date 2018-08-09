@@ -1,7 +1,7 @@
 === tests/cases/compiler/reactNamespaceMissingDeclaration.tsx ===
 // Error myReactLib not declared
 <foo data/>
-><foo data/> : any
->foo : any
+><foo data/> : any (error)
+>foo : any (error)
 >data : true
 

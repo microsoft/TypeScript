@@ -3,12 +3,12 @@
 >"use strict" : "use strict"
 
 import * as package from "./1"
->package : any
+>package : any (error)
 
 import {foo as private} from "./1"
->foo : any
->private : any
+>foo : any (error)
+>private : any (error)
 
 import public from "./1"
->public : any
+>public : any (error)
 

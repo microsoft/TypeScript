@@ -3,7 +3,7 @@ function foo() {
 >foo : () => "123" | "456"
 
     l0:
->l0 : any
+>l0 : any (error)
 
     for (let z = 0; z < 1; ++z) {
 >z : number
@@ -15,7 +15,7 @@ function foo() {
 >z : number
 
         l1:
->l1 : any
+>l1 : any (error)
 
         for (let x = 0; x < 1; ++x) {
 >x : number
@@ -27,7 +27,7 @@ function foo() {
 >x : number
 
             ll1:
->ll1 : any
+>ll1 : any (error)
 
             for (let y = 0; y < 1; ++y) {
 >y : number
@@ -65,7 +65,7 @@ function foo() {
 >1 : 1
 
                     break l1;
->l1 : any
+>l1 : any (error)
                 }
                 if (y == 1) {
 >y == 1 : boolean
@@ -73,7 +73,7 @@ function foo() {
 >1 : 1
 
                     break ll1;
->ll1 : any
+>ll1 : any (error)
                 }
                 if (y == 1) {
 >y == 1 : boolean
@@ -81,7 +81,7 @@ function foo() {
 >1 : 1
 
                     continue l0;
->l0 : any
+>l0 : any (error)
                 }
 
                 if (x == 2) {
@@ -97,7 +97,7 @@ function foo() {
 >2 : 2
 
                     continue l1;
->l1 : any
+>l1 : any (error)
                 }
                 if (x == 2) {
 >x == 2 : boolean
@@ -105,7 +105,7 @@ function foo() {
 >2 : 2
 
                     continue ll1;
->ll1 : any
+>ll1 : any (error)
                 }
                 if (x == 2) {
 >x == 2 : boolean
@@ -136,7 +136,7 @@ function foo() {
 >1 : 1
 
                 break l1;
->l1 : any
+>l1 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean
@@ -151,7 +151,7 @@ function foo() {
 >2 : 2
 
                 continue l1;
->l1 : any
+>l1 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean
@@ -159,7 +159,7 @@ function foo() {
 >2 : 2
 
                 continue l0;
->l0 : any
+>l0 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean
@@ -184,7 +184,7 @@ function foo_c() {
 >foo_c : () => "123" | "456"
 
     l0:
->l0 : any
+>l0 : any (error)
 
     for (const z = 0; z < 1;) {
 >z : 0
@@ -194,7 +194,7 @@ function foo_c() {
 >1 : 1
 
         l1:
->l1 : any
+>l1 : any (error)
 
         for (const x = 0; x < 1;) {
 >x : 0
@@ -204,7 +204,7 @@ function foo_c() {
 >1 : 1
 
             ll1:
->ll1 : any
+>ll1 : any (error)
 
             for (const y = 0; y < 1;) {
 >y : 0
@@ -240,7 +240,7 @@ function foo_c() {
 >1 : 1
 
                     break l1;
->l1 : any
+>l1 : any (error)
                 }
                 if (y == 1) {
 >y == 1 : boolean
@@ -248,7 +248,7 @@ function foo_c() {
 >1 : 1
 
                     break ll1;
->ll1 : any
+>ll1 : any (error)
                 }
                 if (y == 1) {
 >y == 1 : boolean
@@ -256,7 +256,7 @@ function foo_c() {
 >1 : 1
 
                     continue l0;
->l0 : any
+>l0 : any (error)
                 }
 
                 if (x == 2) {
@@ -272,7 +272,7 @@ function foo_c() {
 >2 : 2
 
                     continue l1;
->l1 : any
+>l1 : any (error)
                 }
                 if (x == 2) {
 >x == 2 : boolean
@@ -280,7 +280,7 @@ function foo_c() {
 >2 : 2
 
                     continue ll1;
->ll1 : any
+>ll1 : any (error)
                 }
                 if (x == 2) {
 >x == 2 : boolean
@@ -311,7 +311,7 @@ function foo_c() {
 >1 : 1
 
                 break l1;
->l1 : any
+>l1 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean
@@ -326,7 +326,7 @@ function foo_c() {
 >2 : 2
 
                 continue l1;
->l1 : any
+>l1 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean
@@ -334,7 +334,7 @@ function foo_c() {
 >2 : 2
 
                 continue l0;
->l0 : any
+>l0 : any (error)
             }
             if (x == 2) {
 >x == 2 : boolean

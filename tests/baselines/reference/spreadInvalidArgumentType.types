@@ -68,8 +68,8 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >e : E
 
     var o1 = { ...p1 };   // Error, generic type paramterre
->o1 : any
->{ ...p1 } : any
+>o1 : any (error)
+>{ ...p1 } : any (error)
 >p1 : T
 
     var o2 = { ...p2 };   // OK
@@ -78,23 +78,23 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 
     var o3 = { ...t };   // Error, generic type paramter
->o3 : any
->{ ...t } : any
+>o3 : any (error)
+>{ ...t } : any (error)
 >t : T
 
     var o4 = { ...i };   // Error, index access
->o4 : any
->{ ...i } : any
+>o4 : any (error)
+>{ ...i } : any (error)
 >i : T["b"]
 
     var o5 = { ...k };   // Error, index
->o5 : any
->{ ...k } : any
+>o5 : any (error)
+>{ ...k } : any (error)
 >k : keyof T
 
     var o6 = { ...mapped_generic }; // Error, generic mapped object type
->o6 : any
->{ ...mapped_generic } : any
+>o6 : any (error)
+>{ ...mapped_generic } : any (error)
 >mapped_generic : { [P in keyof T]: T[P]; }
 
     var o7 = { ...mapped };  // OK, non-generic mapped type
@@ -103,43 +103,43 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >mapped : { b: T["b"]; }
 
     var o8 = { ...union_generic };  // Error, union with generic type parameter
->o8 : any
->{ ...union_generic } : any
+>o8 : any (error)
+>{ ...union_generic } : any (error)
 >union_generic : T | { a: number; }
 
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
->o9 : any
->{ ...union_primitive } : any
+>o9 : any (error)
+>{ ...union_primitive } : any (error)
 >union_primitive : number | { a: number; }
 
     var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
->o10 : any
->{ ...intersection_generic } : any
+>o10 : any (error)
+>{ ...intersection_generic } : any (error)
 >intersection_generic : T & { a: number; }
 
     var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
->o11 : any
->{ ...intersection_primitive } : any
+>o11 : any (error)
+>{ ...intersection_primitive } : any (error)
 >intersection_primitive : string | { a: number; }
 
     var o12 = { ...num };  // Error
->o12 : any
->{ ...num } : any
+>o12 : any (error)
+>{ ...num } : any (error)
 >num : number
 
     var o13 = { ...str };  // Error
->o13 : any
->{ ...str } : any
+>o13 : any (error)
+>{ ...str } : any (error)
 >str : number
 
     var o14 = { ...u };  // error, undefined-only not allowed
->o14 : any
->{ ...u } : any
+>o14 : any (error)
+>{ ...u } : any (error)
 >u : undefined
 
     var o15 = { ...n };  // error, null-only not allowed
->o15 : any
->{ ...n } : any
+>o15 : any (error)
+>{ ...n } : any (error)
 >n : null
 
     var o16 = { ...a };  // OK
@@ -148,18 +148,18 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var o17 = { ...literal_string };  // Error
->o17 : any
->{ ...literal_string } : any
+>o17 : any (error)
+>{ ...literal_string } : any (error)
 >literal_string : "string"
 
     var o18 = { ...literal_number };  // Error
->o18 : any
->{ ...literal_number } : any
+>o18 : any (error)
+>{ ...literal_number } : any (error)
 >literal_number : 42
 
     var o19 = { ...e };  // Error, enum
->o19 : any
->{ ...e } : any
+>o19 : any (error)
+>{ ...e } : any (error)
 >e : E
 }
 

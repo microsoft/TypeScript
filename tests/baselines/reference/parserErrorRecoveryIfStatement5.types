@@ -6,16 +6,16 @@ class Foo {
 >f1 : () => void
 
     if (a.b) {
->a.b : any
->a : any
->b : any
+>a.b : any (error)
+>a : any (error)
+>b : any (error)
   }
   f2() {
->f2() : any
->f2 : any
+>f2() : any (error)
+>f2 : any (error)
   }
   f3() {
->f3() : any
->f3 : any
+>f3() : any (error)
+>f3 : any (error)
   }
 }

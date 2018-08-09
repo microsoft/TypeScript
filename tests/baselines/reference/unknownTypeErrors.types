@@ -1,5 +1,5 @@
 === tests/cases/compiler/unknownTypeErrors.ts ===
 var foo: Unknown = 0;
->foo : any
+>foo : any (error)
 >0 : 0
 

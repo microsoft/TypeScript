@@ -7,17 +7,17 @@ class NoBase {
 
     constructor() {
         var a = super.prototype;
->a : any
->super.prototype : any
->super : any
->prototype : any
+>a : any (error)
+>super.prototype : any (error)
+>super : any (error)
+>prototype : any (error)
 
         var b = super.hasOwnProperty('');
->b : any
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>b : any (error)
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
     }
 
@@ -25,32 +25,32 @@ class NoBase {
 >fn : () => void
 
         var a = super.prototype;
->a : any
->super.prototype : any
->super : any
->prototype : any
+>a : any (error)
+>super.prototype : any (error)
+>super : any (error)
+>prototype : any (error)
 
         var b = super.hasOwnProperty('');
->b : any
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>b : any (error)
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
     }
 
     m = super.prototype;
->m : any
->super.prototype : any
->super : any
->prototype : any
+>m : any (error)
+>super.prototype : any (error)
+>super : any (error)
+>prototype : any (error)
 
     n = super.hasOwnProperty('');
->n : any
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>n : any (error)
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
 
     //super static property access in static member function of class with no base type
@@ -59,10 +59,10 @@ class NoBase {
 >static1 : () => void
 
         super.hasOwnProperty('');
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
     }
 
@@ -70,10 +70,10 @@ class NoBase {
 >static2 : string
 
         super.hasOwnProperty('');
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
 
         return '';
@@ -85,10 +85,10 @@ class NoBase {
 >n : string
 
         super.hasOwnProperty('');
->super.hasOwnProperty('') : any
->super.hasOwnProperty : any
->super : any
->hasOwnProperty : any
+>super.hasOwnProperty('') : any (error)
+>super.hasOwnProperty : any (error)
+>super : any (error)
+>hasOwnProperty : any (error)
 >'' : ""
     }
 }
@@ -188,22 +188,22 @@ class SomeDerived1 extends SomeBase {
 >inner : () => void
 
             super.publicFunc();
->super.publicFunc() : any
->super.publicFunc : any
->super : any
->publicFunc : any
+>super.publicFunc() : any (error)
+>super.publicFunc : any (error)
+>super : any (error)
+>publicFunc : any (error)
         }
         var x = {
->x : { test: () => any; }
->{            test: function () { return super.publicFunc(); }        } : { test: () => any; }
+>x : { test: () => any (error); }
+>{            test: function () { return super.publicFunc(); }        } : { test: () => any (error); }
 
             test: function () { return super.publicFunc(); }
->test : () => any
->function () { return super.publicFunc(); } : () => any
->super.publicFunc() : any
->super.publicFunc : any
->super : any
->publicFunc : any
+>test : () => any (error)
+>function () { return super.publicFunc(); } : () => any (error)
+>super.publicFunc() : any (error)
+>super.publicFunc : any (error)
+>super : any (error)
+>publicFunc : any (error)
         }
     }
 }
@@ -348,15 +348,15 @@ class SomeDerived3 extends SomeBase {
 
 // In object literal
 var obj = { n: super.wat, p: super.foo() };
->obj : { n: any; p: any; }
->{ n: super.wat, p: super.foo() } : { n: any; p: any; }
->n : any
->super.wat : any
->super : any
->wat : any
->p : any
->super.foo() : any
->super.foo : any
->super : any
->foo : any
+>obj : { n: any (error); p: any (error); }
+>{ n: super.wat, p: super.foo() } : { n: any (error); p: any (error); }
+>n : any (error)
+>super.wat : any (error)
+>super : any (error)
+>wat : any (error)
+>p : any (error)
+>super.foo() : any (error)
+>super.foo : any (error)
+>super : any (error)
+>foo : any (error)
 

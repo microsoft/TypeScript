@@ -6,12 +6,12 @@ return this.edit(role)
 >this.edit : any
 >this : any
 >edit : any
->role : any
+>role : any (error)
 
     .then((role: Role) =>
 >then : any
->(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: any) => any
->role : any
+>(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: any (error)) => any
+>role : any (error)
 
         this.roleService.add(role)
 >this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : any
@@ -22,14 +22,14 @@ return this.edit(role)
 >this : any
 >roleService : any
 >add : any
->role : any
+>role : any (error)
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >then : any
->(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: any) => any
->data : any
->ng : any
->data.data : any
->data : any
->data : any
+>(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: any (error)) => any (error)
+>data : any (error)
+>ng : any (error)
+>data.data : any (error)
+>data : any (error)
+>data : any (error)
 

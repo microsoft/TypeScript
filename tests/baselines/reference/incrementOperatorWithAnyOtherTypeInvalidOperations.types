@@ -65,12 +65,12 @@ var ResultIsNumber1 = ++ANY2;
 var ResultIsNumber2 = ++A;
 >ResultIsNumber2 : number
 >++A : number
->A : any
+>A : any (error)
 
 var ResultIsNumber3 = ++M;
 >ResultIsNumber3 : number
 >++M : number
->M : any
+>M : any (error)
 
 var ResultIsNumber4 = ++obj;
 >ResultIsNumber4 : number
@@ -90,12 +90,12 @@ var ResultIsNumber6 = ANY2++;
 var ResultIsNumber7 = A++;
 >ResultIsNumber7 : number
 >A++ : number
->A : any
+>A : any (error)
 
 var ResultIsNumber8 = M++;
 >ResultIsNumber8 : number
 >M++ : number
->M : any
+>M : any (error)
 
 var ResultIsNumber9 = obj++;
 >ResultIsNumber9 : number
@@ -121,7 +121,7 @@ var ResultIsNumber12 = ++null;
 var ResultIsNumber13 = ++undefined;
 >ResultIsNumber13 : number
 >++undefined : number
->undefined : any
+>undefined : any (error)
 
 var ResultIsNumber14 = null++;
 >ResultIsNumber14 : number
@@ -136,7 +136,7 @@ var ResultIsNumber15 = {}++;
 var ResultIsNumber16 = undefined++;
 >ResultIsNumber16 : number
 >undefined++ : number
->undefined : any
+>undefined : any (error)
 
 // any type expressions
 var ResultIsNumber17 = ++foo();
@@ -256,13 +256,13 @@ ANY2++;
 >++ANY1 : number
 >ANY1 : any
 >++ : number
-> : any
+> : any (error)
 
 ++ANY2++;
 >++ANY2 : number
 >ANY2 : any[]
 >++ : number
-> : any
+> : any (error)
 
 ++ANY2[0]++;
 >++ANY2[0] : number
@@ -270,5 +270,5 @@ ANY2++;
 >ANY2 : any[]
 >0 : 0
 >++ : number
-> : any
+> : any (error)
 

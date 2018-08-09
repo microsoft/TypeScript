@@ -7,7 +7,7 @@ class Foo {
     constructor() {
         super(); // error
 >super() : void
->super : any
+>super : any (error)
     }
 }
 

@@ -1,5 +1,5 @@
 === tests/cases/compiler/undeclaredVarEmit.ts ===
 f: number;
->f : any
->number : any
+>f : any (error)
+>number : any (error)
 

@@ -7,16 +7,16 @@ with (x) {
 >x : number
 
     function f(a: number) {
->f : any
->a : any
+>f : any (error)
+>a : any (error)
 
         return 1;
->1 : any
+>1 : any (error)
     }
     // should be any
     var r = f(1);
->r : any
->f(1) : any
->f : any
->1 : any
+>r : any (error)
+>f(1) : any (error)
+>f : any (error)
+>1 : any (error)
 }

@@ -58,14 +58,14 @@ var fng = A.fng; // bug 838015
 
 // these should be errors since the functions are not exported
 var fn2 = A.fn2;
->fn2 : any
->A.fn2 : any
+>fn2 : any (error)
+>A.fn2 : any (error)
 >A : typeof A
->fn2 : any
+>fn2 : any (error)
 
 var fng2 = A.fng2;
->fng2 : any
->A.fng2 : any
+>fng2 : any (error)
+>A.fng2 : any (error)
 >A : typeof A
->fng2 : any
+>fng2 : any (error)
 

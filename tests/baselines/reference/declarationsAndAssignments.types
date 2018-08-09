@@ -120,7 +120,7 @@ function f2() {
 >y : string
 
     var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
->x : any
+>x : any (error)
 >a : number
 >{ x: 5, y: "hello" } : { x: number; y: string; }
 >x : number
@@ -129,7 +129,7 @@ function f2() {
 >"hello" : "hello"
 
     var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
->y : any
+>y : any (error)
 >b : string
 >{ x: 5, y: "hello" } : { x: number; y: string; }
 >x : number
@@ -138,9 +138,9 @@ function f2() {
 >"hello" : "hello"
 
     var { x: a, y: b } = { x: 5, y: "hello" };
->x : any
+>x : any (error)
 >a : number
->y : any
+>y : any (error)
 >b : string
 >{ x: 5, y: "hello" } : { x: number; y: string; }
 >x : number
@@ -183,13 +183,13 @@ function f4() {
 >f4 : () => void
 
     var { a: x, b: { a: y, b: { a: z }}} = { a: 1, b: { a: "hello", b: { a: true } } };
->a : any
+>a : any (error)
 >x : number
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >y : string
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 >z : boolean
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
 >a : number
@@ -311,9 +311,9 @@ function f11() {
 >f11 : () => void
 
     var { x: a, y: b } = { x: 10, y: "hello" };
->x : any
+>x : any (error)
 >a : number
->y : any
+>y : any (error)
 >b : string
 >{ x: 10, y: "hello" } : { x: number; y: string; }
 >x : number
@@ -360,7 +360,7 @@ function f12() {
 >a : number
 >b : string
 >x : number
->y : any
+>y : any (error)
 >c : boolean
 >["abc", { x: 10, y: false }] : [string, { x: number; y: boolean; }]
 >"abc" : "abc"
@@ -423,7 +423,7 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 >b : string
 >"hello" : "hello"
 >x : any
->y : any
+>y : any (error)
 >c : boolean
 >false : false
 

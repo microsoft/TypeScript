@@ -60,9 +60,9 @@ var r2 = d.x; // error
 
 var r3 = d.a; // error
 >r3 : string
->d.a : any
+>d.a : any (error)
 >d : D<string>
->a : any
+>a : any (error)
 
 var r4 = d.z; // error
 >r4 : string

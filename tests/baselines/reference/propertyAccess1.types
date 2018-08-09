@@ -12,8 +12,8 @@ foo.a = 4;
 
 foo.b = 5;
 >foo.b = 5 : 5
->foo.b : any
+>foo.b : any (error)
 >foo : { a: number; }
->b : any
+>b : any (error)
 >5 : 5
 

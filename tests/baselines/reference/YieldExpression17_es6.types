@@ -4,5 +4,5 @@ var v = { get foo() { yield foo; } }
 >{ get foo() { yield foo; } } : { readonly foo: void; }
 >foo : void
 >yield foo : any
->foo : any
+>foo : any (error)
 

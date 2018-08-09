@@ -2,9 +2,9 @@
 interface ifc { }
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
->i : any
->new ifc() : any
->ifc : any
+>i : any (error)
+>new ifc() : any (error)
+>ifc : any (error)
 
 // Parens are optional
 var x = new Date;
@@ -19,18 +19,18 @@ var y = new Date();
 
 // Target is not a class or var, good error
 var t1 = new 53();
->t1 : any
->new 53() : any
+>t1 : any (error)
+>new 53() : any (error)
 >53 : 53
 
 var t2 = new ''();
->t2 : any
->new ''() : any
+>t2 : any (error)
+>new ''() : any (error)
 >'' : ""
 
 new string;
->new string : any
->string : any
+>new string : any (error)
+>string : any (error)
 
 // Use in LHS of expression?
 (new Date()).toString();
@@ -43,39 +43,39 @@ new string;
 
 // Various spacing
 var t3 = new string[]( );
->t3 : any
->new string[]( ) : any
->string[] : any
->string : any
-> : any
+>t3 : any (error)
+>new string[]( ) : any (error)
+>string[] : any (error)
+>string : any (error)
+> : any (error)
 
 var t4 =
->t4 : any
+>t4 : any (error)
 
 new
->newstring[    ]    (        ) : any
+>newstring[    ]    (        ) : any (error)
 
 string
->string[    ] : any
->string : any
+>string[    ] : any (error)
+>string : any (error)
 
 [
     ]
-> : any
+> : any (error)
 
     (
         );
 
 // Unresolved symbol
 var f = new q();
->f : any
->new q() : any
->q : any
+>f : any (error)
+>new q() : any (error)
+>q : any (error)
 
 // not legal
 var t5 = new new Date;
->t5 : any
->new new Date : any
+>t5 : any (error)
+>new new Date : any (error)
 >new Date : Date
 >Date : DateConstructor
 
@@ -101,7 +101,7 @@ class S {
 
     public get xs(): M.T[] {
 >xs : M.T[]
->M : any
+>M : any (error)
 
         return new M.T[];
 >new M.T[] : any
@@ -109,7 +109,7 @@ class S {
 >M.T : typeof M.T
 >M : typeof M
 >T : typeof M.T
-> : any
+> : any (error)
     }
 }
 

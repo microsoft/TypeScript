@@ -36,12 +36,12 @@ void 0;
 
 if (!module.exports) module.exports = "";
 >!module.exports : boolean
->module.exports : any
->module : any
->exports : any
+>module.exports : any (error)
+>module : any (error)
+>exports : any (error)
 >module.exports = "" : ""
->module.exports : any
->module : any
->exports : any
+>module.exports : any (error)
+>module : any (error)
+>exports : any (error)
 >"" : ""
 

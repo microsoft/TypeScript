@@ -73,7 +73,7 @@ module m {
 
     function foo111(): m2.public2 {
 >foo111 : () => m2.public2
->m2 : any
+>m2 : any (error)
 
         return;
     }
@@ -89,7 +89,7 @@ module m {
 
     export function foo113(): m2.public2 {
 >foo113 : () => m2.public2
->m2 : any
+>m2 : any (error)
 
         return;
     }

@@ -15,12 +15,12 @@ declare var $: Foo;
 >$ : Foo
 
 var s = $.extend({
->s : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
->$.extend({    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    }, "") : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
+>s : { type: string; data: string; success: any (error); error: any (error); dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
+>$.extend({    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    }, "") : { type: string; data: string; success: any (error); error: any (error); dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
 >$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
 >$ : Foo
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
+>{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any (error); error: any (error); dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
 
     type: "GET" ,
 >type : string
@@ -31,18 +31,18 @@ var s = $.extend({
 >"data" : "data"
 
     success: wrapSuccessCallback(requestContext, callback) ,
->success : any
->wrapSuccessCallback(requestContext, callback) : any
->wrapSuccessCallback : any
->requestContext : any
->callback : any
+>success : any (error)
+>wrapSuccessCallback(requestContext, callback) : any (error)
+>wrapSuccessCallback : any (error)
+>requestContext : any (error)
+>callback : any (error)
 
     error: wrapErrorCallback(requestContext, errorCallback) ,
->error : any
->wrapErrorCallback(requestContext, errorCallback) : any
->wrapErrorCallback : any
->requestContext : any
->errorCallback : any
+>error : any (error)
+>wrapErrorCallback(requestContext, errorCallback) : any (error)
+>wrapErrorCallback : any (error)
+>requestContext : any (error)
+>errorCallback : any (error)
 
     dataType: "json" ,
 >dataType : string

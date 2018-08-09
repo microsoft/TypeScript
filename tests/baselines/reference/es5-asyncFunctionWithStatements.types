@@ -14,7 +14,7 @@ async function withStatement0() {
 >x : any
 
         y;
->y : any
+>y : any (error)
     }
 }
 
@@ -26,7 +26,7 @@ async function withStatement1() {
 >x : any
 
         y;
->y : any
+>y : any (error)
     }
 }
 
@@ -37,14 +37,14 @@ async function withStatement2() {
 >x : any
 
         a;
->a : any
+>a : any (error)
 
         await y;
->await y : any
->y : any
+>await y : any (error)
+>y : any (error)
 
         b;
->b : any
+>b : any (error)
     }
 }
 
@@ -55,17 +55,17 @@ async function withStatement3() {
 >x : any
 
         with (z) {
->z : any
+>z : any (error)
 
             a;
->a : any
+>a : any (error)
 
             await y;
->await y : any
->y : any
+>await y : any (error)
+>y : any (error)
 
             b;
->b : any
+>b : any (error)
         }
     }
 }

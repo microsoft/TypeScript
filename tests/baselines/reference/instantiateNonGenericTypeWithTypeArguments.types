@@ -10,24 +10,24 @@ class C {
 }
 
 var c = new C<number>();
->c : any
->new C<number>() : any
+>c : any (error)
+>new C<number>() : any (error)
 >C : typeof C
 
 function Foo(): void { }
 >Foo : () => void
 
 var r = new Foo<number>();
->r : any
->new Foo<number>() : any
+>r : any (error)
+>new Foo<number>() : any (error)
 >Foo : () => void
 
 var f: { (): void };
 >f : () => void
 
 var r2 = new f<number>();
->r2 : any
->new f<number>() : any
+>r2 : any (error)
+>new f<number>() : any (error)
 >f : () => void
 
 var a: any;
@@ -35,7 +35,7 @@ var a: any;
 
 // BUG 790977
 var r2 = new a<number>();
->r2 : any
+>r2 : any (error)
 >new a<number>() : any
 >a : any
 

@@ -8,8 +8,8 @@ var recurser = function foo() {
 
 // Error: foo should not be visible here
 foo();
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 
 // recurser should be
 recurser();
@@ -23,13 +23,13 @@ recurser();
 
     // Error: foo should not be visible here either
     foo();
->foo() : any
->foo : any
+>foo() : any (error)
+>foo : any (error)
 
 });
 
 // Error: bar should not be visible
 bar();
->bar() : any
->bar : any
+>bar() : any (error)
+>bar : any (error)
 

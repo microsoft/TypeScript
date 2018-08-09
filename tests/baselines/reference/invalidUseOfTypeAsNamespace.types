@@ -3,6 +3,6 @@ interface OhNo {
 }
 
 declare let y: OhNo.hello;
->y : any
->OhNo : any
+>y : any (error)
+>OhNo : any (error)
 

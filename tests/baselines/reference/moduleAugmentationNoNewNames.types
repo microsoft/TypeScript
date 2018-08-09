@@ -30,9 +30,9 @@ declare module "./observable" {
 >z : string
 
     let {a: x, b: x1}: {a: number, b: number};
->a : any
+>a : any (error)
 >x : number
->b : any
+>b : any (error)
 >x1 : number
 >a : number
 >b : number

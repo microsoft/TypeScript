@@ -29,10 +29,10 @@ module Foo.Bar {
 
 
     function foo(greeting: string): Foo.Bar.Greeter {
->foo : (greeting: string) => any
+>foo : (greeting: string) => any (error)
 >greeting : string
->Foo : any
->Bar : any
+>Foo : any (error)
+>Bar : any (error)
 
         return new Greeter(greeting);
 >new Greeter(greeting) : Greeter

@@ -146,9 +146,9 @@ my.predicate.type = class {
 var min = window.min || {};
 >min : typeof min
 >window.min || {} : any
->window.min : any
+>window.min : any (error)
 >window : Window
->min : any
+>min : any (error)
 >{} : {}
 
 min.nest = this.min.nest || function () { };
@@ -172,13 +172,13 @@ min.nest.other = self.min.nest.other || class { };
 >nest : { (): void; other: typeof other; }
 >other : typeof other
 >self.min.nest.other || class { } : typeof other
->self.min.nest.other : any
->self.min.nest : any
->self.min : any
+>self.min.nest.other : any (error)
+>self.min.nest : any (error)
+>self.min : any (error)
 >self : Window
->min : any
->nest : any
->other : any
+>min : any (error)
+>nest : any (error)
+>other : any (error)
 >class { } : typeof other
 
 min.property = global.min.property || {};
@@ -187,10 +187,10 @@ min.property = global.min.property || {};
 >min : typeof min
 >property : {}
 >global.min.property || {} : {}
->global.min.property : any
->global.min : any
->global : any
->min : any
->property : any
+>global.min.property : any (error)
+>global.min : any (error)
+>global : any (error)
+>min : any (error)
+>property : any (error)
 >{} : {}
 

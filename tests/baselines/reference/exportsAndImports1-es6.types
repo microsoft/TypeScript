@@ -49,12 +49,12 @@ export { v, f, C, I, E, D, M, N, T, a };
 >v : number
 >f : () => void
 >C : typeof C
->I : any
+>I : any (error)
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : any
->T : any
+>N : any (error)
+>T : any (error)
 >a : any
 
 === tests/cases/conformance/es6/modules/t2.ts ===
@@ -62,12 +62,12 @@ export { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
 >f : () => void
 >C : typeof C
->I : any
+>I : any (error)
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : any
->T : any
+>N : any (error)
+>T : any (error)
 >a : any
 
 === tests/cases/conformance/es6/modules/t3.ts ===
@@ -75,23 +75,23 @@ import { v, f, C, I, E, D, M, N, T, a } from "./t1";
 >v : number
 >f : () => void
 >C : typeof C
->I : any
+>I : any (error)
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : any
->T : any
+>N : any (error)
+>T : any (error)
 >a : any
 
 export { v, f, C, I, E, D, M, N, T, a };
 >v : number
 >f : () => void
 >C : typeof C
->I : any
+>I : any (error)
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : any
->T : any
+>N : any (error)
+>T : any (error)
 >a : any
 

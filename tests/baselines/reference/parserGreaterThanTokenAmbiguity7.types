@@ -3,6 +3,6 @@
 >1 >> > 2 : boolean
 >1 >> : number
 >1 : 1
-> : any
+> : any (error)
 >2 : 2
 

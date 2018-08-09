@@ -8,9 +8,9 @@ export declare let a: {
 }
 
 a.___foo
->a.___foo : any
+>a.___foo : any (error)
 >a : { __foo: 10; }
->___foo : any
+>___foo : any (error)
 
 // @filename def.ts
 export let b: {

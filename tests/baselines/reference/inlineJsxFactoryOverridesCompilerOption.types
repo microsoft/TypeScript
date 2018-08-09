@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/inline/renderer.d.ts ===
 declare global {
->global : any
+>global : any (error)
 
     namespace JSX {
         interface IntrinsicElements {
@@ -22,16 +22,16 @@ import {dom} from "./renderer";
 >dom : () => void
 
 <h></h>
-><h></h> : any
->h : any
->h : any
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
 import { p } from "./renderer";
 >p : () => void
 
 <h></h>
-><h></h> : any
->h : any
->h : any
+><h></h> : any (error)
+>h : any (error)
+>h : any (error)
 

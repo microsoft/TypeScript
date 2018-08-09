@@ -36,7 +36,7 @@ function f1() {
 >{} : {}
 
     x();
->x() : any
+>x() : any (error)
 >x : never
 }
 

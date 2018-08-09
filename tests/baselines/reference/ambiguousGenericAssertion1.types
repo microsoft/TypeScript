@@ -20,10 +20,10 @@ var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operatio
 >r3 : boolean
 ><<T>(x : boolean
 ><<T : number
-> : any
+> : any (error)
 >T : any
->(x : any
->x : any
+>(x : any (error)
+>x : any (error)
 >T : any
 >T>f : boolean
 >T : any

@@ -7,12 +7,12 @@ enum Position2 {
 >0 : 0
 }
 var x = IgnoreRulesSpecific. // error
->x : any
->IgnoreRulesSpecific. : any
->IgnoreRulesSpecific : any
+>x : any (error)
+>IgnoreRulesSpecific. : any (error)
+>IgnoreRulesSpecific : any (error)
 
 var y = 1;
-> : any
+> : any (error)
 >y : number
 >1 : 1
 

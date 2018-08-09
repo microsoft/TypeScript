@@ -3,5 +3,5 @@ class I<T> {}
 >I : I<T>
 
 var x: I<>;
->x : any
+>x : any (error)
 

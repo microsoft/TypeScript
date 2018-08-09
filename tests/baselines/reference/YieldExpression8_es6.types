@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/yieldExpressions/YieldExpression8_es6.ts ===
 yield(foo);
->yield(foo) : any
->yield : any
+>yield(foo) : any (error)
+>yield : any (error)
 >foo : () => IterableIterator<typeof foo>
 
 function* foo() {

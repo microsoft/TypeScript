@@ -50,9 +50,9 @@ for (let id in z) {
 >id : string
 
   let x = data.notAValue;  // Error
->x : any
->data.notAValue : any
+>x : any (error)
+>data.notAValue : any (error)
 >data : Data
->notAValue : any
+>notAValue : any (error)
 }
 

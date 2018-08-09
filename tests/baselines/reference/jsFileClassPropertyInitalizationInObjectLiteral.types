@@ -15,9 +15,9 @@ module.exports = function () {
     c: A.b = 1,
 >c : number
 >A.b = 1 : 1
->A.b : any
+>A.b : any (error)
 >A : typeof A
->b : any
+>b : any (error)
 >1 : 1
   }
 };

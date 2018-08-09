@@ -1,6 +1,6 @@
 === tests/cases/compiler/index.ts ===
 import { ISpinButton } from "troublesome-lib";
->ISpinButton : any
+>ISpinButton : any (error)
 
 === tests/cases/compiler/node_modules/troublesome-lib/lib/index.d.ts ===
 import { Position } from './utilities/positioning';

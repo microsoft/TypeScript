@@ -7,28 +7,28 @@ module b.a {
 
 module c.a.b {
     import ma = a;
->ma : any
->a : any
+>ma : any (error)
+>a : any (error)
 }
 
 module mImport {
     import d = a;
->d : any
->a : any
+>d : any (error)
+>a : any (error)
 
     import e = b.a;
->e : any
->b : any
->a : any
+>e : any (error)
+>b : any (error)
+>a : any (error)
 
     import d1 = a;
->d1 : any
->a : any
+>d1 : any (error)
+>a : any (error)
 
     import e1 = b.a;
->e1 : any
->b : any
->a : any
+>e1 : any (error)
+>b : any (error)
+>a : any (error)
 }
 
 module m0 {
@@ -74,32 +74,32 @@ module m0 {
     }
 
     import m2 = a;
->m2 : any
->a : any
+>m2 : any (error)
+>a : any (error)
 
     import m3 = b;
->m3 : any
->b : any
+>m3 : any (error)
+>b : any (error)
 
     import m4 = b.a;
->m4 : any
->b : any
->a : any
+>m4 : any (error)
+>b : any (error)
+>a : any (error)
 
     import m5 = c;
->m5 : any
->c : any
+>m5 : any (error)
+>c : any (error)
 
     import m6 = c.a;
->m6 : any
->c : any
->a : any
+>m6 : any (error)
+>c : any (error)
+>a : any (error)
 
     import m7 = c.a.b;
->m7 : any
->c : any
->a : any
->b : any
+>m7 : any (error)
+>c : any (error)
+>a : any (error)
+>b : any (error)
 }
 
 module m1 {
@@ -164,32 +164,32 @@ module m1 {
     }
 
     import m2 = a;
->m2 : any
->a : any
+>m2 : any (error)
+>a : any (error)
 
     import m3 = b;
->m3 : any
->b : any
+>m3 : any (error)
+>b : any (error)
 
     import m4 = b.a;
->m4 : any
->b : any
->a : any
+>m4 : any (error)
+>b : any (error)
+>a : any (error)
 
     import m5 = c;
->m5 : any
->c : any
+>m5 : any (error)
+>c : any (error)
 
     import m6 = c.a;
->m6 : any
->c : any
->a : any
+>m6 : any (error)
+>c : any (error)
+>a : any (error)
 
     import m7 = c.a.b;
->m7 : any
->c : any
->a : any
->b : any
+>m7 : any (error)
+>c : any (error)
+>a : any (error)
+>b : any (error)
 }
 
 module m {
@@ -469,11 +469,11 @@ var aVar = mAmbient.aVar;
 
 var bB: mAmbient.B;
 >bB : mAmbient.B
->mAmbient : any
+>mAmbient : any (error)
 
 var eVar: mAmbient.e;
 >eVar : mAmbient.e
->mAmbient : any
+>mAmbient : any (error)
 
 function m3foo() {
 >m3foo : () => mAmbient.m3.C
@@ -506,12 +506,12 @@ var m3aVar = mAmbient.m3.aVar;
 
 var m3bB: mAmbient.m3.B;
 >m3bB : mAmbient.m3.B
->mAmbient : any
->m3 : any
+>mAmbient : any (error)
+>m3 : any (error)
 
 var m3eVar: mAmbient.m3.e;
 >m3eVar : mAmbient.m3.e
->mAmbient : any
->m3 : any
+>mAmbient : any (error)
+>m3 : any (error)
 
 

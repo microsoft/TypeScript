@@ -1,5 +1,5 @@
 === tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts ===
 for (var a: number of X) {
->a : any
->X : any
+>a : any (error)
+>X : any (error)
 }

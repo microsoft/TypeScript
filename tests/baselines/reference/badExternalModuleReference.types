@@ -1,16 +1,16 @@
 === tests/cases/compiler/badExternalModuleReference.ts ===
 import a1 = require("garbage");
->a1 : any
+>a1 : any (error)
 
 export declare var a: {
->a : { (): any; test1: any; }
+>a : { (): any (error); test1: any (error); }
 
     test1: a1.connectModule;
->test1 : any
->a1 : any
+>test1 : any (error)
+>a1 : any (error)
 
     (): a1.connectExport;
->a1 : any
+>a1 : any (error)
 
 };
 

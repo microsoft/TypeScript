@@ -3,5 +3,5 @@
 function parse1(n: number=) { }
 >parse1 : (n?: number) => void
 >n : number
-> : any
+> : any (error)
 

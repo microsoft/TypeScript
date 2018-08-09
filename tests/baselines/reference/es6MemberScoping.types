@@ -6,18 +6,18 @@ class Foo {
 >store : string
 
     public foo() {
->foo : () => any
+>foo : () => any (error)
 
         return this._store.length; 
->this._store.length : any
->this._store : any
+>this._store.length : any (error)
+>this._store : any (error)
 >this : this
->_store : any
->length : any
+>_store : any (error)
+>length : any (error)
     }
     public _store = store; // should be an error.
->_store : any
->store : any
+>_store : any (error)
+>store : any (error)
 }
 
 class Foo2 {

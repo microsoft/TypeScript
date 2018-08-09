@@ -30,7 +30,7 @@ var x: {
 
     new (a: string): m.c;
 >a : string
->m : any
+>m : any (error)
 
     // Indexers
     [n: number]: c;
@@ -68,5 +68,5 @@ var y: (a: string) => string;
 var z: new (a: string) => m.c;
 >z : new (a: string) => m.c
 >a : string
->m : any
+>m : any (error)
 

@@ -8,8 +8,8 @@ let x = Test; // emit test_1.default
 >Test : typeof Test
 
 <anything attr={Test} />; // ?
-><anything attr={Test} /> : any
->anything : any
+><anything attr={Test} /> : any (error)
+>anything : any (error)
 >attr : typeof Test
 >Test : typeof Test
 

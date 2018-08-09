@@ -1,10 +1,10 @@
 === tests/cases/compiler/undefinedSymbolReferencedInArrayLiteral1.ts ===
 var tokens = [{ startIndex: deltaOffset }];
->tokens : { startIndex: any; }[]
->[{ startIndex: deltaOffset }] : { startIndex: any; }[]
->{ startIndex: deltaOffset } : { startIndex: any; }
->startIndex : any
->deltaOffset : any
+>tokens : { startIndex: any (error); }[]
+>[{ startIndex: deltaOffset }] : { startIndex: any (error); }[]
+>{ startIndex: deltaOffset } : { startIndex: any (error); }
+>startIndex : any (error)
+>deltaOffset : any (error)
 
 var functions = [function() {
 >functions : (() => void)[]
@@ -12,17 +12,17 @@ var functions = [function() {
 >function() {    [1, 2, 3].NonexistantMethod();    anotherNonExistingMethod();} : () => void
 
     [1, 2, 3].NonexistantMethod();
->[1, 2, 3].NonexistantMethod() : any
->[1, 2, 3].NonexistantMethod : any
+>[1, 2, 3].NonexistantMethod() : any (error)
+>[1, 2, 3].NonexistantMethod : any (error)
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3
->NonexistantMethod : any
+>NonexistantMethod : any (error)
 
     anotherNonExistingMethod();
->anotherNonExistingMethod() : any
->anotherNonExistingMethod : any
+>anotherNonExistingMethod() : any (error)
+>anotherNonExistingMethod : any (error)
 
 }];
 

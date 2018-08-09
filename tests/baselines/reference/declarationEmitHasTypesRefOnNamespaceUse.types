@@ -1,7 +1,7 @@
 === /src/index.ts ===
 class Src implements NS.Dep { }
 >Src : Src
->NS : any
+>NS : any (error)
 
 === /deps/dep/dep.d.ts ===
 declare namespace NS {

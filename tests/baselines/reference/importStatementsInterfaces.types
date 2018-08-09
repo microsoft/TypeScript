@@ -19,8 +19,8 @@ module A {
 // no code gen expected
 module B {
     import a = A;
->a : any
->A : any
+>a : any (error)
+>A : any (error)
 }
 
 // no code gen expected
@@ -28,21 +28,21 @@ module C {
 >C : typeof C
 
     import a = A;
->a : any
->A : any
+>a : any (error)
+>A : any (error)
 
     import b = a.inA;
->b : any
->a : any
->inA : any
+>b : any (error)
+>a : any (error)
+>inA : any (error)
 
     var m: typeof a;
->m : any
->a : any
+>m : any (error)
+>a : any (error)
 
     var p: b.Point3D;
 >p : b.Point3D
->b : any
+>b : any (error)
 
     var p = {x:0, y:0, z: 0 };
 >p : b.Point3D
@@ -60,12 +60,12 @@ module D {
 >D : typeof D
 
     import a = A;
->a : any
->A : any
+>a : any (error)
+>A : any (error)
 
     var p : a.Point;
 >p : a.Point
->a : any
+>a : any (error)
 }
 
 // no code gen expected
@@ -73,14 +73,14 @@ module E {
 >E : typeof E
 
     import a = A.inA;
->a : any
->A : any
->inA : any
+>a : any (error)
+>A : any (error)
+>inA : any (error)
 
     export function xDist(x: a.Point3D) {
 >xDist : (x: a.Point3D) => number
 >x : a.Point3D
->a : any
+>a : any (error)
 
         return 0 - x.x;
 >0 - x.x : number

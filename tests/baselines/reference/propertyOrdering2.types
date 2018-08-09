@@ -7,7 +7,7 @@ class Foo {
 >y : any
 
        foo() {
->foo : () => any
+>foo : () => any (error)
 
         var a = this.x;
 >a : any
@@ -16,9 +16,9 @@ class Foo {
 >x : any
 
         return this.y;
->this.y : any
+>this.y : any (error)
 >this : this
->y : any
+>y : any (error)
     }
 }
 

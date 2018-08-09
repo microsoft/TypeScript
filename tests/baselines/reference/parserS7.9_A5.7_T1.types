@@ -27,7 +27,7 @@ x
 >++ : number
 
 ++
-> : any
+> : any (error)
 >++y : number
 
 y

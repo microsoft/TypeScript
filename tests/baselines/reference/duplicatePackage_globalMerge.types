@@ -7,7 +7,7 @@ import { y } from '../tests/index'
 
 === /src/index.ts ===
 import * as React from 'react';
->React : any
+>React : any (error)
 
 export var x = 1
 >x : number
@@ -15,7 +15,7 @@ export var x = 1
 
 === /tests/index.ts ===
 import * as React from 'react';
->React : any
+>React : any (error)
 
 export var y = 2
 >y : number

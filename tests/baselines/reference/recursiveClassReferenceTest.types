@@ -17,14 +17,14 @@ declare module Sample.Thing {
 >gar : (runner: (widget: IWidget) => any) => any
 >runner : (widget: IWidget) => any
 >widget : IWidget
->Sample : any
->Thing : any
+>Sample : any (error)
+>Thing : any (error)
 	}
 
 	export interface ICodeThing {
   
   		getDomNode(): Element;
->getDomNode : () => any
+>getDomNode : () => any (error)
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
@@ -67,8 +67,8 @@ module Sample.Actions.Thing.Find {
 		public run(Thing:Sample.Thing.ICodeThing):boolean {
 >run : (Thing: Sample.Thing.ICodeThing) => boolean
 >Thing : Sample.Thing.ICodeThing
->Sample : any
->Thing : any
+>Sample : any (error)
+>Thing : any (error)
 
 			return true;
 >true : true
@@ -91,8 +91,8 @@ module Sample.Thing.Widgets {
 >gar : (runner: (widget: IWidget) => any) => any
 >runner : (widget: IWidget) => any
 >widget : IWidget
->Sample : any
->Thing : any
+>Sample : any (error)
+>Thing : any (error)
 >true : true
 >runner(this) : any
 >runner : (widget: IWidget) => any
@@ -104,8 +104,8 @@ module Sample.Thing.Widgets {
 
 		constructor(private codeThing: Sample.Thing.ICodeThing) {
 >codeThing : ICodeThing
->Sample : any
->Thing : any
+>Sample : any (error)
+>Thing : any (error)
 
 		    // scenario 1
 		    codeThing.addWidget("addWidget", this);
@@ -118,10 +118,10 @@ module Sample.Thing.Widgets {
 		}
 		
 		public getDomNode() {
->getDomNode : () => any
+>getDomNode : () => any (error)
 
 			return domNode;
->domNode : any
+>domNode : any (error)
 		}
 		
 		public destroy() {
@@ -180,7 +180,7 @@ module Sample.Thing.Languages.PlainText {
 		
 		public getMode(): IMode { return mode; }
 >getMode : () => IMode
->mode : any
+>mode : any (error)
 	}
 	
 	export class Mode extends AbstractMode {
@@ -192,7 +192,7 @@ module Sample.Thing.Languages.PlainText {
 >getInitialState : () => IState
 
 			return new State(self);
->new State(self) : any
+>new State(self) : any (error)
 >State : typeof State
 >self : Window
 		}

@@ -4,7 +4,7 @@ new Date<A ? B : C
 >new Date<A : boolean
 >new Date : Date
 >Date : DateConstructor
->A : any
->B : any
->C : any
+>A : any (error)
+>B : any (error)
+>C : any (error)
 

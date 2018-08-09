@@ -27,7 +27,7 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 
 function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >foo1 : ({ name: nameA }?: Robot) => void
->name : any
+>name : any (error)
 >nameA : string
 >"<NoName>" : "<NoName>"
 >{ } : {}
@@ -41,10 +41,10 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 }
 function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
 >foo2 : ({ name: nameB, skill: skillB }?: Robot) => void
->name : any
+>name : any (error)
 >nameB : string
 >"<NoName>" : "<NoName>"
->skill : any
+>skill : any (error)
 >skillB : string
 >"noSkill" : "noSkill"
 >{} : {}

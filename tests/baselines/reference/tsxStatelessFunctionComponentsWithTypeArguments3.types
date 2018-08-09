@@ -4,7 +4,7 @@ import React = require('react')
 
 declare function OverloadComponent<U>(): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
->JSX : any
+>JSX : any (error)
 
 declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": boolean}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
@@ -12,14 +12,14 @@ declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": bo
 >b : U
 >a : string
 >"ignore-prop" : boolean
->JSX : any
+>JSX : any (error)
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
 >attr : { b: U; a: T; }
 >b : U
 >a : T
->JSX : any
+>JSX : any (error)
 
 // OK
 function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
@@ -85,7 +85,7 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
->JSX : any
+>JSX : any (error)
 
 declare function Link<U>(l: {func: (arg1:U, arg2: string)=>void}): JSX.Element;
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
@@ -93,7 +93,7 @@ declare function Link<U>(l: {func: (arg1:U, arg2: string)=>void}): JSX.Element;
 >func : (arg1: U, arg2: string) => void
 >arg1 : U
 >arg2 : string
->JSX : any
+>JSX : any (error)
 
 function createLink(func: (a: number)=>void) {
 >createLink : (func: (a: number) => void) => void

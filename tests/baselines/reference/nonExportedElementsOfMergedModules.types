@@ -28,9 +28,9 @@ module One {
 >y : any
     }
     B.x;
->B.x : any
+>B.x : any (error)
 >B : typeof B
->x : any
+>x : any (error)
 
     B.y;
 >B.y : any

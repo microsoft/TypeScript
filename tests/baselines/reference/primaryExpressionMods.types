@@ -12,10 +12,10 @@ module M
 }
 var p: M.P;             // Used as ModuleName
 >p : M.P
->M : any
+>M : any (error)
 
 var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
->m : any
+>m : any (error)
 >M : typeof M
 
 var m2: typeof M = M;   // Used as PrimaryExpression in TypeQuery
@@ -30,12 +30,12 @@ var x1 = M.a;           // Used as PrimaryExpression
 >a : number
 
 var x2 = m.a;           // Same as M.a
->x2 : any
->m.a : any
->m : any
->a : any
+>x2 : any (error)
+>m.a : any (error)
+>m : any (error)
+>a : any (error)
 
 var q: m.P;             // Error
->q : any
->m : any
+>q : any (error)
+>m : any (error)
 

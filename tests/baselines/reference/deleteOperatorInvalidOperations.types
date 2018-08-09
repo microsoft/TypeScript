@@ -8,13 +8,13 @@ var BOOLEAN1 = ANY delete ;     //expect error
 >BOOLEAN1 : any
 >ANY : any
 >delete : boolean
-> : any
+> : any (error)
 
 // miss an operand
 var BOOLEAN2 = delete ;
 >BOOLEAN2 : boolean
 >delete : boolean
-> : any
+> : any (error)
 
 // delete global variable s
 class testADelx {

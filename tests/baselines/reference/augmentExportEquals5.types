@@ -10,7 +10,7 @@ declare module "express" {
 
     function e(): e.Express;
 >e : typeof import("tests/cases/compiler/express.d.ts")
->e : any
+>e : any (error)
 
     namespace e {
 >e : typeof import("tests/cases/compiler/express.d.ts")
@@ -43,7 +43,7 @@ declare module "express" {
 >err : Error
 
         interface Request extends Express.Request {
->Express : any
+>Express : any (error)
 
             get (name: string): string;
 >get : (name: string) => string
@@ -51,7 +51,7 @@ declare module "express" {
         }
 
         interface Response extends Express.Response {
->Express : any
+>Express : any (error)
 
             charset: string;
 >charset : string
@@ -83,7 +83,7 @@ declare module "express" {
         }
 
         interface Application extends IRouter<Application>, Express.Application {
->Express : any
+>Express : any (error)
 
             routes: any;
 >routes : any
@@ -118,7 +118,7 @@ declare module "express" {
 
 === tests/cases/compiler/consumer.ts ===
 import { Request } from "express";
->Request : any
+>Request : any (error)
 
 import "./augmentation";
 let x: Request;

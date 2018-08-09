@@ -5,9 +5,9 @@ class X<T, U> implements I2<T> { }
 >X : X<T, U>
 
 (new X).blah;
->(new X).blah : any
+>(new X).blah : any (error)
 >(new X) : X<{}, {}>
 >new X : X<{}, {}>
 >X : typeof X
->blah : any
+>blah : any (error)
 

@@ -4,7 +4,7 @@ function foo() {
 
     super(value => String(value));
 >super(value => String(value)) : void
->super : any
+>super : any (error)
 >value => String(value) : (value: any) => string
 >value : any
 >String(value) : string

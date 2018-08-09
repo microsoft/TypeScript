@@ -4,10 +4,10 @@ class Foo {
 
     constructor() {
         this.foo<string>();
->this.foo<string>() : any
->this.foo : any
+>this.foo<string>() : any (error)
+>this.foo : any (error)
 >this : this
->foo : any
+>foo : any (error)
     }
 }
 

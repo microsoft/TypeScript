@@ -17,12 +17,12 @@ var xs3: typeof Array<number>;
 >xs3 : ArrayConstructor
 >Array : ArrayConstructor
 ><number> : number
-> : any
+> : any (error)
 
 var xs4: typeof Array<typeof x>;
 >xs4 : ArrayConstructor
 >Array : ArrayConstructor
 ><typeof x> : number
 >x : number
-> : any
+> : any (error)
 

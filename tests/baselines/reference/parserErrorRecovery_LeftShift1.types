@@ -1,10 +1,10 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts ===
 retValue = bfs.VARIABLES >> );
 >retValue = bfs.VARIABLES >> : number
->retValue : any
+>retValue : any (error)
 >bfs.VARIABLES >> : number
->bfs.VARIABLES : any
->bfs : any
->VARIABLES : any
-> : any
+>bfs.VARIABLES : any (error)
+>bfs : any (error)
+>VARIABLES : any (error)
+> : any (error)
 

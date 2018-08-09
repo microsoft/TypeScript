@@ -37,14 +37,14 @@ No type information for this code.export * from "./t3";
 No type information for this code.
 No type information for this code.=== tests/cases/conformance/es6/modules/main.ts ===
 import hello, { x, y, z, foo } from "./t4";
->hello : any
+>hello : any (error)
 >x : number
 >y : number
 >z : string
 >foo : () => void
 
 hello;
->hello : any
+>hello : any (error)
 
 x;
 >x : number

@@ -5,10 +5,10 @@ Object.prototype; // ok
 >prototype : Object
 
 new Object().prototype; // error
->new Object().prototype : any
+>new Object().prototype : any (error)
 >new Object() : Object
 >Object : ObjectConstructor
->prototype : any
+>prototype : any (error)
 
 function f() {}
 >f : () => void

@@ -101,7 +101,7 @@ s[<any>{}]; // ok
 >{} : {}
 
 yellow[blue]; // error
->yellow[blue] : any
+>yellow[blue] : any (error)
 >yellow : Yellow
 >blue : Blue
 

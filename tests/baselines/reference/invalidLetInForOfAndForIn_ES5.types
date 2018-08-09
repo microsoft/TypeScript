@@ -13,8 +13,8 @@ for (let of [1,2,3]) {}
 >1 : 1
 >2 : 2
 >3 : 3
-> : any
-> : any
+> : any (error)
+> : any (error)
 
 for (let in [1,2,3]) {}
 >[1,2,3] : number[]

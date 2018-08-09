@@ -24,7 +24,7 @@ module A.M {
 >M : typeof M
 
     import M = Z.I;
->M : any
+>M : any (error)
 >Z : typeof Z
 >I : Z.I
 

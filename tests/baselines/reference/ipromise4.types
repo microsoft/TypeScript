@@ -9,8 +9,8 @@ declare module Windows.Foundation {
 >error : any
 >progress : (progress: any) => void
 >progress : any
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -20,8 +20,8 @@ declare module Windows.Foundation {
 >error : any
 >progress : (progress: any) => void
 >progress : any
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
         then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -31,8 +31,8 @@ declare module Windows.Foundation {
 >error : any
 >progress : (progress: any) => void
 >progress : any
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }
@@ -42,8 +42,8 @@ declare module Windows.Foundation {
 >error : any
 >progress : (progress: any) => void
 >progress : any
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 
         done? <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
 >done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void
@@ -58,8 +58,8 @@ declare module Windows.Foundation {
  
 var p: Windows.Foundation.IPromise<number> = null;
 >p : Windows.Foundation.IPromise<number>
->Windows : any
->Foundation : any
+>Windows : any (error)
+>Foundation : any (error)
 >null : null
  
 p.then(function (x) { } ); // should not error

@@ -9,9 +9,9 @@ function Greet(x: {name?: string}) {
 
 	return <div>Hello, {x}</div>;
 ><div>Hello, {x}</div> : JSX.Element
->div : any
+>div : any (error)
 >x : { name?: string; }
->div : any
+>div : any (error)
 }
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
@@ -26,8 +26,8 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 
 		return <div></div>;
 ><div></div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 	}
 	greeting: string;
 >greeting : string
@@ -75,15 +75,15 @@ let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 >e : JSX.Element
 ><BigGreeter ref={x => x.greeting.subtr(10)} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
->ref : (x: BigGreeter) => any
->x => x.greeting.subtr(10) : (x: BigGreeter) => any
+>ref : (x: BigGreeter) => any (error)
+>x => x.greeting.subtr(10) : (x: BigGreeter) => any (error)
 >x : BigGreeter
->x.greeting.subtr(10) : any
->x.greeting.subtr : any
+>x.greeting.subtr(10) : any (error)
+>x.greeting.subtr : any (error)
 >x.greeting : string
 >x : BigGreeter
 >greeting : string
->subtr : any
+>subtr : any (error)
 >10 : 10
 
 // Error (ref callback is contextually typed)
@@ -91,12 +91,12 @@ let f = <BigGreeter ref={x => x.notARealProperty} />;
 >f : JSX.Element
 ><BigGreeter ref={x => x.notARealProperty} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
->ref : (x: BigGreeter) => any
->x => x.notARealProperty : (x: BigGreeter) => any
+>ref : (x: BigGreeter) => any (error)
+>x => x.notARealProperty : (x: BigGreeter) => any (error)
 >x : BigGreeter
->x.notARealProperty : any
+>x.notARealProperty : any (error)
 >x : BigGreeter
->notARealProperty : any
+>notARealProperty : any (error)
 
 // OK - key is always valid
 let g = <BigGreeter key={100} />;
@@ -110,7 +110,7 @@ let g = <BigGreeter key={100} />;
 let h = <div ref={x => x.innerText} />;
 >h : JSX.Element
 ><div ref={x => x.innerText} /> : JSX.Element
->div : any
+>div : any (error)
 >ref : (x: HTMLDivElement) => string
 >x => x.innerText : (x: HTMLDivElement) => string
 >x : HTMLDivElement
@@ -122,12 +122,12 @@ let h = <div ref={x => x.innerText} />;
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 >i : JSX.Element
 ><div ref={x => x.propertyNotOnHtmlDivElement} /> : JSX.Element
->div : any
->ref : (x: HTMLDivElement) => any
->x => x.propertyNotOnHtmlDivElement : (x: HTMLDivElement) => any
+>div : any (error)
+>ref : (x: HTMLDivElement) => any (error)
+>x => x.propertyNotOnHtmlDivElement : (x: HTMLDivElement) => any (error)
 >x : HTMLDivElement
->x.propertyNotOnHtmlDivElement : any
+>x.propertyNotOnHtmlDivElement : any (error)
 >x : HTMLDivElement
->propertyNotOnHtmlDivElement : any
+>propertyNotOnHtmlDivElement : any (error)
 
 

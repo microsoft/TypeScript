@@ -102,8 +102,8 @@ function good8({a, b}) {}
 function bad1(x, {a, b}) {}
 >bad1 : (x: string, { a, b }: string) => void
 >x : string
->a : any
->b : any
+>a : any (error)
+>b : any (error)
 
 /**
  * @param {string} y - here, y's type gets ignored but obj's is fine

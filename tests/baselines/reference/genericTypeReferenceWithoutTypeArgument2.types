@@ -8,44 +8,44 @@ interface I<T> {
 }
 
 var c: I;
->c : any
+>c : any (error)
 
 var a: { x: I };
->a : { x: any; }
->x : any
+>a : { x: any (error); }
+>x : any (error)
 
 var b: { (x: I): I };
->b : (x: any) => any
->x : any
+>b : (x: any (error)) => any (error)
+>x : any (error)
 
 var d: { [x: I]: I };
 >d : {}
->x : any
+>x : any (error)
 
 var e = (x: I) => { var y: I; return y; }
->e : (x: any) => any
->(x: I) => { var y: I; return y; } : (x: any) => any
->x : any
->y : any
->y : any
+>e : (x: any (error)) => any (error)
+>(x: I) => { var y: I; return y; } : (x: any (error)) => any (error)
+>x : any (error)
+>y : any (error)
+>y : any (error)
 
 function f(x: I): I { var y: I; return y; }
->f : (x: any) => any
->x : any
->y : any
->y : any
+>f : (x: any (error)) => any (error)
+>x : any (error)
+>y : any (error)
+>y : any (error)
 
 var g = function f(x: I): I { var y: I; return y; }
->g : (x: any) => any
->function f(x: I): I { var y: I; return y; } : (x: any) => any
->f : (x: any) => any
->x : any
->y : any
->y : any
+>g : (x: any (error)) => any (error)
+>function f(x: I): I { var y: I; return y; } : (x: any (error)) => any (error)
+>f : (x: any (error)) => any (error)
+>x : any (error)
+>y : any (error)
+>y : any (error)
 
 class D extends I {
 >D : D
->I : any
+>I : any (error)
 }
 
 interface U extends I {}
@@ -57,33 +57,33 @@ module M {
 
 class D2 extends M.C { }
 >D2 : D2
->M.C : any
->M : any
->C : any
+>M.C : any (error)
+>M : any (error)
+>C : any (error)
 
 interface D3<T extends M.E> { }
->M : any
+>M : any (error)
 
 interface I2 extends M.C { }
->M : any
+>M : any (error)
 
 function h<T extends I>(x: T) { }
->h : <T extends any>(x: T) => void
+>h : <T extends any (error)>(x: T) => void
 >x : T
 
 function i<T extends M.E>(x: T) { }
->i : <T extends any>(x: T) => void
->M : any
+>i : <T extends any (error)>(x: T) => void
+>M : any (error)
 >x : T
 
 var j = <C>null;
->j : any
-><C>null : any
+>j : any (error)
+><C>null : any (error)
 >null : null
 
 var k = <M.E>null;
->k : any
-><M.E>null : any
->M : any
+>k : any (error)
+><M.E>null : any (error)
+>M : any (error)
 >null : null
 

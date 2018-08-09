@@ -1,16 +1,16 @@
 === tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts ===
 // errors
 var y = {
->y : { "stringLiteral": any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
->{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { "stringLiteral": any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
+>y : { "stringLiteral": any (error); 42: any (error); readonly e: void; f: any; this: any (error); super: any (error); var: any (error); class: any (error); typeof: any (error); }
+>{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { "stringLiteral": any (error); 42: any (error); readonly e: void; f: any; this: any (error); super: any (error); var: any (error); class: any (error); typeof: any (error); }
 
     "stringLiteral",
->"stringLiteral" : any
-> : any
+>"stringLiteral" : any (error)
+> : any (error)
 
     42,
->42 : any
-> : any
+>42 : any (error)
+> : any (error)
 
     get e,
 >e : void
@@ -19,52 +19,52 @@ var y = {
 >f : any
 
     this,
->this : any
-> : any
+>this : any (error)
+> : any (error)
 
     super,
->super : any
-> : any
+>super : any (error)
+> : any (error)
 
     var,
->var : any
-> : any
+>var : any (error)
+> : any (error)
 
     class,
->class : any
-> : any
+>class : any (error)
+> : any (error)
 
     typeof
->typeof : any
+>typeof : any (error)
 
 };
-> : any
+> : any (error)
 
 var x = {
 >x : { a: number[]; }
 >{    a.b,    a["ss"],    a[1],} : { a: number[]; }
 
     a.b,
->a : any
->.b : any
-> : any
->b : any
+>a : any (error)
+>.b : any (error)
+> : any (error)
+>b : any (error)
 
     a["ss"],
->a : any
+>a : any (error)
 >["ss"] : string[]
 >"ss" : "ss"
 
     a[1],
->a : any
+>a : any (error)
 >[1] : number[]
 >1 : 1
 
 };
 
 var v = { class };  // error
->v : { class: any; }
->{ class } : { class: any; }
->class : any
-> : any
+>v : { class: any (error); }
+>{ class } : { class: any (error); }
+>class : any (error)
+> : any (error)
 

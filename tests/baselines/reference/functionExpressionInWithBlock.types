@@ -6,11 +6,11 @@ function x() {
 >{} : {}
 
   function f() {
->f : any
+>f : any (error)
 
    () => this;
->() => this : any
->this : any
+>() => this : any (error)
+>this : any (error)
   }
  }
 }

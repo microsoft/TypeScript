@@ -1,70 +1,70 @@
 === tests/cases/compiler/parameterNamesInTypeParameterList.ts ===
 function f0<T extends typeof a>(a: T) {
->f0 : <T extends any>(a: T) => void
->a : any
+>f0 : <T extends any (error)>(a: T) => void
+>a : any (error)
 >a : T
 
 	a.b;
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 }
 
 function f1<T extends typeof a>({a}: {a:T}) {
->f1 : <T extends any>({ a }: { a: T; }) => void
->a : any
+>f1 : <T extends any (error)>({ a }: { a: T; }) => void
+>a : any (error)
 >a : T
 >a : T
 
 	a.b;
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 }
 
 function f2<T extends typeof a>([a]: T[]) {
->f2 : <T extends any>([a]: T[]) => void
->a : any
+>f2 : <T extends any (error)>([a]: T[]) => void
+>a : any (error)
 >a : T
 
 	a.b;
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 }
 
 class A {
 >A : A
 
 	m0<T extends typeof a>(a: T) {
->m0 : <T extends any>(a: T) => void
->a : any
+>m0 : <T extends any (error)>(a: T) => void
+>a : any (error)
 >a : T
 
 		a.b
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 	}
 	m1<T extends typeof a>({a}: {a:T}) {
->m1 : <T extends any>({ a }: { a: T; }) => void
->a : any
+>m1 : <T extends any (error)>({ a }: { a: T; }) => void
+>a : any (error)
 >a : T
 >a : T
 
 		a.b
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 	}
 	m2<T extends typeof a>([a]: T[]) {
->m2 : <T extends any>([a]: T[]) => void
->a : any
+>m2 : <T extends any (error)>([a]: T[]) => void
+>a : any (error)
 >a : T
 
 		a.b
->a.b : any
+>a.b : any (error)
 >a : T
->b : any
+>b : any (error)
 	}
 }

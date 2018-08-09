@@ -68,26 +68,26 @@ c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
 >explicitThis : (this: C, m: number) => number
 
 let o = {
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>o : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
+>{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 
     n: 101,
 >n : number
 >101 : 101
 
     explicitThis: function (m: number) {
->explicitThis : (m: number) => any
->function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    } : (m: number) => any
+>explicitThis : (m: number) => any (error)
+>function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    } : (m: number) => any (error)
 >m : number
 
         return m + this.n.length; // error, 'length' does not exist on 'number'
->m + this.n.length : any
+>m + this.n.length : any (error)
 >m : number
->this.n.length : any
+>this.n.length : any (error)
 >this.n : number
->this : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>this : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 >n : number
->length : any
+>length : any (error)
 
     },
     implicitThis(m: number): number { return m; }
@@ -98,29 +98,29 @@ let o = {
 };
 let i: I = o;
 >i : I
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>o : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 
 let o2: I = {
 >o2 : I
->{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any; }
+>{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any (error); }
 
     n: 1001,
 >n : number
 >1001 : 1001
 
     explicitThis: function (m) {
->explicitThis : (this: I, m: number) => any
->function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    } : (this: I, m: number) => any
+>explicitThis : (this: I, m: number) => any (error)
+>function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    } : (this: I, m: number) => any (error)
 >m : number
 
          return m + this.n.length;  // error, this.n: number, no member 'length'
->m + this.n.length : any
+>m + this.n.length : any (error)
 >m : number
->this.n.length : any
+>this.n.length : any (error)
 >this.n : number
 >this : I
 >n : number
->length : any
+>length : any (error)
 
     },
 }
@@ -164,7 +164,7 @@ c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 >o.implicitThis = c.implicitThis : (m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>o : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >c.implicitThis : (m: number) => number
 >c : C
@@ -173,7 +173,7 @@ o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 >o.implicitThis = c.explicitThis : (this: C, m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>o : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
@@ -182,25 +182,25 @@ o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to 
 o.implicitThis = i.explicitThis;
 >o.implicitThis = i.explicitThis : (this: I, m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>o : { n: number; explicitThis: (m: number) => any (error); implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >i.explicitThis : (this: I, m: number) => number
 >i : I
 >explicitThis : (this: I, m: number) => number
 
 i.explicitThis = function(m) {
->i.explicitThis = function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
+>i.explicitThis = function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any (error)
 >i.explicitThis : (this: I, m: number) => number
 >i : I
 >explicitThis : (this: I, m: number) => number
->function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any
+>function(m) {     return this.n.length;  // error, this.n: number} : (this: I, m: number) => any (error)
 >m : number
 
      return this.n.length;  // error, this.n: number
->this.n.length : any
+>this.n.length : any (error)
 >this.n : number
 >this : I
 >n : number
->length : any
+>length : any (error)
 }
 

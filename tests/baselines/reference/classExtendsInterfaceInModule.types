@@ -5,15 +5,15 @@ module M {
 }
 class C1 extends M.I1 {}
 >C1 : C1
->M.I1 : any
->M : any
->I1 : any
+>M.I1 : any (error)
+>M : any (error)
+>I1 : any (error)
 
 class C2<T> extends M.I2<T> {}
 >C2 : C2<T>
->M.I2 : any
->M : any
->I2 : any
+>M.I2 : any (error)
+>M : any (error)
+>I2 : any (error)
 
 module Mod {
 	export namespace Nested {
@@ -23,9 +23,9 @@ module Mod {
 
 class D extends Mod.Nested.I {}
 >D : D
->Mod.Nested.I : any
->Mod.Nested : any
->Mod : any
->Nested : any
->I : any
+>Mod.Nested.I : any (error)
+>Mod.Nested : any (error)
+>Mod : any (error)
+>Nested : any (error)
+>I : any (error)
 

@@ -1,8 +1,8 @@
 === tests/cases/compiler/incompleteDottedExpressionAtEOF.ts ===
 // used to leak __missing into error message
 var p2 = window. 
->p2 : any
->window. : any
+>p2 : any (error)
+>window. : any (error)
 >window : Window
-> : any
+> : any (error)
 

@@ -24,7 +24,7 @@ function x3(a: any, cb: (x: number) => number) {
 }
 // both are errors
 x3(1, (x: string) => 1); 
->x3(1, (x: string) => 1) : any
+>x3(1, (x: string) => 1) : any (error)
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
 >1 : 1
 >(x: string) => 1 : (x: string) => number
@@ -32,7 +32,7 @@ x3(1, (x: string) => 1);
 >1 : 1
 
 x3(1, (x: 'hm') => 1); 
->x3(1, (x: 'hm') => 1) : any
+>x3(1, (x: 'hm') => 1) : any (error)
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
 >1 : 1
 >(x: 'hm') => 1 : (x: "hm") => number

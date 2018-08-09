@@ -1,51 +1,51 @@
 === tests/cases/compiler/assignmentNestedInLiterals.ts ===
 var target, x, y;
->target : any
->x : any
->y : any
+>target : any (auto)
+>x : any (auto)
+>y : any (auto)
 
 target = [x = 1, y = x];
 >target = [x = 1, y = x] : number[]
->target : any
+>target : any (auto)
 >[x = 1, y = x] : number[]
 >x = 1 : 1
->x : any
+>x : any (auto)
 >1 : 1
 >y = x : number
->y : any
+>y : any (auto)
 >x : number
 
 var aegis, a, b;
->aegis : any
->a : any
->b : any
+>aegis : any (auto)
+>a : any (auto)
+>b : any (auto)
 
 aegis = { x: a = 1, y: b = a };
 >aegis = { x: a = 1, y: b = a } : { x: number; y: number; }
->aegis : any
+>aegis : any (auto)
 >{ x: a = 1, y: b = a } : { x: number; y: number; }
 >x : number
 >a = 1 : 1
->a : any
+>a : any (auto)
 >1 : 1
 >y : number
 >b = a : number
->b : any
+>b : any (auto)
 >a : number
 
 var kowloona, c, d;
->kowloona : any
->c : any
->d : any
+>kowloona : any (auto)
+>c : any (auto)
+>d : any (auto)
 
 for (kowloona of [c = 1, d = c]) {
->kowloona : any
+>kowloona : any (auto)
 >[c = 1, d = c] : number[]
 >c = 1 : 1
->c : any
+>c : any (auto)
 >1 : 1
 >d = c : number
->d : any
+>d : any (auto)
 >c : number
 }
 

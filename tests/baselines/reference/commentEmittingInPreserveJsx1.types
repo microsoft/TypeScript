@@ -4,15 +4,15 @@ import React = require('react');
 
 <div>
 ><div>    // Not Comment</div> : JSX.Element
->div : any
+>div : any (error)
 
     // Not Comment
 </div>;
->div : any
+>div : any (error)
 
 <div>
 ><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : JSX.Element
->div : any
+>div : any (error)
 
     // Not Comment
     {
@@ -20,11 +20,11 @@ import React = require('react');
     }
     // Another not Comment
 </div>;
->div : any
+>div : any (error)
 
 <div>
 ><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : JSX.Element
->div : any
+>div : any (error)
 
     // Not Comment
     {
@@ -34,11 +34,11 @@ import React = require('react');
     }
     // Another not Comment
 </div>;
->div : any
+>div : any (error)
 
 <div>
 ><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : JSX.Element
->div : any
+>div : any (error)
 
     /* Not Comment */
     {
@@ -47,5 +47,5 @@ import React = require('react');
 >"Hi" : "Hi"
     }
 </div>;
->div : any
+>div : any (error)
 

@@ -66,8 +66,8 @@ module NonGeneric {
 >4 : 4
 
     var r6 = d.y(); // error
->r6 : any
->d.y() : any
+>r6 : any (error)
+>d.y() : any (error)
 >d.y : number
 >d : D
 >y : number
@@ -141,8 +141,8 @@ module Generic {
 >'' : ""
 
     var r6 = d.y(); // error
->r6 : any
->d.y() : any
+>r6 : any (error)
+>d.y() : any (error)
 >d.y : string
 >d : D<number, string>
 >y : string

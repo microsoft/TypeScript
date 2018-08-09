@@ -3,7 +3,7 @@ import a = require('./externalModuleExportingGenericClass_file0');
 >a : typeof a
 
 var v: a; // this should report error
->v : any
+>v : any (error)
 
 var v2: any = (new a()).foo;
 >v2 : any

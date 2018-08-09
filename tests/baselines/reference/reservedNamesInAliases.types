@@ -13,10 +13,10 @@ type string = I;
 >string : I
 
 type void = I;
->type : any
+>type : any (error)
 >void : undefined
-> : any
->I : any
+> : any (error)
+>I : any (error)
 
 type object = I;
 >object : I

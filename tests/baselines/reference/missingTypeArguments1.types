@@ -7,7 +7,7 @@ class X<T> {
 >X : X<T>
 
     p1: () => X;
->p1 : () => any
+>p1 : () => any (error)
 }
 var a: X<number>;
 >a : X<number>
@@ -16,7 +16,7 @@ class X2<T> {
 >X2 : X2<T>
 
     p2: { [idx: number]: X2 } 
->p2 : { [idx: number]: any; }
+>p2 : { [idx: number]: any (error); }
 >idx : number
 }
 var a2: X2<number>;
@@ -26,7 +26,7 @@ class X3<T> {
 >X3 : X3<T>
 
     p3: X3[]
->p3 : any[]
+>p3 : any (error)[]
 }
 var a3: X3<number>;
 >a3 : X3<number>
@@ -35,7 +35,7 @@ class X4<T> {
 >X4 : X4<T>
 
     p4: I<X4>
->p4 : I<any>
+>p4 : I<any (error)>
 }
 var a4: X4<number>;
 >a4 : X4<number>
@@ -44,7 +44,7 @@ class X5<T> {
 >X5 : X5<T>
 
     p5: X5
->p5 : any
+>p5 : any (error)
 }
 var a5: X5<number>;
 >a5 : X5<number>
@@ -53,7 +53,7 @@ class X6<T> {
 >X6 : X6<T>
 
     p6: () => Y;
->p6 : () => any
+>p6 : () => any (error)
 }
 var a6: X6<number>;
 >a6 : X6<number>
@@ -62,7 +62,7 @@ class X7<T> {
 >X7 : X7<T>
 
     p7: { [idx: number]: Y } 
->p7 : { [idx: number]: any; }
+>p7 : { [idx: number]: any (error); }
 >idx : number
 }
 var a7: X7<number>;
@@ -72,7 +72,7 @@ class X8<T> {
 >X8 : X8<T>
 
     p8: Y[]
->p8 : any[]
+>p8 : any (error)[]
 }
 var a8: X8<number>;
 >a8 : X8<number>
@@ -81,7 +81,7 @@ class X9<T> {
 >X9 : X9<T>
 
     p9: I<Y>
->p9 : I<any>
+>p9 : I<any (error)>
 }
 var a9: X9<number>;
 >a9 : X9<number>
@@ -90,7 +90,7 @@ class X10<T> {
 >X10 : X10<T>
 
     pa: Y
->pa : any
+>pa : any (error)
 }
 var a10: X10<number>;
 >a10 : X10<number>

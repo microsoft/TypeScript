@@ -23,8 +23,8 @@ var x = A.x;
 
 // Error, since y is not exported
 var y = A.y;
->y : any
->A.y : any
+>y : any (error)
+>A.y : any (error)
 >A : typeof A
->y : any
+>y : any (error)
 

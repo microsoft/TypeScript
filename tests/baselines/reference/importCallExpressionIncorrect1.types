@@ -6,6 +6,6 @@ export function foo() { return "foo"; }
 === tests/cases/conformance/dynamicImport/1.ts ===
 import
 import { foo } from './0';
-> : any
+> : any (error)
 >foo : () => string
 

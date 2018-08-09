@@ -23,20 +23,20 @@ module editor {
  
  var i : modes.IMode;
 >i : modes.IMode
->modes : any
+>modes : any (error)
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug {
 >Bug : Bug
 
      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
->p1 : any
->p2 : any
->modes : any
+>p1 : any (error)
+>p2 : any (error)
+>modes : any (error)
 
          var x:modes.Mode;
->x : any
->modes : any
+>x : any (error)
+>modes : any (error)
      }
     
  }

@@ -15,19 +15,19 @@ var p: any;
 var openClosed1 = <div>
 >openClosed1 : JSX.Element
 ><div>   {blah}</div> : JSX.Element
->div : any
+>div : any (error)
 
    {blah}
->blah : any
+>blah : any (error)
 
 </div>;
->div : any
+>div : any (error)
 
 // Should emit React.__spread({}, p, {x: 0})
 var spread1 = <div {...p} x={0} />;
 >spread1 : JSX.Element
 ><div {...p} x={0} /> : JSX.Element
->div : any
+>div : any (error)
 >p : any
 >x : number
 >0 : 0

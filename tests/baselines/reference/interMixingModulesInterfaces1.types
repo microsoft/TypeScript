@@ -24,7 +24,7 @@ module A {
 
 var x: A.B = A.B.createB();
 >x : A.B
->A : any
+>A : any (error)
 >A.B.createB() : A.B
 >A.B.createB : () => A.B
 >A.B : typeof A.B

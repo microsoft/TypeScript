@@ -26,10 +26,10 @@ module M {
 >a : A
 
         var r1 = a.foo; // error
->r1 : any
->a.foo : any
+>r1 : any (error)
+>a.foo : any (error)
 >a : A
->foo : any
+>foo : any (error)
 
         var r2 = a.bar;
 >r2 : number
@@ -46,10 +46,10 @@ module M {
 >b : B<string>
 
         var r3 = b.foo; // error
->r3 : any
->b.foo : any
+>r3 : any (error)
+>b.foo : any (error)
 >b : B<string>
->foo : any
+>foo : any (error)
 
         var r4 = b.bar;
 >r4 : string
@@ -68,10 +68,10 @@ module M {
 >foo : string
 
     var r2 = a.bar; // error
->r2 : any
->a.bar : any
+>r2 : any (error)
+>a.bar : any (error)
 >a : A
->bar : any
+>bar : any (error)
 
     var b: B<string>;
 >b : B<string>
@@ -83,8 +83,8 @@ module M {
 >foo : string
 
     var r4 = b.bar; // error
->r4 : any
->b.bar : any
+>r4 : any (error)
+>b.bar : any (error)
 >b : B<string>
->bar : any
+>bar : any (error)
 }

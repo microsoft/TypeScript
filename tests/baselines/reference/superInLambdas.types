@@ -155,23 +155,23 @@ class RegisteredUser4 extends User {
 
         // super in a nested lambda in a constructor 
         var x = () => () => super;
->x : () => () => any
->() => () => super : () => () => any
->() => super : () => any
->super : any
+>x : () => () => any (error)
+>() => () => super : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
 >super : User
-> : any
+> : any (error)
     }
     sayHello(): void {
 >sayHello : () => void
 
         // super in a nested lambda in a method
         var x = () => () => super;
->x : () => () => any
->() => () => super : () => () => any
->() => super : () => any
->super : any
+>x : () => () => any (error)
+>() => () => super : () => () => any (error)
+>() => super : () => any (error)
+>super : any (error)
 >super : User
-> : any
+> : any (error)
     }
 }

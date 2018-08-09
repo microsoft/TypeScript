@@ -18,8 +18,8 @@ declare module "fs" {
 }
 
 import fs = module("fs");
->fs : any
->module : any
+>fs : any (error)
+>module : any (error)
 >("fs") : "fs"
 >"fs" : "fs"
 
@@ -57,7 +57,7 @@ module TypeScriptAllInOne {
 >retValue : number
 >0 : 0
 >^=  {                    return 1;                } : number
-> : any
+> : any (error)
 >{                    return 1;                } : { return: number; }
 
                     return 1;
@@ -66,18 +66,18 @@ module TypeScriptAllInOne {
                 }
 
                  case  = bfs.STATEMENTS(4);
->case : any
->bfs.STATEMENTS(4) : any
->bfs.STATEMENTS : any
->bfs : any
->STATEMENTS : any
+>case : any (error)
+>bfs.STATEMENTS(4) : any (error)
+>bfs.STATEMENTS : any (error)
+>bfs : any (error)
+>STATEMENTS : any (error)
 >4 : 4
 
                 if (retValue != 0) {
 >if : (retValue: any) => any
 >retValue : any
 >!= 0 : boolean
-> : any
+> : any (error)
 >0 : 0
 
                     return 1;
@@ -85,38 +85,38 @@ module TypeScriptAllInOne {
 
                  ^ 
 >^                 retValue : number
-> : any
+> : any (error)
 
 
                 retValue = bfs.TYPES();
->retValue : any
->bfs.TYPES() : any
->bfs.TYPES : any
->bfs : any
->TYPES : any
+>retValue : any (error)
+>bfs.TYPES() : any (error)
+>bfs.TYPES : any (error)
+>bfs : any (error)
+>TYPES : any (error)
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : any
+>retValue : any (error)
 >0 : 0
 
                     return 1 && 
 >1 && : any
 >1 : 1
                 }
-> : any
+> : any (error)
 
                 retValue = bfs.OPERATOR ' );
->retValue = bfs.OPERATOR : any
->retValue : any
->bfs.OPERATOR : any
->bfs : any
->OPERATOR : any
+>retValue = bfs.OPERATOR : any (error)
+>retValue : any (error)
+>bfs.OPERATOR : any (error)
+>bfs : any (error)
+>OPERATOR : any (error)
 >' ); : " );"
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : any
+>retValue : any (error)
 >0 : 0
 
                     return 1;
@@ -127,10 +127,10 @@ module TypeScriptAllInOne {
 >e : any
 
                 console.log(e);
->console.log(e) : any
->console.log : any
->console : any
->log : any
+>console.log(e) : any (error)
+>console.log : any (error)
+>console : any (error)
+>log : any (error)
 >e : any
             }
             finally {
@@ -138,10 +138,10 @@ module TypeScriptAllInOne {
             }
 
             console.log('Done');
->console.log('Done') : any
->console.log : any
->console : any
->log : any
+>console.log('Done') : any (error)
+>console.log : any (error)
+>console : any (error)
+>log : any (error)
 >'Done' : "Done"
 
             return 0;
@@ -180,7 +180,7 @@ module TypeScriptAllInOne {
 >NEGATIVE_INFINITY : number
 
             var nan = Number.NaN;
-> : any
+> : any (error)
 >nan : number
 >Number.NaN : number
 >Number : NumberConstructor
@@ -200,18 +200,18 @@ module TypeScriptAllInOne {
 >local : number
 
             var local5 = <fs.File>null;
->local5 : any
-><fs.File>null : any
->fs : any
+>local5 : any (error)
+><fs.File>null : any (error)
+>fs : any (error)
 >null : null
 
             var local6 = local5 instanceof fs.File;
 >local6 : boolean
 >local5 instanceof fs.File : boolean
->local5 : any
->fs.File : any
->fs : any
->File : any
+>local5 : any (error)
+>fs.File : any (error)
+>fs : any (error)
+>File : any (error)
 
             var hex = 0xBADC0DE, Hex = 0XDEADBEEF;
 >hex : number
@@ -235,7 +235,7 @@ module TypeScriptAllInOne {
 >'\x42' : "B"
 
             var quoted = '"', quoted2 = "'";
-> : any
+> : any (error)
 >quoted : string
 >'"' : "\""
 >quoted2 : string
@@ -304,7 +304,7 @@ module TypeScriptAllInOne {
 >0 : 0
 
             var bool = 0;
-> : any
+> : any (error)
 >bool : number
 >0 : 0
 
@@ -369,10 +369,10 @@ module TypeScriptAllInOne {
 >0 /> : boolean
 >0 / : number
 >0 : 0
-> : any
+> : any (error)
 
             var yield = 0;
-> : any
+> : any (error)
 >yield : number
 >0 : 0
 
@@ -484,7 +484,7 @@ module TypeScriptAllInOne {
 >! : boolean
 
             try {
-> : any
+> : any (error)
 
                 throw null;
 >null : null
@@ -523,10 +523,10 @@ module TypeScriptAllInOne {
 >c : CLASS
 
             retVal +=  catch .Property;
->retVal += : any
+>retVal += : any (error)
 >retVal : number
-> : any
->Property : any
+> : any (error)
+>Property : any (error)
 
             retVal += c.Member();
 >retVal += c.Member() : number
@@ -540,10 +540,10 @@ module TypeScriptAllInOne {
 >retVal += xx.Foo() ? 0 : 1 : number
 >retVal : number
 >xx.Foo() ? 0 : 1 : 0 | 1
->xx.Foo() : any
->xx.Foo : () => any
+>xx.Foo() : any (error)
+>xx.Foo : () => any (error)
 >xx : IF
->Foo : () => any
+>Foo : () => any (error)
 >0 : 0
 >1 : 1
 
@@ -780,7 +780,7 @@ module TypeScriptAllInOne {
 >i : number
 >0 : 0
 >!= b : boolean
-> : any
+> : any (error)
 >b : number
 >f == 1 : boolean
 >f : number
@@ -797,7 +797,7 @@ module TypeScriptAllInOne {
 
     interface IF {
         Foo(): bool;
->Foo : () => any
+>Foo : () => any (error)
     }
 
     class CLASS implements IF {
@@ -820,7 +820,7 @@ module TypeScriptAllInOne {
 >0 : 0
         }
         public Foo(): bool {
->Foo : () => any
+>Foo : () => any (error)
 
             var myEvent = () => { return 1; };
 >myEvent : () => number
@@ -838,8 +838,8 @@ module TypeScriptAllInOne {
 >true : true
 
             else
-> : any
-> : any
+> : any (error)
+> : any (error)
 
                 return false;
 >false : false
@@ -852,17 +852,17 @@ module TypeScriptAllInOne {
 >A : A
 
         public method1(val:number) {
->method1(val:number) : any
->method1 : any
->val : any
->number : any
+>method1(val:number) : any (error)
+>method1 : any (error)
+>val : any (error)
+>number : any (error)
 
             return val;
->val : any
+>val : any (error)
         }
         public method2() {
->method2() : any
->method2 : any
+>method2() : any (error)
+>method2 : any (error)
 
             return 2 * this.method1(2);
 >2 * this.method1(2) : number
@@ -880,13 +880,13 @@ module TypeScriptAllInOne {
 >A : A
 
         public method2() {
->method2 : () => any
+>method2 : () => any (error)
 
             return this.method1(2);
->this.method1(2) : any
->this.method1 : any
+>this.method1(2) : any (error)
+>this.method1 : any (error)
 >this : this
->method1 : any
+>method1 : any (error)
 >2 : 2
         }
     }
@@ -903,35 +903,35 @@ module TypeScriptAllInOne {
 >name : string
        
         public Overloads(value: string);
->Overloads(value: string) : any
->Overloads : any
->value : any
->string : any
+>Overloads(value: string) : any (error)
+>Overloads : any (error)
+>value : any (error)
+>string : any (error)
 
         public Overloads( while : string, ...rest: string[]) {  & 
->Overloads( : any
->Overloads : any
-> : any
-> : any
->string, : any
->string : any
-> : any
->rest : any
->string[] : any
->string : any
-> : any
+>Overloads( : any (error)
+>Overloads : any (error)
+> : any (error)
+> : any (error)
+>string, : any (error)
+>string : any (error)
+> : any (error)
+>rest : any (error)
+>string[] : any (error)
+>string : any (error)
+> : any (error)
 >&         public : number
-> : any
+> : any (error)
 
         public DefaultValue(value?: string = "Hello") { }
->public : any
->DefaultValue(value?: string = "Hello") : any
->DefaultValue : any
+>public : any (error)
+>DefaultValue(value?: string = "Hello") : any (error)
+>DefaultValue : any (error)
 >value?: string = "Hello" : any
->value : any
-> : any
+>value : any (error)
+> : any (error)
 >string = "Hello" : "Hello"
->string : any
+>string : any (error)
 >"Hello" : "Hello"
     }
 }

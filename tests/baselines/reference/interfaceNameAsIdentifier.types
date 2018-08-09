@@ -3,8 +3,8 @@ interface C {
     (): void;
 }
 C();
->C() : any
->C : any
+>C() : any (error)
+>C : any (error)
 
 module m2 {
     export interface C {
@@ -13,8 +13,8 @@ module m2 {
 }
 
 m2.C();
->m2.C() : any
->m2.C : any
->m2 : any
->C : any
+>m2.C() : any (error)
+>m2.C : any (error)
+>m2 : any (error)
+>C : any (error)
 

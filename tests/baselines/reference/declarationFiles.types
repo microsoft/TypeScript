@@ -11,7 +11,7 @@ class C1 {
 >undefined : undefined
 
     constructor(x: this) { }
->x : any
+>x : any (error)
 }
 
 class C2 {

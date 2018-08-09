@@ -3,12 +3,12 @@ export class C {
 >C : C
 
     factory() {
->factory : () => any
+>factory : () => any (error)
 
         return <div></div>;
-><div></div> : any
->div : any
->div : any
+><div></div> : any (error)
+>div : any (error)
+>div : any (error)
     }
 }
 

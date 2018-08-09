@@ -1,8 +1,8 @@
 === tests/cases/compiler/duplicateLocalVariable1.ts ===
 / /@module: commonjs
 >/ / : RegExp
->module : any
->commonjs : any
+>module : any (error)
+>commonjs : any (error)
 
 //import FileManager = require('filemanager');
 //import App = require('app');

@@ -4,7 +4,7 @@ export class a { }
 
 === tests/cases/compiler/client.ts ===
 import defaultBinding, * as nameSpaceBinding  from "./server";
->defaultBinding : any
+>defaultBinding : any (error)
 >nameSpaceBinding : typeof nameSpaceBinding
 
 export var x = new nameSpaceBinding.a();

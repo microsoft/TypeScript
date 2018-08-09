@@ -15,7 +15,7 @@ let [baz] = [];
 >[] : [undefined?]
 
 let {a: baz2} = { a: 1 };
->a : any
+>a : any (error)
 >baz2 : number
 >{ a: 1 } : { a: number; }
 >a : number
@@ -26,7 +26,7 @@ const [baz3] = []
 >[] : [undefined?]
 
 const {a: baz4} = { a: 1 };
->a : any
+>a : any (error)
 >baz4 : number
 >{ a: 1 } : { a: number; }
 >a : number

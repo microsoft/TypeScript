@@ -1,8 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement7.ts ===
 for (var a: number = 1, b: string = "" of X) {
->a : any
+>a : any (error)
 >1 : 1
->b : any
+>b : any (error)
 >"" : ""
->X : any
+>X : any (error)
 }

@@ -63,8 +63,8 @@ module Peer {
 
         var z:T.U.I2=3;
 >z : T.U.I2
->T : any
->U : any
+>T : any (error)
+>U : any (error)
 >3 : 3
     }
 }
@@ -90,29 +90,29 @@ module Everest {
 
         var v2:K1.I3=v1;
 >v2 : K1.I3
->K1 : any
+>K1 : any (error)
 >v1 : I4
 
         var v3:K1.I3[]=v1;
 >v3 : K1.I3[]
->K1 : any
+>K1 : any (error)
 >v1 : I4
 
         var v4:()=>K1.I3=v1;
 >v4 : () => K1.I3
->K1 : any
+>K1 : any (error)
 >v1 : I4
 
         var v5:(k:K1.I3)=>void=v1;
 >v5 : (k: K1.I3) => void
 >k : K1.I3
->K1 : any
+>K1 : any (error)
 >v1 : I4
 
         var v6:{k:K1.I3;}=v1;
 >v6 : { k: K1.I3; }
 >k : K1.I3
->K1 : any
+>K1 : any (error)
 >v1 : I4
     }
 }
@@ -127,7 +127,7 @@ var y:I;
 
 var x:T.I=y;
 >x : T.I
->T : any
+>T : any (error)
 >y : I
 
 

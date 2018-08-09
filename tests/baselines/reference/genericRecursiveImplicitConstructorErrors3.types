@@ -6,7 +6,7 @@ module TypeScript {
 >MemberName : MemberName<A, B, C>
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any (error)
 >arg1 : any
 >arg2 : any
 >arg3 : any
@@ -21,7 +21,7 @@ module TypeScript {
 >PullSymbol : PullSymbol<A, B, C>
 
         public type: PullTypeSymbol = null;
->type : any
+>type : any (error)
 >null : null
     }
     export class PullTypeSymbol <A,B,C>extends PullSymbol {
@@ -29,95 +29,95 @@ module TypeScript {
 >PullSymbol : typeof PullSymbol
 
         private _elementType: PullTypeSymbol = null;
->_elementType : any
+>_elementType : any (error)
 >null : null
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
->toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
->scopeSymbol : any
+>toString : <A, B, C>(scopeSymbol?: any (error), useConstraintInName?: boolean) => any (error)
+>scopeSymbol : any (error)
 >useConstraintInName : boolean
 
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
->s : any
->this.getScopedNameEx(scopeSymbol, useConstraintInName).toString() : any
->this.getScopedNameEx(scopeSymbol, useConstraintInName).toString : any
->this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
->this.getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>s : any (error)
+>this.getScopedNameEx(scopeSymbol, useConstraintInName).toString() : any (error)
+>this.getScopedNameEx(scopeSymbol, useConstraintInName).toString : any (error)
+>this.getScopedNameEx(scopeSymbol, useConstraintInName) : any (error)
+>this.getScopedNameEx : <A, B, C>(scopeSymbol?: any (error), useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any (error)
 >this : this
->getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->scopeSymbol : any
+>getScopedNameEx : <A, B, C>(scopeSymbol?: any (error), useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any (error)
+>scopeSymbol : any (error)
 >useConstraintInName : boolean
->toString : any
+>toString : any (error)
 
             return s;
->s : any
+>s : any (error)
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
->getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->scopeSymbol : any
+>getScopedNameEx : <A, B, C>(scopeSymbol?: any (error), useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any (error)
+>scopeSymbol : any (error)
 >useConstraintInName : boolean
 >getPrettyTypeName : boolean
 >getTypeParamMarkerInfo : boolean
 
             if (this.isArray()) {
->this.isArray() : any
->this.isArray : any
+>this.isArray() : any (error)
+>this.isArray : any (error)
 >this : this
->isArray : any
+>isArray : any (error)
 
                 var elementMemberName = this._elementType ?
 >elementMemberName : any
 >this._elementType ?                (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1 : any
->this._elementType : any
+>this._elementType : any (error)
 >this : this
->_elementType : any
+>_elementType : any (error)
 
                 (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
 >(this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : any
 >this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?                this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :                this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName) : any
 >this._elementType.isArray() || this._elementType.isNamedTypeSymbol() : any
->this._elementType.isArray() : any
->this._elementType.isArray : any
->this._elementType : any
+>this._elementType.isArray() : any (error)
+>this._elementType.isArray : any (error)
+>this._elementType : any (error)
 >this : this
->_elementType : any
->isArray : any
->this._elementType.isNamedTypeSymbol() : any
->this._elementType.isNamedTypeSymbol : any
->this._elementType : any
+>_elementType : any (error)
+>isArray : any (error)
+>this._elementType.isNamedTypeSymbol() : any (error)
+>this._elementType.isNamedTypeSymbol : any (error)
+>this._elementType : any (error)
 >this : this
->_elementType : any
->isNamedTypeSymbol : any
+>_elementType : any (error)
+>isNamedTypeSymbol : any (error)
 
                 this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :
->this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) : any
->this._elementType.getScopedNameEx : any
->this._elementType : any
+>this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) : any (error)
+>this._elementType.getScopedNameEx : any (error)
+>this._elementType : any (error)
 >this : this
->_elementType : any
->getScopedNameEx : any
->scopeSymbol : any
+>_elementType : any (error)
+>getScopedNameEx : any (error)
+>scopeSymbol : any (error)
 >false : false
 >getPrettyTypeName : boolean
 >getTypeParamMarkerInfo : boolean
 
                 this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1
->this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName) : any
->this._elementType.getMemberTypeNameEx : any
->this._elementType : any
+>this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName) : any (error)
+>this._elementType.getMemberTypeNameEx : any (error)
+>this._elementType : any (error)
 >this : this
->_elementType : any
->getMemberTypeNameEx : any
+>_elementType : any (error)
+>getMemberTypeNameEx : any (error)
 >false : false
->scopeSymbol : any
+>scopeSymbol : any (error)
 >getPrettyTypeName : boolean
 >1 : 1
 
                 return MemberName.create(elementMemberName, "", "[]");
->MemberName.create(elementMemberName, "", "[]") : any
->MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>MemberName.create(elementMemberName, "", "[]") : any (error)
+>MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any (error)
 >MemberName : typeof MemberName
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any (error)
 >elementMemberName : any
 >"" : ""
 >"[]" : "[]"

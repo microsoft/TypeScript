@@ -30,10 +30,10 @@ export module c {
 >b : (x: number) => number
 }
 var d = c.b(11);
->d : any
->c.b(11) : any
->c.b : any
+>d : any (error)
+>c.b(11) : any (error)
+>c.b : any (error)
 >c : typeof c
->b : any
+>b : any (error)
 >11 : 11
 

@@ -14,7 +14,7 @@ export class MyBaseClass<T> {
 }
 === tests/cases/compiler/MixinClass.ts ===
 import { Constructor, MyBaseClass } from './BaseClass';
->Constructor : any
+>Constructor : any (error)
 >MyBaseClass : typeof MyBaseClass
 
 export interface MyMixin {

@@ -9,5 +9,5 @@ var f: {
 >- : number
 
 };
-> : any
+> : any (error)
 

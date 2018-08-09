@@ -25,17 +25,17 @@ function F1(a:any) { return a;}
 >a : any
 
 var f1 = new Foo("hey");
->f1 : any
->new Foo("hey") : any
+>f1 : any (error)
+>new Foo("hey") : any (error)
 >Foo : () => any
 >"hey" : "hey"
 
 
 f1.bar1();
->f1.bar1() : any
->f1.bar1 : any
->f1 : any
->bar1 : any
+>f1.bar1() : any (error)
+>f1.bar1 : any (error)
+>f1 : any (error)
+>bar1 : any (error)
 
 Foo();
 >Foo() : any

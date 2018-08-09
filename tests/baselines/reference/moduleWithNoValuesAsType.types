@@ -1,13 +1,13 @@
 === tests/cases/compiler/moduleWithNoValuesAsType.ts ===
 module A { }
 var a: A; // error
->a : any
+>a : any (error)
 
 module B {
     interface I {}
 }
 var b: B; // error
->b : any
+>b : any (error)
 
 module C {
     module M {
@@ -16,5 +16,5 @@ module C {
 }
 
 var c: C; // error
->c : any
+>c : any (error)
 

@@ -100,9 +100,9 @@ callb((a) =>{ a.length; });
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
 >(a) =>{ a.length; } : (a: number) => void
 >a : number
->a.length : any
+>a.length : any (error)
 >a : number
->length : any
+>length : any (error)
 
 
 

@@ -20,11 +20,11 @@ interface PropsWithConvert<T> extends PropsBase<T> {
 function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 >ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 >props : Props<T>
->JSX : any
+>JSX : any (error)
 
     return <div />;
 ><div /> : JSX.Element
->div : any
+>div : any (error)
 }
 
 // Sanity check: function call equivalent versions work fine

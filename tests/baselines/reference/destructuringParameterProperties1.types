@@ -58,19 +58,19 @@ var useC1Properties = c1.x === c1.y && c1.y === c1.z;
 >useC1Properties : boolean
 >c1.x === c1.y && c1.y === c1.z : boolean
 >c1.x === c1.y : boolean
->c1.x : any
+>c1.x : any (error)
 >c1 : C1
->x : any
->c1.y : any
+>x : any (error)
+>c1.y : any (error)
 >c1 : C1
->y : any
+>y : any (error)
 >c1.y === c1.z : boolean
->c1.y : any
+>c1.y : any (error)
 >c1 : C1
->y : any
->c1.z : any
+>y : any (error)
+>c1.z : any (error)
 >c1 : C1
->z : any
+>z : any (error)
 
 var c2 = new C2(["10", 10, !!10]);
 >c2 : C2
@@ -84,19 +84,19 @@ var c2 = new C2(["10", 10, !!10]);
 >10 : 10
 
 var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
->c2_x : any
->c2_y : any
->c2_z : any
->[c2.x, c2.y, c2.z] : [any, any, any]
->c2.x : any
+>c2_x : any (error)
+>c2_y : any (error)
+>c2_z : any (error)
+>[c2.x, c2.y, c2.z] : [any (error), any (error), any (error)]
+>c2.x : any (error)
 >c2 : C2
->x : any
->c2.y : any
+>x : any (error)
+>c2.y : any (error)
 >c2 : C2
->y : any
->c2.z : any
+>y : any (error)
+>c2.z : any (error)
 >c2 : C2
->z : any
+>z : any (error)
 
 var c3 = new C3({x: 0, y: "", z: false});
 >c3 : C3
@@ -124,17 +124,17 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >true : true
 
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
->c3_x : any
->c3_y : any
->c3_z : any
->[c3.x, c3.y, c3.z] : [any, any, any]
->c3.x : any
+>c3_x : any (error)
+>c3_y : any (error)
+>c3_z : any (error)
+>[c3.x, c3.y, c3.z] : [any (error), any (error), any (error)]
+>c3.x : any (error)
 >c3 : C3
->x : any
->c3.y : any
+>x : any (error)
+>c3.y : any (error)
 >c3 : C3
->y : any
->c3.z : any
+>y : any (error)
+>c3.z : any (error)
 >c3 : C3
->z : any
+>z : any (error)
 

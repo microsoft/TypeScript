@@ -11,7 +11,7 @@ function b1(b1: number) {
 >2 : 2
 
    b1(12); // should error
->b1(12) : any
+>b1(12) : any (error)
 >b1 : number
 >12 : 12
 }
@@ -35,10 +35,10 @@ var x = {
 >2 : 2
 
       b.apply(null, null); // should error
->b.apply(null, null) : any
->b.apply : any
+>b.apply(null, null) : any (error)
+>b.apply : any (error)
 >b : number
->apply : any
+>apply : any (error)
 >null : null
 >null : null
    }

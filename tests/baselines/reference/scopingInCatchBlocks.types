@@ -13,6 +13,6 @@ try { } catch(ex1) { } // should not error
 >ex1 : any
 
 var x = ex1; // should error
->x : any
->ex1 : any
+>x : any (error)
+>ex1 : any (error)
 

@@ -1,13 +1,13 @@
 === tests/cases/compiler/unaryOperators1.ts ===
 +foo;
 >+foo : number
->foo : any
+>foo : any (error)
 
 -bar;
 >-bar : number
->bar : any
+>bar : any (error)
 
 ~quux;
 >~quux : number
->quux : any
+>quux : any (error)
 

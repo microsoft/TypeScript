@@ -3,11 +3,11 @@ var v = { [e]: 1, [e + e]: 2 };
 >v : { [x: number]: number; }
 >{ [e]: 1, [e + e]: 2 } : { [x: number]: number; }
 >[e] : number
->e : any
+>e : any (error)
 >1 : 1
 >[e + e] : number
->e + e : any
->e : any
->e : any
+>e + e : any (error)
+>e : any (error)
+>e : any (error)
 >2 : 2
 

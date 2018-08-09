@@ -64,7 +64,7 @@ function getMultiRobot() {
 }
 
 for (let {name: nameA } = robot, i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
 >robot : Robot
 >i : number
@@ -83,7 +83,7 @@ for (let {name: nameA } = robot, i = 0; i < 1; i++) {
 >nameA : string
 }
 for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -103,7 +103,7 @@ for (let {name: nameA } = getRobot(), i = 0; i < 1; i++) {
 >nameA : string
 }
 for (let {name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
@@ -127,10 +127,10 @@ for (let {name: nameA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; 
 >nameA : string
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } = multiRobot, i = 0; i < 1; i++) {
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >multiRobot : MultiRobot
 >i : number
@@ -149,10 +149,10 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = multiRobot, 
 >primaryA : string
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >getMultiRobot() : MultiRobot
 >getMultiRobot : () => MultiRobot
@@ -172,10 +172,10 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobo
 >primaryA : string
 }
 for (let { skills: { primary: primaryA, secondary: secondaryA } } =
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
@@ -208,9 +208,9 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } =
 }
 
 for (let {name: nameA, skill: skillA } = robot, i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
->skill : any
+>skill : any (error)
 >skillA : string
 >robot : Robot
 >i : number
@@ -229,9 +229,9 @@ for (let {name: nameA, skill: skillA } = robot, i = 0; i < 1; i++) {
 >nameA : string
 }
 for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
->skill : any
+>skill : any (error)
 >skillA : string
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -251,9 +251,9 @@ for (let {name: nameA, skill: skillA } = getRobot(), i = 0; i < 1; i++) {
 >nameA : string
 }
 for (let {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
->skill : any
+>skill : any (error)
 >skillA : string
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
@@ -277,12 +277,12 @@ for (let {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimm
 >nameA : string
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = multiRobot, i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >multiRobot : MultiRobot
 >i : number
@@ -301,12 +301,12 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >primaryA : string
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot(), i = 0; i < 1; i++) {
->name : any
+>name : any (error)
 >nameA : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 >getMultiRobot() : MultiRobot
 >getMultiRobot : () => MultiRobot
@@ -326,12 +326,12 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
 >primaryA : string
 }
 for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
->name : any
+>name : any (error)
 >nameA : string
->skills : any
->primary : any
+>skills : any (error)
+>primary : any (error)
 >primaryA : string
->secondary : any
+>secondary : any (error)
 >secondaryA : string
 
     <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },

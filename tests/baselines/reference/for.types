@@ -76,5 +76,5 @@ for (; ;) { // ok
 }
 
 for () { // error
-> : any
+> : any (error)
 }

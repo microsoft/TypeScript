@@ -16,7 +16,7 @@ declare module 'passport' {
 
     const passport: passport.PassportStatic;
 >passport : passport.PassportStatic
->passport : any
+>passport : any (error)
 
     export = passport;
 >passport : passport.PassportStatic

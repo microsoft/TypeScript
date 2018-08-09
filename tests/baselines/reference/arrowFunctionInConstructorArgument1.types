@@ -9,6 +9,6 @@ var c = new C(() => { return asdf; } ) // should error
 >c : C
 >new C(() => { return asdf; } ) : C
 >C : typeof C
->() => { return asdf; } : () => any
->asdf : any
+>() => { return asdf; } : () => any (error)
+>asdf : any (error)
 

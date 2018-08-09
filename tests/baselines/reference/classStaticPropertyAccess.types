@@ -26,9 +26,9 @@ a['y'] // Error
 >'y' : "y"
 
 a.y    // Error
->a.y : any
+>a.y : any (error)
 >a : A
->y : any
+>y : any (error)
 
 A._b   // Error
 >A._b : number
@@ -36,7 +36,7 @@ A._b   // Error
 >_b : number
 
 A.a
->A.a : any
+>A.a : any (error)
 >A : typeof A
->a : any
+>a : any (error)
 

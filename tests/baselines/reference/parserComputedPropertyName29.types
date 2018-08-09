@@ -5,11 +5,11 @@ class C {
     // yes ASI
     [e] = id++
 >[e] : number
->e : any
+>e : any (error)
 >id++ : number
->id : any
+>id : any (error)
 
     [e2]: number
 >[e2] : number
->e2 : any
+>e2 : any (error)
 }

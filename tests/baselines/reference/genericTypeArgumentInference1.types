@@ -20,11 +20,11 @@ module Underscore {
 }
 declare var _: Underscore.Static;
 >_ : Underscore.Static
->Underscore : any
+>Underscore : any (error)
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
->r : any
->_.all([true, 1, null, 'yes'], _.identity) : any
+>r : any (error)
+>_.all([true, 1, null, 'yes'], _.identity) : any (error)
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T

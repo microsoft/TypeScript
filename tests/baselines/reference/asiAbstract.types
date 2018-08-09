@@ -1,6 +1,6 @@
 === tests/cases/compiler/asiAbstract.ts ===
 abstract
->abstract : any
+>abstract : any (error)
 
 class NonAbstractClass {
 >NonAbstractClass : NonAbstractClass

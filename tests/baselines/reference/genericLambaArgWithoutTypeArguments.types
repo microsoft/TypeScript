@@ -13,9 +13,9 @@ function foo(a) {
 foo((arg: Foo) => { return arg.x; });
 >foo((arg: Foo) => { return arg.x; }) : any
 >foo : (a: any) => any
->(arg: Foo) => { return arg.x; } : (arg: any) => any
->arg : any
->arg.x : any
->arg : any
->x : any
+>(arg: Foo) => { return arg.x; } : (arg: any (error)) => any (error)
+>arg : any (error)
+>arg.x : any (error)
+>arg : any (error)
+>x : any (error)
 

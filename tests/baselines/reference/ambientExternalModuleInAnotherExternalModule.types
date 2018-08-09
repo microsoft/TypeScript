@@ -14,9 +14,9 @@ declare module "ext" {
 
 // Cannot resolve this ext module reference
 import ext = require("ext");
->ext : any
+>ext : any (error)
 
 var x = ext;
->x : any
->ext : any
+>x : any (error)
+>ext : any (error)
 

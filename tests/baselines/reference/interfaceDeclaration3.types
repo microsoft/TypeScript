@@ -40,9 +40,9 @@ module M1 {
 
     class C5 implements M2.M3.I1 {
 >C5 : C5
->M2.M3 : any
+>M2.M3 : any (error)
 >M2 : typeof M2
->M3 : any
+>M3 : any (error)
 
         public item:string;
 >item : string
@@ -99,9 +99,9 @@ class C2 implements M2.I1 {
 
 class C3 implements M2.M3.I1 {
 >C3 : C3
->M2.M3 : any
+>M2.M3 : any (error)
 >M2 : typeof M2
->M3 : any
+>M3 : any (error)
 
     public item:string;
 >item : string

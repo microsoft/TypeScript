@@ -20,9 +20,9 @@ module M2 {
     // Should error.  M1 should bind to the variable, not to the module.
     class B extends M1.A<string> {
 >B : B
->M1.A : any
+>M1.A : any (error)
 >M1 : number
->A : any
+>A : any (error)
     }
 }
 module M3 {

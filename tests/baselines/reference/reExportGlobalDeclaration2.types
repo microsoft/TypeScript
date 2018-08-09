@@ -11,20 +11,20 @@ declare interface I2 {
 
 === tests/cases/compiler/file2.ts ===
 export {I1, I1 as II1};
->I1 : any
->I1 : any
->II1 : any
+>I1 : any (error)
+>I1 : any (error)
+>II1 : any (error)
 
 export {I2, I2 as II2};
->I2 : any
->I2 : any
->II2 : any
+>I2 : any (error)
+>I2 : any (error)
+>II2 : any (error)
 
 export {I1 as III1};
->I1 : any
->III1 : any
+>I1 : any (error)
+>III1 : any (error)
 
 export {I2 as III2};
->I2 : any
->III2 : any
+>I2 : any (error)
+>III2 : any (error)
 

@@ -18,14 +18,14 @@ class Test<T extends A> {
 >m : () => void
 
         this.attrs.params!.name;
->this.attrs.params!.name : any
+>this.attrs.params!.name : any (error)
 >this.attrs.params! : T["params"]
 >this.attrs.params : T["params"]
 >this.attrs : Readonly<T>
 >this : this
 >attrs : Readonly<T>
 >params : T["params"]
->name : any
+>name : any (error)
     }
 }
 

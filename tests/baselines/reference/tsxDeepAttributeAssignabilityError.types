@@ -21,8 +21,8 @@ export function MyComponent(_props: MyProps) {
 
     return <span>my component</span>;
 ><span>my component</span> : JSX.Element
->span : any
->span : any
+>span : any (error)
+>span : any (error)
 }
 
 === tests/cases/compiler/file1.tsx ===

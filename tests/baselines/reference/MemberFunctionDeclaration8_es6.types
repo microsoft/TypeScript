@@ -3,17 +3,17 @@ class C {
 >C : C
 
   foo() {
->foo : () => any
+>foo : () => any (error)
 
     // Make sure we don't think of *bar as the start of a generator method.
     if (a) # * bar;
->a : any
-> : any
+>a : any (error)
+> : any (error)
 >* bar : number
-> : any
->bar : any
+> : any (error)
+>bar : any (error)
 
     return bar;
->bar : any
+>bar : any (error)
   }
 }

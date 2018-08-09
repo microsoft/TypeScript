@@ -1,17 +1,17 @@
 === tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts ===
 		var selection = a, 
->selection : any
->a : any
+>selection : any (error)
+>a : any (error)
 
 			position = b,
->position : any
->b : any
+>position : any (error)
+>b : any (error)
 
 			model = c,
->model : any
->c : any
+>model : any (error)
+>c : any (error)
 
 			support = d;
->support : any
->d : any
+>support : any (error)
+>d : any (error)
 

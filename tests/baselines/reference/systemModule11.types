@@ -28,9 +28,9 @@ export * from 'bar';
 
 === tests/cases/compiler/file3.ts ===
 export {x, y as z} from 'a';
->x : any
->y : any
->z : any
+>x : any (error)
+>y : any (error)
+>z : any (error)
 
 export default function foo() {}
 >foo : () => void
@@ -56,9 +56,9 @@ export {z, z1 as z2};
 >z2 : any
 
 export {s, s1 as s2} from 'a'
->s : any
->s1 : any
->s2 : any
+>s : any (error)
+>s1 : any (error)
+>s2 : any (error)
 
 === tests/cases/compiler/file5.ts ===
 function foo() {}

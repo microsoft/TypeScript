@@ -148,14 +148,14 @@ function f() {
 >obj : { z: number; q: string; }
 
         i = 2;
->i = 2 : any
->i : any
->2 : any
+>i = 2 : any (error)
+>i : any (error)
+>2 : any (error)
 
         z = 10;
->z = 10 : any
->z : any
->10 : any
+>z = 10 : any (error)
+>z : any (error)
+>10 : any (error)
     }
     switch (obj.z) {
 >obj.z : number

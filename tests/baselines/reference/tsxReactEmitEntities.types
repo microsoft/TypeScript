@@ -11,44 +11,44 @@ declare var React: any;
 
 <div>Dot goes here: &middot; &notAnEntity; </div>;
 ><div>Dot goes here: &middot; &notAnEntity; </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 <div>Be careful of &quot;-ed strings!</div>;
 ><div>Be careful of &quot;-ed strings!</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 <div>&#0123;&#123;braces&#x7d;&#x7D;</div>;
 ><div>&#0123;&#123;braces&#x7d;&#x7D;</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 // Escapes do nothing
 <div>\n</div>;
 ><div>\n</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
 // Also works in string literal attributes
 <div attr="&#0123;&hellip;&#x7D;\"></div>;
 ><div attr="&#0123;&hellip;&#x7D;\"></div> : JSX.Element
->div : any
+>div : any (error)
 >attr : string
->div : any
+>div : any (error)
 
 // Does not happen for a string literal that happens to be inside an attribute (and escapes then work)
 <div attr={"&#0123;&hellip;&#x7D;\""}></div>;
 ><div attr={"&#0123;&hellip;&#x7D;\""}></div> : JSX.Element
->div : any
+>div : any (error)
 >attr : string
 >"&#0123;&hellip;&#x7D;\"" : "&#0123;&hellip;&#x7D;\""
->div : any
+>div : any (error)
 
 // Preserves single quotes
 <div attr='"'></div>
 ><div attr='"'></div> : JSX.Element
->div : any
+>div : any (error)
 >attr : string
->div : any
+>div : any (error)
 

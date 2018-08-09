@@ -6,7 +6,7 @@ module M {
 >A : A
     
     new A;
->new A : any
+>new A : any (error)
 >A : typeof A
 }
 
@@ -16,6 +16,6 @@ import myA = M.A;
 >A : myA
 
 new myA;
->new myA : any
+>new myA : any (error)
 >myA : typeof myA
 

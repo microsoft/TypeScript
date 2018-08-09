@@ -13,20 +13,20 @@
 >function () { } : () => void
 
             PluginUtilities.Utilities.markSupportedForProcessing(constructor);
->PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any
->PluginUtilities.Utilities.markSupportedForProcessing : any
->PluginUtilities.Utilities : any
->PluginUtilities : any
->Utilities : any
->markSupportedForProcessing : any
+>PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any (error)
+>PluginUtilities.Utilities.markSupportedForProcessing : any (error)
+>PluginUtilities.Utilities : any (error)
+>PluginUtilities : any (error)
+>Utilities : any (error)
+>markSupportedForProcessing : any (error)
 >constructor : any
 
             if (instanceMembers) {
 >instanceMembers : any
 
                 initializeProperties(constructor.prototype, instanceMembers);
->initializeProperties(constructor.prototype, instanceMembers) : any
->initializeProperties : any
+>initializeProperties(constructor.prototype, instanceMembers) : any (error)
+>initializeProperties : any (error)
 >constructor.prototype : any
 >constructor : any
 >prototype : any
@@ -36,8 +36,8 @@
 >staticMembers : any
 
                 initializeProperties(constructor, staticMembers);
->initializeProperties(constructor, staticMembers) : any
->initializeProperties : any
+>initializeProperties(constructor, staticMembers) : any (error)
+>initializeProperties : any (error)
 >constructor : any
 >staticMembers : any
             }
@@ -80,12 +80,12 @@
 >basePrototype : any
 
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
->PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any
->PluginUtilities.Utilities.markSupportedForProcessing : any
->PluginUtilities.Utilities : any
->PluginUtilities : any
->Utilities : any
->markSupportedForProcessing : any
+>PluginUtilities.Utilities.markSupportedForProcessing(constructor) : any (error)
+>PluginUtilities.Utilities.markSupportedForProcessing : any (error)
+>PluginUtilities.Utilities : any (error)
+>PluginUtilities : any (error)
+>Utilities : any (error)
+>markSupportedForProcessing : any (error)
 >constructor : any
 
                 Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
@@ -111,8 +111,8 @@
 >instanceMembers : any
 
                     initializeProperties(constructor.prototype, instanceMembers);
->initializeProperties(constructor.prototype, instanceMembers) : any
->initializeProperties : any
+>initializeProperties(constructor.prototype, instanceMembers) : any (error)
+>initializeProperties : any (error)
 >constructor.prototype : any
 >constructor : any
 >prototype : any
@@ -122,8 +122,8 @@
 >staticMembers : any
 
                     initializeProperties(constructor, staticMembers);
->initializeProperties(constructor, staticMembers) : any
->initializeProperties : any
+>initializeProperties(constructor, staticMembers) : any (error)
+>initializeProperties : any (error)
 >constructor : any
 >staticMembers : any
                 }
@@ -172,8 +172,8 @@
 >i : any
 
                 initializeProperties(constructor.prototype, arguments[i]);
->initializeProperties(constructor.prototype, arguments[i]) : any
->initializeProperties : any
+>initializeProperties(constructor.prototype, arguments[i]) : any (error)
+>initializeProperties : any (error)
 >constructor.prototype : any
 >constructor : any
 >prototype : any

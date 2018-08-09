@@ -4,7 +4,7 @@ async function bar1() {
 
     ++await 42; // Error
 >++ : number
-> : any
+> : any (error)
 >await 42 : 42
 >42 : 42
 }
@@ -14,7 +14,7 @@ async function bar2() {
 
     --await 42; // Error
 >-- : number
-> : any
+> : any (error)
 >await 42 : 42
 >42 : 42
 }

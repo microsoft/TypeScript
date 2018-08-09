@@ -5,9 +5,9 @@ import SubModule = require('SubModule');
 
 export var x: SubModule.m.m3.c;
 >x : SubModule.m.m3.c
->SubModule : any
->m : any
->m3 : any
+>SubModule : any (error)
+>m : any (error)
+>m3 : any (error)
 
 
 === tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===

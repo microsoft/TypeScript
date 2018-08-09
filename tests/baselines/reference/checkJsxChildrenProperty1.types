@@ -11,7 +11,7 @@ interface Prop {
 
     children: string | JSX.Element
 >children : string | JSX.Element
->JSX : any
+>JSX : any (error)
 }
 
 function Comp(p: Prop) {
@@ -20,11 +20,11 @@ function Comp(p: Prop) {
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
->div : any
+>div : any (error)
 >p.b : string
 >p : Prop
 >b : string
->div : any
+>div : any (error)
 }
 
 // OK
@@ -63,8 +63,8 @@ let k2 =
 
         <div>hi hi hi!</div>
 ><div>hi hi hi!</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 
     </Comp>;
 >Comp : (p: Prop) => JSX.Element

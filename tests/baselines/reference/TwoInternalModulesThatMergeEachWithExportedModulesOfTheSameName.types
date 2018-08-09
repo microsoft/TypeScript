@@ -69,7 +69,7 @@ var l: { length: number };
 
 var l: X.Y.Z.Line;
 >l : { length: number; }
->X : any
->Y : any
->Z : any
+>X : any (error)
+>Y : any (error)
+>Z : any (error)
 

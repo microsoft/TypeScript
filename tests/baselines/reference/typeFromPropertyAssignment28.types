@@ -32,7 +32,7 @@ c.p
 >p : number
 
 c.q
->c.q : any
+>c.q : any (error)
 >c : C
->q : any
+>q : any (error)
 

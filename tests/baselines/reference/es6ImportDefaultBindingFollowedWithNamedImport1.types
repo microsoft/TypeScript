@@ -16,7 +16,7 @@ var x1: number = defaultBinding1;
 
 import defaultBinding2, { a } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding2 : number
->a : any
+>a : any (error)
 
 var x1: number = defaultBinding2;
 >x1 : number
@@ -24,8 +24,8 @@ var x1: number = defaultBinding2;
 
 import defaultBinding3, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding3 : number
->a : any
->b : any
+>a : any (error)
+>b : any (error)
 
 var x1: number = defaultBinding3;
 >x1 : number
@@ -33,9 +33,9 @@ var x1: number = defaultBinding3;
 
 import defaultBinding4, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding4 : number
->x : any
->a : any
->y : any
+>x : any (error)
+>a : any (error)
+>y : any (error)
 
 var x1: number = defaultBinding4;
 >x1 : number
@@ -43,8 +43,8 @@ var x1: number = defaultBinding4;
 
 import defaultBinding5, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding5 : number
->x : any
->z : any
+>x : any (error)
+>z : any (error)
 
 var x1: number = defaultBinding5;
 >x1 : number
@@ -52,7 +52,7 @@ var x1: number = defaultBinding5;
 
 import defaultBinding6, { m,  } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding6 : number
->m : any
+>m : any (error)
 
 var x1: number = defaultBinding6;
 >x1 : number

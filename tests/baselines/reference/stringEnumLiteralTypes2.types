@@ -10,19 +10,19 @@ const enum Choice { Unknown = "", Yes = "yes", No = "no" };
 
 type YesNo = Choice.Yes | Choice.No;
 >YesNo : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 
 type NoYes = Choice.No | Choice.Yes;
 >NoYes : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 
 type UnknownYesNo = Choice.Unknown | Choice.Yes | Choice.No;
 >UnknownYesNo : Choice
->Choice : any
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
+>Choice : any (error)
 
 function f1() {
 >f1 : () => void
@@ -35,13 +35,13 @@ function f1() {
 
     var a: Choice.Yes | Choice.No;
 >a : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 
     var a: Choice.No | Choice.Yes;
 >a : YesNo
->Choice : any
->Choice : any
+>Choice : any (error)
+>Choice : any (error)
 }
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
@@ -69,7 +69,7 @@ function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 function f3(a: Choice.Yes, b: YesNo) {
 >f3 : (a: Choice.Yes, b: YesNo) => void
 >a : Choice.Yes
->Choice : any
+>Choice : any (error)
 >b : YesNo
 
     var x = a + b;
@@ -135,12 +135,12 @@ function f3(a: Choice.Yes, b: YesNo) {
 declare function g(x: Choice.Yes): string;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
 >x : Choice.Yes
->Choice : any
+>Choice : any (error)
 
 declare function g(x: Choice.No): boolean;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
 >x : Choice.No
->Choice : any
+>Choice : any (error)
 
 declare function g(x: Choice): number;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
@@ -284,12 +284,12 @@ type Item =
 
     { kind: Choice.Yes, a: string } |
 >kind : Choice.Yes
->Choice : any
+>Choice : any (error)
 >a : string
 
     { kind: Choice.No, b: string };
 >kind : Choice.No
->Choice : any
+>Choice : any (error)
 >b : string
 
 function f20(x: Item) {

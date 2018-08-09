@@ -7,12 +7,12 @@ function foo() {
 	var x = <div>  { </div>
 >x : JSX.Element
 ><div>  { </div>}// Shouldn't see any errors down herevar y = { a: 1 }; : JSX.Element
->div : any
-> : any
+>div : any (error)
+> : any (error)
 }
 // Shouldn't see any errors down here
 var y = { a: 1 };
->a : any
+>a : any (error)
 
-> : any
+> : any (error)
 

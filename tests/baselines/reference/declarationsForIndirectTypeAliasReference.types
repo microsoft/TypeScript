@@ -1,11 +1,11 @@
 === tests/cases/compiler/b.ts ===
 export {
     Hash,
->Hash : any
+>Hash : any (error)
 
     StringHash, StringHash2
->StringHash : any
->StringHash2 : any
+>StringHash : any (error)
+>StringHash2 : any (error)
 
 };
 
@@ -20,8 +20,8 @@ type StringHash = Hash<string>;
 interface StringHash2 extends Hash<string> {}
 === tests/cases/compiler/a.ts ===
 import {StringHash, StringHash2} from "./b";
->StringHash : any
->StringHash2 : any
+>StringHash : any (error)
+>StringHash2 : any (error)
 
 export {
     doSome

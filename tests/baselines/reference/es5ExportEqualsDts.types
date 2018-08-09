@@ -7,7 +7,7 @@ class A {
 
         var aVal: A.B;
 >aVal : A.B
->A : any
+>A : any (error)
 
         return aVal;
 >aVal : A.B

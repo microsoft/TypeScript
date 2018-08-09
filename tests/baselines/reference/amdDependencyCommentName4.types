@@ -7,29 +7,29 @@
 import "unaliasedModule1";
 
 import r1 = require("aliasedModule1");
->r1 : any
+>r1 : any (error)
 
 r1;
->r1 : any
+>r1 : any (error)
 
 import {p1, p2, p3} from "aliasedModule2";
->p1 : any
->p2 : any
->p3 : any
+>p1 : any (error)
+>p2 : any (error)
+>p3 : any (error)
 
 p1;
->p1 : any
+>p1 : any (error)
 
 import d from "aliasedModule3";
->d : any
+>d : any (error)
 
 d;
->d : any
+>d : any (error)
 
 import * as ns from "aliasedModule4";
->ns : any
+>ns : any (error)
 
 ns;
->ns : any
+>ns : any (error)
 
 import "unaliasedModule2";

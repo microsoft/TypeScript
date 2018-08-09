@@ -1,22 +1,22 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/SwitchStatements/parserErrorRecovery_SwitchStatement1.ts ===
 switch (e) {
->e : any
+>e : any (error)
 
     case 1:
 >1 : 1
 
        1 + 
->1 + : any
+>1 + : any (error)
 >1 : 1
 
     case 2:
-> : any
+> : any (error)
 >2 : 2
 
        1 + 
->1 + : any
+>1 + : any (error)
 >1 : 1
 
     default:
-> : any
+> : any (error)
 }

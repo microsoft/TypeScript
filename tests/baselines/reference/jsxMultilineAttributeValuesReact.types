@@ -3,32 +3,32 @@ declare var React: any;
 >React : any
 
 const a = <input value="
->a : any
-><input value="foo: 23"></input> : any
->input : any
+>a : any (error)
+><input value="foo: 23"></input> : any (error)
+>input : any (error)
 >value : string
 
 foo: 23
 "></input>;
->input : any
+>input : any (error)
 
 const b = <input value='
->b : any
-><input value='foo: 23'></input> : any
->input : any
+>b : any (error)
+><input value='foo: 23'></input> : any (error)
+>input : any (error)
 >value : string
 
 foo: 23
 '></input>;
->input : any
+>input : any (error)
 
 const c = <input value='
->c : any
-><input value='foo: 23\n'></input> : any
->input : any
+>c : any (error)
+><input value='foo: 23\n'></input> : any (error)
+>input : any (error)
 >value : string
 
 foo: 23\n
 '></input>;
->input : any
+>input : any (error)
 

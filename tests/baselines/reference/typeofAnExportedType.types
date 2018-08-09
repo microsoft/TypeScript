@@ -114,8 +114,8 @@ export var r11: typeof E.A;
 >A : E
 
 export var r12: typeof r12;
->r12 : any
->r12 : any
+>r12 : any (error)
+>r12 : any (error)
 
 export function foo() { }
 >foo : typeof foo

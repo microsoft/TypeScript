@@ -199,8 +199,8 @@ class C {
 >null : null
 
         throw undefined.
->undefined. : any
+>undefined. : any (error)
 >undefined : undefined
     }
-> : any
+> : any (error)
 }

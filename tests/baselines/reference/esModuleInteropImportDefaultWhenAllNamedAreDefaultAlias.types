@@ -1,15 +1,15 @@
 === tests/cases/compiler/esModuleInteropImportDefaultWhenAllNamedAreDefaultAlias.ts ===
 import {default as a, default as b} from "m";
->default : any
->a : any
->default : any
->b : any
+>default : any (error)
+>a : any (error)
+>default : any (error)
+>b : any (error)
 
 void a;
 >void a : undefined
->a : any
+>a : any (error)
 
 void b;
 >void b : undefined
->b : any
+>b : any (error)
 

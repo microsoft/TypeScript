@@ -11,7 +11,7 @@ export interface Buzz { }
 import {foo, bar, Buzz} from "./utils";
 >foo : () => void
 >bar : () => void
->Buzz : any
+>Buzz : any (error)
 
 foo();
 >foo() : void

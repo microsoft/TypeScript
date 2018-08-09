@@ -48,17 +48,17 @@ declare module "foo2" {
 
         item: Bar.I;
 >item : Bar.I
->Bar : any
+>Bar : any (error)
 
         constructor(input: Baz.J);
 >input : Baz.J
->Baz : any
+>Baz : any (error)
     }
 }
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
 >y : import("foo2").Bar.I
->Bar : any
+>Bar : any (error)
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string
 >"" : ""

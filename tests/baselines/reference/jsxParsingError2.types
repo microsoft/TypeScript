@@ -12,50 +12,50 @@ declare module JSX {
 let x1 = <div><span></div>;
 >x1 : JSX.Element
 ><div><span></div>; : JSX.Element
->div : any
+>div : any (error)
 ><span></div> : JSX.Element
->span : any
->div : any
+>span : any (error)
+>div : any (error)
 
-> : any
+> : any (error)
 
 === tests/cases/conformance/jsx/Error2.tsx ===
 let x2 = <div></span>;
 >x2 : JSX.Element
 ><div></span> : JSX.Element
->div : any
->span : any
+>div : any (error)
+>span : any (error)
 
 
 === tests/cases/conformance/jsx/Error3.tsx ===
 let x3 = <div>;
 >x3 : JSX.Element
 ><div>; : JSX.Element
->div : any
+>div : any (error)
 
 
-> : any
+> : any (error)
 
 === tests/cases/conformance/jsx/Error4.tsx ===
 let x4 = <div><div></span>;
 >x4 : JSX.Element
 ><div><div></span>; : JSX.Element
->div : any
+>div : any (error)
 ><div></span> : JSX.Element
->div : any
->span : any
+>div : any (error)
+>span : any (error)
 
-> : any
+> : any (error)
 
 === tests/cases/conformance/jsx/Error5.tsx ===
 let x5 = <div><span>
 >x5 : JSX.Element
 ><div><span> : JSX.Element
->div : any
+>div : any (error)
 ><span> : JSX.Element
->span : any
+>span : any (error)
 
 
-> : any
-> : any
+> : any (error)
+> : any (error)
 

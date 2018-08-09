@@ -34,15 +34,15 @@ function use() {
 
   var p1: provide.Provide; // error here, but should be okay
 >p1 : provide.Provide
->provide : any
+>provide : any (error)
 
   var p2: foo.Provide;
 >p2 : provide.Provide
->foo : any
+>foo : any (error)
 
   var p3:booz.bar;
->p3 : any
->booz : any
+>p3 : any (error)
+>booz : any (error)
 
   var p22 = new provide.Provide();
 >p22 : provide.Provide

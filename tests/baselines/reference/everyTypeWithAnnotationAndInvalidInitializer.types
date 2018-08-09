@@ -141,7 +141,7 @@ var aModule: typeof M = N;
 
 var aClassInModule: M.A = new N.A();
 >aClassInModule : M.A
->M : any
+>M : any (error)
 >new N.A() : N.A
 >N.A : typeof N.A
 >N : typeof N

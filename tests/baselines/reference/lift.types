@@ -37,22 +37,22 @@ class C extends B {
     }
 
     public liftxyz () { return x+z+this.y; }
->liftxyz : () => any
->x+z+this.y : any
->x+z : any
->x : any
->z : any
+>liftxyz : () => any (error)
+>x+z+this.y : any (error)
+>x+z : any (error)
+>x : any (error)
+>z : any (error)
 >this.y : number
 >this : this
 >y : number
 
     public liftxylocllz () { return x+z+this.y+this.ll; }
->liftxylocllz : () => any
->x+z+this.y+this.ll : any
->x+z+this.y : any
->x+z : any
->x : any
->z : any
+>liftxylocllz : () => any (error)
+>x+z+this.y+this.ll : any (error)
+>x+z+this.y : any (error)
+>x+z : any (error)
+>x : any (error)
+>z : any (error)
 >this.y : number
 >this : this
 >y : number

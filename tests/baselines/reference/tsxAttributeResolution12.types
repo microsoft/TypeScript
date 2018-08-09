@@ -39,7 +39,7 @@ declare class Component<P, S>  {
 
 	render(): JSX.Element;
 >render : () => JSX.Element
->JSX : any
+>JSX : any (error)
 
 	props: P;
 >props : P

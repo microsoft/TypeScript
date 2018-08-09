@@ -6,42 +6,42 @@ while(true) {
 } 
 
 ONE:
->ONE : any
+>ONE : any (error)
 
 while (true) {
 >true : true
 
     break ONE;
->ONE : any
+>ONE : any (error)
 }
 
 TWO:
->TWO : any
+>TWO : any (error)
 
 THREE:
->THREE : any
+>THREE : any (error)
 
 while (true) {
 >true : true
 
     break THREE;
->THREE : any
+>THREE : any (error)
 }
 
 FOUR:
->FOUR : any
+>FOUR : any (error)
 
 while (true) {
 >true : true
 
     FIVE:
->FIVE : any
+>FIVE : any (error)
 
     while (true) {
 >true : true
 
         break FOUR;
->FOUR : any
+>FOUR : any (error)
     }
 }
 
@@ -49,17 +49,17 @@ while (true) {
 >true : true
 
     SIX:
->SIX : any
+>SIX : any (error)
 
     while (true)
 >true : true
 
         break SIX;
->SIX : any
+>SIX : any (error)
 }
 
 SEVEN:
->SEVEN : any
+>SEVEN : any (error)
 
 while (true)
 >true : true
@@ -71,10 +71,10 @@ while (true)
 >true : true
 
             break SEVEN;
->SEVEN : any
+>SEVEN : any (error)
 
 EIGHT:
->EIGHT : any
+>EIGHT : any (error)
 
 while (true) {
 >true : true
@@ -84,6 +84,6 @@ while (true) {
 >function () { } : () => void
 
     break EIGHT;
->EIGHT : any
+>EIGHT : any (error)
 }
 

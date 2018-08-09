@@ -7,7 +7,7 @@ module Outer {
 >non_export_var : number
 
     module {
->module : any
+>module : any (error)
 
         var non_export_var = 0;
 >non_export_var : number
@@ -39,8 +39,8 @@ module Outer {
 }
 
 Outer.NonExportFunc();
->Outer.NonExportFunc() : any
->Outer.NonExportFunc : any
+>Outer.NonExportFunc() : any (error)
+>Outer.NonExportFunc : any (error)
 >Outer : typeof Outer
->NonExportFunc : any
+>NonExportFunc : any (error)
 

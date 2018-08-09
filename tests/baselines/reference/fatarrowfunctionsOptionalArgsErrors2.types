@@ -1,38 +1,38 @@
 === tests/cases/compiler/fatarrowfunctionsOptionalArgsErrors2.ts ===
 var tt1 = (a, (b, c)) => a+b+c;
->tt1 : any
->(a, (b, c)) : any
->a, (b, c) : any
->a : any
->(b, c) : any
->b, c : any
->b : any
->c : any
->a+b+c : any
->a+b : any
->a : any
->b : any
->c : any
+>tt1 : any (error)
+>(a, (b, c)) : any (error)
+>a, (b, c) : any (error)
+>a : any (error)
+>(b, c) : any (error)
+>b, c : any (error)
+>b : any (error)
+>c : any (error)
+>a+b+c : any (error)
+>a+b : any (error)
+>a : any (error)
+>b : any (error)
+>c : any (error)
 
 var tt2 = ((a), b, c) => a+b+c;
->tt2 : any
->((a), b, c) : any
->(a), b, c : any
->(a), b : any
->(a) : any
->a : any
->b : any
->c : any
->a+b+c : any
->a+b : any
->a : any
->b : any
->c : any
+>tt2 : any (error)
+>((a), b, c) : any (error)
+>(a), b, c : any (error)
+>(a), b : any (error)
+>(a) : any (error)
+>a : any (error)
+>b : any (error)
+>c : any (error)
+>a+b+c : any (error)
+>a+b : any (error)
+>a : any (error)
+>b : any (error)
+>c : any (error)
 
 var tt3 = ((a)) => a;
->tt3 : any
->((a)) : any
->(a) : any
->a : any
->a : any
+>tt3 : any (error)
+>((a)) : any (error)
+>(a) : any (error)
+>a : any (error)
+>a : any (error)
 

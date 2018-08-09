@@ -11,7 +11,7 @@ class D<T, U> {
 }
  
 var d = new D<number>();
->d : any
->new D<number>() : any
+>d : any (error)
+>new D<number>() : any (error)
 >D : typeof D
 

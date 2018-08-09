@@ -1,27 +1,27 @@
 === tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target9.ts ===
 import d from "mod";
->d : any
+>d : any (error)
 
 import {a} from "mod";
->a : any
+>a : any (error)
 
 import * as M from "mod";
->M : any
+>M : any (error)
 
 export {a};
->a : any
+>a : any (error)
 
 export {M};
->M : any
+>M : any (error)
 
 export {d};
->d : any
+>d : any (error)
 
 export * from "mod";
 
 export {b} from "mod"
->b : any
+>b : any (error)
 
 export default d;
->d : any
+>d : any (error)
 

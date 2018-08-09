@@ -15,8 +15,8 @@ class B1<T extends { x: string } = { x:string } > extends React.Component<T, {}>
 
         return <div>hi</div>; 
 ><div>hi</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
     }
 }
 class B<U> extends React.Component<U, {}> {

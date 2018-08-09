@@ -7,11 +7,11 @@ class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 }
 (new S18(123)).S18 = 0;
 >(new S18(123)).S18 = 0 : 0
->(new S18(123)).S18 : any
->(new S18(123)) : any
->new S18(123) : any
+>(new S18(123)).S18 : any (error)
+>(new S18(123)) : any (error)
+>new S18(123) : any (error)
 >S18 : typeof S18
 >123 : 123
->S18 : any
+>S18 : any (error)
 >0 : 0
 

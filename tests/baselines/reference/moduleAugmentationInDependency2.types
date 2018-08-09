@@ -1,6 +1,6 @@
 === /node_modules/A/index.ts ===
 declare module "ext" {
->"ext" : any
+>"ext" : any (error)
 }
 export {};
 

@@ -4,8 +4,8 @@ function EmptyPropSFC() {
 
     return <div> Default Greeting </div>;
 ><div> Default Greeting </div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 }
 
 function Greet(x: {name: string}) {
@@ -15,9 +15,9 @@ function Greet(x: {name: string}) {
 
 	return <div>Hello, {x}</div>;
 ><div>Hello, {x}</div> : JSX.Element
->div : any
+>div : any (error)
 >x : { name: string; }
->div : any
+>div : any (error)
 }
 function Meet({name = 'world'}) {
 >Meet : ({ name }: { name?: string; }) => JSX.Element
@@ -26,9 +26,9 @@ function Meet({name = 'world'}) {
 
 	return <div>Hello, {name}</div>;
 ><div>Hello, {name}</div> : JSX.Element
->div : any
+>div : any (error)
 >name : string
->div : any
+>div : any (error)
 }
 function MeetAndGreet(k: {"prop-name": string}) {
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
@@ -37,8 +37,8 @@ function MeetAndGreet(k: {"prop-name": string}) {
 
 	return <div>Hi Hi</div>;
 ><div>Hi Hi</div> : JSX.Element
->div : any
->div : any
+>div : any (error)
+>div : any (error)
 }
 
 // OK

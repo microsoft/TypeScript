@@ -42,7 +42,7 @@ function two() {
 
     // '_' is declared but never used
     const {a: _, ...bar} = foo;
->a : any
+>a : any (error)
 >_ : number
 >bar : { b: number; }
 >foo : { a: number; b: number; }
@@ -88,7 +88,7 @@ function four() {
 
     // '_' is declared but never used
     const {a: _, ...bar} = foo; // bar should be unused
->a : any
+>a : any (error)
 >_ : number
 >bar : { b: number; }
 >foo : { a: number; b: number; }

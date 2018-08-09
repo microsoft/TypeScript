@@ -1,12 +1,12 @@
 === tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts ===
 import rect = module("rect"); var bar = new rect.Rect();
->rect : any
->module : any
+>rect : any (error)
+>module : any (error)
 >("rect") : "rect"
 >"rect" : "rect"
->bar : any
->new rect.Rect() : any
->rect.Rect : any
->rect : any
->Rect : any
+>bar : any (error)
+>new rect.Rect() : any (error)
+>rect.Rect : any (error)
+>rect : any (error)
+>Rect : any (error)
 

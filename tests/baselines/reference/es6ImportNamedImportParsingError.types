@@ -14,23 +14,23 @@ export var m = a;
 === tests/cases/compiler/es6ImportNamedImportParsingError_1.ts ===
 import { * } from "es6ImportNamedImportParsingError_0";
 >* : number
-> : any
-> : any
->from : any
+> : any (error)
+> : any (error)
+>from : any (error)
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
 
 import defaultBinding, from "es6ImportNamedImportParsingError_0";
->defaultBinding : any
+>defaultBinding : any (error)
 
 import , { a } from "es6ImportNamedImportParsingError_0";
->a : any
->from : any
+>a : any (error)
+>from : any (error)
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
 
 import { a }, from "es6ImportNamedImportParsingError_0";
->a : any
->, from : any
-> : any
->from : any
+>a : any (error)
+>, from : any (error)
+> : any (error)
+>from : any (error)
 >"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
 

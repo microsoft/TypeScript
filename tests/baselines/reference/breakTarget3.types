@@ -1,13 +1,13 @@
 === tests/cases/compiler/breakTarget3.ts ===
 target1:
->target1 : any
+>target1 : any (error)
 
 target2:
->target2 : any
+>target2 : any (error)
 
 while (true) {
 >true : true
 
   break target1;
->target1 : any
+>target1 : any (error)
 }

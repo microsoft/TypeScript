@@ -1,4 +1,4 @@
 === tests/cases/compiler/optionsStrictPropertyInitializationStrict.ts ===
 var x;
->x : any
+>x : any (auto)
 

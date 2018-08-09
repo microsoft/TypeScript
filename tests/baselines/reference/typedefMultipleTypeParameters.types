@@ -17,7 +17,7 @@ var wrong;
 
 /** @type {Everything<{ a: number  }>} */
 var insufficient;
->insufficient : any
+>insufficient : any (error)
 
 === tests/cases/conformance/jsdoc/test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;

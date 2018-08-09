@@ -7,7 +7,7 @@ module Outer {
 >non_export_var : number
 
     module {
->module : any
+>module : any (error)
 
         var non_export_var = 0;
 >non_export_var : number

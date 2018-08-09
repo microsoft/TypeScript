@@ -4,14 +4,14 @@ interface I1 {
 >a : number
 
     b: typeof a; // Should yield error (a is not a value)
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 }
 
 interface I2 {
     c: typeof d; // Should yield error (d is not a value)
->c : any
->d : any
+>c : any (error)
+>d : any (error)
 
     d: string;
 >d : string
@@ -19,8 +19,8 @@ interface I2 {
 
 interface I3 {
     e: typeof e; // Should yield error (e is not a value)
->e : any
->e : any
+>e : any (error)
+>e : any (error)
 }
 
 class C1 {
@@ -30,8 +30,8 @@ class C1 {
 >a : number
 
     b: typeof a; // Should yield error (a is not a value)
->b : any
->a : any
+>b : any (error)
+>a : any (error)
 }
 
 
@@ -39,8 +39,8 @@ class C2 {
 >C2 : C2
 
     c: typeof d; // Should yield error (d is not a value)
->c : any
->d : any
+>c : any (error)
+>d : any (error)
 
     d: string;
 >d : string
@@ -50,8 +50,8 @@ class C3 {
 >C3 : C3
 
     e: typeof e; // Should yield error (e is not a value)
->e : any
->e : any
+>e : any (error)
+>e : any (error)
 }
 
 

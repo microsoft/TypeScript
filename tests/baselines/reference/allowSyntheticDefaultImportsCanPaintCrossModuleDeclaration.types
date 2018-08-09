@@ -8,7 +8,7 @@ export default Color;
 
 === tests/cases/compiler/file1.ts ===
 import Color from "./color";
->Color : any
+>Color : any (error)
 
 export declare function styled(): Color;
 >styled : () => Color

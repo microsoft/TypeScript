@@ -1,11 +1,11 @@
 === tests/cases/compiler/funduleExportedClassIsUsedBeforeDeclaration.ts ===
 interface A {   // interface before module declaration
     (): B.C;    // uses defined below class in module
->B : any
+>B : any (error)
 }
 declare function B(): B.C;  // function merged with module
 >B : typeof B
->B : any
+>B : any (error)
 
 declare module B {
 >B : typeof B

@@ -200,36 +200,36 @@ function f(a = null, b = n, l = []) {
 
 // should get any on variable initialisers
 var u = undefined;
->u : any
+>u : any (auto)
 >undefined : undefined
 
 var l = [];
->l : any[]
+>l : any (auto)[]
 >[] : never[]
 
 u = undefined
 >u = undefined : undefined
->u : any
+>u : any (auto)
 >undefined : undefined
 
 u = 1
 >u = 1 : 1
->u : any
+>u : any (auto)
 >1 : 1
 
 u = true
 >u = true : true
->u : any
+>u : any (auto)
 >true : true
 
 u = {}
 >u = {} : {}
->u : any
+>u : any (auto)
 >{} : {}
 
 u = 'ok'
 >u = 'ok' : "ok"
->u : any
+>u : any (auto)
 >'ok' : "ok"
 
 l.push('ok')

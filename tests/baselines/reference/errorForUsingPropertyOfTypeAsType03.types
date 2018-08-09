@@ -23,16 +23,16 @@ namespace Test1 {
 >Color : typeof Color
 
     let a1: Color.Red.toString;
->a1 : any
->Color : any
->Red : any
+>a1 : any (error)
+>Color : any (error)
+>Red : any (error)
 
     let a2: Color.Red["toString"];
 >a2 : (radix?: number) => string
->Color : any
+>Color : any (error)
 
     let a3: Color["Red"]["toString"];
->a3 : any
+>a3 : any (error)
 
     //let b1: (typeof Color).Red.toString;
     //let b2: (typeof Color).Red["toString"];
@@ -41,25 +41,25 @@ namespace Test1 {
 >Color : typeof Color
 
     let c1: C1.Red.toString;
->c1 : any
->C1 : any
->Red : any
+>c1 : any (error)
+>C1 : any (error)
+>Red : any (error)
 
     let c2: C1.Red["toString"];
->c2 : any
->C1 : any
+>c2 : any (error)
+>C1 : any (error)
 
     let c3: C1["Red"]["toString"];
->c3 : any
+>c3 : any (error)
 
     let d1: C2.Red.toString;
->d1 : any
->C2 : any
->Red : any
+>d1 : any (error)
+>C2 : any (error)
+>Red : any (error)
 
     let d2: C2.Red["toString"];
->d2 : any
->C2 : any
+>d2 : any (error)
+>C2 : any (error)
 
     let d3: C2["Red"]["toString"];
 >d3 : (radix?: number) => string

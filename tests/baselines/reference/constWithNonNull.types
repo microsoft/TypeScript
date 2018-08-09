@@ -6,6 +6,6 @@ declare const x: number | undefined;
 
 x!++;
 >x!++ : number
->x! : any
->x : any
+>x! : any (error)
+>x : any (error)
 

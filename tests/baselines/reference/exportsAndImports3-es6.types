@@ -52,18 +52,18 @@ export { v as v1, f as f1, C as C1, I as I1, E as E1, D as D1, M as M1, N as N1,
 >f1 : () => void
 >C : typeof C
 >C1 : typeof C
->I : any
->I1 : any
+>I : any (error)
+>I1 : any (error)
 >E : typeof E
 >E1 : typeof E
 >D : typeof D
 >D1 : typeof D
 >M : typeof M
 >M1 : typeof M
->N : any
->N1 : any
->T : any
->T1 : any
+>N : any (error)
+>N1 : any (error)
+>T : any (error)
+>T1 : any (error)
 >a : any
 >a1 : any
 
@@ -75,18 +75,18 @@ export { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >f : () => void
 >C1 : typeof C
 >C : typeof C
->I1 : any
->I : any
+>I1 : any (error)
+>I : any (error)
 >E1 : typeof E
 >E : typeof E
 >D1 : typeof D
 >D : typeof D
 >M1 : typeof M
 >M : typeof M
->N1 : any
->N : any
->T1 : any
->T : any
+>N1 : any (error)
+>N : any (error)
+>T1 : any (error)
+>T : any (error)
 >a1 : any
 >a : any
 
@@ -98,18 +98,18 @@ import { v1 as v, f1 as f, C1 as C, I1 as I, E1 as E, D1 as D, M1 as M, N1 as N,
 >f : () => void
 >C1 : typeof C
 >C : typeof C
->I1 : any
->I : any
+>I1 : any (error)
+>I : any (error)
 >E1 : typeof E
 >E : typeof E
 >D1 : typeof D
 >D : typeof D
 >M1 : typeof M
 >M : typeof M
->N1 : any
->N : any
->T1 : any
->T : any
+>N1 : any (error)
+>N : any (error)
+>T1 : any (error)
+>T : any (error)
 >a1 : any
 >a : any
 
@@ -117,11 +117,11 @@ export { v, f, C, I, E, D, M, N, T, a };
 >v : number
 >f : () => void
 >C : typeof C
->I : any
+>I : any (error)
 >E : typeof E
 >D : typeof D
 >M : typeof M
->N : any
->T : any
+>N : any (error)
+>T : any (error)
 >a : any
 

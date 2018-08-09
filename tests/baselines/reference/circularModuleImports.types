@@ -4,12 +4,12 @@ module M
 {
  
     import A = B;
->A : any
->B : any
+>A : any (error)
+>B : any (error)
  
     import B = A;
->B : any
->A : any
+>B : any (error)
+>A : any (error)
  
 }
 

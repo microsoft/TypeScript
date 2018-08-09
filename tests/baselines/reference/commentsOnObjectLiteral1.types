@@ -1,8 +1,8 @@
 === tests/cases/compiler/commentsOnObjectLiteral1.ts ===
 var Person = makeClass( 
->Person : any
->makeClass(    /**      @scope Person    */    {   } ) : any
->makeClass : any
+>Person : any (error)
+>makeClass(    /**      @scope Person    */    {   } ) : any (error)
+>makeClass : any (error)
 
    /** 
      @scope Person 

@@ -9,6 +9,6 @@ module.exports.D = class { }
 >class { } : typeof D
 
 new D()
->new D() : any
->D : any
+>new D() : any (error)
+>D : any (error)
 

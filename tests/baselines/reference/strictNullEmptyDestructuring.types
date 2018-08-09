@@ -8,8 +8,8 @@ let { } = null;
 >null : null
 
 ({} = null);
->({} = null) : any
->{} = null : any
+>({} = null) : any (error)
+>{} = null : any (error)
 >{} : {}
 >null : null
 
@@ -17,8 +17,8 @@ let { } = undefined;
 >undefined : undefined
 
 ({} = undefined);
->({} = undefined) : any
->{} = undefined : any
+>({} = undefined) : any (error)
+>{} = undefined : any (error)
 >{} : {}
 >undefined : undefined
 
@@ -74,8 +74,8 @@ let { } = Math.random() ? null : undefined;
 >undefined : undefined
 
 ({} = Math.random() ? null : undefined);
->({} = Math.random() ? null : undefined) : any
->{} = Math.random() ? null : undefined : any
+>({} = Math.random() ? null : undefined) : any (error)
+>{} = Math.random() ? null : undefined : any (error)
 >{} : {}
 >Math.random() ? null : undefined : null | undefined
 >Math.random() : number

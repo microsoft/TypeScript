@@ -39,9 +39,9 @@ with (a) {
 >a : { a: number; b: number; }
 
     b = 10;
->b = 10 : any
->b : any
->10 : any
+>b = 10 : any (error)
+>b : any (error)
+>10 : any (error)
 }
 
 === tests/cases/compiler/b.js ===

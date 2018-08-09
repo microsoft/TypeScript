@@ -10,10 +10,10 @@ export = Foo;
 
 === tests/cases/compiler/a.ts ===
 import Foo from "./b";
->Foo : any
+>Foo : any (error)
 
 export var x = new Foo();
->x : any
->new Foo() : any
->Foo : any
+>x : any (error)
+>new Foo() : any (error)
+>Foo : any (error)
 

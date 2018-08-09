@@ -6,13 +6,13 @@ declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
 >xs : T[]
 
 map((a) => a.length, [1]);
->map((a) => a.length, [1]) : any[]
+>map((a) => a.length, [1]) : any (error)[]
 >map : <T, U>(f: (x: T) => U, xs: T[]) => U[]
->(a) => a.length : (a: number) => any
+>(a) => a.length : (a: number) => any (error)
 >a : number
->a.length : any
+>a.length : any (error)
 >a : number
->length : any
+>length : any (error)
 >[1] : number[]
 >1 : 1
 

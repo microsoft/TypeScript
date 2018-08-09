@@ -30,9 +30,9 @@ class D extends C {
 >bar : () => void
 
         super.x;  // error
->super.x : any
+>super.x : any (error)
 >super : typeof C
->x : any
+>x : any (error)
     }
 
     constructor() {
@@ -41,10 +41,10 @@ class D extends C {
 >super : typeof C
 
         super.bar(); // error
->super.bar() : any
->super.bar : any
+>super.bar() : any (error)
+>super.bar : any (error)
 >super : C
->bar : any
+>bar : any (error)
 
         super.x;  // error
 >super.x : number
@@ -62,9 +62,9 @@ class D extends C {
 >bar : () => void
 
         super.x; // error
->super.x : any
+>super.x : any (error)
 >super : typeof C
->x : any
+>x : any (error)
 
         return 1;
 >1 : 1

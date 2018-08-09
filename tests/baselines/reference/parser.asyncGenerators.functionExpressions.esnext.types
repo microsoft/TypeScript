@@ -92,9 +92,9 @@ const f11 = async function * () {
 
     function await() {
 > : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpressionNamedAwaitIsError.ts ===
@@ -105,9 +105,9 @@ const f12 = async function * () {
     const x = function await() {
 >x : () => any
 >function : () => any
->await() : any
->() : any
-> : any
+>await() : any (error)
+>() : any (error)
+> : any (error)
 
     };
 };
@@ -132,12 +132,12 @@ const f14 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingValueIsError.ts ===
 const f15 = async function * () {
->f15 : () => AsyncIterableIterator<any>
->async function * () {    yield *;} : () => AsyncIterableIterator<any>
+>f15 : () => AsyncIterableIterator<any (error)>
+>async function * () {    yield *;} : () => AsyncIterableIterator<any (error)>
 
     yield *;
 >yield * : any
-> : any
+> : any (error)
 
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarWithValueIsOk.ts ===
@@ -166,8 +166,8 @@ const f18 = async function * () {
 >async function * () {    await;} : () => AsyncIterableIterator<any>
 
     await;
->await : any
-> : any
+>await : any (error)
+> : any (error)
 
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===

@@ -1,7 +1,7 @@
 === tests/cases/compiler/aliasOnMergedModuleInterface_1.ts ===
 ///<reference path='aliasOnMergedModuleInterface_0.ts' />
 import foo = require("foo")
->foo : any
+>foo : any (error)
 
 var z: foo;
 >z : foo
@@ -15,11 +15,11 @@ z.bar("hello"); // This should be ok
 
 var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
 >x : foo.A
->foo : any
->foo.bar("hello") : any
->foo.bar : any
->foo : any
->bar : any
+>foo : any (error)
+>foo.bar("hello") : any (error)
+>foo.bar : any (error)
+>foo : any (error)
+>bar : any (error)
 >"hello" : "hello"
 
 === tests/cases/compiler/aliasOnMergedModuleInterface_0.ts ===
@@ -34,7 +34,7 @@ declare module "foo"
         bar(name: string): B.A;
 >bar : (name: string) => B.A
 >name : string
->B : any
+>B : any (error)
     }
     export = B;
 >B : B
