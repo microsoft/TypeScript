@@ -16003,7 +16003,21 @@ namespace ts {
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
-                    return !binaryExpression.left.symbol || binaryExpression.left.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.left.symbol.valueDeclaration);
+                    if (!binaryExpression.left.symbol) {
+                        return true;
+                    }
+                    else {
+                        const decl = binaryExpression.left.symbol.valueDeclaration;
+                        if (!decl) {
+                            return false;
+                        }
+                        if (isInJavaScriptFile(decl)) {
+                            return !!getJSDocTypeTag(decl);
+                        }
+                        else {
+                            return isFunctionLike(decl);
+                        }
+                    }
                 case SpecialPropertyAssignmentKind.ThisProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:
                     return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
