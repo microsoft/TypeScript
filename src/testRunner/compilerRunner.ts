@@ -258,7 +258,13 @@ class CompilerTest {
         Harness.Compiler.doTypeAndSymbolBaseline(
             this.justName,
             this.result.program!,
-            this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)));
+            this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
+            /*opts*/ undefined,
+            /*multifile*/ undefined,
+            /*skipTypeBaselines*/ undefined,
+            /*skipSymbolBaselines*/ undefined,
+            !!ts.length(this.result.diagnostics)
+        );
     }
 
     private makeUnitName(name: string, root: string) {

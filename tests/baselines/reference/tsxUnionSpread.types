@@ -43,8 +43,8 @@ var props:AnimalInfo = getProps();
 >getProps : () => AnimalInfo
 
 var component = <AnimalComponent {...props} />
->component : any
-><AnimalComponent {...props} /> : any
+>component : error
+><AnimalComponent {...props} /> : error
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props : AnimalInfo
 
@@ -57,8 +57,8 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 >'Large' : "Large"
 
 var component2 = <AnimalComponent {...props2} />
->component2 : any
-><AnimalComponent {...props2} /> : any
+>component2 : error
+><AnimalComponent {...props2} /> : error
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props2 : CatInfo
 
