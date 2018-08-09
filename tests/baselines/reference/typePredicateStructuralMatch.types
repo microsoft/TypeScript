@@ -31,34 +31,25 @@ type Result = { value: string };
 
 type Results = Result[];
 >Results : Result[]
->Result : Result
 
 function isResponseInData<T>(value: T | { data: T}): value is { data: T } {
 >isResponseInData : <T>(value: T | { data: T; }) => value is { data: T; }
->T : T
 >value : T | { data: T; }
->T : T
 >data : T
->T : T
->value : any
 >data : T
->T : T
 
     return value.hasOwnProperty('data');
 >value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: string) => boolean
+>value.hasOwnProperty : (v: string | number | symbol) => boolean
 >value : T | { data: T; }
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'data' : "data"
 }
 
 function getResults1(value: Results | { data: Results }): Results {
 >getResults1 : (value: Result[] | { data: Result[]; }) => Result[]
 >value : Result[] | { data: Result[]; }
->Results : Result[]
 >data : Result[]
->Results : Result[]
->Results : Result[]
 
     return isResponseInData(value) ? value.data : value;
 >isResponseInData(value) ? value.data : value : Result[]
@@ -73,30 +64,22 @@ function getResults1(value: Results | { data: Results }): Results {
 
 function isPlainResponse<T>(value: T | { data: T}): value is T {
 >isPlainResponse : <T>(value: T | { data: T; }) => value is T
->T : T
 >value : T | { data: T; }
->T : T
 >data : T
->T : T
->value : any
->T : T
 
     return !value.hasOwnProperty('data');
 >!value.hasOwnProperty('data') : boolean
 >value.hasOwnProperty('data') : boolean
->value.hasOwnProperty : (v: string) => boolean
+>value.hasOwnProperty : (v: string | number | symbol) => boolean
 >value : T | { data: T; }
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'data' : "data"
 }
 
 function getResults2(value: Results | { data: Results }): Results {
 >getResults2 : (value: Result[] | { data: Result[]; }) => Result[]
 >value : Result[] | { data: Result[]; }
->Results : Result[]
 >data : Result[]
->Results : Result[]
->Results : Result[]
 
     return isPlainResponse(value) ? value : value.data;
 >isPlainResponse(value) ? value : value.data : Result[]

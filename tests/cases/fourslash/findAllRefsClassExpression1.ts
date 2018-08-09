@@ -11,7 +11,7 @@
 
 const [r0, r1, r2] = test.ranges();
 const defs = { definition: "(local class) A", ranges: [r0] };
-const imports = { definition: 'import A = require("./a")', ranges: [r1, r2] };
+const imports = { definition: '(alias) (local class) A\nimport A = require("./a")', ranges: [r1, r2] };
 verify.referenceGroups([r0], [defs, imports]);
 verify.referenceGroups([r1, r2], [imports, defs]);
 

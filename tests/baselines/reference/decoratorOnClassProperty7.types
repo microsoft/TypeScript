@@ -2,7 +2,6 @@
 declare function dec(target: Function, propertyKey: string | symbol, paramIndex: number): void;
 >dec : (target: Function, propertyKey: string | symbol, paramIndex: number) => void
 >target : Function
->Function : Function
 >propertyKey : string | symbol
 >paramIndex : number
 

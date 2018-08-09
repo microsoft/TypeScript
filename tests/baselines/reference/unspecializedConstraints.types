@@ -3,22 +3,14 @@ module ts {
 >ts : typeof ts
 
     interface Map<T> {
->Map : Map<T>
->T : T
-
         [index: string]: T;
 >index : string
->T : T
     }
 
     interface Equals<T> {
->Equals : Equals<T>
->T : T
-
         equals(other: T): boolean;
 >equals : (other: T) => boolean
 >other : T
->T : T
     }
 
     class Symbol {
@@ -32,7 +24,6 @@ module ts {
         equals(that: Type): boolean {
 >equals : (that: Type) => boolean
 >that : Type
->Type : Type
 
             if (this === that) return true;
 >this === that : boolean
@@ -163,7 +154,6 @@ module ts {
         }
         getProperties(): Property[] {
 >getProperties : () => Property[]
->Property : Property
 
             return [];
 >[] : undefined[]
@@ -171,7 +161,6 @@ module ts {
         getProperty(index: number): Property {
 >getProperty : (index: number) => Property
 >index : number
->Property : Property
 
             return undefined;
 >undefined : undefined
@@ -179,7 +168,6 @@ module ts {
         getPropertyByName(name: string): Property {
 >getPropertyByName : (name: string) => Property
 >name : string
->Property : Property
 
             return undefined;
 >undefined : undefined
@@ -193,7 +181,6 @@ module ts {
         getSignature(index: number): Signature {
 >getSignature : (index: number) => Signature
 >index : number
->Signature : Signature
 
             return undefined;
 >undefined : undefined
@@ -206,7 +193,6 @@ module ts {
         }
         getSignatures(): Signature[] {
 >getSignatures : () => Signature[]
->Signature : Signature
 
             return [];
 >[] : undefined[]
@@ -232,7 +218,6 @@ module ts {
         isSubTypeOf(type: Type) {
 >isSubTypeOf : (type: Type) => void
 >type : Type
->Type : Type
         }
     }
 
@@ -243,9 +228,7 @@ module ts {
         constructor(public name: string, public type: Type, public flags: PropertyFlags) {
 >name : string
 >type : Type
->Type : Type
 >flags : PropertyFlags
->PropertyFlags : PropertyFlags
 
             super();
 >super() : void
@@ -254,7 +237,6 @@ module ts {
         equals(other: Property): boolean {
 >equals : (other: Property) => boolean
 >other : Property
->Property : Property
 
             return this.name === other.name &&
 >this.name === other.name &&                this.flags === other.flags &&                this.type.equals(other.type) : boolean
@@ -307,11 +289,8 @@ module ts {
 
         constructor(public typeParameters: TypeParameter[], public parameters: Parameter[], public returnType: Type) {
 >typeParameters : any[]
->TypeParameter : No type information available!
 >parameters : Parameter[]
->Parameter : Parameter
 >returnType : Type
->Type : Type
 
             super();
 >super() : void
@@ -320,7 +299,6 @@ module ts {
         equalsNoReturn(other: Signature): boolean {
 >equalsNoReturn : (other: Signature) => boolean
 >other : Signature
->Signature : Signature
 
             return this.parameters.length === other.parameters.length &&
 >this.parameters.length === other.parameters.length &&                this.typeParameters.length === other.typeParameters.length &&                arrayEquals(this.parameters, other.parameters) &&                arrayEquals(this.typeParameters, other.typeParameters) : boolean
@@ -374,7 +352,6 @@ module ts {
         equals(other: Signature): boolean {
 >equals : (other: Signature) => boolean
 >other : Signature
->Signature : Signature
 
             return this.equalsNoReturn(other) &&
 >this.equalsNoReturn(other) &&                this.returnType.equals(other.returnType) : boolean
@@ -404,9 +381,7 @@ module ts {
         constructor(public name: string, public type: Type, public flags: ParameterFlags) {
 >name : string
 >type : Type
->Type : Type
 >flags : ParameterFlags
->ParameterFlags : ParameterFlags
 
             super();
 >super() : void
@@ -415,7 +390,6 @@ module ts {
         equals(other: Parameter) {
 >equals : (other: Parameter) => boolean
 >other : Parameter
->Parameter : Parameter
 
             return this.name === other.name &&
 >this.name === other.name &&                this.flags === other.flags &&                this.type.equals(other.type) : boolean
@@ -464,27 +438,23 @@ module ts {
 
    
     var hasOwnProperty = Object.prototype.hasOwnProperty;
->hasOwnProperty : (v: string) => boolean
->Object.prototype.hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
+>Object.prototype.hasOwnProperty : (v: string | number | symbol) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 
     function getProperty<T>(map: Map<T>, key: string): T {
 >getProperty : <T>(map: Map<T>, key: string) => T
->T : T
 >map : Map<T>
->Map : Map<T>
->T : T
 >key : string
->T : T
 
         if (!hasOwnProperty.call(map, key)) return undefined;
 >!hasOwnProperty.call(map, key) : boolean
 >hasOwnProperty.call(map, key) : any
 >hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string
@@ -498,16 +468,13 @@ module ts {
 
     function hasProperty<T>(map: Map<T>, key: string): boolean {
 >hasProperty : <T>(map: Map<T>, key: string) => boolean
->T : T
 >map : Map<T>
->Map : Map<T>
->T : T
 >key : string
 
         return hasOwnProperty.call(map, key);
 >hasOwnProperty.call(map, key) : any
 >hasOwnProperty.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >map : Map<T>
 >key : string
@@ -515,13 +482,8 @@ module ts {
 
     function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
 >arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
->T : T
->Equals : Equals<T>
->T : T
 >a : T[]
->T : T
 >item : T
->T : T
 
         var len = a.length;
 >len : number
@@ -554,13 +516,8 @@ module ts {
 
     function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->T : T
->Equals : Equals<T>
->T : T
 >a : T[]
->T : T
 >b : T[]
->T : T
 
         var len = a.length;
 >len : number
@@ -604,13 +561,8 @@ module ts {
 
     function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->T : T
->Equals : Equals<T>
->T : T
 >a : T[]
->T : T
 >b : T[]
->T : T
 
         var len = a.length;
 >len : number

@@ -11,7 +11,6 @@ type Robot = [number, string, string];
 
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
->Robot : [number, string, string]
 >[1, "mower", "mowing"] : [number, string, string]
 >1 : 1
 >"mower" : "mower"
@@ -21,7 +20,6 @@ function foo1([, nameA]: Robot) {
 >foo1 : ([, nameA]: [number, string, string]) => void
 > : undefined
 >nameA : string
->Robot : [number, string, string]
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -34,7 +32,6 @@ function foo1([, nameA]: Robot) {
 function foo2([numberB]: Robot) {
 >foo2 : ([numberB]: [number, string, string]) => void
 >numberB : number
->Robot : [number, string, string]
 
     console.log(numberB);
 >console.log(numberB) : void
@@ -49,7 +46,6 @@ function foo3([numberA2, nameA2, skillA2]: Robot) {
 >numberA2 : number
 >nameA2 : string
 >skillA2 : string
->Robot : [number, string, string]
 
     console.log(nameA2);
 >console.log(nameA2) : void
@@ -62,15 +58,14 @@ function foo3([numberA2, nameA2, skillA2]: Robot) {
 function foo4([numberA3, ...robotAInfo]: Robot) {
 >foo4 : ([numberA3, ...robotAInfo]: [number, string, string]) => void
 >numberA3 : number
->robotAInfo : (string | number)[]
->Robot : [number, string, string]
+>robotAInfo : string[]
 
     console.log(robotAInfo);
 >console.log(robotAInfo) : void
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->robotAInfo : (string | number)[]
+>robotAInfo : string[]
 }
 
 foo1(robotA);

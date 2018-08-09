@@ -17,12 +17,12 @@ verify.quickInfoAt("1", [
     "(alias) function Original(): void",
     "(alias) type Original<T> = () => T",
     "(alias) namespace Original",
-    "import Original",
-].join("\n"), "some docs ");
+    "export Original",
+].join("\n"), "some docs");
 
 verify.quickInfoAt("2", [
     "(alias) function Alias(): void",
     "(alias) type Alias<T> = () => T",
     "(alias) namespace Alias",
     "import Alias",
-].join("\n"), "some docs ");
+].join("\n"), "some docs");

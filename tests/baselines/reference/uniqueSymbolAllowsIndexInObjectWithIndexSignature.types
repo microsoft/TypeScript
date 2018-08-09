@@ -7,8 +7,6 @@ export const SYM = Symbol('a unique symbol');
 >'a unique symbol' : "a unique symbol"
 
 export interface I {
->I : I
-
   [SYM]: 'sym';
 >[SYM] : "sym"
 >SYM : unique symbol
@@ -19,7 +17,6 @@ export interface I {
 
 let a: I = {[SYM]: 'sym'}; // Expect ok
 >a : I
->I : I
 >{[SYM]: 'sym'} : { [SYM]: "sym"; }
 >[SYM] : "sym"
 >SYM : unique symbol
@@ -27,7 +24,6 @@ let a: I = {[SYM]: 'sym'}; // Expect ok
 
 let b: I = {[SYM]: 'str'}; // Expect error
 >b : I
->I : I
 >{[SYM]: 'str'} : { [SYM]: "str"; }
 >[SYM] : "str"
 >SYM : unique symbol

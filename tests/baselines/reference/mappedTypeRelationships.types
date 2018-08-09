@@ -1,11 +1,8 @@
 === tests/cases/conformance/types/mapped/mappedTypeRelationships.ts ===
 function f1<T>(x: T, k: keyof T) {
 >f1 : <T>(x: T, k: keyof T) => T[keyof T]
->T : T
 >x : T
->T : T
 >k : keyof T
->T : T
 
     return x[k];
 >x[k] : T[keyof T]
@@ -15,13 +12,8 @@ function f1<T>(x: T, k: keyof T) {
 
 function f2<T, K extends keyof T>(x: T, k: K) {
 >f2 : <T, K extends keyof T>(x: T, k: K) => T[K]
->T : T
->K : K
->T : T
 >x : T
->T : T
 >k : K
->K : K
 
     return x[k];
 >x[k] : T[K]
@@ -31,15 +23,9 @@ function f2<T, K extends keyof T>(x: T, k: K) {
 
 function f3<T, U extends T>(x: T, y: U, k: keyof T) {
 >f3 : <T, U extends T>(x: T, y: U, k: keyof T) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
 >k : keyof T
->T : T
 
     x[k] = y[k];
 >x[k] = y[k] : U[keyof T]
@@ -62,17 +48,9 @@ function f3<T, U extends T>(x: T, y: U, k: keyof T) {
 
 function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
 >f4 : <T, U extends T, K extends keyof T>(x: T, y: U, k: K) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : T
->T : T
 >y : U
->U : U
 >k : K
->K : K
 
     x[k] = y[k];
 >x[k] = y[k] : U[K]
@@ -95,15 +73,9 @@ function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
 
 function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 >f5 : <T, U extends T>(x: T, y: U, k: keyof U) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
 >k : keyof U
->U : U
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : U[keyof U]
@@ -126,17 +98,9 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 
 function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
 >f6 : <T, U extends T, K extends keyof U>(x: T, y: U, k: K) => void
->T : T
->U : U
->T : T
->K : K
->U : U
 >x : T
->T : T
 >y : U
->U : U
 >k : K
->K : K
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : U[K]
@@ -159,14 +123,9 @@ function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
 
 function f10<T>(x: T, y: Partial<T>, k: keyof T) {
 >f10 : <T>(x: T, y: Partial<T>, k: keyof T) => void
->T : T
 >x : T
->T : T
 >y : Partial<T>
->Partial : Partial<T>
->T : T
 >k : keyof T
->T : T
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<T>[keyof T]
@@ -189,16 +148,9 @@ function f10<T>(x: T, y: Partial<T>, k: keyof T) {
 
 function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
 >f11 : <T, K extends keyof T>(x: T, y: Partial<T>, k: K) => void
->T : T
->K : K
->T : T
 >x : T
->T : T
 >y : Partial<T>
->Partial : Partial<T>
->T : T
 >k : K
->K : K
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<T>[K]
@@ -221,16 +173,9 @@ function f11<T, K extends keyof T>(x: T, y: Partial<T>, k: K) {
 
 function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
 >f12 : <T, U extends T>(x: T, y: Partial<U>, k: keyof T) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : Partial<U>
->Partial : Partial<T>
->U : U
 >k : keyof T
->T : T
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<U>[keyof T]
@@ -253,18 +198,9 @@ function f12<T, U extends T>(x: T, y: Partial<U>, k: keyof T) {
 
 function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
 >f13 : <T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : T
->T : T
 >y : Partial<U>
->Partial : Partial<T>
->U : U
 >k : K
->K : K
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : Partial<U>[K]
@@ -287,14 +223,9 @@ function f13<T, U extends T, K extends keyof T>(x: T, y: Partial<U>, k: K) {
 
 function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
 >f20 : <T>(x: T, y: Readonly<T>, k: keyof T) => void
->T : T
 >x : T
->T : T
 >y : Readonly<T>
->Readonly : Readonly<T>
->T : T
 >k : keyof T
->T : T
 
     x[k] = y[k];
 >x[k] = y[k] : Readonly<T>[keyof T]
@@ -317,16 +248,9 @@ function f20<T>(x: T, y: Readonly<T>, k: keyof T) {
 
 function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K) {
 >f21 : <T, K extends keyof T>(x: T, y: Readonly<T>, k: K) => void
->T : T
->K : K
->T : T
 >x : T
->T : T
 >y : Readonly<T>
->Readonly : Readonly<T>
->T : T
 >k : K
->K : K
 
     x[k] = y[k];
 >x[k] = y[k] : Readonly<T>[K]
@@ -349,16 +273,9 @@ function f21<T, K extends keyof T>(x: T, y: Readonly<T>, k: K) {
 
 function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T) {
 >f22 : <T, U extends T>(x: T, y: Readonly<U>, k: keyof T) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : Readonly<U>
->Readonly : Readonly<T>
->U : U
 >k : keyof T
->T : T
 
     x[k] = y[k];
 >x[k] = y[k] : Readonly<U>[keyof T]
@@ -381,18 +298,9 @@ function f22<T, U extends T>(x: T, y: Readonly<U>, k: keyof T) {
 
 function f23<T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) {
 >f23 : <T, U extends T, K extends keyof T>(x: T, y: Readonly<U>, k: K) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : T
->T : T
 >y : Readonly<U>
->Readonly : Readonly<T>
->U : U
 >k : K
->K : K
 
     x[k] = y[k];
 >x[k] = y[k] : Readonly<U>[K]
@@ -420,12 +328,8 @@ type Thing = { a: string, b: string };
 
 function f30<T>(x: T, y: Partial<T>) {
 >f30 : <T>(x: T, y: Partial<T>) => void
->T : T
 >x : T
->T : T
 >y : Partial<T>
->Partial : Partial<T>
->T : T
 
     x = y;  // Error
 >x = y : Partial<T>
@@ -440,14 +344,8 @@ function f30<T>(x: T, y: Partial<T>) {
 
 function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
 >f31 : <T extends Thing>(x: Partial<Thing>, y: Partial<T>) => void
->T : T
->Thing : Thing
 >x : Partial<Thing>
->Partial : Partial<T>
->Thing : Thing
 >y : Partial<T>
->Partial : Partial<T>
->T : T
 
     x = y;
 >x = y : Partial<T>
@@ -462,12 +360,8 @@ function f31<T extends Thing>(x: Partial<Thing>, y: Partial<T>) {
 
 function f40<T>(x: T, y: Readonly<T>) {
 >f40 : <T>(x: T, y: Readonly<T>) => void
->T : T
 >x : T
->T : T
 >y : Readonly<T>
->Readonly : Readonly<T>
->T : T
 
     x = y;
 >x = y : Readonly<T>
@@ -482,14 +376,8 @@ function f40<T>(x: T, y: Readonly<T>) {
 
 function f41<T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) {
 >f41 : <T extends Thing>(x: Readonly<Thing>, y: Readonly<T>) => void
->T : T
->Thing : Thing
 >x : Readonly<Thing>
->Readonly : Readonly<T>
->Thing : Thing
 >y : Readonly<T>
->Readonly : Readonly<T>
->T : T
 
     x = y;
 >x = y : Readonly<T>
@@ -514,21 +402,15 @@ type ItemMap = {
 
     [x: string]: Item;
 >x : string
->Item : Item
 }
 
 function f50<T extends ItemMap>(obj: T, key: keyof T) {
 >f50 : <T extends ItemMap>(obj: T, key: keyof T) => string
->T : T
->ItemMap : ItemMap
 >obj : T
->T : T
 >key : keyof T
->T : T
 
     let item: Item = obj[key];
 >item : Item
->Item : Item
 >obj[key] : T[keyof T]
 >obj : T
 >key : keyof T
@@ -543,18 +425,11 @@ function f50<T extends ItemMap>(obj: T, key: keyof T) {
 
 function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
 >f51 : <T extends ItemMap, K extends keyof T>(obj: T, key: K) => string
->T : T
->ItemMap : ItemMap
->K : K
->T : T
 >obj : T
->T : T
 >key : K
->K : K
 
     let item: Item = obj[key];
 >item : Item
->Item : Item
 >obj[key] : T[K]
 >obj : T
 >key : K
@@ -569,35 +444,20 @@ function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
 
 type T1<T> = {
 >T1 : T1<T>
->T : T
 
     [P in keyof T]: T[P];
->P : P
->T : T
->T : T
->P : P
 }
 
 type T2<T> = {
 >T2 : T2<T>
->T : T
 
     [P in keyof T]: T[P];
->P : P
->T : T
->T : T
->P : P
 }
 
 function f60<U>(x: T1<U>, y: T2<U>) {
 >f60 : <U>(x: T1<U>, y: T2<U>) => void
->U : U
 >x : T1<U>
->T1 : T1<T>
->U : U
 >y : T2<U>
->T2 : T2<T>
->U : U
 
     x = y;
 >x = y : T2<U>
@@ -612,24 +472,14 @@ function f60<U>(x: T1<U>, y: T2<U>) {
 
 type Identity<T> = {
 >Identity : Identity<T>
->T : T
 
     [P in keyof T]: T[P];
->P : P
->T : T
->T : T
->P : P
 }
 
 function f61<U>(x: Identity<U>, y: Partial<U>) {
 >f61 : <U>(x: Identity<U>, y: Partial<U>) => void
->U : U
 >x : Identity<U>
->Identity : Identity<T>
->U : U
 >y : Partial<U>
->Partial : Partial<T>
->U : U
 
     x = y;  // Error
 >x = y : Partial<U>
@@ -644,13 +494,8 @@ function f61<U>(x: Identity<U>, y: Partial<U>) {
 
 function f62<U>(x: Identity<U>, y: Readonly<U>) {
 >f62 : <U>(x: Identity<U>, y: Readonly<U>) => void
->U : U
 >x : Identity<U>
->Identity : Identity<T>
->U : U
 >y : Readonly<U>
->Readonly : Readonly<T>
->U : U
 
     x = y;
 >x = y : Readonly<U>
@@ -665,17 +510,8 @@ function f62<U>(x: Identity<U>, y: Readonly<U>) {
 
 function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
 >f70 : <T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof T]: T[P]; }) => void
->T : T
 >x : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 >y : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 
     x = y;
 >x = y : { [P in keyof T]: T[P]; }
@@ -690,19 +526,8 @@ function f70<T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: T[P] }) {
 
 function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U[P] }) {
 >f71 : <T, U extends T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof T]: U[P]; }) => void
->T : T
->U : U
->T : T
 >x : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 >y : { [P in keyof T]: U[P]; }
->P : P
->T : T
->U : U
->P : P
 
     x = y;
 >x = y : { [P in keyof T]: U[P]; }
@@ -717,19 +542,8 @@ function f71<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof T]: U
 
 function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
 >f72 : <T, U extends T>(x: { [P in keyof T]: T[P]; }, y: { [P in keyof U]: U[P]; }) => void
->T : T
->U : U
->T : T
 >x : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 >y : { [P in keyof U]: U[P]; }
->P : P
->U : U
->U : U
->P : P
 
     x = y;
 >x = y : { [P in keyof U]: U[P]; }
@@ -744,19 +558,8 @@ function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U
 
 function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T[P] }) {
 >f73 : <T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof T]: T[P]; }) => void
->T : T
->K : K
->T : T
 >x : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
 >y : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 
     x = y;
 >x = y : { [P in keyof T]: T[P]; }
@@ -771,21 +574,8 @@ function f73<T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: T
 
 function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof U]: U[P] }) {
 >f74 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof U]: U[P]; }) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
 >y : { [P in keyof U]: U[P]; }
->P : P
->U : U
->U : U
->P : P
 
     x = y;
 >x = y : { [P in keyof U]: U[P]; }
@@ -800,21 +590,8 @@ function f74<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
 
 function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in keyof T]: U[P] }) {
 >f75 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in keyof T]: U[P]; }) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
 >y : { [P in keyof T]: U[P]; }
->P : P
->T : T
->U : U
->P : P
 
     x = y;
 >x = y : { [P in keyof T]: U[P]; }
@@ -829,21 +606,8 @@ function f75<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
 
 function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P in K]: U[P] }) {
 >f76 : <T, U extends T, K extends keyof T>(x: { [P in K]: T[P]; }, y: { [P in K]: U[P]; }) => void
->T : T
->U : U
->T : T
->K : K
->T : T
 >x : { [P in K]: T[P]; }
->P : P
->K : K
->T : T
->P : P
 >y : { [P in K]: U[P]; }
->P : P
->K : K
->U : U
->P : P
 
     x = y;
 >x = y : { [P in K]: U[P]; }
@@ -858,11 +622,7 @@ function f76<T, U extends T, K extends keyof T>(x: { [P in K]: T[P] }, y: { [P i
 
 function f80<T>(t: T): Partial<T> {
 >f80 : <T>(t: T) => Partial<T>
->T : T
 >t : T
->T : T
->Partial : Partial<T>
->T : T
 
     return t;
 >t : T
@@ -870,16 +630,8 @@ function f80<T>(t: T): Partial<T> {
 
 function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
 >f81 : <T, K extends keyof T>(t: T, k: K) => Partial<T[K]>
->T : T
->K : K
->T : T
 >t : T
->T : T
 >k : K
->K : K
->Partial : Partial<T>
->T : T
->K : K
 
     return t[k];
 >t[k] : T[K]
@@ -889,22 +641,9 @@ function f81<T, K extends keyof T>(t: T, k: K): Partial<T[K]> {
 
 function f82<T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2): Partial<T[K1][K2]> {
 >f82 : <T, K1 extends keyof T, K2 extends keyof T[K1]>(t: T, k1: K1, k2: K2) => Partial<T[K1][K2]>
->T : T
->K1 : K1
->T : T
->K2 : K2
->T : T
->K1 : K1
 >t : T
->T : T
 >k1 : K1
->K1 : K1
 >k2 : K2
->K2 : K2
->Partial : Partial<T>
->T : T
->K1 : K1
->K2 : K2
 
     return t[k1][k2];
 >t[k1][k2] : T[K1][K2]

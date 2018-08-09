@@ -1,11 +1,9 @@
 === tests/cases/conformance/es6/Symbols/symbolType17.ts ===
 interface Foo { prop }
->Foo : Foo
 >prop : any
 
 var x: symbol | Foo;
 >x : symbol | Foo
->Foo : Foo
 
 x;
 >x : symbol | Foo

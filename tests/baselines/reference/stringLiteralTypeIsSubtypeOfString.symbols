@@ -35,7 +35,7 @@ function f3(x: 'a');
 function f3(x: Object);
 >f3 : Symbol(f3, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 23))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 12))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function f3(x: any) { }
 >f3 : Symbol(f3, Decl(stringLiteralTypeIsSubtypeOfString.ts, 10, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 13, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 14, 23))
@@ -84,7 +84,7 @@ function f7(x: 'a');
 function f7(x: Date);
 >f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 function f7(x: any) { }
 >f7 : Symbol(f7, Decl(stringLiteralTypeIsSubtypeOfString.ts, 27, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 29, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 30, 21))
@@ -97,7 +97,7 @@ function f8(x: 'a');
 function f8(x: RegExp);
 >f8 : Symbol(f8, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 23))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 12))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function f8(x: any) { }
 >f8 : Symbol(f8, Decl(stringLiteralTypeIsSubtypeOfString.ts, 31, 23), Decl(stringLiteralTypeIsSubtypeOfString.ts, 33, 20), Decl(stringLiteralTypeIsSubtypeOfString.ts, 34, 23))
@@ -117,7 +117,7 @@ function f9(x: any) { }
 
 class C implements String {
 >C : Symbol(C, Decl(stringLiteralTypeIsSubtypeOfString.ts, 39, 23))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     toString(): string { return null; }
 >toString : Symbol(C.toString, Decl(stringLiteralTypeIsSubtypeOfString.ts, 41, 27))
@@ -222,7 +222,7 @@ function f10(x: any) { }
 
 interface I extends String {
 >I : Symbol(I, Decl(stringLiteralTypeIsSubtypeOfString.ts, 69, 24))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: string;
 >foo : Symbol(I.foo, Decl(stringLiteralTypeIsSubtypeOfString.ts, 71, 28))
@@ -261,20 +261,20 @@ function f12<T>(x: any) { }
 function f13<T extends String>(x: 'a');
 >f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 31))
 
 function f13<T extends String>(x: T);
 >f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 31))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 13))
 
 function f13<T extends String>(x: any) { }
 >f13 : Symbol(f13, Decl(stringLiteralTypeIsSubtypeOfString.ts, 82, 27), Decl(stringLiteralTypeIsSubtypeOfString.ts, 84, 39), Decl(stringLiteralTypeIsSubtypeOfString.ts, 85, 37))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 86, 31))
 
 enum E { A }
@@ -319,7 +319,7 @@ function f15<T, U extends T>(x: any) { }
 function f16<T extends String, U extends T>(x: 'a');
 >f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 30))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 13))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 44))
@@ -327,7 +327,7 @@ function f16<T extends String, U extends T>(x: 'a');
 function f16<T extends String, U extends T>(x: U);
 >f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 30))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 13))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 44))
@@ -336,7 +336,7 @@ function f16<T extends String, U extends T>(x: U);
 function f16<T extends String, U extends T>(x: any) { }
 >f16 : Symbol(f16, Decl(stringLiteralTypeIsSubtypeOfString.ts, 95, 40), Decl(stringLiteralTypeIsSubtypeOfString.ts, 97, 52), Decl(stringLiteralTypeIsSubtypeOfString.ts, 98, 50))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 13))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 30))
 >T : Symbol(T, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 13))
 >x : Symbol(x, Decl(stringLiteralTypeIsSubtypeOfString.ts, 99, 44))

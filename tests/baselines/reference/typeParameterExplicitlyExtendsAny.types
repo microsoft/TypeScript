@@ -1,11 +1,9 @@
 === tests/cases/compiler/typeParameterExplicitlyExtendsAny.ts ===
 function fee<T>() {
 >fee : <T>() => void
->T : T
 
     var t: T;
 >t : T
->T : T
 
     t.blah; // Error
 >t.blah : any
@@ -20,11 +18,9 @@ function fee<T>() {
 
 function fee2<T extends any>() {
 >fee2 : <T extends any>() => void
->T : T
 
     var t: T;
 >t : T
->T : T
 
     t.blah; // ok
 >t.blah : any
@@ -39,9 +35,7 @@ function fee2<T extends any>() {
 
 function f<T extends any>(x: T) {
 >f : <T extends any>(x: T) => void
->T : T
 >x : T
->T : T
 
     x.children;
 >x.children : any
@@ -71,13 +65,9 @@ function f<T extends any>(x: T) {
 // Generic Tree structure
 type Tree<T> = T & {
 >Tree : Tree<T>
->T : T
->T : T
 
     children?: Tree<T>[];
 >children : Tree<T>[]
->Tree : Tree<T>
->T : T
 }
 
 class MyClass {
@@ -85,10 +75,7 @@ class MyClass {
 
     public static displayTree1<T extends Tree<any>>(tree: T) {
 >displayTree1 : <T extends any>(tree: T) => void
->T : T
->Tree : Tree<T>
 >tree : T
->T : T
 
         // error "Property 'children' does not exist on type 'T'"
         tree.children;

@@ -74,12 +74,9 @@ module Generic {
 
     class C<T,U> {
 >C : C<T, U>
->T : T
->U : U
 
         x: T;
 >x : T
->T : T
 
         get y() {
 >y : U
@@ -90,7 +87,6 @@ module Generic {
         set y(v: U) { }
 >y : U
 >v : U
->U : U
 
         fn() { return this; }
 >fn : () => this
@@ -98,9 +94,7 @@ module Generic {
 
         constructor(public a: T, private b: U) { }
 >a : T
->T : T
 >b : U
->U : U
     }
 
     var c = new C(1, '');

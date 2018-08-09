@@ -4,10 +4,10 @@
 // Excess property error expected here
 Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false }) : any
->Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any
->window : any
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>window : Window
 >"prop" : "prop"
 >{ value: "v1.0.0", readonly: false } : { value: string; readonly: boolean; }
 >value : string
@@ -16,25 +16,20 @@ Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >false : false
 
 interface A { x?: string }
->A : A
 >x : string
 
 // Excess property error expected here
 let a: A & ThisType<any> = { y: 10 };
 >a : A & ThisType<any>
->A : A
->ThisType : ThisType<T>
 >{ y: 10 } : { y: number; }
 >y : number
 >10 : 10
 
 interface Empty {}
->Empty : Empty
 
 // Excess property error expected here
 let x: Empty & { x: number } = { y: "hello" };
 >x : Empty & { x: number; }
->Empty : Empty
 >x : number
 >{ y: "hello" } : { y: string; }
 >y : string

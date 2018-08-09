@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/def.js ===
 var Outer = {};
 >Outer : typeof Outer
->{} : typeof Outer
+>{} : {}
 
 === tests/cases/conformance/salsa/a.js ===
 Outer.Inner = class {

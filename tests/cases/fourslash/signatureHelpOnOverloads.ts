@@ -4,15 +4,18 @@
 ////declare function fn(x: string, y: number);
 ////fn(/*1*/
 
-goTo.marker('1');
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("fn(x: string): any");
-verify.currentParameterHelpArgumentNameIs("x");
-verify.currentParameterSpanIs("x: string");
+verify.signatureHelp({
+    marker: "1",
+    overloadsCount: 2,
+    text: "fn(x: string): any",
+    parameterName: "x",
+    parameterSpan: "x: string",
+});
 
 edit.insert("'',");
-
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("fn(x: string, y: number): any");
-verify.currentParameterHelpArgumentNameIs("y");
-verify.currentParameterSpanIs("y: number");
+verify.signatureHelp({
+    overloadsCount: 2,
+    text: "fn(x: string, y: number): any",
+    parameterName: "y",
+    parameterSpan: "y: number",
+});

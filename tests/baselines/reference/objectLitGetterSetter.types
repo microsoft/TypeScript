@@ -5,13 +5,12 @@
 
             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
 >Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            })) : any
->Object.defineProperty : (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >Object : ObjectConstructor
->defineProperty : (o: any, p: string, attributes: PropertyDescriptor & ThisType<any>) => any
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
 >obj : {}
 >"accProperty" : "accProperty"
 ><PropertyDescriptor>({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
 >({                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            }) : { get: () => number; set: (v: any) => void; }
 >{                get: function () {                    eval("public = 1;");                    return 11;                },                set: function (v) {                }            } : { get: () => number; set: (v: any) => void; }
 

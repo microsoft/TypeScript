@@ -2,8 +2,6 @@
 // Repro from #21637
 
 interface JSONSchema4 {
->JSONSchema4 : JSONSchema4
-
   a?: number
 >a : number
 

@@ -1,21 +1,10 @@
 === tests/cases/compiler/infinitelyExpandingTypes2.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: Foo<Foo<T>>;
 >x : Foo<Foo<T>>
->Foo : Foo<T>
->Foo : Foo<T>
->T : T
 } 
 
 interface Bar<T> extends Foo<T> {
->Bar : Bar<T>
->T : T
->Foo : Foo<T>
->T : T
-
     y: string;
 >y : string
 }
@@ -23,19 +12,17 @@ interface Bar<T> extends Foo<T> {
 function f(p: Foo<number>) {
 >f : (p: Foo<number>) => void
 >p : Foo<number>
->Foo : Foo<T>
 
     console.log(p);
->console.log(p) : any
->console.log : any
->console : any
->log : any
+>console.log(p) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >p : Foo<number>
 }
 
 var v: Bar<number> = null;
 >v : Bar<number>
->Bar : Bar<T>
 >null : null
 
 f(v); // should not error

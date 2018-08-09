@@ -16,15 +16,11 @@ module M {
     }
 
     export interface IEye {
->IEye : IEye
-
         color:number;
 >color : number
     }
 
     export interface IFrenchEye {
->IFrenchEye : IFrenchEye
-
         coleur:number;
 >coleur : number
     }
@@ -32,9 +28,7 @@ module M {
     export function CompareEyes(a:IEye,b:IEye):number {
 >CompareEyes : (a: IEye, b: IEye) => number
 >a : IEye
->IEye : IEye
 >b : IEye
->IEye : IEye
 
         return a.color-b.color;
 >a.color-b.color : number
@@ -49,9 +43,7 @@ module M {
     export function CompareYeux(a:IFrenchEye,b:IFrenchEye):number {
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
 >a : IFrenchEye
->IFrenchEye : IFrenchEye
 >b : IFrenchEye
->IFrenchEye : IFrenchEye
 
         return a.coleur-b.coleur;
 >a.coleur-b.coleur : number
@@ -68,7 +60,6 @@ module M {
 
         var x:IEye[]= [];
 >x : IEye[]
->IEye : IEye
 >[] : undefined[]
 
         var result="";
@@ -159,7 +150,6 @@ module M {
 
         var eeks:IFrenchEye[] = [];
 >eeks : IFrenchEye[]
->IFrenchEye : IFrenchEye
 >[] : undefined[]
 
         for (var j=z.length=1;j>=0;j--) {

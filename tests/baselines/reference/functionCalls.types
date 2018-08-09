@@ -27,21 +27,16 @@ anyVar<number>();
 anyVar<Window>(undefined);
 >anyVar<Window>(undefined) : any
 >anyVar : any
->Window : No type information available!
 >undefined : undefined
 
 
 // Invoke function call on value of a subtype of Function with no call signatures with no type arguments
 interface SubFunc extends Function {
->SubFunc : SubFunc
->Function : Function
-
     prop: number;
 >prop : number
 }
 var subFunc: SubFunc;
 >subFunc : SubFunc
->SubFunc : SubFunc
 
 subFunc(0);
 >subFunc(0) : any
@@ -78,7 +73,6 @@ subFunc<any>();
 // These should be errors
 var func: Function;
 >func : Function
->Function : Function
 
 func<number>(0);
 >func<number>(0) : any

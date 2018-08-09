@@ -1,21 +1,13 @@
 === tests/cases/compiler/genericReturnTypeFromGetter1.ts ===
 export interface A<T> {
->A : A<T>
->T : T
-
    new (dbSet: DbSet<T>): T;
 >dbSet : DbSet<T>
->DbSet : DbSet<T>
->T : T
->T : T
 }
 export class DbSet<T> {
 >DbSet : DbSet<T>
->T : T
 
     _entityType: A;
 >_entityType : any
->A : A<T>
 
   get entityType() { return this._entityType; }  // used to ICE without return type annotation
 >entityType : any

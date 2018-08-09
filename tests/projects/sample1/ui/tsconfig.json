@@ -1,0 +1,5 @@
+{
+    "references": [
+        { "path": "../logic/index" }
+    ]
+}

@@ -1,8 +1,6 @@
 === tests/cases/compiler/mergedDeclarationExports.ts ===
 // OK -- one is type, one is value
 interface b {}
->b : b
-
 export const b = 1;
 >b : 1
 >1 : 1
@@ -12,9 +10,6 @@ type t = 0;
 >t : 0
 
 namespace t { interface I {} }
->t : any
->I : I
-
 export const t = 0;
 >t : 0
 >0 : 0
@@ -23,22 +18,14 @@ export const t = 0;
 
 // both types
 interface c {}
->c : c
-
 export interface c {}
->c : c
 
 // both types (class is also value, but that doesn't matter)
 interface d {}
->d : d
-
 export class d {}
->d : d
+>d : import("tests/cases/compiler/mergedDeclarationExports").d
 
 // both namespaces
 namespace N { }
->N : any
-
 export namespace N {}
->N : any
 

@@ -59,6 +59,8 @@ namespace ts.formatting {
             rule("NoSpaceBeforeDot", anyToken, SyntaxKind.DotToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
             rule("NoSpaceAfterDot", SyntaxKind.DotToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
+            rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.Delete),
+
             // Special handling of unary operators.
             // Prefix operators generally shouldn't have a space between
             // them and their target unary expression.
@@ -126,8 +128,8 @@ namespace ts.formatting {
             rule("SpaceBetweenAsyncAndOpenParen", SyntaxKind.AsyncKeyword, SyntaxKind.OpenParenToken, [isArrowFunctionContext, isNonJsxSameLineTokenContext], RuleAction.Space),
             rule("SpaceBetweenAsyncAndFunctionKeyword", SyntaxKind.AsyncKeyword, SyntaxKind.FunctionKeyword, [isNonJsxSameLineTokenContext], RuleAction.Space),
 
-            // template string
-            rule("NoSpaceBetweenTagAndTemplateString", SyntaxKind.Identifier, [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
+            // Template string
+            rule("NoSpaceBetweenTagAndTemplateString", [SyntaxKind.Identifier, SyntaxKind.CloseParenToken], [SyntaxKind.NoSubstitutionTemplateLiteral, SyntaxKind.TemplateHead], [isNonJsxSameLineTokenContext], RuleAction.Delete),
 
             // JSX opening elements
             rule("SpaceBeforeJsxAttribute", anyToken, SyntaxKind.Identifier, [isNextTokenParentJsxAttribute, isNonJsxSameLineTokenContext], RuleAction.Space),
@@ -641,6 +643,10 @@ namespace ts.formatting {
         return context.contextNode.kind === SyntaxKind.ArrowFunction;
     }
 
+    function isImportTypeContext(context: FormattingContext): boolean {
+        return context.contextNode.kind === SyntaxKind.ImportType;
+    }
+
     function isNonJsxSameLineTokenContext(context: FormattingContext): boolean {
         return context.TokensAreOnSameLine() && context.contextNode.kind !== SyntaxKind.JsxText;
     }
@@ -671,7 +677,7 @@ namespace ts.formatting {
 
     function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
         return context.TokensAreOnSameLine() &&
-            context.contextNode.decorators &&
+            !!context.contextNode.decorators &&
             nodeIsInDecoratorContext(context.currentTokenParent) &&
             !nodeIsInDecoratorContext(context.nextTokenParent);
     }

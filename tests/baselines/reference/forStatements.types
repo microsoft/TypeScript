@@ -1,14 +1,11 @@
 === tests/cases/conformance/statements/forStatements/forStatements.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -16,22 +13,15 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
->T : T
 
     recurse: D<T>;
 >recurse : D<T>
->D : D<T>
->T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D<T>
->D : D<T>
->T : T
 }
 
 function F(x: string): number { return 42; }
@@ -68,14 +58,12 @@ for(var aString: string = 'this is a string';;){}
 
 for(var aDate: Date = new Date(12);;){}
 >aDate : Date
->Date : Date
 >new Date(12) : Date
 >Date : DateConstructor
 >12 : 12
 
 for(var anObject: Object = new Object();;){}
 >anObject : Object
->Object : Object
 >new Object() : Object
 >Object : ObjectConstructor
 
@@ -93,25 +81,21 @@ for(var aVoid: void = undefined;;){}
 
 for(var anInterface: I = new C();;){}
 >anInterface : I
->I : I
 >new C() : C
 >C : typeof C
 
 for(var aClass: C = new C();;){}
 >aClass : C
->C : C
 >new C() : C
 >C : typeof C
 
 for(var aGenericClass: D<string> = new D<string>();;){}
 >aGenericClass : D<string>
->D : D<T>
 >new D<string>() : D<string>
 >D : typeof D
 
 for(var anObjectLiteral: I = { id: 12 };;){}
 >anObjectLiteral : I
->I : I
 >{ id: 12 } : { id: number; }
 >id : number
 >12 : 12
@@ -147,7 +131,6 @@ for(var aModule: typeof M = M;;){}
 for(var aClassInModule: M.A = new M.A();;){}
 >aClassInModule : M.A
 >M : any
->A : M.A
 >new M.A() : M.A
 >M.A : typeof M.A
 >M : typeof M

@@ -4,7 +4,6 @@ module A {
 
     export class B<T> {
 >B : B<T>
->T : T
 
         foo() { }
 >foo : () => void
@@ -29,7 +28,6 @@ module A {
 var b: A.B;
 >b : any
 >A : any
->B : A.B<T>
 
 b.foo();
 >b.foo() : any

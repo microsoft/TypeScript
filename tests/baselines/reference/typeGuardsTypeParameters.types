@@ -10,9 +10,7 @@ class C {
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
     if (x instanceof C) {
 >x instanceof C : boolean
@@ -21,12 +19,10 @@ function f1<T>(x: T) {
 
         let v1: T = x;
 >v1 : T
->T : T
 >x : T & C
 
         let v2: C = x;
 >v2 : C
->C : C
 >x : T & C
 
         x.prop;
@@ -38,9 +34,7 @@ function f1<T>(x: T) {
 
 function f2<T>(x: T) {
 >f2 : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
@@ -50,7 +44,6 @@ function f2<T>(x: T) {
 
         let v1: T = x;
 >v1 : T
->T : T
 >x : T & string
 
         let v2: string = x;
@@ -68,31 +61,26 @@ function f2<T>(x: T) {
 
 function fun<T>(item: { [P in keyof T]: T[P] }) {
 >fun : <T>(item: { [P in keyof T]: T[P]; }) => void
->T : T
 >item : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 
     const strings: string[] = [];
 >strings : string[]
 >[] : never[]
 
     for (const key in item) {
->key : keyof T
+>key : Extract<keyof T, string>
 >item : { [P in keyof T]: T[P]; }
 
         const value = item[key];
->value : { [P in keyof T]: T[P]; }[keyof T]
->item[key] : { [P in keyof T]: T[P]; }[keyof T]
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
+>item[key] : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
 >item : { [P in keyof T]: T[P]; }
->key : keyof T
+>key : Extract<keyof T, string>
 
         if (typeof value === "string") {
 >typeof value === "string" : boolean
 >typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->value : { [P in keyof T]: T[P]; }[keyof T]
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>]
 >"string" : "string"
 
             strings.push(value);
@@ -100,7 +88,7 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 >strings.push : (...items: string[]) => number
 >strings : string[]
 >push : (...items: string[]) => number
->value : { [P in keyof T]: T[P]; }[keyof T] & string
+>value : { [P in keyof T]: T[P]; }[Extract<keyof T, string>] & string
         }
     }
 }

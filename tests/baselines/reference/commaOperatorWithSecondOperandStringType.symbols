@@ -13,7 +13,7 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var resultIsString: string;
 >resultIsString : Symbol(resultIsString, Decl(commaOperatorWithSecondOperandStringType.ts, 6, 3))
@@ -71,7 +71,7 @@ null, STRING;
 
 ANY = new Date(), STRING;
 >ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 true, "";
@@ -80,13 +80,13 @@ BOOLEAN == undefined, "";
 >undefined : Symbol(undefined)
 
 ["a", "b"], NUMBER.toString();
->NUMBER.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 OBJECT = new Object, STRING + "string";
 >OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandStringType.ts, 4, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString6 = (null, STRING);
@@ -96,7 +96,7 @@ var resultIsString6 = (null, STRING);
 var resultIsString7 = (ANY = new Date(), STRING);
 >resultIsString7 : Symbol(resultIsString7, Decl(commaOperatorWithSecondOperandStringType.ts, 31, 3))
 >ANY : Symbol(ANY, Decl(commaOperatorWithSecondOperandStringType.ts, 0, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 
 var resultIsString8 = (true, "");
@@ -109,12 +109,12 @@ var resultIsString9 = (BOOLEAN == undefined, "");
 
 var resultIsString10 = (["a", "b"], NUMBER.toString());
 >resultIsString10 : Symbol(resultIsString10, Decl(commaOperatorWithSecondOperandStringType.ts, 34, 3))
->NUMBER.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>NUMBER.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >NUMBER : Symbol(NUMBER, Decl(commaOperatorWithSecondOperandStringType.ts, 2, 3))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var resultIsString11 = (new Object, STRING + "string");
 >resultIsString11 : Symbol(resultIsString11, Decl(commaOperatorWithSecondOperandStringType.ts, 35, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorWithSecondOperandStringType.ts, 3, 3))
 

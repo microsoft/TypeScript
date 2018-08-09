@@ -67,9 +67,12 @@ const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
 
 //// [mixinClassesAnonymous.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -92,7 +95,7 @@ var Derived = /** @class */ (function (_super) {
     }
     return Derived;
 }(Base));
-var Printable = function (superClass) { return _a = /** @class */ (function (_super) {
+var Printable = function (superClass) { var _a; return _a = /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -103,7 +106,7 @@ var Printable = function (superClass) { return _a = /** @class */ (function (_su
         return class_1;
     }(superClass)),
     _a.message = "hello",
-    _a; var _a; };
+    _a; };
 function Tagged(superClass) {
     var C = /** @class */ (function (_super) {
         __extends(C, _super);

@@ -1,7 +1,8 @@
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type 'undefined[]' is not assignable to type '[any, any, any]'.
-  Property '0' is missing in type 'undefined[]'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,5): error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.
-  Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
+  Property '0' is missing in type '[]'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,48): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): error TS2322: Type 'true' is not assignable to type 'number'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
@@ -10,15 +11,13 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
   Property '0' is missing in type 'number[]'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
-  Types of property 'push' are incompatible.
-    Type '(...items: (string | number)[]) => number' is not assignable to type '(...items: Number[]) => number'.
-      Types of parameters 'items' and 'items' are incompatible.
-        Type 'Number' is not assignable to type 'string | number'.
-          Type 'Number' is not assignable to type 'number'.
-            'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+  Types of property 'pop' are incompatible.
+    Type '() => string | number' is not assignable to type '() => Number'.
+      Type 'string | number' is not assignable to type 'Number'.
+        Type 'string' is not assignable to type 'Number'.
 
 
-==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (6 errors) ====
+==== tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts (8 errors) ====
     // Each element expression in a non-empty array literal is processed as follows:
     //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
     //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -30,12 +29,15 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     
     var a0: [any, any, any] = [];                             // Error
         ~~
-!!! error TS2322: Type 'undefined[]' is not assignable to type '[any, any, any]'.
-!!! error TS2322:   Property '0' is missing in type 'undefined[]'.
+!!! error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
+!!! error TS2322:   Property '0' is missing in type '[]'.
     var a1: [boolean, string, number] = ["string", 1, true];  // Error
-        ~~
-!!! error TS2322: Type '[string, number, boolean]' is not assignable to type '[boolean, string, number]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'boolean'.
+                                         ~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+                                                   ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                                                      ~~~~
+!!! error TS2322: Type 'true' is not assignable to type 'number'.
     
     // The resulting type an array literal expression is determined as follows:
     //     - If the array literal contains no spread elements and is an array assignment pattern in a destructuring assignment (section 4.17.1),
@@ -71,10 +73,8 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
         ~~
 !!! error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
-!!! error TS2322:   Types of property 'push' are incompatible.
-!!! error TS2322:     Type '(...items: (string | number)[]) => number' is not assignable to type '(...items: Number[]) => number'.
-!!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
-!!! error TS2322:         Type 'Number' is not assignable to type 'string | number'.
-!!! error TS2322:           Type 'Number' is not assignable to type 'number'.
-!!! error TS2322:             'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+!!! error TS2322:   Types of property 'pop' are incompatible.
+!!! error TS2322:     Type '() => string | number' is not assignable to type '() => Number'.
+!!! error TS2322:       Type 'string | number' is not assignable to type 'Number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'Number'.
     

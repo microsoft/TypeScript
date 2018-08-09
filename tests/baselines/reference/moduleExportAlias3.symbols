@@ -1,0 +1,15 @@
+=== tests/cases/conformance/salsa/bug24062.js ===
+// #24062
+class C {
+>C : Symbol(C, Decl(bug24062.js, 0, 0))
+}
+module.exports = {
+>module.exports : Symbol("tests/cases/conformance/salsa/bug24062", Decl(bug24062.js, 0, 0))
+>module : Symbol(export=, Decl(bug24062.js, 2, 1))
+>exports : Symbol(export=, Decl(bug24062.js, 2, 1))
+
+    C
+>C : Symbol(C, Decl(bug24062.js, 3, 18))
+
+};
+

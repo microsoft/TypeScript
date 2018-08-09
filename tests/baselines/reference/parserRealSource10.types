@@ -365,24 +365,28 @@ module TypeScript {
 >new TokenInfo[] : any
 >TokenInfo[] : any
 >TokenInfo : typeof TokenInfo
+> : any
 
     export var nodeTypeTable = new string[];
 >nodeTypeTable : any
 >new string[] : any
 >string[] : any
 >string : any
+> : any
 
     export var nodeTypeToTokTable = new number[];
 >nodeTypeToTokTable : any
 >new number[] : any
 >number[] : any
 >number : any
+> : any
 
     export var noRegexTable = new boolean[];
 >noRegexTable : any
 >new boolean[] : any
 >boolean[] : any
 >boolean : any
+> : any
 
     noRegexTable[TokenID.Identifier] = true;
 >noRegexTable[TokenID.Identifier] = true : true
@@ -591,9 +595,7 @@ module TypeScript {
 
         constructor (public tokenId: TokenID, public reservation: Reservation,
 >tokenId : TokenID
->TokenID : TokenID
 >reservation : Reservation
->Reservation : Reservation
 
                     public binopPrecedence: number, public binopNodeType: number,
 >binopPrecedence : number
@@ -606,13 +608,11 @@ module TypeScript {
                     public text: string, public ers: ErrorRecoverySet) { }
 >text : string
 >ers : any
->ErrorRecoverySet : No type information available!
     }
 
     function setTokenInfo(tokenId: TokenID, reservation: number, binopPrecedence: number,
 >setTokenInfo : (tokenId: TokenID, reservation: number, binopPrecedence: number, binopNodeType: number, unopPrecedence: number, unopNodeType: number, text: string, ers: any) => void
 >tokenId : TokenID
->TokenID : TokenID
 >reservation : number
 >binopPrecedence : number
 
@@ -624,7 +624,6 @@ module TypeScript {
         text: string, ers: ErrorRecoverySet) {
 >text : string
 >ers : any
->ErrorRecoverySet : No type information available!
 
         if (tokenId !== undefined) {
 >tokenId !== undefined : boolean
@@ -3526,8 +3525,6 @@ module TypeScript {
     export function lookupToken(tokenId: TokenID): TokenInfo {
 >lookupToken : (tokenId: TokenID) => TokenInfo
 >tokenId : TokenID
->TokenID : TokenID
->TokenInfo : TokenInfo
 
         return tokenTable[tokenId];
 >tokenTable[tokenId] : any
@@ -3565,7 +3562,6 @@ module TypeScript {
 
         constructor (public tok: Token, public minChar: number, public limChar: number) { }
 >tok : Token
->Token : Token
 >minChar : number
 >limChar : number
     }
@@ -3575,7 +3571,6 @@ module TypeScript {
 
         constructor (public tokenId: TokenID) {
 >tokenId : TokenID
->TokenID : TokenID
         }
 
         public toString() {
@@ -3645,7 +3640,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             if (this.tokenId <= TokenID.LimKeyword) {
 >this.tokenId <= TokenID.LimKeyword : boolean
@@ -3753,7 +3747,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal
@@ -3788,7 +3781,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal
@@ -3822,7 +3814,6 @@ module TypeScript {
         }
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Identifier;
 >TokenClass.Identifier : TokenClass.Identifier
@@ -3837,7 +3828,6 @@ module TypeScript {
 
         constructor (tokenId: TokenID, public value: string) {
 >tokenId : TokenID
->TokenID : TokenID
 >value : string
 
             super(tokenId);
@@ -3857,7 +3847,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Whitespace;
 >TokenClass.Whitespace : TokenClass.Whitespace
@@ -3872,7 +3861,6 @@ module TypeScript {
 
         constructor (tokenID: TokenID, public value: string, public isBlock: boolean, public startPos: number, public line: number, public endsLine: boolean) {
 >tokenID : TokenID
->TokenID : TokenID
 >value : string
 >isBlock : boolean
 >startPos : number
@@ -3896,7 +3884,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Comment;
 >TokenClass.Comment : TokenClass.Comment
@@ -3934,7 +3921,6 @@ module TypeScript {
 
         public classification(): TokenClass {
 >classification : () => TokenClass
->TokenClass : TokenClass
 
             return TokenClass.Literal;
 >TokenClass.Literal : TokenClass.Literal
@@ -3949,6 +3935,7 @@ module TypeScript {
 >new Token[] : any
 >Token[] : any
 >Token : typeof Token
+> : any
 
     export function initializeStaticTokens() {
 >initializeStaticTokens : () => void

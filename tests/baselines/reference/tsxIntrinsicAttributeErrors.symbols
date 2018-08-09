@@ -1,0 +1,66 @@
+=== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx ===
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxIntrinsicAttributeErrors.tsx, 0, 0))
+
+    interface Element { }
+>Element : Symbol(Element, Decl(tsxIntrinsicAttributeErrors.tsx, 0, 23))
+
+    interface ElementClass {
+>ElementClass : Symbol(ElementClass, Decl(tsxIntrinsicAttributeErrors.tsx, 1, 25))
+
+        render: any;
+>render : Symbol(ElementClass.render, Decl(tsxIntrinsicAttributeErrors.tsx, 2, 28))
+    }
+    interface IntrinsicAttributes {
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(tsxIntrinsicAttributeErrors.tsx, 4, 5))
+
+        key: string | number
+>key : Symbol(IntrinsicAttributes.key, Decl(tsxIntrinsicAttributeErrors.tsx, 5, 35))
+    }
+    interface IntrinsicClassAttributes<T> {
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(tsxIntrinsicAttributeErrors.tsx, 7, 5))
+>T : Symbol(T, Decl(tsxIntrinsicAttributeErrors.tsx, 8, 39))
+
+        ref: T
+>ref : Symbol(IntrinsicClassAttributes.ref, Decl(tsxIntrinsicAttributeErrors.tsx, 8, 43))
+>T : Symbol(T, Decl(tsxIntrinsicAttributeErrors.tsx, 8, 39))
+    }
+    interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxIntrinsicAttributeErrors.tsx, 10, 5))
+
+        div: {
+>div : Symbol(IntrinsicElements.div, Decl(tsxIntrinsicAttributeErrors.tsx, 11, 33))
+
+            text?: string;
+>text : Symbol(text, Decl(tsxIntrinsicAttributeErrors.tsx, 12, 14))
+
+            width?: number;
+>width : Symbol(width, Decl(tsxIntrinsicAttributeErrors.tsx, 13, 26))
+        }
+
+        span: any;
+>span : Symbol(IntrinsicElements.span, Decl(tsxIntrinsicAttributeErrors.tsx, 15, 9))
+    }
+}
+
+interface I {
+>I : Symbol(I, Decl(tsxIntrinsicAttributeErrors.tsx, 19, 1))
+
+    new(n: string): {
+>n : Symbol(n, Decl(tsxIntrinsicAttributeErrors.tsx, 22, 8))
+
+        x: number
+>x : Symbol(x, Decl(tsxIntrinsicAttributeErrors.tsx, 22, 21))
+
+        render(): void
+>render : Symbol(render, Decl(tsxIntrinsicAttributeErrors.tsx, 23, 17))
+    }
+}
+var E: I;
+>E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
+>I : Symbol(I, Decl(tsxIntrinsicAttributeErrors.tsx, 19, 1))
+
+<E x={10} />
+>E : Symbol(E, Decl(tsxIntrinsicAttributeErrors.tsx, 27, 3))
+>x : Symbol(x, Decl(tsxIntrinsicAttributeErrors.tsx, 28, 2))
+

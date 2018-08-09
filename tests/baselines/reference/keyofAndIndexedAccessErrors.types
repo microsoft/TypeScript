@@ -17,90 +17,68 @@ class Shape {
 
 type Dictionary<T> = { [x: string]: T };
 >Dictionary : Dictionary<T>
->T : T
 >x : string
->T : T
 
 type T00 = keyof K0;  // Error
->T00 : string
->K0 : No type information available!
+>T00 : string | number | symbol
 
 type T01 = keyof Object;
 >T01 : "toString" | "constructor" | "toLocaleString" | "valueOf" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
->Object : Object
 
 type T02 = keyof keyof Object;
->T02 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
->Object : Object
+>T02 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
 
 type T03 = keyof keyof keyof Object;
->T03 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
->Object : Object
+>T03 : "toString" | "valueOf"
 
 type T04 = keyof keyof keyof keyof Object;
->T04 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
->Object : Object
+>T04 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
 
 type T05 = keyof keyof keyof keyof keyof Object;
->T05 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
->Object : Object
+>T05 : "toString" | "valueOf"
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
->T06 : "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
->Object : Object
+>T06 : number | "length" | "toString" | "valueOf" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr"
 
 type T10 = Shape["name"];
 >T10 : string
->Shape : Shape
 
 type T11 = Shape["foo"];  // Error
 >T11 : any
->Shape : Shape
 
 type T12 = Shape["name" | "foo"];  // Error
 >T12 : any
->Shape : Shape
 
 type T13 = Shape[any];  // Error
 >T13 : any
->Shape : Shape
 
 type T14 = Shape[string];  // Error
 >T14 : any
->Shape : Shape
 
 type T15 = Shape[number];  // Error
 >T15 : any
->Shape : Shape
 
 type T16 = Shape[boolean];  // Error
 >T16 : any
->Shape : Shape
 
 type T17 = Shape[void];  // Error
 >T17 : any
->Shape : Shape
 
 type T18 = Shape[undefined];  // Error
 >T18 : any
->Shape : Shape
 
 type T19 = Shape[{ x: string }];  // Error
 >T19 : any
->Shape : Shape
 >x : string
 
 type T20 = Shape[string | number];  // Error
 >T20 : any
->Shape : Shape
 
 type T21 = Shape[string & number];  // Error
 >T21 : any
->Shape : Shape
 
 type T22 = Shape[string | boolean];  // Error
 >T22 : any
->Shape : Shape
 
 type T30 = string[]["length"];
 >T30 : number
@@ -116,19 +94,15 @@ type T33 = string[][boolean];  // Error
 
 type T40 = Dictionary<string>[any];
 >T40 : string
->Dictionary : Dictionary<T>
 
 type T41 = Dictionary<string>[number];
 >T41 : string
->Dictionary : Dictionary<T>
 
 type T42 = Dictionary<string>[string];
 >T42 : string
->Dictionary : Dictionary<T>
 
 type T43 = Dictionary<string>[boolean];  // Error
 >T43 : any
->Dictionary : Dictionary<T>
 
 type T50 = any[any];
 >T50 : any
@@ -153,13 +127,8 @@ declare let cond: boolean;
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->T : T
->K : K
->T : T
 >obj : T
->T : T
 >key : K
->K : K
 
     return obj[key];
 >obj[key] : T[K]
@@ -169,16 +138,9 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 
 function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->T : T
->K : K
->T : T
 >obj : T
->T : T
 >key : K
->K : K
 >value : T[K]
->T : T
->K : K
 
     obj[key] = value;
 >obj[key] = value : T[K]
@@ -191,7 +153,6 @@ function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
 function f10(shape: Shape) {
 >f10 : (shape: Shape) => void
 >shape : Shape
->Shape : Shape
 
     let x1 = getProperty(shape, "name");
 >x1 : string
@@ -242,124 +203,157 @@ function f10(shape: Shape) {
 >10 : 10
 }
 
-function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
->f20 : <T, U>(k1: keyof (T | U), k2: keyof T | keyof U, o1: T | U, o2: T & U) => void
->T : T
->U : U
->k1 : keyof (T | U)
->T : T
->U : U
->k2 : keyof T | keyof U
->T : T
->U : U
->o1 : T | U
->T : T
->U : U
->o2 : T & U
->T : T
->U : U
+function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
+>f20 : <T, U>(x: T | U, y: T & U, k1: keyof T & keyof U, k2: keyof T & keyof U, k3: keyof T | keyof U, k4: keyof T | keyof U) => void
+>x : T | U
+>y : T & U
+>k1 : keyof T & keyof U
+>k2 : keyof T & keyof U
+>k3 : keyof T | keyof U
+>k4 : keyof T | keyof U
 
-    o1[k1];
->o1[k1] : (T | U)[keyof (T | U)]
->o1 : T | U
->k1 : keyof (T | U)
+    x[k1];
+>x[k1] : (T | U)[keyof T & keyof U]
+>x : T | U
+>k1 : keyof T & keyof U
 
-    o1[k2];   // Error
->o1[k2] : (T | U)[keyof T | keyof U]
->o1 : T | U
->k2 : keyof T | keyof U
+    x[k2];
+>x[k2] : (T | U)[keyof T & keyof U]
+>x : T | U
+>k2 : keyof T & keyof U
 
-    o2[k1];
->o2[k1] : (T & U)[keyof (T | U)]
->o2 : T & U
->k1 : keyof (T | U)
+    x[k3];  // Error
+>x[k3] : (T | U)[keyof T | keyof U]
+>x : T | U
+>k3 : keyof T | keyof U
 
-    o2[k2];
->o2[k2] : (T & U)[keyof T | keyof U]
->o2 : T & U
->k2 : keyof T | keyof U
+    x[k4];  // Error
+>x[k4] : (T | U)[keyof T | keyof U]
+>x : T | U
+>k4 : keyof T | keyof U
 
-    o1 = o2;
->o1 = o2 : T & U
->o1 : T | U
->o2 : T & U
+    y[k1];
+>y[k1] : (T & U)[keyof T & keyof U]
+>y : T & U
+>k1 : keyof T & keyof U
 
-    o2 = o1;  // Error
->o2 = o1 : T | U
->o2 : T & U
->o1 : T | U
+    y[k2];
+>y[k2] : (T & U)[keyof T & keyof U]
+>y : T & U
+>k2 : keyof T & keyof U
 
-    k1 = k2;  // Error
->k1 = k2 : keyof T | keyof U
->k1 : keyof (T | U)
->k2 : keyof T | keyof U
+    y[k3];
+>y[k3] : (T & U)[keyof T | keyof U]
+>y : T & U
+>k3 : keyof T | keyof U
+
+    y[k4];
+>y[k4] : (T & U)[keyof T | keyof U]
+>y : T & U
+>k4 : keyof T | keyof U
+
+    k1 = k2;
+>k1 = k2 : keyof T & keyof U
+>k1 : keyof T & keyof U
+>k2 : keyof T & keyof U
+
+    k1 = k3;  // Error
+>k1 = k3 : keyof T | keyof U
+>k1 : keyof T & keyof U
+>k3 : keyof T | keyof U
+
+    k1 = k4;  // Error
+>k1 = k4 : keyof T | keyof U
+>k1 : keyof T & keyof U
+>k4 : keyof T | keyof U
 
     k2 = k1;
->k2 = k1 : keyof (T | U)
->k2 : keyof T | keyof U
->k1 : keyof (T | U)
+>k2 = k1 : keyof T & keyof U
+>k2 : keyof T & keyof U
+>k1 : keyof T & keyof U
+
+    k2 = k3;  // Error
+>k2 = k3 : keyof T | keyof U
+>k2 : keyof T & keyof U
+>k3 : keyof T | keyof U
+
+    k2 = k4;  // Error
+>k2 = k4 : keyof T | keyof U
+>k2 : keyof T & keyof U
+>k4 : keyof T | keyof U
+
+    k3 = k1;
+>k3 = k1 : keyof T & keyof U
+>k3 : keyof T | keyof U
+>k1 : keyof T & keyof U
+
+    k3 = k2;
+>k3 = k2 : keyof T & keyof U
+>k3 : keyof T | keyof U
+>k2 : keyof T & keyof U
+
+    k3 = k4;
+>k3 = k4 : keyof T | keyof U
+>k3 : keyof T | keyof U
+>k4 : keyof T | keyof U
+
+    k4 = k1;
+>k4 = k1 : keyof T & keyof U
+>k4 : keyof T | keyof U
+>k1 : keyof T & keyof U
+
+    k4 = k2;
+>k4 = k2 : keyof T & keyof U
+>k4 : keyof T | keyof U
+>k2 : keyof T & keyof U
+
+    k4 = k3;
+>k4 = k3 : keyof T | keyof U
+>k4 : keyof T | keyof U
+>k3 : keyof T | keyof U
 }
 
 // Repro from #17166
-function f3<T, K extends keyof T, U extends T, J extends K>(
->f3 : <T, K extends keyof T, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
->T : T
->K : K
->T : T
->U : U
->T : T
->J : J
->K : K
+function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
+>f3 : <T, K extends Extract<keyof T, string>, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
 
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
 >t : T
->T : T
 >k : K
->K : K
 >tk : T[K]
->T : T
->K : K
 >u : U
->U : U
 >j : J
->J : J
 >uk : U[K]
->U : U
->K : K
 >tj : T[J]
->T : T
->J : J
 >uj : U[J]
->U : U
->J : J
 
     for (let key in t) {
->key : keyof T
+>key : Extract<keyof T, string>
 >t : T
 
         key = k // ok, K ==> keyof T
 >key = k : K
->key : keyof T
+>key : Extract<keyof T, string>
 >k : K
 
         k = key // error, keyof T =/=> K
->k = key : keyof T
+>k = key : Extract<keyof T, string>
 >k : K
->key : keyof T
+>key : Extract<keyof T, string>
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
 >t[key] = tk : T[K]
->t[key] : T[keyof T]
+>t[key] : T[Extract<keyof T, string>]
 >t : T
->key : keyof T
+>key : Extract<keyof T, string>
 >tk : T[K]
 
         tk = t[key]; // error, T[keyof T] =/=> T[K]
->tk = t[key] : T[keyof T]
+>tk = t[key] : T[Extract<keyof T, string>]
 >tk : T[K]
->t[key] : T[keyof T]
+>t[key] : T[Extract<keyof T, string>]
 >t : T
->key : keyof T
+>key : Extract<keyof T, string>
     }
     tk = uk;
 >tk = uk : U[K]

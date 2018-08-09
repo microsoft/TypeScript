@@ -25,5 +25,4 @@ export class Game {
 
     private prevConfig: SeedCoords[][];
 >prevConfig : any[][]
->SeedCoords : No type information available!
 }

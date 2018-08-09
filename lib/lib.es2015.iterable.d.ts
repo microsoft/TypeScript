@@ -18,7 +18,7 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference path="lib.es2015.symbol.d.ts" />
+/// <reference lib="es2015.symbol" />
 
 interface SymbolConstructor {
     /**
@@ -155,7 +155,7 @@ interface MapConstructor {
 interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object = object, V = any>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {
@@ -203,7 +203,7 @@ interface SetConstructor {
 interface WeakSet<T extends object> { }
 
 interface WeakSetConstructor {
-    new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
+    new <T extends object = object>(iterable: Iterable<T>): WeakSet<T>;
 }
 
 interface Promise<T> { }

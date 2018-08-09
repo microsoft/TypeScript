@@ -106,27 +106,27 @@ module TypeScriptAllInOne {
 
             var local = Number.MAX_VALUE;
 >local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
->Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.d.ts, --, --))
+>Number.MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>MAX_VALUE : Symbol(NumberConstructor.MAX_VALUE, Decl(lib.es5.d.ts, --, --))
 
             var min = Number.MIN_VALUE;
 >min : Symbol(min, Decl(constructorWithIncompleteTypeAnnotation.ts, 66, 15))
->Number.MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.d.ts, --, --))
+>Number.MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>MIN_VALUE : Symbol(NumberConstructor.MIN_VALUE, Decl(lib.es5.d.ts, --, --))
 
             var inf = Number.NEGATIVE_INFINITY - 
 >inf : Symbol(inf, Decl(constructorWithIncompleteTypeAnnotation.ts, 67, 15))
->Number.NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.d.ts, --, --))
+>Number.NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NEGATIVE_INFINITY : Symbol(NumberConstructor.NEGATIVE_INFINITY, Decl(lib.es5.d.ts, --, --))
 
             var nan = Number.NaN;
 >nan : Symbol(nan, Decl(constructorWithIncompleteTypeAnnotation.ts, 68, 15))
->Number.NaN : Symbol(NumberConstructor.NaN, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->NaN : Symbol(NumberConstructor.NaN, Decl(lib.d.ts, --, --))
+>Number.NaN : Symbol(NumberConstructor.NaN, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NumberConstructor.NaN, Decl(lib.es5.d.ts, --, --))
 
             var undef = undefined;
 >undef : Symbol(undef, Decl(constructorWithIncompleteTypeAnnotation.ts, 69, 15))
@@ -191,15 +191,15 @@ module TypeScriptAllInOne {
 >char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
 >f : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
 >hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
->float.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>float.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >float : Symbol(float, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 15))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->float2.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>float2.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >float2 : Symbol(float2, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 32))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->reg.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>reg.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >reg : Symbol(reg, Decl(constructorWithIncompleteTypeAnnotation.ts, 81, 15))
->toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 >objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
 >weekday : Symbol(weekday, Decl(constructorWithIncompleteTypeAnnotation.ts, 83, 15))
 

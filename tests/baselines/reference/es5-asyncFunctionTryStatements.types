@@ -68,8 +68,6 @@ async function tryCatch2() {
 
 async function tryCatch3(): Promise<Function> {
 >tryCatch3 : () => Promise<Function>
->Promise : Promise<T>
->Function : Function
 
     var x: any, y: any;
 >x : any

@@ -11,7 +11,6 @@ type Robot = [number, string, string];
 
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
->Robot : [number, string, string]
 >[1, "mower", "mowing"] : [number, string, string]
 >1 : 1
 >"mower" : "mower"
@@ -22,7 +21,6 @@ function foo1([, nameA = "noName"]: Robot = [-1, "name", "skill"]) {
 > : undefined
 >nameA : string
 >"noName" : "noName"
->Robot : [number, string, string]
 >[-1, "name", "skill"] : [number, string, string]
 >-1 : -1
 >1 : 1
@@ -42,7 +40,6 @@ function foo2([numberB = -1]: Robot = [-1, "name", "skill"]) {
 >numberB : number
 >-1 : -1
 >1 : 1
->Robot : [number, string, string]
 >[-1, "name", "skill"] : [number, string, string]
 >-1 : -1
 >1 : 1
@@ -66,7 +63,6 @@ function foo3([numberA2 = -1, nameA2 = "name", skillA2 = "skill"]: Robot = [-1, 
 >"name" : "name"
 >skillA2 : string
 >"skill" : "skill"
->Robot : [number, string, string]
 >[-1, "name", "skill"] : [number, string, string]
 >-1 : -1
 >1 : 1
@@ -86,8 +82,7 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->robotAInfo : (string | number)[]
->Robot : [number, string, string]
+>robotAInfo : string[]
 >[-1, "name", "skill"] : [number, string, string]
 >-1 : -1
 >1 : 1
@@ -99,7 +94,7 @@ function foo4([numberA3 = -1, ...robotAInfo]: Robot = [-1, "name", "skill"]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->robotAInfo : (string | number)[]
+>robotAInfo : string[]
 }
 
 foo1(robotA);

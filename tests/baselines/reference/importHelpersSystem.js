@@ -20,8 +20,8 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 //// [a.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var A;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
@@ -37,8 +37,8 @@ System.register([], function (exports_1, context_1) {
 //// [b.js]
 System.register(["tslib", "./a"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var tslib_1, a_1, B;
+    var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "B": true
     };

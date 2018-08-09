@@ -1,33 +1,18 @@
 === tests/cases/compiler/inferentialTypingWithFunctionTypeZip.ts ===
 var pair: <T, S>(x: T) => (y: S) => { x: T; y: S; }
 >pair : <T, S>(x: T) => (y: S) => { x: T; y: S; }
->T : T
->S : S
 >x : T
->T : T
 >y : S
->S : S
 >x : T
->T : T
 >y : S
->S : S
 
 var zipWith: <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[];
 >zipWith : <T, S, U>(a: T[], b: S[], f: (x: T) => (y: S) => U) => U[]
->T : T
->S : S
->U : U
 >a : T[]
->T : T
 >b : S[]
->S : S
 >f : (x: T) => (y: S) => U
 >x : T
->T : T
 >y : S
->S : S
->U : U
->U : U
 
 var result = zipWith([1, 2], ['a', 'b'], pair);
 >result : { x: number; y: {}; }[]

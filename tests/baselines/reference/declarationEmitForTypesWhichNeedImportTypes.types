@@ -1,0 +1,18 @@
+=== tests/cases/compiler/b.ts ===
+export interface Named {}
+
+export function createNamed(): Named {
+>createNamed : () => Named
+
+  return {};
+>{} : {}
+}
+=== tests/cases/compiler/a.ts ===
+import { createNamed } from "./b";
+>createNamed : () => import("tests/cases/compiler/b").Named
+
+export const Value = createNamed();
+>Value : import("tests/cases/compiler/b").Named
+>createNamed() : import("tests/cases/compiler/b").Named
+>createNamed : () => import("tests/cases/compiler/b").Named
+

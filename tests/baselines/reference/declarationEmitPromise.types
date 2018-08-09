@@ -1,38 +1,20 @@
 === tests/cases/compiler/declarationEmitPromise.ts ===
 export class bluebird<T> {
 >bluebird : bluebird<T>
->T : T
 
     static all: Array<bluebird<any>>;
 >all : bluebird<any>[]
->Array : T[]
->bluebird : bluebird<T>
 }
 
 export async function runSampleWorks<A, B, C, D, E>(
 >runSampleWorks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
->A : A
->B : B
->C : C
->D : D
->E : E
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
->bluebird : bluebird<T>
->A : A
 >b : bluebird<B>
->bluebird : bluebird<T>
->B : B
 >c : bluebird<C>
->bluebird : bluebird<T>
->C : C
 >d : bluebird<D>
->bluebird : bluebird<T>
->D : D
 >e : bluebird<E>
->bluebird : bluebird<T>
->E : E
 
     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
 >result : any
@@ -61,20 +43,12 @@ export async function runSampleWorks<A, B, C, D, E>(
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->T : T
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >a : A
->A : A
 >b : B
->B : B
 >c : C
->C : C
 >d : D
->D : D
 >e : E
->E : E
->T : T
->T : T
 
         f.apply(this, result);
 >f.apply(this, result) : any
@@ -96,28 +70,13 @@ export async function runSampleWorks<A, B, C, D, E>(
 
 export async function runSampleBreaks<A, B, C, D, E>(
 >runSampleBreaks : <A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) => Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>
->A : A
->B : B
->C : C
->D : D
->E : E
 
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
 >a : bluebird<A>
->bluebird : bluebird<T>
->A : A
 >b : bluebird<B>
->bluebird : bluebird<T>
->B : B
 >c : bluebird<C>
->bluebird : bluebird<T>
->C : C
 >d : bluebird<D>
->bluebird : bluebird<T>
->D : D
 >e : bluebird<E>
->bluebird : bluebird<T>
->E : E
 
     let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
 >result : any
@@ -146,20 +105,12 @@ export async function runSampleBreaks<A, B, C, D, E>(
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->T : T
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >a : A
->A : A
 >b : B
->B : B
 >c : C
->C : C
 >d : D
->D : D
 >e : E
->E : E
->T : T
->T : T
 
         f.apply(this, result);
 >f.apply(this, result) : any

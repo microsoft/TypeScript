@@ -1,7 +1,7 @@
 === tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js ===
 /**
- * @template {T}
  * @param {T} t
+ * @template T
  */
 function Zet(t) {
 >Zet : typeof Zet
@@ -71,4 +71,16 @@ z.u = false
 >z : typeof Zet
 >u : number
 >false : false
+
+// lookup in typedef should not crash the compiler, even when the type is unknown
+/**
+ * @typedef {Object} A
+ * @property {T} value
+ */
+/** @type {A} */
+const options = { value: null };
+>options : A
+>{ value: null } : { value: null; }
+>value : null
+>null : null
 

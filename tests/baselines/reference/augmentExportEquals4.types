@@ -1,9 +1,9 @@
 === tests/cases/compiler/file1.ts ===
 class foo {}
->foo : foo
+>foo : import("o")
 
 namespace foo {
->foo : typeof foo
+>foo : typeof import("o")
 
     export var v = 1;
 >v : number
@@ -28,7 +28,6 @@ declare module "./file1" {
 >"./file1" : typeof x
 
     interface A { a }
->A : A
 >a : any
 
     let b: number;
@@ -43,7 +42,6 @@ import "./file2";
 let a: x.A;
 >a : x.A
 >x : any
->A : x.A
 
 let b = x.b;
 >b : number

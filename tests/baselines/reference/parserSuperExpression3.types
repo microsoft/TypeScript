@@ -10,7 +10,6 @@ class C {
 >this.super : any
 >this : this
 >super : any
->T : No type information available!
 >0 : 0
   }
 }

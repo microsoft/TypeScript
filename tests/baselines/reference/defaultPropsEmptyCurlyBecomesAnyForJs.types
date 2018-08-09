@@ -1,22 +1,16 @@
 === tests/cases/compiler/library.d.ts ===
 export class Foo<T = {}, U = {}> {
 >Foo : Foo<T, U>
->T : T
->U : U
 
     props: T;
 >props : T
->T : T
 
     state: U;
 >state : U
->U : U
 
     constructor(props: T, state: U);
 >props : T
->T : T
 >state : U
->U : U
 }
 
 === tests/cases/compiler/component.js ===

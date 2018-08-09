@@ -1,0 +1,19 @@
+=== tests/cases/compiler/computedPropertiesTransformedInOtherwiseNonTSClasses.ts ===
+namespace NS { 
+>NS : Symbol(NS, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 0, 0))
+
+    export const x = Symbol();
+>x : Symbol(x, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    class NotTransformed { 
+>NotTransformed : Symbol(NotTransformed, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 30))
+
+        [NS.x]: number;
+>[NS.x] : Symbol(NotTransformed[NS.x], Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 3, 26))
+>NS.x : Symbol(x, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 16))
+>NS : Symbol(NS, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 0, 0))
+>x : Symbol(x, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 16))
+    }
+}
+

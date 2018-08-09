@@ -1,16 +1,10 @@
 === tests/cases/compiler/declarationEmitLocalClassDeclarationMixin.ts ===
 interface Constructor<C> { new (...args: any[]): C; }
->Constructor : Constructor<C>
->C : C
 >args : any[]
->C : C
 
 function mixin<B extends Constructor<{}>>(Base: B) {
 >mixin : <B extends Constructor<{}>>(Base: B) => { new (...args: any[]): PrivateMixed; prototype: mixin<any>.PrivateMixed; } & B
->B : B
->Constructor : Constructor<C>
 >Base : B
->B : B
 
     class PrivateMixed extends Base {
 >PrivateMixed : PrivateMixed
@@ -40,10 +34,7 @@ export const Mixed = mixin(Unmixed);
 
 function Filter<C extends Constructor<{}>>(ctor: C) {
 >Filter : <C extends Constructor<{}>>(ctor: C) => { new (...args: any[]): FilterMixin; prototype: Filter<any>.FilterMixin; } & C
->C : C
->Constructor : Constructor<C>
 >ctor : C
->C : C
 
     abstract class FilterMixin extends ctor {
 >FilterMixin : FilterMixin

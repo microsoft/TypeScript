@@ -1,0 +1,34 @@
+=== tests/cases/compiler/importNotElidedWhenNotFound.ts ===
+import X from 'file';
+>X : Symbol(X, Decl(importNotElidedWhenNotFound.ts, 0, 6))
+
+import Z from 'other_file';
+>Z : Symbol(Z, Decl(importNotElidedWhenNotFound.ts, 1, 6))
+
+class Y extends Z {
+>Y : Symbol(Y, Decl(importNotElidedWhenNotFound.ts, 1, 27))
+>Z : Symbol(Z, Decl(importNotElidedWhenNotFound.ts, 1, 6))
+
+  constructor() {
+    super(X);
+>X : Symbol(X, Decl(importNotElidedWhenNotFound.ts, 0, 6))
+  }
+}
+
+import X2 from 'file2';
+>X2 : Symbol(X2, Decl(importNotElidedWhenNotFound.ts, 9, 6))
+
+import X3 from 'file3';
+>X3 : Symbol(X3, Decl(importNotElidedWhenNotFound.ts, 10, 6))
+
+class Q extends Z {
+>Q : Symbol(Q, Decl(importNotElidedWhenNotFound.ts, 10, 23))
+>Z : Symbol(Z, Decl(importNotElidedWhenNotFound.ts, 1, 6))
+
+  constructor() {
+    super(X2, X3);
+>X2 : Symbol(X2, Decl(importNotElidedWhenNotFound.ts, 9, 6))
+>X3 : Symbol(X3, Decl(importNotElidedWhenNotFound.ts, 10, 6))
+  }
+}
+

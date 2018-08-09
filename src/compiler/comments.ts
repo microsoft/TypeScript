@@ -3,8 +3,8 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
-        setWriter(writer: EmitTextWriter): void;
-        emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+        setWriter(writer: EmitTextWriter | undefined): void;
+        emitNodeWithComments(hint: EmitHint, node: Node | undefined, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean): void;
         emitLeadingCommentsOfPosition(pos: number): void;
@@ -20,9 +20,9 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let currentText: string;
         let currentLineMap: ReadonlyArray<number>;
-        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
         let hasWrittenComment = false;
-        let disabled: boolean = printerOptions.removeComments;
+        let disabled: boolean = !!printerOptions.removeComments;
 
         return {
             reset,
@@ -44,7 +44,7 @@ namespace ts {
                 hasWrittenComment = false;
 
                 const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags;
+                const emitFlags = emitNode && emitNode.flags || 0;
                 const { pos, end } = emitNode && emitNode.commentRange || node;
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
@@ -72,11 +72,13 @@ namespace ts {
                     const savedContainerEnd = containerEnd;
                     const savedDeclarationListContainerEnd = declarationListContainerEnd;
 
-                    if (!skipLeadingComments) {
+                    if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
+                        // Advance the container position of comments get emitted or if they've been disabled explicitly using NoLeadingComments.
                         containerPos = pos;
                     }
 
-                    if (!skipTrailingComments) {
+                    if (!skipTrailingComments || (end >= 0 && (emitFlags & EmitFlags.NoTrailingComments) !== 0)) {
+                        // As above.
                         containerEnd = end;
 
                         // To avoid invalid comment emit in a down-level binding pattern, we
@@ -114,7 +116,7 @@ namespace ts {
             }
         }
 
-        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode | undefined, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
             const leadingComments = emitNode && emitNode.leadingComments;
             if (some(leadingComments)) {
                 if (extendedDiagnostics) {
@@ -170,7 +172,7 @@ namespace ts {
         function writeSynthesizedComment(comment: SynthesizedComment) {
             const text = formatSynthesizedComment(comment);
             const lineMap = comment.kind === SyntaxKind.MultiLineCommentTrivia ? computeLineStarts(text) : undefined;
-            writeCommentRange(text, lineMap, writer, 0, text.length, newLine);
+            writeCommentRange(text, lineMap!, writer, 0, text.length, newLine);
         }
 
         function formatSynthesizedComment(comment: SynthesizedComment) {
@@ -364,9 +366,9 @@ namespace ts {
         }
 
         function reset() {
-            currentSourceFile = undefined;
-            currentText = undefined;
-            currentLineMap = undefined;
+            currentSourceFile = undefined!;
+            currentText = undefined!;
+            currentLineMap = undefined!;
             detachedCommentsInfo = undefined;
         }
 
@@ -382,14 +384,14 @@ namespace ts {
         }
 
         function hasDetachedComments(pos: number) {
-            return detachedCommentsInfo !== undefined && lastOrUndefined(detachedCommentsInfo).nodePos === pos;
+            return detachedCommentsInfo !== undefined && last(detachedCommentsInfo).nodePos === pos;
         }
 
         function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
             // get the leading comments from detachedPos
-            const pos = lastOrUndefined(detachedCommentsInfo).detachedCommentEndPos;
-            if (detachedCommentsInfo.length - 1) {
-                detachedCommentsInfo.pop();
+            const pos = last(detachedCommentsInfo!).detachedCommentEndPos;
+            if (detachedCommentsInfo!.length - 1) {
+                detachedCommentsInfo!.pop();
             }
             else {
                 detachedCommentsInfo = undefined;

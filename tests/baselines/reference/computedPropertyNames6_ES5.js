@@ -9,6 +9,7 @@ var v = {
 }
 
 //// [computedPropertyNames6_ES5.js]
+var _a;
 var p1;
 var p2;
 var p3;
@@ -17,4 +18,3 @@ var v = (_a = {},
     _a[p2] = 1,
     _a[p3] = 2,
     _a);
-var _a;

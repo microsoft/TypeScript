@@ -14,6 +14,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,12): error
 !!! error TS2345:   Property '0' is missing in type 'FooIterator'.
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'FooIteratorIterator' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts:18:7: 'FooIteratorIterator' is declared here.
     class Bar { x }
     class Foo extends Bar { y }
     class FooIterator {

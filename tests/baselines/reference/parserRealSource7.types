@@ -22,9 +22,7 @@ module TypeScript {
     function getBaseTypeLinks(bases: ASTList, baseTypeLinks: TypeLink[]) {
 >getBaseTypeLinks : (bases: any, baseTypeLinks: any[]) => any[]
 >bases : any
->ASTList : No type information available!
 >baseTypeLinks : any[]
->TypeLink : No type information available!
 
         if (bases) {
 >bases : any
@@ -48,6 +46,7 @@ module TypeScript {
 >new TypeLink[] : any
 >TypeLink[] : any
 >TypeLink : any
+> : any
             }
             for (var i = 0; i < len; i++) {
 >i : number
@@ -99,9 +98,7 @@ module TypeScript {
     function getBases(type: Type, typeDecl: TypeDeclaration) {
 >getBases : (type: any, typeDecl: any) => void
 >type : any
->Type : No type information available!
 >typeDecl : any
->TypeDeclaration : No type information available!
 
         type.extendsTypeLinks = getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks);
 >type.extendsTypeLinks = getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks) : any[]
@@ -135,11 +132,8 @@ module TypeScript {
     function addPrototypeField(classType: Type, ast: AST, context: TypeCollectionContext) {
 >addPrototypeField : (classType: any, ast: any, context: any) => void
 >classType : any
->Type : No type information available!
 >ast : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var field = new ValueLocation();
 >field : any
@@ -238,7 +232,6 @@ module TypeScript {
     export function createNewConstructGroupForType(type: Type) {
 >createNewConstructGroupForType : (type: any) => void
 >type : any
->Type : No type information available!
 
         var signature = new Signature();
 >signature : any
@@ -292,9 +285,7 @@ module TypeScript {
     export function cloneParentConstructGroupForChildType(child: Type, parent: Type) {
 >cloneParentConstructGroupForChildType : (child: any, parent: any) => void
 >child : any
->Type : No type information available!
 >parent : any
->Type : No type information available!
 
         child.construct = new SignatureGroup();
 >child.construct = new SignatureGroup() : any
@@ -306,7 +297,6 @@ module TypeScript {
 
         var sig: Signature = null;
 >sig : any
->Signature : No type information available!
 >null : null
 
         if (!parent.construct) {
@@ -438,27 +428,20 @@ module TypeScript {
 >"__GLO" : "__GLO"
 
     export interface IAliasScopeContext {
->IAliasScopeContext : IAliasScopeContext
-
         topLevelScope: ScopeChain;
 >topLevelScope : any
->ScopeChain : No type information available!
 
         members: IHashTable;
 >members : any
->IHashTable : No type information available!
 
         tcContext: TypeCollectionContext;
 >tcContext : any
->TypeCollectionContext : No type information available!
     }
 
     function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : string
 >scopeChain : any
->ScopeChain : No type information available!
->Symbol : No type information available!
 
         var symbol = scopeChain.scope.find(name, false, true);
 >symbol : any
@@ -482,10 +465,10 @@ module TypeScript {
 >previous : any
 
             symbol = findTypeSymbolInScopeChain(name, scopeChain.previous);
->symbol = findTypeSymbolInScopeChain(name, scopeChain.previous) : any
+>symbol = findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
 >symbol : any
->findTypeSymbolInScopeChain(name, scopeChain.previous) : any
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : string
 >scopeChain.previous : any
 >scopeChain : any
@@ -497,16 +480,12 @@ module TypeScript {
     }
 
     function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >alias : any
->AST : No type information available!
 >context : IAliasScopeContext
->IAliasScopeContext : IAliasScopeContext
->Symbol : No type information available!
 
         var symbol: Symbol = null;
->symbol : any
->Symbol : No type information available!
+>symbol : Symbol
 >null : null
 
         switch (alias.nodeType) {
@@ -524,7 +503,6 @@ module TypeScript {
 >(<Identifier>alias).text : any
 >(<Identifier>alias) : any
 ><Identifier>alias : any
->Identifier : No type information available!
 >alias : any
 >text : any
 
@@ -555,8 +533,8 @@ module TypeScript {
                     }
                     else {
                         return findTypeSymbolInScopeChain(name, context.topLevelScope);
->findTypeSymbolInScopeChain(name, context.topLevelScope) : any
->findTypeSymbolInScopeChain : (name: string, scopeChain: any) => any
+>findTypeSymbolInScopeChain(name, context.topLevelScope) : Symbol
+>findTypeSymbolInScopeChain : (name: string, scopeChain: any) => Symbol
 >name : any
 >context.topLevelScope : any
 >context : IAliasScopeContext
@@ -569,7 +547,7 @@ module TypeScript {
 
                     symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym);
 >symbol = context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym) : any
->symbol : any
+>symbol : Symbol
 >context.tcContext.checker.findSymbolForDynamicModule(name, context.tcContext.script.locationInfo.filename, findSym) : any
 >context.tcContext.checker.findSymbolForDynamicModule : any
 >context.tcContext.checker : any
@@ -593,7 +571,7 @@ module TypeScript {
                 else {
                     symbol = findSym(name);
 >symbol = findSym(name) : any
->symbol : any
+>symbol : Symbol
 >findSym(name) : any
 >findSym : (id: string) => any
 >name : any
@@ -609,13 +587,12 @@ module TypeScript {
                 var dottedExpr = <BinaryExpression>alias;
 >dottedExpr : any
 ><BinaryExpression>alias : any
->BinaryExpression : No type information available!
 >alias : any
 
                 var op1Sym = findSymbolFromAlias(dottedExpr.operand1, context);
->op1Sym : any
->findSymbolFromAlias(dottedExpr.operand1, context) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>op1Sym : Symbol
+>findSymbolFromAlias(dottedExpr.operand1, context) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >dottedExpr.operand1 : any
 >dottedExpr : any
 >operand1 : any
@@ -623,17 +600,17 @@ module TypeScript {
 
                 if (op1Sym && op1Sym.getType()) {
 >op1Sym && op1Sym.getType() : any
->op1Sym : any
+>op1Sym : Symbol
 >op1Sym.getType() : any
 >op1Sym.getType : any
->op1Sym : any
+>op1Sym : Symbol
 >getType : any
 
                     symbol = findSymbolFromAlias(dottedExpr.operand2, context);
->symbol = findSymbolFromAlias(dottedExpr.operand2, context) : any
->symbol : any
->findSymbolFromAlias(dottedExpr.operand2, context) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>symbol = findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
+>symbol : Symbol
+>findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >dottedExpr.operand2 : any
 >dottedExpr : any
 >operand2 : any
@@ -647,13 +624,13 @@ module TypeScript {
         }
 
         if (symbol) {
->symbol : any
+>symbol : Symbol
 
             var symType = symbol.getType();
 >symType : any
 >symbol.getType() : any
 >symbol.getType : any
->symbol : any
+>symbol : Symbol
 >getType : any
 
             if (symType) {
@@ -681,17 +658,14 @@ module TypeScript {
         }
 
         return symbol;
->symbol : any
+>symbol : Symbol
     }
 
     export function preCollectImportTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectImportTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -701,18 +675,15 @@ module TypeScript {
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : any
->TypeSymbol : No type information available!
 >null : null
 
         var modType: ModuleType = null;
 >modType : any
->ModuleType : No type information available!
 >null : null
 
         var importDecl = <ImportDeclaration>ast;
 >importDecl : any
 ><ImportDeclaration>ast : any
->ImportDeclaration : No type information available!
 >ast : any
 
         var isExported = hasFlag(importDecl.varFlags, VarFlags.Exported);
@@ -728,9 +699,9 @@ module TypeScript {
 
         // REVIEW: technically, this call isn't strictly necessary, since we'll find the type during the call to resolveTypeMembers
         var aliasedModSymbol = findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context });
->aliasedModSymbol : any
->findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : any
->findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => any
+>aliasedModSymbol : Symbol
+>findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : Symbol
+>findSymbolFromAlias : (alias: any, context: IAliasScopeContext) => Symbol
 >importDecl.alias : any
 >importDecl : any
 >alias : any
@@ -757,13 +728,13 @@ module TypeScript {
 >gloMod : any
 
         if (aliasedModSymbol) {
->aliasedModSymbol : any
+>aliasedModSymbol : Symbol
 
             var aliasedModType = aliasedModSymbol.getType();
 >aliasedModType : any
 >aliasedModSymbol.getType() : any
 >aliasedModSymbol.getType : any
->aliasedModSymbol : any
+>aliasedModSymbol : Symbol
 >getType : any
 
             if (aliasedModType) {
@@ -773,7 +744,6 @@ module TypeScript {
 >modType = <ModuleType>aliasedModType : any
 >modType : any
 ><ModuleType>aliasedModType : any
->ModuleType : No type information available!
 >aliasedModType : any
             }
         }
@@ -900,11 +870,8 @@ module TypeScript {
     export function preCollectModuleTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectModuleTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -914,9 +881,7 @@ module TypeScript {
 
         var moduleDecl: ModuleDeclaration = <ModuleDeclaration>ast;
 >moduleDecl : any
->ModuleDeclaration : No type information available!
 ><ModuleDeclaration>ast : any
->ModuleDeclaration : No type information available!
 >ast : any
 
         var isAmbient = hasFlag(moduleDecl.modFlags, ModuleFlags.Ambient);
@@ -971,7 +936,6 @@ module TypeScript {
 >(<Identifier>moduleDecl.name).text : any
 >(<Identifier>moduleDecl.name) : any
 ><Identifier>moduleDecl.name : any
->Identifier : No type information available!
 >moduleDecl.name : any
 >moduleDecl : any
 >name : any
@@ -997,12 +961,10 @@ module TypeScript {
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : any
->TypeSymbol : No type information available!
 >null : null
 
         var modType: ModuleType = null;
 >modType : any
->ModuleType : No type information available!
 >null : null
 
         if ((symbol == null) || (symbol.kind() != SymbolKind.Type)) {
@@ -1252,7 +1214,6 @@ module TypeScript {
 >typeSymbol = <TypeSymbol>symbol : any
 >typeSymbol : any
 ><TypeSymbol>symbol : any
->TypeSymbol : No type information available!
 >symbol : any
 
             // initialize new private scope for the type
@@ -1555,11 +1516,8 @@ module TypeScript {
     export function preCollectClassTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectClassTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -1570,20 +1528,16 @@ module TypeScript {
         var classDecl = <ClassDeclaration>ast;
 >classDecl : any
 ><ClassDeclaration>ast : any
->ClassDeclaration : No type information available!
 >ast : any
 
         var classType: Type;
 >classType : any
->Type : No type information available!
 
         var instanceType: Type;
 >instanceType : any
->Type : No type information available!
 
         var typeSymbol: TypeSymbol = null;
 >typeSymbol : any
->TypeSymbol : No type information available!
 >null : null
 
         var className = (<Identifier>classDecl.name).text;
@@ -1591,7 +1545,6 @@ module TypeScript {
 >(<Identifier>classDecl.name).text : any
 >(<Identifier>classDecl.name) : any
 ><Identifier>classDecl.name : any
->Identifier : No type information available!
 >classDecl.name : any
 >classDecl : any
 >name : any
@@ -1640,7 +1593,6 @@ module TypeScript {
         var containerMod = <TypeSymbol>scopeChain.container;
 >containerMod : any
 ><TypeSymbol>scopeChain.container : any
->TypeSymbol : No type information available!
 >scopeChain.container : any
 >scopeChain : any
 >container : any
@@ -1653,7 +1605,6 @@ module TypeScript {
 >typeSymbol = <TypeSymbol>scopeChain.scope.findLocal(className, false, true) : any
 >typeSymbol : any
 ><TypeSymbol>scopeChain.scope.findLocal(className, false, true) : any
->TypeSymbol : No type information available!
 >scopeChain.scope.findLocal(className, false, true) : any
 >scopeChain.scope.findLocal : any
 >scopeChain.scope : any
@@ -1716,7 +1667,6 @@ module TypeScript {
 >(<FuncDecl>valTypeSymbol.declAST).isSignature : any
 >(<FuncDecl>valTypeSymbol.declAST) : any
 ><FuncDecl>valTypeSymbol.declAST : any
->FuncDecl : No type information available!
 >valTypeSymbol.declAST : any
 >valTypeSymbol : any
 >declAST : any
@@ -1726,7 +1676,6 @@ module TypeScript {
 >typeSymbol = <TypeSymbol>valTypeSymbol : any
 >typeSymbol : any
 ><TypeSymbol>valTypeSymbol : any
->TypeSymbol : No type information available!
 >valTypeSymbol : any
 
                 foundValSymbol = true;
@@ -2242,7 +2191,6 @@ module TypeScript {
 >(<FuncDecl>typeSymbol.declAST).isOverload : any
 >(<FuncDecl>typeSymbol.declAST) : any
 ><FuncDecl>typeSymbol.declAST : any
->FuncDecl : No type information available!
 >typeSymbol.declAST : any
 >typeSymbol : any
 >declAST : any
@@ -2323,11 +2271,8 @@ module TypeScript {
     export function preCollectInterfaceTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectInterfaceTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -2338,17 +2283,14 @@ module TypeScript {
         var interfaceDecl = <InterfaceDeclaration>ast;
 >interfaceDecl : any
 ><InterfaceDeclaration>ast : any
->InterfaceDeclaration : No type information available!
 >ast : any
 
         var interfaceSymbol: TypeSymbol = null;
 >interfaceSymbol : any
->TypeSymbol : No type information available!
 >null : null
 
         var interfaceType: Type = null;
 >interfaceType : any
->Type : No type information available!
 >null : null
 
         var isExported = hasFlag(interfaceDecl.varFlags, VarFlags.Exported);
@@ -2390,7 +2332,6 @@ module TypeScript {
 >(<Identifier>interfaceDecl.name).text : any
 >(<Identifier>interfaceDecl.name) : any
 ><Identifier>interfaceDecl.name : any
->Identifier : No type information available!
 >interfaceDecl.name : any
 >interfaceDecl : any
 >name : any
@@ -2400,7 +2341,6 @@ module TypeScript {
 >interfaceSymbol = <TypeSymbol>scopeChain.scope.findLocal(interfaceName, false, true) : any
 >interfaceSymbol : any
 ><TypeSymbol>scopeChain.scope.findLocal(interfaceName, false, true) : any
->TypeSymbol : No type information available!
 >scopeChain.scope.findLocal(interfaceName, false, true) : any
 >scopeChain.scope.findLocal : any
 >scopeChain.scope : any
@@ -2630,11 +2570,8 @@ module TypeScript {
     export function preCollectArgDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectArgDeclTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -2645,7 +2582,6 @@ module TypeScript {
         var argDecl = <ArgDecl>ast;
 >argDecl : any
 ><ArgDecl>ast : any
->ArgDecl : No type information available!
 >ast : any
 
         if (hasFlag(argDecl.varFlags, VarFlags.Public | VarFlags.Private)) {
@@ -2807,11 +2743,8 @@ module TypeScript {
     export function preCollectVarDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectVarDeclTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -2822,7 +2755,6 @@ module TypeScript {
         var varDecl = <VarDecl>ast;
 >varDecl : any
 ><VarDecl>ast : any
->VarDecl : No type information available!
 >ast : any
 
         var isAmbient = hasFlag(varDecl.varFlags, VarFlags.Ambient);
@@ -2962,7 +2894,6 @@ module TypeScript {
 
                     <FieldSymbol>scopeChain.scope.findLocal(varDecl.id.text, false, false);
 ><FieldSymbol>scopeChain.scope.findLocal(varDecl.id.text, false, false) : any
->FieldSymbol : No type information available!
 >scopeChain.scope.findLocal(varDecl.id.text, false, false) : any
 >scopeChain.scope.findLocal : any
 >scopeChain.scope : any
@@ -3312,11 +3243,8 @@ module TypeScript {
     export function preCollectFuncDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectFuncDeclTypes : (ast: any, parent: any, context: any) => boolean
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >context : any
->TypeCollectionContext : No type information available!
 
         var scopeChain = context.scopeChain;
 >scopeChain : any
@@ -3346,12 +3274,10 @@ module TypeScript {
         var funcDecl = <FuncDecl>ast;
 >funcDecl : any
 ><FuncDecl>ast : any
->FuncDecl : No type information available!
 >ast : any
 
         var fgSym: TypeSymbol = null;
 >fgSym : any
->TypeSymbol : No type information available!
 >null : null
 
         var nameText = funcDecl.getNameText();
@@ -3411,9 +3337,7 @@ module TypeScript {
 
         var containerSym:TypeSymbol = <TypeSymbol> (((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container);
 >containerSym : any
->TypeSymbol : No type information available!
 ><TypeSymbol> (((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container) : any
->TypeSymbol : No type information available!
 >(((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container) : any
 >((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType ? context.scopeChain.classType.symbol : context.scopeChain.container : any
 >((funcDecl.isMethod() && isStatic) || funcDecl.isAccessor()) && context.scopeChain.classType : any
@@ -3450,7 +3374,6 @@ module TypeScript {
 
         var containerScope: SymbolScope = context.scopeChain.scope;
 >containerScope : any
->SymbolScope : No type information available!
 >context.scopeChain.scope : any
 >context.scopeChain : any
 >context : any
@@ -3509,7 +3432,6 @@ module TypeScript {
 >containerSym = <TypeSymbol>containerSym.container : any
 >containerSym : any
 ><TypeSymbol>containerSym.container : any
->TypeSymbol : No type information available!
 >containerSym.container : any
 >containerSym : any
 >container : any
@@ -3574,7 +3496,6 @@ module TypeScript {
 >(<FuncDecl>containerSym.declAST).isConstructor : any
 >(<FuncDecl>containerSym.declAST) : any
 ><FuncDecl>containerSym.declAST : any
->FuncDecl : No type information available!
 >containerSym.declAST : any
 >containerSym : any
 >declAST : any
@@ -3642,7 +3563,6 @@ module TypeScript {
 >fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false) : any
 >fgSym : any
 ><TypeSymbol>containerScope.findLocal(nameText, false, false) : any
->TypeSymbol : No type information available!
 >containerScope.findLocal(nameText, false, false) : any
 >containerScope.findLocal : any
 >containerScope : any
@@ -3664,7 +3584,6 @@ module TypeScript {
 >fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, true) : any
 >fgSym : any
 ><TypeSymbol>containerScope.findLocal(nameText, false, true) : any
->TypeSymbol : No type information available!
 >containerScope.findLocal(nameText, false, true) : any
 >containerScope.findLocal : any
 >containerScope : any
@@ -3936,7 +3855,6 @@ module TypeScript {
 >fgSym = <TypeSymbol>context.scopeChain.previous.scope.findLocal(nameText, false, false) : any
 >fgSym : any
 ><TypeSymbol>context.scopeChain.previous.scope.findLocal(nameText, false, false) : any
->TypeSymbol : No type information available!
 >context.scopeChain.previous.scope.findLocal(nameText, false, false) : any
 >context.scopeChain.previous.scope.findLocal : any
 >context.scopeChain.previous.scope : any
@@ -3961,7 +3879,6 @@ module TypeScript {
 >fgSym = <TypeSymbol>containerScope.findLocal(nameText, false, false) : any
 >fgSym : any
 ><TypeSymbol>containerScope.findLocal(nameText, false, false) : any
->TypeSymbol : No type information available!
 >containerScope.findLocal(nameText, false, false) : any
 >containerScope.findLocal : any
 >containerScope : any
@@ -3999,7 +3916,6 @@ module TypeScript {
 >(<FuncDecl>fgSym.declAST).isAccessor : any
 >(<FuncDecl>fgSym.declAST) : any
 ><FuncDecl>fgSym.declAST : any
->FuncDecl : No type information available!
 >fgSym.declAST : any
 >fgSym : any
 >declAST : any
@@ -4009,7 +3925,6 @@ module TypeScript {
 >(<FuncDecl>fgSym.declAST).isSignature : any
 >(<FuncDecl>fgSym.declAST) : any
 ><FuncDecl>fgSym.declAST : any
->FuncDecl : No type information available!
 >fgSym.declAST : any
 >fgSym : any
 >declAST : any
@@ -4405,15 +4320,11 @@ module TypeScript {
     export function preCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
 >preCollectTypes : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var context: TypeCollectionContext = walker.state;
 >context : any
->TypeCollectionContext : No type information available!
 >walker.state : any
 >walker : any
 >state : any
@@ -4439,9 +4350,7 @@ module TypeScript {
 
             var script: Script = <Script>ast;
 >script : any
->Script : No type information available!
 ><Script>ast : any
->Script : No type information available!
 >ast : any
 
             context.script = script;
@@ -4666,15 +4575,11 @@ module TypeScript {
     export function postCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
 >postCollectTypes : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var context: TypeCollectionContext = walker.state;
 >context : any
->TypeCollectionContext : No type information available!
 >walker.state : any
 >walker : any
 >state : any

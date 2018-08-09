@@ -17,7 +17,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenClassDeclarations = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                const classDeclaration = getClass(diag.file!, diag.start!);
+                const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
                     addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes, context.preferences);
                 }
@@ -28,12 +28,12 @@ namespace ts.codefix {
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
         // Token is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         return cast(token.parent, isClassLike);
     }
 
     function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
-        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
+        const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
         const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
         // Note that this is ultimately derived from a map indexed by symbol names,
@@ -46,7 +46,7 @@ namespace ts.codefix {
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
         // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
-        const flags = getModifierFlags(first(symbol.getDeclarations()));
+        const flags = getModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

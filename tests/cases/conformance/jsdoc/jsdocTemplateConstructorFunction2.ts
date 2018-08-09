@@ -4,8 +4,8 @@
 // @Filename: templateTagWithNestedTypeLiteral.js
 
 /**
- * @template {T}
  * @param {T} t
+ * @template T
  */
 function Zet(t) {
     /** @type {T} */
@@ -24,3 +24,11 @@ Zet.prototype.add = function(v, o) {
 var z = new Zet(1)
 z.t = 2
 z.u = false
+
+// lookup in typedef should not crash the compiler, even when the type is unknown
+/**
+ * @typedef {Object} A
+ * @property {T} value
+ */
+/** @type {A} */
+const options = { value: null };

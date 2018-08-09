@@ -99,9 +99,12 @@ class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
 //// [privacyClassExtendsClauseDeclFile_externalModule.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -291,9 +294,12 @@ var publicClassExtendingFromPrivateModuleClass = /** @class */ (function (_super
 exports.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
 //// [privacyClassExtendsClauseDeclFile_GlobalFile.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -358,3 +364,60 @@ var publicClassExtendingPublicClassInGlobal = /** @class */ (function (_super) {
     }
     return publicClassExtendingPublicClassInGlobal;
 }(publicClassInGlobal));
+
+
+//// [privacyClassExtendsClauseDeclFile_externalModule.d.ts]
+export declare module publicModule {
+    class publicClassInPublicModule {
+        private f1;
+    }
+    class privateClassInPublicModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    }
+    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    }
+}
+declare module privateModule {
+    class publicClassInPrivateModule {
+        private f1;
+    }
+    class privateClassInPrivateModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPrivateModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPrivateModule {
+    }
+    class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+    }
+}
+export declare class publicClass {
+    private f1;
+}
+declare class privateClass {
+}
+export declare class publicClassExtendingPublicClass extends publicClass {
+}
+export declare class publicClassExtendingPrivateClass extends privateClass {
+}
+export declare class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
+}
+export {};
+//// [privacyClassExtendsClauseDeclFile_GlobalFile.d.ts]
+declare module publicModuleInGlobal {
+    class publicClassInPublicModule {
+        private f1;
+    }
+    class privateClassInPublicModule {
+    }
+    class publicClassExtendingPublicClassInModule extends publicClassInPublicModule {
+    }
+    class publicClassExtendingPrivateClassInModule extends privateClassInPublicModule {
+    }
+}
+declare class publicClassInGlobal {
+}
+declare class publicClassExtendingPublicClassInGlobal extends publicClassInGlobal {
+}

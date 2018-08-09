@@ -4,7 +4,6 @@ class A {
 
     public f1<X>() {
 >f1 : <X>() => void
->X : X
 
     }
 }

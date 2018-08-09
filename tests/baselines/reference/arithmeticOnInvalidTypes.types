@@ -1,11 +1,9 @@
 === tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
 var x: Number;
 >x : Number
->Number : Number
 
 var y: Number;
 >y : Number
->Number : Number
 
 var z = x + y;
 >z : any

@@ -58,32 +58,32 @@ a.unknowable = 'hi'
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 
 a.empty.push(1)
->a.empty.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push(true)
->a.empty.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push({})
->a.empty.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push('hi')
->a.empty.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 /** @type {number | undefined} */
 var n;
@@ -130,14 +130,14 @@ function f(a = null, b = n, l = []) {
 
     // l should be any[]
     l.push(1)
->l.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(a.js, 24, 27))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     l.push('ok')
->l.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(a.js, 24, 27))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
 // should get any on variable initialisers
@@ -165,7 +165,7 @@ u = 'ok'
 >u : Symbol(u, Decl(a.js, 44, 3))
 
 l.push('ok')
->l.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>l.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(a.js, 45, 3))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 

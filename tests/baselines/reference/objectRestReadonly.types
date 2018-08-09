@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/rest/objectRestReadonly.ts ===
+// #23734
+type ObjType = {
+>ObjType : ObjType
+
+  foo: string
+>foo : string
+
+  baz: string
+>baz : string
+
+  quux: string
+>quux : string
+}
+
+const obj: Readonly<ObjType> = {
+>obj : Readonly<ObjType>
+>{  foo: 'bar',  baz: 'qux',  quux: 'quuz',} : { foo: string; baz: string; quux: string; }
+
+  foo: 'bar',
+>foo : string
+>'bar' : "bar"
+
+  baz: 'qux',
+>baz : string
+>'qux' : "qux"
+
+  quux: 'quuz',
+>quux : string
+>'quuz' : "quuz"
+}
+
+const { foo, ...rest } = obj
+>foo : string
+>rest : { baz: string; quux: string; }
+>obj : Readonly<ObjType>
+
+delete rest.baz
+>delete rest.baz : boolean
+>rest.baz : string
+>rest : { baz: string; quux: string; }
+>baz : string
+

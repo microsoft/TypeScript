@@ -4,9 +4,12 @@
 // @Filename: templateTagOnConstructorFunctions.js
 
 /**
- * @template {T}
- * @typedef {(t: T) => T} Id
+ * @template U
+ * @typedef {(u: U) => U} Id
+ */
+/**
  * @param {T} t
+ * @template T
  */
 function Zet(t) {
     /** @type {T} */
@@ -15,7 +18,7 @@ function Zet(t) {
 }
 /**
  * @param {T} v
- * @param {Id} id
+ * @param {Id<T>} id
  */
 Zet.prototype.add = function(v, id) {
     this.u = v || this.t

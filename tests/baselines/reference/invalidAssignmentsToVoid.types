@@ -28,7 +28,6 @@ class C { foo: string; }
 
 var c: C;
 >c : C
->C : C
 
 x = C;
 >x = C : typeof C
@@ -41,12 +40,10 @@ x = c;
 >c : C
 
 interface I { foo: string; }
->I : I
 >foo : string
 
 var i: I;
 >i : I
->I : I
 
 x = i;
 >x = i : I
@@ -65,9 +62,7 @@ x = M;
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     x = a;
 >x = a : T

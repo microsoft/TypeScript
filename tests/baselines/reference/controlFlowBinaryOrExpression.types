@@ -36,15 +36,11 @@ x; // string | number
 >x : string | number
 
 export interface NodeList {
->NodeList : NodeList
-
     length: number;
 >length : number
 }
 
 export interface HTMLCollection {
->HTMLCollection : HTMLCollection
-
     length: number;
 >length : number
 }
@@ -52,31 +48,24 @@ export interface HTMLCollection {
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
 >sourceObj : any
->sourceObj : any
->NodeList : NodeList
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
 >sourceObj : any
->sourceObj : any
->HTMLCollection : HTMLCollection
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
->EventTargetLike : NodeList | HTMLCollection | { a: string; }
+>EventTargetLike : EventTargetLike
 >a : string
->HTMLCollection : HTMLCollection
->NodeList : NodeList
 
 var sourceObj: EventTargetLike = <any>undefined;
->sourceObj : NodeList | HTMLCollection | { a: string; }
->EventTargetLike : NodeList | HTMLCollection | { a: string; }
+>sourceObj : EventTargetLike
 ><any>undefined : any
 >undefined : undefined
 
 if (isNodeList(sourceObj)) {
 >isNodeList(sourceObj) : boolean
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->sourceObj : NodeList | HTMLCollection | { a: string; }
+>sourceObj : EventTargetLike
 
     sourceObj.length;
 >sourceObj.length : number
@@ -87,7 +76,7 @@ if (isNodeList(sourceObj)) {
 if (isHTMLCollection(sourceObj)) {
 >isHTMLCollection(sourceObj) : boolean
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->sourceObj : NodeList | HTMLCollection | { a: string; }
+>sourceObj : EventTargetLike
 
     sourceObj.length;
 >sourceObj.length : number
@@ -99,7 +88,7 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >isNodeList(sourceObj) || isHTMLCollection(sourceObj) : boolean
 >isNodeList(sourceObj) : boolean
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->sourceObj : NodeList | HTMLCollection | { a: string; }
+>sourceObj : EventTargetLike
 >isHTMLCollection(sourceObj) : boolean
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
 >sourceObj : { a: string; }

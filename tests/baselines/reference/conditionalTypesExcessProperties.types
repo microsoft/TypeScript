@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts ===
+type Something<T> = { test: string } &  (T extends object ? {
+>Something : Something<T>
+>test : string
+
+    arg: T
+>arg : T
+
+} : {
+    arg?: undefined
+>arg : undefined
+
+    });
+
+function testFunc2<A extends object>(a: A, sa: Something<A>) {
+>testFunc2 : <A extends object>(a: A, sa: Something<A>) => void
+>a : A
+>sa : Something<A>
+
+    sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
+>sa = { test: 'hi', arg: a } : { test: string; arg: A; }
+>sa : Something<A>
+>{ test: 'hi', arg: a } : { test: string; arg: A; }
+>test : string
+>'hi' : "hi"
+>arg : A
+>a : A
+
+    sa = { test: 'bye', arg: a, arr: a } // excess
+>sa = { test: 'bye', arg: a, arr: a } : { test: string; arg: A; arr: A; }
+>sa : Something<A>
+>{ test: 'bye', arg: a, arr: a } : { test: string; arg: A; arr: A; }
+>test : string
+>'bye' : "bye"
+>arg : A
+>a : A
+>arr : A
+>a : A
+}
+

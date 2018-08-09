@@ -7,14 +7,9 @@ declare const x: "foo".charCodeAt(0);
 
 === tests/cases/compiler/string.ts ===
 interface String {
->String : String
-
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 class C {
@@ -34,33 +29,28 @@ class C {
 }
 
 const nodes = document.getElementsByTagName("li");
->nodes : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType = "".typeof(nodes.item(0));
 >ItemType : ""
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : HTMLCollectionOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 === tests/cases/compiler/number.ts ===
 interface Number {
->Number : Number
-
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 class C2 {
@@ -80,33 +70,28 @@ class C2 {
 }
 
 const nodes2 = document.getElementsByTagName("li");
->nodes2 : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes2 : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType2 = 4..typeof(nodes.item(0));
 >ItemType2 : 4
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : HTMLCollectionOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 === tests/cases/compiler/boolean.ts ===
 interface Boolean {
->Boolean : Boolean
-
     typeof<T>(x: T): T;
 >typeof : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 class C3 {
@@ -127,22 +112,22 @@ class C3 {
 }
 
 const nodes3 = document.getElementsByTagName("li");
->nodes3 : any
->document.getElementsByTagName("li") : any
->document.getElementsByTagName : any
->document : any
->getElementsByTagName : any
+>nodes3 : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName("li") : HTMLCollectionOf<HTMLLIElement>
+>document.getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
+>document : Document
+>getElementsByTagName : { <K extends "object" | "li" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "link" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr">(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>; <K extends "symbol" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view">(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>; (qualifiedName: string): HTMLCollectionOf<Element>; }
 >"li" : "li"
 
 type ItemType3 = true.typeof(nodes.item(0));
 >ItemType3 : true
 >true : true
 >typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->(nodes.item(0)) : any
->nodes.item(0) : any
->nodes.item : any
->nodes : any
->item : any
+>(nodes.item(0)) : HTMLLIElement
+>nodes.item(0) : HTMLLIElement
+>nodes.item : (index: number) => HTMLLIElement
+>nodes : HTMLCollectionOf<HTMLLIElement>
+>item : (index: number) => HTMLLIElement
 >0 : 0
 
 

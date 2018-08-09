@@ -92,7 +92,7 @@ function f() {
     }
     try {
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     } catch (e1) {
 >e1 : Symbol(e1, Decl(sourceMapValidationStatements.ts, 37, 13))
@@ -177,7 +177,7 @@ function f() {
 >z : Symbol(z, Decl(sourceMapValidationStatements.ts, 71, 7))
 
     eval("y");
->eval : Symbol(eval, Decl(lib.d.ts, --, --))
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
 
     return;
 }

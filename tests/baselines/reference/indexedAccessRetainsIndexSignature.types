@@ -1,63 +1,28 @@
 === tests/cases/compiler/indexedAccessRetainsIndexSignature.ts ===
-type Diff<T extends string, U extends string> =
+type Diff<T extends keyof any, U extends keyof any> =
 >Diff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
->T : T
->U : U
 
     ({ [P in T]: P } & { [P in U]: never } & { [x: string]: never })[T]
->P : P
->T : T
->P : P
->P : P
->U : U
 >x : string
->T : T
 
 type Omit<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>
 >Omit : Pick<U, ({ [P in keyof U]: P; } & { [P in K]: never; } & { [x: string]: never; })[keyof U]>
->U : U
->K : K
->U : U
->Pick : Pick<T, K>
->U : U
->Diff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
->U : U
->K : K
 
 type Omit1<U, K extends keyof U> = Pick<U, Diff<keyof U, K>>;
 >Omit1 : Pick<U, ({ [P in keyof U]: P; } & { [P in K]: never; } & { [x: string]: never; })[keyof U]>
->U : U
->K : K
->U : U
->Pick : Pick<T, K>
->U : U
->Diff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
->U : U
->K : K
 
 // is in fact an equivalent of
 
 type Omit2<T, K extends keyof T> = {[P in Diff<keyof T, K>]: T[P]};
 >Omit2 : Omit2<T, K>
->T : T
->K : K
->T : T
->P : P
->Diff : ({ [P in T]: P; } & { [P in U]: never; } & { [x: string]: never; })[T]
->T : T
->K : K
->T : T
->P : P
 
 type O = Omit<{ a: number, b: string }, 'a'>
 >O : Pick<{ a: number; b: string; }, "b">
->Omit : Pick<U, ({ [P in keyof U]: P; } & { [P in K]: never; } & { [x: string]: never; })[keyof U]>
 >a : number
 >b : string
 
 const o: O = { b: '' }
 >o : Pick<{ a: number; b: string; }, "b">
->O : Pick<{ a: number; b: string; }, "b">
 >{ b: '' } : { b: string; }
 >b : string
 >'' : ""

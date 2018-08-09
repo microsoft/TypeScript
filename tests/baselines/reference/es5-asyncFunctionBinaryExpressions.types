@@ -379,7 +379,6 @@ async function binaryComma0() {
 
 async function binaryComma1(): Promise<any> {
 >binaryComma1 : () => Promise<any>
->Promise : Promise<T>
 
     return x, await y;
 >x, await y : any

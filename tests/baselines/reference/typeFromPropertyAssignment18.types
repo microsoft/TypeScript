@@ -1,40 +1,52 @@
 === tests/cases/conformance/salsa/a.js ===
 var GLOBSTAR = m.GLOBSTAR = {}
->GLOBSTAR : { [x: string]: any; q: number; }
->m.GLOBSTAR = {} : { [x: string]: any; q: number; }
->m.GLOBSTAR : { [x: string]: any; q: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
->GLOBSTAR : { [x: string]: any; q: number; }
->{} : { [x: string]: any; q: number; }
+>GLOBSTAR : { q: number; p: number; }
+>m.GLOBSTAR = {} : { q: number; p: number; }
+>m.GLOBSTAR : { q: number; p: number; }
+>m : { (): void; GLOBSTAR: { q: number; p: number; }; }
+>GLOBSTAR : { q: number; p: number; }
+>{} : {}
 
 function m() {
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
+>m : { (): void; GLOBSTAR: { q: number; p: number; }; }
 }
 GLOBSTAR.p = 1
 >GLOBSTAR.p = 1 : 1
->GLOBSTAR.p : any
->GLOBSTAR : { [x: string]: any; q: number; }
->p : any
+>GLOBSTAR.p : number
+>GLOBSTAR : { q: number; p: number; }
+>p : number
 >1 : 1
 
 m.GLOBSTAR.q = 2
 >m.GLOBSTAR.q = 2 : 2
 >m.GLOBSTAR.q : number
->m.GLOBSTAR : { [x: string]: any; q: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
->GLOBSTAR : { [x: string]: any; q: number; }
+>m.GLOBSTAR : { q: number; p: number; }
+>m : { (): void; GLOBSTAR: { q: number; p: number; }; }
+>GLOBSTAR : { q: number; p: number; }
 >q : number
 >2 : 2
 
+GLOBSTAR.p
+>GLOBSTAR.p : number
+>GLOBSTAR : { q: number; p: number; }
+>p : number
+
 GLOBSTAR.q
 >GLOBSTAR.q : number
->GLOBSTAR : { [x: string]: any; q: number; }
+>GLOBSTAR : { q: number; p: number; }
 >q : number
 
 m.GLOBSTAR.p
->m.GLOBSTAR.p : any
->m.GLOBSTAR : { [x: string]: any; q: number; }
->m : { (): void; GLOBSTAR: { [x: string]: any; q: number; }; }
->GLOBSTAR : { [x: string]: any; q: number; }
->p : any
+>m.GLOBSTAR.p : number
+>m.GLOBSTAR : { q: number; p: number; }
+>m : { (): void; GLOBSTAR: { q: number; p: number; }; }
+>GLOBSTAR : { q: number; p: number; }
+>p : number
+
+m.GLOBSTAR.q
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : { q: number; p: number; }
+>m : { (): void; GLOBSTAR: { q: number; p: number; }; }
+>GLOBSTAR : { q: number; p: number; }
+>q : number
 
