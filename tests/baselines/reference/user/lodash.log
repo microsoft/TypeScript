@@ -74,8 +74,10 @@ node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but
 node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
 node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
 node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '{}'.
-node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": {}; }'.
+node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: any, isDeep?: boolean | undefined) => any'.
+node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: any, isDeep?: boolean | undefined) => any; }'.
+node_modules/lodash/_cloneBuffer.js(22,14): error TS2577: Return type annotation circularly references itself.
+node_modules/lodash/_cloneBuffer.js(24,22): error TS2502: 'buffer' is referenced directly or indirectly in its own type annotation.
 node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_copySymbolsIn.js(13,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_createAggregator.js(19,37): error TS2554: Expected 0-1 arguments, but got 2.
@@ -143,6 +145,7 @@ node_modules/lodash/_insertWrapDetails.js(10,5): error TS1223: 'returns' tag alr
 node_modules/lodash/_insertWrapDetails.js(15,5): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/lodash/_insertWrapDetails.js(20,3): error TS2322: Type 'string' is not assignable to type 'any[]'.
 node_modules/lodash/_isLaziable.js(24,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/lodash/_isLaziable.js(25,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/lodash/_memoizeCapped.js(22,22): error TS2339: Property 'cache' does not exist on type 'Function'.
 node_modules/lodash/_mergeData.js(60,26): error TS2554: Expected 4 arguments, but got 3.
 node_modules/lodash/_mergeData.js(67,26): error TS2554: Expected 4 arguments, but got 3.
