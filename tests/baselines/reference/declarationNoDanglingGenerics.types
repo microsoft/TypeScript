@@ -29,9 +29,7 @@ function register(kind: string): void | never {
 
 function ClassFactory<TKind extends string>(kind: TKind) {
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->TKind : TKind
 >kind : TKind
->TKind : TKind
 
   register(kind);
 >register(kind) : void
@@ -43,12 +41,10 @@ function ClassFactory<TKind extends string>(kind: TKind) {
 
     static readonly THE_KIND: TKind = kind;
 >THE_KIND : TKind
->TKind : TKind
 >kind : TKind
 
     readonly kind: TKind = kind;
 >kind : TKind
->TKind : TKind
 >kind : TKind
 
   };

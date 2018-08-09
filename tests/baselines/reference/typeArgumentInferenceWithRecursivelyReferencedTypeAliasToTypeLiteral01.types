@@ -7,12 +7,10 @@ type TreeNode = {
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 var nodes: TreeNode[];
 >nodes : TreeNode[]
->TreeNode : TreeNode
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]

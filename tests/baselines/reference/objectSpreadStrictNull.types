@@ -106,15 +106,12 @@ const m = { title: "The Matrix", yearReleased: 1999 };
 // should error here because title: undefined is not assignable to string
 const x: Movie = { ...m, title: undefined };
 >x : Movie
->Movie : Movie
 >{ ...m, title: undefined } : { title: undefined; yearReleased: number; }
 >m : { title: string; yearReleased: number; }
 >title : undefined
 >undefined : undefined
 
 interface Fields {
->Fields : Fields
-
     foo: number;
 >foo : number
 
@@ -122,8 +119,6 @@ interface Fields {
 >bar : string
 }
 interface NearlyPartialFields {
->NearlyPartialFields : NearlyPartialFields
-
     foo: number | undefined;
 >foo : number | undefined
 
@@ -133,12 +128,8 @@ interface NearlyPartialFields {
 function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
 >g : (fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) => void
 >fields : Fields
->Fields : Fields
 >partialFields : Partial<Fields>
->Partial : Partial<T>
->Fields : Fields
 >nearlyPartialFields : NearlyPartialFields
->NearlyPartialFields : NearlyPartialFields
 
     // ok, undefined is stripped from optional properties when spread
     fields = { ...fields, ...partialFields };

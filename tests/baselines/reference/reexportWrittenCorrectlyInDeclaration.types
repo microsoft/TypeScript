@@ -26,5 +26,4 @@ export class Test {
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
 >input : things.ThingA
 >things : any
->ThingA : things.ThingA
 }

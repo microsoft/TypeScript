@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/members/objectTypeWithConstructSignatureHidingMembersOfFunction.ts ===
 interface I {
->I : I
-
     new(): number;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void
@@ -16,7 +14,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 var r1: (a: any, b?: any) => void = i.apply;
 >r1 : (a: any, b?: any) => void

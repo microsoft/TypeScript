@@ -1,20 +1,14 @@
 === tests/cases/compiler/numericIndexerTyping1.ts ===
 interface I {
->I : I
-
     [x: string]: Date;
 >x : string
->Date : Date
 }
 
 interface I2 extends I {
->I2 : I2
->I : I
 }
 
 var i: I;
 >i : I
->I : I
 
 var r: string = i[1]; // error: numeric indexer returns the type of the string indexer
 >r : string
@@ -24,7 +18,6 @@ var r: string = i[1]; // error: numeric indexer returns the type of the string i
 
 var i2: I2;
 >i2 : I2
->I2 : I2
 
 var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexer
 >r2 : string

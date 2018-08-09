@@ -1,15 +1,11 @@
 === tests/cases/conformance/decorators/invalid/decoratorOnInternalModule.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
->T : T
->T : T
 
 @dec
 >dec : <T>(target: T) => T
 
 module M {
->M : any
     
 }

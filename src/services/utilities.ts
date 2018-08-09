@@ -194,16 +194,20 @@ namespace ts {
     }
 
     export function isCallExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.CallExpression);
+        return isCallOrNewExpressionTargetWorker(node, isCallExpression);
     }
 
     export function isNewExpressionTarget(node: Node): boolean {
-        return isCallOrNewExpressionTarget(node, SyntaxKind.NewExpression);
+        return isCallOrNewExpressionTargetWorker(node, isNewExpression);
     }
 
-    function isCallOrNewExpressionTarget(node: Node, kind: SyntaxKind): boolean {
+    export function isCallOrNewExpressionTarget(node: Node): boolean {
+        return isCallOrNewExpressionTargetWorker(node, isCallOrNewExpression);
+    }
+
+    function isCallOrNewExpressionTargetWorker<T extends CallExpression | NewExpression>(node: Node, pred: (node: Node) => node is T): boolean {
         const target = climbPastPropertyAccess(node);
-        return !!target && !!target.parent && target.parent.kind === kind && (<CallExpression>target.parent).expression === target;
+        return !!target && !!target.parent && pred(target.parent) && target.parent.expression === target;
     }
 
     export function climbPastPropertyAccess(node: Node) {
@@ -370,7 +374,7 @@ namespace ts {
                     case SpecialPropertyAssignmentKind.Prototype:
                         return ScriptElementKind.localClassElement;
                     default: {
-                        assertTypeIsNever(kind);
+                        assertType<never>(kind);
                         return ScriptElementKind.unknown;
                     }
                 }
@@ -1183,6 +1187,7 @@ namespace ts {
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
@@ -1190,6 +1195,7 @@ namespace ts {
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
+        SyntaxKind.TrueKeyword,
         SyntaxKind.VoidKeyword,
         SyntaxKind.UndefinedKeyword,
         SyntaxKind.UniqueKeyword,
@@ -1287,6 +1293,14 @@ namespace ts {
         }
     }
 
+    export function getQuoteFromPreference(qp: QuotePreference): string {
+        switch (qp) {
+            case QuotePreference.Single: return "'";
+            case QuotePreference.Double: return '"';
+            default: return Debug.assertNever(qp);
+        }
+    }
+
     export function symbolNameNoDefault(symbol: Symbol): string | undefined {
         const escaped = symbolEscapedNameNoDefault(symbol);
         return escaped === undefined ? undefined : unescapeLeadingUnderscores(escaped);
@@ -1344,63 +1358,6 @@ namespace ts {
 
     export function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean {
         return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
-    }
-
-    export interface ReadonlyNodeSet {
-        has(node: Node): boolean;
-        forEach(cb: (node: Node) => void): void;
-        some(pred: (node: Node) => boolean): boolean;
-    }
-
-    export class NodeSet implements ReadonlyNodeSet {
-        private map = createMap<Node>();
-
-        add(node: Node): void {
-            this.map.set(String(getNodeId(node)), node);
-        }
-        has(node: Node): boolean {
-            return this.map.has(String(getNodeId(node)));
-        }
-        forEach(cb: (node: Node) => void): void {
-            this.map.forEach(cb);
-        }
-        some(pred: (node: Node) => boolean): boolean {
-            return forEachEntry(this.map, pred) || false;
-        }
-    }
-
-    export interface ReadonlyNodeMap<TNode extends Node, TValue> {
-        get(node: TNode): TValue | undefined;
-        has(node: TNode): boolean;
-    }
-
-    export class NodeMap<TNode extends Node, TValue> implements ReadonlyNodeMap<TNode, TValue> {
-        private map = createMap<{ node: TNode, value: TValue }>();
-
-        get(node: TNode): TValue | undefined {
-            const res = this.map.get(String(getNodeId(node)));
-            return res && res.value;
-        }
-
-        getOrUpdate(node: TNode, setValue: () => TValue): TValue {
-            const res = this.get(node);
-            if (res) return res;
-            const value = setValue();
-            this.set(node, value);
-            return value;
-        }
-
-        set(node: TNode, value: TValue): void {
-            this.map.set(String(getNodeId(node)), { node, value });
-        }
-
-        has(node: TNode): boolean {
-            return this.map.has(String(getNodeId(node)));
-        }
-
-        forEach(cb: (value: TValue, node: TNode) => void): void {
-            this.map.forEach(({ node, value }) => cb(value, node));
-        }
     }
 
     export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {

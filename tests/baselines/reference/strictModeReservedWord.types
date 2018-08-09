@@ -36,8 +36,6 @@ function foo() {
 
     function baz<implements, protected>() { }
 >baz : <implements, protected>() => void
->implements : implements
->protected : protected
 
     function barn(cb: (private, public, package) => void) { }
 >barn : (cb: (private: any, public: any, package: any) => void) => void
@@ -63,34 +61,29 @@ function foo() {
     var b: public.bar;
 >b : any
 >public : any
->bar : No type information available!
 
     function foo(x: private.x) { }
 >foo : (x: any) => void
 >x : any
 >private : any
->x : No type information available!
 
     function foo1(x: private.package.x) { }
 >foo1 : (x: any) => void
 >x : any
 >private : any
 >package : any
->x : No type information available!
 
     function foo2(x: private.package.protected) { }
 >foo2 : (x: any) => void
 >x : any
 >private : any
 >package : any
->protected : No type information available!
 
     let b: interface.package.implements.B;
 >b : any
 >interface : any
 >package : any
 >implements : any
->B : No type information available!
 
     ublic();
 >ublic() : any

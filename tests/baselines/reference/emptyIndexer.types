@@ -1,23 +1,17 @@
 === tests/cases/compiler/emptyIndexer.ts ===
 interface I1 {
->I1 : I1
-
 	m(): number;
 >m : () => number
 }
 
 interface I2 {
->I2 : I2
-
 	[s:string]: I1;
 >s : string
->I1 : I1
 }
 
 
 var x: I2;
 >x : I2
->I2 : I2
 
 var n = x[''].m(); // should not crash compiler
 >n : number

@@ -8,7 +8,6 @@ enum Color { R, G, B }
 function f1(x: Color | string) {
 >f1 : (x: string | Color) => void
 >x : string | Color
->Color : Color
 
     if (typeof x === "number") {
 >typeof x === "number" : boolean
@@ -22,7 +21,6 @@ function f1(x: Color | string) {
 
         var y: Color;
 >y : Color
->Color : Color
     }
     else {
         var z = x;
@@ -37,7 +35,6 @@ function f1(x: Color | string) {
 function f2(x: Color | string | string[]) {
 >f2 : (x: string | Color | string[]) => void
 >x : string | Color | string[]
->Color : Color
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
@@ -64,7 +61,6 @@ function f2(x: Color | string | string[]) {
 
         var z: Color;
 >z : Color
->Color : Color
     }
     else {
         var w = x;
@@ -94,7 +90,6 @@ function f2(x: Color | string | string[]) {
 
         var b: Color | string[];
 >b : Color | string[]
->Color : Color
     }
 }
 

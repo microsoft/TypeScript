@@ -3,34 +3,23 @@
 // user defined subtypes of array do not count, all of these are errors
 
 interface MyThing extends Array<any> { }
->MyThing : MyThing
->Array : T[]
-
 interface MyThing2<T> extends Array<T> { }
->MyThing2 : MyThing2<T>
->T : T
->Array : T[]
->T : T
 
 function foo(...x: MyThing) { }
 >foo : (...x: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 
 var f = function foo(...x: MyThing) { }
 >f : (...x: MyThing) => void
 >function foo(...x: MyThing) { } : (...x: MyThing) => void
 >foo : (...x: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 
 var f2 = (...x: MyThing, ...y: MyThing) => { }
 >f2 : (...x: MyThing, ...y: MyThing) => void
 >(...x: MyThing, ...y: MyThing) => { } : (...x: MyThing, ...y: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 >y : MyThing
->MyThing : MyThing
 
 class C {
 >C : C
@@ -38,22 +27,16 @@ class C {
     foo(...x: MyThing) { }
 >foo : (...x: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 }
 
 interface I {
->I : I
-
     (...x: MyThing);
 >x : MyThing
->MyThing : MyThing
 
     foo(...x: MyThing, ...y: MyThing);
 >foo : (...x: MyThing, ...y: MyThing) => any
 >x : MyThing
->MyThing : MyThing
 >y : MyThing
->MyThing : MyThing
 }
 
 var a: {
@@ -61,12 +44,10 @@ var a: {
 
     (...x: MyThing);
 >x : MyThing
->MyThing : MyThing
 
     foo(...x: MyThing);
 >foo : (...x: MyThing) => any
 >x : MyThing
->MyThing : MyThing
 }
 
 var b = {
@@ -76,22 +57,18 @@ var b = {
     foo(...x: MyThing) { },
 >foo : (...x: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 
     a: function foo(...x: MyThing, ...y: MyThing) { },
 >a : (...x: MyThing, ...y: MyThing) => void
 >function foo(...x: MyThing, ...y: MyThing) { } : (...x: MyThing, ...y: MyThing) => void
 >foo : (...x: MyThing, ...y: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 >y : MyThing
->MyThing : MyThing
 
     b: (...x: MyThing) => { }
 >b : (...x: MyThing) => void
 >(...x: MyThing) => { } : (...x: MyThing) => void
 >x : MyThing
->MyThing : MyThing
 }
 
 
@@ -100,22 +77,18 @@ var b = {
 function foo2(...x: MyThing2<string>) { }
 >foo2 : (...x: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 
 var f3 = function foo(...x: MyThing2<string>) { }
 >f3 : (...x: MyThing2<string>) => void
 >function foo(...x: MyThing2<string>) { } : (...x: MyThing2<string>) => void
 >foo : (...x: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 
 var f4 = (...x: MyThing2<string>, ...y: MyThing2<string>) => { }
 >f4 : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
 >(...x: MyThing2<string>, ...y: MyThing2<string>) => { } : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 >y : MyThing2<string>
->MyThing2 : MyThing2<T>
 
 class C2 {
 >C2 : C2
@@ -123,22 +96,16 @@ class C2 {
     foo(...x: MyThing2<string>) { }
 >foo : (...x: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 }
 
 interface I2 {
->I2 : I2
-
     (...x: MyThing2<string>);
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 
     foo(...x: MyThing2<string>, ...y: MyThing2<string>);
 >foo : (...x: MyThing2<string>, ...y: MyThing2<string>) => any
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 >y : MyThing2<string>
->MyThing2 : MyThing2<T>
 }
 
 var a2: {
@@ -146,12 +113,10 @@ var a2: {
 
     (...x: MyThing2<string>);
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 
     foo(...x: MyThing2<string>);
 >foo : (...x: MyThing2<string>) => any
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 }
 
 var b2 = {
@@ -161,20 +126,16 @@ var b2 = {
     foo(...x: MyThing2<string>) { },
 >foo : (...x: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 
     a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },
 >a : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
 >function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { } : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
 >foo : (...x: MyThing2<string>, ...y: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 >y : MyThing2<string>
->MyThing2 : MyThing2<T>
 
     b: (...x: MyThing2<string>) => { }
 >b : (...x: MyThing2<string>) => void
 >(...x: MyThing2<string>) => { } : (...x: MyThing2<string>) => void
 >x : MyThing2<string>
->MyThing2 : MyThing2<T>
 }

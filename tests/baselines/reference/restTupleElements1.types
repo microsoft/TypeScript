@@ -40,13 +40,9 @@ type T15 = [boolean, number, ...string[]];
 
 type L15 = T15["length"];  // number
 >L15 : number
->T15 : [boolean, number, ...string[]]
 
 declare function assign<T, S extends T>(): void;
 >assign : <T, S extends T>() => void
->T : T
->S : S
->T : T
 
 assign<number[], [...number[]]>();
 >assign<number[], [...number[]]>() : void
@@ -109,39 +105,30 @@ type T20 = [number, string, ...boolean[]];
 
 type T21 = T20[0];
 >T21 : number
->T20 : [number, string, ...boolean[]]
 
 type T22 = T20[0 | 1];
 >T22 : string | number
->T20 : [number, string, ...boolean[]]
 
 type T23 = T20[0 | 1 | 2];
 >T23 : string | number | boolean
->T20 : [number, string, ...boolean[]]
 
 type T24 = T20[0 | 1 | 2 | 3];
 >T24 : string | number | boolean
->T20 : [number, string, ...boolean[]]
 
 type T25 = T20[1 | 2 | 3];
 >T25 : string | boolean
->T20 : [number, string, ...boolean[]]
 
 type T26 = T20[2 | 3];
 >T26 : boolean
->T20 : [number, string, ...boolean[]]
 
 type T27 = T20[3];
 >T27 : boolean
->T20 : [number, string, ...boolean[]]
 
 type T28 = T20[number];
 >T28 : string | number | boolean
->T20 : [number, string, ...boolean[]]
 
 declare const t: T20;
 >t : [number, string, ...boolean[]]
->T20 : [number, string, ...boolean[]]
 
 declare const x: number;
 >x : number
@@ -178,13 +165,7 @@ let ex = t[x];  // number | string | boolean
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->T : T
->U : U
 >x : [T, ...U[]]
->T : T
->U : U
->T : T
->U : U
 
 f0([]);  // Error
 >f0([]) : any

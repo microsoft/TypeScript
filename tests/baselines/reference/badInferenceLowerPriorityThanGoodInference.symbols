@@ -1,0 +1,42 @@
+=== tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts ===
+interface Foo<A> {
+>Foo : Symbol(Foo, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 0))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 14))
+
+    a: A;
+>a : Symbol(Foo.a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 18))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 14))
+
+    b: (x: A) => void;
+>b : Symbol(Foo.b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 1, 9))
+>x : Symbol(x, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 8))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 14))
+}
+
+declare function canYouInferThis<A>(fn: () => Foo<A>): A;
+>canYouInferThis : Symbol(canYouInferThis, Decl(badInferenceLowerPriorityThanGoodInference.ts, 3, 1))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 33))
+>fn : Symbol(fn, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 36))
+>Foo : Symbol(Foo, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 0))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 33))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 33))
+
+const result = canYouInferThis(() => ({
+>result : Symbol(result, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 5))
+>canYouInferThis : Symbol(canYouInferThis, Decl(badInferenceLowerPriorityThanGoodInference.ts, 3, 1))
+
+    a: { BLAH: 33 },
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 39))
+>BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 8, 8))
+
+    b: x => { }
+>b : Symbol(b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 8, 20))
+>x : Symbol(x, Decl(badInferenceLowerPriorityThanGoodInference.ts, 9, 6))
+
+}))
+
+result.BLAH;
+>result.BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 8, 8))
+>result : Symbol(result, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 5))
+>BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 8, 8))
+

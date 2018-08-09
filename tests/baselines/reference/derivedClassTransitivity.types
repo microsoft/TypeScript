@@ -28,15 +28,12 @@ class E extends D {
 
 var c: C;
 >c : C
->C : C
 
 var d: D;
 >d : D
->D : D
 
 var e: E;
 >e : E
->E : E
 
 c = e;
 >c = e : E

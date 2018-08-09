@@ -50,7 +50,6 @@ function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
 >[new Foo] : Foo[]
 >new Foo : Foo
 >Foo : typeof Foo
->Bar : Bar
 
 fun(...new FooArrayIterator);
 >fun(...new FooArrayIterator) : void

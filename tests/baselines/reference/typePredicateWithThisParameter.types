@@ -2,14 +2,10 @@
 // Repro from #15310
 
 interface Foo {
->Foo : Foo
-
     foo: string;
 >foo : string
 }
 interface Bar {
->Bar : Bar
-
     bar: string;
 >bar : string
 }
@@ -17,8 +13,6 @@ interface Bar {
 function isFoo1(object: {}): object is Foo {
 >isFoo1 : (object: {}) => object is Foo
 >object : {}
->object : any
->Foo : Foo
 
     return 'foo' in object;
 >'foo' in object : boolean
@@ -30,8 +24,6 @@ function isFoo2(this: void, object: {}): object is Foo {
 >isFoo2 : (this: void, object: {}) => object is Foo
 >this : void
 >object : {}
->object : any
->Foo : Foo
 
     return 'foo' in object;
 >'foo' in object : boolean
@@ -41,8 +33,6 @@ function isFoo2(this: void, object: {}): object is Foo {
 
 declare let test: Foo | Bar;
 >test : Foo | Bar
->Foo : Foo
->Bar : Bar
 
 if (isFoo1(test)) {
 >isFoo1(test) : boolean

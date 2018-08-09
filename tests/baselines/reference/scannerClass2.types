@@ -1,11 +1,9 @@
 === tests/cases/conformance/scanner/ecmascript5/scannerClass2.ts ===
     export class LoggerAdapter implements ILogger {
 >LoggerAdapter : LoggerAdapter
->ILogger : No type information available!
 
         constructor (public logger: ILogger) { 
 >logger : any
->ILogger : No type information available!
 
             this._information = this.logger.information();
 >this._information = this.logger.information() : any

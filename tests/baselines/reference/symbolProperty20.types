@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty20.ts ===
 interface I {
->I : I
-
     [Symbol.iterator]: (s: string) => string;
 >[Symbol.iterator] : (s: string) => string
 >Symbol.iterator : symbol
@@ -19,7 +17,6 @@ interface I {
 
 var i: I = {
 >i : I
->I : I
 >{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }
 
     [Symbol.iterator]: s => s,

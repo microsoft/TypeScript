@@ -5,9 +5,9 @@
  */
 module.exports = C
 >module.exports = C : typeof C
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof C
+>module : { "tests/cases/conformance/jsdoc/mod1": typeof C; }
+>exports : typeof C
 >C : typeof C
 
 function C() {
