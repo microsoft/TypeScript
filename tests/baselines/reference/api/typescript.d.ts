@@ -548,6 +548,7 @@ declare namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
+        /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         constraint?: TypeNode;
         default?: TypeNode;
         expression?: Expression;
@@ -3268,6 +3269,7 @@ declare namespace ts {
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration>;
+    function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
