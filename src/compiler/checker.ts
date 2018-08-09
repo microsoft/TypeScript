@@ -24363,10 +24363,13 @@ namespace ts {
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || node.name;
                 if (!isBindingPattern(name)) {
-                    const property = getPropertyOfType(parentType!, getTextOfPropertyName(name))!; // TODO: GH#18217
-                    markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                    if (parent.initializer && property) {
-                        checkPropertyAccessibility(parent, parent.initializer, parentType!, property);
+                    const nameText = getTextOfPropertyName(name);
+                    if (nameText) {
+                        const property = getPropertyOfType(parentType!, nameText)!; // TODO: GH#18217
+                        markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                        if (parent.initializer && property) {
+                            checkPropertyAccessibility(parent, parent.initializer, parentType!, property);
+                        }
                     }
                 }
             }
