@@ -1240,7 +1240,7 @@ namespace ts {
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
         return name.kind === SyntaxKind.ComputedPropertyName
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
+            ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
             : getTextOfIdentifierOrLiteral(name);
     }
 

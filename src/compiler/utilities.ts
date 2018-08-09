@@ -767,9 +767,9 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                return isStringOrNumericLiteral(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
+                return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -2566,6 +2566,10 @@ namespace ts {
             || kind === SyntaxKind.NumericLiteral;
     }
 
+    export function isStringOrNumericLiteralLike(node: Node): node is StringLiteralLike | NumericLiteral {
+        return isStringOrNumericLiteral(node) || isNoSubstitutionTemplateLiteral(node);
+    }
+
     /**
      * A declaration has a dynamic name if both of the following are true:
      *   1. The declaration has a computed property name
@@ -2580,7 +2584,7 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral(name.expression) &&
+            !isStringOrNumericLiteralLike(name.expression) &&
             !isWellKnownSymbolSyntactically(name.expression);
     }
 
@@ -2593,24 +2597,25 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName): __String | undefined {
-        if (name.kind === SyntaxKind.Identifier) {
-            return name.escapedText;
+    export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+                return name.escapedText;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                return escapeLeadingUnderscores(name.text);
+            case SyntaxKind.ComputedPropertyName:
+                const nameExpression = name.expression;
+                if (isWellKnownSymbolSyntactically(nameExpression)) {
+                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
+                }
+                else if (isStringOrNumericLiteralLike(nameExpression)) {
+                    return escapeLeadingUnderscores(nameExpression.text);
+                }
+                return undefined;
+            default:
+                return Debug.assertNever(name);
         }
-        if (name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
-            return escapeLeadingUnderscores(name.text);
-        }
-        if (name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = name.expression;
-            if (isWellKnownSymbolSyntactically(nameExpression)) {
-                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-            }
-            else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
-                return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
-            }
-        }
-
-        return undefined;
     }
 
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
@@ -3325,17 +3330,17 @@ namespace ts {
             }
         }
         else {
-            forEach(declarations, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+            forEach(declarations, member => {
+                if (isAccessor(member)
                     && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
-                    const memberName = getPropertyNameForPropertyNameNode((member as NamedDeclaration).name!);
+                    const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
                         if (!firstAccessor) {
-                            firstAccessor = <AccessorDeclaration>member;
+                            firstAccessor = member;
                         }
                         else if (!secondAccessor) {
-                            secondAccessor = <AccessorDeclaration>member;
+                            secondAccessor = member;
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
