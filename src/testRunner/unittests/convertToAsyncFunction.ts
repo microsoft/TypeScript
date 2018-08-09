@@ -1039,11 +1039,27 @@ function res(result){
     return 5;
 }
 
+function rej(reject): Response{
+    return reject;
+}
+`
+        );
+
+_testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes02NoAnnotations", `
+function [#|f|](){
+    return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
+}
+
+function res(result){
+    return 5;
+}
+
 function rej(reject){
     return reject;
 }
 `
         );
+
 
 _testConvertToAsyncFunction("convertToAsyncFunction_CatchFollowedByThenMismatchTypes03", `
 function [#|f|](){
@@ -1075,11 +1091,11 @@ function [#|f|](){
     return fetch("https://typescriptlang.org").then(res).catch(rej).then(res);
 }
 
-function res(result){
+function res(result): b{
     return {name: "myName", age: 22, color: "red"};
 }
 
-function rej(reject){
+function rej(reject): a{
     return {name: "myName", age: 27};
 }
 `
