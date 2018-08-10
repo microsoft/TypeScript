@@ -416,7 +416,7 @@ namespace ts.NavigationBar {
         }
 
         const declName = getNameOfDeclaration(<Declaration>node);
-        if (declName) {
+        if (declName && isPropertyName(declName)) {
             return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
         }
         switch (node.kind) {

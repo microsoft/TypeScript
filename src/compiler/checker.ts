@@ -4447,7 +4447,7 @@ namespace ts {
         }
 
         function isComputedNonLiteralName(name: PropertyName): boolean {
-            return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteral(name.expression);
+            return name.kind === SyntaxKind.ComputedPropertyName && !isStringOrNumericLiteralLike(name.expression);
         }
 
         function getRestType(source: Type, properties: PropertyName[], symbol: Symbol | undefined): Type {
@@ -13741,7 +13741,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                         return idText(name);
                     case SyntaxKind.ComputedPropertyName:
-                        return isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined;
+                        return isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined;
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
                         return name.text;

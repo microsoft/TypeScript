@@ -4465,7 +4465,7 @@ namespace ts {
                     }
                     else {
                         const argument = allowInAnd(parseExpression);
-                        if (isStringOrNumericLiteral(argument)) {
+                        if (isStringOrNumericLiteralLike(argument)) {
                             argument.text = internIdentifier(argument.text);
                         }
                         indexedAccess.argumentExpression = argument;
