@@ -323,11 +323,19 @@ namespace ts {
         }
 
         it("preserves originalPath on cache hit", () => {
-            const host = createModuleResolutionHost(
+            const originalHost = createModuleResolutionHost(
                 /*hasDirectoryExists*/ true,
                 { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
                 { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
             );
+            let realpathCalls = 0;
+            const host: ModuleResolutionHost = {
+                ...originalHost,
+                realpath(path) {
+                    assert.strictEqual(++realpathCalls, 1, "realpath should be cached");
+                    return originalHost.realpath!(path);
+                }
+            };
             const cache = createModuleResolutionCache("/", (f) => f);
             const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
             let resolution = resolveModuleName("linked", "/app/src/app.ts", compilerOptions, host, cache);
