@@ -403,6 +403,30 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
+
+        it("uses originalPath for caching", () => {
+            const host = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                {
+                    name: "/modules/a.ts",
+                    symlinks: ["/sub/node_modules/a/index.ts"],
+                },
+                {
+                    name: "/sub/node_modules/a/package.json",
+                    content: '{"version": "0.0.0", "main": "./index"}'
+                }
+            );
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
+            const cache = createModuleResolutionCache("/", (f) => f);
+            let resolution = resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
+            resolution = resolveModuleName("a", "/sub/foo.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
+            resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
+            assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
+        });
     });
 
     describe("Module resolution - relative imports", () => {

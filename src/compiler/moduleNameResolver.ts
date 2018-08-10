@@ -401,7 +401,8 @@ namespace ts {
                 }
                 directoryPathMap.set(path, result);
 
-                const resolvedFileName = result.resolvedModule && result.resolvedModule.resolvedFileName;
+                const resolvedFileName = result.resolvedModule &&
+                    (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
                 // find common prefix between directory and resolved file name
                 // this common prefix should be the shortest path that has the same resolution
                 // directory: /a/b/c/d/e
