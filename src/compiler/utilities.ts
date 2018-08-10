@@ -6972,13 +6972,8 @@ namespace ts {
             return false;
         }
 
-        for (const option of optionDeclarations) {
-            if ((option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
-                (option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name])) {
-                return true;
-            }
-        }
-        return false;
+        return optionDeclarations.some(option => (!!option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
+            (!!option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name]));
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
