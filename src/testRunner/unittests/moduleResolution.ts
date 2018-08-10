@@ -337,13 +337,11 @@ namespace ts {
             const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
             const cache = createModuleResolutionCache("/", (f) => f);
             let resolution = resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
-            checkResolvedModule(resolution.resolvedModule, {
-                extension: Extension.Ts,
-                isExternalLibraryImport: true,
-                originalPath: "/sub/node_modules/a/index.ts",
-                packageId: undefined,
-                resolvedFileName: "/modules/a.ts",
-            });
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
+            resolution = resolveModuleName("a", "/sub/foo.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
             resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
             assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
         });
