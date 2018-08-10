@@ -403,44 +403,44 @@ namespace ts {
 
                 const resolvedFileName = result.resolvedModule && result.resolvedModule.resolvedFileName;
                 // find common prefix between directory and resolved file name
-                // this common prefix should be the shorted path that has the same resolution
+                // this common prefix should be the shortest path that has the same resolution
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
-                const commonPrefix = getCommonPrefix(path, resolvedFileName);
+                // commonPrefix: /a/b
+                // for failed lookups cache the result for every directory up to root
+                const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
                 let current = path;
-                while (true) {
+                while (current !== commonPrefix) {
                     const parent = getDirectoryPath(current);
                     if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
                     current = parent;
-
-                    if (current === commonPrefix) {
-                        break;
-                    }
                 }
             }
 
-            function getCommonPrefix(directory: Path, resolution: string | undefined) {
-                if (resolution === undefined) {
-                    return undefined;
-                }
+            function getCommonPrefix(directory: Path, resolution: string) {
                 const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
 
                 // find first position where directory and resolution differs
                 let i = 0;
-                while (i < Math.min(directory.length, resolutionDirectory.length) && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+                const limit = Math.min(directory.length, resolutionDirectory.length);
+                while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
                     i++;
                 }
-
-                // find last directory separator before position i
-                const sep = directory.lastIndexOf(directorySeparator, i);
-                if (sep < 0) {
+                if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+                    return directory;
+                }
+                const rootLength = getRootLength(directory);
+                if (i < rootLength) {
                     return undefined;
                 }
-
-                return directory.substr(0, sep);
+                const sep = directory.lastIndexOf(directorySeparator, i - 1);
+                if (sep === -1) {
+                    return undefined;
+                }
+                return directory.substr(0, Math.max(sep, rootLength));
             }
         }
     }
