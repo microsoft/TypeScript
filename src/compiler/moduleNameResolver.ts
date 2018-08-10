@@ -362,6 +362,7 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string): PerModuleNameCache {
+            Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
             if (!perModuleNameCache) {
                 perModuleNameCache = createPerModuleNameCache();
