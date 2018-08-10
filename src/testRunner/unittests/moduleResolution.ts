@@ -403,6 +403,31 @@ namespace ts {
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
+
+        it("preserves originalPath on cache hit", () => {
+            const originalHost = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
+                { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
+            );
+            let realpathCalls = 0;
+            const host: ModuleResolutionHost = {
+                ...originalHost,
+                realpath(path) {
+                    assert.strictEqual(++realpathCalls, 1, "realpath should be cached");
+                    return originalHost.realpath!(path);
+                }
+            };
+            const cache = createModuleResolutionCache("/", (f) => f);
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
+            let resolution = resolveModuleName("linked", "/app/src/app.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/linked/index.d.ts", /*isExternalLibraryImport*/ true));
+            assert.strictEqual(resolution.resolvedModule && resolution.resolvedModule.originalPath, "/app/node_modules/linked/index.d.ts");
+
+            resolution = resolveModuleName("linked", "/app/lib/main.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/linked/index.d.ts", /*isExternalLibraryImport*/ true));
+            assert.strictEqual(resolution.resolvedModule && resolution.resolvedModule.originalPath, "/app/node_modules/linked/index.d.ts");
+        });
     });
 
     describe("Module resolution - relative imports", () => {
