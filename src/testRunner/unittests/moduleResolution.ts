@@ -427,6 +427,23 @@ namespace ts {
             resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
             assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
         });
+
+        it("preserves originalPath on cache hit", () => {
+            const host = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
+                { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
+            );
+            const cache = createModuleResolutionCache("/", (f) => f);
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
+            checkResolution(resolveModuleName("linked", "/app/src/app.ts", compilerOptions, host, cache));
+            checkResolution(resolveModuleName("linked", "/app/lib/main.ts", compilerOptions, host, cache));
+
+            function checkResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+                checkResolvedModule(resolution.resolvedModule, createResolvedModule("/linked/index.d.ts", /*isExternalLibraryImport*/ true));
+                assert.strictEqual(resolution.resolvedModule!.originalPath, "/app/node_modules/linked/index.d.ts");
+            }
+        });
     });
 
     describe("Module resolution - relative imports", () => {

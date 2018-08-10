@@ -8415,7 +8415,7 @@ new C();`
             expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
             getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true, cacheLocation);
             expectedTrace.push(`Resolution for module '${moduleName}' was found in cache from location '${cacheLocation}'.`);
-            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true, /*ignoreModuleFileFound*/ true);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false, /*ignoreModuleFileFound*/ true);
             return expectedTrace;
         }
 
