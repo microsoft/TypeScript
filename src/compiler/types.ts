@@ -759,6 +759,7 @@ namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
+        /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         constraint?: TypeNode;
         default?: TypeNode;
 
@@ -2363,6 +2364,7 @@ namespace ts {
 
     export interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
+        constraint: TypeNode | undefined;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
 
@@ -5333,7 +5335,6 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -5346,7 +5347,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost;
+        moduleResolverHost?: EmitHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }

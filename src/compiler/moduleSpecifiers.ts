@@ -78,17 +78,6 @@ namespace ts.moduleSpecifiers {
             first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
     }
 
-    export function getModuleSpecifierForDeclarationFile(
-        moduleSymbol: Symbol,
-        compilerOptions: CompilerOptions,
-        importingSourceFile: SourceFile,
-        host: ModuleSpecifierResolutionHost,
-        files: ReadonlyArray<SourceFile>,
-        redirectTargetsMap: RedirectTargetsMap,
-    ): string {
-        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, files, { importModuleSpecifierPreference: "non-relative" }, redirectTargetsMap)));
-    }
-
     // For each symlink/original for a module, returns a list of ways to import that file.
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
@@ -103,9 +92,6 @@ namespace ts.moduleSpecifiers {
         if (ambient) return [[ambient]];
 
         const info = getInfo(importingSourceFile.path, host);
-        if (!files) {
-            return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
-        }
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
 

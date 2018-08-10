@@ -1020,6 +1020,8 @@ namespace ts {
                         return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.JSDocTemplateTag:
+                        return node === (<JSDocTemplateTag>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.Parameter:
@@ -5107,6 +5109,13 @@ namespace ts {
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
+    }
+
+    export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
+        return node.constraint ? node.constraint
+            : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0]
+            ? node.parent.constraint
+            : undefined;
     }
 }
 
