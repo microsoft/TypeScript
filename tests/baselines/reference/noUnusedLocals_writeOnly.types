@@ -18,6 +18,33 @@ function f(x = 0) {
 >x : number
 >2 : 2
 
+    ([x] = [1]);
+>([x] = [1]) : [number]
+>[x] = [1] : [number]
+>[x] : [number]
+>x : number
+>[1] : [number]
+>1 : 1
+
+    ({ x } = { x: 1 });
+>({ x } = { x: 1 }) : { x: number; }
+>{ x } = { x: 1 } : { x: number; }
+>{ x } : { x: number; }
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    ({ x: x } = { x: 1 });
+>({ x: x } = { x: 1 }) : { x: number; }
+>{ x: x } = { x: 1 } : { x: number; }
+>{ x: x } : { x: number; }
+>x : number
+>x : number
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
     let y = 0;
 >y : number
 >0 : 0
@@ -29,4 +56,7 @@ function f(x = 0) {
 >y++ : number
 >y : number
 }
+function f2(_: ReadonlyArray<number>): void {}
+>f2 : (_: ReadonlyArray<number>) => void
+>_ : ReadonlyArray<number>
 

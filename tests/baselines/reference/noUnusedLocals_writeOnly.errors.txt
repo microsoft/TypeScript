@@ -8,9 +8,13 @@ tests/cases/compiler/noUnusedLocals_writeOnly.ts(1,12): error TS6133: 'x' is dec
         x = 1;
         x++;
         x /= 2;
+        ([x] = [1]);
+        ({ x } = { x: 1 });
+        ({ x: x } = { x: 1 });
     
         let y = 0;
         // This is a write access to y, but not a write-*only* access.
         f(y++);
     }
+    function f2(_: ReadonlyArray<number>): void {}
     

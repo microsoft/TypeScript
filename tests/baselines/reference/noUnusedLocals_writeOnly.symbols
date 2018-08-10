@@ -12,12 +12,28 @@ function f(x = 0) {
     x /= 2;
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
 
+    ([x] = [1]);
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
+
+    ({ x } = { x: 1 });
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 5, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 5, 14))
+
+    ({ x: x } = { x: 1 });
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 6, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 6, 17))
+
     let y = 0;
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 5, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
 
     // This is a write access to y, but not a write-*only* access.
     f(y++);
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 5, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
 }
+function f2(_: ReadonlyArray<number>): void {}
+>f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 11, 1))
+>_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 12, 12))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 
