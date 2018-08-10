@@ -1234,7 +1234,7 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.isTypeParameter() ? type.getConstraint()! : type; // TODO: GH#18217
+        return type.isTypeParameter() ? type.getConstraint() || type : type;
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
