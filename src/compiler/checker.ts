@@ -7405,21 +7405,6 @@ namespace ts {
             return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
-        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
-            const { parameterName } = node;
-            const type = getTypeFromTypeNode(node.type);
-            const func = isJSDocTypeExpression(node.parent) ? getJSDocHost(node.parent) as FunctionLikeDeclaration : node.parent;
-            if (parameterName.kind === SyntaxKind.Identifier) {
-                return createIdentifierTypePredicate(
-                    parameterName.escapedText as string,
-                    getTypePredicateParameterIndex(func.parameters, parameterName),
-                    type);
-            }
-            else {
-                return createThisTypePredicate(type);
-            }
-        }
-
         function createIdentifierTypePredicate(parameterName: string, parameterIndex: number, type: Type): IdentifierTypePredicate {
             return { kind: TypePredicateKind.Identifier, parameterName, parameterIndex, type };
         }
@@ -7681,7 +7666,7 @@ namespace ts {
                     let jsdocPredicate: TypePredicate | undefined;
                     if (!type && isInJavaScriptFile(signature.declaration)) {
                         const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
-                        if (jsdocSignature) {
+                        if (jsdocSignature && signature !== jsdocSignature) {
                             jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
                         }
                     }
@@ -7692,6 +7677,21 @@ namespace ts {
                 Debug.assert(!!signature.resolvedTypePredicate);
             }
             return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
+        }
+
+        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
+            const { parameterName } = node;
+            const type = getTypeFromTypeNode(node.type);
+            const func = isJSDocTypeExpression(node.parent) ? getJSDocHost(node.parent) as FunctionLikeDeclaration : node.parent;
+            if (parameterName.kind === SyntaxKind.Identifier) {
+                return createIdentifierTypePredicate(
+                    parameterName.escapedText as string,
+                    getTypePredicateParameterIndex(func.parameters, parameterName),
+                    type);
+            }
+            else {
+                return createThisTypePredicate(type);
+            }
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
