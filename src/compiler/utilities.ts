@@ -4202,7 +4202,9 @@ namespace ts {
                 return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
             case SyntaxKind.BinaryExpression:
                 const { left, operatorToken } = parent as BinaryExpression;
-                return left === node && isAssignmentOperator(operatorToken.kind) ? writeOrReadWrite() : AccessKind.Read;
+                return left === node && isAssignmentOperator(operatorToken.kind) ?
+                    operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
+                    : AccessKind.Read;
             case SyntaxKind.PropertyAccessExpression:
                 return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
             default:
