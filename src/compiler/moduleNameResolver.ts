@@ -423,21 +423,24 @@ namespace ts {
             function getCommonPrefix(directory: Path, resolution: string) {
                 const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
 
-                let current = directory;
-                let parent = getDirectoryPath(current);
-                while (
-                    // keep going until we find a matching prefix
-                    !startsWith(resolutionDirectory, current) ||
-                    // keep going if the prefix is not a complete directory segment, e.g. '/dir' as prefix of '/directory'
-                    resolutionDirectory.length > current.length && resolutionDirectory[current.length] !== directorySeparator && current !== parent
-                ) {
-                    if (current === parent) {
-                        return undefined;
-                    }
-                    current = parent;
-                    parent = getDirectoryPath(current);
+                // find first position where directory and resolution differs
+                let i = 0;
+                const limit = Math.min(directory.length, resolutionDirectory.length);
+                while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+                    i++;
                 }
-                return current;
+                if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+                    return directory;
+                }
+                const rootLength = getRootLength(directory);
+                if (i < rootLength) {
+                    return undefined;
+                }
+                const sep = directory.lastIndexOf(directorySeparator, i - 1);
+                if (sep === -1) {
+                    return undefined;
+                }
+                return directory.substr(0, Math.max(sep, rootLength));
             }
         }
     }
