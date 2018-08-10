@@ -292,7 +292,8 @@ namespace ts.codefix {
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
 
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchClause = createCatchClause(argName.identifier.text, createBlock(transformationBody));
+        const catchArg = argName.identifier.text.length > 0  ? argName.identifier.text : "e";
+        const catchClause = createCatchClause(catchArg, createBlock(transformationBody));
 
         /*
             In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
@@ -326,9 +327,11 @@ namespace ts.codefix {
             const tryBlock = createBlock(transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody));
 
             const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
-            const catchClause = createCatchClause(argNameRej.identifier.text, createBlock(transformationBody2));
 
-            return [createTry(tryBlock, catchClause, /*finallyBlock*/ undefined) as Statement];
+            const catchArg = argNameRej.identifier.text.length > 0  ? argNameRej.identifier.text : "e";
+            const catchClause = createCatchClause(catchArg, createBlock(transformationBody2));
+
+            return [createTry(tryBlock, catchClause,  undefined) as Statement];
         }
         else {
             return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
@@ -524,10 +527,9 @@ namespace ts.codefix {
 
         return name;
 
-        function getMapEntryIfExists(node: Identifier): SynthIdentifier {
-            const originalNode = getOriginalNode(node);
+        function getMapEntryIfExists(identifier: Identifier): SynthIdentifier {
+            const originalNode = getOriginalNode(identifier);
             const symbol = getSymbol(originalNode);
-            const identifier = node;
 
             if (!symbol) {
                 return { identifier, types, numberOfAssignmentsOriginal };
