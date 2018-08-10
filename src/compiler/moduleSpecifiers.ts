@@ -87,11 +87,9 @@ namespace ts.moduleSpecifiers {
     function getLocalModuleSpecifiers(
         moduleFileName: string,
         { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
-        compilerOptions: CompilerOptions,
+        { baseUrl, paths, rootDirs }: CompilerOptions,
         preferences: ModuleSpecifierPreferences,
     ): ReadonlyArray<string> {
-        const { baseUrl, paths, rootDirs } = compilerOptions;
-
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
         if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
@@ -105,23 +103,21 @@ namespace ts.moduleSpecifiers {
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
         const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-        if (fromPaths) {
-            return [fromPaths];
-        }
+        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (preferences.importModuleSpecifierPreference === "non-relative") {
-            return [importRelativeToBaseUrl];
+            return [nonRelative];
         }
 
         if (preferences.importModuleSpecifierPreference !== undefined) Debug.assertNever(preferences.importModuleSpecifierPreference);
 
-        if (isPathRelativeToParent(relativeToBaseUrl)) {
+        if (isPathRelativeToParent(nonRelative)) {
             return [relativePath];
         }
 
         // Prefer a relative import over a baseUrl import if it has fewer components.
-        const relativeFirst = countPathComponents(relativePath) < countPathComponents(importRelativeToBaseUrl);
-        return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+        const relativeFirst = countPathComponents(relativePath) < countPathComponents(nonRelative);
+        return relativeFirst ? [relativePath, nonRelative] : [nonRelative, relativePath];
     }
 
     function countPathComponents(path: string): number {
