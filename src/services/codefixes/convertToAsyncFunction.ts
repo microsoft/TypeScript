@@ -292,7 +292,7 @@ namespace ts.codefix {
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
 
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchArg = argName.identifier.text.length > 0  ? argName.identifier.text : "e";
+        const catchArg = argName.identifier.text.length > 0 ? argName.identifier.text : "e";
         const catchClause = createCatchClause(catchArg, createBlock(transformationBody));
 
         /*
@@ -328,10 +328,10 @@ namespace ts.codefix {
 
             const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
 
-            const catchArg = argNameRej.identifier.text.length > 0  ? argNameRej.identifier.text : "e";
+            const catchArg = argNameRej.identifier.text.length > 0 ? argNameRej.identifier.text : "e";
             const catchClause = createCatchClause(catchArg, createBlock(transformationBody2));
 
-            return [createTry(tryBlock, catchClause,  undefined) as Statement];
+            return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined) as Statement];
         }
         else {
             return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
@@ -398,12 +398,10 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
-                    const indices = getReturnStatementsWithPromiseHandlersIndices(func.body);
                     let refactoredStmts: Statement[] = [];
 
-                    for (let i = 0; i < func.body.statements.length; i++) {
-                        const statement = func.body.statements[i];
-                        if (indices.some(elem => elem === i)) {
+                    for (const statement of func.body.statements) {
+                        if (getReturnStatementsWithPromiseHandlers(statement).length) {
                             refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
                         else {
@@ -444,16 +442,6 @@ namespace ts.codefix {
         return callSignatures && callSignatures[callSignatures.length - 1];
     }
 
-    function getReturnStatementsWithPromiseHandlersIndices(block: Block): number[] {
-        const indices: number[] = [];
-        for (let i = 0; i < block.statements.length; i++) {
-            const statement = block.statements[i];
-            if (getReturnStatementsWithPromiseHandlers(statement).length) {
-                indices.push(i);
-            }
-        }
-        return indices;
-    }
 
     function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[]): NodeArray<Statement> {
         const ret: Statement[] = [];
