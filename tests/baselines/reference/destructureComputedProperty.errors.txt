@@ -1,15 +1,20 @@
-tests/cases/compiler/destructureComputedProperty.ts(8,7): error TS2341: Property 'p' is private and only accessible within class 'C'.
+tests/cases/compiler/destructureComputedProperty.ts(7,7): error TS2341: Property 'p' is private and only accessible within class 'C'.
+tests/cases/compiler/destructureComputedProperty.ts(10,7): error TS2341: Property 'p' is private and only accessible within class 'C'.
 
 
-==== tests/cases/compiler/destructureComputedProperty.ts (1 errors) ====
+==== tests/cases/compiler/destructureComputedProperty.ts (2 errors) ====
     declare const ab: { n: number } | { n: string };
     const nameN = "n";
     const { [nameN]: n } = ab;
     
     class C { private p: number; }
     const nameP = "p";
-    const { [nameP]: p } = new C();
-    const { p: p2 } = new C();
+    const { "p": p0 } = new C();
+          ~~~~~~~~~~~
+!!! error TS2341: Property 'p' is private and only accessible within class 'C'.
+    const { ["p"]: p1 } = new C();
+    const { [nameP]: p2 } = new C();
+    const { p: p3 } = new C();
           ~~~~~~~~~
 !!! error TS2341: Property 'p' is private and only accessible within class 'C'.
     

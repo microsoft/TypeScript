@@ -24391,7 +24391,7 @@ namespace ts {
                     if (nameText) {
                         const property = getPropertyOfType(parentType!, nameText)!; // TODO: GH#18217
                         markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                        if (parent.initializer && property) {
+                        if (parent.initializer && property && !isComputedPropertyName(name)) {
                             checkPropertyAccessibility(parent, parent.initializer, parentType!, property);
                         }
                     }

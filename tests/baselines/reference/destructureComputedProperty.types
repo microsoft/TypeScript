@@ -21,15 +21,26 @@ const nameP = "p";
 >nameP : "p"
 >"p" : "p"
 
-const { [nameP]: p } = new C();
->nameP : "p"
->p : number
+const { "p": p0 } = new C();
+>p0 : number
 >new C() : C
 >C : typeof C
 
-const { p: p2 } = new C();
->p : any
+const { ["p"]: p1 } = new C();
+>"p" : "p"
+>p1 : number
+>new C() : C
+>C : typeof C
+
+const { [nameP]: p2 } = new C();
+>nameP : "p"
 >p2 : number
+>new C() : C
+>C : typeof C
+
+const { p: p3 } = new C();
+>p : any
+>p3 : number
 >new C() : C
 >C : typeof C
 
