@@ -2081,7 +2081,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    const specialKind = getSpetzPropertyAssignmentKind(node as BinaryExpression);
+                    const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
                     switch (specialKind) {
                         case SpecialPropertyAssignmentKind.ExportsProperty:
                             bindExportsPropertyAssignment(node as BinaryExpression);
@@ -2478,9 +2478,8 @@ namespace ts {
         function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Class declarations in Typescript do not allow property declarations
-            const s = lookupSymbolForPropertyAccess(lhs.expression);
-            if ((!s || !s.valueDeclaration) && !isInJavaScriptFile(node) ||
-                s && s.valueDeclaration && !isInJavaScriptFile(s.valueDeclaration) && !(s.valueDeclaration.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(s.valueDeclaration) && s.valueDeclaration.initializer && isFunctionLike(s.valueDeclaration.initializer))) {
+            const parentSymbol = lookupSymbolForPropertyAccess(lhs.expression);
+            if (!isInJavaScriptFile(node) && !isTSFunctionSymbol(parentSymbol)) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them

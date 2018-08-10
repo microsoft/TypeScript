@@ -15993,7 +15993,7 @@ namespace ts {
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
-            const kind = getSpetzPropertyAssignmentKind(binaryExpression);
+            const kind = getSpecialPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
                     return true;
@@ -16017,7 +16017,7 @@ namespace ts {
                         else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
                             const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
-                            return !(parentSymbol && parentSymbol.valueDeclaration && (parentSymbol.valueDeclaration.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(parentSymbol.valueDeclaration) && parentSymbol.valueDeclaration.initializer && isFunctionLike(parentSymbol.valueDeclaration.initializer)));
+                            return !isTSFunctionSymbol(parentSymbol);
                         }
                         return true;
                     }

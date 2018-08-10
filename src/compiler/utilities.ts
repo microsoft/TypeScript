@@ -1888,7 +1888,12 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function spetz(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+        const special = getSpecialPropertyAssignmentKindWorker(expr);
+        return special === SpecialPropertyAssignmentKind.Property || isInJavaScriptFile(expr) ? special : SpecialPropertyAssignmentKind.None;
+    }
+
+    function getSpecialPropertyAssignmentKindWorker(expr: BinaryExpression): SpecialPropertyAssignmentKind {
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return SpecialPropertyAssignmentKind.None;
@@ -1899,15 +1904,6 @@ namespace ts {
                 return SpecialPropertyAssignmentKind.Prototype;
         }
         return getSpecialPropertyAccessKind(lhs);
-    }
-
-    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        return isInJavaScriptFile(expr) ? spetz(expr) : SpecialPropertyAssignmentKind.None;
-    }
-
-    export function getSpetzPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        const special = spetz(expr);
-        return special === SpecialPropertyAssignmentKind.Property || isInJavaScriptFile(expr) ? special : SpecialPropertyAssignmentKind.None;
     }
 
 
@@ -1958,6 +1954,15 @@ namespace ts {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
+    }
+
+    export function isTSFunctionSymbol(symbol: Symbol | undefined) {
+        if (!symbol || !symbol.valueDeclaration) {
+            return false;
+        }
+        const decl = symbol.valueDeclaration;
+        return !isInJavaScriptFile(decl) &&
+            (decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer));
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
@@ -2360,7 +2365,10 @@ namespace ts {
                 }
                 else {
                     const binExp = name.parent.parent;
-                    return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                    return isBinaryExpression(binExp) &&
+                        getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
+                        (isInJavaScriptFile(name) || !isPropertyAccessExpression(binExp.left) || binExp.left.expression.symbol) &&
+                        getNameOfDeclaration(binExp) === name;
                 }
             }
             default:
