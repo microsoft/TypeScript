@@ -35,7 +35,6 @@ namespace ts.codefix {
         synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
         allVarNames: SymbolAndIdentifier[];
         setOfExpressionsToReturn: Map<true>; // keys are the node ids of the expressions
-        context: CodeFixContextBase;
         constIdentifiers: Identifier[];
         originalTypeMap: Map<Type>; // keys are the node id of the identifier
         isInJSFile: boolean;
@@ -56,7 +55,7 @@ namespace ts.codefix {
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseHandlers(functionToConvertRenamed);
-        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, context, constIdentifiers, originalTypeMap, isInJSFile };
+        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile };
 
         if (!returnStatements.length) {
             return;
@@ -166,14 +165,13 @@ namespace ts.codefix {
 
             if (symbol && isDefinedInFile) {
                 const type = checker.getTypeAtLocation(node);
-                const callSignatures = type && type.getCallSignatures();
+                const lastCallSignature = getLastCallSignature(type, checker);
                 const symbolIdString = getSymbolId(symbol).toString();
 
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                 // Note - the choice of the last call signature is arbitrary
-                const index = callSignatures.length - 1;
-                if (callSignatures && callSignatures.length > 0 && callSignatures[index].parameters.length && !synthNamesMap.has(symbolIdString)) {
-                    const synthName = getNewNameIfConflict(createIdentifier(callSignatures[index].parameters[0].name), allVarNames);
+                if (lastCallSignature && lastCallSignature.parameters.length && !synthNamesMap.has(symbolIdString)) {
+                    const synthName = getNewNameIfConflict(createIdentifier(lastCallSignature.parameters[0].name), allVarNames);
                     synthNamesMap.set(symbolIdString, synthName);
                     allVarNames.push({ identifier: synthName.identifier, symbol });
                 }
@@ -346,6 +344,7 @@ namespace ts.codefix {
 
     function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
+        // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
         if (hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
@@ -423,8 +422,7 @@ namespace ts.codefix {
 
                     if (hasPrevArgName && !shouldReturn) {
                         const type = transformer.checker.getTypeAtLocation(func);
-                        const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
-                        const returnType = callSignatures && callSignatures[0].getReturnType();
+                        const returnType = getLastCallSignature(type, transformer.checker).getReturnType();
                         const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
                         prevArgName!.types.push(returnType);
                         return varDeclOrAssignment;
@@ -436,6 +434,11 @@ namespace ts.codefix {
                 break;
         }
         return createNodeArray([]);
+    }
+
+    function getLastCallSignature(type: Type, checker: TypeChecker): Signature {
+        const callSignatures = type && checker.getSignaturesOfType(type, SignatureKind.Call);
+        return callSignatures && callSignatures[callSignatures.length - 1];
     }
 
     function getReturnStatementsWithPromiseHandlersIndices(block: Block): number[] {
