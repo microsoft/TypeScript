@@ -1906,7 +1906,6 @@ namespace ts {
         return getSpecialPropertyAccessKind(lhs);
     }
 
-
     export function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return SpecialPropertyAssignmentKind.ThisProperty;
