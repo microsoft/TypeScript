@@ -1,7 +1,8 @@
 === tests/cases/compiler/noUnusedLocals_writeOnly.ts ===
-function f(x = 0) {
+function f(x = 0, b = false) {
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 0, 17))
 
     x = 1;
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
@@ -24,16 +25,39 @@ function f(x = 0) {
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
 >x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 6, 17))
 
+    ({ a: [{ b: x }] } = { a: [{ b: 1 }] });
+>a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 7, 6))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 7, 12))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 0, 11))
+>a : Symbol(a, Decl(noUnusedLocals_writeOnly.ts, 7, 26))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 7, 32))
+
+    ({ x = 2 } = { x: b ? 1 : undefined });
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 8, 6))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 8, 18))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 0, 17))
+>undefined : Symbol(undefined)
+
+    let used = 1;
+>used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 9, 7))
+
+    ({ x = used } = { x: b ? 1 : undefined });
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 10, 6))
+>used : Symbol(used, Decl(noUnusedLocals_writeOnly.ts, 9, 7))
+>x : Symbol(x, Decl(noUnusedLocals_writeOnly.ts, 10, 21))
+>b : Symbol(b, Decl(noUnusedLocals_writeOnly.ts, 0, 17))
+>undefined : Symbol(undefined)
+
     let y = 0;
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 12, 7))
 
     // This is a write access to y, but not a write-*only* access.
     f(y++);
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
->y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 8, 7))
+>y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 12, 7))
 }
 function f2(_: ReadonlyArray<number>): void {}
->f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 11, 1))
->_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 12, 12))
+>f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 15, 1))
+>_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 16, 12))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 

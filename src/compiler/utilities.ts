@@ -4221,7 +4221,7 @@ namespace ts {
             }
             case SyntaxKind.ShorthandPropertyAssignment:
                 // Assume it's the local variable being accessed, since we don't check public properties for --noUnusedLocals.
-                return accessKind(parent.parent);
+                return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
             case SyntaxKind.ArrayLiteralExpression:
                 return accessKind(parent);
             default:
