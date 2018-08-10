@@ -1206,6 +1206,13 @@ function [#|f|]() {
 } 
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_ResRejNoArgsArrow", `
+    function [#|f|]() {
+        return Promise.resolve().then(() => 1, () => "a"); 
+    }
+`);
+
+
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
