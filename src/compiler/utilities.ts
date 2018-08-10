@@ -8225,4 +8225,11 @@ namespace ts {
         // Include the `<>`
         return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
     }
+
+    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions) {
+        // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
+        // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
+        // '/// <reference no-default-lib="true"/>' directive.
+        return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
+    }
 }

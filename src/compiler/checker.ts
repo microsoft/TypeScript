@@ -314,6 +314,10 @@ namespace ts {
                 return node && getTypeArgumentConstraint(node);
             },
             getSuggestionDiagnostics: (file, ct) => {
+                if (skipTypeChecking(file, compilerOptions)) {
+                    return emptyArray;
+                }
+
                 let diagnostics: DiagnosticWithLocation[] | undefined;
                 try {
                     // Record the cancellation token so it can be checked later on during checkSourceElement.
@@ -26887,10 +26891,7 @@ namespace ts {
         function checkSourceFileWorker(node: SourceFile) {
             const links = getNodeLinks(node);
             if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-                // If skipLibCheck is enabled, skip type checking if file is a declaration file.
-                // If skipDefaultLibCheck is enabled, skip type checking if file contains a
-                // '/// <reference no-default-lib="true"/>' directive.
-                if (compilerOptions.skipLibCheck && node.isDeclarationFile || compilerOptions.skipDefaultLibCheck && node.hasNoDefaultLib) {
+                if (skipTypeChecking(node, compilerOptions)) {
                     return;
                 }
 
