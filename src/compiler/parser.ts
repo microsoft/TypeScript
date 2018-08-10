@@ -475,7 +475,7 @@ namespace ts {
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
-                return visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                return visitNode(cbNode, (<JSDocTemplateTag>node).constraint) || visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
                 if ((node as JSDocTypedefTag).typeExpression &&
                     (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression) {
@@ -7049,13 +7049,10 @@ namespace ts {
                         typeParameters.push(typeParameter);
                     } while (parseOptionalJsdoc(SyntaxKind.CommaToken));
 
-                    if (constraint) {
-                        first(typeParameters).constraint = constraint.type;
-                    }
-
                     const result = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
+                    result.constraint = constraint;
                     result.typeParameters = createNodeArray(typeParameters, typeParametersPos);
                     finishNode(result);
                     return result;

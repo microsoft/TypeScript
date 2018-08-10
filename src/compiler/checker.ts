@@ -5950,7 +5950,8 @@ namespace ts {
 
         /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
         function isThislessTypeParameter(node: TypeParameterDeclaration) {
-            return !node.constraint || isThislessType(node.constraint);
+            const constraint = getEffectiveConstraintOfTypeParameter(node);
+            return !constraint || isThislessType(constraint);
         }
 
         /**
@@ -6737,7 +6738,7 @@ namespace ts {
         }
 
         function getConstraintDeclarationForMappedType(type: MappedType) {
-            return type.declaration.typeParameter.constraint;
+            return getEffectiveConstraintOfTypeParameter(type.declaration.typeParameter);
         }
 
         function isMappedTypeWithKeyofConstraintDeclaration(type: MappedType) {
@@ -7874,7 +7875,7 @@ namespace ts {
 
         function getConstraintDeclaration(type: TypeParameter) {
             const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
-            return decl && decl.constraint;
+            return decl && getEffectiveConstraintOfTypeParameter(decl);
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -7938,7 +7939,9 @@ namespace ts {
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
-            return getSymbolOfNode(getDeclarationOfKind(typeParameter.symbol, SyntaxKind.TypeParameter)!.parent);
+            const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
+            const host = isJSDocTemplateTag(tp.parent) ? getHostSignatureFromJSDoc(tp.parent) : tp.parent;
+            return host && getSymbolOfNode(host);
         }
 
         function getTypeListId(types: ReadonlyArray<Type> | undefined) {
@@ -22008,7 +22011,7 @@ namespace ts {
             checkSourceElement(node.default);
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
             if (!hasNonCircularBaseConstraint(typeParameter)) {
-                error(node.constraint, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
+                error(getEffectiveConstraintOfTypeParameter(node), Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
             }
             if (!hasNonCircularTypeParameterDefault(typeParameter)) {
                 error(node.default, Diagnostics.Type_parameter_0_has_a_circular_default, typeToString(typeParameter));
@@ -22741,7 +22744,7 @@ namespace ts {
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
-            checkTypeAssignableTo(constraintType, keyofConstraintType, node.typeParameter.constraint);
+            checkTypeAssignableTo(constraintType, keyofConstraintType, getEffectiveConstraintOfTypeParameter(node.typeParameter));
         }
 
         function checkThisType(node: ThisTypeNode) {
@@ -23630,6 +23633,13 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             }
             checkSourceElement(node.typeExpression);
+        }
+
+        function checkJSDocTemplateTag(node: JSDocTemplateTag): void {
+            checkSourceElement(node.constraint);
+            for (const tp of node.typeParameters) {
+                checkSourceElement(tp);
+            }
         }
 
         function checkJSDocTypeTag(node: JSDocTypeTag) {
@@ -25422,7 +25432,8 @@ namespace ts {
 
                     // If the type parameter node does not have an identical constraint as the resolved
                     // type parameter at this position, we report an error.
-                    const sourceConstraint = source.constraint && getTypeFromTypeNode(source.constraint);
+                    const constraint = getEffectiveConstraintOfTypeParameter(source);
+                    const sourceConstraint = constraint && getTypeFromTypeNode(constraint);
                     const targetConstraint = getConstraintOfTypeParameter(target);
                     if (sourceConstraint) {
                         // relax check if later interface augmentation has no constraint
@@ -26642,6 +26653,8 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                     return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
+                case SyntaxKind.JSDocTemplateTag:
+                    return checkJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypeTag:
                     return checkJSDocTypeTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocParameterTag:
