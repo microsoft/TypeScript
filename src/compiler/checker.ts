@@ -7671,7 +7671,7 @@ namespace ts {
                         }
                     }
                     signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
-                        createTypePredicateFromTypePredicateNode(type) :
+                        createTypePredicateFromTypePredicateNode(type, signature.declaration!) :
                         jsdocPredicate || noTypePredicate;
                 }
                 Debug.assert(!!signature.resolvedTypePredicate);
@@ -7679,10 +7679,9 @@ namespace ts {
             return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
         }
 
-        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
+        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode, func: SignatureDeclaration | JSDocSignature): IdentifierTypePredicate | ThisTypePredicate {
             const { parameterName } = node;
             const type = getTypeFromTypeNode(node.type);
-            const func = isJSDocTypeExpression(node.parent) ? getJSDocHost(node.parent) as FunctionLikeDeclaration : node.parent;
             if (parameterName.kind === SyntaxKind.Identifier) {
                 return createIdentifierTypePredicate(
                     parameterName.escapedText as string,
@@ -7692,6 +7691,16 @@ namespace ts {
             else {
                 return createThisTypePredicate(type);
             }
+        }
+
+        function getTypePredicateParameterIndex(parameterList: ReadonlyArray<ParameterDeclaration | JSDocParameterTag>, parameter: Identifier): number {
+            for (let i = 0; i < parameterList.length; i++) {
+                const param = parameterList[i];
+                if (param.name.kind === SyntaxKind.Identifier && param.name.escapedText === parameter.escapedText) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -22055,18 +22064,6 @@ namespace ts {
             if (node.dotDotDotToken && !isBindingPattern(node.name) && !isRestParameterType(getTypeOfSymbol(node.symbol))) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
-        }
-
-        function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration> | undefined, parameter: Identifier | undefined): number {
-            if (parameterList && parameter) {
-                for (let i = 0; i < parameterList.length; i++) {
-                    const param = parameterList[i];
-                    if (param.name.kind === SyntaxKind.Identifier && param.name.escapedText === parameter.escapedText) {
-                        return i;
-                    }
-                }
-            }
-            return -1;
         }
 
         function checkTypePredicate(node: TypePredicateNode): void {
