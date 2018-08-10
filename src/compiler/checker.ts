@@ -7406,20 +7406,6 @@ namespace ts {
             return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
-        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode): IdentifierTypePredicate | ThisTypePredicate {
-            const { parameterName } = node;
-            const type = getTypeFromTypeNode(node.type);
-            if (parameterName.kind === SyntaxKind.Identifier) {
-                return createIdentifierTypePredicate(
-                    parameterName && parameterName.escapedText as string, // TODO: GH#18217
-                    parameterName && getTypePredicateParameterIndex(node.parent.parameters, parameterName),
-                    type);
-            }
-            else {
-                return createThisTypePredicate(type);
-            }
-        }
-
         function createIdentifierTypePredicate(parameterName: string, parameterIndex: number, type: Type): IdentifierTypePredicate {
             return { kind: TypePredicateKind.Identifier, parameterName, parameterIndex, type };
         }
@@ -7678,13 +7664,44 @@ namespace ts {
                 }
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                    let jsdocPredicate: TypePredicate | undefined;
+                    if (!type && isInJavaScriptFile(signature.declaration)) {
+                        const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
+                        if (jsdocSignature && signature !== jsdocSignature) {
+                            jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
+                        }
+                    }
                     signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
-                        createTypePredicateFromTypePredicateNode(type) :
-                        noTypePredicate;
+                        createTypePredicateFromTypePredicateNode(type, signature.declaration!) :
+                        jsdocPredicate || noTypePredicate;
                 }
                 Debug.assert(!!signature.resolvedTypePredicate);
             }
             return signature.resolvedTypePredicate === noTypePredicate ? undefined : signature.resolvedTypePredicate;
+        }
+
+        function createTypePredicateFromTypePredicateNode(node: TypePredicateNode, func: SignatureDeclaration | JSDocSignature): IdentifierTypePredicate | ThisTypePredicate {
+            const { parameterName } = node;
+            const type = getTypeFromTypeNode(node.type);
+            if (parameterName.kind === SyntaxKind.Identifier) {
+                return createIdentifierTypePredicate(
+                    parameterName.escapedText as string,
+                    getTypePredicateParameterIndex(func.parameters, parameterName),
+                    type);
+            }
+            else {
+                return createThisTypePredicate(type);
+            }
+        }
+
+        function getTypePredicateParameterIndex(parameterList: ReadonlyArray<ParameterDeclaration | JSDocParameterTag>, parameter: Identifier): number {
+            for (let i = 0; i < parameterList.length; i++) {
+                const param = parameterList[i];
+                if (param.name.kind === SyntaxKind.Identifier && param.name.escapedText === parameter.escapedText) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         function getReturnTypeOfSignature(signature: Signature): Type {
@@ -22062,18 +22079,6 @@ namespace ts {
             if (node.dotDotDotToken && !isBindingPattern(node.name) && !isRestParameterType(getTypeOfSymbol(node.symbol))) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
-        }
-
-        function getTypePredicateParameterIndex(parameterList: NodeArray<ParameterDeclaration>, parameter: Identifier): number {
-            if (parameterList) {
-                for (let i = 0; i < parameterList.length; i++) {
-                    const param = parameterList[i];
-                    if (param.name.kind === SyntaxKind.Identifier && param.name.escapedText === parameter.escapedText) {
-                        return i;
-                    }
-                }
-            }
-            return -1;
         }
 
         function checkTypePredicate(node: TypePredicateNode): void {
