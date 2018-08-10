@@ -46,6 +46,9 @@ class FailedTestsReporter extends Mocha.reporters.Base {
             }
 
             const newOptions = Object.assign({}, options, { reporterOptions: reporterOptions.reporterOptions || {} });
+            if (reporterOptions.reporter === "xunit") {
+                newOptions.reporterOptions.output = "TEST-results.xml";
+            }
             this.reporter = new reporter(runner, newOptions);
         }
 

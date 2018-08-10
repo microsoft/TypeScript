@@ -1187,6 +1187,7 @@ namespace ts {
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
         SyntaxKind.BooleanKeyword,
+        SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,
         SyntaxKind.NeverKeyword,
         SyntaxKind.NullKeyword,
@@ -1194,6 +1195,7 @@ namespace ts {
         SyntaxKind.ObjectKeyword,
         SyntaxKind.StringKeyword,
         SyntaxKind.SymbolKeyword,
+        SyntaxKind.TrueKeyword,
         SyntaxKind.VoidKeyword,
         SyntaxKind.UndefinedKeyword,
         SyntaxKind.UniqueKeyword,
@@ -1232,7 +1234,7 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.isTypeParameter() ? type.getConstraint()! : type; // TODO: GH#18217
+        return type.isTypeParameter() ? type.getConstraint() || type : type;
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {

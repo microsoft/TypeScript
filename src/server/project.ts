@@ -572,6 +572,14 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
+                const projectReferences = this.program.getProjectReferences();
+                if (projectReferences) {
+                    for (const ref of projectReferences) {
+                        if (ref) {
+                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
+                        }
+                    }
+                }
             }
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
@@ -1365,6 +1373,12 @@ namespace ts.server {
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
             this.projectReferences = refs;
+        }
+
+        /*@internal*/
+        getResolvedProjectReferences() {
+            const program = this.getCurrentProgram();
+            return program && program.getProjectReferences();
         }
 
         enablePlugins() {

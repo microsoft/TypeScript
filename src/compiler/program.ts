@@ -2358,7 +2358,7 @@ namespace ts {
             if (sourceFile === undefined) {
                 return undefined;
             }
-
+            sourceFile.path = toPath(refPath);
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }

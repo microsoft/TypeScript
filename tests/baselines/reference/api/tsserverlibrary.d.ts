@@ -8116,7 +8116,7 @@ declare namespace ts.server {
         setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
-        reloadFromFile(tempFileName?: NormalizedPath): void;
+        reloadFromFile(tempFileName?: NormalizedPath): boolean;
         editContent(start: number, end: number, newText: string): void;
         markContainingProjectsAsDirty(): void;
         isOrphan(): boolean;

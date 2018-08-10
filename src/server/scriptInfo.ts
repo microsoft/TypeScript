@@ -163,7 +163,10 @@ namespace ts.server {
         }
 
         private getFileText(tempFileName?: string) {
-            return this.host.readFile(tempFileName || this.fileName) || "";
+            let text: string;
+            const getText = () => text === undefined ? (text = this.host.readFile(tempFileName || this.fileName) || "") : text;
+            const size = this.host.getFileSize ? this.host.getFileSize(tempFileName || this.fileName) : getText().length;
+            return size > maxFileSize ? "" : getText();
         }
 
         private switchToScriptVersionCache(): ScriptVersionCache {
@@ -456,12 +459,15 @@ namespace ts.server {
             if (this.isDynamicOrHasMixedContent()) {
                 this.textStorage.reload("");
                 this.markContainingProjectsAsDirty();
+                return true;
             }
             else {
                 if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
+                    return true;
                 }
             }
+            return false;
         }
 
         /*@internal*/

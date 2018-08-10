@@ -638,6 +638,10 @@ namespace ts {
         return false;
     }
 
+    export function getNonAugmentationDeclaration(symbol: Symbol) {
+        return find(symbol.declarations, d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
+    }
+
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
@@ -3374,10 +3378,9 @@ namespace ts {
      * JavaScript file, gets the return type annotation from JSDoc.
      */
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
-        if (isJSDocSignature(node)) {
-            return node.type && node.type.typeExpression && node.type.typeExpression.type;
-        }
-        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+        return isJSDocSignature(node) ?
+            node.type && node.type.typeExpression && node.type.typeExpression.type :
+            node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {

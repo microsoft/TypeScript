@@ -2973,6 +2973,7 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
         /* @internal */ getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined;
         /* @internal */ isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean;
@@ -3666,6 +3667,7 @@ namespace ts {
         superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
+        contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
     }
 
     export const enum TypeFlags {
