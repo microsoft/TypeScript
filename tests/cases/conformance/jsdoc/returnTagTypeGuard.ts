@@ -47,3 +47,19 @@ function foo(val) {
         val;
     }
 }
+
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+
+/** @param {unknown} x */
+function g(x) {
+    if (isNumber(x)) {
+        x * 2;
+    }
+}

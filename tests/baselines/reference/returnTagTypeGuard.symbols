@@ -87,3 +87,29 @@ function foo(val) {
     }
 }
 
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+
+/** @param {unknown} x */
+function g(x) {
+>g : Symbol(g, Decl(bug25127.js, 52, 53))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+    if (isNumber(x)) {
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+        x * 2;
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+    }
+}
+

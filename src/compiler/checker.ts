@@ -7411,7 +7411,7 @@ namespace ts {
             const func = isJSDocTypeExpression(node.parent) ? getJSDocHost(node.parent) as FunctionLikeDeclaration : node.parent;
             if (parameterName.kind === SyntaxKind.Identifier) {
                 return createIdentifierTypePredicate(
-                    parameterName && parameterName.escapedText as string, // TODO: GH#18217
+                    parameterName.escapedText as string,
                     getTypePredicateParameterIndex(func.parameters, parameterName),
                     type);
             }
@@ -7678,9 +7678,16 @@ namespace ts {
                 }
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
+                    let jsdocPredicate: TypePredicate | undefined;
+                    if (!type && isInJavaScriptFile(signature.declaration)) {
+                        const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
+                        if (jsdocSignature) {
+                            jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
+                        }
+                    }
                     signature.resolvedTypePredicate = type && isTypePredicateNode(type) ?
                         createTypePredicateFromTypePredicateNode(type) :
-                        noTypePredicate;
+                        jsdocPredicate || noTypePredicate;
                 }
                 Debug.assert(!!signature.resolvedTypePredicate);
             }

@@ -99,3 +99,35 @@ function foo(val) {
     }
 }
 
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+>isNumber : (x: unknown) => x is number
+>x : unknown
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"number" : "number"
+
+/** @param {unknown} x */
+function g(x) {
+>g : (x: unknown) => void
+>x : unknown
+
+    if (isNumber(x)) {
+>isNumber(x) : boolean
+>isNumber : (x: unknown) => x is number
+>x : unknown
+
+        x * 2;
+>x * 2 : number
+>x : number
+>2 : 2
+    }
+}
+
