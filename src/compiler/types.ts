@@ -4546,6 +4546,8 @@ namespace ts {
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
+        strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
     /* @internal */

@@ -6978,6 +6978,15 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions) {
+        if (oldOptions === newOptions) {
+            return false;
+        }
+
+        return optionDeclarations.some(option => (!!option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
+            (!!option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name]));
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {

@@ -9333,7 +9333,7 @@ export function Test2() {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 }); debugger;
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
             verifyUserTsConfigProject(session);
 
             // Navigate to the definition
