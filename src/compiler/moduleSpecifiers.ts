@@ -27,11 +27,21 @@ namespace ts.moduleSpecifiers {
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
-        files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences,
         redirectTargetsMap: RedirectTargetsMap,
     ): string {
-        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, files, preferences, redirectTargetsMap)));
+        const isBundle = (compilerOptions.out || compilerOptions.outFile);
+        if (isBundle && host.getCommonSourceDirectory) {
+            // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
+            // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
+            // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
+            // specifier preference
+            compilerOptions = {
+                ...compilerOptions,
+                baseUrl: host.getCommonSourceDirectory(),
+            };
+        }
+        const preferences: ModuleSpecifierPreferences = { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" };
+        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, host.getSourceFiles ? host.getSourceFiles() : [importingSourceFile], preferences, redirectTargetsMap)));
     }
 
     // For each symlink/original for a module, returns a list of ways to import that file.
