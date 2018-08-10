@@ -5,8 +5,10 @@ const { [nameN]: n } = ab;
 
 class C { private p: number; }
 const nameP = "p";
-const { [nameP]: p } = new C();
-const { p: p2 } = new C();
+const { "p": p0 } = new C();
+const { ["p"]: p1 } = new C();
+const { [nameP]: p2 } = new C();
+const { p: p3 } = new C();
 
 
 //// [destructureComputedProperty.js]
@@ -18,5 +20,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 var nameP = "p";
-var _b = nameP, p = new C()[_b];
-var p2 = new C().p;
+var p0 = new C()["p"];
+var p1 = new C()["p"];
+var _b = nameP, p2 = new C()[_b];
+var p3 = new C().p;
