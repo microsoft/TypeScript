@@ -4563,5 +4563,25 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Add a return statement": {
+        "category": "Message",
+        "code": 95065
+    },
+    "Remove block body braces": {
+        "category": "Message",
+        "code": 95066
+    },
+    "Replace braces with parentheses": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Wrap this block with parentheses": {
+        "category": "Message",
+        "code": 95068
+    },
+    "Surmise all return value": {
+        "category": "Message",
+        "code": 95069
     }
 }

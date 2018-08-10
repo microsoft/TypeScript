@@ -51,6 +51,7 @@
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixSpelling.ts",
+        "codefixes/returnValueSurmise.ts",
         "codefixes/fixAddMissingMember.ts",
         "codefixes/fixCannotFindModule.ts",
         "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
