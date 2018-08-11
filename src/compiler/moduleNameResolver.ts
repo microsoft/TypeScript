@@ -29,6 +29,14 @@ namespace ts {
         path: string;
         extension: Extension;
         packageId: PackageId | undefined;
+        /**
+         * When the resolved is not created from cache, the value is
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - undefined if path is not a symbolic link
+         * When the resolved is created using value from cache of ResolvedModuleWithFailedLookupLocations, the value is:
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - true if path is not a symbolic link - this indicates that the originalPath calculation is already done and needs to be skipped
+         */
         originalPath?: string | true;
     }
 
