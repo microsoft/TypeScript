@@ -29,6 +29,15 @@ namespace ts {
         path: string;
         extension: Extension;
         packageId: PackageId | undefined;
+        /**
+         * When the resolved is not created from cache, the value is
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - undefined if path is not a symbolic link
+         * When the resolved is created using value from cache of ResolvedModuleWithFailedLookupLocations, the value is:
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - true if path is not a symbolic link - this indicates that the originalPath calculation is already done and needs to be skipped
+         */
+        originalPath?: string | true;
     }
 
     /** Result of trying to resolve a module at a file. Needs to have 'packageId' added later. */
@@ -62,9 +71,9 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, originalPath: string | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
         return {
-            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
+            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations
         };
     }
@@ -751,12 +760,12 @@ namespace ts {
                 tryResolve(Extensions.JavaScript) ||
                 (compilerOptions.resolveJsonModule ? tryResolve(Extensions.Json) : undefined));
         if (result && result.value) {
-            const { resolved, originalPath, isExternalLibraryImport } = result.value;
-            return createResolvedModuleWithFailedLookupLocations(resolved, originalPath, isExternalLibraryImport, failedLookupLocations);
+            const { resolved, isExternalLibraryImport } = result.value;
+            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
         }
         return { resolvedModule: undefined, failedLookupLocations };
 
-        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, originalPath?: string, isExternalLibraryImport: boolean }> {
+        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
@@ -771,17 +780,13 @@ namespace ts {
                 if (!resolved) return undefined;
 
                 let resolvedValue = resolved.value;
-                let originalPath: string | undefined;
-                if (!compilerOptions.preserveSymlinks && resolvedValue) {
-                    originalPath = resolvedValue.path;
+                if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
-                    if (path === originalPath) {
-                        originalPath = undefined;
-                    }
-                    resolvedValue = { ...resolvedValue, path };
+                    const originalPath = path === resolvedValue.path ? undefined : resolvedValue.path;
+                    resolvedValue = { ...resolvedValue, path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-                return { value: resolvedValue && { resolved: resolvedValue, originalPath, isExternalLibraryImport: true } };
+                return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
                 const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
@@ -1231,7 +1236,7 @@ namespace ts {
                 trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             failedLookupLocations.push(...result.failedLookupLocations);
-            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
+            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
 
@@ -1243,7 +1248,7 @@ namespace ts {
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*originalPath*/ undefined, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, failedLookupLocations, state);
@@ -1290,7 +1295,7 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
         const failedLookupLocations: string[] = [];
         const resolved = loadModuleFromNodeModulesOneLevel(Extensions.DtsOnly, moduleName, globalCache, failedLookupLocations, state);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*originalPath*/ undefined, /*isExternalLibraryImport*/ true, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
     }
 
     /**
