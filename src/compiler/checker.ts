@@ -21113,24 +21113,7 @@ namespace ts {
                     return undefined;
                 }
 
-                let type: Type | undefined;
-                if (isTypeAny(objectLiteralType)) {
-                    type = objectLiteralType;
-                }
-                else {
-                    const text = getTextOfPropertyName(name);
-                    if (text) { // TODO: GH#26379
-                        const prop = getPropertyOfType(objectLiteralType, text);
-                        if (prop) {
-                            markPropertyAsReferenced(prop, property, rightIsThis);
-                            checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
-                            type = getTypeOfSymbol(prop);
-                        }
-                        type = type || (isNumericLiteralName(text) ? getIndexTypeOfType(objectLiteralType, IndexKind.Number) : undefined);
-                    }
-                    type = type || getIndexTypeOfType(objectLiteralType, IndexKind.String);
-                }
-
+                const type = getTypeOfObjectLiteralDestructuringProperty(objectLiteralType, name, property, rightIsThis);
                 if (type) {
                     // non-shorthand property assignments should always have initializers
                     return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
@@ -21156,6 +21139,25 @@ namespace ts {
             else {
                 error(property, Diagnostics.Property_assignment_expected);
             }
+        }
+
+        function getTypeOfObjectLiteralDestructuringProperty(objectLiteralType: Type, name: PropertyName, property: PropertyAssignment | ShorthandPropertyAssignment, rightIsThis: boolean) {
+            if (isTypeAny(objectLiteralType)) {
+                return objectLiteralType;
+            }
+
+            let type: Type | undefined;
+            const text = getTextOfPropertyName(name);
+            if (text) { // TODO: GH#26379
+                const prop = getPropertyOfType(objectLiteralType, text);
+                if (prop) {
+                    markPropertyAsReferenced(prop, property, rightIsThis);
+                    checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
+                    type = getTypeOfSymbol(prop);
+                }
+                type = type || (isNumericLiteralName(text) ? getIndexTypeOfType(objectLiteralType, IndexKind.Number) : undefined);
+            }
+            return type || getIndexTypeOfType(objectLiteralType, IndexKind.String);
         }
 
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
