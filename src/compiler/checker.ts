@@ -18593,8 +18593,6 @@ namespace ts {
                 inferTypes(context.inferences, thisArgumentType, thisType);
             }
 
-            // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
-            // wildcards for all context sensitive function expressions.
             const effectiveArgCount = getEffectiveArgumentCount(node, args, signature);
             const genericRestType = getGenericRestType(signature);
             const argCount = genericRestType ? Math.min(getParameterCount(signature) - 1, effectiveArgCount) : effectiveArgCount;
@@ -18621,21 +18619,6 @@ namespace ts {
                 inferTypes(context.inferences, spreadType, genericRestType);
             }
 
-            // In the second pass we visit only context sensitive arguments, and only those that aren't excluded, this
-            // time treating function expressions normally (which may cause previously inferred type arguments to be fixed
-            // as we construct types for contextually typed parameters)
-            // Decorators will not have `excludeArgument`, as their arguments cannot be contextually typed.
-            // Tagged template expressions will always have `undefined` for `excludeArgument[0]`.
-            if (excludeArgument) {
-                for (let i = 0; i < argCount; i++) {
-                    // No need to check for omitted args and template expressions, their exclusion value is always undefined
-                    if (excludeArgument[i] === false) {
-                        const arg = args[i];
-                        const paramType = getTypeAtPosition(signature, i);
-                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
-                    }
-                }
-            }
             return getInferredTypes(context);
         }
 
@@ -19205,23 +19188,20 @@ namespace ts {
 
             const args = getEffectiveCallArguments(node);
 
-            // The following applies to any value of 'excludeArgument[i]':
-            //    - true:      the argument at 'i' is susceptible to a one-time permanent contextual typing.
-            //    - undefined: the argument at 'i' is *not* susceptible to permanent contextual typing.
-            //    - false:     the argument at 'i' *was* and *has been* permanently contextually typed.
+            // The excludeArgument array contains true for each context sensitive argument (an argument
+            // is context sensitive it is susceptible to a one-time permanent contextual typing).
             //
             // The idea is that we will perform type argument inference & assignability checking once
-            // without using the susceptible parameters that are functions, and once more for each of those
+            // without using the susceptible parameters that are functions, and once more for those
             // parameters, contextually typing each as we go along.
             //
-            // For a tagged template, then the first argument be 'undefined' if necessary
-            // because it represents a TemplateStringsArray.
+            // For a tagged template, then the first argument be 'undefined' if necessary because it
+            // represents a TemplateStringsArray.
             //
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
             let excludeArgument: boolean[] | undefined;
-            let excludeCount = 0;
             if (!isDecorator && !isSingleNonGenericCandidate) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
@@ -19231,7 +19211,6 @@ namespace ts {
                             excludeArgument = new Array(args!.length);
                         }
                         excludeArgument[i] = true;
-                        excludeCount++;
                     }
                 }
             }
@@ -19379,17 +19358,13 @@ namespace ts {
                             candidateForArgumentError = candidate;
                             break;
                         }
-                        if (excludeCount === 0) {
+                        // If no arguments were excluded, we're done
+                        if (!excludeArgument) {
                             candidates[candidateIndex] = candidate;
                             return candidate;
                         }
-                        excludeCount--;
-                        if (excludeCount > 0) {
-                            excludeArgument![excludeArgument!.indexOf(/*value*/ true)] = false;
-                        }
-                        else {
-                            excludeArgument = undefined;
-                        }
+                        // Otherwise, stop excluding arguments and perform a second pass
+                        excludeArgument = undefined;
                     }
                 }
 
