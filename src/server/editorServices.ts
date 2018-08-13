@@ -5,6 +5,7 @@ namespace ts.server {
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
@@ -14,6 +15,11 @@ namespace ts.server {
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
+    }
+
+    export interface LargeFileReferencedEvent {
+        eventName: typeof LargeFileReferencedEvent;
+        data: { file: string; fileSize: number; maxFileSize: number; };
     }
 
     export interface ConfigFileDiagEvent {
@@ -92,7 +98,7 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    export type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -641,6 +647,19 @@ namespace ts.server {
                 data: {
                     openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
                 }
+            };
+            this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendLargeFileReferencedEvent(file: string, fileSize: number) {
+            if (!this.eventHandler) {
+                return;
+            }
+
+            const event: LargeFileReferencedEvent = {
+                eventName: LargeFileReferencedEvent,
+                data: { file, fileSize, maxFileSize }
             };
             this.eventHandler(event);
         }
