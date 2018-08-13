@@ -1,15 +1,15 @@
 // @strict: true
 interface Square {
-    kind: "square";
-    size: number;
+    ["dash-ok"]: "square";
+    ["square-size"]: number;
 }
  interface Rectangle {
-    kind: "rectangle";
+    ["dash-ok"]: "rectangle";
     width: number;
     height: number;
 }
  interface Circle {
-    kind: "circle";
+    ["dash-ok"]: "circle";
     radius: number;
 }
  type Shape = Square | Rectangle | Circle;
@@ -23,15 +23,15 @@ interface Subshape {
     }
 }
 function area(s: Shape): number {
-    switch(s['kind']) {
-        case "square": return s.size * s['size'];
+    switch(s['dash-ok']) {
+        case "square": return s['square-size'] * s['square-size'];
         case "rectangle": return s.width * s['height'];
         case "circle": return Math.PI * s['radius'] * s.radius;
     }
 }
 function subarea(s: Subshape): number {
-    switch(s[0]["sub"].under["shape"]["kind"]) {
-        case "square": return s[0].sub.under.shape.size * s[0].sub.under.shape.size;
+    switch(s[0]["sub"].under["shape"]["dash-ok"]) {
+        case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
         case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
         case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
     }

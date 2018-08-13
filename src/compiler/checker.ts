@@ -14439,7 +14439,10 @@ namespace ts {
                     else if (flags & FlowFlags.Start) {
                         // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
-                        if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression && reference.kind !== SyntaxKind.ThisKeyword) {
+                        if (container && container !== flowContainer &&
+                            reference.kind !== SyntaxKind.PropertyAccessExpression &&
+                            reference.kind !== SyntaxKind.ElementAccessExpression &&
+                            reference.kind !== SyntaxKind.ThisKeyword) {
                             flow = container.flowNode!;
                             continue;
                         }

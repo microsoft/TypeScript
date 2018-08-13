@@ -1,14 +1,17 @@
 === tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty.ts ===
 interface Square {
-    kind: "square";
->kind : "square"
+    ["dash-ok"]: "square";
+>["dash-ok"] : "square"
+>"dash-ok" : "dash-ok"
 
-    size: number;
->size : number
+    ["square-size"]: number;
+>["square-size"] : number
+>"square-size" : "square-size"
 }
  interface Rectangle {
-    kind: "rectangle";
->kind : "rectangle"
+    ["dash-ok"]: "rectangle";
+>["dash-ok"] : "rectangle"
+>"dash-ok" : "dash-ok"
 
     width: number;
 >width : number
@@ -17,8 +20,9 @@ interface Square {
 >height : number
 }
  interface Circle {
-    kind: "circle";
->kind : "circle"
+    ["dash-ok"]: "circle";
+>["dash-ok"] : "circle"
+>"dash-ok" : "dash-ok"
 
     radius: number;
 >radius : number
@@ -46,20 +50,20 @@ function area(s: Shape): number {
 >area : (s: Shape) => number
 >s : Shape
 
-    switch(s['kind']) {
->s['kind'] : "square" | "rectangle" | "circle"
+    switch(s['dash-ok']) {
+>s['dash-ok'] : "square" | "rectangle" | "circle"
 >s : Shape
->'kind' : "kind"
+>'dash-ok' : "dash-ok"
 
-        case "square": return s.size * s['size'];
+        case "square": return s['square-size'] * s['square-size'];
 >"square" : "square"
->s.size * s['size'] : number
->s.size : number
+>s['square-size'] * s['square-size'] : number
+>s['square-size'] : number
 >s : Square
->size : number
->s['size'] : number
+>'square-size' : "square-size"
+>s['square-size'] : number
 >s : Square
->'size' : "size"
+>'square-size' : "square-size"
 
         case "rectangle": return s.width * s['height'];
 >"rectangle" : "rectangle"
@@ -90,8 +94,8 @@ function subarea(s: Subshape): number {
 >subarea : (s: Subshape) => number
 >s : Subshape
 
-    switch(s[0]["sub"].under["shape"]["kind"]) {
->s[0]["sub"].under["shape"]["kind"] : "square" | "rectangle" | "circle"
+    switch(s[0]["sub"].under["shape"]["dash-ok"]) {
+>s[0]["sub"].under["shape"]["dash-ok"] : "square" | "rectangle" | "circle"
 >s[0]["sub"].under["shape"] : Shape
 >s[0]["sub"].under : { shape: Shape; }
 >s[0]["sub"] : { under: { shape: Shape; }; }
@@ -101,12 +105,12 @@ function subarea(s: Subshape): number {
 >"sub" : "sub"
 >under : { shape: Shape; }
 >"shape" : "shape"
->"kind" : "kind"
+>"dash-ok" : "dash-ok"
 
-        case "square": return s[0].sub.under.shape.size * s[0].sub.under.shape.size;
+        case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
 >"square" : "square"
->s[0].sub.under.shape.size * s[0].sub.under.shape.size : number
->s[0].sub.under.shape.size : number
+>s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"] : number
+>s[0].sub.under.shape["square-size"] : number
 >s[0].sub.under.shape : Square
 >s[0].sub.under : { shape: Shape; }
 >s[0].sub : { under: { shape: Shape; }; }
@@ -116,8 +120,8 @@ function subarea(s: Subshape): number {
 >sub : { under: { shape: Shape; }; }
 >under : { shape: Shape; }
 >shape : Square
->size : number
->s[0].sub.under.shape.size : number
+>"square-size" : "square-size"
+>s[0].sub.under.shape["square-size"] : number
 >s[0].sub.under.shape : Square
 >s[0].sub.under : { shape: Shape; }
 >s[0].sub : { under: { shape: Shape; }; }
@@ -127,7 +131,7 @@ function subarea(s: Subshape): number {
 >sub : { under: { shape: Shape; }; }
 >under : { shape: Shape; }
 >shape : Square
->size : number
+>"square-size" : "square-size"
 
         case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
 >"rectangle" : "rectangle"
