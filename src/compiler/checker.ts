@@ -14437,7 +14437,7 @@ namespace ts {
                         }
                     }
                     else if (flags & FlowFlags.Start) {
-                        // Check if we should continue with the control flow of the containing function. TODO: Should probably make this access element access too
+                        // Check if we should continue with the control flow of the containing function.
                         const container = (<FlowStart>flow).container;
                         if (container && container !== flowContainer && reference.kind !== SyntaxKind.PropertyAccessExpression && reference.kind !== SyntaxKind.ThisKeyword) {
                             flow = container.flowNode!;
