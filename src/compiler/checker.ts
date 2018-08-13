@@ -13769,9 +13769,6 @@ namespace ts {
                     return target.kind === SyntaxKind.SuperKeyword;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    if (target.kind !== SyntaxKind.PropertyAccessExpression && target.kind !== SyntaxKind.ElementAccessExpression) {
-                        return false;
-                    }
                     return (isPropertyAccessExpression(target) || isElementAccessExpression(target)) &&
                         getAccessedPropertyName(source as PropertyAccessExpression | ElementAccessExpression) === getAccessedPropertyName(target) &&
                         isMatchingReference((source as PropertyAccessExpression | ElementAccessExpression).expression, target.expression);
