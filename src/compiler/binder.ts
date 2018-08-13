@@ -723,6 +723,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     return isNarrowableReference(expr);
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
@@ -737,10 +738,20 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.SuperKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+            if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword) {
+                return true;
+            }
+            if (expr.kind === SyntaxKind.PropertyAccessExpression) {
+                return isNarrowableReference((expr as PropertyAccessExpression).expression);
+            }
+            if (expr.kind === SyntaxKind.ElementAccessExpression) {
+                const access = expr as ElementAccessExpression;
+                const isArgumentLiteral = access.argumentExpression &&
+                    (access.argumentExpression.kind === SyntaxKind.StringLiteral ||
+                     access.argumentExpression.kind === SyntaxKind.NumericLiteral);
+                return isArgumentLiteral && isNarrowableReference(access.expression);
+            }
+            return false;
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
@@ -2066,6 +2077,7 @@ namespace ts {
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     if (currentFlow && isNarrowableReference(<Expression>node)) {
                         node.flowNode = currentFlow;
                     }
