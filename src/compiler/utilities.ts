@@ -3358,7 +3358,8 @@ namespace ts {
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
-        return (node as HasType).type || (isInJavaScriptFile(node) ? getJSDocType(node) : undefined);
+        return (node as HasType).type || (
+            isInJavaScriptFile(node) ? isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node) : undefined);
     }
 
     export function getTypeAnnotationNode(node: Node): TypeNode | undefined {
