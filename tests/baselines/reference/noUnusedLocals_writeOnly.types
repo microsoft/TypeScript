@@ -28,5 +28,16 @@ function f(x = 0) {
 >f : (x?: number) => void
 >y++ : number
 >y : number
+
+    let z = 0;
+>z : number
+>0 : 0
+
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
+>f(z = 1) : void
+>f : (x?: number) => void
+>z = 1 : 1
+>z : number
+>1 : 1
 }
 
