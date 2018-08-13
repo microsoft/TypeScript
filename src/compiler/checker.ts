@@ -9155,8 +9155,8 @@ namespace ts {
                             getNodeLinks(accessNode!).resolvedSymbol = prop;
                         }
                     }
-                    const t = getTypeOfSymbol(prop);
-                    return accessExpression ? getFlowTypeOfReference(accessExpression, t) : t;
+                    const propType = getTypeOfSymbol(prop);
+                    return accessExpression ? getFlowTypeOfReference(accessExpression, propType) : propType;
                 }
                 if (isTupleType(objectType)) {
                     const restType = getRestTypeOfTupleType(objectType);
@@ -13772,10 +13772,9 @@ namespace ts {
                     if (target.kind !== SyntaxKind.PropertyAccessExpression && target.kind !== SyntaxKind.ElementAccessExpression) {
                         return false;
                     }
-                    const sourceAccess = source as PropertyAccessExpression | ElementAccessExpression;
-                    const targetAccess = target as PropertyAccessExpression | ElementAccessExpression;
-                    return getAccessedPropertyName(sourceAccess) === getAccessedPropertyName(targetAccess)
-                        && isMatchingReference(sourceAccess.expression, targetAccess.expression);
+                    return (isPropertyAccessExpression(target) || isElementAccessExpression(target)) &&
+                        getAccessedPropertyName(source as PropertyAccessExpression | ElementAccessExpression) === getAccessedPropertyName(target) &&
+                        isMatchingReference((source as PropertyAccessExpression | ElementAccessExpression).expression, target.expression);
                 case SyntaxKind.BindingElement:
                     if (target.kind !== SyntaxKind.PropertyAccessExpression) return false;
                     const t = target as PropertyAccessExpression;
@@ -14559,9 +14558,10 @@ namespace ts {
                     type = narrowTypeBySwitchOnDiscriminant(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
                 else if (isMatchingReferenceDiscriminant(expr, type)) {
-                    type = narrowTypeByDiscriminant(type,
-                                                    expr as PropertyAccessExpression | ElementAccessExpression,
-                                                    t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
+                    type = narrowTypeByDiscriminant(
+                        type,
+                        expr as PropertyAccessExpression | ElementAccessExpression,
+                        t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }

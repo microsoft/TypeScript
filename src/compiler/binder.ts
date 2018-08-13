@@ -738,20 +738,11 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            if (expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword) {
-                return true;
-            }
-            if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                return isNarrowableReference((expr as PropertyAccessExpression).expression);
-            }
-            if (expr.kind === SyntaxKind.ElementAccessExpression) {
-                const access = expr as ElementAccessExpression;
-                const isArgumentLiteral = access.argumentExpression &&
-                    (access.argumentExpression.kind === SyntaxKind.StringLiteral ||
-                     access.argumentExpression.kind === SyntaxKind.NumericLiteral);
-                return isArgumentLiteral && isNarrowableReference(access.expression);
-            }
-            return false;
+            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
+                isPropertyAccessExpression(expr) && isNarrowableReference(expr.expression) ||
+                isElementAccessExpression(expr) && expr.argumentExpression &&
+                (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
+                isNarrowableReference(expr.expression);
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
