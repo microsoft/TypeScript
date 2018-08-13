@@ -7280,8 +7280,6 @@ namespace ts {
         if (pathComponents.length === 0) return "";
 
         const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
-        if (pathComponents.length === 1) return root;
-
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
