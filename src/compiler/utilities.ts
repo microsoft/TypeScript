@@ -3188,16 +3188,7 @@ namespace ts {
     }
 
     export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-        // TODO: GH#25810 following should work but makes the build break:
-        // return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
-
-        const options = host.getCompilerOptions();
-        const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
-
-        const path = outputDir
-            ? getSourceFilePathInNewDir(fileName, host, outputDir)
-            : fileName;
-        return removeFileExtension(path) + Extension.Dts;
+        return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
     }
 
     export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
