@@ -5092,7 +5092,14 @@ namespace ts {
             // Handle export default expressions
             if (isSourceFile(declaration)) {
                 const jsonSourceFile = cast(declaration, isJsonSourceFile);
-                return jsonSourceFile.statements.length ? checkExpression(jsonSourceFile.statements[0].expression) : emptyObjectType;
+                if (!jsonSourceFile.statements.length) {
+                    return emptyObjectType;
+                }
+                const type = getWidenedLiteralType(checkExpression(jsonSourceFile.statements[0].expression));
+                if (type.flags & TypeFlags.Object) {
+                    return getRegularTypeOfObjectLiteral(type);
+                }
+                return type;
             }
             if (declaration.kind === SyntaxKind.ExportAssignment) {
                 return checkExpression((<ExportAssignment>declaration).expression);
