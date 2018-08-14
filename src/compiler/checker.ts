@@ -18652,7 +18652,7 @@ namespace ts {
                 createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true);
         }
 
-        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | false {
+        function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
             const isJavascript = isInJavaScriptFile(signature.declaration);
             const typeParameters = signature.typeParameters!;
             const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
@@ -18660,21 +18660,21 @@ namespace ts {
             for (let i = 0; i < typeArgumentNodes.length; i++) {
                 Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
-                if (!constraint) continue;
-
-                const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
-                const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
-                if (!mapper) {
-                    mapper = createTypeMapper(typeParameters, typeArgumentTypes);
-                }
-                const typeArgument = typeArgumentTypes[i];
-                if (!checkTypeAssignableTo(
-                    typeArgument,
-                    getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
-                    reportErrors ? typeArgumentNodes[i] : undefined,
-                    typeArgumentHeadMessage,
-                    errorInfo)) {
-                    return false;
+                if (constraint) {
+                    const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
+                    const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
+                    if (!mapper) {
+                        mapper = createTypeMapper(typeParameters, typeArgumentTypes);
+                    }
+                    const typeArgument = typeArgumentTypes[i];
+                    if (!checkTypeAssignableTo(
+                        typeArgument,
+                        getTypeWithThisArgument(instantiateType(constraint, mapper), typeArgument),
+                        reportErrors ? typeArgumentNodes[i] : undefined,
+                        typeArgumentHeadMessage,
+                        errorInfo)) {
+                        return undefined;
+                    }
                 }
             }
             return typeArgumentTypes;
@@ -19318,54 +19318,58 @@ namespace ts {
                 }
 
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
-                    const originalCandidate = candidates[candidateIndex];
-                    if (!hasCorrectTypeArgumentArity(originalCandidate, typeArguments) || !hasCorrectArity(node, args!, originalCandidate, signatureHelpTrailingComma)) {
+                    const candidate = candidates[candidateIndex];
+                    if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
                         continue;
                     }
 
-                    let candidate: Signature;
-                    const inferenceContext = originalCandidate.typeParameters ?
-                        createInferenceContext(originalCandidate.typeParameters, originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None) :
-                        undefined;
+                    let checkCandidate: Signature;
+                    let inferenceContext: InferenceContext | undefined;
 
-                    while (true) {
-                        candidate = originalCandidate;
-                        if (candidate.typeParameters) {
-                            let typeArgumentTypes: Type[];
-                            if (typeArguments) {
-                                const typeArgumentResult = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
-                                if (typeArgumentResult) {
-                                    typeArgumentTypes = typeArgumentResult;
-                                }
-                                else {
-                                    candidateForTypeArgumentError = originalCandidate;
-                                    break;
-                                }
-                            }
-                            else {
-                                typeArgumentTypes = inferTypeArguments(node, candidate, args!, excludeArgument, inferenceContext!);
-                            }
-                            const isJavascript = isInJavaScriptFile(candidate.declaration);
-                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript);
-                            // If the original signature has a generic rest type, instantiation may produce a
-                            // signature with different arity and we need to perform another arity check.
-                            if (getGenericRestType(originalCandidate) && !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
-                                candidateForArgumentArityError = candidate;
-                                break;
+                    if (candidate.typeParameters) {
+                        let typeArgumentTypes: Type[] | undefined;
+                        if (typeArguments) {
+                            typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
+                            if (!typeArgumentTypes) {
+                                candidateForTypeArgumentError = candidate;
+                                continue;
                             }
                         }
-                        if (!checkApplicableSignature(node, args!, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                            candidateForArgumentError = candidate;
-                            break;
+                        else {
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args!, excludeArgument, inferenceContext);
                         }
-                        // If no arguments were excluded, we're done
-                        if (!excludeArgument) {
-                            candidates[candidateIndex] = candidate;
-                            return candidate;
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
+                        // If the original signature has a generic rest type, instantiation may produce a
+                        // signature with different arity and we need to perform another arity check.
+                        if (getGenericRestType(candidate) && !hasCorrectArity(node, args!, checkCandidate, signatureHelpTrailingComma)) {
+                            candidateForArgumentArityError = checkCandidate;
+                            continue;
                         }
-                        // Otherwise, stop excluding arguments and perform a second pass
-                        excludeArgument = undefined;
                     }
+                    else {
+                        checkCandidate = candidate;
+                    }
+                    if (!checkApplicableSignature(node, args!, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        candidateForArgumentError = checkCandidate;
+                        continue;
+                    }
+                    if (excludeArgument) {
+                        // If one or more context sensitive arguments were excluded, we start including
+                        // them now (and keeping do so for any subsequent candidates) and perform a second
+                        // round of type inference and applicability checking for this particular candidate.
+                        excludeArgument = undefined;
+                        if (inferenceContext) {
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args!, excludeArgument, inferenceContext);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
+                        }
+                        if (!checkApplicableSignature(node, args!, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            candidateForArgumentError = checkCandidate;
+                            continue;
+                        }
+                    }
+                    candidates[candidateIndex] = checkCandidate;
+                    return checkCandidate;
                 }
 
                 return undefined;
