@@ -10747,13 +10747,13 @@ namespace ts {
             }
 
             if (!ignoreReturnTypes) {
-                const targetReturnType = (target.declaration && isJavaScriptConstructor(target.declaration)) ?
-                    getJavaScriptClassType(target.declaration.symbol)! : getReturnTypeOfSignature(target);
+                const targetReturnType = (target.declaration && isJavascriptConstructor(target.declaration)) ?
+                    getJavascriptClassType(target.declaration.symbol)! : getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) {
                     return result;
                 }
-                const sourceReturnType = (source.declaration && isJavaScriptConstructor(source.declaration)) ?
-                    getJavaScriptClassType(source.declaration.symbol)! : getReturnTypeOfSignature(source);
+                const sourceReturnType = (source.declaration && isJavascriptConstructor(source.declaration)) ?
+                    getJavascriptClassType(source.declaration.symbol)! : getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -12020,8 +12020,8 @@ namespace ts {
                     return Ternary.True;
                 }
 
-                const sourceIsJSConstructor = source.symbol && isJavaScriptConstructor(source.symbol.valueDeclaration);
-                const targetIsJSConstructor = target.symbol && isJavaScriptConstructor(target.symbol.valueDeclaration);
+                const sourceIsJSConstructor = source.symbol && isJavascriptConstructor(source.symbol.valueDeclaration);
+                const targetIsJSConstructor = target.symbol && isJavascriptConstructor(target.symbol.valueDeclaration);
 
                 const sourceSignatures = getSignaturesOfType(source, (sourceIsJSConstructor && kind === SignatureKind.Construct) ?
                     SignatureKind.Call : kind);
