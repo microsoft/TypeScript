@@ -17779,7 +17779,7 @@ namespace ts {
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-                if (declaringClassDeclaration && isNodeWithinConstructorOfClass(node, declaringClassDeclaration)) {
+                if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
                     return false;
                 }
@@ -27146,9 +27146,9 @@ namespace ts {
             return result;
         }
 
-        function isNodeWithinConstructorOfClass(node: Node, classDeclaration: ClassLikeDeclaration) {
-            return findAncestor(node, element => {
-                if (isConstructorDeclaration(element) && nodeIsPresent(element.body) && element.parent === classDeclaration) {
+        function isNodeUsedDuringClassInitialization(node: Node, classDeclaration: ClassLikeDeclaration) {
+            return !!findAncestor(node, element => {
+                if ((isConstructorDeclaration(element) && nodeIsPresent(element.body) || isPropertyDeclaration(element)) && element.parent === classDeclaration) {
                     return true;
                 }
                 else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
