@@ -641,6 +641,10 @@ namespace ts {
         return false;
     }
 
+    export function getNonAugmentationDeclaration(symbol: Symbol) {
+        return find(symbol.declarations, d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
+    }
+
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
         return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
     }
@@ -770,9 +774,9 @@ namespace ts {
             case SyntaxKind.NumericLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                return isStringOrNumericLiteral(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
+                return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
             default:
-                Debug.assertNever(name);
+                return Debug.assertNever(name);
         }
     }
 
@@ -1019,6 +1023,8 @@ namespace ts {
                         return !isExpressionWithTypeArgumentsInClassExtendsClause(parent);
                     case SyntaxKind.TypeParameter:
                         return node === (<TypeParameterDeclaration>parent).constraint;
+                    case SyntaxKind.JSDocTemplateTag:
+                        return node === (<JSDocTemplateTag>parent).constraint;
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
                     case SyntaxKind.Parameter:
@@ -2563,10 +2569,8 @@ namespace ts {
         return false;
     }
 
-    export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
-        const kind = node.kind;
-        return kind === SyntaxKind.StringLiteral
-            || kind === SyntaxKind.NumericLiteral;
+    export function isStringOrNumericLiteralLike(node: Node): node is StringLiteralLike | NumericLiteral {
+        return isStringLiteralLike(node) || isNumericLiteral(node);
     }
 
     /**
@@ -2583,7 +2587,7 @@ namespace ts {
 
     export function isDynamicName(name: DeclarationName): boolean {
         return name.kind === SyntaxKind.ComputedPropertyName &&
-            !isStringOrNumericLiteral(name.expression) &&
+            !isStringOrNumericLiteralLike(name.expression) &&
             !isWellKnownSymbolSyntactically(name.expression);
     }
 
@@ -2596,24 +2600,25 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName): __String | undefined {
-        if (name.kind === SyntaxKind.Identifier) {
-            return name.escapedText;
+    export function getPropertyNameForPropertyNameNode(name: PropertyName): __String | undefined {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+                return name.escapedText;
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                return escapeLeadingUnderscores(name.text);
+            case SyntaxKind.ComputedPropertyName:
+                const nameExpression = name.expression;
+                if (isWellKnownSymbolSyntactically(nameExpression)) {
+                    return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
+                }
+                else if (isStringOrNumericLiteralLike(nameExpression)) {
+                    return escapeLeadingUnderscores(nameExpression.text);
+                }
+                return undefined;
+            default:
+                return Debug.assertNever(name);
         }
-        if (name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
-            return escapeLeadingUnderscores(name.text);
-        }
-        if (name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = name.expression;
-            if (isWellKnownSymbolSyntactically(nameExpression)) {
-                return getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>nameExpression).name));
-            }
-            else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
-                return escapeLeadingUnderscores((<LiteralExpression>nameExpression).text);
-            }
-        }
-
-        return undefined;
     }
 
     export type PropertyNameLiteral = Identifier | StringLiteralLike | NumericLiteral;
@@ -3541,16 +3546,7 @@ namespace ts {
     }
 
     export function getDeclarationEmitOutputFilePath(fileName: string, host: EmitHost) {
-        // TODO: GH#25810 following should work but makes the build break:
-        // return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
-
-        const options = host.getCompilerOptions();
-        const outputDir = options.declarationDir || options.outDir; // Prefer declaration folder if specified
-
-        const path = outputDir
-            ? getSourceFilePathInNewDir(fileName, host, outputDir)
-            : fileName;
-        return removeFileExtension(path) + Extension.Dts;
+        return getDeclarationEmitOutputFilePathWorker(fileName, host.getCompilerOptions(), host.getCurrentDirectory(), host.getCommonSourceDirectory(), f => host.getCanonicalFileName(f));
     }
 
     export function getDeclarationEmitOutputFilePathWorker(fileName: string, options: CompilerOptions, currentDirectory: string, commonSourceDirectory: string, getCanonicalFileName: GetCanonicalFileName): string {
@@ -3683,17 +3679,17 @@ namespace ts {
             }
         }
         else {
-            forEach(declarations, (member: Declaration) => {
-                if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
+            forEach(declarations, member => {
+                if (isAccessor(member)
                     && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
-                    const memberName = getPropertyNameForPropertyNameNode((member as NamedDeclaration).name!);
+                    const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
                         if (!firstAccessor) {
-                            firstAccessor = <AccessorDeclaration>member;
+                            firstAccessor = member;
                         }
                         else if (!secondAccessor) {
-                            secondAccessor = <AccessorDeclaration>member;
+                            secondAccessor = member;
                         }
 
                         if (member.kind === SyntaxKind.GetAccessor && !getAccessor) {
@@ -3720,7 +3716,9 @@ namespace ts {
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
-        return (node as HasType).type || (isInJavaScriptFile(node) ? getJSDocType(node) : undefined);
+        const type = (node as HasType).type;
+        if (type || !isInJavaScriptFile(node)) return type;
+        return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
     }
 
     export function getTypeAnnotationNode(node: Node): TypeNode | undefined {
@@ -3732,10 +3730,9 @@ namespace ts {
      * JavaScript file, gets the return type annotation from JSDoc.
      */
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
-        if (isJSDocSignature(node)) {
-            return node.type && node.type.typeExpression && node.type.typeExpression.type;
-        }
-        return node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+        return isJSDocSignature(node) ?
+            node.type && node.type.typeExpression && node.type.typeExpression.type :
+            node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
@@ -4555,7 +4552,9 @@ namespace ts {
                 return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
             case SyntaxKind.BinaryExpression:
                 const { left, operatorToken } = parent as BinaryExpression;
-                return left === node && isAssignmentOperator(operatorToken.kind) ? writeOrReadWrite() : AccessKind.Read;
+                return left === node && isAssignmentOperator(operatorToken.kind) ?
+                    operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
+                    : AccessKind.Read;
             case SyntaxKind.PropertyAccessExpression:
                 return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
             default:
@@ -5462,6 +5461,13 @@ namespace ts {
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
         return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
+    }
+
+    export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
+        return node.constraint ? node.constraint
+            : isJSDocTemplateTag(node.parent) && node === node.parent.typeParameters[0]
+            ? node.parent.constraint
+            : undefined;
     }
 }
 
@@ -7325,6 +7331,15 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
+    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions) {
+        if (oldOptions === newOptions) {
+            return false;
+        }
+
+        return optionDeclarations.some(option => (!!option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
+            (!!option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name]));
+    }
+
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
@@ -8570,5 +8585,12 @@ namespace ts {
     export function rangeOfTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration>): TextRange {
         // Include the `<>`
         return { pos: typeParameters.pos - 1, end: typeParameters.end + 1 };
+    }
+
+    export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOptions) {
+        // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
+        // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
+        // '/// <reference no-default-lib="true"/>' directive.
+        return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
     }
 }

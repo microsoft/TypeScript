@@ -39,7 +39,7 @@ namespace ts.server {
          */
         private pendingReloadFromDisk: boolean;
 
-        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion?: ScriptInfoVersion) {
+        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
             this.version = initialVersion || { svc: 0, text: 0 };
         }
 
@@ -163,7 +163,18 @@ namespace ts.server {
         }
 
         private getFileText(tempFileName?: string) {
-            return this.host.readFile(tempFileName || this.fileName) || "";
+            let text: string;
+            const fileName = tempFileName || this.fileName;
+            const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
+            const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
+            if (fileSize > maxFileSize) {
+                Debug.assert(!!this.info.containingProjects.length);
+                const service = this.info.containingProjects[0].projectService;
+                service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
+                return "";
+            }
+            return getText();
         }
 
         private switchToScriptVersionCache(): ScriptVersionCache {
@@ -245,7 +256,7 @@ namespace ts.server {
             initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, fileName, initialVersion);
+            this.textStorage = new TextStorage(host, fileName, initialVersion, this);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -456,12 +467,15 @@ namespace ts.server {
             if (this.isDynamicOrHasMixedContent()) {
                 this.textStorage.reload("");
                 this.markContainingProjectsAsDirty();
+                return true;
             }
             else {
                 if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
+                    return true;
                 }
             }
+            return false;
         }
 
         /*@internal*/

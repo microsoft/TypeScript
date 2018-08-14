@@ -1476,10 +1476,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
-                // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
-                // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
-                // '/// <reference no-default-lib="true"/>' directive.
-                if (options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) {
+                if (skipTypeChecking(sourceFile, options)) {
                     return emptyArray;
                 }
 
@@ -2358,7 +2355,7 @@ namespace ts {
             if (sourceFile === undefined) {
                 return undefined;
             }
-
+            sourceFile.path = toPath(refPath);
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }

@@ -14,9 +14,7 @@ var bb;
 
 var bbb = new mod.Baz();
 >bbb : Symbol(bbb, Decl(use.js, 5, 3))
->mod.Baz : Symbol(Baz)
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->Baz : Symbol(Baz)
 
 === tests/cases/conformance/jsdoc/mod1.js ===
 // error

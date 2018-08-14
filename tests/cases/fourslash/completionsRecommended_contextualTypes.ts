@@ -5,8 +5,11 @@
 // @Filename: /a.tsx
 ////enum E {}
 ////enum F {}
+////interface I { e: E }
 ////function f(e: E, f: F) {}
 ////f(/*arg0*/, /*arg1*/);
+////
+////const i: I = { e: /*prop*/ };
 ////
 ////function tag(arr: TemplateStringsArray, x: E) {}
 ////tag`${/*tag*/}`;
@@ -17,6 +20,7 @@
 
 recommended("arg0");
 recommended("arg1", { enumName: "F" });
+recommended("prop");
 recommended("tag");
 recommended("jsx");
 recommended("jsx2", { insertText: "{E}" });

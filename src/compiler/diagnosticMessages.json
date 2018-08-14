@@ -987,6 +987,10 @@
         "category": "Error",
         "code": 1344
     },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2063,6 +2067,14 @@
     "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
         "category": "Error",
         "code": 2575
+    },
+    "Property '{0}' is a static member of type '{1}'": {
+        "category": "Error",
+        "code": 2576
+    },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -4177,7 +4189,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4550,6 +4565,7 @@
         "category": "Message",
         "code": 95062
     },
+    
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4557,5 +4573,13 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Convert to async function":{
+        "category": "Message",
+         "code": 95065
+    },
+    "Convert all to async functions": {
+     "category": "Message",
+         "code": 95066
     }
 }

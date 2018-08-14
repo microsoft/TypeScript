@@ -1,8 +1,11 @@
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
+    /*@internal*/
+    export const maxFileSize = 4 * 1024 * 1024;
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
@@ -12,6 +15,11 @@ namespace ts.server {
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
+    }
+
+    export interface LargeFileReferencedEvent {
+        eventName: typeof LargeFileReferencedEvent;
+        data: { file: string; fileSize: number; maxFileSize: number; };
     }
 
     export interface ConfigFileDiagEvent {
@@ -90,7 +98,7 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    export type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -337,7 +345,8 @@ namespace ts.server {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
     }
 
-    function updateProjectIfDirty(project: Project) {
+    /*@internal*/
+    export function updateProjectIfDirty(project: Project) {
         return project.dirty && project.updateGraph();
     }
 
@@ -617,7 +626,7 @@ namespace ts.server {
             this.pendingProjectUpdates.set(projectName, project);
             this.throttledOperations.schedule(projectName, /*delay*/ 250, () => {
                 if (this.pendingProjectUpdates.delete(projectName)) {
-                    project.updateGraph();
+                    updateProjectIfDirty(project);
                 }
             });
         }
@@ -638,6 +647,19 @@ namespace ts.server {
                 data: {
                     openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
                 }
+            };
+            this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendLargeFileReferencedEvent(file: string, fileSize: number) {
+            if (!this.eventHandler) {
+                return;
+            }
+
+            const event: LargeFileReferencedEvent = {
+                eventName: LargeFileReferencedEvent,
+                data: { file, fileSize, maxFileSize }
             };
             this.eventHandler(event);
         }
@@ -2148,7 +2170,7 @@ namespace ts.server {
         private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
             return find(this.externalProjects, proj => {
                 // Ensure project structure is up-to-date to check if info is present in external project
-                proj.updateGraph();
+                updateProjectIfDirty(proj);
                 return proj.containsScriptInfo(info);
             });
         }
@@ -2241,6 +2263,20 @@ namespace ts.server {
                 if (project.hasOpenRef()) {
                     toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
                     markOriginalProjectsAsUsed(project);
+                }
+                else {
+                    // If the configured project for project reference has more than zero references, keep it alive
+                    const resolvedProjectReferences = project.getResolvedProjectReferences();
+                    if (resolvedProjectReferences) {
+                        for (const ref of resolvedProjectReferences) {
+                            if (ref) {
+                                const refProject = this.configuredProjects.get(ref.sourceFile.path);
+                                if (refProject && refProject.hasOpenRef()) {
+                                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
+                                }
+                            }
+                        }
+                    }
                 }
             });
 

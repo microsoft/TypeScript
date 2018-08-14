@@ -548,6 +548,7 @@ declare namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
+        /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         constraint?: TypeNode;
         default?: TypeNode;
         expression?: Expression;
@@ -751,7 +752,7 @@ declare namespace ts {
     }
     interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
-        parent: SignatureDeclaration;
+        parent: SignatureDeclaration | JSDocTypeExpression;
         parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
@@ -1568,6 +1569,7 @@ declare namespace ts {
     }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
+        constraint: TypeNode | undefined;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
     interface JSDocReturnTag extends JSDocTag {
@@ -2231,6 +2233,7 @@ declare namespace ts {
         ReverseMapped = 2048,
         JsxAttributes = 4096,
         MarkerType = 8192,
+        JSLiteral = 16384,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
@@ -3268,6 +3271,7 @@ declare namespace ts {
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration>;
+    function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
 }
 declare namespace ts {
     function isNumericLiteral(node: Node): node is NumericLiteral;
@@ -7658,6 +7662,25 @@ declare namespace ts.server.protocol {
          */
         openFiles: string[];
     }
+    type LargeFileReferencedEventName = "largeFileReferenced";
+    interface LargeFileReferencedEvent extends Event {
+        event: LargeFileReferencedEventName;
+        body: LargeFileReferencedEventBody;
+    }
+    interface LargeFileReferencedEventBody {
+        /**
+         * name of the large file being loaded
+         */
+        file: string;
+        /**
+         * size of the file
+         */
+        fileSize: number;
+        /**
+         * max file size allowed on the server
+         */
+        maxFileSize: number;
+    }
     /**
      * Arguments for reload request.
      */
@@ -8115,7 +8138,7 @@ declare namespace ts.server {
         setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
-        reloadFromFile(tempFileName?: NormalizedPath): void;
+        reloadFromFile(tempFileName?: NormalizedPath): boolean;
         editContent(start: number, end: number, newText: string): void;
         markContainingProjectsAsDirty(): void;
         isOrphan(): boolean;
@@ -8378,6 +8401,7 @@ declare namespace ts.server {
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     const ProjectInfoTelemetryEvent = "projectInfo";
@@ -8386,6 +8410,14 @@ declare namespace ts.server {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
             openFiles: string[];
+        };
+    }
+    interface LargeFileReferencedEvent {
+        eventName: typeof LargeFileReferencedEvent;
+        data: {
+            file: string;
+            fileSize: number;
+            maxFileSize: number;
         };
     }
     interface ConfigFileDiagEvent {
@@ -8458,7 +8490,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {

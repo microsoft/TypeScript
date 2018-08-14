@@ -402,6 +402,8 @@ namespace ts.Completions {
                         return stringLiteralCompletionsFromProperties(typeChecker.getTypeFromTypeNode((node.parent.parent as IndexedAccessTypeNode).objectType));
                     case SyntaxKind.ImportType:
                         return { kind: StringLiteralCompletionKind.Paths, paths: PathCompletions.getStringLiteralCompletionsFromModuleNames(sourceFile, node, compilerOptions, host, typeChecker) };
+                    case SyntaxKind.UnionType:
+                        return isTypeReferenceNode(node.parent.parent.parent) ? { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(node.parent.parent as UnionTypeNode)), isNewIdentifier: false } : undefined;
                     default:
                         return undefined;
                 }

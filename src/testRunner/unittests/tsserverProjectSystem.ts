@@ -2843,7 +2843,7 @@ namespace ts.projectSystem {
             const session = createSession(host, {
                 canUseEvents: true,
                 eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent) {
+                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent || e.eventName === server.LargeFileReferencedEvent) {
                         return;
                     }
                     assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
@@ -8415,7 +8415,7 @@ new C();`
             expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
             getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true, cacheLocation);
             expectedTrace.push(`Resolution for module '${moduleName}' was found in cache from location '${cacheLocation}'.`);
-            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true, /*ignoreModuleFileFound*/ true);
+            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false, /*ignoreModuleFileFound*/ true);
             return expectedTrace;
         }
 
@@ -9020,6 +9020,76 @@ export const x = 10;`
         });
     });
 
+    describe("tsserverProjectSystem with large file", () => {
+        const projectRoot = "/user/username/projects/project";
+        const largeFile: File = {
+            path: `${projectRoot}/src/large.ts`,
+            content: "export var x = 10;",
+            fileSize: server.maxFileSize + 1
+        };
+
+        function createSessionWithEventHandler(host: TestServerHost) {
+            const largeFileReferencedEvents: server.LargeFileReferencedEvent[] = [];
+            const session = createSession(host, {
+                eventHandler: e => {
+                    if (e.eventName === server.LargeFileReferencedEvent) {
+                        largeFileReferencedEvents.push(e);
+                    }
+                }
+            });
+
+            return { session, verifyLargeFileReferencedEvent };
+
+            function verifyLargeFileReferencedEvent() {
+                assert.equal(largeFileReferencedEvents.length, 1);
+                assert.deepEqual(largeFileReferencedEvents, [{
+                    eventName: server.LargeFileReferencedEvent,
+                    data: { file: largeFile.path, fileSize: largeFile.fileSize, maxFileSize: server.maxFileSize }
+                }]);
+            }
+        }
+
+        it("when large file is included by tsconfig", () => {
+            const file: File = {
+                path: `${projectRoot}/src/file.ts`,
+                content: "export var y = 10;"
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ files: ["src/file.ts", "src/large.ts"] })
+            };
+            const files = [file, largeFile, libFile, tsconfig];
+            const host = createServerHost(files);
+            const { session, verifyLargeFileReferencedEvent } = createSessionWithEventHandler(host);
+            const service = session.getProjectService();
+            openFilesForSession([file], session);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path, tsconfig.path]);
+            const info = service.getScriptInfo(largeFile.path)!;
+            assert.equal(info.cacheSourceFile.sourceFile.text, "");
+            verifyLargeFileReferencedEvent();
+        });
+
+        it("when large file is included by module resolution", () => {
+            const file: File = {
+                path: `${projectRoot}/src/file.ts`,
+                content: `export var y = 10;import {x} from "./large"`
+            };
+            const files = [file, largeFile, libFile];
+            const host = createServerHost(files);
+            const { session, verifyLargeFileReferencedEvent } = createSessionWithEventHandler(host);
+            const service = session.getProjectService();
+            openFilesForSession([file], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path]);
+            const info = service.getScriptInfo(largeFile.path)!;
+            assert.equal(info.cacheSourceFile.sourceFile.text, "");
+            verifyLargeFileReferencedEvent();
+        });
+    });
+
     describe("tsserverProjectSystem syntax operations", () => {
         function navBarFull(session: TestSession, file: File) {
             return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
@@ -9183,8 +9253,21 @@ export function Test2() {
             content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
         };
 
-        function makeSampleProjects() {
-            const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, userTs, dummyFile]);
+        const userTsForConfigProject: File = {
+            path: "/user/user.ts",
+            content: 'import { fnA, instanceA } from "../a/a";\nimport { fnB } from "../b/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
+        };
+
+        const userTsconfig: File = {
+            path: "/user/tsconfig.json",
+            content: JSON.stringify({
+                file: ["user.ts"],
+                references: [{ path: "../a" }, { path: "../b" }]
+            })
+        };
+
+        function makeSampleProjects(addUserTsConfig?: boolean) {
+            const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
             const session = createSession(host);
 
             checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
@@ -9195,7 +9278,7 @@ export function Test2() {
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
-            checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 1 } : { inferredProjects: 1 });
             return session;
         }
 
@@ -9247,6 +9330,10 @@ export function Test2() {
             verifyATsConfigProject(session); // ATsConfig should still be alive
         }
 
+        function verifyUserTsConfigProject(session: TestSession) {
+            checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aDts.path, userTsconfig.path]);
+        }
+
         it("goToDefinition", () => {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
@@ -9262,6 +9349,29 @@ export function Test2() {
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
             verifySingleInferredProject(session);
+        });
+
+        it("getDefinitionAndBoundSpan with file navigation", () => {
+            const session = makeSampleProjects(/*addUserTsConfig*/ true);
+            const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+            assert.deepEqual(response, {
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
+            });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            verifyUserTsConfigProject(session);
+
+            // Navigate to the definition
+            closeFilesForSession([userTs], session);
+            openFilesForSession([aTs], session);
+
+            // UserTs configured project should be alive
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+            verifyUserTsConfigProject(session);
+            verifyATsConfigProject(session);
+
+            closeFilesForSession([aTs], session);
+            verifyOnlyOrphanInferredProject(session);
         });
 
         it("goToType", () => {
@@ -9535,7 +9645,7 @@ export function Test2() {
         });
     });
 
-    describe("duplicate packages", () => {
+    describe("tsserverProjectSystem duplicate packages", () => {
         // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
         it("works with import fixes", () => {
             const packageContent = "export const foo: number;";
