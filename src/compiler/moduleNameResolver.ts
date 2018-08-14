@@ -769,7 +769,7 @@ namespace ts {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
-                return toSearchResult({ resolved, isExternalLibraryImport: false });
+                return toSearchResult({ resolved, isExternalLibraryImport: resolved.path.indexOf("/node_modules/") !== -1 });
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
