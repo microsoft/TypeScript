@@ -2449,6 +2449,27 @@ namespace ts.server.protocol {
         /** Url of the survey */
         url: string;
     }
+    
+    export type LargeFileReferencedEventName = "largeFileReferenced";
+    export interface LargeFileReferencedEvent extends Event {
+        event: LargeFileReferencedEventName;
+        body: LargeFileReferencedEventBody;
+    }
+
+    export interface LargeFileReferencedEventBody {
+        /**
+         * name of the large file being loaded
+         */
+        file: string;
+        /**
+         * size of the file
+         */
+        fileSize: number;
+        /**
+         * max file size allowed on the server
+         */
+        maxFileSize: number;
+    }
 
     /**
      * Arguments for reload request.

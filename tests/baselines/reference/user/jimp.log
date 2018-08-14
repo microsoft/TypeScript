@@ -1,8 +1,6 @@
 Exit Code: 1
 Standard output:
-node_modules/jimp/jimp.d.ts(268,16): error TS7010: 'appendConstructorOption', which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/jimp/jimp.d.ts(270,19): error TS2304: Cannot find name 'function'.
-node_modules/jimp/jimp.d.ts(271,18): error TS2304: Cannot find name 'function'.
+node_modules/jimp/jimp.d.ts(499,16): error TS7010: 'appendConstructorOption', which lacks return-type annotation, implicitly has an 'any' return type.
 
 
 

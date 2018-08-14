@@ -6,6 +6,7 @@ namespace ts.server {
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     export const SurveyReady = "surveyReady";
+    export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
     export const ProjectInfoTelemetryEvent = "projectInfo";
@@ -20,6 +21,11 @@ namespace ts.server {
     export interface SurveyReady {
         eventName: typeof SurveyReady;
         data: { surveyId: string; url: string };
+    }
+
+    export interface LargeFileReferencedEvent {
+        eventName: typeof LargeFileReferencedEvent;
+        data: { file: string; fileSize: number; maxFileSize: number; };
     }
 
     export interface ConfigFileDiagEvent {
@@ -98,7 +104,7 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | SurveyReady;
+    export type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -657,6 +663,19 @@ namespace ts.server {
                 return;
             }
             this.eventHandler({ eventName: SurveyReady, data: { surveyId, url } });
+        }
+
+        /* @internal */
+        sendLargeFileReferencedEvent(file: string, fileSize: number) {
+            if (!this.eventHandler) {
+                return;
+            }
+
+            const event: LargeFileReferencedEvent = {
+                eventName: LargeFileReferencedEvent,
+                data: { file, fileSize, maxFileSize }
+            };
+            this.eventHandler(event);
         }
 
         /* @internal */

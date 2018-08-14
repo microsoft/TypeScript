@@ -1,0 +1,40 @@
+=== tests/cases/compiler/destructureComputedProperty.ts ===
+declare const ab: { n: number } | { n: string };
+>ab : Symbol(ab, Decl(destructureComputedProperty.ts, 0, 13))
+>n : Symbol(n, Decl(destructureComputedProperty.ts, 0, 19))
+>n : Symbol(n, Decl(destructureComputedProperty.ts, 0, 35))
+
+const nameN = "n";
+>nameN : Symbol(nameN, Decl(destructureComputedProperty.ts, 1, 5))
+
+const { [nameN]: n } = ab;
+>nameN : Symbol(nameN, Decl(destructureComputedProperty.ts, 1, 5))
+>n : Symbol(n, Decl(destructureComputedProperty.ts, 2, 7))
+>ab : Symbol(ab, Decl(destructureComputedProperty.ts, 0, 13))
+
+class C { private p: number; }
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+>p : Symbol(C.p, Decl(destructureComputedProperty.ts, 4, 9))
+
+const nameP = "p";
+>nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
+
+const { "p": p0 } = new C();
+>p0 : Symbol(p0, Decl(destructureComputedProperty.ts, 6, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+
+const { ["p"]: p1 } = new C();
+>"p" : Symbol(p1, Decl(destructureComputedProperty.ts, 7, 7))
+>p1 : Symbol(p1, Decl(destructureComputedProperty.ts, 7, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+
+const { [nameP]: p2 } = new C();
+>nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
+>p2 : Symbol(p2, Decl(destructureComputedProperty.ts, 8, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+
+const { p: p3 } = new C();
+>p : Symbol(C.p, Decl(destructureComputedProperty.ts, 4, 9))
+>p3 : Symbol(p3, Decl(destructureComputedProperty.ts, 9, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+

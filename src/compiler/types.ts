@@ -759,6 +759,7 @@ namespace ts {
         kind: SyntaxKind.TypeParameter;
         parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
+        /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         constraint?: TypeNode;
         default?: TypeNode;
 
@@ -1081,7 +1082,7 @@ namespace ts {
 
     export interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
-        parent: SignatureDeclaration;
+        parent: SignatureDeclaration | JSDocTypeExpression;
         parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
@@ -2363,6 +2364,7 @@ namespace ts {
 
     export interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
+        constraint: TypeNode | undefined;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
 
@@ -2909,6 +2911,8 @@ namespace ts {
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
+        /* @internal */
+        getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
@@ -4542,6 +4546,8 @@ namespace ts {
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
+        strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
     /* @internal */
@@ -5334,6 +5340,7 @@ namespace ts {
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
         getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
+        getCommonSourceDirectory?(): string;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

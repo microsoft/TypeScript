@@ -259,7 +259,7 @@ namespace ts {
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = name.expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
-                    if (isStringOrNumericLiteral(nameExpression)) {
+                    if (isStringOrNumericLiteralLike(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
                     }
 

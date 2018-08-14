@@ -61,3 +61,55 @@ function f(chunk) {
 >x : Symbol(x, Decl(bug25127.js, 26, 7))
 }
 
+/**
+ * @param {any} value
+ * @return {value is boolean}
+ */
+function isBoolean(value) {
+>isBoolean : Symbol(isBoolean, Decl(bug25127.js, 28, 1))
+>value : Symbol(value, Decl(bug25127.js, 34, 19))
+
+    return typeof value === "boolean";
+>value : Symbol(value, Decl(bug25127.js, 34, 19))
+}
+
+/** @param {boolean | number} val */
+function foo(val) {
+>foo : Symbol(foo, Decl(bug25127.js, 36, 1))
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+
+    if (isBoolean(val)) {
+>isBoolean : Symbol(isBoolean, Decl(bug25127.js, 28, 1))
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+
+        val;
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+    }
+}
+
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+
+/** @param {unknown} x */
+function g(x) {
+>g : Symbol(g, Decl(bug25127.js, 52, 53))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+    if (isNumber(x)) {
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+        x * 2;
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+    }
+}
+
