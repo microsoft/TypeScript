@@ -1,0 +1,84 @@
+tests/cases/conformance/salsa/first.js(15,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/salsa/first.js(23,24): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+tests/cases/conformance/salsa/second.ts(8,25): error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+tests/cases/conformance/salsa/second.ts(14,7): error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+  Types of property 'circle' are incompatible.
+    Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(others?: Wagon[]) => number'.
+      Types of parameters 'others' and 'others' are incompatible.
+        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+          Type 'Wagon' is not assignable to type 'typeof Wagon'.
+            Property 'circle' is missing in type 'Wagon'.
+tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/conformance/salsa/first.js (2 errors) ====
+    /**
+     * @constructor
+     * @param {number} numberOxen
+     */
+    function Wagon(numberOxen) {
+        this.numberOxen = numberOxen
+    }
+    /** @param {Wagon[]=} others */
+    Wagon.circle = function (others) {
+        return others ? others.length : 3.14;
+    }
+    // ok
+    class Sql extends Wagon {
+        constructor() {
+            super(); // error: not enough arguments
+            ~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+            this.foonly = 12
+        }
+    }
+    var db = new Sql();
+    db.numberOxen = db.foonly
+    
+    // error, can't extend a TS constructor function
+    class Drakkhen extends Dragon {
+                           ~~~~~~
+!!! error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+    
+    }
+    
+==== tests/cases/conformance/salsa/second.ts (3 errors) ====
+    /**
+     * @constructor
+     */
+    function Dragon(numberEaten: number) {
+        this.numberEaten = numberEaten
+    }
+    // error!
+    class Firedrake extends Dragon {
+                            ~~~~~~
+!!! error TS2507: Type '(numberEaten: number) => void' is not a constructor function type.
+        constructor() {
+            super();
+        }
+    }
+    // ok
+    class Conestoga extends Wagon {
+          ~~~~~~~~~
+!!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+!!! error TS2417:   Types of property 'circle' are incompatible.
+!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(others?: Wagon[]) => number'.
+!!! error TS2417:       Types of parameters 'others' and 'others' are incompatible.
+!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+!!! error TS2417:           Type 'Wagon' is not assignable to type 'typeof Wagon'.
+!!! error TS2417:             Property 'circle' is missing in type 'Wagon'.
+        constructor(public drunkOO: true) {
+            // error: wrong type
+            super('nope');
+                  ~~~~~~
+!!! error TS2345: Argument of type '"nope"' is not assignable to parameter of type 'number'.
+        }
+        // should error since others is not optional
+        static circle(others: (typeof Wagon)[]) {
+            return others.length
+        }
+    }
+    var c = new Conestoga(true);
+    c.drunkOO
+    c.numberOxen
+    

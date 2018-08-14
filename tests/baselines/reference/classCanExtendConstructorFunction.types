@@ -1,0 +1,141 @@
+=== tests/cases/conformance/salsa/first.js ===
+/**
+ * @constructor
+ * @param {number} numberOxen
+ */
+function Wagon(numberOxen) {
+>Wagon : typeof Wagon
+>numberOxen : number
+
+    this.numberOxen = numberOxen
+>this.numberOxen = numberOxen : number
+>this.numberOxen : number
+>this : Wagon
+>numberOxen : number
+>numberOxen : number
+}
+/** @param {Wagon[]=} others */
+Wagon.circle = function (others) {
+>Wagon.circle = function (others) {    return others ? others.length : 3.14;} : (others?: Wagon[]) => number
+>Wagon.circle : (others?: Wagon[]) => number
+>Wagon : typeof Wagon
+>circle : (others?: Wagon[]) => number
+>function (others) {    return others ? others.length : 3.14;} : (others?: Wagon[]) => number
+>others : Wagon[]
+
+    return others ? others.length : 3.14;
+>others ? others.length : 3.14 : number
+>others : Wagon[]
+>others.length : number
+>others : Wagon[]
+>length : number
+>3.14 : 3.14
+}
+// ok
+class Sql extends Wagon {
+>Sql : Sql
+>Wagon : Wagon
+
+    constructor() {
+        super(); // error: not enough arguments
+>super() : void
+>super : typeof Wagon
+
+        this.foonly = 12
+>this.foonly = 12 : 12
+>this.foonly : number
+>this : this
+>foonly : number
+>12 : 12
+    }
+}
+var db = new Sql();
+>db : Sql
+>new Sql() : Sql
+>Sql : typeof Sql
+
+db.numberOxen = db.foonly
+>db.numberOxen = db.foonly : number
+>db.numberOxen : number
+>db : Sql
+>numberOxen : number
+>db.foonly : number
+>db : Sql
+>foonly : number
+
+// error, can't extend a TS constructor function
+class Drakkhen extends Dragon {
+>Drakkhen : Drakkhen
+>Dragon : (numberEaten: number) => void
+
+}
+
+=== tests/cases/conformance/salsa/second.ts ===
+/**
+ * @constructor
+ */
+function Dragon(numberEaten: number) {
+>Dragon : (numberEaten: number) => void
+>numberEaten : number
+
+    this.numberEaten = numberEaten
+>this.numberEaten = numberEaten : number
+>this.numberEaten : any
+>this : any
+>numberEaten : any
+>numberEaten : number
+}
+// error!
+class Firedrake extends Dragon {
+>Firedrake : Firedrake
+>Dragon : (numberEaten: number) => void
+
+    constructor() {
+        super();
+>super() : void
+>super : any
+    }
+}
+// ok
+class Conestoga extends Wagon {
+>Conestoga : Conestoga
+>Wagon : Wagon
+
+    constructor(public drunkOO: true) {
+>drunkOO : true
+>true : true
+
+        // error: wrong type
+        super('nope');
+>super('nope') : void
+>super : typeof Wagon
+>'nope' : "nope"
+    }
+    // should error since others is not optional
+    static circle(others: (typeof Wagon)[]) {
+>circle : (others: (typeof Wagon)[]) => number
+>others : (typeof Wagon)[]
+>Wagon : typeof Wagon
+
+        return others.length
+>others.length : number
+>others : (typeof Wagon)[]
+>length : number
+    }
+}
+var c = new Conestoga(true);
+>c : Conestoga
+>new Conestoga(true) : Conestoga
+>Conestoga : typeof Conestoga
+>true : true
+
+c.drunkOO
+>c.drunkOO : true
+>c : Conestoga
+>drunkOO : true
+
+c.numberOxen
+>c.numberOxen : number
+>c : Conestoga
+>numberOxen : number
+
