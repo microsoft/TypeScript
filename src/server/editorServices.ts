@@ -99,10 +99,6 @@ namespace ts.server {
     }
 
     export type ProjectServiceEvent = ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent | SurveyReady;
-    // 1. notice that the survey should be ready
-    // 2. prepare the data structure
-    // 3. fire off the data structure to ???
-    // "project configuration change" might be the place I'm looking for, and Sheetal might the person who knows about it
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
