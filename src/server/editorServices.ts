@@ -656,18 +656,11 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendSurveyReadyEvent() {
+        sendSurveyReadyEvent(surveyId: string, url: string) {
             if (!this.eventHandler) {
                 return;
             }
-            const event: SurveyReady = {
-                eventName: SurveyReady,
-                data: {
-                    surveyId: "checkjs",
-                    url: "https://surveymonkey.egg"
-                }
-            };
-            this.eventHandler(event);
+            this.eventHandler({ eventName: SurveyReady, data: { surveyId, url } });
         }
 
         /* @internal */
@@ -905,6 +898,11 @@ namespace ts.server {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
                 project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 this.delayUpdateProjectGraph(project);
+                if (project.getCompilerOptions().checkJs !== undefined) {
+                    const name = "checkJs";
+                    project.projectService.logger.info(`Survey ${name} is ready`);
+                    project.projectService.sendSurveyReadyEvent(name, "http://NOT READY YET");
+                }
                 // As we scheduled the update on configured project graph,
                 // we would need to schedule the project reload for only the root of inferred projects
                 this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);

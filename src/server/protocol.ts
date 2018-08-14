@@ -2436,6 +2436,20 @@ namespace ts.server.protocol {
         openFiles: string[];
     }
 
+    export type SurveyReadyEventName = "surveyReady";
+
+    export interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+
+    export interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+        /** Url of the survey */
+        url: string;
+    }
+
     /**
      * Arguments for reload request.
      */
