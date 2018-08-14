@@ -14,22 +14,33 @@ function Wagon(numberOxen) {
 >numberOxen : number
 >numberOxen : number
 }
-/** @param {Wagon[]=} others */
-Wagon.circle = function (others) {
->Wagon.circle = function (others) {    return others ? others.length : 3.14;} : (others?: Wagon[]) => number
->Wagon.circle : (others?: Wagon[]) => number
+/** @param {Wagon[]=} wagons */
+Wagon.circle = function (wagons) {
+>Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[]) => number
+>Wagon.circle : (wagons?: Wagon[]) => number
 >Wagon : typeof Wagon
->circle : (others?: Wagon[]) => number
->function (others) {    return others ? others.length : 3.14;} : (others?: Wagon[]) => number
->others : Wagon[]
+>circle : (wagons?: Wagon[]) => number
+>function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[]) => number
+>wagons : Wagon[]
 
-    return others ? others.length : 3.14;
->others ? others.length : 3.14 : number
->others : Wagon[]
->others.length : number
->others : Wagon[]
+    return wagons ? wagons.length : 3.14;
+>wagons ? wagons.length : 3.14 : number
+>wagons : Wagon[]
+>wagons.length : number
+>wagons : Wagon[]
 >length : number
 >3.14 : 3.14
+}
+/** @param {*[]=} supplies - *[]= is my favourite type */
+Wagon.prototype.load = function (supplies) {
+>Wagon.prototype.load = function (supplies) {} : (supplies?: any[]) => void
+>Wagon.prototype.load : any
+>Wagon.prototype : any
+>Wagon : typeof Wagon
+>prototype : any
+>load : any
+>function (supplies) {} : (supplies?: any[]) => void
+>supplies : any[]
 }
 // ok
 class Sql extends Wagon {
@@ -47,6 +58,27 @@ class Sql extends Wagon {
 >this : this
 >foonly : number
 >12 : 12
+    }
+    /**
+     * @param {Array.<string>} files
+     * @param {"csv" | "json" | "xmlolololol"} format
+     * This is not assignable, so should have a type error
+     */
+    load(files, format) {
+>load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
+>files : string[]
+>format : "csv" | "json" | "xmlolololol"
+
+        if (format === "xmlolololol") {
+>format === "xmlolololol" : boolean
+>format : "csv" | "json" | "xmlolololol"
+>"xmlolololol" : "xmlolololol"
+
+            throw new Error("please do not use XML. It was a joke.");
+>new Error("please do not use XML. It was a joke.") : Error
+>Error : ErrorConstructor
+>"please do not use XML. It was a joke." : "please do not use XML. It was a joke."
+        }
     }
 }
 var db = new Sql();
@@ -138,4 +170,59 @@ c.numberOxen
 >c.numberOxen : number
 >c : Conestoga
 >numberOxen : number
+
+=== tests/cases/conformance/salsa/generic.js ===
+/**
+ * @template T
+ * @param {T} flavour
+ */
+function Soup(flavour) {
+>Soup : typeof Soup
+>flavour : T
+
+    this.flavour = flavour
+>this.flavour = flavour : T
+>this.flavour : any
+>this : any
+>flavour : any
+>flavour : T
+}
+/** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+class Chowder extends Soup {
+>Chowder : Chowder
+>Soup : typeof Soup
+
+    log() {
+>log : () => any
+
+        return this.flavour
+>this.flavour : any
+>this : this
+>flavour : any
+    }
+}
+
+var soup = new Soup(1);
+>soup : typeof Soup
+>new Soup(1) : typeof Soup
+>Soup : typeof Soup
+>1 : 1
+
+soup.flavour
+>soup.flavour : number
+>soup : typeof Soup
+>flavour : number
+
+var chowder = new Chowder();
+>chowder : Chowder
+>new Chowder() : Chowder
+>Chowder : typeof Chowder
+
+chowder.flavour.claim
+>chowder.flavour.claim : any
+>chowder.flavour : any
+>chowder : Chowder
+>flavour : any
+>claim : any
+
 

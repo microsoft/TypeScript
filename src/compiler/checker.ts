@@ -5514,7 +5514,7 @@ namespace ts {
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
             const typeArgCount = length(typeArgumentNodes);
             const isJavascript = isInJavaScriptFile(location);
-            if (isJavascriptConstructorType(type)) {
+            if (isJavascriptConstructorType(type) && !typeArgCount) {
                 return getSignaturesOfType(type, SignatureKind.Call);
             }
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
@@ -5609,7 +5609,7 @@ namespace ts {
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
             }
-            else if (isJavascriptConstructorType(baseConstructorType)) {
+            else if (isJavascriptConstructorType(baseConstructorType) && !baseTypeNode.typeArguments) {
                 baseType = getJavascriptClassType(baseConstructorType.symbol) || anyType;
             }
             else {

@@ -10,15 +10,28 @@
 function Wagon(numberOxen) {
     this.numberOxen = numberOxen
 }
-/** @param {Wagon[]=} others */
-Wagon.circle = function (others) {
-    return others ? others.length : 3.14;
+/** @param {Wagon[]=} wagons */
+Wagon.circle = function (wagons) {
+    return wagons ? wagons.length : 3.14;
+}
+/** @param {*[]=} supplies - *[]= is my favourite type */
+Wagon.prototype.load = function (supplies) {
 }
 // ok
 class Sql extends Wagon {
     constructor() {
         super(); // error: not enough arguments
         this.foonly = 12
+    }
+    /**
+     * @param {Array.<string>} files
+     * @param {"csv" | "json" | "xmlolololol"} format
+     * This is not assignable, so should have a type error
+     */
+    load(files, format) {
+        if (format === "xmlolololol") {
+            throw new Error("please do not use XML. It was a joke.");
+        }
     }
 }
 var db = new Sql();
@@ -57,3 +70,25 @@ class Conestoga extends Wagon {
 var c = new Conestoga(true);
 c.drunkOO
 c.numberOxen
+
+// @Filename: generic.js
+
+/**
+ * @template T
+ * @param {T} flavour
+ */
+function Soup(flavour) {
+    this.flavour = flavour
+}
+/** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
+class Chowder extends Soup {
+    log() {
+        return this.flavour
+    }
+}
+
+var soup = new Soup(1);
+soup.flavour
+var chowder = new Chowder();
+chowder.flavour.claim
+
