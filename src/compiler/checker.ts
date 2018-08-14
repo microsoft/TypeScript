@@ -5090,9 +5090,6 @@ namespace ts {
             if (!isInJavaScriptFile(decl)) {
                 return undefined;
             }
-            else if (isJSDocPropertyLikeTag(decl) && decl.typeExpression) {
-                return getTypeFromTypeNode(decl.typeExpression.type);
-            }
             // Handle certain special assignment kinds, which happen to union across multiple declarations:
             // * module.exports = expr
             // * exports.p = expr
