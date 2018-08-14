@@ -5100,7 +5100,8 @@ namespace ts {
             // * className.prototype.method = expr
             else if (isBinaryExpression(decl) ||
                 isPropertyAccessExpression(decl) && isBinaryExpression(decl.parent)) {
-                return getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(isBinaryExpression(decl) ? decl.left : decl)) ||
+                const target = isBinaryExpression(decl) ? decl.left as PropertyAccessExpression : decl;
+                return getSpecialPropertyAccessKind(target) !== SpecialPropertyAssignmentKind.ThisProperty && getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(target)) ||
                     getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
             }
             else if (isParameter(decl)
@@ -5119,7 +5120,7 @@ namespace ts {
         }
 
         function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isInJavaScriptFile(init) && isObjectLiteralExpression(init) && init.properties.length === 0 && !getJSDocType(decl)) {
+            if (init && isObjectLiteralExpression(init) && init.properties.length === 0) {
                 const exports = createSymbolTable();
                 while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
                     const s = getSymbolOfNode(decl);
