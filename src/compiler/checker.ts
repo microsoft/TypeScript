@@ -19961,9 +19961,7 @@ namespace ts {
         function isJavascriptConstructorType(type: Type) {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                if (resolved.callSignatures.length === 1) {
-                    return isJavascriptConstructor(resolved.callSignatures[0].declaration);
-                }
+                return resolved.callSignatures.length === 1 && isJavascriptConstructor(resolved.callSignatures[0].declaration);
             }
             return false;
         }
