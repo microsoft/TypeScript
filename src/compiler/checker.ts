@@ -5090,9 +5090,6 @@ namespace ts {
             if (!isInJavaScriptFile(decl)) {
                 return undefined;
             }
-            else if (isJSDocPropertyLikeTag(decl) && decl.typeExpression) {
-                return getTypeFromTypeNode(decl.typeExpression.type);
-            }
             // Handle certain special assignment kinds, which happen to union across multiple declarations:
             // * module.exports = expr
             // * exports.p = expr
@@ -10750,11 +10747,13 @@ namespace ts {
             }
 
             if (!ignoreReturnTypes) {
-                const targetReturnType = getReturnTypeOfSignature(target);
+                const targetReturnType = (target.declaration && isJavaScriptConstructor(target.declaration)) ?
+                    getJavaScriptClassType(target.declaration.symbol)! : getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) {
                     return result;
                 }
-                const sourceReturnType = getReturnTypeOfSignature(source);
+                const sourceReturnType = (source.declaration && isJavaScriptConstructor(source.declaration)) ?
+                    getJavaScriptClassType(source.declaration.symbol)! : getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -12021,8 +12020,14 @@ namespace ts {
                     return Ternary.True;
                 }
 
-                const sourceSignatures = getSignaturesOfType(source, kind);
-                const targetSignatures = getSignaturesOfType(target, kind);
+                const sourceIsJSConstructor = source.symbol && isJavaScriptConstructor(source.symbol.valueDeclaration);
+                const targetIsJSConstructor = target.symbol && isJavaScriptConstructor(target.symbol.valueDeclaration);
+
+                const sourceSignatures = getSignaturesOfType(source, (sourceIsJSConstructor && kind === SignatureKind.Construct) ?
+                    SignatureKind.Call : kind);
+                const targetSignatures = getSignaturesOfType(target, (targetIsJSConstructor && kind === SignatureKind.Construct) ?
+                    SignatureKind.Call : kind);
+
                 if (kind === SignatureKind.Construct && sourceSignatures.length && targetSignatures.length) {
                     if (isAbstractConstructorType(source) && !isAbstractConstructorType(target)) {
                         // An abstract constructor type is not assignable to a non-abstract constructor type
