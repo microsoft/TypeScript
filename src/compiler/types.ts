@@ -3072,6 +3072,7 @@ namespace ts {
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
         /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
+        /* @internal */ isTypeAssignableTo(type1: Type, type2: Type): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
