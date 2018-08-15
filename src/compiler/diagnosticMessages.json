@@ -3941,6 +3941,10 @@
         "category": "Error",
         "code": 7041
     },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4183,7 +4187,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4556,6 +4563,7 @@
         "category": "Message",
         "code": 95062
     },
+    
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4563,5 +4571,13 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Convert to async function":{
+        "category": "Message",
+         "code": 95065
+    },
+    "Convert all to async functions": {
+     "category": "Message",
+         "code": 95066
     }
 }

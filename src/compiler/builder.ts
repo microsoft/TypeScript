@@ -65,7 +65,8 @@ namespace ts {
         }
         state.changedFilesSet = createMap<true>();
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
-        const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile;
+        const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
+            !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldState!.program.getCompilerOptions());
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {

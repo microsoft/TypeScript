@@ -414,8 +414,6 @@ namespace ts.codefix {
     }
 
     function getDefaultExportInfo(defaultExport: Symbol, moduleSymbol: Symbol, program: Program): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
-        const checker = program.getTypeChecker();
-
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
         if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
@@ -423,12 +421,11 @@ namespace ts.codefix {
         if (name !== undefined) return { symbolForMeaning: defaultExport, name };
 
         if (defaultExport.flags & SymbolFlags.Alias) {
-            const aliased = checker.getAliasedSymbol(defaultExport);
-            return getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
+            const aliased = program.getTypeChecker().getImmediateAliasedSymbol(defaultExport);
+            return aliased && getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
         }
         else {
-            const moduleName = moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!);
-            return moduleName === undefined ? undefined : { symbolForMeaning: defaultExport, name: moduleName };
+            return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) };
         }
     }
 
