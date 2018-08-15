@@ -401,7 +401,7 @@ namespace ts.moduleSpecifiers {
             partEnd = fullPath.indexOf("/", partStart + 1);
             switch (state) {
                 case States.BeforeNodeModules:
-                    if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
                         topLevelNodeModulesIndex = partStart;
                         topLevelPackageNameIndex = partEnd;
                         state = States.NodeModules;
@@ -418,7 +418,7 @@ namespace ts.moduleSpecifiers {
                     }
                     break;
                 case States.PackageContent:
-                    if (fullPath.indexOf("/node_modules/", partStart) === partStart) {
+                    if (fullPath.indexOf(nodeModulesPathPart, partStart) === partStart) {
                         state = States.NodeModules;
                     }
                     else {
