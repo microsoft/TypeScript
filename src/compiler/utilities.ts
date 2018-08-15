@@ -2366,7 +2366,7 @@ namespace ts {
                     const binExp = name.parent.parent;
                     return isBinaryExpression(binExp) &&
                         getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
-                        (isInJavaScriptFile(name) || !isPropertyAccessExpression(binExp.left) || binExp.left.expression.symbol) &&
+                        (isInJavaScriptFile(name) || binExp.left.symbol) &&
                         getNameOfDeclaration(binExp) === name;
                 }
             }
