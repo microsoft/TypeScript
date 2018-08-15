@@ -17866,6 +17866,12 @@ namespace ts {
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
             return forEachProperty(symbol, prop => {
+                if (prop.valueDeclaration &&
+                    isPropertyAccessExpression(prop.valueDeclaration) &&
+                    getSpecialPropertyAccessKind(prop.valueDeclaration) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                    const init = getAssignedJavascriptInitializer(prop.valueDeclaration);
+                    return !init || !isFunctionExpressionOrArrowFunction(init);
+                }
                 const propKind = getDeclarationKindFromSymbol(prop);
                 return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
             });

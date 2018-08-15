@@ -2,7 +2,6 @@
 // @allowJs: true
 // @checkJs: true
 // @Filename: first.js
-
 /**
  * @constructor
  * @param {number} numberOxen
@@ -16,6 +15,11 @@ Wagon.circle = function (wagons) {
 }
 /** @param {*[]=} supplies - *[]= is my favourite type */
 Wagon.prototype.load = function (supplies) {
+}
+/** @param {*[]=} supplies - Yep, still a great type */
+Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+Wagon.prototype.speed = function () {
+    return this.numberOxen / this.weight()
 }
 // ok
 class Sql extends Wagon {
@@ -31,6 +35,12 @@ class Sql extends Wagon {
     load(files, format) {
         if (format === "xmlolololol") {
             throw new Error("please do not use XML. It was a joke.");
+        }
+        else {
+            super.speed() // run faster
+            if (super.weight() < 0) {
+                // ????????????????????????
+            }
         }
     }
 }

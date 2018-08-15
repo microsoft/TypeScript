@@ -42,6 +42,43 @@ Wagon.prototype.load = function (supplies) {
 >function (supplies) {} : (supplies?: any[]) => void
 >supplies : any[]
 }
+/** @param {*[]=} supplies - Yep, still a great type */
+Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
+>Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies?: any[]) => number
+>Wagon.prototype.weight : any
+>Wagon.prototype : any
+>Wagon : typeof Wagon
+>prototype : any
+>weight : any
+>supplies => supplies ? supplies.length : -1 : (supplies?: any[]) => number
+>supplies : any[]
+>supplies ? supplies.length : -1 : number
+>supplies : any[]
+>supplies.length : number
+>supplies : any[]
+>length : number
+>-1 : -1
+>1 : 1
+
+Wagon.prototype.speed = function () {
+>Wagon.prototype.speed = function () {    return this.numberOxen / this.weight()} : () => number
+>Wagon.prototype.speed : any
+>Wagon.prototype : any
+>Wagon : typeof Wagon
+>prototype : any
+>speed : any
+>function () {    return this.numberOxen / this.weight()} : () => number
+
+    return this.numberOxen / this.weight()
+>this.numberOxen / this.weight() : number
+>this.numberOxen : number
+>this : Wagon
+>numberOxen : number
+>this.weight() : number
+>this.weight : (supplies?: any[]) => number
+>this : Wagon
+>weight : (supplies?: any[]) => number
+}
 // ok
 class Sql extends Wagon {
 >Sql : Sql
@@ -78,6 +115,24 @@ class Sql extends Wagon {
 >new Error("please do not use XML. It was a joke.") : Error
 >Error : ErrorConstructor
 >"please do not use XML. It was a joke." : "please do not use XML. It was a joke."
+        }
+        else {
+            super.speed() // run faster
+>super.speed() : number
+>super.speed : () => number
+>super : Wagon
+>speed : () => number
+
+            if (super.weight() < 0) {
+>super.weight() < 0 : boolean
+>super.weight() : number
+>super.weight : (supplies?: any[]) => number
+>super : Wagon
+>weight : (supplies?: any[]) => number
+>0 : 0
+
+                // ????????????????????????
+            }
         }
     }
 }
