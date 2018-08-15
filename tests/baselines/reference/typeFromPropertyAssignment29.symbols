@@ -1,0 +1,173 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts ===
+function ExpandoDecl(n: number) {
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 0, 21))
+
+    return n.toString();
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 0, 21))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+ExpandoDecl.prop = 2
+>ExpandoDecl.prop : Symbol(ExpandoDecl.prop, Decl(typeFromPropertyAssignment29.ts, 2, 1))
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>prop : Symbol(ExpandoDecl.prop, Decl(typeFromPropertyAssignment29.ts, 2, 1))
+
+ExpandoDecl.m = function(n: number) {
+>ExpandoDecl.m : Symbol(ExpandoDecl.m, Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>m : Symbol(ExpandoDecl.m, Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 4, 25))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 4, 25))
+}
+var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
+>ExpandoDecl.prop : Symbol(ExpandoDecl.prop, Decl(typeFromPropertyAssignment29.ts, 2, 1))
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>prop : Symbol(ExpandoDecl.prop, Decl(typeFromPropertyAssignment29.ts, 2, 1))
+>ExpandoDecl.m : Symbol(ExpandoDecl.m, Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>m : Symbol(ExpandoDecl.m, Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>ExpandoDecl(101).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>ExpandoDecl : Symbol(ExpandoDecl, Decl(typeFromPropertyAssignment29.ts, 0, 0), Decl(typeFromPropertyAssignment29.ts, 3, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const ExpandoExpr = function (n: number) {
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 9, 30))
+
+    return n.toString();
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 9, 30))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+ExpandoExpr.prop = 2
+>ExpandoExpr.prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1))
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1))
+
+ExpandoExpr.m = function(n: number) {
+>ExpandoExpr.m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 13, 25))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 13, 25))
+}
+var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
+>ExpandoExpr.prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1))
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>prop : Symbol(ExpandoExpr.prop, Decl(typeFromPropertyAssignment29.ts, 11, 1))
+>ExpandoExpr.m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>m : Symbol(ExpandoExpr.m, Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>ExpandoExpr(101).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>ExpandoExpr : Symbol(ExpandoExpr, Decl(typeFromPropertyAssignment29.ts, 9, 5), Decl(typeFromPropertyAssignment29.ts, 12, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const ExpandoArrow = (n: number) => n.toString();
+>ExpandoArrow : Symbol(ExpandoArrow, Decl(typeFromPropertyAssignment29.ts, 18, 5), Decl(typeFromPropertyAssignment29.ts, 19, 21))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 18, 22))
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 18, 22))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+
+ExpandoArrow.prop = 2
+>ExpandoArrow.prop : Symbol(ExpandoArrow.prop, Decl(typeFromPropertyAssignment29.ts, 18, 49))
+>ExpandoArrow : Symbol(ExpandoArrow, Decl(typeFromPropertyAssignment29.ts, 18, 5), Decl(typeFromPropertyAssignment29.ts, 19, 21))
+>prop : Symbol(ExpandoArrow.prop, Decl(typeFromPropertyAssignment29.ts, 18, 49))
+
+ExpandoArrow.m = function(n: number) {
+>ExpandoArrow.m : Symbol(ExpandoArrow.m, Decl(typeFromPropertyAssignment29.ts, 19, 21))
+>ExpandoArrow : Symbol(ExpandoArrow, Decl(typeFromPropertyAssignment29.ts, 18, 5), Decl(typeFromPropertyAssignment29.ts, 19, 21))
+>m : Symbol(ExpandoArrow.m, Decl(typeFromPropertyAssignment29.ts, 19, 21))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 20, 26))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 20, 26))
+
+}
+
+// Should not work in Typescript -- must be const
+var ExpandoExpr2 = function (n: number) {
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 26, 29))
+
+    return n.toString();
+>n.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 26, 29))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+ExpandoExpr2.prop = 2
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+
+ExpandoExpr2.m = function(n: number) {
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 30, 26))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 30, 26))
+}
+var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+>ExpandoExpr2(101).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>ExpandoExpr2 : Symbol(ExpandoExpr2, Decl(typeFromPropertyAssignment29.ts, 26, 3), Decl(typeFromPropertyAssignment29.ts, 29, 21))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+// Should not work in typescript -- classes already have statics
+class ExpandoClass {
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+
+    n = 1001;
+>n : Symbol(ExpandoClass.n, Decl(typeFromPropertyAssignment29.ts, 36, 20))
+}
+ExpandoClass.prop = 2
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+
+ExpandoClass.m = function(n: number) {
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 40, 26))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 40, 26))
+}
+var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+>new ExpandoClass().n : Symbol(ExpandoClass.n, Decl(typeFromPropertyAssignment29.ts, 36, 20))
+>ExpandoClass : Symbol(ExpandoClass, Decl(typeFromPropertyAssignment29.ts, 33, 73))
+>n : Symbol(ExpandoClass.n, Decl(typeFromPropertyAssignment29.ts, 36, 20))
+
+// Class expressions shouldn't work in typescript either
+var ExpandoExpr3 = class {
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+
+    n = 10001;
+>n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
+}
+ExpandoExpr3.prop = 3
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+
+ExpandoExpr3.m = function(n: number) {
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 50, 26))
+
+    return n + 1;
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 50, 26))
+}
+var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
+>n : Symbol(n, Decl(typeFromPropertyAssignment29.ts, 7, 3), Decl(typeFromPropertyAssignment29.ts, 16, 3), Decl(typeFromPropertyAssignment29.ts, 33, 3), Decl(typeFromPropertyAssignment29.ts, 43, 3), Decl(typeFromPropertyAssignment29.ts, 53, 3))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+>new ExpandoExpr3().n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
+>ExpandoExpr3 : Symbol(ExpandoExpr3, Decl(typeFromPropertyAssignment29.ts, 46, 3))
+>n : Symbol(ExpandoExpr3.n, Decl(typeFromPropertyAssignment29.ts, 46, 26))
+
+
