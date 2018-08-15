@@ -3439,6 +3439,10 @@ node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS23
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(17,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(30,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ok' must be of type 'boolean', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(74,1): error TS2719: Type 'typeof StringStream' is not assignable to type 'typeof StringStream'. Two different types with this name exist, but they are unrelated.
+  Type 'StringStream' is not assignable to type 'StringStream & { backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; ... 5 more ...; sol: () => void; }'.
+    Type 'StringStream' is not assignable to type '{ backUp: (n: any) => void; column: () => void; current: () => void; eat: (match: any) => void; eatSpace: () => void; eatWhile: (match: any) => void; eol: () => void; indentation: () => void; match: (pattern: string | RegExp, consume?: boolean, caseInsensitive?: boolean) => void; ... 4 more ...; sol: () => void; }'.
+      Property 'backUp' is missing in type 'StringStream'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(87,12): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(97,21): error TS2339: Property 'resolveMode' does not exist on type 'typeof CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(102,12): error TS2339: Property 'registerHelper' does not exist on type 'typeof CodeMirror'.
