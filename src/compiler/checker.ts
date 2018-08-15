@@ -15474,8 +15474,8 @@ namespace ts {
                 error(
                     node,
                     capturedByArrowFunction ?
-                        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation :
-                        Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any);
+                        Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any :
+                        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
             }
             return type || anyType;
         }
