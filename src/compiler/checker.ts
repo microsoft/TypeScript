@@ -15826,7 +15826,7 @@ namespace ts {
             }
             const iife = getImmediatelyInvokedFunctionExpression(func);
             if (iife && iife.arguments) {
-                const args = getEffectiveCallArguments(iife)!;
+                const args = getEffectiveCallArguments(iife);
                 const indexOfParameter = func.parameters.indexOf(parameter);
                 if (parameter.dotDotDotToken) {
                     return getSpreadArgumentType(args, indexOfParameter, args.length, anyType, /*context*/ undefined);
@@ -15955,7 +15955,7 @@ namespace ts {
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
         function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type | undefined {
-            const args = getEffectiveCallArguments(callTarget)!; // TODO: GH#18217
+            const args = getEffectiveCallArguments(callTarget);
             const argIndex = args.indexOf(arg); // -1 for e.g. the expression of a CallExpression, or the tag of a TaggedTemplateExpression
             return argIndex === -1 ? undefined : getContextualTypeForArgumentAtIndex(callTarget, argIndex);
         }
@@ -18461,7 +18461,7 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                argCount = getDecoratorArgumentCount(<Decorator>node, signature);
+                argCount = getDecoratorArgumentCount(node, signature);
             }
             else {
                 if (!node.arguments) {
@@ -18783,7 +18783,7 @@ namespace ts {
                 return args;
             }
             if (node.kind === SyntaxKind.Decorator) {
-                return getEffectiveDecoratorArguments(<Decorator>node);
+                return getEffectiveDecoratorArguments(node);
             }
             if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
