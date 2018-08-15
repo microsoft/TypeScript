@@ -4733,10 +4733,7 @@ namespace ts {
                     return getTypeFromTypeNode(tag.typeExpression);
                 }
                 const expando = getJSExpandoObjectType(symbol.valueDeclaration, symbol, specialDeclaration);
-                if (expando) {
-                    return expando;
-                }
-                return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
+                return expando || getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
             let definedInConstructor = false;
             let definedInMethod = false;
