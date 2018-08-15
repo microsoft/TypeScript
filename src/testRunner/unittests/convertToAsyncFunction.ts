@@ -362,11 +362,11 @@ interface Array<T> {}`
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
-            assert.isNotNull(diagnostic);
+            assert.exists(diagnostic);
 
             const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === description.message)!;
-            assert.isNotNull(action);
+            assert.exists(action);
 
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
