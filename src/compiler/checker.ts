@@ -4658,12 +4658,6 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
-            if (isInJavaScriptFile(declaration)) {
-                const expandoType = getJSExpandoObjectType(declaration, getSymbolOfNode(declaration), getDeclaredJavascriptInitializer(declaration));
-                if (expandoType) {
-                    return expandoType;
-                }
-            }
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
@@ -4700,6 +4694,12 @@ namespace ts {
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
                     return addOptionality(type, isOptional);
+                }
+            }
+            else if (isInJavaScriptFile(declaration)) {
+                const expandoType = getJSExpandoObjectType(declaration, getSymbolOfNode(declaration), getDeclaredJavascriptInitializer(declaration));
+                if (expandoType) {
+                    return expandoType;
                 }
             }
 
