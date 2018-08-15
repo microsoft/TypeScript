@@ -15829,7 +15829,7 @@ namespace ts {
                 const args = getEffectiveCallArguments(iife)!;
                 const indexOfParameter = func.parameters.indexOf(parameter);
                 if (parameter.dotDotDotToken) {
-                    return getSpreadArgumentType(iife, args, indexOfParameter, args.length, anyType, /*context*/ undefined);
+                    return getSpreadArgumentType(args, indexOfParameter, args.length, anyType, /*context*/ undefined);
                 }
                 const links = getNodeLinks(iife);
                 const cached = links.resolvedSignature;
@@ -18435,20 +18435,16 @@ namespace ts {
         }
 
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
-            let argCount: number; // Apparent number of arguments we will have in this call
-            let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
-            let spreadArgIndex = -1;
-
             if (isJsxOpeningLikeElement(node)) {
                 // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
                 return true;
             }
 
-            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-                // Even if the call is incomplete, we'll have a missing expression as our last argument,
-                // so we can say the count is just the arg list length
-                argCount = args.length;
+            let argCount: number;
+            let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
 
+            if (node.kind === SyntaxKind.TaggedTemplateExpression) {
+                argCount = args.length;
                 if (node.template.kind === SyntaxKind.TemplateExpression) {
                     // If a tagged template expression lacks a tail literal, the call is incomplete.
                     // Specifically, a template only can end in a TemplateTail or a Missing literal.
@@ -18465,7 +18461,7 @@ namespace ts {
                 }
             }
             else if (node.kind === SyntaxKind.Decorator) {
-                argCount = getEffectiveArgumentCount(node, /*args*/ undefined!, signature);
+                argCount = getDecoratorArgumentCount(<Decorator>node, signature);
             }
             else {
                 if (!node.arguments) {
@@ -18479,12 +18475,11 @@ namespace ts {
                 // If we are missing the close parenthesis, the call is incomplete.
                 callIsIncomplete = node.arguments.end === node.end;
 
-                spreadArgIndex = getSpreadArgumentIndex(args);
-            }
-
-            // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
-            if (spreadArgIndex >= 0) {
-                return spreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || spreadArgIndex < getParameterCount(signature));
+                // If a spread argument is present, check that it corresponds to a rest parameter or at least that it's in the valid range.
+                const spreadArgIndex = getSpreadArgumentIndex(args);
+                if (spreadArgIndex >= 0) {
+                    return spreadArgIndex >= getMinArgumentCount(signature) && (hasEffectiveRestParameter(signature) || spreadArgIndex < getParameterCount(signature));
+                }
             }
 
             // Too many arguments implies incorrect arity.
@@ -18593,38 +18588,31 @@ namespace ts {
                 inferTypes(context.inferences, thisArgumentType, thisType);
             }
 
-            const effectiveArgCount = getEffectiveArgumentCount(node, args, signature);
             const genericRestType = getGenericRestType(signature);
-            const argCount = genericRestType ? Math.min(getParameterCount(signature) - 1, effectiveArgCount) : effectiveArgCount;
+            const argCount = genericRestType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
             for (let i = 0; i < argCount; i++) {
-                const arg = getEffectiveArgument(node, args, i);
-                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
-                if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
+                const arg = args[i];
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    let argType = getEffectiveArgumentType(node, i);
-                    // If the effective argument type is 'undefined', there is no synthetic type
-                    // for the argument. In that case, we should check the argument.
-                    if (argType === undefined) {
-                        // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                        // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
-                        argType = checkExpressionWithContextualType(arg!, paramType, mapper);
-                    }
+                    // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
+                    // context sensitive function expressions as wildcards
+                    const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
+                    const argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     inferTypes(context.inferences, argType, paramType);
                 }
             }
 
             if (genericRestType) {
-                const spreadType = getSpreadArgumentType(node, args, argCount, effectiveArgCount, genericRestType, context);
+                const spreadType = getSpreadArgumentType(args, argCount, args.length, genericRestType, context);
                 inferTypes(context.inferences, spreadType, genericRestType);
             }
 
             return getInferredTypes(context);
         }
 
-        function getSpreadArgumentType(node: CallLikeExpression, args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
+        function getSpreadArgumentType(args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
             if (index >= argCount - 1) {
-                const arg = getEffectiveArgument(node, args, argCount - 1);
+                const arg = args[argCount - 1];
                 if (isSpreadArgument(arg)) {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
@@ -18638,12 +18626,9 @@ namespace ts {
             const types = [];
             let spreadIndex = -1;
             for (let i = index; i < argCount; i++) {
-                let argType = getEffectiveArgumentType(node, i);
-                if (!argType) {
-                    argType = checkExpressionWithContextualType(args[i], contextualType, context);
-                    if (spreadIndex < 0 && isSpreadArgument(args[i])) {
-                        spreadIndex = i - index;
-                    }
+                const argType = checkExpressionWithContextualType(args[i], contextualType, context);
+                if (spreadIndex < 0 && isSpreadArgument(args[i])) {
+                    spreadIndex = i - index;
                 }
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
             }
@@ -18738,31 +18723,23 @@ namespace ts {
                 }
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-            const argCount = getEffectiveArgumentCount(node, args, signature);
             const restIndex = signature.hasRestParameter ? signature.parameters.length - 1 : -1;
             const restType = restIndex >= 0 ? getTypeOfSymbol(signature.parameters[restIndex]) : anyType;
-            for (let i = 0; i < argCount; i++) {
-                const arg = getEffectiveArgument(node, args, i);
-                // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
-                if (arg === undefined || arg.kind !== SyntaxKind.OmittedExpression) {
+            for (let i = 0; i < args.length; i++) {
+                const arg = args[i];
+                if (arg.kind !== SyntaxKind.OmittedExpression) {
                     if (i === restIndex && (restType.flags & TypeFlags.TypeParameter || isSpreadArgument(arg) && !isArrayType(restType))) {
-                        const spreadType = getSpreadArgumentType(node, args, i, argCount, restType, /*context*/ undefined);
+                        const spreadType = getSpreadArgumentType(args, i, args.length, restType, /*context*/ undefined);
                         return checkTypeRelatedTo(spreadType, restType, relation, arg, headMessage);
                     }
                     else {
-                        // Check spread elements against rest type (from arity check we know spread argument corresponds to a rest parameter)
                         const paramType = getTypeAtPosition(signature, i);
-                        // If the effective argument type is undefined, there is no synthetic type for the argument.
-                        // In that case, we should check the argument.
-                        const argType = getEffectiveArgumentType(node, i) ||
-                            checkExpressionWithContextualType(arg!, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        const argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
                         // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                         // we obtain the regular type of any object literal arguments because we may not have inferred complete
                         // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                         const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
-                        // Use argument expression as error location when reporting errors
-                        const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
-                        if (!checkTypeRelatedTo(checkArgType, paramType, relation, errorNode, headMessage)) {
+                        if (!checkTypeRelatedTo(checkArgType, paramType, relation, reportErrors ? arg : undefined, headMessage)) {
                             return false;
                         }
                     }
@@ -18783,19 +18760,21 @@ namespace ts {
             }
         }
 
+        function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean) {
+            const result = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, parent.pos, parent.end);
+            result.parent = parent;
+            result.type = type;
+            result.isSpread = isSpread || false;
+            return result;
+        }
+
         /**
          * Returns the effective arguments for an expression that works like a function invocation.
-         *
-         * If 'node' is a CallExpression or a NewExpression, then its argument list is returned.
-         * If 'node' is a TaggedTemplateExpression, a new argument list is constructed from the substitution
-         *    expressions, where the first element of the list is `undefined`.
-         * If 'node' is a Decorator, the argument list will be `undefined`, and its arguments and types
-         *    will be supplied from calls to `getEffectiveArgumentCount` and `getEffectiveArgumentType`.
          */
-        function getEffectiveCallArguments(node: CallLikeExpression): ReadonlyArray<Expression> | undefined {
+        function getEffectiveCallArguments(node: CallLikeExpression): ReadonlyArray<Expression> {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 const template = node.template;
-                const args: Expression[] = [undefined!]; // TODO: GH#18217
+                const args: Expression[] = [createSyntheticExpression(template, getGlobalTemplateStringsArrayType())];
                 if (template.kind === SyntaxKind.TemplateExpression) {
                     forEach(template.templateSpans, span => {
                         args.push(span.expression);
@@ -18803,314 +18782,89 @@ namespace ts {
                 }
                 return args;
             }
-            else if (node.kind === SyntaxKind.Decorator) {
-                // For a decorator, we return undefined as we will determine
-                // the number and types of arguments for a decorator using
-                // `getEffectiveArgumentCount` and `getEffectiveArgumentType` below.
-                return undefined;
+            if (node.kind === SyntaxKind.Decorator) {
+                return getEffectiveDecoratorArguments(<Decorator>node);
             }
-            else if (isJsxOpeningLikeElement(node)) {
+            if (isJsxOpeningLikeElement(node)) {
                 return node.attributes.properties.length > 0 ? [node.attributes] : emptyArray;
             }
-            else {
-                const args = node.arguments || emptyArray;
-                const length = args.length;
-                if (length && isSpreadArgument(args[length - 1]) && getSpreadArgumentIndex(args) === length - 1) {
-                    // We have a spread argument in the last position and no other spread arguments. If the type
-                    // of the argument is a tuple type, spread the tuple elements into the argument list. We can
-                    // call checkExpressionCached because spread expressions never have a contextual type.
-                    const spreadArgument = <SpreadElement>args[length - 1];
-                    const type = checkExpressionCached(spreadArgument.expression);
-                    if (isTupleType(type)) {
-                        const typeArguments = (<TypeReference>type).typeArguments || emptyArray;
-                        const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
-                        const syntheticArgs = map(typeArguments, (t, i) => {
-                            const arg = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, spreadArgument.pos, spreadArgument.end);
-                            arg.parent = spreadArgument;
-                            arg.type = t;
-                            arg.isSpread = i === restIndex;
-                            return arg;
-                        });
-                        return concatenate(args.slice(0, length - 1), syntheticArgs);
-                    }
-                }
-                return args;
-            }
-        }
-
-
-        /**
-         * Returns the effective argument count for a node that works like a function invocation.
-         * If 'node' is a Decorator, the number of arguments is derived from the decoration
-         *    target and the signature:
-         *    If 'node.target' is a class declaration or class expression, the effective argument
-         *       count is 1.
-         *    If 'node.target' is a parameter declaration, the effective argument count is 3.
-         *    If 'node.target' is a property declaration, the effective argument count is 2.
-         *    If 'node.target' is a method or accessor declaration, the effective argument count
-         *       is 3, although it can be 2 if the signature only accepts two arguments, allowing
-         *       us to match a property decorator.
-         * Otherwise, the argument count is the length of the 'args' array.
-         */
-        function getEffectiveArgumentCount(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature) {
-            if (node.kind === SyntaxKind.Decorator) {
-                switch (node.parent.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        // A class decorator will have one argument (see `ClassDecorator` in core.d.ts)
-                        return 1;
-
-                    case SyntaxKind.PropertyDeclaration:
-                        // A property declaration decorator will have two arguments (see
-                        // `PropertyDecorator` in core.d.ts)
-                        return 2;
-
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        // A method or accessor declaration decorator will have two or three arguments (see
-                        // `PropertyDecorator` and `MethodDecorator` in core.d.ts)
-
-                        // If we are emitting decorators for ES3, we will only pass two arguments.
-                        if (languageVersion === ScriptTarget.ES3) {
-                            return 2;
-                        }
-
-                        // If the method decorator signature only accepts a target and a key, we will only
-                        // type check those arguments.
-                        return signature.parameters.length >= 3 ? 3 : 2;
-
-                    case SyntaxKind.Parameter:
-                        // A parameter declaration decorator will have three arguments (see
-                        // `ParameterDecorator` in core.d.ts)
-                        return 3;
-
-                    default:
-                        return Debug.fail();
+            const args = node.arguments || emptyArray;
+            const length = args.length;
+            if (length && isSpreadArgument(args[length - 1]) && getSpreadArgumentIndex(args) === length - 1) {
+                // We have a spread argument in the last position and no other spread arguments. If the type
+                // of the argument is a tuple type, spread the tuple elements into the argument list. We can
+                // call checkExpressionCached because spread expressions never have a contextual type.
+                const spreadArgument = <SpreadElement>args[length - 1];
+                const type = checkExpressionCached(spreadArgument.expression);
+                if (isTupleType(type)) {
+                    const typeArguments = (<TypeReference>type).typeArguments || emptyArray;
+                    const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
+                    const syntheticArgs = map(typeArguments, (t, i) => createSyntheticExpression(spreadArgument, t, /*isSpread*/ i === restIndex));
+                    return concatenate(args.slice(0, length - 1), syntheticArgs);
                 }
             }
-            else {
-                return args.length;
-            }
+            return args;
         }
 
         /**
-         * Returns the effective type of the first argument to a decorator.
-         * If 'node' is a class declaration or class expression, the effective argument type
-         *    is the type of the static side of the class.
-         * If 'node' is a parameter declaration, the effective argument type is either the type
-         *    of the static or instance side of the class for the parameter's parent method,
-         *    depending on whether the method is declared static.
-         *    For a constructor, the type is always the type of the static side of the class.
-         * If 'node' is a property, method, or accessor declaration, the effective argument
-         *    type is the type of the static or instance side of the parent class for class
-         *    element, depending on whether the element is declared static.
+         * Returns the synthetic argument list for a decorator invocation.
          */
-        function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
-            // The first argument to a decorator is its `target`.
-            if (node.kind === SyntaxKind.ClassDeclaration) {
-                // For a class decorator, the `target` is the type of the class (e.g. the
-                // "static" or "constructor" side of the class)
-                const classSymbol = getSymbolOfNode(node as ClassDeclaration);
-                return getTypeOfSymbol(classSymbol);
+        function getEffectiveDecoratorArguments(node: Decorator): ReadonlyArray<Expression> {
+            const parent = node.parent;
+            const expr = node.expression;
+            switch (parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    // For a class decorator, the `target` is the type of the class (e.g. the
+                    // "static" or "constructor" side of the class).
+                    return [
+                        createSyntheticExpression(expr, getTypeOfSymbol(getSymbolOfNode(parent)))
+                    ];
+                case SyntaxKind.Parameter:
+                    // A parameter declaration decorator will have three arguments (see
+                    // `ParameterDecorator` in core.d.ts).
+                    const func = <FunctionLikeDeclaration>parent.parent;
+                    return [
+                        createSyntheticExpression(expr, parent.parent.kind === SyntaxKind.Constructor ? getTypeOfSymbol(getSymbolOfNode(func)) : errorType),
+                        createSyntheticExpression(expr, anyType),
+                        createSyntheticExpression(expr, numberType)
+                    ];
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // A method or accessor declaration decorator will have two or three arguments (see
+                    // `PropertyDecorator` and `MethodDecorator` in core.d.ts). If we are emitting decorators
+                    // for ES3, we will only pass two arguments.
+                    const hasPropDesc = parent.kind !== SyntaxKind.PropertyDeclaration && languageVersion !== ScriptTarget.ES3;
+                    return [
+                        createSyntheticExpression(expr, getParentTypeOfClassElement(<ClassElement>parent)),
+                        createSyntheticExpression(expr, getClassElementPropertyKeyType(<ClassElement>parent)),
+                        createSyntheticExpression(expr, hasPropDesc ? createTypedPropertyDescriptorType(getTypeOfNode(parent)) : anyType)
+                    ];
             }
-
-            if (node.kind === SyntaxKind.Parameter) {
-                // For a parameter decorator, the `target` is the parent type of the
-                // parameter's containing method.
-                node = node.parent;
-                if (node.kind === SyntaxKind.Constructor) {
-                    const classSymbol = getSymbolOfNode(node as ConstructorDeclaration);
-                    return getTypeOfSymbol(classSymbol);
-                }
-            }
-
-            if (node.kind === SyntaxKind.PropertyDeclaration ||
-                node.kind === SyntaxKind.MethodDeclaration ||
-                node.kind === SyntaxKind.GetAccessor ||
-                node.kind === SyntaxKind.SetAccessor) {
-                // For a property or method decorator, the `target` is the
-                // "static"-side type of the parent of the member if the member is
-                // declared "static"; otherwise, it is the "instance"-side type of the
-                // parent of the member.
-                return getParentTypeOfClassElement(<ClassElement>node);
-            }
-
-            Debug.fail("Unsupported decorator target.");
-            return errorType;
+            return Debug.fail();
         }
 
         /**
-         * Returns the effective type for the second argument to a decorator.
-         * If 'node' is a parameter, its effective argument type is one of the following:
-         *    If 'node.parent' is a constructor, the effective argument type is 'any', as we
-         *       will emit `undefined`.
-         *    If 'node.parent' is a member with an identifier, numeric, or string literal name,
-         *       the effective argument type will be a string literal type for the member name.
-         *    If 'node.parent' is a computed property name, the effective argument type will
-         *       either be a symbol type or the string type.
-         * If 'node' is a member with an identifier, numeric, or string literal name, the
-         *    effective argument type will be a string literal type for the member name.
-         * If 'node' is a computed property name, the effective argument type will either
-         *    be a symbol type or the string type.
-         * A class decorator does not have a second argument type.
+         * Returns the argument count for a decorator node that works like a function invocation.
          */
-        function getEffectiveDecoratorSecondArgumentType(node: Node) {
-            // The second argument to a decorator is its `propertyKey`
-            if (node.kind === SyntaxKind.ClassDeclaration) {
-                Debug.fail("Class decorators should not have a second synthetic argument.");
-                return errorType;
-            }
-
-            if (node.kind === SyntaxKind.Parameter) {
-                node = node.parent;
-                if (node.kind === SyntaxKind.Constructor) {
-                    // For a constructor parameter decorator, the `propertyKey` will be `undefined`.
-                    return anyType;
-                }
-
-                // For a non-constructor parameter decorator, the `propertyKey` will be either
-                // a string or a symbol, based on the name of the parameter's containing method.
-            }
-
-            if (node.kind === SyntaxKind.PropertyDeclaration ||
-                node.kind === SyntaxKind.MethodDeclaration ||
-                node.kind === SyntaxKind.GetAccessor ||
-                node.kind === SyntaxKind.SetAccessor) {
-                // The `propertyKey` for a property or method decorator will be a
-                // string literal type if the member name is an identifier, number, or string;
-                // otherwise, if the member name is a computed property name it will
-                // be either string or symbol.
-                const element = <ClassElement>node;
-                const name = element.name!;
-                switch (name.kind) {
-                    case SyntaxKind.Identifier:
-                        return getLiteralType(idText(name));
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.StringLiteral:
-                        return getLiteralType(name.text);
-
-                    case SyntaxKind.ComputedPropertyName:
-                        const nameType = checkComputedPropertyName(name);
-                        if (isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike)) {
-                            return nameType;
-                        }
-                        else {
-                            return stringType;
-                        }
-
-                    default:
-                        Debug.fail("Unsupported property name.");
-                        return errorType;
-                }
-            }
-
-            Debug.fail("Unsupported decorator target.");
-            return errorType;
-        }
-
-        /**
-         * Returns the effective argument type for the third argument to a decorator.
-         * If 'node' is a parameter, the effective argument type is the number type.
-         * If 'node' is a method or accessor, the effective argument type is a
-         *    `TypedPropertyDescriptor<T>` instantiated with the type of the member.
-         * Class and property decorators do not have a third effective argument.
-         */
-        function getEffectiveDecoratorThirdArgumentType(node: Node) {
-            // The third argument to a decorator is either its `descriptor` for a method decorator
-            // or its `parameterIndex` for a parameter decorator
-            if (node.kind === SyntaxKind.ClassDeclaration) {
-                Debug.fail("Class decorators should not have a third synthetic argument.");
-                return errorType;
-            }
-
-            if (node.kind === SyntaxKind.Parameter) {
-                // The `parameterIndex` for a parameter decorator is always a number
-                return numberType;
-            }
-
-            if (node.kind === SyntaxKind.PropertyDeclaration) {
-                Debug.fail("Property decorators should not have a third synthetic argument.");
-                return errorType;
-            }
-
-            if (node.kind === SyntaxKind.MethodDeclaration ||
-                node.kind === SyntaxKind.GetAccessor ||
-                node.kind === SyntaxKind.SetAccessor) {
-                // The `descriptor` for a method decorator will be a `TypedPropertyDescriptor<T>`
-                // for the type of the member.
-                const propertyType = getTypeOfNode(node);
-                return createTypedPropertyDescriptorType(propertyType);
-            }
-
-            Debug.fail("Unsupported decorator target.");
-            return errorType;
-        }
-
-        /**
-         * Returns the effective argument type for the provided argument to a decorator.
-         */
-        function getEffectiveDecoratorArgumentType(node: Decorator, argIndex: number): Type {
-            if (argIndex === 0) {
-                return getEffectiveDecoratorFirstArgumentType(node.parent);
-            }
-            else if (argIndex === 1) {
-                return getEffectiveDecoratorSecondArgumentType(node.parent);
-            }
-            else if (argIndex === 2) {
-                return getEffectiveDecoratorThirdArgumentType(node.parent);
-            }
-
-            Debug.fail("Decorators should not have a fourth synthetic argument.");
-            return errorType;
-        }
-
-        /**
-         * Gets the effective argument type for an argument in a call expression.
-         */
-        function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number): Type | undefined {
-            // Decorators provide special arguments, a tagged template expression provides
-            // a special first argument, and string literals get string literal types
-            // unless we're reporting errors
-            if (node.kind === SyntaxKind.Decorator) {
-                return getEffectiveDecoratorArgumentType(node, argIndex);
-            }
-            else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
-                return getGlobalTemplateStringsArrayType();
-            }
-
-            // This is not a synthetic argument, so we return 'undefined'
-            // to signal that the caller needs to check the argument.
-            return undefined;
-        }
-
-        /**
-         * Gets the effective argument expression for an argument in a call expression.
-         */
-        function getEffectiveArgument(node: CallLikeExpression, args: ReadonlyArray<Expression>, argIndex: number) {
-            // For a decorator or the first argument of a tagged template expression we return undefined.
-            if (node.kind === SyntaxKind.Decorator ||
-                (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression)) {
-                return undefined;
-            }
-
-            return args[argIndex];
-        }
-
-        /**
-         * Gets the error node to use when reporting errors for an effective argument.
-         */
-        function getEffectiveArgumentErrorNode(node: CallLikeExpression, argIndex: number, arg: Expression | undefined): Expression | undefined {
-            if (node.kind === SyntaxKind.Decorator) {
-                // For a decorator, we use the expression of the decorator for error reporting.
-                return node.expression;
-            }
-            else if (argIndex === 0 && node.kind === SyntaxKind.TaggedTemplateExpression) {
-                // For a the first argument of a tagged template expression, we use the template of the tag for error reporting.
-                return node.template;
-            }
-            else {
-                return arg;
+        function getDecoratorArgumentCount(node: Decorator, signature: Signature) {
+            switch (node.parent.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                    return 1;
+                case SyntaxKind.PropertyDeclaration:
+                    return 2;
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    // For ES3 or decorators with only two parameters we supply only two arguments
+                    return languageVersion === ScriptTarget.ES3 || signature.parameters.length <= 2 ? 2 : 3;
+                case SyntaxKind.Parameter:
+                    return 3;
+                default:
+                    return Debug.fail();
             }
         }
 
@@ -19205,10 +18959,10 @@ namespace ts {
             if (!isDecorator && !isSingleNonGenericCandidate) {
                 // We do not need to call `getEffectiveArgumentCount` here as it only
                 // applies when calculating the number of arguments for a decorator.
-                for (let i = isTaggedTemplate ? 1 : 0; i < args!.length; i++) {
-                    if (isContextSensitive(args![i])) {
+                for (let i = 0; i < args.length; i++) {
+                    if (isContextSensitive(args[i])) {
                         if (!excludeArgument) {
-                            excludeArgument = new Array(args!.length);
+                            excludeArgument = new Array(args.length);
                         }
                         excludeArgument[i] = true;
                     }
@@ -19280,10 +19034,10 @@ namespace ts {
                 // in arguments too early. If possible, we'd like to only type them once we know the correct
                 // overload. However, this matters for the case where the call is correct. When the call is
                 // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                checkApplicableSignature(node, args!, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForArgumentArityError) {
-                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args!));
+                diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
             }
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments!, /*reportErrors*/ true, fallbackError);
@@ -19291,7 +19045,7 @@ namespace ts {
             else if (typeArguments && every(signatures, sig => typeArguments!.length < getMinTypeArgumentCount(sig.typeParameters) || typeArguments!.length > length(sig.typeParameters))) {
                 diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
             }
-            else if (args) {
+            else if (!isDecorator) {
                 diagnostics.add(getArgumentArityError(node, signatures, args));
             }
             else if (fallbackError) {
@@ -19307,10 +19061,10 @@ namespace ts {
 
                 if (isSingleNonGenericCandidate) {
                     const candidate = candidates[0];
-                    if (typeArguments || !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
+                    if (typeArguments || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args!, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                         candidateForArgumentError = candidate;
                         return undefined;
                     }
@@ -19319,7 +19073,7 @@ namespace ts {
 
                 for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
                     const candidate = candidates[candidateIndex];
-                    if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args!, candidate, signatureHelpTrailingComma)) {
+                    if (!hasCorrectTypeArgumentArity(candidate, typeArguments) || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         continue;
                     }
 
@@ -19337,12 +19091,12 @@ namespace ts {
                         }
                         else {
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                            typeArgumentTypes = inferTypeArguments(node, candidate, args!, excludeArgument, inferenceContext);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                         }
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
-                        if (getGenericRestType(candidate) && !hasCorrectArity(node, args!, checkCandidate, signatureHelpTrailingComma)) {
+                        if (getGenericRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
                             candidateForArgumentArityError = checkCandidate;
                             continue;
                         }
@@ -19350,7 +19104,7 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args!, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
                         candidateForArgumentError = checkCandidate;
                         continue;
                     }
@@ -19360,10 +19114,10 @@ namespace ts {
                         // round of type inference and applicability checking for this particular candidate.
                         excludeArgument = undefined;
                         if (inferenceContext) {
-                            const typeArgumentTypes = inferTypeArguments(node, candidate, args!, excludeArgument, inferenceContext);
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
                         }
-                        if (!checkApplicableSignature(node, args!, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = checkCandidate;
                             continue;
                         }
@@ -19835,7 +19589,7 @@ namespace ts {
             return signatures.length && every(signatures, signature =>
                 signature.minArgumentCount === 0 &&
                 !signature.hasRestParameter &&
-                signature.parameters.length < getEffectiveArgumentCount(decorator, /*args*/ undefined!, signature));
+                signature.parameters.length < getDecoratorArgumentCount(decorator, signature));
         }
 
         /**
@@ -27551,6 +27305,23 @@ namespace ts {
             return hasModifier(node, ModifierFlags.Static)
                 ? getTypeOfSymbol(classSymbol)
                 : getDeclaredTypeOfSymbol(classSymbol);
+        }
+
+        function getClassElementPropertyKeyType(element: ClassElement) {
+            const name = element.name!;
+            switch (name.kind) {
+                case SyntaxKind.Identifier:
+                    return getLiteralType(idText(name));
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.StringLiteral:
+                    return getLiteralType(name.text);
+                case SyntaxKind.ComputedPropertyName:
+                    const nameType = checkComputedPropertyName(name);
+                    return isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike) ? nameType : stringType;
+                default:
+                    Debug.fail("Unsupported property name.");
+                    return errorType;
+            }
         }
 
         // Return the list of properties of the given type, augmented with properties from Function
