@@ -2,7 +2,7 @@
 // should not crash while checking
 function Test({ b = '' } = {}) {}
 >Test : ({ b }?: {}) => void
->b : string
+>b : any
 >'' : ""
 >{} : { b?: string; }
 

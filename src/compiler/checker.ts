@@ -4658,6 +4658,12 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
+            if (isInJavaScriptFile(declaration)) {
+                const expandoType = getJSExpandoObjectType(declaration, getSymbolOfNode(declaration), getDeclaredJavascriptInitializer(declaration));
+                if (expandoType) {
+                    return expandoType;
+                }
+            }
             if ((noImplicitAny || isInJavaScriptFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
@@ -4718,13 +4724,17 @@ namespace ts {
             return undefined;
         }
 
-        function getWidenedTypeFromJSSpecialPropertyDeclarations(symbol: Symbol, resolvedSymbol?: Symbol) {
+        function getWidenedTypeFromJSPropertyAssignments(symbol: Symbol, resolvedSymbol?: Symbol) {
             // function/class/{} assignments are fresh declarations, not property assignments, so only add prototype assignments
             const specialDeclaration = getAssignedJavascriptInitializer(symbol.valueDeclaration);
             if (specialDeclaration) {
                 const tag = getJSDocTypeTag(specialDeclaration);
                 if (tag && tag.typeExpression) {
                     return getTypeFromTypeNode(tag.typeExpression);
+                }
+                const expando = getJSExpandoObjectType(symbol.valueDeclaration, symbol, specialDeclaration);
+                if (expando) {
+                    return expando;
                 }
                 return getWidenedLiteralType(checkExpressionCached(specialDeclaration));
             }
@@ -4776,6 +4786,27 @@ namespace ts {
                 return anyType;
             }
             return widened;
+        }
+
+        function getJSExpandoObjectType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
+            if (!init || !isObjectLiteralExpression(init) || init.properties.length) {
+                return undefined;
+            }
+            const exports = createSymbolTable();
+            while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
+                const s = getSymbolOfNode(decl);
+                if (s && hasEntries(s.exports)) {
+                    mergeSymbolTable(exports, s.exports);
+                }
+                decl = isBinaryExpression(decl) ? decl.parent : decl.parent.parent;
+            }
+            const s = getSymbolOfNode(decl);
+            if (s && hasEntries(s.exports)) {
+                mergeSymbolTable(exports, s.exports);
+            }
+            const type = createAnonymousType(symbol, exports, emptyArray, emptyArray, undefined, undefined);
+            type.objectFlags |= ObjectFlags.JSLiteral;
+            return type;
         }
 
         function getJSDocTypeFromSpecialDeclarations(declaredType: Type | undefined, expression: Expression, _symbol: Symbol, declaration: Declaration) {
@@ -5041,99 +5072,51 @@ namespace ts {
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
                 return errorType;
             }
-            let type = getJSSpecialType(symbol, declaration);
-            if (!type) {
-                if (isJSDocPropertyLikeTag(declaration)
-                    || isPropertyAccessExpression(declaration)
-                    || isIdentifier(declaration)
-                    || isClassDeclaration(declaration)
-                    || isFunctionDeclaration(declaration)
-                    || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
-                    || isMethodSignature(declaration)) {
-                    // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
-                    if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
-                        return getTypeOfFuncClassEnumModule(symbol);
-                    }
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
+            let type: Type | undefined;
+            if (isInJavaScriptFile(declaration) &&
+                (isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
+                type = getWidenedTypeFromJSPropertyAssignments(symbol);
+            }
+            else if (isJSDocPropertyLikeTag(declaration)
+                || isPropertyAccessExpression(declaration)
+                || isIdentifier(declaration)
+                || isClassDeclaration(declaration)
+                || isFunctionDeclaration(declaration)
+                || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
+                || isMethodSignature(declaration)) {
+                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
+                if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
+                    return getTypeOfFuncClassEnumModule(symbol);
                 }
-                else if (isPropertyAssignment(declaration)) {
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
-                }
-                else if (isJsxAttribute(declaration)) {
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkJsxAttribute(declaration);
-                }
-                else if (isShorthandPropertyAssignment(declaration)) {
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
-                }
-                else if (isObjectLiteralMethod(declaration)) {
-                    type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
-                }
-                else if (isParameter(declaration)
-                         || isPropertyDeclaration(declaration)
-                         || isPropertySignature(declaration)
-                         || isVariableDeclaration(declaration)
-                         || isBindingElement(declaration)) {
-                    type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
-                }
-                else {
-                    return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
-                }
+                type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
+            }
+            else if (isPropertyAssignment(declaration)) {
+                type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
+            }
+            else if (isJsxAttribute(declaration)) {
+                type = tryGetTypeFromEffectiveTypeNode(declaration) || checkJsxAttribute(declaration);
+            }
+            else if (isShorthandPropertyAssignment(declaration)) {
+                type = tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionForMutableLocation(declaration.name, CheckMode.Normal);
+            }
+            else if (isObjectLiteralMethod(declaration)) {
+                type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
+            }
+            else if (isParameter(declaration)
+                     || isPropertyDeclaration(declaration)
+                     || isPropertySignature(declaration)
+                     || isVariableDeclaration(declaration)
+                     || isBindingElement(declaration)) {
+                type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
+            }
+            else {
+                return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
             }
 
             if (!popTypeResolution()) {
                 type = reportCircularityError(symbol);
             }
             return type;
-       }
-
-        function getJSSpecialType(symbol: Symbol, decl: Declaration): Type | undefined {
-            if (!isInJavaScriptFile(decl)) {
-                return undefined;
-            }
-            // Handle certain special assignment kinds, which happen to union across multiple declarations:
-            // * module.exports = expr
-            // * exports.p = expr
-            // * this.p = expr
-            // * className.prototype.method = expr
-            else if (isBinaryExpression(decl) ||
-                isPropertyAccessExpression(decl) && isBinaryExpression(decl.parent)) {
-                const target = isBinaryExpression(decl) ? decl.left as PropertyAccessExpression : decl;
-                return getSpecialPropertyAccessKind(target) !== SpecialPropertyAssignmentKind.ThisProperty && getJSInitializerType(decl, symbol, getAssignedJavascriptInitializer(target)) ||
-                    getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
-            }
-            else if (isParameter(decl)
-                || isPropertyDeclaration(decl)
-                || isPropertySignature(decl)
-                || isVariableDeclaration(decl)
-                || isBindingElement(decl)) {
-                // Use type from type annotation if one is present
-                const isOptional = isParameter(decl) && isJSDocOptionalParameter(decl) ||
-                    !isBindingElement(decl) && !isVariableDeclaration(decl) && !!decl.questionToken;
-                const declaredType = tryGetTypeFromEffectiveTypeNode(decl);
-                return declaredType && addOptionality(declaredType, isOptional) ||
-                    getJSInitializerType(decl, symbol, getDeclaredJavascriptInitializer(decl)) ||
-                    getWidenedTypeForVariableLikeDeclaration(decl, /*includeOptionality*/ true);
-            }
-        }
-
-        function getJSInitializerType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (init && isObjectLiteralExpression(init) && init.properties.length === 0) {
-                const exports = createSymbolTable();
-                while (isBinaryExpression(decl) || isPropertyAccessExpression(decl)) {
-                    const s = getSymbolOfNode(decl);
-                    if (s && hasEntries(s.exports)) {
-                        mergeSymbolTable(exports, s.exports);
-                    }
-                    decl = isBinaryExpression(decl) ? decl.parent : decl.parent.parent;
-                }
-                const s = getSymbolOfNode(decl);
-                if (s && hasEntries(s.exports)) {
-                    mergeSymbolTable(exports, s.exports);
-                }
-                const type = createAnonymousType(symbol, exports, emptyArray, emptyArray, undefined, undefined);
-                type.objectFlags |= ObjectFlags.JSLiteral;
-                return type;
-            }
         }
 
         function getAnnotatedAccessorTypeNode(accessor: AccessorDeclaration | undefined): TypeNode | undefined {
@@ -5265,7 +5248,7 @@ namespace ts {
             }
             else if (declaration.kind === SyntaxKind.BinaryExpression ||
                      declaration.kind === SyntaxKind.PropertyAccessExpression && declaration.parent.kind === SyntaxKind.BinaryExpression) {
-                return getWidenedTypeFromJSSpecialPropertyDeclarations(symbol);
+                return getWidenedTypeFromJSPropertyAssignments(symbol);
             }
             else if (symbol.flags & SymbolFlags.ValueModule && declaration && isSourceFile(declaration) && declaration.commonJsModuleIndicator) {
                 const resolvedModule = resolveExternalModuleSymbol(symbol);
@@ -5274,7 +5257,7 @@ namespace ts {
                         return errorType;
                     }
                     const exportEquals = getMergedSymbol(symbol.exports!.get(InternalSymbolName.ExportEquals)!);
-                    const type = getWidenedTypeFromJSSpecialPropertyDeclarations(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
+                    const type = getWidenedTypeFromJSPropertyAssignments(exportEquals, exportEquals === resolvedModule ? undefined : resolvedModule);
                     if (!popTypeResolution()) {
                         return reportCircularityError(symbol);
                     }
