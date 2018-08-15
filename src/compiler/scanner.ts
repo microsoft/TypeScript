@@ -1390,6 +1390,24 @@ namespace ts {
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
+                    case CharacterCodes.nonBreakingSpace:
+                    case CharacterCodes.ogham:
+                    case CharacterCodes.enQuad:
+                    case CharacterCodes.emQuad:
+                    case CharacterCodes.enSpace:
+                    case CharacterCodes.emSpace:
+                    case CharacterCodes.threePerEmSpace:
+                    case CharacterCodes.fourPerEmSpace:
+                    case CharacterCodes.sixPerEmSpace:
+                    case CharacterCodes.figureSpace:
+                    case CharacterCodes.punctuationSpace:
+                    case CharacterCodes.thinSpace:
+                    case CharacterCodes.hairSpace:
+                    case CharacterCodes.zeroWidthSpace:
+                    case CharacterCodes.narrowNoBreakSpace:
+                    case CharacterCodes.mathematicalSpace:
+                    case CharacterCodes.ideographicSpace:
+                    case CharacterCodes.byteOrderMark:
                         if (skipTrivia) {
                             pos++;
                             continue;
