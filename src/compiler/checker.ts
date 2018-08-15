@@ -16017,7 +16017,7 @@ namespace ts {
                         else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
                             const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
-                            return !isTSFunctionSymbol(parentSymbol);
+                            return !isFunctionSymbol(parentSymbol);
                         }
                         return true;
                     }

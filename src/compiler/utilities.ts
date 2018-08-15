@@ -1955,13 +1955,12 @@ namespace ts {
             !!getJSDocTypeTag(expr.parent);
     }
 
-    export function isTSFunctionSymbol(symbol: Symbol | undefined) {
+    export function isFunctionSymbol(symbol: Symbol | undefined) {
         if (!symbol || !symbol.valueDeclaration) {
             return false;
         }
         const decl = symbol.valueDeclaration;
-        return !isInJavaScriptFile(decl) &&
-            (decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer));
+        return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
