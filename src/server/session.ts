@@ -573,8 +573,8 @@ namespace ts.server {
                     }, "configFileDiag");
                     break;
                 case SurveyReady:
-                    const { surveyId, url } = event.data;
-                    this.event<protocol.SurveyReadyEventBody>({ surveyId, url }, "surveyReady");
+                    const { surveyId } = event.data;
+                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, "surveyReady");
                     break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";

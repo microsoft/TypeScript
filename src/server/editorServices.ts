@@ -20,7 +20,7 @@ namespace ts.server {
 
     export interface SurveyReady {
         eventName: typeof SurveyReady;
-        data: { surveyId: string; url: string };
+        data: { surveyId: string; };
     }
 
     export interface LargeFileReferencedEvent {
@@ -658,11 +658,11 @@ namespace ts.server {
         }
 
         /* @internal */
-        sendSurveyReadyEvent(surveyId: string, url: string) {
+        sendSurveyReadyEvent(surveyId: string) {
             if (!this.eventHandler) {
                 return;
             }
-            this.eventHandler({ eventName: SurveyReady, data: { surveyId, url } });
+            this.eventHandler({ eventName: SurveyReady, data: { surveyId } });
         }
 
         /* @internal */
@@ -913,11 +913,6 @@ namespace ts.server {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
                 project.pendingReload = ConfigFileProgramReloadLevel.Full;
                 this.delayUpdateProjectGraph(project);
-                if (project.getCompilerOptions().checkJs !== undefined) {
-                    const name = "checkJs";
-                    project.projectService.logger.info(`Survey ${name} is ready`);
-                    project.projectService.sendSurveyReadyEvent(name, "http://NOT READY YET");
-                }
                 // As we scheduled the update on configured project graph,
                 // we would need to schedule the project reload for only the root of inferred projects
                 this.delayReloadConfiguredProjectForFiles(configFileExistenceInfo, /*ignoreIfNotInferredProjectRoot*/ true);
@@ -1532,7 +1527,15 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
-            if (!this.eventHandler || !this.host.createSHA256Hash) {
+            if (!this.eventHandler) {
+                return;
+            }
+            if (project.getCompilerOptions().checkJs !== undefined) {
+                const name = "checkJs";
+                this.logger.info(`Survey ${name} is ready`);
+                this.sendSurveyReadyEvent(name);
+            }
+            if (!this.host.createSHA256Hash) {
                 return;
             }
 
