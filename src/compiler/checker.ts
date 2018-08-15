@@ -26672,7 +26672,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.OptionalType:
                 case SyntaxKind.RestType:
-                    return checkSourceElement((<ParenthesizedTypeNode | OptionalTypeNode>node).type);
+                    return checkSourceElement((<ParenthesizedTypeNode | OptionalTypeNode | RestTypeNode>node).type);
                 case SyntaxKind.ThisType:
                     return checkThisType(<ThisTypeNode>node);
                 case SyntaxKind.TypeOperator:
