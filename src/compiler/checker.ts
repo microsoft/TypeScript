@@ -3291,7 +3291,7 @@ namespace ts {
                     if (symbol) {
                         const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                         id = (isConstructorObject ? "+" : "") + getSymbolId(symbol);
-                        if (isJavaScriptConstructor(symbol.valueDeclaration)) {
+                        if (isJavascriptConstructor(symbol.valueDeclaration)) {
                             // Instance and static types share the same symbol; only add 'typeof' for the static side.
                             const isInstanceType = type === getInferredClassType(symbol) ? SymbolFlags.Type : SymbolFlags.Value;
                             return symbolToTypeNode(symbol, context, isInstanceType);
@@ -5090,9 +5090,6 @@ namespace ts {
             if (!isInJavaScriptFile(decl)) {
                 return undefined;
             }
-            else if (isJSDocPropertyLikeTag(decl) && decl.typeExpression) {
-                return getTypeFromTypeNode(decl.typeExpression.type);
-            }
             // Handle certain special assignment kinds, which happen to union across multiple declarations:
             // * module.exports = expr
             // * exports.p = expr
@@ -5505,7 +5502,7 @@ namespace ts {
                 const constraint = getBaseConstraintOfType(type);
                 return !!constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
             }
-            return false;
+            return isJavascriptConstructorType(type);
         }
 
         function getBaseTypeNodeOfClass(type: InterfaceType): ExpressionWithTypeArguments | undefined {
@@ -5514,9 +5511,12 @@ namespace ts {
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
             const typeArgCount = length(typeArgumentNodes);
-            const isJavaScript = isInJavaScriptFile(location);
+            const isJavascript = isInJavaScriptFile(location);
+            if (isJavascriptConstructorType(type) && !typeArgCount) {
+                return getSignaturesOfType(type, SignatureKind.Call);
+            }
             return filter(getSignaturesOfType(type, SignatureKind.Construct),
-                sig => (isJavaScript || typeArgCount >= getMinTypeArgumentCount(sig.typeParameters)) && typeArgCount <= length(sig.typeParameters));
+                sig => (isJavascript || typeArgCount >= getMinTypeArgumentCount(sig.typeParameters)) && typeArgCount <= length(sig.typeParameters));
         }
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
@@ -5606,6 +5606,9 @@ namespace ts {
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
+            }
+            else if (isJavascriptConstructorType(baseConstructorType) && !baseTypeNode.typeArguments) {
+                baseType = getJavascriptClassType(baseConstructorType.symbol) || anyType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
@@ -10114,7 +10117,7 @@ namespace ts {
                     }
                 }
                 let outerTypeParameters = getOuterTypeParameters(declaration, /*includeThisTypes*/ true);
-                if (isJavaScriptConstructor(declaration)) {
+                if (isJavascriptConstructor(declaration)) {
                     const templateTagParameters = getTypeParametersFromDeclaration(declaration as DeclarationWithTypeParameters);
                     outerTypeParameters = addRange(outerTypeParameters, templateTagParameters);
                 }
@@ -10411,7 +10414,7 @@ namespace ts {
         function getTypeWithoutSignatures(type: Type): Type {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                if (resolved.constructSignatures.length) {
+                if (resolved.constructSignatures.length || resolved.callSignatures.length) {
                     const result = createObjectType(ObjectFlags.Anonymous, type.symbol);
                     result.members = resolved.members;
                     result.properties = resolved.properties;
@@ -10745,11 +10748,13 @@ namespace ts {
             }
 
             if (!ignoreReturnTypes) {
-                const targetReturnType = getReturnTypeOfSignature(target);
+                const targetReturnType = (target.declaration && isJavascriptConstructor(target.declaration)) ?
+                    getJavascriptClassType(target.declaration.symbol)! : getReturnTypeOfSignature(target);
                 if (targetReturnType === voidType) {
                     return result;
                 }
-                const sourceReturnType = getReturnTypeOfSignature(source);
+                const sourceReturnType = (source.declaration && isJavascriptConstructor(source.declaration)) ?
+                    getJavascriptClassType(source.declaration.symbol)! : getReturnTypeOfSignature(source);
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -12016,8 +12021,14 @@ namespace ts {
                     return Ternary.True;
                 }
 
-                const sourceSignatures = getSignaturesOfType(source, kind);
-                const targetSignatures = getSignaturesOfType(target, kind);
+                const sourceIsJSConstructor = source.symbol && isJavascriptConstructor(source.symbol.valueDeclaration);
+                const targetIsJSConstructor = target.symbol && isJavascriptConstructor(target.symbol.valueDeclaration);
+
+                const sourceSignatures = getSignaturesOfType(source, (sourceIsJSConstructor && kind === SignatureKind.Construct) ?
+                    SignatureKind.Call : kind);
+                const targetSignatures = getSignaturesOfType(target, (targetIsJSConstructor && kind === SignatureKind.Construct) ?
+                    SignatureKind.Call : kind);
+
                 if (kind === SignatureKind.Construct && sourceSignatures.length && targetSignatures.length) {
                     if (isAbstractConstructorType(source) && !isAbstractConstructorType(target)) {
                         // An abstract constructor type is not assignable to a non-abstract constructor type
@@ -15496,7 +15507,7 @@ namespace ts {
                 //   * /** @constructor */ var x = function() { ... }
                 else if ((container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
-                    const classType = getJavaScriptClassType(container.symbol);
+                    const classType = getJavascriptClassType(container.symbol);
                     if (classType) {
                         return getFlowTypeOfReference(node, classType);
                     }
@@ -19656,7 +19667,7 @@ namespace ts {
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
-                if (signature.declaration && !isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
+                if (signature.declaration && !isJavascriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
                 if (getThisTypeOfSignature(signature) === voidType) {
@@ -19937,7 +19948,7 @@ namespace ts {
          * Indicates whether a declaration can be treated as a constructor in a JavaScript
          * file.
          */
-        function isJavaScriptConstructor(node: Declaration | undefined): boolean {
+        function isJavascriptConstructor(node: Declaration | undefined): boolean {
             if (node && isInJavaScriptFile(node)) {
                 // If the node has a @class tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
@@ -19953,14 +19964,22 @@ namespace ts {
             return false;
         }
 
-        function getJavaScriptClassType(symbol: Symbol): Type | undefined {
+        function isJavascriptConstructorType(type: Type) {
+            if (type.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                return resolved.callSignatures.length === 1 && isJavascriptConstructor(resolved.callSignatures[0].declaration);
+            }
+            return false;
+        }
+
+        function getJavascriptClassType(symbol: Symbol): Type | undefined {
             let inferred: Type | undefined;
-            if (isJavaScriptConstructor(symbol.valueDeclaration)) {
+            if (isJavascriptConstructor(symbol.valueDeclaration)) {
                 inferred = getInferredClassType(symbol);
             }
             const assigned = getAssignedClassType(symbol);
             const valueType = getTypeOfSymbol(symbol);
-            if (valueType.symbol && !isInferredClassType(valueType) && isJavaScriptConstructor(valueType.symbol.valueDeclaration)) {
+            if (valueType.symbol && !isInferredClassType(valueType) && isJavascriptConstructor(valueType.symbol.valueDeclaration)) {
                 inferred = getInferredClassType(valueType.symbol);
             }
             return assigned && inferred ?
@@ -20043,7 +20062,7 @@ namespace ts {
                     if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
                         funcSymbol = getResolvedSymbol(node.expression as Identifier);
                     }
-                    const type = funcSymbol && getJavaScriptClassType(funcSymbol);
+                    const type = funcSymbol && getJavascriptClassType(funcSymbol);
                     if (type) {
                         return signature.target ? instantiateType(type, signature.mapper) : type;
                     }
@@ -20651,7 +20670,7 @@ namespace ts {
                 return undefined;
             }
             if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression &&
-                !(isJavaScriptConstructor(func) && aggregatedTypes.some(t => t.symbol === func.symbol))) {
+                !(isJavascriptConstructor(func) && aggregatedTypes.some(t => t.symbol === func.symbol))) {
                 // Javascript "callable constructors", containing eg `if (!(this instanceof A)) return new A()` should not add undefined
                 pushIfUnique(aggregatedTypes, undefinedType);
             }
@@ -25557,8 +25576,9 @@ namespace ts {
                         // that all instantiated base constructor signatures return the same type. We can simply compare the type
                         // references (as opposed to checking the structure of the types) because elsewhere we have already checked
                         // that the base type is a class or interface type (and not, for example, an anonymous object type).
+                        // (Javascript constructor functions have this property trivially true since their return type is ignored.)
                         const constructors = getInstantiatedConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode);
-                        if (forEach(constructors, sig => getReturnTypeOfSignature(sig) !== baseType)) {
+                        if (forEach(constructors, sig => !isJavascriptConstructor(sig.declaration) && getReturnTypeOfSignature(sig) !== baseType)) {
                             error(baseTypeNode.expression, Diagnostics.Base_constructors_must_all_have_the_same_return_type);
                         }
                     }
