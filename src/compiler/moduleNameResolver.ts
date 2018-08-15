@@ -769,7 +769,7 @@ namespace ts {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
-                return toSearchResult({ resolved, isExternalLibraryImport: resolved.path.indexOf("/node_modules/") !== -1 });
+                return toSearchResult({ resolved, isExternalLibraryImport: stringContains(resolved.path, nodeModulesPathPart) });
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -843,7 +843,8 @@ namespace ts {
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
     }
 
-    const nodeModulesPathPart = "/node_modules/";
+    /*@internal*/
+    export const nodeModulesPathPart = "/node_modules/";
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
