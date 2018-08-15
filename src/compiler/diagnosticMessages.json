@@ -3941,6 +3941,10 @@
         "category": "Error",
         "code": 7041
     },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
