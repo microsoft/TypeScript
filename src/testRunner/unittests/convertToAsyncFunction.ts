@@ -319,7 +319,7 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
+    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, diagnosticDescription: DiagnosticMessage, codeFixDescription: DiagnosticMessage, includeLib?: boolean) {
         const t = getTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -361,11 +361,11 @@ interface Array<T> {}`
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
+            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === diagnosticDescription.message);
             assert.exists(diagnostic);
 
             const actions = codefix.getFixes(context);
-            const action = find(actions, action => action.description === description.message)!;
+            const action = find(actions, action => action.description === codeFixDescription.message)!;
             assert.exists(action);
 
             const data: string[] = [];
@@ -380,7 +380,7 @@ interface Array<T> {}`
 
             const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => data.join(newLineCharacter));
         }
 
         function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
@@ -1182,7 +1182,7 @@ function [#|f|]() {
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, /*includeLib*/ true);
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.This_may_be_converted_to_an_async_function, Diagnostics.Convert_to_async_function, /*includeLib*/ true);
     }
 
     function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
