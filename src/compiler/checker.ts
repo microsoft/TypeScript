@@ -6649,7 +6649,7 @@ namespace ts {
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include), /*_index*/ undefined, prop);
+                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include));
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
@@ -6668,7 +6668,7 @@ namespace ts {
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
-            function addMemberForKeyType(t: Type, _index?: number, origin?: Symbol) {
+            function addMemberForKeyType(t: Type) {
                 // Create a mapper from T to the current iteration type constituent. Then, if the
                 // mapped type is itself an instantiated type, combine the iteration mapper with the
                 // instantiation mapper.
@@ -6690,9 +6690,9 @@ namespace ts {
                     prop.type = strictNullChecks && isOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
                         strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                         propType;
-                    if (origin) {
-                        prop.syntheticOrigin = origin;
-                        prop.declarations = origin.declarations;
+                    if (modifiersProp) {
+                        prop.syntheticOrigin = modifiersProp;
+                        prop.declarations = modifiersProp.declarations;
                     }
                     prop.nameType = t;
                     members.set(propName, prop);
