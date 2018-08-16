@@ -3,12 +3,11 @@ tests/cases/compiler/targetTypeTest1.ts(6,43): error TS2304: Cannot find name 'P
 tests/cases/compiler/targetTypeTest1.ts(7,22): error TS2304: Cannot find name 'Point'.
 tests/cases/compiler/targetTypeTest1.ts(14,10): error TS2300: Duplicate identifier 'Point'.
 tests/cases/compiler/targetTypeTest1.ts(19,18): error TS2384: Overload signatures must all be ambient or non-ambient.
-tests/cases/compiler/targetTypeTest1.ts(26,7): error TS2339: Property 'origin' does not exist on type '(x: any, y: any) => void'.
 tests/cases/compiler/targetTypeTest1.ts(53,15): error TS2300: Duplicate identifier 'C'.
 tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifier 'C'.
 
 
-==== tests/cases/compiler/targetTypeTest1.ts (8 errors) ====
+==== tests/cases/compiler/targetTypeTest1.ts (7 errors) ====
     declare class Point
                   ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
@@ -45,8 +44,6 @@ tests/cases/compiler/targetTypeTest1.ts(60,10): error TS2300: Duplicate identifi
     
     // Point.origin declared as type Point
     Point.origin = new Point(0, 0);
-          ~~~~~~
-!!! error TS2339: Property 'origin' does not exist on type '(x: any, y: any) => void'.
     
     // Point.prototype declared as type Point
     // this inferred as Point because of obj.prop assignment

@@ -4821,48 +4821,45 @@ namespace ts {
         }
 
         /** If we don't have an explicit JSDoc type, get the type from the initializer. */
-        function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: Expression, special: SpecialPropertyAssignmentKind) {
-            if (isBinaryExpression(expression)) {
-                const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
-                if (type.flags & TypeFlags.Object &&
-                    special === SpecialPropertyAssignmentKind.ModuleExports &&
-                    symbol.escapedName === InternalSymbolName.ExportEquals) {
-                    const exportedType = resolveStructuredTypeMembers(type as ObjectType);
-                    const members = createSymbolTable();
-                    copyEntries(exportedType.members, members);
-                    if (resolvedSymbol && !resolvedSymbol.exports) {
-                        resolvedSymbol.exports = createSymbolTable();
-                    }
-                    (resolvedSymbol || symbol).exports!.forEach((s, name) => {
-                        if (members.has(name)) {
-                            const exportedMember = exportedType.members.get(name)!;
-                            const union = createSymbol(s.flags | exportedMember.flags, name);
-                            union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
-                            members.set(name, union);
-                        }
-                        else {
-                            members.set(name, s);
-                        }
-                    });
-                    const result = createAnonymousType(
-                        exportedType.symbol,
-                        members,
-                        exportedType.callSignatures,
-                        exportedType.constructSignatures,
-                        exportedType.stringIndexInfo,
-                        exportedType.numberIndexInfo);
-                    result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
-                    return result;
+        function getInitializerTypeFromSpecialDeclarations(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: BinaryExpression, special: SpecialPropertyAssignmentKind) {
+            const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
+            if (type.flags & TypeFlags.Object &&
+                special === SpecialPropertyAssignmentKind.ModuleExports &&
+                symbol.escapedName === InternalSymbolName.ExportEquals) {
+                const exportedType = resolveStructuredTypeMembers(type as ObjectType);
+                const members = createSymbolTable();
+                copyEntries(exportedType.members, members);
+                if (resolvedSymbol && !resolvedSymbol.exports) {
+                    resolvedSymbol.exports = createSymbolTable();
                 }
-                if (isEmptyArrayLiteralType(type)) {
-                    if (noImplicitAny) {
-                        reportImplicitAnyError(expression, anyArrayType);
+                (resolvedSymbol || symbol).exports!.forEach((s, name) => {
+                    if (members.has(name)) {
+                        const exportedMember = exportedType.members.get(name)!;
+                        const union = createSymbol(s.flags | exportedMember.flags, name);
+                        union.type = getUnionType([getTypeOfSymbol(s), getTypeOfSymbol(exportedMember)]);
+                        members.set(name, union);
                     }
-                    return anyArrayType;
-                }
-                return type;
+                    else {
+                        members.set(name, s);
+                    }
+                });
+                const result = createAnonymousType(
+                    exportedType.symbol,
+                    members,
+                    exportedType.callSignatures,
+                    exportedType.constructSignatures,
+                    exportedType.stringIndexInfo,
+                    exportedType.numberIndexInfo);
+                result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Propagate JSLiteral flag
+                return result;
             }
-            return neverType;
+            if (isEmptyArrayLiteralType(type)) {
+                if (noImplicitAny) {
+                    reportImplicitAnyError(expression, anyArrayType);
+                }
+                return anyArrayType;
+            }
+            return type;
         }
 
         function isDeclarationInConstructor(expression: Expression) {
@@ -5085,7 +5082,9 @@ namespace ts {
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                     return getTypeOfFuncClassEnumModule(symbol);
                 }
-                type = tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
+                type = isBinaryExpression(declaration.parent) ?
+                    getWidenedTypeFromJSPropertyAssignments(symbol) :
+                    tryGetTypeFromEffectiveTypeNode(declaration) || anyType;
             }
             else if (isPropertyAssignment(declaration)) {
                 type = tryGetTypeFromEffectiveTypeNode(declaration) || checkPropertyAssignment(declaration);
@@ -9150,7 +9149,7 @@ namespace ts {
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
-                if (isTypeAny(objectType)) {
+                if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
                 const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
@@ -16025,7 +16024,24 @@ namespace ts {
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
                     // If `binaryExpression.left` was assigned a symbol, then this is a new declaration; otherwise it is an assignment to an existing declaration.
                     // See `bindStaticPropertyAssignment` in `binder.ts`.
-                    return !binaryExpression.left.symbol || binaryExpression.left.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.left.symbol.valueDeclaration);
+                    if (!binaryExpression.left.symbol) {
+                        return true;
+                    }
+                    else {
+                        const decl = binaryExpression.left.symbol.valueDeclaration;
+                        if (!decl) {
+                            return false;
+                        }
+                        if (isInJavaScriptFile(decl)) {
+                            return !!getJSDocTypeTag(decl);
+                        }
+                        else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
+                            const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
+                            const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
+                            return !isFunctionSymbol(parentSymbol);
+                        }
+                        return true;
+                    }
                 case SpecialPropertyAssignmentKind.ThisProperty:
                 case SpecialPropertyAssignmentKind.ModuleExports:
                     return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
@@ -17723,12 +17739,6 @@ namespace ts {
             }
         }
 
-        // If a symbol is a synthesized symbol with no value declaration, we assume it is a property. Example of this are the synthesized
-        // '.prototype' property as well as synthesized tuple index properties.
-        function getDeclarationKindFromSymbol(s: Symbol) {
-            return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.PropertyDeclaration;
-        }
-
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
             return s.valueDeclaration ? getCombinedNodeFlags(s.valueDeclaration) : 0;
         }
@@ -17865,16 +17875,7 @@ namespace ts {
         }
 
         function symbolHasNonMethodDeclaration(symbol: Symbol) {
-            return forEachProperty(symbol, prop => {
-                if (prop.valueDeclaration &&
-                    isPropertyAccessExpression(prop.valueDeclaration) &&
-                    getSpecialPropertyAccessKind(prop.valueDeclaration) === SpecialPropertyAssignmentKind.PrototypeProperty) {
-                    const init = getAssignedJavascriptInitializer(prop.valueDeclaration);
-                    return !init || !isFunctionExpressionOrArrowFunction(init);
-                }
-                const propKind = getDeclarationKindFromSymbol(prop);
-                return propKind !== SyntaxKind.MethodDeclaration && propKind !== SyntaxKind.MethodSignature;
-            });
+            return !!forEachProperty(symbol, prop => !(prop.flags & SymbolFlags.Method));
         }
 
         function checkNonNullExpression(

@@ -1725,12 +1725,15 @@ namespace ts {
     }
 
     export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
-        if (!isInJavaScriptFile(node) || !node.parent) {
+        if (!node.parent) {
             return undefined;
         }
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
+            if (!isInJavaScriptFile(node) && !isVarConst(node.parent)) {
+                return undefined;
+            }
             name = node.parent.name;
             decl = node.parent;
         }
@@ -1892,8 +1895,12 @@ namespace ts {
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
     export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        if (!isInJavaScriptFile(expr) ||
-            expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
+        const special = getSpecialPropertyAssignmentKindWorker(expr);
+        return special === SpecialPropertyAssignmentKind.Property || isInJavaScriptFile(expr) ? special : SpecialPropertyAssignmentKind.None;
+    }
+
+    function getSpecialPropertyAssignmentKindWorker(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+        if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return SpecialPropertyAssignmentKind.None;
         }
@@ -1952,6 +1959,14 @@ namespace ts {
         return isInJavaScriptFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
+    }
+
+    export function isFunctionSymbol(symbol: Symbol | undefined) {
+        if (!symbol || !symbol.valueDeclaration) {
+            return false;
+        }
+        const decl = symbol.valueDeclaration;
+        return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
@@ -2354,7 +2369,10 @@ namespace ts {
                 }
                 else {
                     const binExp = name.parent.parent;
-                    return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+                    return isBinaryExpression(binExp) &&
+                        getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
+                        (binExp.left.symbol || binExp.symbol) &&
+                        getNameOfDeclaration(binExp) === name;
                 }
             }
             default:

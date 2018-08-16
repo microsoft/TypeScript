@@ -55,7 +55,9 @@ var x = EF1(1,2);
 
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
+>Point.origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 22, 17))
 >Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1))
+>origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 22, 17))
 >Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1))
 
 // Point.prototype declared as type Point
