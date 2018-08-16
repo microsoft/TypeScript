@@ -3298,7 +3298,7 @@ namespace ts {
                         }
                         // Always use 'typeof T' for type of class, enum, and module objects
                         else if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) ||
-                            symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
+                            symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) && !isJSContainerFunctionDeclaration(symbol.valueDeclaration) ||
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
@@ -27932,6 +27932,15 @@ namespace ts {
                 hasModifier(parameter, ModifierFlags.ParameterPropertyModifier);
         }
 
+        function isJSContainerFunctionDeclaration(node: Declaration): boolean {
+            const declaration = getParseTreeNode(node, isFunctionDeclaration);
+            if (!declaration) {
+                return false;
+            }
+            const symbol = getSymbolOfNode(declaration);
+            return !!(symbol && symbol.flags & SymbolFlags.JSContainer && symbol.flags & SymbolFlags.Function);
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags || 0;
         }
@@ -28039,8 +28048,8 @@ namespace ts {
             }
         }
 
-        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
-            const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessor);
+        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | FunctionDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
+            const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessorOrFunction);
             if (!declaration) {
                 return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
             }
@@ -28172,6 +28181,7 @@ namespace ts {
                 isImplementationOfOverload,
                 isRequiredInitializedParameter,
                 isOptionalUninitializedParameterProperty,
+                isJSContainerFunctionDeclaration,
                 createTypeOfDeclaration,
                 createReturnTypeOfSignatureDeclaration,
                 createTypeOfExpression,

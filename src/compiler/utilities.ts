@@ -1183,8 +1183,8 @@ namespace ts {
         return false;
     }
 
-    export function isVariableLikeOrAccessor(node: Node): node is AccessorDeclaration | VariableLikeDeclaration {
-        return isVariableLike(node) || isAccessor(node);
+    export function isVariableLikeOrAccessorOrFunction(node: Node): node is AccessorDeclaration | VariableLikeDeclaration | FunctionDeclaration {
+        return isVariableLike(node) || isAccessor(node) || isFunctionDeclaration(node);
     }
 
     export function isVariableDeclarationInVariableStatement(node: VariableDeclaration) {

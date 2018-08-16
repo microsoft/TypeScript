@@ -11,11 +11,12 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
 const ExpandoExpr = function (n: number) {
     return n.toString();
 }
-ExpandoExpr.prop = 2
+ExpandoExpr.prop = { x: 2 }
+ExpandoExpr.prop = { y: "" }
 ExpandoExpr.m = function(n: number) {
     return n + 1;
 }
-var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length
+var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 
 const ExpandoArrow = (n: number) => n.toString();
 ExpandoArrow.prop = 2
@@ -68,11 +69,12 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length;
 var ExpandoExpr = function (n) {
     return n.toString();
 };
-ExpandoExpr.prop = 2;
+ExpandoExpr.prop = { x: 2 };
+ExpandoExpr.prop = { y: "" };
 ExpandoExpr.m = function (n) {
     return n + 1;
 };
-var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length;
+var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length;
 var ExpandoArrow = function (n) { return n.toString(); };
 ExpandoArrow.prop = 2;
 ExpandoArrow.m = function (n) {
@@ -111,3 +113,41 @@ ExpandoExpr3.m = function (n) {
     return n + 1;
 };
 var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n;
+
+
+//// [typeFromPropertyAssignment29.d.ts]
+declare const ExpandoDecl: {
+    (n: number): string;
+    prop: number;
+    m(n: number): number;
+};
+declare var n: number;
+declare const ExpandoExpr: {
+    (n: number): string;
+    prop: {
+        x: number;
+        y?: undefined;
+    } | {
+        y: string;
+        x?: undefined;
+    };
+    m(n: number): number;
+};
+declare var n: number;
+declare const ExpandoArrow: {
+    (n: number): string;
+    prop: number;
+    m(n: number): number;
+};
+declare var ExpandoExpr2: (n: number) => string;
+declare var n: number;
+declare class ExpandoClass {
+    n: number;
+}
+declare var n: number;
+declare var ExpandoExpr3: {
+    new (): {
+        n: number;
+    };
+};
+declare var n: number;
