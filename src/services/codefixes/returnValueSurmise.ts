@@ -19,14 +19,16 @@ namespace ts.codefix {
     interface MissingReturnInfo {
         kind: FixKind.MissingReturnStatement;
         declaration: FunctionLikeDeclaration;
+        expression: Expression;
     }
 
-    interface MissingParenthesesInfo {
+    interface MissingParenInfo {
         kind: FixKind.MissingParentheses;
         declaration: ArrowFunction;
+        expression: Expression;
     }
 
-    type Info = MissingReturnInfo | MissingParenthesesInfo;
+    type Info = MissingReturnInfo | MissingParenInfo;
 
     registerCodeFix({
         errorCodes,
@@ -37,14 +39,15 @@ namespace ts.codefix {
             if (!info) return undefined;
 
             if (info.kind === FixKind.MissingReturnStatement) {
-                return [
-                    getActionForfixAddReturnStatement(context, info.declaration),
-                    getActionForfixRemoveBlockBodyBrace(context, info.declaration),
-                    getActionForfixReplaceBraceWithParen(context, info.declaration)
-                ];
+                return concatenate(
+                    [getActionForfixAddReturnStatement(context, info.declaration, info.expression)],
+                    isArrowFunction(info.declaration) ? [
+                        getActionForfixRemoveBlockBodyBrace(context, info.declaration, info.expression),
+                        getActionForfixReplaceBraceWithParen(context, info.declaration, info.expression)
+                    ] : undefined);
             }
             else {
-                return [getActionForfixWrapTheBlockWithParen(context, info.declaration)];
+                return [getActionForfixWrapTheBlockWithParen(context, info.declaration, info.expression)];
             }
         },
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -53,16 +56,19 @@ namespace ts.codefix {
 
             switch (context.fixId) {
                 case fixIdAddReturnStatement:
-                    addReturnStatement(changes, diag.file, info.declaration);
+                    addReturnStatement(changes, diag.file, info.declaration, info.expression);
                     break;
                 case fixIdRemoveBlockBodyBrace:
-                    removeBlockBodyBrace(changes, diag.file, info.declaration, /* withParen */ false);
+                    if (!isArrowFunction(info.declaration)) return undefined;
+                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, /* withParen */ false);
                     break;
                 case fixIdReplaceBraceWithParen:
-                    removeBlockBodyBrace(changes, diag.file, info.declaration, /* withParen */ true);
+                    if (!isArrowFunction(info.declaration)) return undefined;
+                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, /* withParen */ true);
                     break;
                 case fixIdWrapTheBlockWithParen:
-                    wrapBlockWithParen(changes, diag.file, <ArrowFunction>info.declaration);
+                    if (!isArrowFunction(info.declaration)) return undefined;
+                    wrapBlockWithParen(changes, diag.file, info.declaration, info.expression);
                     break;
                 default:
                     Debug.fail(JSON.stringify(context.fixId));
@@ -96,16 +102,22 @@ namespace ts.codefix {
         if (isExpressionStatement(firstStatement) && checkFixedAssignableTo(checker, declaration, firstStatement.expression, expectType, isFunctionType)) {
             return {
                 declaration,
-                kind: FixKind.MissingReturnStatement
+                kind: FixKind.MissingReturnStatement,
+                expression: firstStatement.expression
             };
         }
-        else if (isArrowFunction(declaration) && isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
+        else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
             const node = createObjectLiteral([createPropertyAssignment(firstStatement.label, firstStatement.statement.expression)]);
             if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
-                return {
+                return isArrowFunction(declaration) ? {
                     declaration,
-                    kind: FixKind.MissingParentheses
-                };
+                    kind: FixKind.MissingParentheses,
+                    expression: node
+                } : {
+                        declaration,
+                        kind: FixKind.MissingReturnStatement,
+                        expression: node
+                    };
             }
         }
         else if (isBlock(firstStatement) && length(firstStatement.statements) === 1) {
@@ -115,7 +127,8 @@ namespace ts.codefix {
                 if (checkFixedAssignableTo(checker, declaration, node, expectType, isFunctionType)) {
                     return {
                         declaration,
-                        kind: FixKind.MissingReturnStatement
+                        kind: FixKind.MissingReturnStatement,
+                        expression: node
                     };
                 }
             }
@@ -124,7 +137,7 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function checkFixedAssignableTo (checker: TypeChecker, declaration: FunctionLikeDeclaration, expr: Expression, type: Type, isFunctionType: boolean) {
+    function checkFixedAssignableTo(checker: TypeChecker, declaration: FunctionLikeDeclaration, expr: Expression, type: Type, isFunctionType: boolean) {
         return checker.isTypeAssignableTo(checker.getTypeAtLocation(isFunctionType ? updateFunctionLikeBody(declaration, createBlock([createReturn(expr)])) : expr), type);
     }
 
@@ -149,59 +162,38 @@ namespace ts.codefix {
             if (!isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
             return getFixInfo(checker, initializer, checker.getTypeFromTypeNode(node.parent.type), /* isFunctionType */ true);
         }
-        return Debug.fail("unknow pattern");
+        return undefined;
     }
 
-    function getReturnExpression (stmt: Statement) {
-        if (isExpressionStatement(stmt)) {
-            return stmt.expression;
-        }
-        else if (isBlock(stmt) && length(stmt.statements) === 1) {
-            const block = first(stmt.statements);
-            if (isLabeledStatement(block) && isExpressionStatement(block.statement)) {
-                return block.statement.expression;
-            }
-        }
-
-        return Debug.fail("unknow statement");
+    function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: FunctionLikeDeclaration, expression: Expression) {
+        changes.replaceNode(sourceFile, declaration.body!, createBlock([createReturn(expression)]));
     }
 
-    function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: FunctionLikeDeclaration) {
-        const body = cast(declaration.body, isBlock);
-        const firstStatement = first(body.statements);
-        changes.replaceNode(sourceFile, firstStatement, createReturn(getReturnExpression(firstStatement)));
+    function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, withParen: boolean) {
+        changes.replaceNode(sourceFile, declaration.body, (withParen || needsParentheses(expression)) ? createParen(expression) : expression);
     }
 
-    function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: FunctionLikeDeclaration, withParen: boolean) {
-        const body = cast(declaration.body, isBlock);
-        const expression = getReturnExpression(first(body.statements));
-        changes.replaceNode(sourceFile, body, withParen ? createParen(expression) : expression);
+    function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
+        changes.replaceNode(sourceFile, declaration.body, createParen(expression));
     }
 
-    function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction) {
-        const body = cast(declaration.body, isBlock);
-        const labeledStatement = cast(first(body.statements), isLabeledStatement);
-        const expression = cast(labeledStatement.statement, isExpressionStatement).expression;
-        changes.replaceNode(sourceFile, declaration.body, createParen(createObjectLiteral([createPropertyAssignment(labeledStatement.label, expression)])));
-    }
-
-    function getActionForfixAddReturnStatement(context: CodeFixContext, declaration: FunctionLikeDeclaration) {
-        const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, declaration));
+    function getActionForfixAddReturnStatement(context: CodeFixContext, declaration: FunctionLikeDeclaration, expression: Expression) {
+        const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, declaration, expression));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Surmise_all_return_value);
     }
 
-    function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: FunctionLikeDeclaration) {
-        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, /* withParen */ false));
+    function getActionForfixRemoveBlockBodyBrace(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
+        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ false));
         return createCodeFixAction(fixId, changes, Diagnostics.Remove_block_body_braces, fixIdRemoveBlockBodyBrace, Diagnostics.Surmise_all_return_value);
     }
 
-    function getActionForfixReplaceBraceWithParen(context: CodeFixContext, declaration: FunctionLikeDeclaration) {
-        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, /* withParen */ true));
+    function getActionForfixReplaceBraceWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
+        const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, /* withParen */ true));
         return createCodeFixAction(fixId, changes, Diagnostics.Replace_braces_with_parentheses, fixIdReplaceBraceWithParen, Diagnostics.Surmise_all_return_value);
     }
 
-    function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction) {
-        const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration));
+    function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
+        const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
         return createCodeFixAction(fixId, changes, Diagnostics.Wrap_this_block_with_parentheses, fixIdWrapTheBlockWithParen, Diagnostics.Surmise_all_return_value);
     }
 }

@@ -13,3 +13,7 @@ verify.codeFixAvailable([
     { description: 'Replace braces with parentheses' },
     { description: 'Remove unused label' },
 ]);
+
+interface A {
+    bar: string
+}

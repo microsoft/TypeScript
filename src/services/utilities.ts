@@ -1783,4 +1783,9 @@ namespace ts {
         if (idx === -1) idx = change.indexOf('"' + name);
         return idx === -1 ? -1 : idx + 1;
     }
+
+    /* @internal */
+    export function needsParentheses(expression: Expression) {
+        return isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken || isObjectLiteralExpression(expression);
+    }
 }

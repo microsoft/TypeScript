@@ -1,13 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 //// interface A {
-////     foo: number
+////     bar: string
 //// }
-
-//// function Foo (): A | number {
-////     1
+//// 
+//// function Foo (): A {
+////     bar: '123'
 //// }
 
 verify.codeFixAvailable([
     { description: 'Add a return statement' },
+    { description: 'Remove unused label' },
 ]);
