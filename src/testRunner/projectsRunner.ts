@@ -211,14 +211,12 @@ namespace project {
                 .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
-            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => content);
+            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", content);
         }
 
         public verifyDiagnostics() {
             if (this.compilerResult.errors.length) {
-                Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt", () => {
-                    return getErrorsBaseline(this.compilerResult);
-                });
+                Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt", getErrorsBaseline(this.compilerResult));
             }
         }
 
@@ -244,7 +242,7 @@ namespace project {
                         }
 
                         const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, () => content as string | null); // TODO: GH#18217
+                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
                     }
                     catch (e) {
                         errs.push(e);
@@ -271,9 +269,7 @@ namespace project {
             if (!this.compilerResult.errors.length && this.testCase.declaration) {
                 const dTsCompileResult = this.compileDeclarations(this.compilerResult);
                 if (dTsCompileResult && dTsCompileResult.errors.length) {
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt", () => {
-                        return getErrorsBaseline(dTsCompileResult);
-                    });
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt", getErrorsBaseline(dTsCompileResult));
                 }
             }
         }

@@ -207,24 +207,19 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"), () => {
-                return utils.removeTestPathPrefixes(JSON.stringify(this.result.traces, undefined, 4));
-            });
+            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"),
+                utils.removeTestPathPrefixes(JSON.stringify(this.result.traces, undefined, 4)));
         }
     }
 
     public verifySourceMapRecord() {
         if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
-                const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
-                if ((this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined) {
-                    // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                    /* tslint:disable:no-null-keyword */
-                    return null;
-                    /* tslint:enable:no-null-keyword */
-                }
-                return record;
-            });
+            const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
+            const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
+                // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
+                ? null // tslint:disable-line no-null-keyword
+                : record;
+            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
 

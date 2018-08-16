@@ -4,7 +4,7 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
     return fetch("https://typescriptlang.org").then(resp => {
         return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 
