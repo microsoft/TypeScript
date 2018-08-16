@@ -642,51 +642,6 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, [combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
         });
 
-        function createSessionWithEventHandler(host: TestServerHost) {
-            const surveyEvents: server.SurveyReady[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.SurveyReady) {
-                        surveyEvents.push(e);
-                    }
-                }
-            });
-
-            return { session, verifySurveyReadyEvent };
-
-            function verifySurveyReadyEvent() {
-                assert.equal(surveyEvents.length, 1);
-                assert.deepEqual(surveyEvents, [{
-                    eventName: server.SurveyReady,
-                    data: { surveyId: "checkJs" }
-                }]);
-            }
-        }
-
-
-        it("logs an event when checkJs is set", () => {
-            const projectRoot = "/user/username/projects/project";
-            const file: File = {
-                path: `${projectRoot}/src/file.ts`,
-                content: "export var y = 10;"
-            };
-            const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { checkJs: true } }),
-            };
-            const host = createServerHost([file, tsconfig]);
-            const { session, verifySurveyReadyEvent } = createSessionWithEventHandler(host);
-            const service = session.getProjectService();
-            openFilesForSession([file], session);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, [file.path, tsconfig.path]);
-
-            host.runQueuedTimeoutCallbacks();
-
-            verifySurveyReadyEvent();
-        });
-
         it("can handle tsconfig file name with difference casing", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -3536,6 +3491,48 @@ namespace ts.projectSystem {
             function openFile(file: File) {
                 openFilesForSession([{ file, projectRootPath }], session);
             }
+        });
+
+        function createSessionWithEventHandler(host: TestServerHost) {
+            const surveyEvents: server.SurveyReady[] = [];
+            const session = createSession(host, {
+                eventHandler: e => {
+                    if (e.eventName === server.SurveyReady) {
+                        surveyEvents.push(e);
+                    }
+                }
+            });
+
+            return { session, verifySurveyReadyEvent };
+
+            function verifySurveyReadyEvent() {
+                assert.equal(surveyEvents.length, 1);
+                assert.deepEqual(surveyEvents, [{
+                    eventName: server.SurveyReady,
+                    data: { surveyId: "checkJs" }
+                }]);
+            }
+        }
+
+        it("logs an event when checkJs is set", () => {
+            const projectRoot = "/user/username/projects/project";
+            const file: File = {
+                path: `${projectRoot}/src/file.ts`,
+                content: "export var y = 10;"
+            };
+            const tsconfig: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { checkJs: true } }),
+            };
+            const host = createServerHost([file, tsconfig]);
+            const { session, verifySurveyReadyEvent } = createSessionWithEventHandler(host);
+            const service = session.getProjectService();
+            openFilesForSession([file], session);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            checkProjectActualFiles(project, [file.path, tsconfig.path]);
+
+            verifySurveyReadyEvent();
         });
 
         describe("CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
@@ -9135,75 +9132,6 @@ export const x = 10;`
         });
     });
 
-    describe("tsserverProjectSystem with large file", () => {
-        const projectRoot = "/user/username/projects/project";
-        const largeFile: File = {
-            path: `${projectRoot}/src/large.ts`,
-            content: "export var x = 10;",
-            fileSize: server.maxFileSize + 1
-        };
-
-        function createSessionWithEventHandler(host: TestServerHost) {
-            const largeFileReferencedEvents: server.LargeFileReferencedEvent[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.LargeFileReferencedEvent) {
-                        largeFileReferencedEvents.push(e);
-                    }
-                }
-            });
-
-            return { session, verifyLargeFileReferencedEvent };
-
-            function verifyLargeFileReferencedEvent() {
-                assert.equal(largeFileReferencedEvents.length, 1);
-                assert.deepEqual(largeFileReferencedEvents, [{
-                    eventName: server.LargeFileReferencedEvent,
-                    data: { file: largeFile.path, fileSize: largeFile.fileSize, maxFileSize: server.maxFileSize }
-                }]);
-            }
-        }
-
-        it("when large file is included by tsconfig", () => {
-            const file: File = {
-                path: `${projectRoot}/src/file.ts`,
-                content: "export var y = 10;"
-            };
-            const tsconfig: File = {
-                path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({ files: ["src/file.ts", "src/large.ts"] })
-            };
-            const files = [file, largeFile, libFile, tsconfig];
-            const host = createServerHost(files);
-            const { session, verifyLargeFileReferencedEvent } = createSessionWithEventHandler(host);
-            const service = session.getProjectService();
-            openFilesForSession([file], session);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            const project = service.configuredProjects.get(tsconfig.path)!;
-            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path, tsconfig.path]);
-            const info = service.getScriptInfo(largeFile.path)!;
-            assert.equal(info.cacheSourceFile.sourceFile.text, "");
-            verifyLargeFileReferencedEvent();
-        });
-
-        it("when large file is included by module resolution", () => {
-            const file: File = {
-                path: `${projectRoot}/src/file.ts`,
-                content: `export var y = 10;import {x} from "./large"`
-            };
-            const files = [file, largeFile, libFile];
-            const host = createServerHost(files);
-            const { session, verifyLargeFileReferencedEvent } = createSessionWithEventHandler(host);
-            const service = session.getProjectService();
-            openFilesForSession([file], session);
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, [file.path, libFile.path, largeFile.path]);
-            const info = service.getScriptInfo(largeFile.path)!;
-            assert.equal(info.cacheSourceFile.sourceFile.text, "");
-            verifyLargeFileReferencedEvent();
-        });
-    })
     describe("tsserverProjectSystem syntax operations", () => {
         function navBarFull(session: TestSession, file: File) {
             return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
