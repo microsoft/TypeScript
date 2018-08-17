@@ -7119,6 +7119,22 @@ namespace ts {
             return !!(typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default));
         }
 
+        function getApparentTypeOfMappedType(type: MappedType) {
+            return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
+        }
+
+        function getResolvedApparentTypeOfMappedType(type: MappedType) {
+            const typeVariable = getHomomorphicTypeVariable(type);
+            if (typeVariable) {
+                const constraint = getConstraintOfTypeParameter(typeVariable);
+                if (constraint && (isArrayType(constraint) || isReadonlyArrayType(constraint) || isTupleType(constraint))) {
+                    const mapper = makeUnaryTypeMapper(typeVariable, constraint);
+                    return instantiateType(type, combineTypeMappers(mapper, type.mapper));
+                }
+            }
+            return type;
+        }
+
         /**
          * For a type parameter, return the base constraint of the type parameter. For the string, number,
          * boolean, and symbol primitive types, return the corresponding object types. Otherwise return the
@@ -7126,7 +7142,8 @@ namespace ts {
          */
         function getApparentType(type: Type): Type {
             const t = type.flags & TypeFlags.Instantiable ? getBaseConstraintOfType(type) || emptyObjectType : type;
-            return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
+            return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(<MappedType>t) :
+                t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
                 t.flags & TypeFlags.NumberLike ? globalNumberType :
                 t.flags & TypeFlags.BooleanLike ? globalBooleanType :
@@ -10159,8 +10176,19 @@ namespace ts {
             }
         }
 
+        function getHomomorphicTypeVariable(type: MappedType) {
+            const constraintType = getConstraintTypeFromMappedType(type);
+            if (constraintType.flags & TypeFlags.Index) {
+                const typeVariable = (<IndexType>constraintType).type;
+                if (typeVariable.flags & TypeFlags.TypeParameter) {
+                    return <TypeParameter>typeVariable;
+                }
+            }
+            return undefined;
+        }
+
         function instantiateMappedType(type: MappedType, mapper: TypeMapper): Type {
-            // For a momomorphic mapped type { [P in keyof T]: X }, where T is some type variable, the mapping
+            // For a homomorphic mapped type { [P in keyof T]: X }, where T is some type variable, the mapping
             // operation depends on T as follows:
             // * If T is a primitive type no mapping is performed and the result is simply T.
             // * If T is a union type we distribute the mapped type over the union.
@@ -10170,30 +10198,23 @@ namespace ts {
             // For example, when T is instantiated to a union type A | B, we produce { [P in keyof A]: X } |
             // { [P in keyof B]: X }, and when when T is instantiated to a union type A | undefined, we produce
             // { [P in keyof A]: X } | undefined.
-            const constraintType = getConstraintTypeFromMappedType(type);
-            if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = (<IndexType>constraintType).type;
-                if (typeVariable.flags & TypeFlags.TypeParameter) {
-                    const mappedTypeVariable = instantiateType(typeVariable, mapper);
-                    if (typeVariable !== mappedTypeVariable) {
-                        return mapType(mappedTypeVariable, t => {
-                            if (isMappableType(t)) {
-                                const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                                return isArrayType(t) ? createArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper)) :
-                                    isReadonlyArrayType(t) ? createReadonlyArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper)) :
-                                    isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
-                                    instantiateAnonymousType(type, replacementMapper);
-                            }
-                            return t;
-                        });
-                    }
+            const typeVariable = getHomomorphicTypeVariable(type);
+            if (typeVariable) {
+                const mappedTypeVariable = instantiateType(typeVariable, mapper);
+                if (typeVariable !== mappedTypeVariable) {
+                    return mapType(mappedTypeVariable, t => {
+                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType) {
+                            const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
+                            return isArrayType(t) ? createArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper)) :
+                                isReadonlyArrayType(t) ? createReadonlyArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper)) :
+                                isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
+                                instantiateAnonymousType(type, replacementMapper);
+                        }
+                        return t;
+                    });
                 }
             }
             return instantiateAnonymousType(type, mapper);
-        }
-
-        function isMappableType(type: Type) {
-            return type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection);
         }
 
         function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
@@ -11623,7 +11644,6 @@ namespace ts {
                     const constraint = getConstraintForRelation(target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
-                            errorInfo = saveErrorInfo;
                             return result;
                         }
                     }
@@ -11642,7 +11662,6 @@ namespace ts {
                             const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
                             const templateType = getTemplateTypeFromMappedType(target);
                             if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                                errorInfo = saveErrorInfo;
                                 return result;
                             }
                         }
@@ -11716,6 +11735,23 @@ namespace ts {
                     }
                 }
                 else {
+                    // An empty object type is related to any mapped type that includes a '?' modifier.
+                    if (isPartialMappedType(target) && !isGenericMappedType(source) && isEmptyObjectType(source)) {
+                        return Ternary.True;
+                    }
+                    if (isGenericMappedType(target)) {
+                        if (isGenericMappedType(source)) {
+                            if (result = mappedTypeRelatedTo(source, target, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                        return Ternary.False;
+                    }
+                    const sourceIsPrimitive = !!(source.flags & TypeFlags.Primitive);
+                    if (relation !== identityRelation) {
+                        source = getApparentType(source);
+                    }
                     if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target &&
                         !(getObjectFlags(source) & ObjectFlags.MarkerType || getObjectFlags(target) & ObjectFlags.MarkerType)) {
                         // We have type references to the same generic type, and the type references are not marker
@@ -11751,34 +11787,21 @@ namespace ts {
                     }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
                     // it may hold in a structural comparison.
-                    const sourceIsPrimitive = !!(source.flags & TypeFlags.Primitive);
-                    if (relation !== identityRelation) {
-                        source = getApparentType(source);
-                    }
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !sourceIsPrimitive;
-                        // An empty object type is related to any mapped type that includes a '?' modifier.
-                        if (isPartialMappedType(target) && !isGenericMappedType(source) && isEmptyObjectType(source)) {
-                            result = Ternary.True;
-                        }
-                        else if (isGenericMappedType(target)) {
-                            result = isGenericMappedType(source) ? mappedTypeRelatedTo(source, target, reportStructuralErrors) : Ternary.False;
-                        }
-                        else {
-                            result = propertiesRelatedTo(source, target, reportStructuralErrors);
+                        result = propertiesRelatedTo(source, target, reportStructuralErrors);
+                        if (result) {
+                            result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportStructuralErrors);
                             if (result) {
-                                result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportStructuralErrors);
+                                result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportStructuralErrors);
                                 if (result) {
-                                    result &= signaturesRelatedTo(source, target, SignatureKind.Construct, reportStructuralErrors);
+                                    result &= indexTypesRelatedTo(source, target, IndexKind.String, sourceIsPrimitive, reportStructuralErrors);
                                     if (result) {
-                                        result &= indexTypesRelatedTo(source, target, IndexKind.String, sourceIsPrimitive, reportStructuralErrors);
-                                        if (result) {
-                                            result &= indexTypesRelatedTo(source, target, IndexKind.Number, sourceIsPrimitive, reportStructuralErrors);
-                                        }
+                                        result &= indexTypesRelatedTo(source, target, IndexKind.Number, sourceIsPrimitive, reportStructuralErrors);
                                     }
                                 }
                             }

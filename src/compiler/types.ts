@@ -3949,6 +3949,7 @@ namespace ts {
         constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
+        resolvedApparentType?: Type;
     }
 
     export interface EvolvingArrayType extends ObjectType {
