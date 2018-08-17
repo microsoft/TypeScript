@@ -27,7 +27,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >render : () => any
 
     return <span>Hello, world!</span>;
-><span>Hello, world!</span> : any
+><span>Hello, world!</span> : error
 >span : any
 >span : any
   }

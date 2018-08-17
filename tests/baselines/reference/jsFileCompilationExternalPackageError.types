@@ -4,14 +4,14 @@ import {a} from "b";
 
 a++;
 >a++ : number
->a : any
+>a : error
 
 import {c} from "c";
 >c : any
 
 c++;
 >c++ : number
->c : any
+>c : error
 
 === tests/cases/compiler/node_modules/b.ts ===
 var a = 10;
@@ -28,6 +28,6 @@ exports.a = 10;
 
 c = 10;
 >c = 10 : 10
->c : any
+>c : error
 >10 : 10
 
