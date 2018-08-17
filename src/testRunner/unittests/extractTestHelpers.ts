@@ -131,23 +131,21 @@ namespace ts {
             const infos = refactor.extractSymbol.getAvailableActions(context)!;
             const actions = find(infos, info => info.description === description.message)!.actions;
 
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
-                const data: string[] = [];
-                data.push(`// ==ORIGINAL==`);
-                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-                for (const action of actions) {
-                    const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
-                    assert.lengthOf(edits, 1);
-                    data.push(`// ==SCOPE::${action.description}==`);
-                    const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
-                    const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
-                    data.push(newTextWithRename);
+            const data: string[] = [];
+            data.push(`// ==ORIGINAL==`);
+            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+            for (const action of actions) {
+                const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
+                assert.lengthOf(edits, 1);
+                data.push(`// ==SCOPE::${action.description}==`);
+                const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+                const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
+                data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
-                    assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-                }
-                return data.join(newLineCharacter);
-            });
+                const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+            }
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
         function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {

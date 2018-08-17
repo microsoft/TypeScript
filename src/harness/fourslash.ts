@@ -1639,11 +1639,7 @@ Actual: ${stringify(fullActual)}`);
                 baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
 
             }
-            Harness.Baseline.runBaseline(
-                baselineFile,
-                () => {
-                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!);
-                });
+            Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
         private getEmitFiles(): ReadonlyArray<FourSlashFile> {
@@ -1680,44 +1676,40 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineGetEmitOutput(): void {
-            Harness.Baseline.runBaseline(
-                ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]),
-                () => {
-                    let resultString = "";
-                    // Loop through all the emittedFiles and emit them one by one
-                    for (const emitFile of this.getEmitFiles()) {
-                        const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
-                        // Print emitOutputStatus in readable format
-                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
+            let resultString = "";
+            // Loop through all the emittedFiles and emit them one by one
+            for (const emitFile of this.getEmitFiles()) {
+                const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
+                // Print emitOutputStatus in readable format
+                resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
 
-                        if (emitOutput.emitSkipped) {
-                            resultString += "Diagnostics:" + Harness.IO.newLine();
-                            const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
-                            for (const diagnostic of diagnostics) {
-                                if (!ts.isString(diagnostic.messageText)) {
-                                    let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
-                                    let indentation = " ";
-                                    while (chainedMessage) {
-                                        resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
-                                        chainedMessage = chainedMessage.next;
-                                        indentation = indentation + " ";
-                                    }
-                                }
-                                else {
-                                    resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
-                                }
+                if (emitOutput.emitSkipped) {
+                    resultString += "Diagnostics:" + Harness.IO.newLine();
+                    const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
+                    for (const diagnostic of diagnostics) {
+                        if (!ts.isString(diagnostic.messageText)) {
+                            let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
+                            let indentation = " ";
+                            while (chainedMessage) {
+                                resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
+                                chainedMessage = chainedMessage.next;
+                                indentation = indentation + " ";
                             }
                         }
-
-                        for (const outputFile of emitOutput.outputFiles) {
-                            const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
-                            resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
+                        else {
+                            resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
                         }
-                        resultString += Harness.IO.newLine();
                     }
+                }
 
-                    return resultString;
-                });
+                for (const outputFile of emitOutput.outputFiles) {
+                    const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
+                    resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
+                }
+                resultString += Harness.IO.newLine();
+            }
+
+            Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
         }
 
         public baselineQuickInfo() {
@@ -1728,12 +1720,11 @@ Actual: ${stringify(fullActual)}`);
 
             Harness.Baseline.runBaseline(
                 baselineFile,
-                () => stringify(
+                stringify(
                     this.testData.markers.map(marker => ({
                         marker,
                         quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
-                    }))
-                ));
+                    }))));
         }
 
         public printBreakpointLocation(pos: number) {
@@ -2347,10 +2338,7 @@ Actual: ${stringify(fullActual)}`);
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
                 this.testData.globalOptions[MetadataOptionNames.baselineFile],
-                () => {
-                    return this.baselineCurrentFileLocations(pos =>
-                        this.getNameOrDottedNameSpan(pos)!);
-                });
+                this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!));
         }
 
         public printNameOrDottedNameSpans(pos: number) {
