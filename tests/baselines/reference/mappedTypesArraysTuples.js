@@ -62,6 +62,28 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
     let x4 = all(a, b, c, d);
 }
 
+function f2<T extends any[]>(a: Boxified<T>) {
+    let x: Box<any> | undefined = a.pop();
+    let y: Box<any>[] = a.concat(a);
+}
+
+// Repro from #26163
+
+type ElementType<T> = T extends Array<infer U> ? U : never;
+type Mapped<T> = { [K in keyof T]: T[K] };
+
+type F<T> = ElementType<Mapped<T>>;
+type R1 = F<[string, number, boolean]>;  // string | number | boolean
+type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
+
+// Repro from #26163
+
+declare function acceptArray(arr: any[]): void;
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+function acceptMappedArray<T extends any[]>(arr: T) {
+    acceptArray(mapArray(arr));
+}
+
 
 //// [mappedTypesArraysTuples.js]
 "use strict";
@@ -76,6 +98,13 @@ function f1(a, b, c, d) {
     var x2 = all(a, b);
     var x3 = all(a, b, c);
     var x4 = all(a, b, c, d);
+}
+function f2(a) {
+    var x = a.pop();
+    var y = a.concat(a);
+}
+function acceptMappedArray(arr) {
+    acceptArray(mapArray(arr));
 }
 
 
@@ -142,3 +171,14 @@ declare type Awaitified<T> = {
 };
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 declare function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>): void;
+declare function f2<T extends any[]>(a: Boxified<T>): void;
+declare type ElementType<T> = T extends Array<infer U> ? U : never;
+declare type Mapped<T> = {
+    [K in keyof T]: T[K];
+};
+declare type F<T> = ElementType<Mapped<T>>;
+declare type R1 = F<[string, number, boolean]>;
+declare type R2 = ElementType<Mapped<[string, number, boolean]>>;
+declare function acceptArray(arr: any[]): void;
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+declare function acceptMappedArray<T extends any[]>(arr: T): void;

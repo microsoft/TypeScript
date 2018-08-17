@@ -245,3 +245,86 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >d : Symbol(d, Decl(mappedTypesArraysTuples.ts, 56, 55))
 }
 
+function f2<T extends any[]>(a: Boxified<T>) {
+>f2 : Symbol(f2, Decl(mappedTypesArraysTuples.ts, 61, 1))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 63, 12))
+>a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 63, 29))
+>Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 63, 12))
+
+    let x: Box<any> | undefined = a.pop();
+>x : Symbol(x, Decl(mappedTypesArraysTuples.ts, 64, 7))
+>Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
+>a.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 63, 29))
+>pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+
+    let y: Box<any>[] = a.concat(a);
+>y : Symbol(y, Decl(mappedTypesArraysTuples.ts, 65, 7))
+>Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
+>a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 63, 29))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 63, 29))
+}
+
+// Repro from #26163
+
+type ElementType<T> = T extends Array<infer U> ? U : never;
+>ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 66, 1))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 70, 17))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 70, 17))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 70, 43))
+>U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 70, 43))
+
+type Mapped<T> = { [K in keyof T]: T[K] };
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 71, 12))
+>K : Symbol(K, Decl(mappedTypesArraysTuples.ts, 71, 20))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 71, 12))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 71, 12))
+>K : Symbol(K, Decl(mappedTypesArraysTuples.ts, 71, 20))
+
+type F<T> = ElementType<Mapped<T>>;
+>F : Symbol(F, Decl(mappedTypesArraysTuples.ts, 71, 42))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 73, 7))
+>ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 66, 1))
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 73, 7))
+
+type R1 = F<[string, number, boolean]>;  // string | number | boolean
+>R1 : Symbol(R1, Decl(mappedTypesArraysTuples.ts, 73, 35))
+>F : Symbol(F, Decl(mappedTypesArraysTuples.ts, 71, 42))
+
+type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
+>R2 : Symbol(R2, Decl(mappedTypesArraysTuples.ts, 74, 39))
+>ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 66, 1))
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+
+// Repro from #26163
+
+declare function acceptArray(arr: any[]): void;
+>acceptArray : Symbol(acceptArray, Decl(mappedTypesArraysTuples.ts, 75, 57))
+>arr : Symbol(arr, Decl(mappedTypesArraysTuples.ts, 79, 29))
+
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+>mapArray : Symbol(mapArray, Decl(mappedTypesArraysTuples.ts, 79, 47))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 80, 26))
+>arr : Symbol(arr, Decl(mappedTypesArraysTuples.ts, 80, 43))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 80, 26))
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 80, 26))
+
+function acceptMappedArray<T extends any[]>(arr: T) {
+>acceptMappedArray : Symbol(acceptMappedArray, Decl(mappedTypesArraysTuples.ts, 80, 62))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 81, 27))
+>arr : Symbol(arr, Decl(mappedTypesArraysTuples.ts, 81, 44))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 81, 27))
+
+    acceptArray(mapArray(arr));
+>acceptArray : Symbol(acceptArray, Decl(mappedTypesArraysTuples.ts, 75, 57))
+>mapArray : Symbol(mapArray, Decl(mappedTypesArraysTuples.ts, 79, 47))
+>arr : Symbol(arr, Decl(mappedTypesArraysTuples.ts, 81, 44))
+}
+

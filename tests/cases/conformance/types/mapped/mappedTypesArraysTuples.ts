@@ -63,3 +63,25 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
     let x3 = all(a, b, c);
     let x4 = all(a, b, c, d);
 }
+
+function f2<T extends any[]>(a: Boxified<T>) {
+    let x: Box<any> | undefined = a.pop();
+    let y: Box<any>[] = a.concat(a);
+}
+
+// Repro from #26163
+
+type ElementType<T> = T extends Array<infer U> ? U : never;
+type Mapped<T> = { [K in keyof T]: T[K] };
+
+type F<T> = ElementType<Mapped<T>>;
+type R1 = F<[string, number, boolean]>;  // string | number | boolean
+type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
+
+// Repro from #26163
+
+declare function acceptArray(arr: any[]): void;
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+function acceptMappedArray<T extends any[]>(arr: T) {
+    acceptArray(mapArray(arr));
+}
