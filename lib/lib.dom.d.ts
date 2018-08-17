@@ -928,6 +928,7 @@ interface PositionOptions {
     enableHighAccuracy?: boolean;
     maximumAge?: number;
     timeout?: number;
+    distanceFilter?: number;                      
 }
 
 interface ProgressEventInit extends EventInit {
