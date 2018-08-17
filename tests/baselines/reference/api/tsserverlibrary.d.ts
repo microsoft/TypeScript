@@ -5751,24 +5751,6 @@ declare namespace ts.server {
         remove(path: NormalizedPath): void;
     }
     function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
-    interface ProjectOptions {
-        configHasExtendsProperty: boolean;
-        /**
-         * true if config file explicitly listed files
-         */
-        configHasFilesProperty: boolean;
-        configHasIncludeProperty: boolean;
-        configHasExcludeProperty: boolean;
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
-        /**
-         * these fields can be present in the project file
-         */
-        files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
-        compilerOptions?: CompilerOptions;
-        typeAcquisition?: TypeAcquisition;
-        compileOnSave?: boolean;
-    }
     function isInferredProjectName(name: string): boolean;
     function makeInferredProjectName(counter: number): string;
     function createSortedArray<T>(): SortedArray<T>;
@@ -8238,6 +8220,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
@@ -8322,7 +8305,7 @@ declare namespace ts.server {
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
-        protected enableGlobalPlugins(): void;
+        protected enableGlobalPlugins(options: CompilerOptions): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
@@ -8351,14 +8334,14 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        compileOnSaveEnabled: boolean;
-        private projectReferences;
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
+        private projectReferences;
+        protected isInitialLoadPending: () => boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -8391,6 +8374,7 @@ declare namespace ts.server {
         compileOnSaveEnabled: boolean;
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
+        updateGraph(): boolean;
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
         getTypeAcquisition(): TypeAcquisition;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
@@ -8692,15 +8676,13 @@ declare namespace ts.server {
         private findConfiguredProjectByProjectName;
         private getConfiguredProjectByCanonicalConfigFilePath;
         private findExternalProjectByProjectName;
-        private convertConfigFileContentToProjectOptions;
         /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
         private getFilenameForExceededTotalSizeLimitForNonTsFiles;
         private createExternalProject;
-        private sendProjectTelemetry;
-        private addFilesToNonInferredProjectAndUpdateGraph;
+        private addFilesToNonInferredProject;
         private createConfiguredProject;
         private updateNonInferredProjectFiles;
-        private updateNonInferredProject;
+        private updateRootAndOptionsOfNonInferredProject;
         private sendConfigFileDiagEvent;
         private getOrCreateInferredProjectForProjectRootPathIfEnabled;
         private getOrCreateSingleInferredProjectIfEnabled;
