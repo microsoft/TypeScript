@@ -5155,7 +5155,7 @@ module TypeScript {
 >emitRequired : () => boolean
 
             if (!this.isDeclareFile && !this.isResident && this.bod) {
->!this.isDeclareFile && !this.isResident && this.bod : ASTList
+>!this.isDeclareFile && !this.isResident && this.bod : false | ASTList
 >!this.isDeclareFile && !this.isResident : boolean
 >!this.isDeclareFile : boolean
 >this.isDeclareFile : boolean

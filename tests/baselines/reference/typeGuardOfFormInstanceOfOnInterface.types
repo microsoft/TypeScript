@@ -50,9 +50,9 @@ var c1Orc2: C1 | C2;
 >c1Orc2 : C1 | C2
 
 str = c1Orc2 instanceof c1 && c1Orc2.p1; // C1
->str = c1Orc2 instanceof c1 && c1Orc2.p1 : string
+>str = c1Orc2 instanceof c1 && c1Orc2.p1 : string | false
 >str : string
->c1Orc2 instanceof c1 && c1Orc2.p1 : string
+>c1Orc2 instanceof c1 && c1Orc2.p1 : string | false
 >c1Orc2 instanceof c1 : boolean
 >c1Orc2 : C1 | C2
 >c1 : C1
@@ -61,9 +61,9 @@ str = c1Orc2 instanceof c1 && c1Orc2.p1; // C1
 >p1 : string
 
 num = c1Orc2 instanceof c2 && c1Orc2.p2; // C2
->num = c1Orc2 instanceof c2 && c1Orc2.p2 : number
+>num = c1Orc2 instanceof c2 && c1Orc2.p2 : number | false
 >num : number
->c1Orc2 instanceof c2 && c1Orc2.p2 : number
+>c1Orc2 instanceof c2 && c1Orc2.p2 : number | false
 >c1Orc2 instanceof c2 : boolean
 >c1Orc2 : C1 | C2
 >c2 : C2
@@ -72,9 +72,9 @@ num = c1Orc2 instanceof c2 && c1Orc2.p2; // C2
 >p2 : number
 
 str = c1Orc2 instanceof d1 && c1Orc2.p1; // C1
->str = c1Orc2 instanceof d1 && c1Orc2.p1 : string
+>str = c1Orc2 instanceof d1 && c1Orc2.p1 : string | false
 >str : string
->c1Orc2 instanceof d1 && c1Orc2.p1 : string
+>c1Orc2 instanceof d1 && c1Orc2.p1 : string | false
 >c1Orc2 instanceof d1 : boolean
 >c1Orc2 : C1 | C2
 >d1 : D1
@@ -83,9 +83,9 @@ str = c1Orc2 instanceof d1 && c1Orc2.p1; // C1
 >p1 : string
 
 num = c1Orc2 instanceof d1 && c1Orc2.p3; // D1
->num = c1Orc2 instanceof d1 && c1Orc2.p3 : number
+>num = c1Orc2 instanceof d1 && c1Orc2.p3 : number | false
 >num : number
->c1Orc2 instanceof d1 && c1Orc2.p3 : number
+>c1Orc2 instanceof d1 && c1Orc2.p3 : number | false
 >c1Orc2 instanceof d1 : boolean
 >c1Orc2 : C1 | C2
 >d1 : D1
@@ -97,9 +97,9 @@ var c2Ord1: C2 | D1;
 >c2Ord1 : C2 | D1
 
 num = c2Ord1 instanceof c2 && c2Ord1.p2; // C2
->num = c2Ord1 instanceof c2 && c2Ord1.p2 : number
+>num = c2Ord1 instanceof c2 && c2Ord1.p2 : number | false
 >num : number
->c2Ord1 instanceof c2 && c2Ord1.p2 : number
+>c2Ord1 instanceof c2 && c2Ord1.p2 : number | false
 >c2Ord1 instanceof c2 : boolean
 >c2Ord1 : C2 | D1
 >c2 : C2
@@ -108,9 +108,9 @@ num = c2Ord1 instanceof c2 && c2Ord1.p2; // C2
 >p2 : number
 
 num = c2Ord1 instanceof d1 && c2Ord1.p3; // D1
->num = c2Ord1 instanceof d1 && c2Ord1.p3 : number
+>num = c2Ord1 instanceof d1 && c2Ord1.p3 : number | false
 >num : number
->c2Ord1 instanceof d1 && c2Ord1.p3 : number
+>c2Ord1 instanceof d1 && c2Ord1.p3 : number | false
 >c2Ord1 instanceof d1 : boolean
 >c2Ord1 : C2 | D1
 >d1 : D1
@@ -119,9 +119,9 @@ num = c2Ord1 instanceof d1 && c2Ord1.p3; // D1
 >p3 : number
 
 str = c2Ord1 instanceof d1 && c2Ord1.p1; // D1
->str = c2Ord1 instanceof d1 && c2Ord1.p1 : string
+>str = c2Ord1 instanceof d1 && c2Ord1.p1 : string | false
 >str : string
->c2Ord1 instanceof d1 && c2Ord1.p1 : string
+>c2Ord1 instanceof d1 && c2Ord1.p1 : string | false
 >c2Ord1 instanceof d1 : boolean
 >c2Ord1 : C2 | D1
 >d1 : D1
@@ -131,7 +131,7 @@ str = c2Ord1 instanceof d1 && c2Ord1.p1; // D1
 
 var r2: D1 | C2 = c2Ord1 instanceof c1 && c2Ord1; // C2 | D1
 >r2 : C2 | D1
->c2Ord1 instanceof c1 && c2Ord1 : D1
+>c2Ord1 instanceof c1 && c2Ord1 : false | D1
 >c2Ord1 instanceof c1 : boolean
 >c2Ord1 : C2 | D1
 >c1 : C1

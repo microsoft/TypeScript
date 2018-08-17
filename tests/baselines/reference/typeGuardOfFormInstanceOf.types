@@ -43,9 +43,9 @@ var ctor1: C1 | C2;
 >ctor1 : C1 | C2
 
 str = ctor1 instanceof C1 && ctor1.p1; // C1
->str = ctor1 instanceof C1 && ctor1.p1 : string
+>str = ctor1 instanceof C1 && ctor1.p1 : string | false
 >str : string
->ctor1 instanceof C1 && ctor1.p1 : string
+>ctor1 instanceof C1 && ctor1.p1 : string | false
 >ctor1 instanceof C1 : boolean
 >ctor1 : C1 | C2
 >C1 : typeof C1
@@ -54,9 +54,9 @@ str = ctor1 instanceof C1 && ctor1.p1; // C1
 >p1 : string
 
 num = ctor1 instanceof C2 && ctor1.p2; // C2
->num = ctor1 instanceof C2 && ctor1.p2 : number
+>num = ctor1 instanceof C2 && ctor1.p2 : number | false
 >num : number
->ctor1 instanceof C2 && ctor1.p2 : number
+>ctor1 instanceof C2 && ctor1.p2 : number | false
 >ctor1 instanceof C2 : boolean
 >ctor1 : C1 | C2
 >C2 : typeof C2
@@ -65,9 +65,9 @@ num = ctor1 instanceof C2 && ctor1.p2; // C2
 >p2 : number
 
 str = ctor1 instanceof D1 && ctor1.p1; // D1
->str = ctor1 instanceof D1 && ctor1.p1 : string
+>str = ctor1 instanceof D1 && ctor1.p1 : string | false
 >str : string
->ctor1 instanceof D1 && ctor1.p1 : string
+>ctor1 instanceof D1 && ctor1.p1 : string | false
 >ctor1 instanceof D1 : boolean
 >ctor1 : C1 | C2
 >D1 : typeof D1
@@ -76,9 +76,9 @@ str = ctor1 instanceof D1 && ctor1.p1; // D1
 >p1 : string
 
 num = ctor1 instanceof D1 && ctor1.p3; // D1
->num = ctor1 instanceof D1 && ctor1.p3 : number
+>num = ctor1 instanceof D1 && ctor1.p3 : number | false
 >num : number
->ctor1 instanceof D1 && ctor1.p3 : number
+>ctor1 instanceof D1 && ctor1.p3 : number | false
 >ctor1 instanceof D1 : boolean
 >ctor1 : C1 | C2
 >D1 : typeof D1
@@ -90,9 +90,9 @@ var ctor2: C2 | D1;
 >ctor2 : C2 | D1
 
 num = ctor2 instanceof C2 && ctor2.p2; // C2
->num = ctor2 instanceof C2 && ctor2.p2 : number
+>num = ctor2 instanceof C2 && ctor2.p2 : number | false
 >num : number
->ctor2 instanceof C2 && ctor2.p2 : number
+>ctor2 instanceof C2 && ctor2.p2 : number | false
 >ctor2 instanceof C2 : boolean
 >ctor2 : C2 | D1
 >C2 : typeof C2
@@ -101,9 +101,9 @@ num = ctor2 instanceof C2 && ctor2.p2; // C2
 >p2 : number
 
 num = ctor2 instanceof D1 && ctor2.p3; // D1
->num = ctor2 instanceof D1 && ctor2.p3 : number
+>num = ctor2 instanceof D1 && ctor2.p3 : number | false
 >num : number
->ctor2 instanceof D1 && ctor2.p3 : number
+>ctor2 instanceof D1 && ctor2.p3 : number | false
 >ctor2 instanceof D1 : boolean
 >ctor2 : C2 | D1
 >D1 : typeof D1
@@ -112,9 +112,9 @@ num = ctor2 instanceof D1 && ctor2.p3; // D1
 >p3 : number
 
 str = ctor2 instanceof D1 && ctor2.p1; // D1
->str = ctor2 instanceof D1 && ctor2.p1 : string
+>str = ctor2 instanceof D1 && ctor2.p1 : string | false
 >str : string
->ctor2 instanceof D1 && ctor2.p1 : string
+>ctor2 instanceof D1 && ctor2.p1 : string | false
 >ctor2 instanceof D1 : boolean
 >ctor2 : C2 | D1
 >D1 : typeof D1
@@ -124,7 +124,7 @@ str = ctor2 instanceof D1 && ctor2.p1; // D1
 
 var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
 >r2 : C2 | D1
->ctor2 instanceof C1 && ctor2 : D1
+>ctor2 instanceof C1 && ctor2 : false | D1
 >ctor2 instanceof C1 : boolean
 >ctor2 : C2 | D1
 >C1 : typeof C1

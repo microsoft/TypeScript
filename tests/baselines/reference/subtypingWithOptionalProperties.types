@@ -25,7 +25,7 @@ var r = f({ s: new Object() }); // ok
 >Object : ObjectConstructor
 
 r.s && r.s.toFixed(); // would blow up at runtime
->r.s && r.s.toFixed() : string
+>r.s && r.s.toFixed() : string | 0
 >r.s : number
 >r : { s?: number; }
 >s : number

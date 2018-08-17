@@ -352,8 +352,8 @@ function f14(x: 0 | 1 | 2, y: string) {
 >y : string
 
     var a = x && y;
->a : string
->x && y : string
+>a : string | 0
+>x && y : string | 0
 >x : 0 | 1 | 2
 >y : string
 

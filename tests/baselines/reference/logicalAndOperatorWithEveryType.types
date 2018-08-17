@@ -105,14 +105,14 @@ var rb2 = a2 && a2;
 >a2 : true
 
 var rb3 = a3 && a2;
->rb3 : boolean
->a3 && a2 : boolean
+>rb3 : boolean | 0
+>a3 && a2 : boolean | 0
 >a3 : number
 >a2 : boolean
 
 var rb4 = a4 && a2;
->rb4 : boolean
->a4 && a2 : boolean
+>rb4 : boolean | ""
+>a4 && a2 : boolean | ""
 >a4 : string
 >a2 : boolean
 
@@ -123,8 +123,8 @@ var rb5 = a5 && a2;
 >a2 : boolean
 
 var rb6 = a6 && a2;
->rb6 : boolean
->a6 && a2 : boolean
+>rb6 : boolean | E
+>a6 && a2 : boolean | E.a
 >a6 : E
 >a2 : boolean
 
@@ -159,8 +159,8 @@ var rc1 = a1 && a3;
 >a3 : number
 
 var rc2 = a2 && a3;
->rc2 : number
->a2 && a3 : number
+>rc2 : number | boolean
+>a2 && a3 : number | false
 >a2 : boolean
 >a3 : number
 
@@ -171,8 +171,8 @@ var rc3 = a3 && a3;
 >a3 : number
 
 var rc4 = a4 && a3;
->rc4 : number
->a4 && a3 : number
+>rc4 : number | ""
+>a4 && a3 : number | ""
 >a4 : string
 >a3 : number
 
@@ -219,14 +219,14 @@ var rd1 = a1 && a4;
 >a4 : string
 
 var rd2 = a2 && a4;
->rd2 : string
->a2 && a4 : string
+>rd2 : string | boolean
+>a2 && a4 : string | false
 >a2 : boolean
 >a4 : string
 
 var rd3 = a3 && a4;
->rd3 : string
->a3 && a4 : string
+>rd3 : string | 0
+>a3 && a4 : string | 0
 >a3 : number
 >a4 : string
 
@@ -243,8 +243,8 @@ var rd5 = a5 && a4;
 >a4 : string
 
 var rd6 = a6 && a4;
->rd6 : string
->a6 && a4 : string
+>rd6 : string | E
+>a6 && a4 : string | E.a
 >a6 : E
 >a4 : string
 
@@ -279,20 +279,20 @@ var re1 = a1 && a5;
 >a5 : void
 
 var re2 = a2 && a5;
->re2 : void
->a2 && a5 : void
+>re2 : boolean | void
+>a2 && a5 : false | void
 >a2 : boolean
 >a5 : void
 
 var re3 = a3 && a5;
->re3 : void
->a3 && a5 : void
+>re3 : void | 0
+>a3 && a5 : void | 0
 >a3 : number
 >a5 : void
 
 var re4 = a4 && a5;
->re4 : void
->a4 && a5 : void
+>re4 : void | ""
+>a4 && a5 : void | ""
 >a4 : string
 >a5 : void
 
@@ -303,8 +303,8 @@ var re5 = a5 && a5;
 >a5 : void
 
 var re6 = a6 && a5;
->re6 : void
->a6 && a5 : void
+>re6 : void | E
+>a6 && a5 : void | E.a
 >a6 : E
 >a5 : void
 
@@ -339,20 +339,20 @@ var rf1 = a1 && a6;
 >a6 : E
 
 var rf2 = a2 && a6;
->rf2 : E
->a2 && a6 : E
+>rf2 : boolean | E
+>a2 && a6 : false | E
 >a2 : boolean
 >a6 : E
 
 var rf3 = a3 && a6;
->rf3 : E
->a3 && a6 : E
+>rf3 : 0 | E
+>a3 && a6 : 0 | E
 >a3 : number
 >a6 : E
 
 var rf4 = a4 && a6;
->rf4 : E
->a4 && a6 : E
+>rf4 : "" | E
+>a4 && a6 : "" | E
 >a4 : string
 >a6 : E
 
@@ -399,20 +399,20 @@ var rg1 = a1 && a7;
 >a7 : {}
 
 var rg2 = a2 && a7;
->rg2 : {}
->a2 && a7 : {}
+>rg2 : boolean | {}
+>a2 && a7 : false | {}
 >a2 : boolean
 >a7 : {}
 
 var rg3 = a3 && a7;
->rg3 : {}
->a3 && a7 : {}
+>rg3 : {} | 0
+>a3 && a7 : {} | 0
 >a3 : number
 >a7 : {}
 
 var rg4 = a4 && a7;
->rg4 : {}
->a4 && a7 : {}
+>rg4 : {} | ""
+>a4 && a7 : {} | ""
 >a4 : string
 >a7 : {}
 
@@ -423,8 +423,8 @@ var rg5 = a5 && a7;
 >a7 : {}
 
 var rg6 = a6 && a7;
->rg6 : {}
->a6 && a7 : {}
+>rg6 : {} | E
+>a6 && a7 : {} | E.a
 >a6 : E
 >a7 : {}
 
@@ -459,20 +459,20 @@ var rh1 = a1 && a8;
 >a8 : string[]
 
 var rh2 = a2 && a8;
->rh2 : string[]
->a2 && a8 : string[]
+>rh2 : boolean | string[]
+>a2 && a8 : false | string[]
 >a2 : boolean
 >a8 : string[]
 
 var rh3 = a3 && a8;
->rh3 : string[]
->a3 && a8 : string[]
+>rh3 : 0 | string[]
+>a3 && a8 : 0 | string[]
 >a3 : number
 >a8 : string[]
 
 var rh4 = a4 && a8;
->rh4 : string[]
->a4 && a8 : string[]
+>rh4 : "" | string[]
+>a4 && a8 : "" | string[]
 >a4 : string
 >a8 : string[]
 
@@ -483,8 +483,8 @@ var rh5 = a5 && a8;
 >a8 : string[]
 
 var rh6 = a6 && a8;
->rh6 : string[]
->a6 && a8 : string[]
+>rh6 : E | string[]
+>a6 && a8 : E.a | string[]
 >a6 : E
 >a8 : string[]
 
@@ -519,20 +519,20 @@ var ri1 = a1 && null;
 >null : null
 
 var ri2 = a2 && null;
->ri2 : any
->a2 && null : null
+>ri2 : boolean
+>a2 && null : false
 >a2 : boolean
 >null : null
 
 var ri3 = a3 && null;
->ri3 : any
->a3 && null : null
+>ri3 : 0
+>a3 && null : 0
 >a3 : number
 >null : null
 
 var ri4 = a4 && null;
->ri4 : any
->a4 && null : null
+>ri4 : ""
+>a4 && null : ""
 >a4 : string
 >null : null
 
@@ -543,8 +543,8 @@ var ri5 = a5 && null;
 >null : null
 
 var ri6 = a6 && null;
->ri6 : any
->a6 && null : null
+>ri6 : E
+>a6 && null : E.a
 >a6 : E
 >null : null
 
@@ -579,20 +579,20 @@ var rj1 = a1 && undefined;
 >undefined : undefined
 
 var rj2 = a2 && undefined;
->rj2 : any
->a2 && undefined : undefined
+>rj2 : boolean
+>a2 && undefined : false
 >a2 : boolean
 >undefined : undefined
 
 var rj3 = a3 && undefined;
->rj3 : any
->a3 && undefined : undefined
+>rj3 : 0
+>a3 && undefined : 0
 >a3 : number
 >undefined : undefined
 
 var rj4 = a4 && undefined;
->rj4 : any
->a4 && undefined : undefined
+>rj4 : ""
+>a4 && undefined : ""
 >a4 : string
 >undefined : undefined
 
@@ -603,8 +603,8 @@ var rj5 = a5 && undefined;
 >undefined : undefined
 
 var rj6 = a6 && undefined;
->rj6 : any
->a6 && undefined : undefined
+>rj6 : E
+>a6 && undefined : E.a
 >a6 : E
 >undefined : undefined
 

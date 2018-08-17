@@ -41,17 +41,17 @@ function f() {
 >a : any
 
     n&&s;
->n&&s : string
+>n&&s : string | 0
 >n : number
 >s : string
 
     n&&b;
->n&&b : false
+>n&&b : false | 0
 >n : number
 >b : false
 
     n&&i;
->n&&i : I
+>n&&i : 0 | I
 >n : number
 >i : I
 
@@ -61,7 +61,7 @@ function f() {
 >n : number
 
     n&&e;
->n&&e : E
+>n&&e : 0 | E
 >n : number
 >e : E
 
@@ -71,17 +71,17 @@ function f() {
 >a : any
 
     s&&n;
->s&&n : number
+>s&&n : number | ""
 >s : string
 >n : number
 
     s&&b;
->s&&b : false
+>s&&b : false | ""
 >s : string
 >b : false
 
     s&&i;
->s&&i : I
+>s&&i : "" | I
 >s : string
 >i : I
 
@@ -91,7 +91,7 @@ function f() {
 >s : string
 
     s&&e;
->s&&e : E
+>s&&e : "" | E
 >s : string
 >e : E
 
@@ -161,12 +161,12 @@ function f() {
 >n : number
 
     e&&s;
->e&&s : string
+>e&&s : string | E.Red
 >e : E
 >s : string
 
     e&&b;
->e&&b : false
+>e&&b : false | E.Red
 >e : E
 >b : false
 
@@ -176,7 +176,7 @@ function f() {
 >a : any
 
     e&&i;
->e&&i : I
+>e&&i : I | E.Red
 >e : E
 >i : I
 

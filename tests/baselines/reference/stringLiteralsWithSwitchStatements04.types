@@ -36,13 +36,13 @@ switch (y) {
 
         break;
     case "baz" && "bar":
->"baz" && "bar" : "" | "bar"
+>"baz" && "bar" : "bar"
 >"baz" : "baz"
 >"bar" : "bar"
 
         break;
     case "baz" && ("foo" || "bar"):
->"baz" && ("foo" || "bar") : "" | "foo" | "bar"
+>"baz" && ("foo" || "bar") : "foo" | "bar"
 >"baz" : "baz"
 >("foo" || "bar") : "foo" | "bar"
 >"foo" || "bar" : "foo" | "bar"
@@ -51,7 +51,7 @@ switch (y) {
 
         break;
     case "bar" && ("baz" || "bar"):
->"bar" && ("baz" || "bar") : "" | "bar" | "baz"
+>"bar" && ("baz" || "bar") : "bar" | "baz"
 >"bar" : "bar"
 >("baz" || "bar") : "bar" | "baz"
 >"baz" || "bar" : "bar" | "baz"

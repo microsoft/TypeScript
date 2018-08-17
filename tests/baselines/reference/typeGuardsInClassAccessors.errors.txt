@@ -1,0 +1,205 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(12,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(16,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(23,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(26,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(30,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(35,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(39,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(46,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(49,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(53,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(58,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(62,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(69,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(72,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(76,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(81,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(85,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(92,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(95,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts(99,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'false' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts (20 errors) ====
+    // Note that type guards affect types of variables and parameters only and 
+    // have no effect on members of objects such as properties. 
+    
+    // variables in global
+    var num: number;
+    var strOrNum: string | number;
+    var var1: string | number;
+    class ClassWithAccessors {
+        // Inside public accessor getter
+        get p1() {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            return strOrNum;
+        }
+        // Inside public accessor setter
+        set p1(param: string | number) {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // parameter of function declaration
+            num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+        }
+        // Inside private accessor getter
+        private get pp1() {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            return strOrNum;
+        }
+        // Inside private accessor setter
+        private set pp1(param: string | number) {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // parameter of function declaration
+            num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+        }
+        // Inside static accessor getter
+        static get s1() {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            return strOrNum;
+        }
+        // Inside static accessor setter
+        static set s1(param: string | number) {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // parameter of function declaration
+            num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+        }
+        // Inside private static accessor getter
+        private static get ss1() {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            return strOrNum;
+        }
+        // Inside private static accessor setter
+        private static set ss1(param: string | number) {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // parameter of function declaration
+            num = typeof param === "string" && param.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+    
+            // variables in function declaration
+            var var2: string | number;
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'false' is not assignable to type 'number'.
+        }
+    }
+    
