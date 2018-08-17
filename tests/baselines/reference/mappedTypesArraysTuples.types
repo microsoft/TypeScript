@@ -182,3 +182,62 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >d : Promise<string[]>
 }
 
+function f2<T extends any[]>(a: Boxified<T>) {
+>f2 : <T extends any[]>(a: Boxified<T>) => void
+>a : Boxified<T>
+
+    let x: Box<any> | undefined = a.pop();
+>x : Box<any> | undefined
+>a.pop() : Box<any> | undefined
+>a.pop : () => Box<any> | undefined
+>a : Boxified<T>
+>pop : () => Box<any> | undefined
+
+    let y: Box<any>[] = a.concat(a);
+>y : Box<any>[]
+>a.concat(a) : Box<any>[]
+>a.concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>a : Boxified<T>
+>concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>a : Boxified<T>
+}
+
+// Repro from #26163
+
+type ElementType<T> = T extends Array<infer U> ? U : never;
+>ElementType : ElementType<T>
+
+type Mapped<T> = { [K in keyof T]: T[K] };
+>Mapped : Mapped<T>
+
+type F<T> = ElementType<Mapped<T>>;
+>F : ElementType<Mapped<T>>
+
+type R1 = F<[string, number, boolean]>;  // string | number | boolean
+>R1 : string | number | boolean
+
+type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
+>R2 : string | number | boolean
+
+// Repro from #26163
+
+declare function acceptArray(arr: any[]): void;
+>acceptArray : (arr: any[]) => void
+>arr : any[]
+
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+>mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>arr : T
+
+function acceptMappedArray<T extends any[]>(arr: T) {
+>acceptMappedArray : <T extends any[]>(arr: T) => void
+>arr : T
+
+    acceptArray(mapArray(arr));
+>acceptArray(mapArray(arr)) : void
+>acceptArray : (arr: any[]) => void
+>mapArray(arr) : Mapped<T>
+>mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>arr : T
+}
+
