@@ -4680,6 +4680,7 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
+    /* @internal */
     export interface UpToDateHost {
         fileExists(fileName: string): boolean;
         getModifiedTime(fileName: string): Date;

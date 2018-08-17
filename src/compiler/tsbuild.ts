@@ -1,3 +1,4 @@
+/* @internal */
 namespace ts {
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
