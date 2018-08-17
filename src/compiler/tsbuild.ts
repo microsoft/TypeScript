@@ -1,3 +1,5 @@
+// Currently we do not want to expose API for build, we should work out the API, and then expose it just like we did for builder/watch
+/*@internal*/
 namespace ts {
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
