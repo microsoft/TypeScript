@@ -360,6 +360,7 @@ namespace ts.JsDoc {
                     const varStatement = <VariableStatement>commentOwner;
                     const varDeclarations = varStatement.declarationList.declarations;
                     const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
+                        // tslint:disable-next-line
                         ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
                         : undefined;
                     return { commentOwner, parameters };
