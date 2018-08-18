@@ -3273,7 +3273,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },

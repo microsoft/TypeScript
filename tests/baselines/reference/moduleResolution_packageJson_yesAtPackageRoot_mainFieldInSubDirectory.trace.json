@@ -2,6 +2,7 @@
     "======== Resolving module 'foo' from '/index.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
     "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
+    "'package.json' does not have a 'typesVersions' field.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' does not have a 'types' field.",
     "'package.json' has 'main' field 'src/index.js' that references '/node_modules/foo/src/index.js'.",

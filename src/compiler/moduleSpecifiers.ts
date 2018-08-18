@@ -326,7 +326,7 @@ namespace ts.moduleSpecifiers {
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
         if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;
         // If the module was found in @types, get the actual Node package name
-        return getPackageNameFromAtTypesDirectory(moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1));
+        return getPackageNameFromTypesPackageName(moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1));
 
         function getDirectoryOrExtensionlessFileName(path: string): string {
             // If the file is the main module, it can be imported by the package name

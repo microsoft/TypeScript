@@ -3940,6 +3940,27 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
+        try {
+            const jsonText = host.readFile(path);
+            if (!jsonText) return {};
+            const result = parseConfigFileTextToJson(path, jsonText);
+            if (result.error) {
+                return {};
+            }
+            return result.config;
+        }
+        catch (e) {
+            // gracefully handle if readFile fails or returns not JSON
+            return {};
+        }
+    }
+
+    export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
+        // if host does not support 'directoryExists' assume that directory will exist
+        return !host.directoryExists || host.directoryExists(directoryName);
+    }
+
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
