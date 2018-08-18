@@ -54,15 +54,7 @@ namespace ts {
 
     export function executeCommandLine(args: string[]): void {
         if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const reportDiag = createDiagnosticReporter(sys, defaultIsPretty());
-            const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
-            const buildHost: BuildHost = {
-                error: report,
-                verbose: report,
-                message: report,
-                errorDiagnostic: d => reportDiag(d)
-            };
-            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost);
+            const result = performBuild(args.slice(1));
             // undefined = in watch mode, do not exit
             if (result !== undefined) {
                 return sys.exit(result);
@@ -172,7 +164,7 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost): number | undefined {
+    function performBuild(args: string[]): number | undefined {
         const buildOpts: CommandLineOption[] = [
             {
                 name: "help",
@@ -243,24 +235,28 @@ namespace ts {
         }
 
         if (buildOptions.help) {
-            printHelp(buildOpts, "--build ");            return ExitStatus.Success;
+            printHelp(buildOpts, "--build ");
+            return ExitStatus.Success;
         }
+
+        // Update to pretty if host supports it
+        updateReportDiagnostic({});
 
         // Nonsensical combinations
         if (buildOptions.clean && buildOptions.force) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (buildOptions.clean && buildOptions.verbose) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose"));
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (buildOptions.clean && buildOptions.watch) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch"));
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
         if (buildOptions.watch && buildOptions.dry) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
 
@@ -269,7 +265,15 @@ namespace ts {
             addProject(".");
         }
 
-        const builder = createSolutionBuilder(compilerHost, buildHost, projects, buildOptions);
+        const report = (message: DiagnosticMessage, ...args: string[]) => reportDiagnostic(createCompilerDiagnostic(message, ...args));
+        const buildHost: BuildHost = {
+            error: report,
+            verbose: report,
+            message: report,
+            errorDiagnostic: d => reportDiagnostic(d)
+        };
+
+        const builder = createSolutionBuilder(createCompilerHost({}), buildHost, projects, buildOptions);
         if (buildOptions.clean) {
             return builder.cleanAllProjects();
         }
@@ -283,9 +287,9 @@ namespace ts {
         return builder.buildAllProjects();
 
         function addProject(projectSpecification: string) {
-            const fileName = resolvePath(compilerHost.getCurrentDirectory(), projectSpecification);
-            const refPath = resolveProjectReferencePath(compilerHost, { path: fileName });
-            if (!compilerHost.fileExists(refPath)) {
+            const fileName = resolvePath(sys.getCurrentDirectory(), projectSpecification);
+            const refPath = resolveProjectReferencePath(sys, { path: fileName });
+            if (!sys.fileExists(refPath)) {
                 return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
             }
             projects.push(refPath);
