@@ -1,13 +1,27 @@
-
 ///<reference path="fourslash.ts" />
+
 // @allowJs: true
-// @Filename: Foo.js
+// @Filename: jsDocFunctionSignatures.js
+
 /////**
-//// * @param {{ stringProp: string,
-//// *           numProp: number }} o
+//// * @param {{
+//// *   stringProp: string,
+//// *   numProp: number,
+//// *   boolProp: boolean,
+//// *   anyProp: *,
+//// *   anotherAnyProp:
+//// *   *
+//// * }} o
 //// */
 ////function f1(o) {
 ////    o/**/;
 ////}
+
 goTo.marker();
-verify.quickInfoIs("(parameter) o: any");
+verify.quickInfoIs(`(parameter) o: {
+    stringProp: string;
+    numProp: number;
+    boolProp: boolean;
+    anyProp: any;
+    anotherAnyProp: any;
+}`);
