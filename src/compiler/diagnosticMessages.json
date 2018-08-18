@@ -2872,6 +2872,11 @@
         "category": "Error",
         "code": 5071
     },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

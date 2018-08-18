@@ -46,10 +46,13 @@ namespace ts {
         dependencyMap: Mapper;
     }
 
-    interface BuildOptions {
-        dry: boolean;
-        force: boolean;
-        verbose: boolean;
+    export interface BuildOptions {
+        dry?: boolean;
+        force?: boolean;
+        verbose?: boolean;
+        /*@internal*/ clean?: boolean;
+        /*@internal*/ watch?: boolean;
+        /*@internal*/ help?: boolean;
     }
 
     enum BuildResultFlags {

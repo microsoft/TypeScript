@@ -62,7 +62,7 @@ namespace ts {
                 message: report,
                 errorDiagnostic: d => reportDiag(d)
             };
-            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
+            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost);
             // undefined = in watch mode, do not exit
             if (result !== undefined) {
                 return sys.exit(result);
@@ -172,96 +172,94 @@ namespace ts {
         }
     }
 
-    const buildOpts: CommandLineOption[] = [
-        {
-            name: "verbose",
-            shortName: "v",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Enable_verbose_logging,
-            type: "boolean"
-        },
-        {
-            name: "dry",
-            shortName: "d",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
-            type: "boolean"
-        },
-        {
-            name: "force",
-            shortName: "f",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
-            type: "boolean"
-        },
-        {
-            name: "clean",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Delete_the_outputs_of_all_projects,
-            type: "boolean"
-        },
-        {
-            name: "watch",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Watch_input_files,
-            type: "boolean"
-        }
-    ];
+    function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost): number | undefined {
+        const buildOpts: CommandLineOption[] = [
+            {
+                name: "help",
+                shortName: "h",
+                type: "boolean",
+                showInSimplifiedHelpView: true,
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Print_this_message,
+            },
+            {
+                name: "help",
+                shortName: "?",
+                type: "boolean"
+            },
+            {
+                name: "verbose",
+                shortName: "v",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Enable_verbose_logging,
+                type: "boolean"
+            },
+            {
+                name: "dry",
+                shortName: "d",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
+                type: "boolean"
+            },
+            {
+                name: "force",
+                shortName: "f",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
+                type: "boolean"
+            },
+            {
+                name: "clean",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Delete_the_outputs_of_all_projects,
+                type: "boolean"
+            },
+            {
+                name: "watch",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Watch_input_files,
+                type: "boolean"
+            }
+        ];
+        let buildOptionNameMap: OptionNameMap | undefined;
+        const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
 
-    function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined {
-        let verbose = false;
-        let dry = false;
-        let force = false;
-        let clean = false;
-        let watch = false;
-
+        const buildOptions: BuildOptions = {};
         const projects: string[] = [];
         for (const arg of args) {
-            switch (arg.toLowerCase()) {
-                case "-v":
-                case "--verbose":
-                    verbose = true;
-                    continue;
-                case "-d":
-                case "--dry":
-                    dry = true;
-                    continue;
-                case "-f":
-                case "--force":
-                    force = true;
-                    continue;
-                case "--clean":
-                    clean = true;
-                    continue;
-                case "--watch":
-                case "-w":
-                    watch = true;
-                    continue;
-
-                case "--?":
-                case "-?":
-                case "--help":
-                    printHelp(buildOpts, "--build ");
-                    return ExitStatus.Success;
+            if (arg.charCodeAt(0) === CharacterCodes.minus) {
+                const opt = getOptionDeclarationFromName(returnBuildOptionNameMap, arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1), /*allowShort*/ true);
+                if (opt) {
+                    buildOptions[opt.name as keyof BuildOptions] = true;
+                }
+                else {
+                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unknown_build_option_0, arg));
+                }
             }
-            // Not a flag, parse as filename
-            addProject(arg);
+            else {
+                // Not a flag, parse as filename
+                addProject(arg);
+            }
+        }
+
+        if (buildOptions.help) {
+            printHelp(buildOpts, "--build ");            return ExitStatus.Success;
         }
 
         // Nonsensical combinations
-        if (clean && force) {
+        if (buildOptions.clean && buildOptions.force) {
             buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
-        if (clean && verbose) {
+        if (buildOptions.clean && buildOptions.verbose) {
             buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
-        if (clean && watch) {
+        if (buildOptions.clean && buildOptions.watch) {
             buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
-        if (watch && dry) {
+        if (buildOptions.watch && buildOptions.dry) {
             buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
@@ -271,12 +269,12 @@ namespace ts {
             addProject(".");
         }
 
-        const builder = createSolutionBuilder(compilerHost, buildHost, projects, { dry, force, verbose }, system);
-        if (clean) {
+        const builder = createSolutionBuilder(compilerHost, buildHost, projects, buildOptions);
+        if (buildOptions.clean) {
             return builder.cleanAllProjects();
         }
 
-        if (watch) {
+        if (buildOptions.watch) {
             builder.buildAllProjects();
             builder.startWatching();
             return undefined;

@@ -797,10 +797,11 @@ namespace ts {
     }
 
     function getOptionNameMap(): OptionNameMap {
-        if (optionNameMapCache) {
-            return optionNameMapCache;
-        }
+        return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
+    }
 
+    /*@internal*/
+    export function createOptionNameMap(optionDeclarations: ReadonlyArray<CommandLineOption>): OptionNameMap {
         const optionNameMap = createMap<CommandLineOption>();
         const shortOptionNames = createMap<string>();
         forEach(optionDeclarations, option => {
@@ -810,8 +811,7 @@ namespace ts {
             }
         });
 
-        optionNameMapCache = { optionNameMap, shortOptionNames };
-        return optionNameMapCache;
+        return { optionNameMap, shortOptionNames };
     }
 
     /* @internal */
@@ -961,7 +961,12 @@ namespace ts {
     }
 
     /** @internal */
-    export function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+    export function getOptionFromName(optionName: string, allowShort?: boolean): CommandLineOption | undefined {
+        return getOptionDeclarationFromName(getOptionNameMap, optionName, allowShort);
+    }
+
+    /*@internal*/
+    export function getOptionDeclarationFromName(getOptionNameMap: () => OptionNameMap, optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.
