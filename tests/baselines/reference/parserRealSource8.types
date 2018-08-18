@@ -1259,7 +1259,7 @@ module TypeScript {
 >!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl &&                    (<FuncDecl>container.declAST).isConstructor : any
 >!funcDecl.isConstructor &&                    container &&                    container.declAST &&                    container.declAST.nodeType == NodeType.FuncDecl : boolean
 >!funcDecl.isConstructor &&                    container &&                    container.declAST : any
->!funcDecl.isConstructor &&                    container : Symbol
+>!funcDecl.isConstructor &&                    container : false | Symbol
 >!funcDecl.isConstructor : boolean
 >funcDecl.isConstructor : any
 >funcDecl : any
@@ -1391,8 +1391,8 @@ module TypeScript {
             if (!funcDecl.accessorSymbol && 
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) ||                     (fgSym && fgSym.isAccessor()) : any
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : Symbol
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : false | 0 | Symbol
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number | false
 >!funcDecl.accessorSymbol : boolean
 >funcDecl.accessorSymbol : any
 >funcDecl : any

@@ -287,7 +287,7 @@ function foo10(x: number | string | boolean) {
     }
 }
 function foo11(x: number | string | boolean) {
->foo11 : (x: string | number | boolean) => string
+>foo11 : (x: string | number | boolean) => string | false
 >x : string | number | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
@@ -310,7 +310,7 @@ function foo11(x: number | string | boolean) {
 >x : number | boolean
 
         return typeof x === "number"
->typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number | boolean | string            )            : (            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
+>typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number | boolean | string            )            : (            // do not change value            y = x && x.toString() // number | boolean | string            ) : string | false
 >typeof x === "number" : boolean
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
@@ -332,13 +332,13 @@ function foo11(x: number | string | boolean) {
 
             )
             : (
->(            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
+>(            // do not change value            y = x && x.toString() // number | boolean | string            ) : string | false
 
             // do not change value
             y = x && x.toString() // number | boolean | string
->y = x && x.toString() : string
+>y = x && x.toString() : string | false
 >y : string | number | boolean
->x && x.toString() : string
+>x && x.toString() : string | false
 >x : boolean
 >x.toString() : string
 >x.toString : () => string

@@ -18,9 +18,9 @@ module m1 {
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
+>num = typeof var1 === "string" && var1.length : number | false
 >num : number
->typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" && var1.length : number | false
 >typeof var1 === "string" : boolean
 >typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
@@ -90,9 +90,9 @@ module m2 {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
+>num = typeof var1 === "string" && var1.length : number | false
 >num : number
->typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" && var1.length : number | false
 >typeof var1 === "string" : boolean
 >typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
@@ -103,9 +103,9 @@ module m2 {
 
         // local variables from outer module declaration
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
+>num = typeof var2 === "string" && var2.length : number | false
 >num : number
->typeof var2 === "string" && var2.length : number
+>typeof var2 === "string" && var2.length : number | false
 >typeof var2 === "string" : boolean
 >typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
@@ -116,9 +116,9 @@ module m2 {
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
->strOrNum = typeof var3 === "string" && var3 : string
+>strOrNum = typeof var3 === "string" && var3 : string | false
 >strOrNum : string | number
->typeof var3 === "string" && var3 : string
+>typeof var3 === "string" && var3 : string | false
 >typeof var3 === "string" : boolean
 >typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
@@ -179,9 +179,9 @@ module m3.m4 {
 
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
+>num = typeof var1 === "string" && var1.length : number | false
 >num : number
->typeof var1 === "string" && var1.length : number
+>typeof var1 === "string" && var1.length : number | false
 >typeof var1 === "string" : boolean
 >typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number

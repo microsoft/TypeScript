@@ -3420,7 +3420,7 @@ define(function () {
 
     // environment-dependent
     if (typeof window !== 'undefined' && window.screen) {
->typeof window !== 'undefined' && window.screen : Screen
+>typeof window !== 'undefined' && window.screen : false | Screen
 >typeof window !== 'undefined' : boolean
 >typeof window : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >window : Window
