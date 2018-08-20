@@ -205,7 +205,7 @@ namespace fakes {
     /**
      * A fake `ts.CompilerHost` that leverages a virtual file system.
      */
-    export class CompilerHost implements ts.CompilerHost {
+    export class CompilerHost implements ts.CompilerHost, ts.SolutionBuilderHost {
         public readonly sys: System;
         public readonly defaultLibLocation: string;
         public readonly outputs: documents.TextDocument[] = [];

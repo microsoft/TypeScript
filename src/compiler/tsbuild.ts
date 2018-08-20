@@ -388,16 +388,27 @@ namespace ts {
         };
     }
 
+    export interface SolutionBuilderHost extends CompilerHost {
+        getModifiedTime(fileName: string): Date | undefined;
+        setModifiedTime(fileName: string, date: Date): void;
+        deleteFile(fileName: string): void;
+    }
+
+    export function createSolutionBuilderHost(system = sys) {
+        const host = createCompilerHost({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
+        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
+        host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
+        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
+        return host;
+    }
+
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    export function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System) {
-        if (!compilerHost.getModifiedTime || !compilerHost.setModifiedTime) {
-            throw new Error("Host must support timestamp APIs");
-        }
+    export function createSolutionBuilder(host: SolutionBuilderHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System) {
 
-        const configFileCache = createConfigFileCache(compilerHost);
+        const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions);
 
         const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
@@ -501,14 +512,14 @@ namespace ts {
             let newestInputFileTime = minimumDate;
             // Get timestamps of input files
             for (const inputFile of project.fileNames) {
-                if (!compilerHost.fileExists(inputFile)) {
+                if (!host.fileExists(inputFile)) {
                     return {
                         type: UpToDateStatusType.Unbuildable,
                         reason: `${inputFile} does not exist`
                     };
                 }
 
-                const inputTime = compilerHost.getModifiedTime!(inputFile) || missingFileModifiedTime;
+                const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
                 if (inputTime > newestInputFileTime) {
                     newestInputFileName = inputFile;
                     newestInputFileTime = inputTime;
@@ -535,12 +546,12 @@ namespace ts {
             for (const output of outputs) {
                 // Output is missing; can stop checking
                 // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-                if (!compilerHost.fileExists(output)) {
+                if (!host.fileExists(output)) {
                     missingOutputFileName = output;
                     break;
                 }
 
-                const outputTime = compilerHost.getModifiedTime!(output) || missingFileModifiedTime;
+                const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
                 if (outputTime < oldestOutputFileTime) {
                     oldestOutputFileTime = outputTime;
                     oldestOutputFileName = output;
@@ -568,7 +579,7 @@ namespace ts {
                         newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                     }
                     else {
-                        const outputModifiedTime = compilerHost.getModifiedTime!(output) || missingFileModifiedTime;
+                        const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
                         newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                     }
                 }
@@ -580,7 +591,7 @@ namespace ts {
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
                     usesPrepend = usesPrepend || !!(ref.prepend);
-                    const resolvedRef = resolveProjectReferencePath(compilerHost, ref);
+                    const resolvedRef = resolveProjectReferencePath(host, ref);
                     const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
 
                     // An upstream project is blocked
@@ -809,7 +820,7 @@ namespace ts {
 
             const programOptions: CreateProgramOptions = {
                 projectReferences: configFile.projectReferences,
-                host: compilerHost,
+                host,
                 rootNames: configFile.fileNames,
                 options: configFile.options
             };
@@ -858,18 +869,18 @@ namespace ts {
             program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
 
-                if (!anyDtsChanged && isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
-                    if (compilerHost.readFile(fileName) === content) {
+                if (!anyDtsChanged && isDeclarationFile(fileName) && host.fileExists(fileName)) {
+                    if (host.readFile(fileName) === content) {
                         // Check for unchanged .d.ts files
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                        priorChangeTime = compilerHost.getModifiedTime && compilerHost.getModifiedTime(fileName);
+                        priorChangeTime = host.getModifiedTime(fileName);
                     }
                     else {
                         anyDtsChanged = true;
                     }
                 }
 
-                compilerHost.writeFile(fileName, content, writeBom, onError, emptyArray);
+                host.writeFile(fileName, content, writeBom, onError, emptyArray);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
                     context.unchangedOutputs.setValue(fileName, priorChangeTime);
@@ -898,10 +909,10 @@ namespace ts {
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file) || missingFileModifiedTime);
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
                 }
 
-                compilerHost.setModifiedTime!(file, now);
+                host.setModifiedTime(file, now);
             }
 
             context.projectStatus.setValue(proj.options.configFilePath!, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
@@ -924,7 +935,7 @@ namespace ts {
                 }
                 const outputs = getAllProjectOutputs(parsed);
                 for (const output of outputs) {
-                    if (compilerHost.fileExists(output)) {
+                    if (host.fileExists(output)) {
                         filesToDelete.push(output);
                     }
                 }
@@ -958,25 +969,20 @@ namespace ts {
                 return ExitStatus.Success;
             }
 
-            // Do this check later to allow --clean --dry to function even if the host can't delete files
-            if (!compilerHost.deleteFile) {
-                throw new Error("Host does not support deleting files");
-            }
-
             for (const output of filesToDelete) {
-                compilerHost.deleteFile(output);
+                host.deleteFile(output);
             }
 
             return ExitStatus.Success;
         }
 
         function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
-            const fullPath = resolvePath(compilerHost.getCurrentDirectory(), name);
-            if (compilerHost.fileExists(fullPath)) {
+            const fullPath = resolvePath(host.getCurrentDirectory(), name);
+            if (host.fileExists(fullPath)) {
                 return fullPath as ResolvedConfigFileName;
             }
             const fullPathWithTsconfig = combinePaths(fullPath, "tsconfig.json");
-            if (compilerHost.fileExists(fullPathWithTsconfig)) {
+            if (host.fileExists(fullPathWithTsconfig)) {
                 return fullPathWithTsconfig as ResolvedConfigFileName;
             }
             buildHost.error(Diagnostics.File_0_not_found, relName(fullPath));
@@ -1058,7 +1064,7 @@ namespace ts {
         }
 
         function relName(path: string): string {
-            return convertToRelativePath(path, compilerHost.getCurrentDirectory(), f => compilerHost.getCanonicalFileName(f));
+            return convertToRelativePath(path, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
         }
 
         function reportVerbose(message: DiagnosticMessage, ...args: string[]) {
@@ -1072,15 +1078,6 @@ namespace ts {
             if (!context.options.verbose) return;
             return formatUpToDateStatus(configFileName, status, relName, reportVerbose);
         }
-    }
-
-    export interface UpToDateHost {
-        fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date | undefined;
-        getUnchangedTime?(fileName: string): Date | undefined;
-        getLastStatus?(fileName: string): UpToDateStatus | undefined;
-        setLastStatus?(fileName: string, status: UpToDateStatus): void;
-        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
     }
 
     export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {

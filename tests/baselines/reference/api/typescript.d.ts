@@ -2690,9 +2690,6 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
-        getModifiedTime?(fileName: string): Date | undefined;
-        setModifiedTime?(fileName: string, date: Date): void;
-        deleteFile?(fileName: string): void;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;

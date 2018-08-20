@@ -1,8 +1,8 @@
 namespace ts.tscWatch {
     export import libFile = TestFSWithWatch.libFile;
-    function createSolutionBuilder(host: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
-        const compilerHost = createCompilerHost({}, /*setParentNodes*/ undefined, host);
-        const reportDiag = createDiagnosticReporter(host);
+    function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+        const host = createSolutionBuilderHost(system);
+        const reportDiag = createDiagnosticReporter(system);
         const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
         const buildHost: BuildHost = {
             error: report,
@@ -10,7 +10,7 @@ namespace ts.tscWatch {
             message: report,
             errorDiagnostic: d => reportDiag(d)
         };
-        return ts.createSolutionBuilder(compilerHost, buildHost, rootNames, defaultOptions || { dry: false, force: false, verbose: false }, host);
+        return ts.createSolutionBuilder(host, buildHost, rootNames, defaultOptions || { dry: false, force: false, verbose: false }, system);
     }
 
     function createSolutionBuilderWithWatch(host: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
