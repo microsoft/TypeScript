@@ -13638,10 +13638,11 @@ namespace ts {
             if (!inferredType) {
                 const signature = context.signature;
                 if (signature) {
-                    if (inference.contraCandidates) {
-                        // If we have contravariant inferences we find the best common subtype and treat
-                        // that as a single covariant candidate.
-                        inference.candidates = append(inference.candidates, getContravariantInference(inference));
+                    if (inference.contraCandidates && (!inference.candidates || inference.candidates.length === 1 && inference.candidates[0].flags & TypeFlags.Never)) {
+                        // If we have contravariant inferences, but no covariant inferences or a single
+                        // covariant inference of 'never', we find the best common subtype and treat that
+                        // as a single covariant candidate.
+                        inference.candidates = [getContravariantInference(inference)];
                         inference.contraCandidates = undefined;
                     }
                     if (inference.candidates) {
