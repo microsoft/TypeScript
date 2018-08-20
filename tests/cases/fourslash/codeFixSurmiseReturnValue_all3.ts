@@ -54,6 +54,8 @@
 //// const baz5: ((() => number) | (() => A)) = () => {
 ////     bar: '1'
 //// }
+//// 
+//// const test: { a: A } = { a: () => { bar: '1' } }
 
 verify.codeFixAll({
     fixId: "fixReplaceBraceWithParen",
@@ -91,5 +93,7 @@ const baz1: () => number = () => (1)
 const baz2: () => A = () => ({ bar: '1' })
 const baz3: () => A = () => ({ bar: '1' })
 const baz4: ((() => number) | (() => A)) = () => (1)
-const baz5: ((() => number) | (() => A)) = () => ({ bar: '1' })`,
+const baz5: ((() => number) | (() => A)) = () => ({ bar: '1' })
+
+const test: { a: A } = { a: () => ({ bar: '1' }) }`,
 });

@@ -34,8 +34,8 @@ namespace ts.codefix {
         errorCodes,
         fixIds: [fixIdAddReturnStatement, fixIdRemoveBlockBodyBrace, fixIdReplaceBraceWithParen, fixIdWrapTheBlockWithParen],
         getCodeActions: context => {
-            const { program, sourceFile, span: { start } } = context;
-            const info = getInfo(program.getTypeChecker(), sourceFile, start);
+            const { program, sourceFile, span: { start }, errorCode } = context;
+            const info = getInfo(program.getTypeChecker(), sourceFile, start, errorCode);
             if (!info) return undefined;
 
             if (info.kind === FixKind.MissingReturnStatement) {
@@ -51,7 +51,7 @@ namespace ts.codefix {
             }
         },
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const info = getInfo(context.program.getTypeChecker(), diag.file, diag.start);
+            const info = getInfo(context.program.getTypeChecker(), diag.file, diag.start, diag.code);
             if (!info) return undefined;
 
             switch (context.fixId) {
@@ -141,28 +141,55 @@ namespace ts.codefix {
         return checker.isTypeAssignableTo(checker.getTypeAtLocation(isFunctionType ? updateFunctionLikeBody(declaration, createBlock([createReturn(expr)])) : expr), type);
     }
 
-    function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number): Info | undefined {
+    function getInfo(checker: TypeChecker, sourceFile: SourceFile, position: number, errorCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, position);
         if (!node.parent) return undefined;
 
         const declaration = findAncestor(node.parent, isFunctionLikeDeclaration);
-        if (declaration) {
-            if (declaration.body && declaration.type && rangeContainsRange(declaration.type, node)) {
+        switch (errorCode) {
+            case Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value.code:
+                if (!declaration || !declaration.body || !declaration.type || !rangeContainsRange(declaration.type, node)) return undefined;
                 return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /* isFunctionType */ false);
-            }
-            else if (isCallExpression(declaration.parent) && declaration.body) {
+            case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
+                if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
                 const pos = declaration.parent.arguments.indexOf(<Expression>declaration);
                 const type = checker.getContextualTypeForArgumentAtIndex(declaration.parent, pos);
                 if (!type) return undefined;
                 return getFixInfo(checker, declaration, type, /* isFunctionType */ true);
-            }
+            case Diagnostics.Type_0_is_not_assignable_to_type_1.code:
+                if (!isDeclarationName(node) || !isVariableLike(node.parent) && !isJsxAttribute(node.parent)) return undefined;
+                const initializer = getVariableLikeInitializer(node.parent);
+                if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
+                return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /* isFunctionType */ true);
         }
-        else if (isDeclarationName(node) && isVariableDeclaration(node.parent) && node.parent.initializer && node.parent.type) {
-            const initializer = skipParentheses(node.parent.initializer);
-            if (!isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
-            return getFixInfo(checker, initializer, checker.getTypeFromTypeNode(node.parent.type), /* isFunctionType */ true);
+
+        if (isDeclarationName(node) && (isVariableLike(node.parent) || isJsxAttribute(node.parent))) {
+            const initializer = getVariableLikeInitializer(node.parent);
+            if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
+            return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /* isFunctionType */ true);
         }
         return undefined;
+    }
+
+    function getVariableLikeInitializer(declaration: VariableLikeDeclaration): Expression | undefined {
+        switch (declaration.kind) {
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertyAssignment:
+                return declaration.initializer;
+            case SyntaxKind.JsxAttribute:
+                return declaration.initializer && (isJsxExpression(declaration.initializer) ? declaration.initializer.expression : undefined);
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag:
+                return undefined;
+            default:
+                Debug.fail("unexpected token");
+        }
     }
 
     function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: FunctionLikeDeclaration, expression: Expression) {
