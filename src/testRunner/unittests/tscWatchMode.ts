@@ -110,7 +110,7 @@ namespace ts.tscWatch {
 
         function assertWatchDiagnostic(diagnostic: Diagnostic) {
             const expected = getWatchDiagnosticWithoutDate(diagnostic);
-            if (!disableConsoleClears && !contains(nonClearingMessageCodes, diagnostic.code)) {
+            if (!disableConsoleClears && contains(screenStartingMessageCodes, diagnostic.code)) {
                 assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
                 screenClears++;
             }
