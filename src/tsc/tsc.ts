@@ -211,7 +211,13 @@ namespace ts {
                 category: Diagnostics.Command_line_Options,
                 description: Diagnostics.Watch_input_files,
                 type: "boolean"
-            }
+            },
+            {
+                name: "preserveWatchOutput",
+                type: "boolean",
+                category: Diagnostics.Command_line_Options,
+                description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
+            },
         ];
         let buildOptionNameMap: OptionNameMap | undefined;
         const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));

@@ -53,6 +53,7 @@ namespace ts {
         /*@internal*/ clean?: boolean;
         /*@internal*/ watch?: boolean;
         /*@internal*/ help?: boolean;
+        preserveWatchOutput?: boolean;
     }
 
     enum BuildResultFlags {
@@ -464,6 +465,12 @@ namespace ts {
             host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
         }
 
+        function reportWatchStatus(message: DiagnosticMessage, ...args: string[]) {
+            if (hostWithWatch.onWatchStatusChange) {
+                hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), { preserveWatchOutput: context.options.preserveWatchOutput });
+            }
+        }
+
         function startWatching() {
             const graph = getGlobalDependencyGraph()!;
             if (!graph.buildQueue) {
@@ -499,6 +506,7 @@ namespace ts {
             }
 
             function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
+                reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
                 invalidateProject(resolved);
                 if (!hostWithWatch.setTimeout) {
                     return;
@@ -1037,6 +1045,7 @@ namespace ts {
         }
 
         function buildAllProjects(): ExitStatus {
+            if (context.options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             const graph = getGlobalDependencyGraph();
             if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
 
