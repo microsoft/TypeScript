@@ -13,7 +13,7 @@ class TestComponent extends React.Component<any, {}> {
 >render : () => any
 
         return <BaseComponent />;
-><BaseComponent /> : any
+><BaseComponent /> : error
 >BaseComponent : typeof BaseComponent
     }
 }

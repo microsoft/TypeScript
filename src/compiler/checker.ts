@@ -3553,15 +3553,10 @@ namespace ts {
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
-                if (getCheckFlags(propertySymbol) & CheckFlags.Late) {
+                if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late) {
                     const decl = first(propertySymbol.declarations);
-                    if (context.tracker.trackSymbol && hasLateBindableName(decl)) {
-                        // get symbol of the first identifier of the entityName
-                        const firstIdentifier = getFirstIdentifier(decl.name.expression);
-                        const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
-                        if (name) {
-                            context.tracker.trackSymbol(name, saveEnclosingDeclaration, SymbolFlags.Value);
-                        }
+                    if (hasLateBindableName(decl)) {
+                        trackComputedName(decl.name, saveEnclosingDeclaration, context);
                     }
                 }
                 const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
@@ -3771,6 +3766,9 @@ namespace ts {
                 function cloneBindingName(node: BindingName): BindingName {
                     return <BindingName>elideInitializerAndSetEmitFlags(node);
                     function elideInitializerAndSetEmitFlags(node: Node): Node {
+                        if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
+                            trackComputedName(node, context.enclosingDeclaration, context);
+                        }
                         const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
                         const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
                         if (clone.kind === SyntaxKind.BindingElement) {
@@ -3778,6 +3776,16 @@ namespace ts {
                         }
                         return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
+                }
+            }
+
+            function trackComputedName(node: LateBoundName, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
+                if (!context.tracker.trackSymbol) return;
+                // get symbol of the first identifier of the entityName
+                const firstIdentifier = getFirstIdentifier(node.expression);
+                const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+                if (name) {
+                    context.tracker.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
                 }
             }
 
@@ -13909,6 +13917,18 @@ namespace ts {
             return flow.id;
         }
 
+        function typeMaybeAssignableTo(source: Type, target: Type) {
+            if (!(source.flags & TypeFlags.Union)) {
+                return isTypeAssignableTo(source, target);
+            }
+            for (const t of (<UnionType>source).types) {
+                if (isTypeAssignableTo(t, target)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         // Remove those constituent types of declaredType to which no constituent type of assignedType is assignable.
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
@@ -13917,8 +13937,12 @@ namespace ts {
                 if (assignedType.flags & TypeFlags.Never) {
                     return assignedType;
                 }
-                const reducedType = filterType(declaredType, t => isTypeComparableTo(assignedType, t));
-                if (!(reducedType.flags & TypeFlags.Never)) {
+                const reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                // Our crude heuristic produces an invalid result in some cases: see GH#26130.
+                // For now, when that happens, we give up and don't narrow at all.  (This also
+                // means we'll never narrow for erroneous assignments where the assigned type
+                // is not assignable to the declared type.)
+                if (isTypeAssignableTo(assignedType, reducedType)) {
                     return reducedType;
                 }
             }

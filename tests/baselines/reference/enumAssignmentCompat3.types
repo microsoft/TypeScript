@@ -252,9 +252,9 @@ abc = merged; // missing 'd'
 >merged : Merged.E
 
 merged = abc; // ok
->merged = abc : First.E.a | First.E.b
+>merged = abc : First.E
 >merged : Merged.E
->abc : First.E.a | First.E.b
+>abc : First.E
 
 abc = merged2; // ok
 >abc = merged2 : Merged2.E
