@@ -2100,7 +2100,7 @@ function fn<T extends I, K extends keyof T>(o: T, k: K) {
 >k : K
 
     take<{} | null | undefined>(o[k]);
->take<{} | null | undefined>(o[k]) : any
+>take<{} | null | undefined>(o[k]) : void
 >take : <T>(p: T) => void
 >null : null
 >o[k] : T[K]
