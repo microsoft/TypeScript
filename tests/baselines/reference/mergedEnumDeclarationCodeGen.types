@@ -3,16 +3,16 @@ enum E {
 >E : E
 
     a,
->a : E
+>a : E.a
 
     b = a
->b : E
+>b : E.a
 >a : E
 }
 enum E {
 >E : E
 
     c = a
->c : E
+>c : E.a
 >a : E
 }

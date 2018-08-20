@@ -835,7 +835,7 @@
         "category": "Error",
         "code": 1253
     },
-    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
     },
