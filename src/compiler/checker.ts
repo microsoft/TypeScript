@@ -53,7 +53,8 @@ namespace ts {
         let typeCount = 0;
         let symbolCount = 0;
         let enumCount = 0;
-        let symbolInstantiationDepth = 0;
+        let instantiationDepth = 0;
+        let constraintDepth = 0;
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
@@ -5295,22 +5296,14 @@ namespace ts {
         function getTypeOfInstantiatedSymbol(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbolInstantiationDepth === 100) {
-                    error(symbol.valueDeclaration, Diagnostics.Generic_type_instantiation_is_excessively_deep_and_possibly_infinite);
-                    links.type = errorType;
+                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                    return links.type = errorType;
                 }
-                else {
-                    if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                        return links.type = errorType;
-                    }
-                    symbolInstantiationDepth++;
-                    let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper!);
-                    symbolInstantiationDepth--;
-                    if (!popTypeResolution()) {
-                        type = reportCircularityError(symbol);
-                    }
-                    links.type = type;
+                let type = instantiateType(getTypeOfSymbol(links.target!), links.mapper!);
+                if (!popTypeResolution()) {
+                    type = reportCircularityError(symbol);
                 }
+                links.type = type;
             }
             return links.type;
         }
@@ -7003,6 +6996,7 @@ namespace ts {
          * circularly references the type variable.
          */
         function getResolvedBaseConstraint(type: InstantiableType | UnionOrIntersectionType): Type {
+            let nonTerminating = false;
             return type.resolvedBaseConstraint ||
                 (type.resolvedBaseConstraint = getTypeWithThisArgument(getImmediateBaseConstraint(type), type));
 
@@ -7011,8 +7005,18 @@ namespace ts {
                     if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                         return circularConstraintType;
                     }
+                    if (constraintDepth === 50) {
+                        // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
+                        // very high likelyhood we're dealing with an infinite generic type that perpetually generates
+                        // new type identities as we descend into it. We stop the recursion here and mark this type
+                        // and the outer types as having circular constraints.
+                        nonTerminating = true;
+                        return t.immediateBaseConstraint = noConstraintType;
+                    }
+                    constraintDepth++;
                     let result = computeBaseConstraint(getSimplifiedType(t));
-                    if (!popTypeResolution()) {
+                    constraintDepth--;
+                    if (!popTypeResolution() || nonTerminating) {
                         result = circularConstraintType;
                     }
                     t.immediateBaseConstraint = result || noConstraintType;
@@ -10282,12 +10286,25 @@ namespace ts {
             return getConditionalType(root, mapper);
         }
 
+        function instantiateWithDepthCheck(type: Type, mapper: TypeMapper, instantiator: (type: Type, mapper: TypeMapper) => Type): Type {
+            if (instantiationDepth < 50) {
+                instantiationDepth++;
+                const result = instantiator(type, mapper);
+                instantiationDepth--;
+                return result;
+            }
+            // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
+            // with a combination of infinite generic types that perpetually generate new type identities. We stop
+            // the recursion here by yielding the error type.
+            return errorType;
+        }
+
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined;
         function instantiateType(type: Type | undefined, mapper: TypeMapper | undefined): Type | undefined {
             if (type && mapper && mapper !== identityMapper) {
                 if (type.flags & TypeFlags.TypeParameter) {
-                    return mapper(<TypeParameter>type);
+                    return mapper(type);
                 }
                 if (type.flags & TypeFlags.Object) {
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Anonymous) {
@@ -10295,10 +10312,10 @@ namespace ts {
                         // interface, in an object type literal, or in an object literal expression, we may need
                         // to instantiate the type because it might reference a type parameter.
                         return type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ?
-                            getAnonymousTypeInstantiation(<AnonymousType>type, mapper) : type;
+                            instantiateWithDepthCheck(type, mapper, getAnonymousTypeInstantiation) : type;
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Mapped) {
-                        return getAnonymousTypeInstantiation(<MappedType>type, mapper);
+                        return instantiateWithDepthCheck(type, mapper, getAnonymousTypeInstantiation);
                     }
                     if ((<ObjectType>type).objectFlags & ObjectFlags.Reference) {
                         const typeArguments = (<TypeReference>type).typeArguments;
@@ -10323,7 +10340,7 @@ namespace ts {
                     return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper));
                 }
                 if (type.flags & TypeFlags.Conditional) {
-                    return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
+                    return instantiateWithDepthCheck(type, combineTypeMappers((<ConditionalType>type).mapper, mapper), getConditionalTypeInstantiation);
                 }
                 if (type.flags & TypeFlags.Substitution) {
                     return instantiateType((<SubstitutionType>type).typeVariable, mapper);
