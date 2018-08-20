@@ -247,6 +247,9 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
+        if (buildOptions.watch) {
+            reportWatchModeWithoutSysSupport();
+        }
 
         // Nonsensical combinations
         if (buildOptions.clean && buildOptions.force) {
@@ -279,7 +282,8 @@ namespace ts {
             errorDiagnostic: d => reportDiagnostic(d)
         };
 
-        const builder = createSolutionBuilder(createSolutionBuilderHost(), buildHost, projects, buildOptions);
+        // TODO: change this to host if watch => watchHost otherwiue without wathc
+        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(), buildHost, projects, buildOptions);
         if (buildOptions.clean) {
             return builder.cleanAllProjects();
         }

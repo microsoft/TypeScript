@@ -4292,15 +4292,26 @@ declare namespace ts {
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
-    interface WatchCompilerHost<T extends BuilderProgram> {
+    /** Host that has watch functionality used in --watch mode */
+    interface WatchHost {
+        /** If provided, called with Diagnostic message that informs about change in watch status */
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
+        /** Used to watch changes in source files, missing files needed to update the program or config file */
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
+        clearTimeout?(timeoutId: any): void;
+    }
+    interface WatchCompilerHost<T extends BuilderProgram> extends WatchHost {
         /**
          * Used to create the program when need for program creation or recreation detected
          */
         createProgram: CreateProgram<T>;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
-        /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
@@ -4333,14 +4344,6 @@ declare namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        /** Used to watch changes in source files, missing files needed to update the program or config file */
-        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
-        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
-        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        /** If provided, will be used to reset existing delayed compilation */
-        clearTimeout?(timeoutId: any): void;
     }
     /**
      * Host to create watch with root files and options

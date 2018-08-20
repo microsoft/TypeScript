@@ -393,6 +393,9 @@ namespace ts {
         deleteFile(fileName: string): void;
     }
 
+    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
+    }
+
     export function createSolutionBuilderHost(system = sys) {
         const host = createCompilerHost({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
@@ -401,12 +404,25 @@ namespace ts {
         return host;
     }
 
+    export function createSolutionBuilderWithWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter) {
+        const host = createSolutionBuilderHost(system) as SolutionBuilderWithWatchHost;
+        const watchHost = createWatchHost(system, reportWatchStatus);
+        host.onWatchStatusChange = watchHost.onWatchStatusChange;
+        host.watchFile = watchHost.watchFile;
+        host.watchDirectory = watchHost.watchDirectory;
+        host.setTimeout = watchHost.setTimeout;
+        host.clearTimeout = watchHost.clearTimeout;
+        return host;
+    }
+
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
+     * TODO: use SolutionBuilderWithWatchHost => watchedSolution
+     *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(host: SolutionBuilderHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System) {
-
+    export function createSolutionBuilder(host: SolutionBuilderHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions) {
+        const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions);
 
@@ -429,9 +445,6 @@ namespace ts {
         };
 
         function startWatching() {
-            if (!system) throw new Error("System host must be provided if using --watch");
-            if (!system.watchFile || !system.watchDirectory || !system.setTimeout) throw new Error("System host must support watchFile / watchDirectory / setTimeout if using --watch");
-
             const graph = getGlobalDependencyGraph()!;
             if (!graph.buildQueue) {
                 // Everything is broken - we don't even know what to watch. Give up.
@@ -442,7 +455,7 @@ namespace ts {
                 const cfg = configFileCache.parseConfigFile(resolved);
                 if (cfg) {
                     // Watch this file
-                    system.watchFile(resolved, () => {
+                    hostWithWatch.watchFile(resolved, () => {
                         configFileCache.removeKey(resolved);
                         invalidateProjectAndScheduleBuilds(resolved);
                     });
@@ -450,7 +463,7 @@ namespace ts {
                     // Update watchers for wildcard directories
                     if (cfg.configFileSpecs) {
                         updateWatchingWildcardDirectories(existingWatchersForWildcards, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
-                            return system.watchDirectory!(dir, () => {
+                            return hostWithWatch.watchDirectory(dir, () => {
                                 invalidateProjectAndScheduleBuilds(resolved);
                             }, !!(flags & WatchDirectoryFlags.Recursive));
                         });
@@ -458,7 +471,7 @@ namespace ts {
 
                     // Watch input files
                     for (const input of cfg.fileNames) {
-                        system.watchFile(input, () => {
+                        hostWithWatch.watchFile(input, () => {
                             invalidateProjectAndScheduleBuilds(resolved);
                         });
                     }
@@ -467,8 +480,11 @@ namespace ts {
 
             function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
                 invalidateProject(resolved);
-                system!.setTimeout!(buildInvalidatedProjects, 100);
-                system!.setTimeout!(buildDependentInvalidatedProjects, 3000);
+                if (!hostWithWatch.setTimeout) {
+                    return;
+                }
+                hostWithWatch.setTimeout(buildInvalidatedProjects, 100);
+                hostWithWatch.setTimeout(buildDependentInvalidatedProjects, 3000);
             }
         }
 
