@@ -53,16 +53,16 @@ const x1 = f1(fo, fs);  // (x: string) => void
 >fs : (x: string) => void
 
 const x2 = f2("abc", fo, fs);  // "abc"
->x2 : string
->f2("abc", fo, fs) : string
+>x2 : "abc"
+>f2("abc", fo, fs) : "abc"
 >f2 : <T>(obj: T, f1: (x: T) => void, f2: (x: T) => void) => T
 >"abc" : "abc"
 >fo : (x: Object) => void
 >fs : (x: string) => void
 
 const x3 = f3("abc", fo, fx);  // "abc" | "def"
->x3 : Object
->f3("abc", fo, fx) : Object
+>x3 : "def" | "abc"
+>f3("abc", fo, fx) : "def" | "abc"
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
 >"abc" : "abc"
 >fo : (x: Object) => void
@@ -87,8 +87,8 @@ const x10 = f2(never, fo, fs);  // string
 >fs : (x: string) => void
 
 const x11 = f3(never, fo, fx);  // "def"
->x11 : Object
->f3(never, fo, fx) : Object
+>x11 : "def"
+>f3(never, fo, fx) : "def"
 >f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
 >never : never
 >fo : (x: Object) => void
