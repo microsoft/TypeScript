@@ -235,6 +235,7 @@ namespace ts {
         }
 
         if (buildOptions.help) {
+            printVersion();
             printHelp(buildOpts, "--build ");
             return ExitStatus.Success;
         }
