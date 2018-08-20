@@ -9262,11 +9262,12 @@ namespace ts {
             // We recursively simplify the object type as it may in turn be an indexed access type. For example, with
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
             const objectType = getSimplifiedType(type.objectType);
+            const indexType = getSimplifiedType(type.indexType);
             if (objectType.flags & TypeFlags.Union) {
-                return type.simplified = mapType(objectType, t => getIndexedAccessType(t, type.indexType));
+                return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
             }
             if (objectType.flags & TypeFlags.Intersection) {
-                return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getIndexedAccessType(t, type.indexType)));
+                return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
             }
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
