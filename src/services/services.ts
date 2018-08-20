@@ -2142,7 +2142,7 @@ namespace ts {
     function initializeNameTable(sourceFile: SourceFile): void {
         const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
         sourceFile.forEachChild(function walk(node) {
-            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
@@ -2162,7 +2162,7 @@ namespace ts {
      * then we want 'something' to be in the name table.  Similarly, if we have
      * "a['propname']" then we want to store "propname" in the name table.
      */
-    function literalIsName(node: StringLiteral | NumericLiteral): boolean {
+    function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
         return isDeclarationName(node) ||
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||

@@ -264,3 +264,20 @@ declare const o1Test: ExpectType<{}, O1Props>;
 declare const o0Test: ExpectType<{}, O0Props>;
 >o0Test : "Match"
 
+// Repro from #23005
+
+type Example<T extends Record<'a', string>> = T['a'];
+>Example : T["a"]
+
+type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
+>Res1 : "x" | "y"
+>a : "x"
+>a : "y"
+
+type Res2 = Example<{ a: "x" }>;  // "x"
+>Res2 : "x"
+>a : "x"
+
+type Res3 = Example<never>;  // never 
+>Res3 : never
+

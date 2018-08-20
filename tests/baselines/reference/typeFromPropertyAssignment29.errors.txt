@@ -1,0 +1,95 @@
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(30,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(31,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(34,22): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(34,42): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(40,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(41,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(44,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(44,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(50,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(51,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(54,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(54,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+
+
+==== tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts (12 errors) ====
+    function ExpandoDecl(n: number) {
+        return n.toString();
+    }
+    ExpandoDecl.prop = 2
+    ExpandoDecl.m = function(n: number) {
+        return n + 1;
+    }
+    var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
+    
+    const ExpandoExpr = function (n: number) {
+        return n.toString();
+    }
+    ExpandoExpr.prop = 2
+    ExpandoExpr.m = function(n: number) {
+        return n + 1;
+    }
+    var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length
+    
+    const ExpandoArrow = (n: number) => n.toString();
+    ExpandoArrow.prop = 2
+    ExpandoArrow.m = function(n: number) {
+        return n + 1;
+    
+    }
+    
+    // Should not work in Typescript -- must be const
+    var ExpandoExpr2 = function (n: number) {
+        return n.toString();
+    }
+    ExpandoExpr2.prop = 2
+                 ~~~~
+!!! error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+    ExpandoExpr2.m = function(n: number) {
+                 ~
+!!! error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+        return n + 1;
+    }
+    var n = ExpandoExpr2.prop + ExpandoExpr2.m(12) + ExpandoExpr2(101).length
+                         ~~~~
+!!! error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+                                             ~
+!!! error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+    
+    // Should not work in typescript -- classes already have statics
+    class ExpandoClass {
+        n = 1001;
+    }
+    ExpandoClass.prop = 2
+                 ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+    ExpandoClass.m = function(n: number) {
+                 ~
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+        return n + 1;
+    }
+    var n = ExpandoClass.prop + ExpandoClass.m(12) + new ExpandoClass().n
+                         ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+                                             ~
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+    
+    // Class expressions shouldn't work in typescript either
+    var ExpandoExpr3 = class {
+        n = 10001;
+    }
+    ExpandoExpr3.prop = 3
+                 ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+    ExpandoExpr3.m = function(n: number) {
+                 ~
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+        return n + 1;
+    }
+    var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n
+                         ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+                                             ~
+!!! error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+    
+    

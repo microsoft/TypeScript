@@ -1476,10 +1476,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
-                // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
-                // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
-                // '/// <reference no-default-lib="true"/>' directive.
-                if (options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) {
+                if (skipTypeChecking(sourceFile, options)) {
                     return emptyArray;
                 }
 
@@ -2852,7 +2849,6 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
-            case Extension.Json: // Since module is resolved to json file only when --resolveJsonModule, we dont need further check
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:
@@ -2861,6 +2857,8 @@ namespace ts {
                 return needJsx() || needAllowJs();
             case Extension.Js:
                 return needAllowJs();
+            case Extension.Json:
+                return needResolveJsonModule();
         }
 
         function needJsx() {
@@ -2868,6 +2866,9 @@ namespace ts {
         }
         function needAllowJs() {
             return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+        }
+        function needResolveJsonModule() {
+            return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
         }
     }
 

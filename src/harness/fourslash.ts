@@ -1639,11 +1639,7 @@ Actual: ${stringify(fullActual)}`);
                 baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
 
             }
-            Harness.Baseline.runBaseline(
-                baselineFile,
-                () => {
-                    return this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!);
-                });
+            Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
         private getEmitFiles(): ReadonlyArray<FourSlashFile> {
@@ -1674,50 +1670,46 @@ Actual: ${stringify(fullActual)}`);
             for (const { name, text } of outputFiles) {
                 const fromTestFile = this.getFileContent(name);
                 if (fromTestFile !== text) {
-                    this.raiseError("Emit output is not as expected: " + showTextDiff(fromTestFile, text));
+                    this.raiseError(`Emit output for ${name} is not as expected: ${showTextDiff(fromTestFile, text)}`);
                 }
             }
         }
 
         public baselineGetEmitOutput(): void {
-            Harness.Baseline.runBaseline(
-                ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]),
-                () => {
-                    let resultString = "";
-                    // Loop through all the emittedFiles and emit them one by one
-                    for (const emitFile of this.getEmitFiles()) {
-                        const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
-                        // Print emitOutputStatus in readable format
-                        resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
+            let resultString = "";
+            // Loop through all the emittedFiles and emit them one by one
+            for (const emitFile of this.getEmitFiles()) {
+                const emitOutput = this.languageService.getEmitOutput(emitFile.fileName);
+                // Print emitOutputStatus in readable format
+                resultString += "EmitSkipped: " + emitOutput.emitSkipped + Harness.IO.newLine();
 
-                        if (emitOutput.emitSkipped) {
-                            resultString += "Diagnostics:" + Harness.IO.newLine();
-                            const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
-                            for (const diagnostic of diagnostics) {
-                                if (!ts.isString(diagnostic.messageText)) {
-                                    let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
-                                    let indentation = " ";
-                                    while (chainedMessage) {
-                                        resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
-                                        chainedMessage = chainedMessage.next;
-                                        indentation = indentation + " ";
-                                    }
-                                }
-                                else {
-                                    resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
-                                }
+                if (emitOutput.emitSkipped) {
+                    resultString += "Diagnostics:" + Harness.IO.newLine();
+                    const diagnostics = ts.getPreEmitDiagnostics(this.languageService.getProgram()!); // TODO: GH#18217
+                    for (const diagnostic of diagnostics) {
+                        if (!ts.isString(diagnostic.messageText)) {
+                            let chainedMessage: ts.DiagnosticMessageChain | undefined = diagnostic.messageText;
+                            let indentation = " ";
+                            while (chainedMessage) {
+                                resultString += indentation + chainedMessage.messageText + Harness.IO.newLine();
+                                chainedMessage = chainedMessage.next;
+                                indentation = indentation + " ";
                             }
                         }
-
-                        for (const outputFile of emitOutput.outputFiles) {
-                            const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
-                            resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
+                        else {
+                            resultString += "  " + diagnostic.messageText + Harness.IO.newLine();
                         }
-                        resultString += Harness.IO.newLine();
                     }
+                }
 
-                    return resultString;
-                });
+                for (const outputFile of emitOutput.outputFiles) {
+                    const fileName = "FileName : " + outputFile.name + Harness.IO.newLine();
+                    resultString = resultString + Harness.IO.newLine() + fileName + outputFile.text;
+                }
+                resultString += Harness.IO.newLine();
+            }
+
+            Harness.Baseline.runBaseline(ts.Debug.assertDefined(this.testData.globalOptions[MetadataOptionNames.baselineFile]), resultString);
         }
 
         public baselineQuickInfo() {
@@ -1728,12 +1720,11 @@ Actual: ${stringify(fullActual)}`);
 
             Harness.Baseline.runBaseline(
                 baselineFile,
-                () => stringify(
+                stringify(
                     this.testData.markers.map(marker => ({
                         marker,
                         quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
-                    }))
-                ));
+                    }))));
         }
 
         public printBreakpointLocation(pos: number) {
@@ -2347,10 +2338,7 @@ Actual: ${stringify(fullActual)}`);
         public baselineCurrentFileNameOrDottedNameSpans() {
             Harness.Baseline.runBaseline(
                 this.testData.globalOptions[MetadataOptionNames.baselineFile],
-                () => {
-                    return this.baselineCurrentFileLocations(pos =>
-                        this.getNameOrDottedNameSpan(pos)!);
-                });
+                this.baselineCurrentFileLocations(pos => this.getNameOrDottedNameSpan(pos)!));
         }
 
         public printNameOrDottedNameSpans(pos: number) {
@@ -2985,7 +2973,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
-            const isAvailable = this.getApplicableRefactors(this.getMarkerByName(markerName).position).length > 0;
+            const isAvailable = this.getApplicableRefactors(this.getMarkerByName(markerName)).length > 0;
             if (negative && isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
             }
@@ -3002,7 +2990,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactorAvailable(negative: boolean, name: string, actionName?: string) {
-            let refactors = this.getApplicableRefactors(this.getSelection());
+            let refactors = this.getApplicableRefactorsAtSelection();
             refactors = refactors.filter(r => r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)));
             const isAvailable = refactors.length > 0;
 
@@ -3022,11 +3010,11 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRefactorsAvailable(names: ReadonlyArray<string>): void {
-            assert.deepEqual(unique(this.getApplicableRefactors(this.getSelection()), r => r.name), names);
+            assert.deepEqual(unique(this.getApplicableRefactorsAtSelection(), r => r.name), names);
         }
 
         public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
-            const actualRefactors = this.getApplicableRefactors(this.getSelection()).filter(r => r.name === name && r.actions.some(a => a.name === actionName));
+            const actualRefactors = this.getApplicableRefactorsAtSelection().filter(r => r.name === name && r.actions.some(a => a.name === actionName));
             this.assertObjectsEqual(actualRefactors, refactors);
         }
 
@@ -3047,7 +3035,7 @@ Actual: ${stringify(fullActual)}`);
 
         public applyRefactor({ refactorName, actionName, actionDescription, newContent: newContentWithRenameMarker }: FourSlashInterface.ApplyRefactorOptions) {
             const range = this.getSelection();
-            const refactors = this.getApplicableRefactors(range);
+            const refactors = this.getApplicableRefactorsAtSelection();
             const refactorsWithName = refactors.filter(r => r.name === refactorName);
             if (refactorsWithName.length === 0) {
                 this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.\nAvailable refactors: ${refactors.map(r => r.name)}`);
@@ -3125,7 +3113,7 @@ Actual: ${stringify(fullActual)}`);
             const action = ts.first(refactor.actions);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
+            const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
             this.testNewFileContents(editInfo.edits, options.newFileContents, "move to new file");
         }
 
@@ -3165,21 +3153,21 @@ Actual: ${stringify(fullActual)}`);
             formattingOptions?: ts.FormatCodeSettings) {
 
             formattingOptions = formattingOptions || this.formatCodeSettings;
-            const markerPos = this.getMarkerByName(markerName).position;
+            const marker = this.getMarkerByName(markerName);
 
-            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos, ts.emptyOptions);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.emptyOptions);
             const applicableRefactorToApply = ts.find(applicableRefactors, refactor => refactor.name === refactorNameToApply);
 
             if (!applicableRefactorToApply) {
                 this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
             }
 
-            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName, ts.emptyOptions)!;
+            const editInfo = this.languageService.getEditsForRefactor(marker.fileName, formattingOptions, marker.position, refactorNameToApply, actionName, ts.emptyOptions)!;
 
             for (const edit of editInfo.edits) {
                 this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
-            const actualContent = this.getFileContent(this.activeFile.fileName);
+            const actualContent = this.getFileContent(marker.fileName);
 
             if (actualContent !== expectedContent) {
                 this.raiseError(`verifyFileAfterApplyingRefactors failed:\n${showTextDiff(expectedContent, actualContent)}`);
@@ -3381,8 +3369,14 @@ Actual: ${stringify(fullActual)}`);
             test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
         }
 
-        private getApplicableRefactors(positionOrRange: number | ts.TextRange, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
-            return this.languageService.getApplicableRefactors(this.activeFile.fileName, positionOrRange, preferences) || ts.emptyArray;
+        private getApplicableRefactorsAtSelection() {
+            return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName);
+        }
+        private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences);
+        }
+        private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
+            return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
         }
     }
 
