@@ -38,7 +38,6 @@ declare function acceptA(x: A): void;
 
 declare let a: A;
 declare let b: B;
-declare let never: never;
 
 declare function coAndContra<T>(value: T, func: (t: T) => void): T;
 
