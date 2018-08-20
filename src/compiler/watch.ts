@@ -27,12 +27,6 @@ namespace ts {
         };
     }
 
-    /** @internal */
-    export const nonClearingMessageCodes: number[] = [
-        Diagnostics.Found_1_error_Watching_for_file_changes.code,
-        Diagnostics.Found_0_errors_Watching_for_file_changes.code
-    ];
-
     /**
      * @returns Whether the screen was cleared.
      */
@@ -41,7 +35,7 @@ namespace ts {
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
             !options.diagnostics &&
-            !contains(nonClearingMessageCodes, diagnostic.code)) {
+            contains(screenStartingMessageCodes, diagnostic.code)) {
             system.clearScreen();
             return true;
         }
