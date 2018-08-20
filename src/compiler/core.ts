@@ -121,29 +121,62 @@ namespace ts {
     function shimMap(): new <T>() => Map<T> {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
-            private data: MapLike<T>;
-            private keys: ReadonlyArray<string>;
-            private index = 0;
+            index = 0;
+
+            private shimMap: ShimMap<T>;
             private selector: (data: MapLike<T>, key: string) => U;
-            constructor(data: MapLike<T>, selector: (data: MapLike<T>, key: string) => U) {
-                this.data = data;
+
+            constructor(shimMap: ShimMap<T>, selector: (data: MapLike<T>, key: string) => U) {
+                this.shimMap = shimMap;
                 this.selector = selector;
-                this.keys = Object.keys(data);
+
+                if (!shimMap.iteratorState) {
+                    // Create the initial iterator state.
+                    shimMap.iteratorState = {
+                        iterators: [],
+                        keys: Object.keys(shimMap.data)
+                    };
+                }
+
+                // Add ourselves to the list of iterators.
+                shimMap.iteratorState.iterators.push(this);
             }
 
             public next(): { value: U, done: false } | { value: never, done: true } {
-                const index = this.index;
-                if (index < this.keys.length) {
-                    this.index++;
-                    return { value: this.selector(this.data, this.keys[index]), done: false };
+                const iteratorState = this.shimMap.iteratorState!;
+                if (this.index != -1 && this.index < iteratorState.keys.length) {
+                    const index = this.index++;
+                    return { value: this.selector(this.shimMap.data, iteratorState.keys[index]), done: false };
                 }
-                return { value: undefined as never, done: true };
+                else {
+                    // Ensure subsequent invocations will always return done.
+                    this.index = -1;                    
+
+                    // Remove ourselves from the list of iterators.
+                    iteratorState.iterators.splice(
+                        iteratorState.iterators.indexOf(this), 1);
+
+                    if (iteratorState.iterators.length == 0) {
+                        // No other iterator is active, so clear the iterator state.
+                        this.shimMap.iteratorState = undefined;
+                    }
+
+                    return { value: undefined as never, done: true };
+                }
             }
         }
 
-        return class <T> implements Map<T> {
-            private data = createDictionaryObject<T>();
-            public size = 0;
+        class ShimMap<T> implements Map<T> {
+            size = 0;
+
+            data = createDictionaryObject<T>();
+            
+            iteratorState: {
+                readonly keys: string[];
+                readonly iterators: {
+                    index: number;
+                }[];
+            } | undefined;
 
             get(key: string): T | undefined {
                 return this.data[key];
@@ -152,6 +185,11 @@ namespace ts {
             set(key: string, value: T): this {
                 if (!this.has(key)) {
                     this.size++;
+
+                    if (this.iteratorState) {
+                        // Add the new entry.
+                        this.iteratorState.keys.push(key);
+                    }
                 }
                 this.data[key] = value;
                 return this;
@@ -166,6 +204,22 @@ namespace ts {
                 if (this.has(key)) {
                     this.size--;
                     delete this.data[key];
+
+                    if (this.iteratorState) {
+                        // Remove the key and adjust the iterator indexes.
+                        // Note that this operation isn't very performant as we need to
+                        // iterate over the "keys" array; however, we expect that no one
+                        // will delete entries while iterators are still active.
+                        const keys = this.iteratorState.keys;
+                        const keyIndex = keys.indexOf(key);                       
+                        keys.splice(keyIndex, 1);
+
+                        const iterators = this.iteratorState.iterators;
+                        for (let i = 0; i < iterators.length; i++)
+                            if (iterators[i].index > keyIndex)
+                                iterators[i].index--;
+                    }
+
                     return true;
                 }
                 return false;
@@ -174,26 +228,41 @@ namespace ts {
             clear(): void {
                 this.data = createDictionaryObject<T>();
                 this.size = 0;
+
+                if (this.iteratorState) {
+                    this.iteratorState.keys.splice(0, this.iteratorState.keys.length);
+
+                    const iterators = this.iteratorState.iterators;
+                    for (let i = 0; i < iterators.length; i++)
+                        iterators[i].index = 0;
+                }
             }
 
             keys(): Iterator<string> {
-                return new MapIterator(this.data, (_data, key) => key);
+                return new MapIterator(this, (_data, key) => key);
             }
 
             values(): Iterator<T> {
-                return new MapIterator(this.data, (data, key) => data[key]);
+                return new MapIterator(this, (data, key) => data[key]);
             }
 
             entries(): Iterator<[string, T]> {
-                return new MapIterator(this.data, (data, key) => [key, data[key]] as [string, T]);
+                return new MapIterator(this, (data, key) => [key, data[key]] as [string, T]);
             }
 
             forEach(action: (value: T, key: string) => void): void {
-                for (const key in this.data) {
-                    action(this.data[key], key);
+                const iterator = this.entries();
+                while (true) {
+                    const { value: entry, done } = iterator.next();
+                    if (done)
+                        break;
+
+                    action(entry[1], entry[0]);
                 }
             }
-        };
+        }
+
+        return ShimMap;
     }
 
     export function length(array: ReadonlyArray<any> | undefined): number {
