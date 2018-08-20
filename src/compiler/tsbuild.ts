@@ -392,21 +392,37 @@ namespace ts {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
+
+        reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
+        reportSolutionBuilderStatus: DiagnosticReporter;
     }
 
     export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
     }
 
-    export function createSolutionBuilderHost(system = sys) {
+    /**
+     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     */
+    export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
+        return diagnostic => {
+            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
+            system.write(output);
+        };
+    }
+
+    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
         const host = createCompilerHost({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
+        host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
+        host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
         return host;
     }
 
-    export function createSolutionBuilderWithWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter) {
-        const host = createSolutionBuilderHost(system) as SolutionBuilderWithWatchHost;
+    export function createSolutionBuilderWithWatchHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+        const host = createSolutionBuilderHost(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
         const watchHost = createWatchHost(system, reportWatchStatus);
         host.onWatchStatusChange = watchHost.onWatchStatusChange;
         host.watchFile = watchHost.watchFile;
@@ -422,7 +438,7 @@ namespace ts {
      * TODO: use SolutionBuilderWithWatchHost => watchedSolution
      *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(host: SolutionBuilderHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions) {
+    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions) {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions);
@@ -444,6 +460,10 @@ namespace ts {
 
             startWatching
         };
+
+        function reportStatus(message: DiagnosticMessage, ...args: string[]) {
+            host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
+        }
 
         function startWatching() {
             const graph = getGlobalDependencyGraph()!;
@@ -743,7 +763,7 @@ namespace ts {
                 verboseReportProjectStatus(next, status);
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    if (context.options.verbose) buildHost.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
+                    if (context.options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
                     continue;
                 }
 
@@ -780,7 +800,7 @@ namespace ts {
                 if (temporaryMarks[projPath]) {
                     if (!inCircularContext) {
                         hadError = true;
-                        buildHost.error(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
+                        reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
                         return;
                     }
                 }
@@ -812,11 +832,11 @@ namespace ts {
 
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (context.options.dry) {
-                buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj);
+                reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj);
                 return BuildResultFlags.Success;
             }
 
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Building_project_0, proj);
+            if (context.options.verbose) reportStatus(Diagnostics.Building_project_0, proj);
 
             let resultFlags = BuildResultFlags.None;
             resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
@@ -850,7 +870,7 @@ namespace ts {
             if (syntaxDiagnostics.length) {
                 resultFlags |= BuildResultFlags.SyntaxErrors;
                 for (const diag of syntaxDiagnostics) {
-                    buildHost.errorDiagnostic(diag);
+                    host.reportDiagnostic(diag);
                 }
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
                 return resultFlags;
@@ -862,7 +882,7 @@ namespace ts {
                 if (declDiagnostics.length) {
                     resultFlags |= BuildResultFlags.DeclarationEmitErrors;
                     for (const diag of declDiagnostics) {
-                        buildHost.errorDiagnostic(diag);
+                        host.reportDiagnostic(diag);
                     }
                     context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
                     return resultFlags;
@@ -874,7 +894,7 @@ namespace ts {
             if (semanticDiagnostics.length) {
                 resultFlags |= BuildResultFlags.TypeErrors;
                 for (const diag of semanticDiagnostics) {
-                    buildHost.errorDiagnostic(diag);
+                    host.reportDiagnostic(diag);
                 }
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
                 return resultFlags;
@@ -913,11 +933,11 @@ namespace ts {
 
         function updateOutputTimestamps(proj: ParsedCommandLine) {
             if (context.options.dry) {
-                return buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
+                return reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
 
             if (context.options.verbose) {
-                buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+                reportStatus(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
             }
 
             const now = new Date();
@@ -970,18 +990,18 @@ namespace ts {
         function cleanAllProjects() {
             const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
             if (resolvedNames === undefined) {
-                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             const filesToDelete = getFilesToClean(resolvedNames);
             if (filesToDelete === undefined) {
-                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
+                reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
             }
 
             if (context.options.dry) {
-                buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+                reportStatus(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
                 return ExitStatus.Success;
             }
 
@@ -1001,7 +1021,7 @@ namespace ts {
             if (host.fileExists(fullPathWithTsconfig)) {
                 return fullPathWithTsconfig as ResolvedConfigFileName;
             }
-            buildHost.error(Diagnostics.File_0_not_found, relName(fullPath));
+            host.reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, relName(fullPath)));
             return undefined;
         }
 
@@ -1039,7 +1059,7 @@ namespace ts {
                     // Up to date, skip
                     if (defaultOptions.dry) {
                         // In a dry build, inform the user of this fact
-                        buildHost.message(Diagnostics.Project_0_is_up_to_date, projName);
+                        reportStatus(Diagnostics.Project_0_is_up_to_date, projName);
                     }
                     continue;
                 }
@@ -1051,7 +1071,7 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    if (context.options.verbose) buildHost.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
+                    if (context.options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
                     continue;
                 }
 
@@ -1076,15 +1096,11 @@ namespace ts {
             for (const name of graph.buildQueue) {
                 names.push(name);
             }
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + relName(s)).join(""));
+            if (context.options.verbose) reportStatus(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + relName(s)).join(""));
         }
 
         function relName(path: string): string {
             return convertToRelativePath(path, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
-        }
-
-        function reportVerbose(message: DiagnosticMessage, ...args: string[]) {
-            buildHost.verbose(message, ...args);
         }
 
         /**
@@ -1092,7 +1108,7 @@ namespace ts {
          */
         function verboseReportProjectStatus(configFileName: string, status: UpToDateStatus) {
             if (!context.options.verbose) return;
-            return formatUpToDateStatus(configFileName, status, relName, reportVerbose);
+            return formatUpToDateStatus(configFileName, status, relName, reportStatus);
         }
     }
 

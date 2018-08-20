@@ -13,7 +13,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function updateReportDiagnostic(options: CompilerOptions) {
+    function updateReportDiagnostic(options?: CompilerOptions) {
         if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -23,8 +23,8 @@ namespace ts {
         return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
     }
 
-    function shouldBePretty(options: CompilerOptions) {
-        if (typeof options.pretty === "undefined") {
+    function shouldBePretty(options?: CompilerOptions) {
+        if (!options || typeof options.pretty === "undefined") {
             return defaultIsPretty();
         }
         return options.pretty;
@@ -241,7 +241,7 @@ namespace ts {
         }
 
         // Update to pretty if host supports it
-        updateReportDiagnostic({});
+        updateReportDiagnostic();
 
         if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
@@ -274,16 +274,8 @@ namespace ts {
             addProject(".");
         }
 
-        const report = (message: DiagnosticMessage, ...args: string[]) => reportDiagnostic(createCompilerDiagnostic(message, ...args));
-        const buildHost: BuildHost = {
-            error: report,
-            verbose: report,
-            message: report,
-            errorDiagnostic: d => reportDiagnostic(d)
-        };
-
         // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(), buildHost, projects, buildOptions);
+        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
         if (buildOptions.clean) {
             return builder.cleanAllProjects();
         }
@@ -300,7 +292,7 @@ namespace ts {
             const fileName = resolvePath(sys.getCurrentDirectory(), projectSpecification);
             const refPath = resolveProjectReferencePath(sys, { path: fileName });
             if (!sys.fileExists(refPath)) {
-                return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
+                return reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
             }
             projects.push(refPath);
         }
@@ -339,7 +331,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(options: CompilerOptions) {
+    function createWatchStatusReporter(options?: CompilerOptions) {
         return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 
