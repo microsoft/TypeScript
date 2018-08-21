@@ -175,7 +175,7 @@ namespace ts {
             return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
         }
 
-        const newLine = getNewLineCharacter(options);
+        const newLine = getNewLineCharacter(options, () => system.newLine);
         const realpath = system.realpath && ((path: string) => system.realpath!(path));
 
         return {

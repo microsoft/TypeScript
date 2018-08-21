@@ -35,9 +35,11 @@ namespace ts {
          * Map from config file name to up-to-date status
          */
         projectStatus: FileMap<UpToDateStatus>;
+        diagnostics?: FileMap<number>; // TODO(shkamat): this should be really be diagnostics but thats for later time
 
-        invalidatedProjects: FileMap<true>;
-        queuedProjects: FileMap<true>;
+        invalidateProject(project: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined): void;
+        getNextInvalidatedProject(): ResolvedConfigFileName | undefined;
+        pendingInvalidatedProjects(): boolean;
         missingRoots: Map<true>;
     }
 
@@ -194,6 +196,7 @@ namespace ts {
         hasKey(fileName: string): boolean;
         removeKey(fileName: string): void;
         getKeys(): string[];
+        getSize(): number;
     }
 
     /**
@@ -209,7 +212,8 @@ namespace ts {
             getValueOrUndefined,
             removeKey,
             getKeys,
-            hasKey
+            hasKey,
+            getSize
         };
 
         function getKeys(): string[] {
@@ -241,6 +245,10 @@ namespace ts {
         function getValueOrUndefined(fileName: string): T | undefined {
             const f = normalizePath(fileName);
             return lookup.get(f);
+        }
+
+        function getSize() {
+            return lookup.size;
         }
     }
 
@@ -375,18 +383,64 @@ namespace ts {
     }
 
     export function createBuildContext(options: BuildOptions): BuildContext {
-        const invalidatedProjects = createFileMap<true>();
-        const queuedProjects = createFileMap<true>();
+        const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
+        let nextIndex = 0;
+        const projectPendingBuild = createFileMap<true>();
         const missingRoots = createMap<true>();
+        const diagnostics = options.watch ? createFileMap<number>() : undefined;
 
         return {
             options,
             projectStatus: createFileMap(),
+            diagnostics,
             unchangedOutputs: createFileMap(),
-            invalidatedProjects,
-            missingRoots,
-            queuedProjects
+            invalidateProject,
+            getNextInvalidatedProject,
+            pendingInvalidatedProjects,
+            missingRoots
         };
+
+        function invalidateProject(proj: ResolvedConfigFileName, dependancyGraph: DependencyGraph | undefined) {
+            if (!projectPendingBuild.hasKey(proj)) {
+                addProjToQueue(proj);
+                if (dependancyGraph) {
+                    queueBuildForDownstreamReferences(proj, dependancyGraph);
+                }
+            }
+        }
+
+        function addProjToQueue(proj: ResolvedConfigFileName) {
+            projectPendingBuild.setValue(proj, true);
+            invalidatedProjectQueue.push(proj);
+        }
+
+        function getNextInvalidatedProject() {
+            if (nextIndex < invalidatedProjectQueue.length) {
+                const proj = invalidatedProjectQueue[nextIndex];
+                nextIndex++;
+                projectPendingBuild.removeKey(proj);
+                if (!projectPendingBuild.getSize()) {
+                    invalidatedProjectQueue.length = 0;
+                }
+                return proj;
+            }
+        }
+
+        function pendingInvalidatedProjects() {
+            return !!projectPendingBuild.getSize();
+        }
+
+        // Mark all downstream projects of this one needing to be built "later"
+        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName, dependancyGraph: DependencyGraph) {
+            const deps = dependancyGraph.dependencyMap.getReferencesTo(root);
+            for (const ref of deps) {
+                // Can skip circular references
+                if (!projectPendingBuild.hasKey(ref)) {
+                    addProjToQueue(ref);
+                    queueBuildForDownstreamReferences(ref, dependancyGraph);
+                }
+            }
+        }
     }
 
     export interface SolutionBuilderHost extends CompilerHost {
@@ -443,6 +497,7 @@ namespace ts {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions);
+        let timerToBuildInvalidatedProject: any;
 
         const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
         return {
@@ -454,8 +509,7 @@ namespace ts {
             getBuildGraph,
 
             invalidateProject,
-            buildInvalidatedProjects,
-            buildDependentInvalidatedProjects,
+            buildInvalidatedProject,
 
             resolveProjectName,
 
@@ -466,7 +520,19 @@ namespace ts {
             host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
         }
 
-        function reportWatchStatus(message: DiagnosticMessage, ...args: string[]) {
+        function storeErrors(proj: ResolvedConfigFileName, diagnostics: ReadonlyArray<Diagnostic>) {
+            if (context.options.watch) {
+                storeErrorSummary(proj, diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+            }
+        }
+
+        function storeErrorSummary(proj: ResolvedConfigFileName, errorCount: number) {
+            if (context.options.watch) {
+                context.diagnostics!.setValue(proj, errorCount);
+            }
+        }
+
+        function reportWatchStatus(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             if (hostWithWatch.onWatchStatusChange) {
                 hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), { preserveWatchOutput: context.options.preserveWatchOutput });
             }
@@ -506,15 +572,12 @@ namespace ts {
                 }
             }
 
-            function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
-                reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
-                invalidateProject(resolved);
-                if (!hostWithWatch.setTimeout) {
-                    return;
-                }
-                hostWithWatch.setTimeout(buildInvalidatedProjects, 100);
-                hostWithWatch.setTimeout(buildDependentInvalidatedProjects, 3000);
-            }
+        }
+
+        function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
+            reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            invalidateProject(resolved);
+            scheduleBuildInvalidatedProject();
         }
 
         function resetBuildContext(opts = defaultOptions) {
@@ -725,33 +788,44 @@ namespace ts {
             }
 
             configFileCache.removeKey(resolved);
-            context.invalidatedProjects.setValue(resolved, true);
             context.projectStatus.removeKey(resolved);
-
-            const graph = getGlobalDependencyGraph()!;
-            if (graph) {
-                queueBuildForDownstreamReferences(resolved);
+            if (context.options.watch) {
+                context.diagnostics!.removeKey(resolved);
             }
 
-            // Mark all downstream projects of this one needing to be built "later"
-            function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
-                const deps = graph.dependencyMap.getReferencesTo(root);
-                for (const ref of deps) {
-                    // Can skip circular references
-                    if (!context.queuedProjects.hasKey(ref)) {
-                        context.queuedProjects.setValue(ref, true);
-                        queueBuildForDownstreamReferences(ref);
-                    }
+            context.invalidateProject(resolved, getGlobalDependencyGraph());
+        }
+
+        function scheduleBuildInvalidatedProject() {
+            if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
+                return;
+            }
+            if (timerToBuildInvalidatedProject) {
+                hostWithWatch.clearTimeout(timerToBuildInvalidatedProject);
+            }
+            timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildInvalidatedProject, 250);
+        }
+
+        function buildInvalidatedProject() {
+            timerToBuildInvalidatedProject = undefined;
+            const buildProject = context.getNextInvalidatedProject();
+            buildSomeProjects(p => p === buildProject);
+            if (context.pendingInvalidatedProjects()) {
+                if (!timerToBuildInvalidatedProject) {
+                    scheduleBuildInvalidatedProject();
                 }
             }
+            else {
+                reportErrorSummary();
+            }
         }
 
-        function buildInvalidatedProjects() {
-            buildSomeProjects(p => context.invalidatedProjects.hasKey(p));
-        }
-
-        function buildDependentInvalidatedProjects() {
-            buildSomeProjects(p => context.queuedProjects.hasKey(p));
+        function reportErrorSummary() {
+            if (context.options.watch) {
+                let errorCount = 0;
+                context.diagnostics!.getKeys().forEach(resolved => errorCount += context.diagnostics!.getValue(resolved));
+                reportWatchStatus(errorCount === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount);
+            }
         }
 
         function buildSomeProjects(predicate: (projName: ResolvedConfigFileName) => boolean) {
@@ -808,6 +882,7 @@ namespace ts {
                 if (temporaryMarks[projPath]) {
                     if (!inCircularContext) {
                         hadError = true;
+                        // TODO(shkamat): Account for this error
                         reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
                         return;
                     }
@@ -853,6 +928,7 @@ namespace ts {
             if (!configFile) {
                 // Failed to read the config file
                 resultFlags |= BuildResultFlags.ConfigFileErrors;
+                storeErrorSummary(proj, 1);
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
                 return resultFlags;
             }
@@ -880,6 +956,7 @@ namespace ts {
                 for (const diag of syntaxDiagnostics) {
                     host.reportDiagnostic(diag);
                 }
+                storeErrors(proj, syntaxDiagnostics);
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
                 return resultFlags;
             }
@@ -892,6 +969,7 @@ namespace ts {
                     for (const diag of declDiagnostics) {
                         host.reportDiagnostic(diag);
                     }
+                    storeErrors(proj, declDiagnostics);
                     context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
                     return resultFlags;
                 }
@@ -904,6 +982,7 @@ namespace ts {
                 for (const diag of semanticDiagnostics) {
                     host.reportDiagnostic(diag);
                 }
+                storeErrors(proj, semanticDiagnostics);
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
                 return resultFlags;
             }
@@ -1029,6 +1108,7 @@ namespace ts {
             if (host.fileExists(fullPathWithTsconfig)) {
                 return fullPathWithTsconfig as ResolvedConfigFileName;
             }
+            // TODO(shkamat): right now this is accounted as 1 error in config file, but we need to do better
             host.reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, relName(fullPath)));
             return undefined;
         }
@@ -1048,7 +1128,10 @@ namespace ts {
         function buildAllProjects(): ExitStatus {
             if (context.options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            if (graph === undefined) {
+                reportErrorSummary();
+                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            }
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
@@ -1092,6 +1175,7 @@ namespace ts {
                 const buildResult = buildSingleProject(next);
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
+            reportErrorSummary();
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 

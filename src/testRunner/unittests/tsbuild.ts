@@ -205,14 +205,14 @@ namespace ts {
                 // Rebuild this project
                 tick();
                 builder.invalidateProject("/src/logic");
-                builder.buildInvalidatedProjects();
+                builder.buildInvalidatedProject();
                 // The file should be updated
                 assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
 
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
-                builder.buildDependentInvalidatedProjects();
+                builder.buildInvalidatedProject();
                 assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
