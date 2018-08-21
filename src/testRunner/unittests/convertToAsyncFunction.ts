@@ -319,38 +319,6 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    const newLineCharacter = "\n";
-    const formatOptions: FormatCodeSettings = {
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter,
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceBeforeFunctionParenthesis: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-    };
-
-    const notImplementedHost: LanguageServiceHost = {
-        getCompilationSettings: notImplemented,
-        getScriptFileNames: notImplemented,
-        getScriptVersion: notImplemented,
-        getScriptSnapshot: notImplemented,
-        getDefaultLibFileName: notImplemented,
-        getCurrentDirectory: notImplemented,
-    };
-
     function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = getTest(text);
         const selectionRange = t.ranges.get("selection")!;
@@ -389,7 +357,7 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(formatOptions)
+                formatContext: formatting.getFormatContext(testFormatOptions)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);

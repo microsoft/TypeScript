@@ -2648,6 +2648,7 @@ namespace ts {
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
+        /* @internal */ syntheticLibReferences?: ReadonlyArray<FileReference>;
         /* @internal */ hasNoDefaultLib?: boolean;
     }
 
@@ -5074,6 +5075,7 @@ namespace ts {
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;

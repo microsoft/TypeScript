@@ -86,7 +86,7 @@ namespace ts {
         placeOpenBraceOnNewLineForControlBlocks: false,
     };
 
-    const notImplementedHost: LanguageServiceHost = {
+    export const notImplementedHost: LanguageServiceHost = {
         getCompilationSettings: notImplemented,
         getScriptFileNames: notImplemented,
         getScriptVersion: notImplemented,
