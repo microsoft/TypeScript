@@ -775,7 +775,7 @@ namespace ts {
         return deduplicated.map(i => array[i]);
     }
 
-    function deduplicateEquality<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>) {
+    function deduplicateEquality<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>) {
         const result: T[] = [];
         for (const item of array) {
             pushIfUnique(result, item, equalityComparer);
@@ -789,23 +789,17 @@ namespace ts {
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[];
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined;
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined {
-        return !array ? undefined :
-            array.length === 0 ? [] :
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return array.length === 0 ? [] :
             array.length === 1 ? array.slice() :
-            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+            comparer ? deduplicateRelational(array, equalityComparer!, comparer) :
             deduplicateEquality(array, equalityComparer);
     }
 
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[];
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined;
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined {
-        if (!array) return undefined;
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
         if (array.length === 0) return [];
 
         let last = array[0];
