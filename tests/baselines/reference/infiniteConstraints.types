@@ -87,3 +87,11 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >value : <V extends string>(val: V) => Record<"val", V>
 >"dup" : "dup"
 
+// Repro from #26448
+
+type Cond<T> = T extends number ? number : never;
+>Cond : Cond<T>
+
+declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
+>function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
+

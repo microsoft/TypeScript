@@ -31,6 +31,11 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
 
+// Repro from #26448
+
+type Cond<T> = T extends number ? number : never;
+declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
+
 
 //// [infiniteConstraints.js]
 "use strict";

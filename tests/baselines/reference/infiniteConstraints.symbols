@@ -120,3 +120,21 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >alternate : Symbol(alternate, Decl(infiniteConstraints.ts, 30, 61))
 >value : Symbol(value, Decl(infiniteConstraints.ts, 15, 57))
 
+// Repro from #26448
+
+type Cond<T> = T extends number ? number : never;
+>Cond : Symbol(Cond, Decl(infiniteConstraints.ts, 30, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 34, 10))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 34, 10))
+
+declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
+>function1 : Symbol(function1, Decl(infiniteConstraints.ts, 34, 49))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 35, 39))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>Cond : Symbol(Cond, Decl(infiniteConstraints.ts, 30, 88))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>K : Symbol(K, Decl(infiniteConstraints.ts, 35, 39))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+>T : Symbol(T, Decl(infiniteConstraints.ts, 35, 27))
+
