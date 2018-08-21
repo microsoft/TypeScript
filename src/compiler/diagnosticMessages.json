@@ -4577,7 +4577,11 @@
          "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
+        "category": "Message",
          "code": 95066
+    },
+    "Merge duplicate import declaration": {
+        "category": "Message",
+        "code": 95067
     }
 }
