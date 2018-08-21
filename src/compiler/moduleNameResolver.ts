@@ -934,7 +934,7 @@ namespace ts {
         if (endsWith(path, ".d.ts")) {
             return path;
         }
-        if (endsWith(path, "/index")) {
+        if (path === "index" || endsWith(path, "/index")) {
             return path + ".d.ts";
         }
         return path + "/index.d.ts";
@@ -1069,9 +1069,9 @@ namespace ts {
                 }
             }
 
-            // if (versionPath) {
-            //     subModuleName = combinePaths(versionPath, subModuleName);
-            // }
+            if (versionPath) {
+                subModuleName = combinePaths(versionPath, subModuleName);
+            }
 
             if (!endsWith(subModuleName, Extension.Dts)) {
                 subModuleName = addExtensionAndIndex(subModuleName);
