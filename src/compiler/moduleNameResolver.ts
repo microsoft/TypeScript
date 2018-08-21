@@ -127,7 +127,7 @@ namespace ts {
 
     /* @internal */
     export function getPackageJsonTypesVersionsOverride(typesVersions: MapLike<string>) {
-        const typeScriptVersion = Version.parse(version);
+        const typeScriptVersion = Version.parse(versionMajorMinor);
         let bestVersion: Version | undefined;
         let bestVersionKey: string | undefined;
         for (const key in typesVersions) {
