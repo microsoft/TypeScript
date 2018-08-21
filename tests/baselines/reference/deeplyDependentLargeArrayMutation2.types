@@ -1,3606 +1,3674 @@
 === tests/cases/compiler/foo.js ===
-// Exerpt from https://github.com/archilogic-com/3dio-js - MIT Licenced
-function generateMeshes3d(a) {
->generateMeshes3d : (a: any) => Promise<{ closet: { positions: Float32Array; material: string; }; }>
->a : any
+// Looking at this test and thinking "that's silly, nobody would write code like that" and thinking it's OK to break this test?
+// You'd be wrong - https://raw.githubusercontent.com/archilogic-com/3dio-js/master/build/3dio.js and plenty of other codebases
+// have js code exactly like this! This pattern (even at this size!) with a few more embellishments is a common way to encode
+// polygons or verticies into a buffer from a formulaic object definition! So while this is a lot more regular than a real piece
+// of code, this is still representative of a common pattern.
+function build() {
+>build : () => any[]
 
-    var step = 0,
->step : number
+    let i = 0;
+>i : number
 >0 : 0
 
-        elementNum = Math.round(a.l / 0.6),
->elementNum : number
->Math.round(a.l / 0.6) : number
->Math.round : (x: number) => number
->Math : Math
->round : (x: number) => number
->a.l / 0.6 : number
->a.l : any
->a : any
->l : any
->0.6 : 0.6
-
-        elementLength = a.l / elementNum,
->elementLength : number
->a.l / elementNum : number
->a.l : any
->a : any
->l : any
->elementNum : number
-
-        handlePos = elementLength * 0.8,
->handlePos : number
->elementLength * 0.8 : number
->elementLength : number
->0.8 : 0.8
-
-        //handleWidth = a.handleWidth+ a.doorWidth,
-        handleDistance = 0.05,
->handleDistance : number
->0.05 : 0.05
-
-        offsetY = -0.01,
->offsetY : number
->-0.01 : -0.01
->0.01 : 0.01
-
-
-        // internals
-        closetVertices = [],
->closetVertices : any[]
+    const arr = [];
+>arr : any[]
 >[] : undefined[]
 
-        cvPos = 0;
->cvPos : number
->0 : 0
-
-    //CLOSET DOORS
-
-    // FRONT VIEW VERTICES
-    //
-    // A------------C
-    // |E\I------G\K|
-    // | |        | |
-    // | |M\Q-O\S | |
-    // | ||   |   | |
-    // | |N\R-P\T | |
-    // |F\J------H\L|
-    // B------------D
-
-    var aX = step,
->aX : number
->step : number
-
-        aY = a.h + offsetY,
->aY : any
->a.h + offsetY : any
->a.h : any
->a : any
->h : any
->offsetY : number
-
-        aZ = a.w,
->aZ : any
->a.w : any
->a : any
->w : any
-
-        bY = 0,
->bY : number
->0 : 0
-
-        cX = step + elementLength,
->cX : number
->step + elementLength : number
->step : number
->elementLength : number
-
-        eX = step + a.doorWidth / 2,
->eX : number
->step + a.doorWidth / 2 : number
->step : number
->a.doorWidth / 2 : number
->a.doorWidth : any
->a : any
->doorWidth : any
->2 : 2
-
-        eY = a.h - a.doorWidth,
->eY : number
->a.h - a.doorWidth : number
->a.h : any
->a : any
->h : any
->a.doorWidth : any
->a : any
->doorWidth : any
-
-        fY = a.baseboard,
->fY : any
->a.baseboard : any
->a : any
->baseboard : any
-
-        gX = step + elementLength - a.doorWidth / 2,
->gX : number
->step + elementLength - a.doorWidth / 2 : number
->step + elementLength : number
->step : number
->elementLength : number
->a.doorWidth / 2 : number
->a.doorWidth : any
->a : any
->doorWidth : any
->2 : 2
-
-        iZ = a.w + a.doorWidth,
->iZ : any
->a.w + a.doorWidth : any
->a.w : any
->a : any
->w : any
->a.doorWidth : any
->a : any
->doorWidth : any
-
-        mX = step + handlePos,
->mX : number
->step + handlePos : number
->step : number
->handlePos : number
-
-        mY = 1 + a.handleHeight / 2,
->mY : number
->1 + a.handleHeight / 2 : number
->1 : 1
->a.handleHeight / 2 : number
->a.handleHeight : any
->a : any
->handleHeight : any
->2 : 2
-
-        nY = 1 - a.handleHeight / 2,
->nY : number
->1 - a.handleHeight / 2 : number
->1 : 1
->a.handleHeight / 2 : number
->a.handleHeight : any
->a : any
->handleHeight : any
->2 : 2
-
-        oX = step + handlePos + a.handleLength,
->oX : any
->step + handlePos + a.handleLength : any
->step + handlePos : number
->step : number
->handlePos : number
->a.handleLength : any
->a : any
->handleLength : any
-
-        qZ = a.w + a.doorWidth + a.handleWidth;
->qZ : any
->a.w + a.doorWidth + a.handleWidth : any
->a.w + a.doorWidth : any
->a.w : any
->a : any
->w : any
->a.doorWidth : any
->a : any
->doorWidth : any
->a.handleWidth : any
->a : any
->handleWidth : any
-
-    for (var c = 0; c < elementNum; c++) {
->c : number
->0 : 0
->c < elementNum : boolean
->c : number
->elementNum : number
->c++ : number
->c : number
-
-        if (c % 2 == 1 || c === elementNum - 1) {
->c % 2 == 1 || c === elementNum - 1 : boolean
->c % 2 == 1 : boolean
->c % 2 : number
->c : number
->2 : 2
->1 : 1
->c === elementNum - 1 : boolean
->c : number
->elementNum - 1 : number
->elementNum : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
 
-            handlePos = handleDistance + a.handleLength / 2;
->handlePos = handleDistance + a.handleLength / 2 : number
->handlePos : number
->handleDistance + a.handleLength / 2 : number
->handleDistance : number
->a.handleLength / 2 : number
->a.handleLength : any
->a : any
->handleLength : any
->2 : 2
-
-        } else {
-            handlePos = elementLength - handleDistance - a.handleLength / 2;
->handlePos = elementLength - handleDistance - a.handleLength / 2 : number
->handlePos : number
->elementLength - handleDistance - a.handleLength / 2 : number
->elementLength - handleDistance : number
->elementLength : number
->handleDistance : number
->a.handleLength / 2 : number
->a.handleLength : any
->a : any
->handleLength : any
->2 : 2
-        }
-        aX = step;
->aX = step : number
->aX : number
->step : number
-
-        cX = step + elementLength;
->cX = step + elementLength : number
->cX : number
->step + elementLength : number
->step : number
->elementLength : number
-
-        eX = step + a.doorWidth / 2;
->eX = step + a.doorWidth / 2 : number
->eX : number
->step + a.doorWidth / 2 : number
->step : number
->a.doorWidth / 2 : number
->a.doorWidth : any
->a : any
->doorWidth : any
->2 : 2
-
-        gX = step + elementLength - a.doorWidth / 2;
->gX = step + elementLength - a.doorWidth / 2 : number
->gX : number
->step + elementLength - a.doorWidth / 2 : number
->step + elementLength : number
->step : number
->elementLength : number
->a.doorWidth / 2 : number
->a.doorWidth : any
->a : any
->doorWidth : any
->2 : 2
-
-        mX = step + handlePos - a.handleLength / 2;
->mX = step + handlePos - a.handleLength / 2 : number
->mX : number
->step + handlePos - a.handleLength / 2 : number
->step + handlePos : number
->step : number
->handlePos : number
->a.handleLength / 2 : number
->a.handleLength : any
->a : any
->handleLength : any
->2 : 2
-
-        oX = step + handlePos + a.handleLength / 2;
->oX = step + handlePos + a.handleLength / 2 : number
->oX : any
->step + handlePos + a.handleLength / 2 : number
->step + handlePos : number
->step : number
->handlePos : number
->a.handleLength / 2 : number
->a.handleLength : any
->a : any
->handleLength : any
->2 : 2
-
-        // DOOR FRAME
-        //A
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->aX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //B
-        closetVertices[cvPos + 3] = aX;
->closetVertices[cvPos + 3] = aX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->aX : number
-
-        closetVertices[cvPos + 4] = bY;
->closetVertices[cvPos + 4] = bY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->bY : number
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //F
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = eX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->eX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //E
-        closetVertices[cvPos + 15] = eX;
->closetVertices[cvPos + 15] = eX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->eX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //F
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = fY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->fY : any
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //B
-        closetVertices[cvPos + 3] = aX;
->closetVertices[cvPos + 3] = aX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->aX : number
-
-        closetVertices[cvPos + 4] = bY;
->closetVertices[cvPos + 4] = bY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->bY : number
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //D
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->cX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->bY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //H
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = fY;
->closetVertices[cvPos + 16] = fY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->fY : any
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //G
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = gX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = gX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = gX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->gX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //H
-        closetVertices[cvPos + 3] = gX;
->closetVertices[cvPos + 3] = gX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->gX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //D
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->cX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->bY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //C
-        closetVertices[cvPos + 15] = cX;
->closetVertices[cvPos + 15] = cX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->cX : number
-
-        closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //A
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->aX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //E
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = eY;
->closetVertices[cvPos + 4] = eY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->eY : number
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //G
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = eY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->eY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //C
-        closetVertices[cvPos + 15] = cX;
->closetVertices[cvPos + 15] = cX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->cX : number
-
-        closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        // DOOR LEAF
-
-        //E
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //F
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //J
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = eX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->eX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //I
-        closetVertices[cvPos + 15] = eX;
->closetVertices[cvPos + 15] = eX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->eX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //J
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = fY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->fY : any
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //F
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-        //H
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //L
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = fY;
->closetVertices[cvPos + 16] = fY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->fY : any
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //K
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = gX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = gX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = gX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->gX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //L
-        closetVertices[cvPos + 3] = gX;
->closetVertices[cvPos + 3] = gX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->gX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //H
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-        //G
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //E
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-        //I
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = eY;
->closetVertices[cvPos + 4] = eY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->eY : number
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //K
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = eY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->eY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //G
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //I
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //J
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //N
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = mX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->mX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->nY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //M
-        closetVertices[cvPos + 15] = mX;
->closetVertices[cvPos + 15] = mX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->mX : number
-
-        closetVertices[cvPos + 16] = mY;
->closetVertices[cvPos + 16] = mY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->mY : number
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //N
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->mX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = nY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->nY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //J
-        closetVertices[cvPos + 3] = eX;
->closetVertices[cvPos + 3] = eX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->eX : number
-
-        closetVertices[cvPos + 4] = fY;
->closetVertices[cvPos + 4] = fY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->fY : any
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //L
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //P
-        closetVertices[cvPos + 15] = oX;
->closetVertices[cvPos + 15] = oX : any
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->oX : any
-
-        closetVertices[cvPos + 16] = nY;
->closetVertices[cvPos + 16] = nY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->nY : number
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //O
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = oX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = oX : any
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = oX : any
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->oX : any
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->mY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //P
-        closetVertices[cvPos + 3] = oX;
->closetVertices[cvPos + 3] = oX : any
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->oX : any
-
-        closetVertices[cvPos + 4] = nY;
->closetVertices[cvPos + 4] = nY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->nY : number
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //L
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = gX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->gX : number
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = fY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->fY : any
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //K
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        //I
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = eX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->eX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = eY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->eY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-        //M
-        closetVertices[cvPos + 3] = mX;
->closetVertices[cvPos + 3] = mX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->mX : number
-
-        closetVertices[cvPos + 4] = mY;
->closetVertices[cvPos + 4] = mY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->mY : number
-
-        closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-        //O
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->oX : any
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = mY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->mY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-        //K
-        closetVertices[cvPos + 15] = gX;
->closetVertices[cvPos + 15] = gX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->gX : number
-
-        closetVertices[cvPos + 16] = eY;
->closetVertices[cvPos + 16] = eY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->eY : number
-
-        closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        // HANDLE
-        if (a.handleWidth > 0) {
->a.handleWidth > 0 : boolean
->a.handleWidth : any
->a : any
->handleWidth : any
->0 : 0
-
-            // HANDLE SIDES
-            //M
-            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->mX : number
-
-            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->mY : number
 
-            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-            //N
-            closetVertices[cvPos + 3] = mX;
->closetVertices[cvPos + 3] = mX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->mX : number
-
-            closetVertices[cvPos + 4] = nY;
->closetVertices[cvPos + 4] = nY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->nY : number
-
-            closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-            //R
-            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = mX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->mX : number
-
-            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->nY : number
-
-            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->qZ : any
-
-            //Q
-            closetVertices[cvPos + 15] = mX;
->closetVertices[cvPos + 15] = mX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->mX : number
-
-            closetVertices[cvPos + 16] = mY;
->closetVertices[cvPos + 16] = mY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->mY : number
-
-            closetVertices[cvPos + 17] = qZ;
->closetVertices[cvPos + 17] = qZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->qZ : any
-
-            cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-            //R
-            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->mX : number
-
-            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = nY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->nY : number
 
-            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->qZ : any
-
-            //N
-            closetVertices[cvPos + 3] = mX;
->closetVertices[cvPos + 3] = mX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->mX : number
-
-            closetVertices[cvPos + 4] = nY;
->closetVertices[cvPos + 4] = nY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->nY : number
-
-            closetVertices[cvPos + 5] = iZ;
->closetVertices[cvPos + 5] = iZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->iZ : any
-
-            //P
-            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->oX : any
-
-            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->nY : number
-
-            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-            //T
-            closetVertices[cvPos + 15] = oX;
->closetVertices[cvPos + 15] = oX : any
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->oX : any
-
-            closetVertices[cvPos + 16] = nY;
->closetVertices[cvPos + 16] = nY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->nY : number
-
-            closetVertices[cvPos + 17] = qZ;
->closetVertices[cvPos + 17] = qZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->qZ : any
-
-            cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-            //S
-            closetVertices[cvPos] = closetVertices[cvPos + 9] = oX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = oX : any
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = oX : any
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->oX : any
-
-            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->mY : number
 
-            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->qZ : any
-
-            //T
-            closetVertices[cvPos + 3] = oX;
->closetVertices[cvPos + 3] = oX : any
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->oX : any
-
-            closetVertices[cvPos + 4] = nY;
->closetVertices[cvPos + 4] = nY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->nY : number
-
-            closetVertices[cvPos + 5] = qZ;
->closetVertices[cvPos + 5] = qZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->qZ : any
-
-            //P
-            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->oX : any
-
-            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->nY : number
-
-            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = iZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->iZ : any
-
-            //O
-            closetVertices[cvPos + 15] = oX;
->closetVertices[cvPos + 15] = oX : any
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->oX : any
-
-            closetVertices[cvPos + 16] = mY;
->closetVertices[cvPos + 16] = mY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->mY : number
-
-            closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-            cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-            //M
-            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->mX : number
-
-            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->mY : number
 
-            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = iZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->iZ : any
-
-            //Q
-            closetVertices[cvPos + 3] = mX;
->closetVertices[cvPos + 3] = mX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->mX : number
-
-            closetVertices[cvPos + 4] = mY;
->closetVertices[cvPos + 4] = mY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->mY : number
-
-            closetVertices[cvPos + 5] = qZ;
->closetVertices[cvPos + 5] = qZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->qZ : any
-
-            //S
-            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->oX : any
-
-            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = mY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->mY : number
-
-            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->qZ : any
-
-            //O
-            closetVertices[cvPos + 15] = oX;
->closetVertices[cvPos + 15] = oX : any
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->oX : any
-
-            closetVertices[cvPos + 16] = mY;
->closetVertices[cvPos + 16] = mY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->mY : number
-
-            closetVertices[cvPos + 17] = iZ;
->closetVertices[cvPos + 17] = iZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->iZ : any
-
-            cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-        }
-        // HANDLE FRONT
-        //Q
-        closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = mX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->mX : number
-
-        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = mY : number
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->mY : number
 
-        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = qZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->qZ : any
-
-        //R
-        closetVertices[cvPos + 3] = mX;
->closetVertices[cvPos + 3] = mX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->mX : number
-
-        closetVertices[cvPos + 4] = nY;
->closetVertices[cvPos + 4] = nY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->nY : number
-
-        closetVertices[cvPos + 5] = qZ;
->closetVertices[cvPos + 5] = qZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->qZ : any
-
-        //T
-        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = oX : any
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->oX : any
-
-        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = nY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->nY : number
-
-        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = qZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->qZ : any
-
-        //S
-        closetVertices[cvPos + 15] = oX;
->closetVertices[cvPos + 15] = oX : any
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->oX : any
-
-        closetVertices[cvPos + 16] = mY;
->closetVertices[cvPos + 16] = mY : number
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->mY : number
-
-        closetVertices[cvPos + 17] = qZ;
->closetVertices[cvPos + 17] = qZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->qZ : any
-
-        cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-        step += elementLength;
->step += elementLength : number
->step : number
->elementLength : number
-    }
-
-    //CLOSET BOX
-
-    // FRONT VIEW VERTICES
-    //
-    // A/E---C/G
-    //  |     |
-    //  |     |
-    //  |     |
-    // B/F---D/H
-
-    aX = 0;
->aX = 0 : 0
->aX : number
->0 : 0
-
-    aY = a.h + offsetY;
->aY = a.h + offsetY : any
->aY : any
->a.h + offsetY : any
->a.h : any
->a : any
->h : any
->offsetY : number
-
-    aZ = a.w;
->aZ = a.w : any
->aZ : any
->a.w : any
->a : any
->w : any
-
-    bY = 0;
->bY = 0 : 0
->bY : number
->0 : 0
-
-    cX = a.l;
->cX = a.l : any
->cX : number
->a.l : any
->a : any
->l : any
-
-    var eZ = 0;
->eZ : number
->0 : 0
-
-    //E
-    closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->aX : number
-
-    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->eZ : number
-
-    //F
-    closetVertices[cvPos + 3] = aX;
->closetVertices[cvPos + 3] = aX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->aX : number
-
-    closetVertices[cvPos + 4] = bY;
->closetVertices[cvPos + 4] = bY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->bY : number
-
-    closetVertices[cvPos + 5] = eZ;
->closetVertices[cvPos + 5] = eZ : number
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->eZ : number
-
-    //B
-    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = aX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->aX : number
-
-    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->bY : number
-
-    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-    //A
-    closetVertices[cvPos + 15] = aX;
->closetVertices[cvPos + 15] = aX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->aX : number
-
-    closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
-
-    closetVertices[cvPos + 17] = aZ;
->closetVertices[cvPos + 17] = aZ : any
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->aZ : any
-
-    cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-    //E
-    closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = aX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->aX : number
-
-    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->eZ : number
-
-    //A
-    closetVertices[cvPos + 3] = aX;
->closetVertices[cvPos + 3] = aX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->aX : number
-
-    closetVertices[cvPos + 4] = aY;
->closetVertices[cvPos + 4] = aY : any
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->aY : any
-
-    closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-    //C
-    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->cX : number
-
-    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = aY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = aY : any
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = aY : any
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->aY : any
-
-    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = aZ : any
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->aZ : any
-
-    //G
-    closetVertices[cvPos + 15] = cX;
->closetVertices[cvPos + 15] = cX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->cX : number
-
-    closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
-
-    closetVertices[cvPos + 17] = eZ;
->closetVertices[cvPos + 17] = eZ : number
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->eZ : number
-
-    cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-    //C
-    closetVertices[cvPos] = closetVertices[cvPos + 9] = cX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = cX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = cX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->cX : number
-
-    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = aZ : any
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->aZ : any
-
-    //D
-    closetVertices[cvPos + 3] = cX;
->closetVertices[cvPos + 3] = cX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->cX : number
-
-    closetVertices[cvPos + 4] = bY;
->closetVertices[cvPos + 4] = bY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->bY : number
-
-    closetVertices[cvPos + 5] = aZ;
->closetVertices[cvPos + 5] = aZ : any
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->aZ : any
-
-    //H
-    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = cX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->cX : number
-
-    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->bY : number
-
-    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ : number
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = eZ : number
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->eZ : number
-
-    //G
-    closetVertices[cvPos + 15] = cX;
->closetVertices[cvPos + 15] = cX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->cX : number
-
-    closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
-
-    closetVertices[cvPos + 17] = eZ;
->closetVertices[cvPos + 17] = eZ : number
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->eZ : number
-
-    cvPos = cvPos + 18;
->cvPos = cvPos + 18 : number
->cvPos : number
->cvPos + 18 : number
->cvPos : number
->18 : 18
-
-    //G
-    closetVertices[cvPos] = closetVertices[cvPos + 9] = cX;
->closetVertices[cvPos] = closetVertices[cvPos + 9] = cX : number
->closetVertices[cvPos] : any
->closetVertices : any[]
->cvPos : number
->closetVertices[cvPos + 9] = cX : number
->closetVertices[cvPos + 9] : any
->closetVertices : any[]
->cvPos + 9 : number
->cvPos : number
->9 : 9
->cX : number
-
-    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
->closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 1] : any
->closetVertices : any[]
->cvPos + 1 : number
->cvPos : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
 >1 : 1
->closetVertices[cvPos + 10] = aY : any
->closetVertices[cvPos + 10] : any
->closetVertices : any[]
->cvPos + 10 : number
->cvPos : number
->10 : 10
->aY : any
 
-    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
->closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 2] : any
->closetVertices : any[]
->cvPos + 2 : number
->cvPos : number
->2 : 2
->closetVertices[cvPos + 11] = eZ : number
->closetVertices[cvPos + 11] : any
->closetVertices : any[]
->cvPos + 11 : number
->cvPos : number
->11 : 11
->eZ : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    //H
-    closetVertices[cvPos + 3] = cX;
->closetVertices[cvPos + 3] = cX : number
->closetVertices[cvPos + 3] : any
->closetVertices : any[]
->cvPos + 3 : number
->cvPos : number
->3 : 3
->cX : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 4] = bY;
->closetVertices[cvPos + 4] = bY : number
->closetVertices[cvPos + 4] : any
->closetVertices : any[]
->cvPos + 4 : number
->cvPos : number
->4 : 4
->bY : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 5] = eZ;
->closetVertices[cvPos + 5] = eZ : number
->closetVertices[cvPos + 5] : any
->closetVertices : any[]
->cvPos + 5 : number
->cvPos : number
->5 : 5
->eZ : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    //F
-    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX;
->closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX : number
->closetVertices[cvPos + 6] : any
->closetVertices : any[]
->cvPos + 6 : number
->cvPos : number
->6 : 6
->closetVertices[cvPos + 12] = aX : number
->closetVertices[cvPos + 12] : any
->closetVertices : any[]
->cvPos + 12 : number
->cvPos : number
->12 : 12
->aX : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
->closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 7] : any
->closetVertices : any[]
->cvPos + 7 : number
->cvPos : number
->7 : 7
->closetVertices[cvPos + 13] = bY : number
->closetVertices[cvPos + 13] : any
->closetVertices : any[]
->cvPos + 13 : number
->cvPos : number
->13 : 13
->bY : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ;
->closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ : number
->closetVertices[cvPos + 8] : any
->closetVertices : any[]
->cvPos + 8 : number
->cvPos : number
->8 : 8
->closetVertices[cvPos + 14] = eZ : number
->closetVertices[cvPos + 14] : any
->closetVertices : any[]
->cvPos + 14 : number
->cvPos : number
->14 : 14
->eZ : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    //E
-    closetVertices[cvPos + 15] = aX;
->closetVertices[cvPos + 15] = aX : number
->closetVertices[cvPos + 15] : any
->closetVertices : any[]
->cvPos + 15 : number
->cvPos : number
->15 : 15
->aX : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 16] = aY;
->closetVertices[cvPos + 16] = aY : any
->closetVertices[cvPos + 16] : any
->closetVertices : any[]
->cvPos + 16 : number
->cvPos : number
->16 : 16
->aY : any
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    closetVertices[cvPos + 17] = eZ;
->closetVertices[cvPos + 17] = eZ : number
->closetVertices[cvPos + 17] : any
->closetVertices : any[]
->cvPos + 17 : number
->cvPos : number
->17 : 17
->eZ : number
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-    return Promise.resolve({
->Promise.resolve({        closet: {            positions: new Float32Array(closetVertices),            material: 'closet'        }    }) : Promise<{ closet: { positions: Float32Array; material: string; }; }>
->Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
->Promise : PromiseConstructor
->resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
->{        closet: {            positions: new Float32Array(closetVertices),            material: 'closet'        }    } : { closet: { positions: Float32Array; material: string; }; }
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-        closet: {
->closet : { positions: Float32Array; material: string; }
->{            positions: new Float32Array(closetVertices),            material: 'closet'        } : { positions: Float32Array; material: string; }
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-            positions: new Float32Array(closetVertices),
->positions : Float32Array
->new Float32Array(closetVertices) : Float32Array
->Float32Array : Float32ArrayConstructor
->closetVertices : any[]
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
 
-            material: 'closet'
->material : string
->'closet' : "closet"
-        }
-    });
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    arr[i++] = arr[i] + 1;
+>arr[i++] = arr[i] + 1 : any
+>arr[i++] : any
+>arr : any[]
+>i++ : number
+>i : number
+>arr[i] + 1 : any
+>arr[i] : any
+>arr : any[]
+>i : number
+>1 : 1
+
+    return arr;
+>arr : any[]
 }
 
-const a = generateMeshes3d(null);
->a : Promise<{ closet: { positions: Float32Array; material: string; }; }>
->generateMeshes3d(null) : Promise<{ closet: { positions: Float32Array; material: string; }; }>
->generateMeshes3d : (a: any) => Promise<{ closet: { positions: Float32Array; material: string; }; }>
->null : null
+const a = build();
+>a : any[]
+>build() : any[]
+>build : () => any[]
 
