@@ -125,6 +125,34 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    export function getPackageJsonTypesVersionsOverride(typesVersions: MapLike<string>) {
+        const typeScriptVersion = Version.parse(version);
+        let bestVersion: Version | undefined;
+        let bestVersionKey: string | undefined;
+        for (const key in typesVersions) {
+            if (!hasProperty(typesVersions, key)) continue;
+
+            const keyVersion = Version.tryParse(key);
+            if (keyVersion === undefined) {
+                continue;
+            }
+
+            // match the greatest version less than the current TypeScript version
+            if (keyVersion.compareTo(typeScriptVersion) <= 0
+                && (bestVersion === undefined || keyVersion.compareTo(bestVersion) > 0)) {
+                bestVersion = keyVersion;
+                bestVersionKey = key;
+            }
+        }
+
+        if (!bestVersionKey) {
+            return;
+        }
+
+        return { version: bestVersionKey, directory: typesVersions[bestVersionKey] };
+    }
+
     function tryReadPackageJsonTypesVersion(jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState): string | undefined {
         if (!hasProperty(jsonContent, "typesVersions")) {
             if (state.traceEnabled) {
@@ -141,36 +169,12 @@ namespace ts {
             return;
         }
 
-        const typeScriptVersion = Version.parse(version);
-        let bestVersion: Version | undefined;
-        let bestVersionKey: string | undefined;
-        for (const key in typesVersions) {
-            if (!hasProperty(typesVersions, key)) continue;
-
-            const keyVersion = Version.tryParse(key);
-            if (keyVersion === undefined) {
-                if (state.traceEnabled) {
-                    // TODO(rbuckton): log
-                }
-                continue;
-            }
-
-            // match the greatest version less than the current TypeScript version
-            if (keyVersion.compareTo(typeScriptVersion) <= 0
-                && (bestVersion === undefined || keyVersion.compareTo(bestVersion) > 0)) {
-                bestVersion = keyVersion;
-                bestVersionKey = key;
-            }
+        const result = getPackageJsonTypesVersionsOverride(typesVersions);
+        if (!result) {
+            return undefined;
         }
 
-        if (!bestVersionKey) {
-            if (state.traceEnabled) {
-                // TODO(rbuckton): log
-            }
-            return;
-        }
-
-        const bestVersionPath = typesVersions[bestVersionKey];
+        const { version: bestVersionKey, directory: bestVersionPath } = result;
         if (!isString(bestVersionPath)) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, `typesVersion['${bestVersionKey}']`, "string", typeof bestVersionPath);

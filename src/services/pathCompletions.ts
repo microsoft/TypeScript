@@ -107,10 +107,24 @@ namespace ts.Completions.PathCompletions {
 
         // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
         const absolutePath = resolvePath(scriptPath, fragment);
-        const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
+        let baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
         if (tryDirectoryExists(host, baseDirectory)) {
+            // check for a version redirect
+            const packageJsonPath = findPackageJson(baseDirectory, host);
+            if (packageJsonPath) {
+                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+                const typesVersions = (packageJson as any).typesVersions;
+                if (typeof typesVersions === "object") {
+                    const result = getPackageJsonTypesVersionsOverride(typesVersions);
+                    const versionPath = result && result.directory;
+                    if (versionPath) {
+                        baseDirectory = resolvePath(baseDirectory, versionPath);
+                    }
+                }
+            }
+
             // Enumerate the available files if possible
             const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/ undefined, /*include*/ ["./*"]);
 
@@ -388,6 +402,18 @@ namespace ts.Completions.PathCompletions {
             paths.push(currentConfigPath);
         });
         return paths;
+    }
+
+    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
+        let packageJson: string | undefined;
+        forEachAncestorDirectory(directory, ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        });
+        return packageJson;
     }
 
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {
