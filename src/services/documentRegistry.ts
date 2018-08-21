@@ -199,7 +199,7 @@ namespace ts {
 
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind); // TODO: GH#18217
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
                 if (externalCache) {
                     externalCache.setDocument(key, path, sourceFile);
                 }
