@@ -1,0 +1,1924 @@
+=== tests/cases/compiler/foo.js ===
+// Exerpt from https://github.com/archilogic-com/3dio-js - MIT Licenced
+function generateMeshes3d(a) {
+>generateMeshes3d : Symbol(generateMeshes3d, Decl(foo.js, 0, 0))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+    var step = 0,
+>step : Symbol(step, Decl(foo.js, 3, 7))
+
+        elementNum = Math.round(a.l / 0.6),
+>elementNum : Symbol(elementNum, Decl(foo.js, 3, 17))
+>Math.round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        elementLength = a.l / elementNum,
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>elementNum : Symbol(elementNum, Decl(foo.js, 3, 17))
+
+        handlePos = elementLength * 0.8,
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+
+        //handleWidth = a.handleWidth+ a.doorWidth,
+        handleDistance = 0.05,
+>handleDistance : Symbol(handleDistance, Decl(foo.js, 6, 40))
+
+        offsetY = -0.01,
+>offsetY : Symbol(offsetY, Decl(foo.js, 9, 30))
+
+
+        // internals
+        closetVertices = [],
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+
+        cvPos = 0;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+    //CLOSET DOORS
+
+    // FRONT VIEW VERTICES
+    //
+    // A------------C
+    // |E\I------G\K|
+    // | |        | |
+    // | |M\Q-O\S | |
+    // | ||   |   | |
+    // | |N\R-P\T | |
+    // |F\J------H\L|
+    // B------------D
+
+    var aX = step,
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+
+        aY = a.h + offsetY,
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>offsetY : Symbol(offsetY, Decl(foo.js, 9, 30))
+
+        aZ = a.w,
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        bY = 0,
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+        cX = step + elementLength,
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+
+        eX = step + a.doorWidth / 2,
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        eY = a.h - a.doorWidth,
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        fY = a.baseboard,
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        gX = step + elementLength - a.doorWidth / 2,
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        iZ = a.w + a.doorWidth,
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        mX = step + handlePos,
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+
+        mY = 1 + a.handleHeight / 2,
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        nY = 1 - a.handleHeight / 2,
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        oX = step + handlePos + a.handleLength,
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        qZ = a.w + a.doorWidth + a.handleWidth;
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+    for (var c = 0; c < elementNum; c++) {
+>c : Symbol(c, Decl(foo.js, 46, 12))
+>c : Symbol(c, Decl(foo.js, 46, 12))
+>elementNum : Symbol(elementNum, Decl(foo.js, 3, 17))
+>c : Symbol(c, Decl(foo.js, 46, 12))
+
+        if (c % 2 == 1 || c === elementNum - 1) {
+>c : Symbol(c, Decl(foo.js, 46, 12))
+>c : Symbol(c, Decl(foo.js, 46, 12))
+>elementNum : Symbol(elementNum, Decl(foo.js, 3, 17))
+
+            handlePos = handleDistance + a.handleLength / 2;
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>handleDistance : Symbol(handleDistance, Decl(foo.js, 6, 40))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        } else {
+            handlePos = elementLength - handleDistance - a.handleLength / 2;
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+>handleDistance : Symbol(handleDistance, Decl(foo.js, 6, 40))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+        }
+        aX = step;
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+
+        cX = step + elementLength;
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+
+        eX = step + a.doorWidth / 2;
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        gX = step + elementLength - a.doorWidth / 2;
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        mX = step + handlePos - a.handleLength / 2;
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        oX = step + handlePos + a.handleLength / 2;
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>handlePos : Symbol(handlePos, Decl(foo.js, 5, 41))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+        // DOOR FRAME
+        //A
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //B
+        closetVertices[cvPos + 3] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+        closetVertices[cvPos + 4] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //F
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //E
+        closetVertices[cvPos + 15] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //F
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //B
+        closetVertices[cvPos + 3] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+        closetVertices[cvPos + 4] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //D
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //H
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //G
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //H
+        closetVertices[cvPos + 3] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //D
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //C
+        closetVertices[cvPos + 15] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+        closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //A
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //E
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //G
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //C
+        closetVertices[cvPos + 15] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+        closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        // DOOR LEAF
+
+        //E
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //F
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //J
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //I
+        closetVertices[cvPos + 15] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //J
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //F
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //H
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //L
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //K
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //L
+        closetVertices[cvPos + 3] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //H
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //G
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //E
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        //I
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //K
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //G
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //I
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //J
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //N
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //M
+        closetVertices[cvPos + 15] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 16] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //N
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //J
+        closetVertices[cvPos + 3] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 4] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //L
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //P
+        closetVertices[cvPos + 15] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 16] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //O
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //P
+        closetVertices[cvPos + 3] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 4] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //L
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = fY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>fY : Symbol(fY, Decl(foo.js, 36, 31))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //K
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        //I
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = eX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eX : Symbol(eX, Decl(foo.js, 34, 34))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //M
+        closetVertices[cvPos + 3] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 4] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //O
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        //K
+        closetVertices[cvPos + 15] = gX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>gX : Symbol(gX, Decl(foo.js, 37, 25))
+
+        closetVertices[cvPos + 16] = eY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eY : Symbol(eY, Decl(foo.js, 35, 36))
+
+        closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        // HANDLE
+        if (a.handleWidth > 0) {
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+            // HANDLE SIDES
+            //M
+            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //N
+            closetVertices[cvPos + 3] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 4] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //R
+            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //Q
+            closetVertices[cvPos + 15] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 16] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 17] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+            //R
+            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //N
+            closetVertices[cvPos + 3] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 4] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 5] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //P
+            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //T
+            closetVertices[cvPos + 15] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 16] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 17] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+            //S
+            closetVertices[cvPos] = closetVertices[cvPos + 9] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //T
+            closetVertices[cvPos + 3] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 4] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 5] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //P
+            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //O
+            closetVertices[cvPos + 15] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 16] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+            //M
+            closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            //Q
+            closetVertices[cvPos + 3] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+            closetVertices[cvPos + 4] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 5] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //S
+            closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+            //O
+            closetVertices[cvPos + 15] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+            closetVertices[cvPos + 16] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+            closetVertices[cvPos + 17] = iZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>iZ : Symbol(iZ, Decl(foo.js, 38, 52))
+
+            cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+        }
+        // HANDLE FRONT
+        //Q
+        closetVertices[cvPos] = closetVertices[cvPos + 9] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+        //R
+        closetVertices[cvPos + 3] = mX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mX : Symbol(mX, Decl(foo.js, 39, 31))
+
+        closetVertices[cvPos + 4] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 5] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+        //T
+        closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = nY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>nY : Symbol(nY, Decl(foo.js, 41, 36))
+
+        closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+        //S
+        closetVertices[cvPos + 15] = oX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>oX : Symbol(oX, Decl(foo.js, 42, 36))
+
+        closetVertices[cvPos + 16] = mY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>mY : Symbol(mY, Decl(foo.js, 40, 30))
+
+        closetVertices[cvPos + 17] = qZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>qZ : Symbol(qZ, Decl(foo.js, 43, 47))
+
+        cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+        step += elementLength;
+>step : Symbol(step, Decl(foo.js, 3, 7))
+>elementLength : Symbol(elementLength, Decl(foo.js, 4, 43))
+    }
+
+    //CLOSET BOX
+
+    // FRONT VIEW VERTICES
+    //
+    // A/E---C/G
+    //  |     |
+    //  |     |
+    //  |     |
+    // B/F---D/H
+
+    aX = 0;
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    aY = a.h + offsetY;
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+>offsetY : Symbol(offsetY, Decl(foo.js, 9, 30))
+
+    aZ = a.w;
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+    bY = 0;
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    cX = a.l;
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+>a : Symbol(a, Decl(foo.js, 1, 26))
+
+    var eZ = 0;
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //E
+    closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //F
+    closetVertices[cvPos + 3] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 4] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 5] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //B
+    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    //A
+    closetVertices[cvPos + 15] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 17] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+    //E
+    closetVertices[cvPos] = closetVertices[cvPos + 9] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //A
+    closetVertices[cvPos + 3] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 4] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    //C
+    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    //G
+    closetVertices[cvPos + 15] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 17] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+    //C
+    closetVertices[cvPos] = closetVertices[cvPos + 9] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    //D
+    closetVertices[cvPos + 3] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 4] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 5] = aZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aZ : Symbol(aZ, Decl(foo.js, 31, 27))
+
+    //H
+    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //G
+    closetVertices[cvPos + 15] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 17] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    cvPos = cvPos + 18;
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+
+    //G
+    closetVertices[cvPos] = closetVertices[cvPos + 9] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 1] = closetVertices[cvPos + 10] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 2] = closetVertices[cvPos + 11] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //H
+    closetVertices[cvPos + 3] = cX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>cX : Symbol(cX, Decl(foo.js, 33, 15))
+
+    closetVertices[cvPos + 4] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 5] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //F
+    closetVertices[cvPos + 6] = closetVertices[cvPos + 12] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 7] = closetVertices[cvPos + 13] = bY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>bY : Symbol(bY, Decl(foo.js, 32, 17))
+
+    closetVertices[cvPos + 8] = closetVertices[cvPos + 14] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    //E
+    closetVertices[cvPos + 15] = aX;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aX : Symbol(aX, Decl(foo.js, 30, 7))
+
+    closetVertices[cvPos + 16] = aY;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>aY : Symbol(aY, Decl(foo.js, 30, 18))
+
+    closetVertices[cvPos + 17] = eZ;
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+>cvPos : Symbol(cvPos, Decl(foo.js, 14, 28))
+>eZ : Symbol(eZ, Decl(foo.js, 408, 7))
+
+    return Promise.resolve({
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+        closet: {
+>closet : Symbol(closet, Decl(foo.js, 484, 28))
+
+            positions: new Float32Array(closetVertices),
+>positions : Symbol(positions, Decl(foo.js, 485, 17))
+>Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>closetVertices : Symbol(closetVertices, Decl(foo.js, 10, 24))
+
+            material: 'closet'
+>material : Symbol(material, Decl(foo.js, 486, 56))
+        }
+    });
+}
+
+const a = generateMeshes3d(null);
+>a : Symbol(a, Decl(foo.js, 492, 5))
+>generateMeshes3d : Symbol(generateMeshes3d, Decl(foo.js, 0, 0))
+
