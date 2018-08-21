@@ -2593,14 +2593,14 @@ namespace ts {
         }
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
+            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
         }
 
         function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives);
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
         }
 
-        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>, libs: ReadonlyArray<FileReference>) {
             if (hasNoDefaultLib) {
                 write(`/// <reference no-default-lib="true"/>`);
                 writeLine();
@@ -2626,6 +2626,10 @@ namespace ts {
             }
             for (const directive of types) {
                 write(`/// <reference types="${directive.fileName}" />`);
+                writeLine();
+            }
+            for (const directive of libs) {
+                write(`/// <reference lib="${directive.fileName}" />`);
                 writeLine();
             }
         }
