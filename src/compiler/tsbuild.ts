@@ -413,7 +413,7 @@ namespace ts {
     }
 
     export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
-        const host = createCompilerHost({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
+        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
