@@ -66,7 +66,12 @@ namespace ts {
         mtime: Date;
     }
 
-    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
+    export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
+        return createCompilerHostWorker(options, setParentNodes);
+    }
+    /*@internal*/
+    // TODO(shkamat): update this after reworking ts build API
+    export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = createMap<boolean>();
 
         function getCanonicalFileName(fileName: string): string {
