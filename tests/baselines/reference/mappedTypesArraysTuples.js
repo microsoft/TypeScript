@@ -84,6 +84,14 @@ function acceptMappedArray<T extends any[]>(arr: T) {
     acceptArray(mapArray(arr));
 }
 
+// Repro from #26163
+
+type Unconstrained<T> = ElementType<Mapped<T>>;
+type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
+
+type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
+
 
 //// [mappedTypesArraysTuples.js]
 "use strict";
@@ -182,3 +190,7 @@ declare type R2 = ElementType<Mapped<[string, number, boolean]>>;
 declare function acceptArray(arr: any[]): void;
 declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
 declare function acceptMappedArray<T extends any[]>(arr: T): void;
+declare type Unconstrained<T> = ElementType<Mapped<T>>;
+declare type T1 = Unconstrained<[string, number, boolean]>;
+declare type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+declare type T2 = Constrained<[string, number, boolean]>;
