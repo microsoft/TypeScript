@@ -1,0 +1,97 @@
+=== tests/cases/compiler/infiniteConstraints.ts ===
+// Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
+
+type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
+>T1 : B
+>val : string
+
+type T2<B extends { [K in keyof B]: B[Exclude<keyof B, K>]["val"] }> = B;
+>T2 : B
+
+// Repros from #22950
+
+type AProp<T extends { a: string }> = T
+>AProp : T
+>a : string
+
+declare function myBug<
+>myBug : <T extends { [K in keyof T]: T[K]; }>(arg: T) => T
+
+  T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
+>(arg: T): T
+>arg : T
+
+const out = myBug({obj1: {a: "test"}})
+>out : { obj1: { a: string; }; }
+>myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
+>myBug : <T extends { [K in keyof T]: T[K]; }>(arg: T) => T
+>{obj1: {a: "test"}} : { obj1: { a: string; }; }
+>obj1 : { a: string; }
+>{a: "test"} : { a: string; }
+>a : string
+>"test" : "test"
+
+type Value<V extends string = string> = Record<"val", V>;
+>Value : Record<"val", V>
+
+declare function value<V extends string>(val: V): Value<V>;
+>value : <V extends string>(val: V) => Record<"val", V>
+>val : V
+
+declare function ensureNoDuplicates<
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
+
+  T extends {
+    [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
+      ? never
+      : any
+  }
+>(vals: T): void;
+>vals : T
+
+const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
+>noError : void
+>ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
+>{main: value("test"), alternate: value("test2")} : { main: Record<"val", "test">; alternate: Record<"val", "test2">; }
+>main : Record<"val", "test">
+>value("test") : Record<"val", "test">
+>value : <V extends string>(val: V) => Record<"val", V>
+>"test" : "test"
+>alternate : Record<"val", "test2">
+>value("test2") : Record<"val", "test2">
+>value : <V extends string>(val: V) => Record<"val", V>
+>"test2" : "test2"
+
+const shouldBeNoError = ensureNoDuplicates({main: value("test")});
+>shouldBeNoError : void
+>ensureNoDuplicates({main: value("test")}) : void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
+>{main: value("test")} : { main: Record<"val", "test">; }
+>main : Record<"val", "test">
+>value("test") : Record<"val", "test">
+>value : <V extends string>(val: V) => Record<"val", V>
+>"test" : "test"
+
+const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
+>shouldBeError : any
+>ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : any
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
+>{main: value("dup"), alternate: value("dup")} : { main: Record<"val", "dup">; alternate: Record<"val", "dup">; }
+>main : Record<"val", "dup">
+>value("dup") : Record<"val", "dup">
+>value : <V extends string>(val: V) => Record<"val", V>
+>"dup" : "dup"
+>alternate : Record<"val", "dup">
+>value("dup") : Record<"val", "dup">
+>value : <V extends string>(val: V) => Record<"val", V>
+>"dup" : "dup"
+
+// Repro from #26448
+
+type Cond<T> = T extends number ? number : never;
+>Cond : Cond<T>
+
+declare function function1<T extends {[K in keyof T]: Cond<T[K]>}>(): T[keyof T]["foo"];
+>function1 : <T extends { [K in keyof T]: Cond<T[K]>; }>() => T[keyof T]["foo"]
+
