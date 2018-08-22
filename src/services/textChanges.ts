@@ -878,6 +878,9 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeComment(s: string): void {
+            this.writer.writeComment(s);
+        }
         writeKeyword(s: string): void {
             this.writer.writeKeyword(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
@@ -888,6 +891,10 @@ namespace ts.textChanges {
         }
         writePunctuation(s: string): void {
             this.writer.writePunctuation(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeTrailingSemicolon(s: string): void {
+            this.writer.writeTrailingSemicolon(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
         writeParameter(s: string): void {
@@ -909,9 +916,6 @@ namespace ts.textChanges {
         writeSymbol(s: string, sym: Symbol): void {
             this.writer.writeSymbol(s, sym);
             this.setLastNonTriviaPosition(s, /*force*/ false);
-        }
-        writeTextOfNode(text: string, node: Node): void {
-            this.writer.writeTextOfNode(text, node);
         }
         writeLine(): void {
             this.writer.writeLine();

@@ -19,11 +19,7 @@ namespace Harness.SourceMapRecorder {
             decodingIndex = 0;
             sourceMapMappings = sourceMapData.sourceMapMappings;
             mappings = ts.sourcemaps.decodeMappings({
-                version: 3,
-                file: sourceMapData.sourceMapFile,
                 sources: sourceMapData.sourceMapSources,
-                sourceRoot: sourceMapData.sourceMapSourceRoot,
-                sourcesContent: sourceMapData.sourceMapSourcesContent,
                 mappings: sourceMapData.sourceMapMappings,
                 names: sourceMapData.sourceMapNames
             });
@@ -130,12 +126,19 @@ namespace Harness.SourceMapRecorder {
         }
 
         export function recordNewSourceFileSpan(sourceMapSpan: ts.SourceMapSpan, newSourceFileCode: string) {
-            assert.isTrue(spansOnSingleLine.length === 0 || spansOnSingleLine[0].sourceMapSpan.emittedLine !== sourceMapSpan.emittedLine, "new file source map span should be on new line. We currently handle only that scenario");
+            let continuesLine = false;
+            if (spansOnSingleLine.length > 0 && spansOnSingleLine[0].sourceMapSpan.emittedLine === sourceMapSpan.emittedLine) {
+                writeRecordedSpans();
+                spansOnSingleLine = [];
+                nextJsLineToWrite--; // walk back one line to reprint the line
+                continuesLine = true;
+            }
+
             recordSourceMapSpan(sourceMapSpan);
 
             assert.isTrue(spansOnSingleLine.length === 1);
             sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
-            sourceMapRecorder.WriteLine("emittedFile:" + jsFile.file);
+            sourceMapRecorder.WriteLine("emittedFile:" + jsFile.file + (continuesLine ? ` (${sourceMapSpan.emittedLine + 1}, ${sourceMapSpan.emittedColumn + 1})` : ""));
             sourceMapRecorder.WriteLine("sourceFile:" + sourceMapSources[spansOnSingleLine[0].sourceMapSpan.sourceIndex]);
             sourceMapRecorder.WriteLine("-------------------------------------------------------------------");
 

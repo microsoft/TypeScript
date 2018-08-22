@@ -30,16 +30,6 @@ namespace ts {
 
 /* @internal */
 namespace ts.sourcemaps {
-    export interface SourceMapData {
-        version?: number;
-        file?: string;
-        sourceRoot?: string;
-        sources: string[];
-        sourcesContent?: (string | null)[];
-        names?: string[];
-        mappings: string;
-    }
-
     export interface SourceMappableLocation {
         fileName: string;
         position: number;
@@ -59,7 +49,7 @@ namespace ts.sourcemaps {
         log(text: string): void;
     }
 
-    export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
+    export function decode(host: SourceMapDecodeHost, mapPath: string, map: RawSourceMap, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
         const currentDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, currentDirectory) : currentDirectory;
         let decodedMappings: ProcessedSourceMapPosition[];
@@ -82,7 +72,7 @@ namespace ts.sourcemaps {
             if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
                 return loc;
             }
-            return { fileName: toPath(map.file!, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
+            return { fileName: toPath(map.file, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
@@ -140,7 +130,7 @@ namespace ts.sourcemaps {
         function processPosition(position: RawSourceMapPosition): ProcessedSourceMapPosition {
             const sourcePath = map.sources[position.sourceIndex];
             return {
-                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file!, currentDirectory, position.emittedLine, position.emittedColumn),
+                emittedPosition: getPositionOfLineAndCharacterUsingName(map.file, currentDirectory, position.emittedLine, position.emittedColumn),
                 sourcePosition: getPositionOfLineAndCharacterUsingName(sourcePath, sourceRoot, position.sourceLine, position.sourceColumn),
                 sourcePath,
                 // TODO: Consider using `name` field to remap the expected identifier to scan for renames to handle another tool renaming oout output
@@ -157,7 +147,7 @@ namespace ts.sourcemaps {
     }
 
     /*@internal*/
-    export function decodeMappings(map: SourceMapData): MappingsDecoder {
+    export function decodeMappings(map: Pick<RawSourceMap, "mappings" | "sources" | "names">): MappingsDecoder {
         const state: DecoderState = {
             encodedText: map.mappings,
             currentNameIndex: undefined,
@@ -191,7 +181,7 @@ namespace ts.sourcemaps {
         };
     }
 
-    function calculateDecodedMappings<T>(map: SourceMapData, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
+    function calculateDecodedMappings<T>(map: RawSourceMap, processPosition: (position: RawSourceMapPosition) => T, host?: { log?(s: string): void }): T[] {
         const decoder = decodeMappings(map);
         const positions = arrayFrom(decoder, processPosition);
         if (decoder.error) {

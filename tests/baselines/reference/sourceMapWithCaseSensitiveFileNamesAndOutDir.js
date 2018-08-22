@@ -18,7 +18,8 @@ var c = /** @class */ (function () {
     }
     return c;
 }());
-//# sourceMappingURL=app.js.map//// [app2.js]
+//# sourceMappingURL=app.js.map
+//// [app2.js]
 var d = /** @class */ (function () {
     function d() {
     }

@@ -2745,7 +2745,8 @@ declare namespace ts {
         Expression = 1,
         IdentifierName = 2,
         MappedTypeParameter = 3,
-        Unspecified = 4
+        Unspecified = 4,
+        EmbeddedStatement = 5
     }
     interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */

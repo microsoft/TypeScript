@@ -42,14 +42,8 @@ namespace ts {
         }
 
         function convertDocumentToSourceMapper(file: { sourceMapper?: sourcemaps.SourceMapper }, contents: string, mapFileName: string) {
-            let maps: sourcemaps.SourceMapData | undefined;
-            try {
-                maps = JSON.parse(contents);
-            }
-            catch {
-                // swallow error
-            }
-            if (!maps || !maps.sources || !maps.file || !maps.mappings) {
+            const map = tryParseRawSourceMap(contents);
+            if (!map || !map.sources || !map.file || !map.mappings) {
                 // obviously invalid map
                 return file.sourceMapper = sourcemaps.identitySourceMapper;
             }
@@ -58,7 +52,7 @@ namespace ts {
                 fileExists: s => host.fileExists!(s), // TODO: GH#18217
                 getCanonicalFileName,
                 log,
-            }, mapFileName, maps, getProgram(), sourcemappedFileCache);
+            }, mapFileName, map, getProgram(), sourcemappedFileCache);
         }
 
         function getSourceMapper(fileName: string, file: SourceFileLike): sourcemaps.SourceMapper {

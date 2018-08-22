@@ -18,7 +18,7 @@ namespace ts {
                     writeFile: (fileName, text) => outputs.set(fileName, text),
                 };
 
-                const program = createProgram(arrayFrom(fileMap.keys()), options, host);
+                const program = createProgram(arrayFrom(fileMap.keys()), { newLine: NewLineKind.LineFeed, ...options }, host);
                 program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
                 let content = "";
                 for (const [file, text] of arrayFrom(outputs.entries())) {

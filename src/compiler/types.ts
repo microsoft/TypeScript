@@ -5065,6 +5065,7 @@ namespace ts {
         IdentifierName,      // Emitting an IdentifierName
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
         Unspecified,         // Emitting an otherwise unspecified node
+        EmbeddedStatement,   // Emitting an embedded statement
     }
 
     /* @internal */
@@ -5321,9 +5322,79 @@ namespace ts {
     }
 
     /* @internal */
+    export interface RawSourceMap {
+        version: 3;
+        file: string;
+        sourceRoot?: string | null;
+        sources: string[];
+        sourcesContent?: (string | null)[] | null;
+        mappings: string;
+        names?: string[] | null;
+    }
+
+    /**
+     * Generates a source map.
+     * @internal
+     */
+    export interface SourceMapGenerator {
+        /**
+         * Adds a source to the source map.
+         */
+        addSource(fileName: string): number;
+        /**
+         * Set the content for a source.
+         */
+        setSourceContent(sourceIndex: number, content: string | null): void;
+        /**
+         * Adds a name.
+         */
+        addName(name: string): number;
+        /**
+         * Adds a mapping without source information.
+         */
+        addMapping(generatedLine: number, generatedCharacter: number): void;
+        /**
+         * Adds a mapping with source information.
+         */
+        addMapping(generatedLine: number, generatedCharacter: number, sourceIndex: number, sourceLine: number, sourceCharacter: number, nameIndex?: number): void;
+        /**
+         * Appends a source map.
+         */
+        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string): void;
+        /**
+         * Gets the source map as a `RawSourceMap` object.
+         */
+        toJSON(): RawSourceMap;
+        /**
+         * Gets the string representation of the source map.
+         */
+        toString(): string;
+    }
+
+    /**
+     * Emits SourceMap information through an entangled `EmitTextWriter`
+     * @internal
+     */
+    export interface SourceMapEmitter {
+        /**
+         * Emits a mapping without source information.
+         */
+        emitMapping(): void;
+        /**
+         * Emits a mapping with source information.
+         */
+        emitMapping(sourceIndex: number, sourceLine: number, sourceCharacter: number, nameIndex?: number): void;
+        /**
+         * Emits a source map.
+         */
+        emitSourceMap(sourceMap: RawSourceMap, sourceMapPath: string): void;
+    }
+
+    /* @internal */
     export interface EmitTextWriter extends SymbolWriter {
         write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
+        writeTrailingSemicolon(text: string): void;
+        writeComment(text: string): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;
@@ -5332,6 +5403,7 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
+        getSourceMapEmitter?(generator: SourceMapGenerator): SourceMapEmitter;
     }
 
     export interface GetEffectiveTypeRootsHost {

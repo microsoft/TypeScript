@@ -65,7 +65,6 @@ namespace ts {
             getText: () => str,
             write: writeText,
             rawWrite: writeText,
-            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
@@ -74,7 +73,9 @@ namespace ts {
             writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
-            writeSymbol: writeText,
+            writeSymbol: (s, _) => writeText(s),
+            writeTrailingSemicolon: writeText,
+            writeComment: writeText,
             getTextPos: () => str.length,
             getLine: () => 0,
             getColumn: () => 0,
@@ -3130,18 +3131,11 @@ namespace ts {
             }
         }
 
-        function writeTextOfNode(text: string, node: Node) {
-            const s = getTextOfNodeFromSourceText(text, node);
-            write(s);
-            updateLineCountAndPosFor(s);
-        }
-
         reset();
 
         return {
             write,
             rawWrite,
-            writeTextOfNode,
             writeLiteral,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -3164,7 +3158,79 @@ namespace ts {
             writePunctuation: write,
             writeSpace: write,
             writeStringLiteral: write,
-            writeSymbol: write
+            writeSymbol: (s, _) => write(s),
+            writeTrailingSemicolon: write,
+            writeComment: write
+        };
+    }
+
+    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
+        let pendingTrailingSemicolon = false;
+
+        function commitPendingTrailingSemicolon() {
+            if (pendingTrailingSemicolon) {
+                writer.writeTrailingSemicolon(";");
+                pendingTrailingSemicolon = false;
+            }
+        }
+
+        return {
+            ...writer,
+            writeTrailingSemicolon() {
+                pendingTrailingSemicolon = true;
+            },
+            writeLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeLiteral(s);
+            },
+            writeStringLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeStringLiteral(s);
+            },
+            writeSymbol(s, sym) {
+                commitPendingTrailingSemicolon();
+                writer.writeSymbol(s, sym);
+            },
+            writePunctuation(s) {
+                commitPendingTrailingSemicolon();
+                writer.writePunctuation(s);
+            },
+            writeKeyword(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeKeyword(s);
+            },
+            writeOperator(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeOperator(s);
+            },
+            writeParameter(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeParameter(s);
+            },
+            writeSpace(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeSpace(s);
+            },
+            writeProperty(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeProperty(s);
+            },
+            writeComment(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeComment(s);
+            },
+            writeLine() {
+                commitPendingTrailingSemicolon();
+                writer.writeLine();
+            },
+            increaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.increaseIndent();
+            },
+            decreaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.decreaseIndent();
+            }
         };
     }
 
@@ -3444,13 +3510,13 @@ namespace ts {
         writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
 
             let emitInterveningSeparator = false;
             for (const comment of comments) {
                 if (emitInterveningSeparator) {
-                    writer.write(" ");
+                    writer.writeSpace(" ");
                     emitInterveningSeparator = false;
                 }
 
@@ -3464,7 +3530,7 @@ namespace ts {
             }
 
             if (emitInterveningSeparator && trailingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
     }
@@ -3598,7 +3664,7 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(text.substring(commentPos, commentEnd));
+            writer.writeComment(text.substring(commentPos, commentEnd));
         }
     }
 
@@ -3607,14 +3673,14 @@ namespace ts {
         const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
         if (currentLineText) {
             // trimmed forward and ending spaces text
-            writer.write(currentLineText);
+            writer.writeComment(currentLineText);
             if (end !== commentEnd) {
                 writer.writeLine();
             }
         }
         else {
             // Empty string - make sure we write empty line
-            writer.writeLiteral(newLine);
+            writer.rawWrite(newLine);
         }
     }
 

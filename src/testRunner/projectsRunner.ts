@@ -427,6 +427,7 @@ namespace project {
             skipDefaultLibCheck: false,
             moduleResolution: ts.ModuleResolutionKind.Classic,
             module: moduleKind,
+            newLine: ts.NewLineKind.CarriageReturnLineFeed,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
                 ? vpath.resolve(vfs.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,
