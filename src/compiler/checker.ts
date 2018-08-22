@@ -14433,8 +14433,8 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
-                if (flowDepth === 2500) {
-                    // We have made 2500 recursive invocations. To avoid overflowing the call stack we report an error
+                if (flowDepth === 2000) {
+                    // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
                     // and disable further control flow analysis in the containing function or module body.
                     flowAnalysisDisabled = true;
                     reportFlowControlError(reference);
@@ -14574,7 +14574,8 @@ namespace ts {
                                 }
                             }
                             else {
-                                const indexType = getTypeOfExpression((<ElementAccessExpression>node.left).argumentExpression);
+                                // We must get the context free expression type so as to not recur in an uncached fashion on the LHS (which causes exponential blowup in compile time)
+                                const indexType = getContextFreeTypeOfExpression((<ElementAccessExpression>node.left).argumentExpression);
                                 if (isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                                     evolvedType = addEvolvingArrayElementType(evolvedType, node.right);
                                 }
@@ -21720,9 +21721,13 @@ namespace ts {
          * It sets the contextual type of the node to any before calling getTypeOfExpression.
          */
         function getContextFreeTypeOfExpression(node: Expression) {
+            const links = getNodeLinks(node);
+            if (links.contextFreeType) {
+                return links.contextFreeType;
+            }
             const saveContextualType = node.contextualType;
             node.contextualType = anyType;
-            const type = getTypeOfExpression(node);
+            const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
             node.contextualType = saveContextualType;
             return type;
         }
