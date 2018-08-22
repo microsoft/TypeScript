@@ -11778,6 +11778,9 @@ namespace ts {
                         }
                         return Ternary.False;
                     }
+                    if (relation === definitelyAssignableRelation && isGenericMappedType(source)) {
+                        return Ternary.False;
+                    }
                     const sourceIsPrimitive = !!(source.flags & TypeFlags.Primitive);
                     if (relation !== identityRelation) {
                         source = getApparentType(source);
