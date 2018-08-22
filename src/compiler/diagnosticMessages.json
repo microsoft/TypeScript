@@ -1964,10 +1964,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551

@@ -125,3 +125,93 @@ let x = foo([]);  // never
 >x : Symbol(x, Decl(strictFunctionTypes1.ts, 25, 3))
 >foo : Symbol(foo, Decl(strictFunctionTypes1.ts, 20, 30))
 
+// Modified repros from #26127
+
+interface A { a: string }
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>a : Symbol(A.a, Decl(strictFunctionTypes1.ts, 29, 13))
+
+interface B extends A { b: string }
+>B : Symbol(B, Decl(strictFunctionTypes1.ts, 29, 25))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>b : Symbol(B.b, Decl(strictFunctionTypes1.ts, 30, 23))
+
+declare function acceptUnion(x: A | number): void;
+>acceptUnion : Symbol(acceptUnion, Decl(strictFunctionTypes1.ts, 30, 35))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 32, 29))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+
+declare function acceptA(x: A): void;
+>acceptA : Symbol(acceptA, Decl(strictFunctionTypes1.ts, 32, 50))
+>x : Symbol(x, Decl(strictFunctionTypes1.ts, 33, 25))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+
+declare let a: A;
+>a : Symbol(a, Decl(strictFunctionTypes1.ts, 35, 11))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+
+declare let b: B;
+>b : Symbol(b, Decl(strictFunctionTypes1.ts, 36, 11))
+>B : Symbol(B, Decl(strictFunctionTypes1.ts, 29, 25))
+
+declare function coAndContra<T>(value: T, func: (t: T) => void): T;
+>coAndContra : Symbol(coAndContra, Decl(strictFunctionTypes1.ts, 36, 17))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 38, 29))
+>value : Symbol(value, Decl(strictFunctionTypes1.ts, 38, 32))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 38, 29))
+>func : Symbol(func, Decl(strictFunctionTypes1.ts, 38, 41))
+>t : Symbol(t, Decl(strictFunctionTypes1.ts, 38, 49))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 38, 29))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 38, 29))
+
+const t1: A = coAndContra(a, acceptUnion);
+>t1 : Symbol(t1, Decl(strictFunctionTypes1.ts, 40, 5))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>coAndContra : Symbol(coAndContra, Decl(strictFunctionTypes1.ts, 36, 17))
+>a : Symbol(a, Decl(strictFunctionTypes1.ts, 35, 11))
+>acceptUnion : Symbol(acceptUnion, Decl(strictFunctionTypes1.ts, 30, 35))
+
+const t2: B = coAndContra(b, acceptA);
+>t2 : Symbol(t2, Decl(strictFunctionTypes1.ts, 41, 5))
+>B : Symbol(B, Decl(strictFunctionTypes1.ts, 29, 25))
+>coAndContra : Symbol(coAndContra, Decl(strictFunctionTypes1.ts, 36, 17))
+>b : Symbol(b, Decl(strictFunctionTypes1.ts, 36, 11))
+>acceptA : Symbol(acceptA, Decl(strictFunctionTypes1.ts, 32, 50))
+
+const t3: A = coAndContra(never, acceptA);
+>t3 : Symbol(t3, Decl(strictFunctionTypes1.ts, 42, 5))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>coAndContra : Symbol(coAndContra, Decl(strictFunctionTypes1.ts, 36, 17))
+>never : Symbol(never, Decl(strictFunctionTypes1.ts, 17, 13))
+>acceptA : Symbol(acceptA, Decl(strictFunctionTypes1.ts, 32, 50))
+
+declare function coAndContraArray<T>(value: T[], func: (t: T) => void): T[];
+>coAndContraArray : Symbol(coAndContraArray, Decl(strictFunctionTypes1.ts, 42, 42))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 44, 34))
+>value : Symbol(value, Decl(strictFunctionTypes1.ts, 44, 37))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 44, 34))
+>func : Symbol(func, Decl(strictFunctionTypes1.ts, 44, 48))
+>t : Symbol(t, Decl(strictFunctionTypes1.ts, 44, 56))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 44, 34))
+>T : Symbol(T, Decl(strictFunctionTypes1.ts, 44, 34))
+
+const t4: A[] = coAndContraArray([a], acceptUnion);
+>t4 : Symbol(t4, Decl(strictFunctionTypes1.ts, 46, 5))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>coAndContraArray : Symbol(coAndContraArray, Decl(strictFunctionTypes1.ts, 42, 42))
+>a : Symbol(a, Decl(strictFunctionTypes1.ts, 35, 11))
+>acceptUnion : Symbol(acceptUnion, Decl(strictFunctionTypes1.ts, 30, 35))
+
+const t5: B[] = coAndContraArray([b], acceptA);
+>t5 : Symbol(t5, Decl(strictFunctionTypes1.ts, 47, 5))
+>B : Symbol(B, Decl(strictFunctionTypes1.ts, 29, 25))
+>coAndContraArray : Symbol(coAndContraArray, Decl(strictFunctionTypes1.ts, 42, 42))
+>b : Symbol(b, Decl(strictFunctionTypes1.ts, 36, 11))
+>acceptA : Symbol(acceptA, Decl(strictFunctionTypes1.ts, 32, 50))
+
+const t6: A[] = coAndContraArray([], acceptA);
+>t6 : Symbol(t6, Decl(strictFunctionTypes1.ts, 48, 5))
+>A : Symbol(A, Decl(strictFunctionTypes1.ts, 25, 16))
+>coAndContraArray : Symbol(coAndContraArray, Decl(strictFunctionTypes1.ts, 42, 42))
+>acceptA : Symbol(acceptA, Decl(strictFunctionTypes1.ts, 32, 50))
+
