@@ -1,0 +1,161 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardWithRelaxEquality.ts ===
+// Github issue #24991
+function test(level: number | string):number {
+>test : (level: string | number) => number
+>level : string | number
+
+    if (level == +level) {
+>level == +level : boolean
+>level : string | number
+>+level : number
+>level : string | number
+
+        const q2 = level; // number | string
+>q2 : string | number
+>level : string | number
+
+        return level;
+>level : string | number
+    }
+    if (level === +level + 1) {
+>level === +level + 1 : boolean
+>level : string | number
+>+level + 1 : number
+>+level : number
+>level : string | number
+>1 : 1
+
+        const q2 = level;
+>q2 : number
+>level : number
+
+        return level;
+>level : number
+    }
+    return 0;
+>0 : 0
+}
+alert(test(5) + 1);
+>alert(test(5) + 1) : void
+>alert : (message?: any) => void
+>test(5) + 1 : number
+>test(5) : number
+>test : (level: string | number) => number
+>5 : 5
+>1 : 1
+
+alert(test("5") + 1)
+>alert(test("5") + 1) : void
+>alert : (message?: any) => void
+>test("5") + 1 : number
+>test("5") : number
+>test : (level: string | number) => number
+>"5" : "5"
+>1 : 1
+
+declare const a: string | number | boolean | object | symbol | null | undefined;
+>a : string | number | boolean | symbol | object | null | undefined
+>null : null
+
+declare const s: symbol;
+>s : symbol
+
+declare const str: string;
+>str : string
+
+declare const num: number;
+>num : number
+
+declare const bool: boolean;
+>bool : boolean
+
+if (a == 1) {
+>a == 1 : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>1 : 1
+
+    const t = a
+>t : boolean | 1
+>a : boolean | 1
+}
+if (a == num) {
+>a == num : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>num : number
+
+    const t = a
+>t : string | number | boolean
+>a : string | number | boolean
+}
+if (a == '') {
+>a == '' : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>'' : ""
+
+    const t = a
+>t : boolean | ""
+>a : boolean | ""
+}
+if (a == str) {
+>a == str : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>str : string
+
+    const t = a
+>t : string | number | boolean
+>a : string | number | boolean
+}
+if (a == false) {
+>a == false : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>false : false
+
+    const t = a
+>t : string | number | false
+>a : string | number | false
+}
+if (a == bool) {
+>a == bool : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>bool : boolean
+
+    const t = a
+>t : string | number | boolean
+>a : string | number | boolean
+}
+if (a == {}) {
+>a == {} : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>{} : {}
+
+    const t = a
+>t : object
+>a : object
+}
+if (a == s) {
+>a == s : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>s : symbol
+
+    const t = a
+>t : symbol
+>a : symbol
+}
+if (a == null) {
+>a == null : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>null : null
+
+    const t = a
+>t : null | undefined
+>a : null | undefined
+}
+if (a == undefined) {
+>a == undefined : boolean
+>a : string | number | boolean | symbol | object | null | undefined
+>undefined : undefined
+
+    const t = a
+>t : null | undefined
+>a : null | undefined
+}

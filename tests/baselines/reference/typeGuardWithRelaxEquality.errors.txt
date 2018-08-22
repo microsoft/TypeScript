@@ -1,0 +1,59 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardWithRelaxEquality.ts(5,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardWithRelaxEquality.ts (1 errors) ====
+    // Github issue #24991
+    function test(level: number | string):number {
+        if (level == +level) {
+            const q2 = level; // number | string
+            return level;
+            ~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+        }
+        if (level === +level + 1) {
+            const q2 = level;
+            return level;
+        }
+        return 0;
+    }
+    alert(test(5) + 1);
+    alert(test("5") + 1)
+    
+    declare const a: string | number | boolean | object | symbol | null | undefined;
+    declare const s: symbol;
+    declare const str: string;
+    declare const num: number;
+    declare const bool: boolean;
+    
+    if (a == 1) {
+        const t = a
+    }
+    if (a == num) {
+        const t = a
+    }
+    if (a == '') {
+        const t = a
+    }
+    if (a == str) {
+        const t = a
+    }
+    if (a == false) {
+        const t = a
+    }
+    if (a == bool) {
+        const t = a
+    }
+    if (a == {}) {
+        const t = a
+    }
+    if (a == s) {
+        const t = a
+    }
+    if (a == null) {
+        const t = a
+    }
+    if (a == undefined) {
+        const t = a
+    }

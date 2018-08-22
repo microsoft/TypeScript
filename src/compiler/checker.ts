@@ -610,6 +610,7 @@ namespace ts {
         const assignableRelation = createMap<RelationComparisonResult>();
         const definitelyAssignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
+        const relaxComparableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<RelationComparisonResult>();
 
@@ -10675,6 +10676,14 @@ namespace ts {
             return elaborateElementwise(generateObjectLiteralElements(node), source, target);
         }
 
+        function isTypeRelaxComparableTo(source: Type, target: Type): boolean {
+            return isTypeRelatedTo(source, target, relaxComparableRelation);
+        }
+
+        function areTypesRelaxComparable(type1: Type, type2: Type): boolean {
+            return isTypeRelaxComparableTo(type1, type2) || isTypeRelaxComparableTo(type2, type1);
+        }
+
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'isTypeComparableTo'.
@@ -10922,6 +10931,14 @@ namespace ts {
             const t = target.flags;
             if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
             if (t & TypeFlags.Never) return false;
+            if (relation === relaxComparableRelation) {
+                if (s & TypeFlags.NumberLike && t & TypeFlags.StringLike) return true;
+                if (s & TypeFlags.NumberLike && t & TypeFlags.BooleanLike) return true;
+                // if (s & TypeFlags.NumberLike && t & TypeFlags.Object) return true;
+                if (s & TypeFlags.StringLike && t & TypeFlags.BooleanLike) return true;
+                // if (s & TypeFlags.StringLike && t & TypeFlags.Object) return true;
+                // if (s & TypeFlags.BooleanLike && t & TypeFlags.Object) return true;
+            }
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
@@ -10943,7 +10960,7 @@ namespace ts {
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
-            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) {
+            if (relation === assignableRelation || relation === definitelyAssignableRelation || (relation === comparableRelation || relation === relaxComparableRelation)) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -10962,7 +10979,7 @@ namespace ts {
                 target = (<LiteralType>target).regularType;
             }
             if (source === target ||
-                relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                (relation === comparableRelation || relation === relaxComparableRelation) && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                 relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -11062,7 +11079,7 @@ namespace ts {
                 }
 
                 if (!message) {
-                    if (relation === comparableRelation) {
+                    if (relation === comparableRelation || relation === relaxComparableRelation) {
                         message = Diagnostics.Type_0_is_not_comparable_to_type_1;
                     }
                     else if (sourceType === targetType) {
@@ -11157,7 +11174,7 @@ namespace ts {
                     return isIdenticalTo(source, target);
                 }
 
-                if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
+                if ((relation === comparableRelation || relation === relaxComparableRelation) && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
@@ -11177,7 +11194,7 @@ namespace ts {
                     }
                 }
 
-                if (relation !== comparableRelation &&
+                if ((relation !== comparableRelation || relation === relaxComparableRelation) &&
                     !(source.flags & TypeFlags.UnionOrIntersection) &&
                     !(target.flags & TypeFlags.Union) &&
                     !isIntersectionConstituent &&
@@ -11208,7 +11225,7 @@ namespace ts {
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
-                    result = relation === comparableRelation ?
+                    result = (relation === comparableRelation || relation === relaxComparableRelation) ?
                         someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive)) :
                         eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                 }
@@ -11332,7 +11349,7 @@ namespace ts {
                 }
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
+                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || (relation === comparableRelation || relation === relaxComparableRelation)) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
@@ -11852,7 +11869,7 @@ namespace ts {
             // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
             // that S and T are contra-variant whereas X and Y are co-variant.
             function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
-                const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
+                const modifiersRelated = (relation === comparableRelation || relation === relaxComparableRelation) || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                         getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
@@ -11974,7 +11991,7 @@ namespace ts {
                             }
                             result &= related;
                             // When checking for comparability, be more lenient with optional properties.
-                            if (relation !== comparableRelation && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
+                            if ((relation !== comparableRelation && relation !== relaxComparableRelation) && sourceProp.flags & SymbolFlags.Optional && !(targetProp.flags & SymbolFlags.Optional)) {
                                 // TypeScript 1.0 spec (April 2014): 3.8.3
                                 // S is a subtype of a type T, and T is a supertype of S if ...
                                 // S' and T are object types and, for each member M in T..
@@ -12100,7 +12117,7 @@ namespace ts {
                     // in the context of the target signature before checking the relationship. Ideally we'd do
                     // this regardless of the number of signatures, but the potential costs are prohibitive due
                     // to the quadratic nature of the logic below.
-                    const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
+                    const eraseGenerics = (relation === comparableRelation || relation === relaxComparableRelation) || !!compilerOptions.noStrictGenericChecks;
                     result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
                 }
                 else {
@@ -14860,7 +14877,8 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue) {
-                    const narrowedType = filterType(type, t => areTypesComparable(t, valueType));
+                    const strictEquals = operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken;
+                    const narrowedType = filterType(type, t => strictEquals ? areTypesComparable(t, valueType) : areTypesRelaxComparable(t, valueType));
                     return narrowedType.flags & TypeFlags.Never ? type : replacePrimitivesWithLiterals(narrowedType, valueType);
                 }
                 if (isUnitType(valueType)) {
