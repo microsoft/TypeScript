@@ -1589,6 +1589,8 @@ namespace ts.server {
                 configFileErrors.push(...parsedCommandLine.errors);
             }
 
+            project.setTypeAcquisition(parsedCommandLine.typeAcquisition!); // TODO: GH#18217
+
             Debug.assert(!!parsedCommandLine.fileNames);
             const compilerOptions = parsedCommandLine.options;
 
