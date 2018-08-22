@@ -1,5 +1,5 @@
 /* @internal */
-namespace ts.refactor.addOrRemoveBracesToArrowFunction {
+namespace ts.refactor.mergeImportDeclaration {
     const refactorName = "Merge duplicate import declaration";
     registerRefactor(refactorName, {
         getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
