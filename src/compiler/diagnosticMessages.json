@@ -3671,6 +3671,14 @@
         "category": "Error",
         "code": 6205
     },
+    "'package.json' has invalid version '{0}' in 'typesVersions' field.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
 
     "Projects to reference": {
         "category": "Message",

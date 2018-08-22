@@ -127,7 +127,14 @@ namespace ts {
 
     /* @internal */
     export function getPackageJsonTypesVersionsOverride(typesVersions: MapLike<string>) {
-        const typeScriptVersion = Version.parse(versionMajorMinor);
+        return getPackageJsonTypesVersionsOverrideWithTrace(typesVersions, /*state*/ undefined);
+    }
+
+    let typeScriptVersion: Version | undefined;
+
+    function getPackageJsonTypesVersionsOverrideWithTrace(typesVersions: MapLike<string>, state: ModuleResolutionState | undefined) {
+        if (!typeScriptVersion) typeScriptVersion = new Version(versionMajorMinor);
+
         let bestVersion: Version | undefined;
         let bestVersionKey: string | undefined;
         for (const key in typesVersions) {
@@ -135,12 +142,15 @@ namespace ts {
 
             const keyVersion = Version.tryParse(key);
             if (keyVersion === undefined) {
+                if (state && state.traceEnabled) {
+                    trace(state.host, Diagnostics.package_json_has_invalid_version_0_in_typesVersions_field, key);
+                }
                 continue;
             }
 
             // match the greatest version less than the current TypeScript version
-            if (keyVersion.compareTo(typeScriptVersion) <= 0
-                && (bestVersion === undefined || keyVersion.compareTo(bestVersion) > 0)) {
+            if (keyVersion.compareTo(bestVersion) > 0 &&
+                keyVersion.compareTo(typeScriptVersion) <= 0) {
                 bestVersion = keyVersion;
                 bestVersionKey = key;
             }
@@ -169,22 +179,25 @@ namespace ts {
             return;
         }
 
-        const result = getPackageJsonTypesVersionsOverride(typesVersions);
+        const result = getPackageJsonTypesVersionsOverrideWithTrace(typesVersions, state);
         if (!result) {
-            return undefined;
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.package_json_does_not_have_a_typesVersions_entry_that_matches_version_0, versionMajorMinor);
+            }
+            return;
         }
 
         const { version: bestVersionKey, directory: bestVersionPath } = result;
         if (!isString(bestVersionPath)) {
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, `typesVersion['${bestVersionKey}']`, "string", typeof bestVersionPath);
+                trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, `typesVersions['${bestVersionKey}']`, "string", typeof bestVersionPath);
             }
             return;
         }
 
         if (state.traceEnabled) {
             const path = normalizePath(combinePaths(baseDirectory, bestVersionPath));
-            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, `typesVersion['${bestVersionKey}']`, bestVersionPath, path);
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, `typesVersions['${bestVersionKey}']`, bestVersionPath, path);
         }
 
         return bestVersionPath;
