@@ -4,11 +4,11 @@ function /*[#|*/f/*|]*/(){
     return fetch("https://typescriptlang.org").then(res => {
       if (res.ok) {
         return fetch("https://microsoft.com");
-      } 
+      }
       else {
         if (res.buffer.length > 5) {
           return res;
-        } 
+        }
         else {
             return fetch("https://github.com");
         }

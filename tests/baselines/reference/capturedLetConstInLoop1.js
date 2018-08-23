@@ -113,6 +113,16 @@ for (const y = 0; y < 1;) {
     (() => x + y);
 }
 
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+for (let sx in sobj) {
+    (() => sobj[sx]);
+}
+declare const iobj: { [x: number]: any };
+for (let ix in iobj) {
+    (() => iobj[ix]);
+}
+
 //// [capturedLetConstInLoop1.js]
 var _loop_1 = function (x) {
     (function () { return x; });
@@ -269,4 +279,16 @@ var _loop_20 = function (y) {
 };
 for (var y = 0; y < 1;) {
     _loop_20(y);
+}
+var _loop_21 = function (sx) {
+    (function () { return sobj[sx]; });
+};
+for (var sx in sobj) {
+    _loop_21(sx);
+}
+var _loop_22 = function (ix) {
+    (function () { return iobj[ix]; });
+};
+for (var ix in iobj) {
+    _loop_22(ix);
 }

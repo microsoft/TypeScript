@@ -1,7 +1,7 @@
 // ==ORIGINAL==
 
     function /*[#|*/f/*|]*/() {
-        return Promise.resolve().then(() => 1, () => "a"); 
+        return Promise.resolve().then(() => 1, () => "a");
     }
 
 // ==ASYNC FUNCTION::Convert to async function==
@@ -13,5 +13,5 @@
         }
         catch (e) {
             return "a";
-        } 
+        }
     }

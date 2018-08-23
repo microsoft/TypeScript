@@ -1964,10 +1964,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -3940,6 +3936,10 @@
     "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
         "category": "Error",
         "code": 7041
+    },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
     },
     "You cannot rename this element.": {
         "category": "Error",

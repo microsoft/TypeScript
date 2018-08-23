@@ -2,7 +2,7 @@
 
 function /*[#|*/f/*|]*/() {
     var var1:Promise<Response>, var2;
-    return fetch('https://typescriptlang.org').then( _ => 
+    return fetch('https://typescriptlang.org').then( _ =>
       Promise.resolve().then( res => {
         var2 = "test";
         return fetch("https://microsoft.com");

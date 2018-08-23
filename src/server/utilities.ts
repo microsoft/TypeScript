@@ -120,6 +120,7 @@ namespace ts.server {
         };
     }
 
+    /*@internal*/
     export interface ProjectOptions {
         configHasExtendsProperty: boolean;
         /**
@@ -128,16 +129,6 @@ namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
-
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
-        /**
-         * these fields can be present in the project file
-         */
-        files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
-        compilerOptions?: CompilerOptions;
-        typeAcquisition?: TypeAcquisition;
-        compileOnSave?: boolean;
     }
 
     export function isInferredProjectName(name: string) {

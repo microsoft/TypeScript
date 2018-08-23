@@ -7,7 +7,7 @@ namespace ts {
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                     Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
-                        () => Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
+                        Utils.sourceFileToJSON(typeAndDiagnostics!.jsDocTypeExpression.type));
                 });
             }
 
@@ -95,7 +95,7 @@ namespace ts {
                     }
 
                     Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
-                        () => JSON.stringify(comment.jsDoc,
+                        JSON.stringify(comment.jsDoc,
                             (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
                 });
             }

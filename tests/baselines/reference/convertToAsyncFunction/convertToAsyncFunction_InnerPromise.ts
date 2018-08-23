@@ -5,7 +5,7 @@ function /*[#|*/innerPromise/*|]*/(): Promise<string> {
         var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
         return blob2;
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 

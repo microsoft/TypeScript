@@ -166,13 +166,16 @@ namespace ts.server {
             let text: string;
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
-            const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
-            if (fileSize > maxFileSize) {
-                Debug.assert(!!this.info.containingProjects.length);
-                const service = this.info.containingProjects[0].projectService;
-                service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
-                this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
-                return "";
+            // Only non typescript files have size limitation
+            if (!hasTypeScriptFileExtension(this.fileName)) {
+                const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
+                if (fileSize > maxFileSize) {
+                    Debug.assert(!!this.info.containingProjects.length);
+                    const service = this.info.containingProjects[0].projectService;
+                    service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                    this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
+                    return "";
+                }
             }
             return getText();
         }
