@@ -4795,7 +4795,7 @@ namespace ts {
         }
 
         function getJSExpandoObjectType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (!init || !isObjectLiteralExpression(init) || init.properties.length) {
+            if (!isInJavaScriptFile(decl) || !init || !isObjectLiteralExpression(init) || init.properties.length) {
                 return undefined;
             }
             const exports = createSymbolTable();
