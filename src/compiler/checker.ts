@@ -27269,6 +27269,7 @@ namespace ts {
                 case SyntaxKind.DefaultKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.EqualsGreaterThanToken:
+                case SyntaxKind.ClassKeyword:
                     return getSymbolOfNode(node.parent);
                 case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal) : undefined;
