@@ -783,7 +783,7 @@ namespace ts {
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
-            sourceText = _sourceText;
+            sourceText = _sourceText.replace(/\/\*\*([^\/]*?)\*\//g, (_, content) => `/**${content.replace(/(\n\s*)\*/g, '$1 ')}*/`);
             syntaxCursor = _syntaxCursor;
 
             parseDiagnostics = [];
