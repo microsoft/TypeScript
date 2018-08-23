@@ -1862,10 +1862,8 @@ namespace ts.Completions {
 
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
-                    if (isFromObjectTypeDeclaration(contextToken)) {
-                        return false;
-                    }
-                // falls through
+                    return !isFromObjectTypeDeclaration(contextToken);
+
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
@@ -1877,6 +1875,9 @@ namespace ts.Completions {
                 case SyntaxKind.YieldKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
+
+                case SyntaxKind.AsteriskToken:
+                    return isFunctionLike(contextToken.parent);
             }
 
             // If the previous token is keyword correspoding to class member completion keyword
