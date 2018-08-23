@@ -11256,7 +11256,7 @@ namespace ts {
             function isIdenticalTo(source: Type, target: Type): Ternary {
                 let result: Ternary;
                 const flags = source.flags & target.flags;
-                if (flags & TypeFlags.Object) {
+                if (flags & TypeFlags.Object || flags & TypeFlags.IndexedAccess || flags & TypeFlags.Conditional || flags & TypeFlags.Index || flags & TypeFlags.Substitution) {
                     return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false);
                 }
                 if (flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -11265,32 +11265,6 @@ namespace ts {
                             return result;
                         }
                     }
-                }
-                if (flags & TypeFlags.Index) {
-                    return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
-                }
-                if (flags & TypeFlags.IndexedAccess) {
-                    if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, /*reportErrors*/ false)) {
-                        if (result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, /*reportErrors*/ false)) {
-                            return result;
-                        }
-                    }
-                }
-                if (flags & TypeFlags.Conditional) {
-                    if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive) {
-                        if (result = isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType, /*reportErrors*/ false)) {
-                            if (result &= isRelatedTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType, /*reportErrors*/ false)) {
-                                if (result &= isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
-                                    if (result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
-                                        return result;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (flags & TypeFlags.Substitution) {
-                    return isRelatedTo((<SubstitutionType>source).substitute, (<SubstitutionType>target).substitute, /*reportErrors*/ false);
                 }
                 return Ternary.False;
             }
@@ -11603,6 +11577,37 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+                const flags = source.flags & target.flags;
+                if (relation === identityRelation && !(flags & TypeFlags.Object)) {
+                    if (flags & TypeFlags.Index) {
+                        return isRelatedTo((<IndexType>source).type, (<IndexType>target).type, /*reportErrors*/ false);
+                    }
+                    let result = Ternary.False;
+                    if (flags & TypeFlags.IndexedAccess) {
+                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, /*reportErrors*/ false)) {
+                            if (result &= isRelatedTo((<IndexedAccessType>source).indexType, (<IndexedAccessType>target).indexType, /*reportErrors*/ false)) {
+                                return result;
+                            }
+                        }
+                    }
+                    if (flags & TypeFlags.Conditional) {
+                        if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive) {
+                            if (result = isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType, /*reportErrors*/ false)) {
+                                if (result &= isRelatedTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType, /*reportErrors*/ false)) {
+                                    if (result &= isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
+                                        if (result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
+                                            return result;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (flags & TypeFlags.Substitution) {
+                        return isRelatedTo((<SubstitutionType>source).substitute, (<SubstitutionType>target).substitute, /*reportErrors*/ false);
+                    }
+                    return Ternary.False;
+                }
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 const saveErrorInfo = errorInfo;
