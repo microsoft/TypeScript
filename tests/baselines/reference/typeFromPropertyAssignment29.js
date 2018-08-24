@@ -116,11 +116,11 @@ var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n;
 
 
 //// [typeFromPropertyAssignment29.d.ts]
-declare const ExpandoDecl: {
-    (n: number): string;
-    prop: number;
-    m(n: number): number;
-};
+declare function ExpandoDecl(n: number): string;
+declare module ExpandoDecl {
+    export var prop: number;
+    export var m: (n: number) => number;
+}
 declare var n: number;
 declare const ExpandoExpr: {
     (n: number): string;

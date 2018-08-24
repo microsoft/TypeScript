@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts ===
 function ExpandoDecl(n: number) {
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >n : number
 
     return n.toString();
@@ -12,14 +12,14 @@ function ExpandoDecl(n: number) {
 ExpandoDecl.prop = 2
 >ExpandoDecl.prop = 2 : 2
 >ExpandoDecl.prop : number
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >prop : number
 >2 : 2
 
 ExpandoDecl.m = function(n: number) {
 >ExpandoDecl.m = function(n: number) {    return n + 1;} : (n: number) => number
 >ExpandoDecl.m : (n: number) => number
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >m : (n: number) => number
 >function(n: number) {    return n + 1;} : (n: number) => number
 >n : number
@@ -34,16 +34,16 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
 >ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length : number
 >ExpandoDecl.prop + ExpandoDecl.m(12) : number
 >ExpandoDecl.prop : number
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >prop : number
 >ExpandoDecl.m(12) : number
 >ExpandoDecl.m : (n: number) => number
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >m : (n: number) => number
 >12 : 12
 >ExpandoDecl(101).length : number
 >ExpandoDecl(101) : string
->ExpandoDecl : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoDecl : typeof ExpandoDecl
 >101 : 101
 >length : number
 

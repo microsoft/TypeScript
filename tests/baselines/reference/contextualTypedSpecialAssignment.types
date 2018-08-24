@@ -167,13 +167,13 @@ Thing.prototype.x
 
 // prototype assignment
 function F() {
->F : { (): void; prototype: { status: "done"; m(n: number): void; }; }
+>F : typeof F
 }
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 >F.prototype : { status: "done"; m(n: number): void; }
->F : { (): void; prototype: { status: "done"; m(n: number): void; }; }
+>F : typeof F
 >prototype : { status: "done"; m(n: number): void; }
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
 

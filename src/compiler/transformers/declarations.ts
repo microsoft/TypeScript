@@ -971,12 +971,7 @@ namespace ts {
                 }
                 case SyntaxKind.FunctionDeclaration: {
                     // Generators lose their generator-ness, excepting their return type
-                    if (resolver.isJSContainerFunctionDeclaration(input)) {
-                        const varDecl = createVariableDeclaration(input.name!, resolver.createTypeOfDeclaration(input, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
-                        const statement = createVariableStatement(needsDeclare ? [createModifier(SyntaxKind.DeclareKeyword)] : [], createVariableDeclarationList([varDecl], NodeFlags.Const));
-                        return cleanup(statement);
-                    }
-                    return cleanup(updateFunctionDeclaration(
+                    const clean = cleanup(updateFunctionDeclaration(
                         input,
                         /*decorators*/ undefined,
                         ensureModifiers(input, isPrivate),
@@ -987,6 +982,21 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
+                    if (clean && resolver.isJSContainerFunctionDeclaration(input)) {
+
+                        const declarations = resolver.getPropertiesOfContainerFunction(input).map(p => {
+                            const type = resolver.createTypeOfDeclaration(
+                                p.valueDeclaration as VariableLikeDeclaration,
+                                enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                            const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
+                            return createVariableStatement([createModifier(SyntaxKind.ExportKeyword)], createVariableDeclarationList([varDecl]));
+                        });
+                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations));
+                        return [clean, namespaceDecl];
+                    }
+                    else {
+                        return clean;
+                    }
                 }
                 case SyntaxKind.ModuleDeclaration: {
                     needsDeclare = false;
