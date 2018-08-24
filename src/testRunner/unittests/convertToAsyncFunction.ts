@@ -380,7 +380,7 @@ interface Array<T> {}`
 
             const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => data.join(newLineCharacter));
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
         function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
