@@ -12,7 +12,8 @@ verify.codeFix({
 `class C {
     static m() { C.m(); }
     n() { m(); }
-}`
+}`,
+    applyChanges: true,
 });
 
 verify.codeFix({

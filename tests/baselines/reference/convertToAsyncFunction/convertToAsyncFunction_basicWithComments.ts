@@ -3,7 +3,7 @@
 function /*[#|*/f/*|]*/(): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
 
-    // a 
+    // a
     /*b*/ return /*c*/ fetch( /*d*/ 'https://typescriptlang.org' /*e*/).then( /*f*/ result /*g*/ => { /*h*/ console.log(/*i*/ result /*j*/) /*k*/}/*l*/);
     // m
 }
@@ -12,7 +12,7 @@ function /*[#|*/f/*|]*/(): Promise<void>{
 async function f(): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
 
-    // a 
+    // a
     /*b*/ const result = await fetch(/*d*/ 'https://typescriptlang.org' /*e*/);
     console.log(result); /*k*/
     // m

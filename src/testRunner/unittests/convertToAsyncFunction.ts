@@ -319,38 +319,6 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    const newLineCharacter = "\n";
-    const formatOptions: FormatCodeSettings = {
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter,
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceBeforeFunctionParenthesis: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-    };
-
-    const notImplementedHost: LanguageServiceHost = {
-        getCompilationSettings: notImplemented,
-        getScriptFileNames: notImplemented,
-        getScriptVersion: notImplemented,
-        getScriptSnapshot: notImplemented,
-        getDefaultLibFileName: notImplemented,
-        getCurrentDirectory: notImplemented,
-    };
-
     function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
         const t = getTest(text);
         const selectionRange = t.ranges.get("selection")!;
@@ -389,7 +357,7 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(formatOptions)
+                formatContext: formatting.getFormatContext(testFormatOptions)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
@@ -400,21 +368,19 @@ interface Array<T> {}`
             const action = find(actions, action => action.description === description.message)!;
             assert.isNotNull(action);
 
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
-                const data: string[] = [];
-                data.push(`// ==ORIGINAL==`);
-                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-                const changes = action.changes;
-                assert.lengthOf(changes, 1);
+            const data: string[] = [];
+            data.push(`// ==ORIGINAL==`);
+            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+            const changes = action.changes;
+            assert.lengthOf(changes, 1);
 
-                data.push(`// ==ASYNC FUNCTION::${action.description}==`);
-                const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-                data.push(newText);
+            data.push(`// ==ASYNC FUNCTION::${action.description}==`);
+            const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+            data.push(newText);
 
-                const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
-                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-                return data.join(newLineCharacter);
-            });
+            const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
+            assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
         function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
@@ -462,7 +428,7 @@ function [#|f|](): Promise<void>{
 function [#|f|](): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
 
-    // a 
+    // a
     /*b*/ return /*c*/ fetch( /*d*/ 'https://typescriptlang.org' /*e*/).then( /*f*/ result /*g*/ => { /*h*/ console.log(/*i*/ result /*j*/) /*k*/}/*l*/);
     // m
 }`);
@@ -580,7 +546,7 @@ function [#|f|]():Promise<Response> {
         _testConvertToAsyncFunction("convertToAsyncFunction_PromiseDotAll", `
 function [#|f|]():Promise<void>{
     return Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
-        vals.forEach(console.log); 
+        vals.forEach(console.log);
     });
 }
 `
@@ -664,7 +630,7 @@ function [#|innerPromise|](): Promise<string> {
         var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
         return blob2;
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 `
@@ -674,7 +640,7 @@ function [#|innerPromise|](): Promise<string> {
     return fetch("https://typescriptlang.org").then(resp => {
         return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 `
@@ -914,7 +880,7 @@ function [#|f|]() {
         _testConvertToAsyncFunction("convertToAsyncFunction_Scope1", `
 function [#|f|]() {
     var var1:Promise<Response>, var2;
-    return fetch('https://typescriptlang.org').then( _ => 
+    return fetch('https://typescriptlang.org').then( _ =>
       Promise.resolve().then( res => {
         var2 = "test";
         return fetch("https://microsoft.com");
@@ -933,11 +899,11 @@ function [#|f|](){
     return fetch("https://typescriptlang.org").then(res => {
       if (res.ok) {
         return fetch("https://microsoft.com");
-      } 
+      }
       else {
         if (res.buffer.length > 5) {
           return res;
-        } 
+        }
         else {
             return fetch("https://github.com");
         }
@@ -1177,7 +1143,7 @@ function [#|f|]() {
       }
     };
   });
-} 
+}
 `
         );
 
@@ -1190,25 +1156,25 @@ function [#|f|]() {
         return fn3();
     }
     return fn2();
-} 
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_UntypedFunction", `
 function [#|f|]() {
     return Promise.resolve().then(res => console.log(res));
-} 
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_TernaryConditional", `
 function [#|f|]() {
     let i;
     return Promise.resolve().then(res => res ? i = res : i = 100);
-} 
+}
 `);
 
     _testConvertToAsyncFunction("convertToAsyncFunction_ResRejNoArgsArrow", `
     function [#|f|]() {
-        return Promise.resolve().then(() => 1, () => "a"); 
+        return Promise.resolve().then(() => 1, () => "a");
     }
 `);
 

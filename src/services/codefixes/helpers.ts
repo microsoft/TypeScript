@@ -112,27 +112,23 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
-        { typeArguments, arguments: args, parent: parent }: CallExpression,
+        call: CallExpression,
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
         body: boolean,
     ): MethodDeclaration {
+        const { typeArguments, arguments: args, parent } = call;
         const checker = context.program.getTypeChecker();
-        const types = map(args,
-            arg => {
-                let type = checker.getTypeAtLocation(arg);
-                if (type === undefined) {
-                    return undefined;
-                }
-                // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-                type = checker.getBaseTypeOfLiteralType(type);
-                return checker.typeToTypeNode(type);
-            });
+        const types = map(args, arg =>
+            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg))));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
-            isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+                isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+        const contextualType = checker.getContextualType(call);
+        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, call) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -142,7 +138,7 @@ namespace ts.codefix {
             /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
-            /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            /*type*/ returnType,
             body ? createStubbedMethodBody(preferences) : undefined);
     }
 

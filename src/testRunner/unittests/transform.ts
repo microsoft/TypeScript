@@ -53,7 +53,7 @@ namespace ts {
 
         function testBaseline(testName: string, test: () => string) {
             it(testName, () => {
-                Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test);
+                Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test());
             });
         }
 
