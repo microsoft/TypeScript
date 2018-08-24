@@ -397,11 +397,8 @@ namespace ts {
         getConstructSignatures(): ReadonlyArray<Signature> {
             return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
         }
-        getStringIndexType(): Type | undefined {
-            return this.checker.getIndexTypeOfType(this, IndexKind.String);
-        }
-        getNumberIndexType(): Type | undefined {
-            return this.checker.getIndexTypeOfType(this, IndexKind.Number);
+        getTypeIndexedByType(indexType: Type): Type | undefined {
+            return this.checker.getIndexTypeOfType(this, indexType);
         }
         getBaseTypes(): BaseType[] | undefined {
             return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;

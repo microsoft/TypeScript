@@ -46,8 +46,7 @@ namespace ts {
         getApparentProperties(): Symbol[];
         getCallSignatures(): ReadonlyArray<Signature>;
         getConstructSignatures(): ReadonlyArray<Signature>;
-        getStringIndexType(): Type | undefined;
-        getNumberIndexType(): Type | undefined;
+        getTypeIndexedByType(indexType: Type): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
         getConstraint(): Type | undefined;

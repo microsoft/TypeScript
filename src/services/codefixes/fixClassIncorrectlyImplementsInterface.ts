@@ -53,19 +53,18 @@ namespace ts.codefix {
 
         const classType = checker.getTypeAtLocation(classDeclaration);
 
-        if (!classType.getNumberIndexType()) {
-            createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
-        }
-        if (!classType.getStringIndexType()) {
-            createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
-        }
+        createMissingIndexSignatureDeclarations(implementedType, classType);
 
         createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, checker, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
 
-        function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
-            const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-            if (indexInfoOfKind) {
-                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration)!);
+        function createMissingIndexSignatureDeclarations(type: InterfaceType, implementingType: Type): void {
+            const indexInfos = checker.getIndexInfosOfType(type);
+            if (indexInfos) {
+                for (const info of indexInfos) {
+                    if (!checker.getIndexTypeOfType(implementingType, info.indexType)) {
+                        changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(info, classDeclaration)!);
+                    }
+                }
             }
         }
     }

@@ -1952,26 +1952,26 @@ namespace ts.server {
         }
 
         private handlers = createMapFromTemplate<(request: protocol.Request) => HandlerResponse>({
-            [CommandNames.Status]: () => {
+            [protocol.CommandTypes.Status]: () => {
                 const response: protocol.StatusResponseBody = { version };
                 return this.requiredResponse(response);
             },
-            [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
+            [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments);
                 // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
+            [protocol.CommandTypes.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
                 this.projectService.openExternalProjects(request.arguments.projects);
                 // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
+            [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
                 this.projectService.closeExternalProject(request.arguments.projectFileName);
                 // TODO: GH#20447 report errors
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
+            [protocol.CommandTypes.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
                 if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                     return this.requiredResponse(result);
@@ -1989,56 +1989,56 @@ namespace ts.server {
                 });
                 return this.requiredResponse(converted);
             },
-            [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
+            [protocol.CommandTypes.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.changeSeq++;
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles!, request.arguments.closedFiles!); // TODO: GH#18217
                 // TODO: report errors
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.Exit]: () => {
+            [protocol.CommandTypes.Exit]: () => {
                 this.exit();
                 return this.notRequired();
             },
-            [CommandNames.Definition]: (request: protocol.DefinitionRequest) => {
+            [protocol.CommandTypes.Definition]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.DefinitionFull]: (request: protocol.DefinitionRequest) => {
+            [protocol.CommandTypes.DefinitionFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinition(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
+            [protocol.CommandTypes.DefinitionAndBoundSpan]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
+            [protocol.CommandTypes.DefinitionAndBoundSpanFull]: (request: protocol.DefinitionRequest) => {
                 return this.requiredResponse(this.getDefinitionAndBoundSpan(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.EmitOutput]: (request: protocol.EmitOutputRequest) => {
+            [protocol.CommandTypes.EmitOutput]: (request: protocol.EmitOutputRequest) => {
                 return this.requiredResponse(this.getEmitOutput(request.arguments));
             },
-            [CommandNames.TypeDefinition]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.TypeDefinition]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getTypeDefinition(request.arguments));
             },
-            [CommandNames.Implementation]: (request: protocol.Request) => {
+            [protocol.CommandTypes.Implementation]: (request: protocol.Request) => {
                 return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.ImplementationFull]: (request: protocol.Request) => {
+            [protocol.CommandTypes.ImplementationFull]: (request: protocol.Request) => {
                 return this.requiredResponse(this.getImplementation(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.References]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.References]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.ReferencesFull]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.ReferencesFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getReferences(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.Rename]: (request: protocol.RenameRequest) => {
+            [protocol.CommandTypes.Rename]: (request: protocol.RenameRequest) => {
                 return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.RenameLocationsFull]: (request: protocol.RenameFullRequest) => {
+            [protocol.CommandTypes.RenameLocationsFull]: (request: protocol.RenameFullRequest) => {
                 return this.requiredResponse(this.getRenameLocations(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.RenameInfoFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
             },
-            [CommandNames.Open]: (request: protocol.OpenRequest) => {
+            [protocol.CommandTypes.Open]: (request: protocol.OpenRequest) => {
                 this.openClientFile(
                     toNormalizedPath(request.arguments.file),
                     request.arguments.fileContent,
@@ -2046,215 +2046,215 @@ namespace ts.server {
                     request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined);
                 return this.notRequired();
             },
-            [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {
+            [protocol.CommandTypes.Quickinfo]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
+            [protocol.CommandTypes.QuickinfoFull]: (request: protocol.QuickInfoRequest) => {
                 return this.requiredResponse(this.getQuickInfoWorker(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.GetOutliningSpans]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.GetOutliningSpans]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.GetOutliningSpansFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getOutliningSpans(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.TodoComments]: (request: protocol.TodoCommentRequest) => {
+            [protocol.CommandTypes.TodoComments]: (request: protocol.TodoCommentRequest) => {
                 return this.requiredResponse(this.getTodoComments(request.arguments));
             },
-            [CommandNames.Indentation]: (request: protocol.IndentationRequest) => {
+            [protocol.CommandTypes.Indentation]: (request: protocol.IndentationRequest) => {
                 return this.requiredResponse(this.getIndentation(request.arguments));
             },
-            [CommandNames.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.NameOrDottedNameSpan]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getNameOrDottedNameSpan(request.arguments));
             },
-            [CommandNames.BreakpointStatement]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.BreakpointStatement]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getBreakpointStatement(request.arguments));
             },
-            [CommandNames.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
+            [protocol.CommandTypes.BraceCompletion]: (request: protocol.BraceCompletionRequest) => {
                 return this.requiredResponse(this.isValidBraceCompletion(request.arguments));
             },
-            [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
+            [protocol.CommandTypes.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
             },
-            [CommandNames.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
+            [protocol.CommandTypes.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
                 return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
             },
-            [CommandNames.Format]: (request: protocol.FormatRequest) => {
+            [protocol.CommandTypes.Format]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));
             },
-            [CommandNames.Formatonkey]: (request: protocol.FormatOnKeyRequest) => {
+            [protocol.CommandTypes.Formatonkey]: (request: protocol.FormatOnKeyRequest) => {
                 return this.requiredResponse(this.getFormattingEditsAfterKeystroke(request.arguments));
             },
-            [CommandNames.FormatFull]: (request: protocol.FormatRequest) => {
+            [protocol.CommandTypes.FormatFull]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForDocumentFull(request.arguments));
             },
-            [CommandNames.FormatonkeyFull]: (request: protocol.FormatOnKeyRequest) => {
+            [protocol.CommandTypes.FormatonkeyFull]: (request: protocol.FormatOnKeyRequest) => {
                 return this.requiredResponse(this.getFormattingEditsAfterKeystrokeFull(request.arguments));
             },
-            [CommandNames.FormatRangeFull]: (request: protocol.FormatRequest) => {
+            [protocol.CommandTypes.FormatRangeFull]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRangeFull(request.arguments));
             },
-            [CommandNames.CompletionInfo]: (request: protocol.CompletionsRequest) => {
+            [protocol.CommandTypes.CompletionInfo]: (request: protocol.CompletionsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionInfo));
             },
-            [CommandNames.Completions]: (request: protocol.CompletionsRequest) => {
+            [protocol.CommandTypes.Completions]: (request: protocol.CompletionsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.Completions));
             },
-            [CommandNames.CompletionsFull]: (request: protocol.CompletionsRequest) => {
+            [protocol.CommandTypes.CompletionsFull]: (request: protocol.CompletionsRequest) => {
                 return this.requiredResponse(this.getCompletions(request.arguments, CommandNames.CompletionsFull));
             },
-            [CommandNames.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
+            [protocol.CommandTypes.CompletionDetails]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
+            [protocol.CommandTypes.CompletionDetailsFull]: (request: protocol.CompletionDetailsRequest) => {
                 return this.requiredResponse(this.getCompletionEntryDetails(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
+            [protocol.CommandTypes.CompileOnSaveAffectedFileList]: (request: protocol.CompileOnSaveAffectedFileListRequest) => {
                 return this.requiredResponse(this.getCompileOnSaveAffectedFileList(request.arguments));
             },
-            [CommandNames.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
+            [protocol.CommandTypes.CompileOnSaveEmitFile]: (request: protocol.CompileOnSaveEmitFileRequest) => {
                 return this.requiredResponse(this.emitFile(request.arguments));
             },
-            [CommandNames.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
+            [protocol.CommandTypes.SignatureHelp]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
+            [protocol.CommandTypes.SignatureHelpFull]: (request: protocol.SignatureHelpRequest) => {
                 return this.requiredResponse(this.getSignatureHelpItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
+            [protocol.CommandTypes.CompilerOptionsDiagnosticsFull]: (request: protocol.CompilerOptionsDiagnosticsRequest) => {
                 return this.requiredResponse(this.getCompilerOptionsDiagnostics(request.arguments));
             },
-            [CommandNames.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
+            [protocol.CommandTypes.EncodedSemanticClassificationsFull]: (request: protocol.EncodedSemanticClassificationsRequest) => {
                 return this.requiredResponse(this.getEncodedSemanticClassifications(request.arguments));
             },
-            [CommandNames.Cleanup]: () => {
+            [protocol.CommandTypes.Cleanup]: () => {
                 this.cleanup();
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
+            [protocol.CommandTypes.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
             },
-            [CommandNames.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
+            [protocol.CommandTypes.SyntacticDiagnosticsSync]: (request: protocol.SyntacticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSyntacticDiagnosticsSync(request.arguments));
             },
-            [CommandNames.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
+            [protocol.CommandTypes.SuggestionDiagnosticsSync]: (request: protocol.SuggestionDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSuggestionDiagnosticsSync(request.arguments));
             },
-            [CommandNames.Geterr]: (request: protocol.GeterrRequest) => {
+            [protocol.CommandTypes.Geterr]: (request: protocol.GeterrRequest) => {
                 this.errorCheck.startNew(next => this.getDiagnostics(next, request.arguments.delay, request.arguments.files));
                 return this.notRequired();
             },
-            [CommandNames.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
+            [protocol.CommandTypes.GeterrForProject]: (request: protocol.GeterrForProjectRequest) => {
                 this.errorCheck.startNew(next => this.getDiagnosticsForProject(next, request.arguments.delay, request.arguments.file));
                 return this.notRequired();
             },
-            [CommandNames.Change]: (request: protocol.ChangeRequest) => {
+            [protocol.CommandTypes.Change]: (request: protocol.ChangeRequest) => {
                 this.change(request.arguments);
                 return this.notRequired();
             },
-            [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
+            [protocol.CommandTypes.Configure]: (request: protocol.ConfigureRequest) => {
                 this.projectService.setHostConfiguration(request.arguments);
                 this.doOutput(/*info*/ undefined, CommandNames.Configure, request.seq, /*success*/ true);
                 return this.notRequired();
             },
-            [CommandNames.Reload]: (request: protocol.ReloadRequest) => {
+            [protocol.CommandTypes.Reload]: (request: protocol.ReloadRequest) => {
                 this.reload(request.arguments, request.seq);
                 return this.requiredResponse({ reloadFinished: true });
             },
-            [CommandNames.Saveto]: (request: protocol.Request) => {
+            [protocol.CommandTypes.Saveto]: (request: protocol.Request) => {
                 const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
                 this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
                 return this.notRequired();
             },
-            [CommandNames.Close]: (request: protocol.Request) => {
+            [protocol.CommandTypes.Close]: (request: protocol.Request) => {
                 const closeArgs = <protocol.FileRequestArgs>request.arguments;
                 this.closeClientFile(closeArgs.file);
                 return this.notRequired();
             },
-            [CommandNames.Navto]: (request: protocol.NavtoRequest) => {
+            [protocol.CommandTypes.Navto]: (request: protocol.NavtoRequest) => {
                 return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.NavtoFull]: (request: protocol.NavtoRequest) => {
+            [protocol.CommandTypes.NavtoFull]: (request: protocol.NavtoRequest) => {
                 return this.requiredResponse(this.getNavigateToItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.Brace]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.Brace]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.BraceFull]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.BraceFull]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getBraceMatching(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.NavBar]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.NavBar]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.NavBarFull]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.NavBarFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getNavigationBarItems(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.NavTree]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.NavTree]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.NavTreeFull]: (request: protocol.FileRequest) => {
+            [protocol.CommandTypes.NavTreeFull]: (request: protocol.FileRequest) => {
                 return this.requiredResponse(this.getNavigationTree(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.Occurrences]: (request: protocol.FileLocationRequest) => {
+            [protocol.CommandTypes.Occurrences]: (request: protocol.FileLocationRequest) => {
                 return this.requiredResponse(this.getOccurrences(request.arguments));
             },
-            [CommandNames.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
+            [protocol.CommandTypes.DocumentHighlights]: (request: protocol.DocumentHighlightsRequest) => {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
+            [protocol.CommandTypes.DocumentHighlightsFull]: (request: protocol.DocumentHighlightsRequest) => {
                 return this.requiredResponse(this.getDocumentHighlights(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
+            [protocol.CommandTypes.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
                 this.setCompilerOptionsForInferredProjects(request.arguments);
                 return this.requiredResponse(/*response*/ true);
             },
-            [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
+            [protocol.CommandTypes.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
             },
-            [CommandNames.ReloadProjects]: () => {
+            [protocol.CommandTypes.ReloadProjects]: () => {
                 this.projectService.reloadProjects();
                 return this.notRequired();
             },
-            [CommandNames.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
+            [protocol.CommandTypes.JsxClosingTag]: (request: protocol.JsxClosingTagRequest) => {
                 return this.requiredResponse(this.getJsxClosingTag(request.arguments));
             },
-            [CommandNames.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
+            [protocol.CommandTypes.GetCodeFixes]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
+            [protocol.CommandTypes.GetCodeFixesFull]: (request: protocol.CodeFixRequest) => {
                 return this.requiredResponse(this.getCodeFixes(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
+            [protocol.CommandTypes.GetCombinedCodeFix]: (request: protocol.GetCombinedCodeFixRequest) => {
                 return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetCombinedCodeFixFull]: (request: protocol.GetCombinedCodeFixRequest) => {
+            [protocol.CommandTypes.GetCombinedCodeFixFull]: (request: protocol.GetCombinedCodeFixRequest) => {
                 return this.requiredResponse(this.getCombinedCodeFix(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
+            [protocol.CommandTypes.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
                 return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
             },
-            [CommandNames.GetSupportedCodeFixes]: () => {
+            [protocol.CommandTypes.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             },
-            [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
+            [protocol.CommandTypes.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
                 return this.requiredResponse(this.getApplicableRefactors(request.arguments));
             },
-            [CommandNames.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
+            [protocol.CommandTypes.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
                 return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
+            [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
                 return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
+            [protocol.CommandTypes.OrganizeImports]: (request: protocol.OrganizeImportsRequest) => {
                 return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
+            [protocol.CommandTypes.OrganizeImportsFull]: (request: protocol.OrganizeImportsRequest) => {
                 return this.requiredResponse(this.organizeImports(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
+            [protocol.CommandTypes.GetEditsForFileRename]: (request: protocol.GetEditsForFileRenameRequest) => {
                 return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
+            [protocol.CommandTypes.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
                 return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ false));
             },
         });

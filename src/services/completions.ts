@@ -1112,7 +1112,7 @@ namespace ts.Completions {
         }
 
         function addTypeProperties(type: Type): void {
-            isNewIdentifierLocation = !!type.getStringIndexType();
+            isNewIdentifierLocation = !!type.getTypeIndexedByType(typeChecker.getStringType());
 
             if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
@@ -2239,7 +2239,7 @@ namespace ts.Completions {
     }
 
     function hasIndexSignature(type: Type): boolean {
-        return !!type.getStringIndexType() || !!type.getNumberIndexType();
+        return !!length(type.checker.getIndexInfosOfType(type));
     }
 
     function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {

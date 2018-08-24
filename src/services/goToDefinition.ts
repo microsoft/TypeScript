@@ -188,10 +188,10 @@ namespace ts.GoToDefinition {
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
         if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
         const type = checker.getTypeAtLocation(node.parent.expression);
-        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
-            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
-            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
-        });
+        return flatten<DefinitionInfo>(mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
+            const infos = checker.getIndexInfosOfType(nonUnionType, checker.getStringType()); // TODO: Pass in literal name
+            return mapDefined(infos, info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
+        }));
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {

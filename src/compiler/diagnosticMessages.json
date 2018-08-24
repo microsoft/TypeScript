@@ -1432,15 +1432,11 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
+    "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2411
     },
-    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
-        "category": "Error",
-        "code": 2412
-    },
-    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+    "'{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2413
     },
