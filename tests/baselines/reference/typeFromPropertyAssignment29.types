@@ -143,6 +143,89 @@ ExpandoArrow.m = function(n: number) {
 
 }
 
+function ExpandoNested(n: number) {
+>ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+>n : number
+
+    const nested = function (m: number) {
+>nested : { (m: number): number; total: number; }
+>function (m: number) {        return n + m;    } : { (m: number): number; total: number; }
+>m : number
+
+        return n + m;
+>n + m : number
+>n : number
+>m : number
+
+    };
+    nested.total = n + 1_000_000;
+>nested.total = n + 1_000_000 : number
+>nested.total : number
+>nested : { (m: number): number; total: number; }
+>total : number
+>n + 1_000_000 : number
+>n : number
+>1_000_000 : 1000000
+
+    return nested;
+>nested : { (m: number): number; total: number; }
+}
+ExpandoNested.also = -1;
+>ExpandoNested.also = -1 : -1
+>ExpandoNested.also : number
+>ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+>also : number
+>-1 : -1
+>1 : 1
+
+function ExpandoMerge(n: number) {
+>ExpandoMerge : typeof ExpandoMerge
+>n : number
+
+    return n * 100;
+>n * 100 : number
+>n : number
+>100 : 100
+}
+ExpandoMerge.p1 = 111
+>ExpandoMerge.p1 = 111 : 111
+>ExpandoMerge.p1 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p1 : number
+>111 : 111
+
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p2 = 222;
+>p2 : number
+>222 : 222
+}
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p3 = 333;
+>p3 : number
+>333 : 333
+}
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+>n : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1) : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 : number
+>ExpandoMerge.p1 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p1 : number
+>ExpandoMerge.p2 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p2 : number
+>ExpandoMerge.p3 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p3 : number
+>ExpandoMerge(1) : number
+>ExpandoMerge : typeof ExpandoMerge
+>1 : 1
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
 >ExpandoExpr2 : (n: number) => string

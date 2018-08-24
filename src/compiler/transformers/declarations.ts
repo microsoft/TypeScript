@@ -983,15 +983,15 @@ namespace ts {
                         /*body*/ undefined
                     ));
                     if (clean && resolver.isJSContainerFunctionDeclaration(input)) {
-
-                        const declarations = resolver.getPropertiesOfContainerFunction(input).map(p => {
-                            const type = resolver.createTypeOfDeclaration(
-                                p.valueDeclaration as VariableLikeDeclaration,
-                                enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                        const declarations = mapDefined(resolver.getPropertiesOfContainerFunction(input), p => {
+                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
+                                return undefined;
+                            }
+                            const type = resolver.createTypeOfDeclaration(p.valueDeclaration, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
                             const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
-                            return createVariableStatement([createModifier(SyntaxKind.ExportKeyword)], createVariableDeclarationList([varDecl]));
+                            return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
-                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations));
+                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
                         return [clean, namespaceDecl];
                     }
                     else {

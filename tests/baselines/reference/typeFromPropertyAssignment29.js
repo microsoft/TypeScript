@@ -25,6 +25,27 @@ ExpandoArrow.m = function(n: number) {
 
 }
 
+function ExpandoNested(n: number) {
+    const nested = function (m: number) {
+        return n + m;
+    };
+    nested.total = n + 1_000_000;
+    return nested;
+}
+ExpandoNested.also = -1;
+
+function ExpandoMerge(n: number) {
+    return n * 100;
+}
+ExpandoMerge.p1 = 111
+namespace ExpandoMerge {
+    export var p2 = 222;
+}
+namespace ExpandoMerge {
+    export var p3 = 333;
+}
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
     return n.toString();
@@ -80,6 +101,25 @@ ExpandoArrow.prop = 2;
 ExpandoArrow.m = function (n) {
     return n + 1;
 };
+function ExpandoNested(n) {
+    var nested = function (m) {
+        return n + m;
+    };
+    nested.total = n + 1000000;
+    return nested;
+}
+ExpandoNested.also = -1;
+function ExpandoMerge(n) {
+    return n * 100;
+}
+ExpandoMerge.p1 = 111;
+(function (ExpandoMerge) {
+    ExpandoMerge.p2 = 222;
+})(ExpandoMerge || (ExpandoMerge = {}));
+(function (ExpandoMerge) {
+    ExpandoMerge.p3 = 333;
+})(ExpandoMerge || (ExpandoMerge = {}));
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n) {
     return n.toString();
@@ -117,9 +157,9 @@ var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n;
 
 //// [typeFromPropertyAssignment29.d.ts]
 declare function ExpandoDecl(n: number): string;
-declare module ExpandoDecl {
-    export var prop: number;
-    export var m: (n: number) => number;
+declare namespace ExpandoDecl {
+    var prop: number;
+    var m: (n: number) => number;
 }
 declare var n: number;
 declare const ExpandoExpr: {
@@ -139,6 +179,24 @@ declare const ExpandoArrow: {
     prop: number;
     m(n: number): number;
 };
+declare function ExpandoNested(n: number): {
+    (m: number): number;
+    total: number;
+};
+declare namespace ExpandoNested {
+    var also: number;
+}
+declare function ExpandoMerge(n: number): number;
+declare namespace ExpandoMerge {
+    var p1: number;
+}
+declare namespace ExpandoMerge {
+    var p2: number;
+}
+declare namespace ExpandoMerge {
+    var p3: number;
+}
+declare var n: number;
 declare var ExpandoExpr2: (n: number) => string;
 declare var n: number;
 declare class ExpandoClass {

@@ -25,6 +25,27 @@ ExpandoArrow.m = function(n: number) {
 
 }
 
+function ExpandoNested(n: number) {
+    const nested = function (m: number) {
+        return n + m;
+    };
+    nested.total = n + 1_000_000;
+    return nested;
+}
+ExpandoNested.also = -1;
+
+function ExpandoMerge(n: number) {
+    return n * 100;
+}
+ExpandoMerge.p1 = 111
+namespace ExpandoMerge {
+    export var p2 = 222;
+}
+namespace ExpandoMerge {
+    export var p3 = 333;
+}
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
     return n.toString();
