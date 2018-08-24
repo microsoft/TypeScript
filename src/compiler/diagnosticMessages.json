@@ -987,6 +987,10 @@
         "category": "Error",
         "code": 1344
     },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1959,10 +1963,6 @@
     "Type '{0}' is not an array type or a string type or does not have a '[Symbol.iterator]()' method that returns an iterator.": {
         "category": "Error",
         "code": 2549
-    },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
     },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
@@ -3937,6 +3937,10 @@
         "category": "Error",
         "code": 7041
     },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4179,7 +4183,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4552,6 +4559,7 @@
         "category": "Message",
         "code": 95062
     },
+    
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4559,5 +4567,13 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Convert to async function":{
+        "category": "Message",
+         "code": 95065
+    },
+    "Convert all to async functions": {
+     "category": "Message",
+         "code": 95066
     }
 }

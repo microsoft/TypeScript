@@ -117,12 +117,13 @@ namespace ts.codefix {
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
+        body: boolean,
     ): MethodDeclaration {
         const checker = context.program.getTypeChecker();
         const types = map(args, arg => resolveTypeFromNode(checker, arg));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
-            isPropertyAccessExpression(arg) ? arg.name.text : undefined);
+                isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         const returnType = inJs ? undefined : isVariableLike(parent) && resolveTypeFromNode(checker, parent) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
@@ -134,9 +135,9 @@ namespace ts.codefix {
                 createTypeParameterDeclaration(CharacterCodes.T + typeArguments!.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
-            createStubbedMethodBody(preferences));
+            body ? createStubbedMethodBody(preferences) : undefined);
 
-        function resolveTypeFromNode (checker: TypeChecker, node: Node): TypeNode | undefined {
+        function resolveTypeFromNode(checker: TypeChecker, node: Node): TypeNode | undefined {
             let type = checker.getTypeAtLocation(node);
             if (type === undefined) {
                 return undefined;

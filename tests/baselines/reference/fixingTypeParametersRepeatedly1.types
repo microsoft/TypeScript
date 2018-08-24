@@ -40,10 +40,10 @@ g("", x => null, x => x.toLowerCase());
 >x => null : (x: string) => any
 >x : string
 >null : null
->x => x.toLowerCase() : (x: any) => any
->x : any
->x.toLowerCase() : any
->x.toLowerCase : any
->x : any
->toLowerCase : any
+>x => x.toLowerCase() : (x: string) => string
+>x : string
+>x.toLowerCase() : string
+>x.toLowerCase : () => string
+>x : string
+>toLowerCase : () => string
 

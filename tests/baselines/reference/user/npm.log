@@ -326,6 +326,8 @@ node_modules/npm/lib/help.js(196,26): error TS2339: Property 'commands' does not
 node_modules/npm/lib/help.js(197,22): error TS2339: Property 'deref' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/help.js(199,14): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/help.js(199,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/help.js(206,33): error TS2339: Property 'length' does not exist on type 'never'.
+node_modules/npm/lib/help.js(207,14): error TS2339: Property 'split' does not exist on type 'never'.
 node_modules/npm/lib/init.js(38,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/init.js(39,25): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/init.js(53,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -752,11 +754,7 @@ node_modules/npm/lib/uninstall.js(27,24): error TS2339: Property 'config' does n
 node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(40,42): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(46,50): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
-node_modules/npm/lib/uninstall.js(51,27): error TS2507: Type 'typeof Installer' is not a constructor function type.
-node_modules/npm/lib/uninstall.js(70,36): error TS2339: Property 'idealTree' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(26,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
