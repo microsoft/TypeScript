@@ -2116,8 +2116,9 @@ namespace ts.Completions {
             const kind = stringToToken(entry.name)!;
             switch (keywordFilter) {
                 case KeywordCompletionFilters.None:
-                    // "undefined" is a global variable, so don't need a keyword completion for it.
-                    return kind !== SyntaxKind.UndefinedKeyword;
+                    //TODO: GH#23631 Includes type keywords because `Array<numb/**/` is treaded as a value location currently.
+                    return kind === SyntaxKind.AsyncKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind) || kind === SyntaxKind.DeclareKeyword || kind === SyntaxKind.ModuleKeyword
+                        || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.InterfaceElementKeywords:
@@ -2125,7 +2126,7 @@ namespace ts.Completions {
                 case KeywordCompletionFilters.ConstructorParameterKeywords:
                     return isParameterPropertyModifier(kind);
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
-                    return isFunctionLikeBodyKeyword(kind);
+                    return  isFunctionLikeBodyKeyword(kind);
                 case KeywordCompletionFilters.TypeKeywords:
                     return isTypeKeyword(kind);
                 default:
@@ -2152,7 +2153,7 @@ namespace ts.Completions {
     }
 
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
-        return kind === SyntaxKind.AsyncKeyword || !isClassMemberCompletionKeyword(kind);
+        return kind === SyntaxKind.AsyncKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 
     function keywordForNode(node: Node): SyntaxKind {
