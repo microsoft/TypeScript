@@ -7789,8 +7789,12 @@ namespace ts {
         }
 
         function tryGetRestTypeOfSignature(signature: Signature): Type | undefined {
-            const type = getTypeOfRestParameter(signature);
-            return type && getIndexTypeOfType(type, IndexKind.Number);
+            if (signature.hasRestParameter) {
+                const sigRestType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                const restType = isTupleType(sigRestType) ? getRestTypeOfTupleType(sigRestType) : sigRestType;
+                return restType && getIndexTypeOfType(restType, IndexKind.Number);
+            }
+            return undefined;
         }
 
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean): Signature {
@@ -10718,9 +10722,9 @@ namespace ts {
             }
 
             const sourceCount = getParameterCount(source);
-            const sourceGenericRestType = getGenericRestType(source);
-            const targetGenericRestType = sourceGenericRestType ? getGenericRestType(target) : undefined;
-            if (sourceGenericRestType && !(targetGenericRestType && sourceCount === targetCount)) {
+            const sourceRestType = getNonArrayRestType(source);
+            const targetRestType = sourceRestType ? getNonArrayRestType(target) : undefined;
+            if (sourceRestType && !(targetRestType && sourceCount === targetCount)) {
                 return Ternary.False;
             }
 
@@ -10749,8 +10753,8 @@ namespace ts {
             const paramCount = Math.max(sourceCount, targetCount);
             const lastIndex = paramCount - 1;
             for (let i = 0; i < paramCount; i++) {
-                const sourceType = i === lastIndex && sourceGenericRestType || getTypeAtPosition(source, i);
-                const targetType = i === lastIndex && targetGenericRestType || getTypeAtPosition(target, i);
+                const sourceType = i === lastIndex && sourceRestType || getTypeAtPosition(source, i);
+                const targetType = i === lastIndex && targetRestType || getTypeAtPosition(target, i);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -12693,6 +12697,11 @@ namespace ts {
             return type.target.hasRestElement ? type.typeArguments![type.target.typeParameters!.length - 1] : undefined;
         }
 
+        function getRestArrayTypeOfTupleType(type: TupleTypeReference) {
+            const restType = getRestTypeOfTupleType(type);
+            return restType && createArrayType(restType);
+        }
+
         function getLengthOfTupleType(type: TupleTypeReference) {
             return getTypeReferenceArity(type) - (type.target.hasRestElement ? 1 : 0);
         }
@@ -13038,19 +13047,18 @@ namespace ts {
         function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceCount = getParameterCount(source);
             const targetCount = getParameterCount(target);
-            const sourceHasRest = hasEffectiveRestParameter(source);
-            const targetHasRest = hasEffectiveRestParameter(target);
-            const maxCount = sourceHasRest && targetHasRest ? Math.max(sourceCount, targetCount) :
-                sourceHasRest ? targetCount :
-                targetHasRest ? sourceCount :
+            const sourceRestType = getEffectiveRestType(source);
+            const targetRestType = getEffectiveRestType(target);
+            const maxCount = sourceRestType && targetRestType ? Math.max(sourceCount, targetCount) :
+                sourceRestType ? targetCount :
+                targetRestType ? sourceCount :
                 Math.min(sourceCount, targetCount);
-            const targetGenericRestType = getGenericRestType(target);
-            const paramCount = targetGenericRestType ? Math.min(targetCount - 1, maxCount) : maxCount;
+            const paramCount = targetRestType ? Math.min(targetCount - 1, maxCount) : maxCount;
             for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
-            if (targetGenericRestType) {
-                callback(getRestTypeAtPosition(source, paramCount), targetGenericRestType);
+            if (targetRestType) {
+                callback(getRestTypeAtPosition(source, paramCount), targetRestType);
             }
         }
 
@@ -13510,32 +13518,37 @@ namespace ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                if (isTupleType(source) && isTupleType(target)) {
-                    const sourceLength = getLengthOfTupleType(source);
-                    const targetLength = getLengthOfTupleType(target);
-                    const sourceRestType = getRestTypeOfTupleType(source);
-                    const targetRestType = getRestTypeOfTupleType(target);
-                    const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
-                    for (let i = 0; i < fixedLength; i++) {
-                        inferFromTypes(i < sourceLength ? source.typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                if (isTupleType(source)) {
+                    if (isTupleType(target)) {
+                        const sourceLength = getLengthOfTupleType(source);
+                        const targetLength = getLengthOfTupleType(target);
+                        const sourceRestType = getRestTypeOfTupleType(source);
+                        const targetRestType = getRestTypeOfTupleType(target);
+                        const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
+                        for (let i = 0; i < fixedLength; i++) {
+                            inferFromTypes(i < sourceLength ? source.typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                        }
+                        if (targetRestType) {
+                            const types = fixedLength < sourceLength ? source.typeArguments!.slice(fixedLength, sourceLength) : [];
+                            if (sourceRestType) {
+                                types.push(sourceRestType);
+                            }
+                            if (types.length) {
+                                inferFromTypes(getUnionType(types), targetRestType);
+                            }
+                        }
+                        return;
                     }
-                    if (targetRestType) {
-                        const types = fixedLength < sourceLength ? source.typeArguments!.slice(fixedLength, sourceLength) : [];
-                        if (sourceRestType) {
-                            types.push(sourceRestType);
-                        }
-                        if (types.length) {
-                            inferFromTypes(getUnionType(types), targetRestType);
-                        }
+                    if (isArrayType(target)) {
+                        inferFromIndexTypes(source, target);
+                        return;
                     }
                 }
-                else {
-                    const properties = getPropertiesOfObjectType(target);
-                    for (const targetProp of properties) {
-                        const sourceProp = getPropertyOfType(source, targetProp.escapedName);
-                        if (sourceProp) {
-                            inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
-                        }
+                const properties = getPropertiesOfObjectType(target);
+                for (const targetProp of properties) {
+                    const sourceProp = getPropertyOfType(source, targetProp.escapedName);
+                    if (sourceProp) {
+                        inferFromTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
                     }
                 }
             }
@@ -18679,8 +18692,8 @@ namespace ts {
                 inferTypes(context.inferences, thisArgumentType, thisType);
             }
 
-            const genericRestType = getGenericRestType(signature);
-            const argCount = genericRestType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
+            const restType = getNonArrayRestType(signature);
+            const argCount = restType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
             for (let i = 0; i < argCount; i++) {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
@@ -18693,12 +18706,19 @@ namespace ts {
                 }
             }
 
-            if (genericRestType) {
-                const spreadType = getSpreadArgumentType(args, argCount, args.length, genericRestType, context);
-                inferTypes(context.inferences, spreadType, genericRestType);
+            if (restType) {
+                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, context);
+                inferTypes(context.inferences, spreadType, restType);
             }
 
             return getInferredTypes(context);
+        }
+
+        function getArrayifiedType(type: Type) {
+            if (forEachType(type, t => !(t.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isArrayType(t) || isTupleType(t)))) {
+                return createArrayType(getIndexTypeOfType(type, IndexKind.Number) || errorType);
+            }
+            return type;
         }
 
         function getSpreadArgumentType(args: ReadonlyArray<Expression>, index: number, argCount: number, restType: TypeParameter, context: InferenceContext | undefined) {
@@ -18709,7 +18729,7 @@ namespace ts {
                     // and the argument are ...x forms.
                     return arg.kind === SyntaxKind.SyntheticExpression ?
                         createArrayType((<SyntheticExpression>arg).type) :
-                        checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context);
+                        getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context));
                 }
             }
             const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
@@ -18814,27 +18834,26 @@ namespace ts {
                 }
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
-            const restIndex = signature.hasRestParameter ? signature.parameters.length - 1 : -1;
-            const restType = restIndex >= 0 ? getTypeOfSymbol(signature.parameters[restIndex]) : anyType;
-            for (let i = 0; i < args.length; i++) {
+            const restType = getNonArrayRestType(signature);
+            const argCount = restType ? Math.min(getParameterCount(signature) - 1, args.length) : args.length;
+            for (let i = 0; i < argCount; i++) {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
-                    if (i === restIndex && (restType.flags & TypeFlags.TypeParameter || isSpreadArgument(arg) && !isArrayType(restType))) {
-                        const spreadType = getSpreadArgumentType(args, i, args.length, restType, /*context*/ undefined);
-                        return checkTypeRelatedTo(spreadType, restType, relation, arg, headMessage);
-                    }
-                    else {
-                        const paramType = getTypeAtPosition(signature, i);
-                        const argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
-                        // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
-                        // we obtain the regular type of any object literal arguments because we may not have inferred complete
-                        // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                        const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
-                        if (!checkTypeRelatedTo(checkArgType, paramType, relation, reportErrors ? arg : undefined, headMessage)) {
-                            return false;
-                        }
+                    const paramType = getTypeAtPosition(signature, i);
+                    const argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
+                    // we obtain the regular type of any object literal arguments because we may not have inferred complete
+                    // parameter types yet and therefore excess property checks may yield false positives (see #17041).
+                    const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
+                    if (!checkTypeRelatedTo(checkArgType, paramType, relation, reportErrors ? arg : undefined, headMessage)) {
+                        return false;
                     }
                 }
+            }
+            if (restType) {
+                const spreadType = getSpreadArgumentType(args, argCount, args.length, restType, /*context*/ undefined);
+                const errorNode = reportErrors ? argCount < args.length ? args[argCount] : node : undefined;
+                return checkTypeRelatedTo(spreadType, restType, relation, errorNode, headMessage);
             }
             return true;
         }
@@ -19187,7 +19206,7 @@ namespace ts {
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
-                        if (getGenericRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
+                        if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
                             candidateForArgumentArityError = checkCandidate;
                             continue;
                         }
@@ -20138,14 +20157,11 @@ namespace ts {
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
             const paramCount = getParameterCount(source);
-            const hasRest = hasEffectiveRestParameter(source);
-            if (hasRest && pos === paramCount - 1) {
-                const genericRestType = getGenericRestType(source);
-                if (genericRestType) {
-                    return genericRestType;
-                }
+            const restType = getEffectiveRestType(source);
+            if (restType && pos === paramCount - 1) {
+                return restType;
             }
-            const start = hasRest ? Math.min(pos, paramCount - 1) : pos;
+            const start = restType ? Math.min(pos, paramCount - 1) : pos;
             const types = [];
             const names = [];
             for (let i = start; i < paramCount; i++) {
@@ -20154,18 +20170,7 @@ namespace ts {
             }
             const minArgumentCount = getMinArgumentCount(source);
             const minLength = minArgumentCount < start ? 0 : minArgumentCount - start;
-            return createTupleType(types, minLength, hasRest, names);
-        }
-
-        function getTypeOfRestParameter(signature: Signature) {
-            if (signature.hasRestParameter) {
-                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                if (isTupleType(restType)) {
-                    return getRestTypeOfTupleType(restType);
-                }
-                return restType;
-            }
-            return undefined;
+            return createTupleType(types, minLength, !!restType, names);
         }
 
         function getParameterCount(signature: Signature) {
@@ -20192,22 +20197,25 @@ namespace ts {
             return signature.minArgumentCount;
         }
 
-        function getGenericRestType(signature: Signature) {
-            if (signature.hasRestParameter) {
-                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
-                if (restType.flags & TypeFlags.Instantiable) {
-                    return restType;
-                }
-            }
-            return undefined;
-        }
-
         function hasEffectiveRestParameter(signature: Signature) {
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
                 return !isTupleType(restType) || restType.target.hasRestElement;
             }
             return false;
+        }
+
+        function getEffectiveRestType(signature: Signature) {
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[signature.parameters.length - 1]);
+                return isTupleType(restType) ? getRestArrayTypeOfTupleType(restType) : restType;
+            }
+            return undefined;
+        }
+
+        function getNonArrayRestType(signature: Signature) {
+            const restType = getEffectiveRestType(signature);
+            return restType && !isArrayType(restType) && !isTypeAny(restType) ? restType : undefined;
         }
 
         function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -21889,10 +21897,6 @@ namespace ts {
             }
         }
 
-        function isRestParameterType(type: Type) {
-            return isArrayType(type) || isTupleType(type) || type.flags & TypeFlags.Instantiable && isTypeAssignableTo(type, anyArrayType);
-        }
-
         function checkParameter(node: ParameterDeclaration) {
             // Grammar checking
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
@@ -21924,7 +21928,7 @@ namespace ts {
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isRestParameterType(getTypeOfSymbol(node.symbol))) {
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getTypeOfSymbol(node.symbol), anyArrayType)) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
