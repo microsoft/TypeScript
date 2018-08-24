@@ -11178,7 +11178,7 @@ namespace ts {
                 }
 
                 if (relation !== comparableRelation &&
-                    !(source.flags & TypeFlags.UnionOrIntersection) &&
+                    !(source.flags & TypeFlags.Union) &&
                     !(target.flags & TypeFlags.Union) &&
                     !isIntersectionConstituent &&
                     source !== globalObjectType &&
