@@ -112,19 +112,23 @@ namespace ts.codefix {
 
     export function createMethodFromCallExpression(
         context: CodeFixContextBase,
-        { typeArguments, arguments: args, parent }: CallExpression,
+        call: CallExpression,
         methodName: string,
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
         body: boolean,
     ): MethodDeclaration {
+        const { typeArguments, arguments: args, parent } = call;
         const checker = context.program.getTypeChecker();
-        const types = map(args, arg => resolveTypeFromNode(checker, arg));
+        const types = map(args, arg =>
+            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg))));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
                 isPropertyAccessExpression(arg) ? arg.name.text : undefined);
-        const returnType = inJs ? undefined : isVariableLike(parent) && resolveTypeFromNode(checker, parent) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        const contextualType = checker.getContextualType(call);
+        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, call) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -136,16 +140,6 @@ namespace ts.codefix {
             /*parameters*/ createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, inJs),
             /*type*/ returnType,
             body ? createStubbedMethodBody(preferences) : undefined);
-
-        function resolveTypeFromNode(checker: TypeChecker, node: Node): TypeNode | undefined {
-            let type = checker.getTypeAtLocation(node);
-            if (type === undefined) {
-                return undefined;
-            }
-            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            type = checker.getBaseTypeOfLiteralType(type);
-            return checker.typeToTypeNode(type);
-        }
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
