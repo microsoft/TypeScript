@@ -1,0 +1,8 @@
+=== tests/cases/compiler/parseGenericArrowRatherThanLeftShift.ts ===
+type Bar = ReturnType<<T>(x: T) => number>;
+>Bar : number
+>x : T
+
+declare const a: Bar;
+>a : number
+
