@@ -10723,8 +10723,9 @@ namespace ts {
 
             const sourceCount = getParameterCount(source);
             const sourceRestType = getNonArrayRestType(source);
-            const targetRestType = sourceRestType ? getNonArrayRestType(target) : undefined;
-            if (sourceRestType && !(targetRestType && sourceCount === targetCount)) {
+            const targetRestType = getNonArrayRestType(target);
+            if (sourceRestType && targetRestType && sourceCount !== targetCount) {
+                // We're not able to relate misaliged complex rest parameters
                 return Ternary.False;
             }
 
@@ -10750,11 +10751,12 @@ namespace ts {
                 }
             }
 
-            const paramCount = Math.max(sourceCount, targetCount);
-            const lastIndex = paramCount - 1;
+            const paramCount = sourceRestType || targetRestType ? Math.min(sourceCount, targetCount) : Math.max(sourceCount, targetCount);
+            const restIndex = sourceRestType || targetRestType ? paramCount - 1 : -1;
+
             for (let i = 0; i < paramCount; i++) {
-                const sourceType = i === lastIndex && sourceRestType || getTypeAtPosition(source, i);
-                const targetType = i === lastIndex && targetRestType || getTypeAtPosition(target, i);
+                const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : getTypeAtPosition(source, i);
+                const targetType = i === restIndex ? getRestTypeAtPosition(target, i) : getTypeAtPosition(target, i);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -13049,11 +13051,9 @@ namespace ts {
             const targetCount = getParameterCount(target);
             const sourceRestType = getEffectiveRestType(source);
             const targetRestType = getEffectiveRestType(target);
-            const maxCount = sourceRestType && targetRestType ? Math.max(sourceCount, targetCount) :
+            const paramCount = targetRestType ? Math.min(targetCount - 1, sourceCount) :
                 sourceRestType ? targetCount :
-                targetRestType ? sourceCount :
                 Math.min(sourceCount, targetCount);
-            const paramCount = targetRestType ? Math.min(targetCount - 1, maxCount) : maxCount;
             for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
