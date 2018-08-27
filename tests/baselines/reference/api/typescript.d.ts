@@ -2065,7 +2065,7 @@ declare namespace ts {
         Namespace = 1920,
         Module = 1536,
         Accessor = 98304,
-        FunctionScopedVariableExcludes = 67216318,
+        FunctionScopedVariableExcludes = 107454,
         BlockScopedVariableExcludes = 67216319,
         ParameterExcludes = 67216319,
         PropertyExcludes = 0,

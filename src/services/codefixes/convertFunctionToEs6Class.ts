@@ -84,13 +84,14 @@ namespace ts.codefix {
             }
 
             function createClassElement(symbol: Symbol, modifiers: Modifier[] | undefined): ClassElement | undefined {
-                // Right now the only thing we can convert are function expressions, which are marked as methods
-                if (!(symbol.flags & SymbolFlags.Method)) {
+                // Right now the only thing we can convert are function expressions, which are marked as methods or namespace exports
+                const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression;
+                const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
+                const isMethod = symbol.flags & SymbolFlags.Method || symbol.flags & SymbolFlags.FunctionScopedVariable && isFunctionLikeDeclaration(getAssignedJavascriptInitializer(memberDeclaration)!);
+                if (!isMethod) {
                     return;
                 }
 
-                const memberDeclaration = symbol.valueDeclaration as PropertyAccessExpression;
-                const assignmentBinaryExpression = memberDeclaration.parent as BinaryExpression;
 
                 if (!shouldConvertDeclaration(memberDeclaration, assignmentBinaryExpression.right)) {
                     return;

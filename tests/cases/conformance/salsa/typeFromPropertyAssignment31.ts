@@ -8,10 +8,15 @@ ExpandoMerge.m = function(n: number) {
 namespace ExpandoMerge {
     export var p2 = 222;
 }
+ExpandoMerge.p4 = 44444; // ok
+ExpandoMerge.p6 = 66666; // error: duplicate
 namespace ExpandoMerge {
     export var p3 = 333;
-    export var p4 = 4;
+    export var p4 = 4; // ok
+    export var p5 = 5; // ok
+    export let p6 = 6; // error: duplicate
+    export let p7 = 7; // error: duplicate
 }
-ExpandoMerge.p4 = 44444;
-var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.m(12) + ExpandoMerge(1001);
-
+ExpandoMerge.p5 = 555555; // should be ok
+ExpandoMerge.p7 = 777777; // error: duplicate
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001);

@@ -3,7 +3,7 @@ declare namespace C {
 >C : Symbol(C, Decl(a.d.ts, 0, 0), Decl(b.js, 0, 0))
 
     function bar(): void
->bar : Symbol(bar, Decl(a.d.ts, 0, 21), Decl(b.js, 0, 17))
+>bar : Symbol(bar, Decl(a.d.ts, 0, 21))
 }
 === tests/cases/conformance/salsa/b.js ===
 C.prototype = {};
@@ -12,7 +12,7 @@ C.prototype = {};
 >prototype : Symbol(C.prototype, Decl(b.js, 0, 0))
 
 C.bar = 2;
->C.bar : Symbol(C.bar, Decl(a.d.ts, 0, 21), Decl(b.js, 0, 17))
+>C.bar : Symbol(C.bar, Decl(a.d.ts, 0, 21))
 >C : Symbol(C, Decl(a.d.ts, 0, 0), Decl(b.js, 0, 0))
->bar : Symbol(C.bar, Decl(a.d.ts, 0, 21), Decl(b.js, 0, 17))
+>bar : Symbol(C.bar, Decl(a.d.ts, 0, 21))
 

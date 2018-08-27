@@ -3441,7 +3441,7 @@ namespace ts {
 
         // Variables can be redeclared, but can not redeclare a block-scoped declaration with the
         // same name, or any other value that is not a variable, e.g. ValueModule or Class
-        FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
+        FunctionScopedVariableExcludes = Value & ~(FunctionScopedVariable | JSContainer),
 
         // Block-scoped declarations are not allowed to be re-declared
         // they can not merge with anything in the value space
