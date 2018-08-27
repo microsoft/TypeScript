@@ -10501,8 +10501,7 @@ namespace ts {
         }
 
         function elaborateError(node: Expression | undefined, source: Type, target: Type): boolean {
-            if (!node) return false;
-            if (isOrHasGenericConditional(target)) return false;
+            if (!node || isOrHasGenericConditional(target)) return false;
             switch (node.kind) {
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.ParenthesizedExpression:
@@ -15141,9 +15140,9 @@ namespace ts {
             return type.flags & TypeFlags.InstantiableNonPrimitive && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
         }
 
-        function getConstraintForLocation(type: Type, node?: Node): Type;
-        function getConstraintForLocation(type: Type | undefined, node?: Node): Type | undefined;
-        function getConstraintForLocation(type: Type, node?: Node): Type | undefined {
+        function getConstraintForLocation(type: Type, node: Node | undefined): Type;
+        function getConstraintForLocation(type: Type | undefined, node: Node | undefined): Type | undefined;
+        function getConstraintForLocation(type: Type, node: Node | undefined): Type | undefined {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
