@@ -4699,6 +4699,12 @@ namespace ts {
                         return getReturnTypeOfSignature(getterSignature);
                     }
                 }
+                if (isInJavaScriptFile(declaration)) {
+                    const typeTag = getJSDocType(func);
+                    if (typeTag && isFunctionTypeNode(typeTag)) {
+                        return getTypeAtPosition(getSignatureFromDeclaration(typeTag), func.parameters.indexOf(declaration));
+                    }
+                }
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {

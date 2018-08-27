@@ -5120,7 +5120,22 @@ namespace ts {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
+        if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (isInJavaScriptFile(node)) {
+            const decls = getJSDocTypeParameterDeclarations(node);
+            if (decls.length) {
+                return decls;
+            }
+            const typeTag = getJSDocType(node);
+            if (typeTag) {
+                if (isFunctionTypeNode(typeTag) && typeTag.typeParameters) {
+                    return typeTag.typeParameters;
+                }
+            }
+        }
+        return emptyArray;
     }
 
     export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
