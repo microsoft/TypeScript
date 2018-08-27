@@ -1,0 +1,49 @@
+tests/cases/conformance/salsa/expando.ts(9,14): error TS2451: Cannot redeclare block-scoped variable 'p6'.
+tests/cases/conformance/salsa/expando.ts(11,14): error TS2451: Cannot redeclare block-scoped variable 'p7'.
+tests/cases/conformance/salsa/ns.ts(1,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+tests/cases/conformance/salsa/ns.ts(5,16): error TS2451: Cannot redeclare block-scoped variable 'p6'.
+tests/cases/conformance/salsa/ns.ts(6,16): error TS2451: Cannot redeclare block-scoped variable 'p7'.
+tests/cases/conformance/salsa/ns.ts(8,11): error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+
+
+==== tests/cases/conformance/salsa/ns.ts (4 errors) ====
+    namespace ExpandoMerge {
+              ~~~~~~~~~~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+        export var p3 = 333;
+        export var p4 = 4; // ok
+        export var p5 = 5; // ok
+        export let p6 = 6; // error: duplicate
+                   ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'p6'.
+!!! related TS6203 tests/cases/conformance/salsa/expando.ts:9:14: 'p6' was also declared here.
+        export let p7 = 7; // error: duplicate
+                   ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'p7'.
+!!! related TS6203 tests/cases/conformance/salsa/expando.ts:11:14: 'p7' was also declared here.
+    }
+    namespace ExpandoMerge {
+              ~~~~~~~~~~~~
+!!! error TS2433: A namespace declaration cannot be in a different file from a class or function with which it is merged.
+        export var p2 = 222;
+    }
+==== tests/cases/conformance/salsa/expando.ts (2 errors) ====
+    function ExpandoMerge(n: number) {
+        return n;
+    }
+    ExpandoMerge.p1 = 111
+    ExpandoMerge.m = function(n: number) {
+        return n + 1;
+    }
+    ExpandoMerge.p4 = 44444; // ok
+    ExpandoMerge.p6 = 66666; // error: duplicate
+                 ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'p6'.
+!!! related TS6203 tests/cases/conformance/salsa/ns.ts:5:16: 'p6' was also declared here.
+    ExpandoMerge.p5 = 555555; // should be ok
+    ExpandoMerge.p7 = 777777; // error: duplicate
+                 ~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'p7'.
+!!! related TS6203 tests/cases/conformance/salsa/ns.ts:6:16: 'p7' was also declared here.
+    var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+    
