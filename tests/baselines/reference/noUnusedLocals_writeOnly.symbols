@@ -55,9 +55,16 @@ function f(x = 0, b = false) {
     f(y++);
 >f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
 >y : Symbol(y, Decl(noUnusedLocals_writeOnly.ts, 12, 7))
+
+    let z = 0;
+>z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 16, 7))
+
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
+>f : Symbol(f, Decl(noUnusedLocals_writeOnly.ts, 0, 0))
+>z : Symbol(z, Decl(noUnusedLocals_writeOnly.ts, 16, 7))
 }
 function f2(_: ReadonlyArray<number>): void {}
->f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 15, 1))
->_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 16, 12))
+>f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 18, 1))
+>_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 19, 12))
 >ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 

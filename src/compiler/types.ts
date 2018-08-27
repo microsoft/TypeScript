@@ -1082,7 +1082,7 @@ namespace ts {
 
     export interface TypePredicateNode extends TypeNode {
         kind: SyntaxKind.TypePredicate;
-        parent: SignatureDeclaration;
+        parent: SignatureDeclaration | JSDocTypeExpression;
         parameterName: Identifier | ThisTypeNode;
         type: TypeNode;
     }
@@ -2648,6 +2648,7 @@ namespace ts {
         sourceFiles: ReadonlyArray<SourceFile>;
         /* @internal */ syntheticFileReferences?: ReadonlyArray<FileReference>;
         /* @internal */ syntheticTypeReferences?: ReadonlyArray<FileReference>;
+        /* @internal */ syntheticLibReferences?: ReadonlyArray<FileReference>;
         /* @internal */ hasNoDefaultLib?: boolean;
     }
 
@@ -2911,6 +2912,8 @@ namespace ts {
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
+        /* @internal */
+        getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
         /**
          * Gets the type of a parameter at a given position in a signature.
@@ -3371,7 +3374,9 @@ namespace ts {
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
-        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+        isJSContainerFunctionDeclaration(node: FunctionDeclaration): boolean;
+        getPropertiesOfContainerFunction(node: Declaration): Symbol[];
+        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
         createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): Expression;
@@ -3947,6 +3952,7 @@ namespace ts {
         constraintType?: Type;
         templateType?: Type;
         modifiersType?: Type;
+        resolvedApparentType?: Type;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -4544,6 +4550,8 @@ namespace ts {
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
+        strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
     /* @internal */
@@ -4709,6 +4717,7 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
+    /*@internal*/
     export interface UpToDateHost {
         fileExists(fileName: string): boolean;
         getModifiedTime(fileName: string): Date | undefined;
@@ -5068,6 +5077,7 @@ namespace ts {
 
         /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         getCommonSourceDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -5336,6 +5346,7 @@ namespace ts {
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
         getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
+        getCommonSourceDirectory?(): string;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally

@@ -140,7 +140,7 @@ function diagnosticFromJson(json, host) {
         category: json.category,
         code: json.code,
         source: json.source,
-        relatedInformation: json.relatedInformation && json.relatedInformation.map(diagnosticRelatedInformationFromJson, host)
+        relatedInformation: json.relatedInformation && json.relatedInformation.map(json => diagnosticRelatedInformationFromJson(json, host))
     });
 }
 exports.diagnosticFromJson = diagnosticFromJson;
@@ -169,7 +169,9 @@ function diagnosticRelatedInformationFromJson(json, host) {
         file: json.file && sourceFileFromJson(json.file, host),
         start: json.start,
         length: json.length,
-        messageText: json.messageText
+        messageText: json.messageText,
+        category: json.category,
+        code: json.code
     };
 }
 exports.diagnosticRelatedInformationFromJson = diagnosticRelatedInformationFromJson;

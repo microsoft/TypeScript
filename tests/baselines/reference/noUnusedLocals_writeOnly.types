@@ -103,6 +103,17 @@ function f(x = 0, b = false) {
 >f : (x?: number, b?: boolean) => void
 >y++ : number
 >y : number
+
+    let z = 0;
+>z : number
+>0 : 0
+
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
+>f(z = 1) : void
+>f : (x?: number, b?: boolean) => void
+>z = 1 : 1
+>z : number
+>1 : 1
 }
 function f2(_: ReadonlyArray<number>): void {}
 >f2 : (_: ReadonlyArray<number>) => void

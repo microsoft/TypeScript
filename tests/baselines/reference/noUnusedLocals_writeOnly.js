@@ -14,6 +14,9 @@ function f(x = 0, b = false) {
     let y = 0;
     // This is a write access to y, but not a write-*only* access.
     f(y++);
+
+    let z = 0;
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
 }
 function f2(_: ReadonlyArray<number>): void {}
 
@@ -37,5 +40,7 @@ function f(x, b) {
     var y = 0;
     // This is a write access to y, but not a write-*only* access.
     f(y++);
+    var z = 0;
+    f(z = 1); // This effectively doesn't use `z`, values just pass through it.
 }
 function f2(_) { }

@@ -28,7 +28,7 @@ import * as React from "./renderer";
 >React : typeof React
 
 <h></h>
-><h></h> : any
+><h></h> : error
 >h : any
 >h : any
 
@@ -39,8 +39,8 @@ import { dom as h } from "./renderer"
 >h : () => void
 
 export const prerendered = <h></h>;
->prerendered : any
-><h></h> : any
+>prerendered : error
+><h></h> : error
 >h : () => void
 >h : () => void
 
@@ -50,8 +50,8 @@ import { otherdom } from "./renderer"
 >otherdom : () => void
 
 export const prerendered2 = <h></h>;
->prerendered2 : any
-><h></h> : any
+>prerendered2 : error
+><h></h> : error
 >h : any
 >h : any
 
@@ -60,8 +60,8 @@ import React from "./renderer"
 >React : () => void
 
 export const prerendered3 = <h></h>;
->prerendered3 : any
-><h></h> : any
+>prerendered3 : error
+><h></h> : error
 >h : any
 >h : any
 
@@ -71,7 +71,7 @@ import { dom } from "./renderer"
 >dom : () => void
 
 <h></h>
-><h></h> : any
+><h></h> : error
 >h : any
 >h : any
 

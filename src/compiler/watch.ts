@@ -183,6 +183,7 @@ namespace ts {
         }
 
         let host: DirectoryStructureHost = system;
+        host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
         const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);

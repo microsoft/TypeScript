@@ -19,13 +19,22 @@ class C { private p: number; }
 const nameP = "p";
 >nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
 
-const { [nameP]: p } = new C();
->nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
->p : Symbol(p, Decl(destructureComputedProperty.ts, 6, 7))
+const { "p": p0 } = new C();
+>p0 : Symbol(p0, Decl(destructureComputedProperty.ts, 6, 7))
 >C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
 
-const { p: p2 } = new C();
+const { ["p"]: p1 } = new C();
+>"p" : Symbol(p1, Decl(destructureComputedProperty.ts, 7, 7))
+>p1 : Symbol(p1, Decl(destructureComputedProperty.ts, 7, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+
+const { [nameP]: p2 } = new C();
+>nameP : Symbol(nameP, Decl(destructureComputedProperty.ts, 5, 5))
+>p2 : Symbol(p2, Decl(destructureComputedProperty.ts, 8, 7))
+>C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
+
+const { p: p3 } = new C();
 >p : Symbol(C.p, Decl(destructureComputedProperty.ts, 4, 9))
->p2 : Symbol(p2, Decl(destructureComputedProperty.ts, 7, 7))
+>p3 : Symbol(p3, Decl(destructureComputedProperty.ts, 9, 7))
 >C : Symbol(C, Decl(destructureComputedProperty.ts, 2, 26))
 

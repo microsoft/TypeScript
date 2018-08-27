@@ -227,9 +227,9 @@
 
 verify.quickInfos({
     1: ["function f1(a: number): number (+1 overload)", "this is signature 1"],
-    2: "function f1(b: string): number (+1 overload)",
+    2: ["function f1(b: string): number (+1 overload)", "this is signature 1"],
     3: ["function f1(a: number): number (+1 overload)", "this is signature 1"],
-    "4q": "function f1(b: string): number (+1 overload)",
+    "4q": ["function f1(b: string): number (+1 overload)", "this is signature 1"],
     o4q: ["function f1(a: number): number (+1 overload)", "this is signature 1"]
 });
 
@@ -237,11 +237,11 @@ verify.signatureHelp({ marker: "4", overloadsCount: 2 });
 verify.signatureHelp({ marker: "o4", overloadsCount: 2, docComment: "this is signature 1", parameterDocComment: "param a" });
 
 verify.quickInfos({
-    5: "function f2(a: number): number (+1 overload)",
+    5: ["function f2(a: number): number (+1 overload)", "this is signature 2\nthis is f2 var comment"],
     6: ["function f2(b: string): number (+1 overload)", "this is signature 2"],
-    7: "function f2(a: number): number (+1 overload)",
+    7: ["function f2(a: number): number (+1 overload)", "this is signature 2\nthis is f2 var comment"],
     "8q": ["function f2(b: string): number (+1 overload)", "this is signature 2"],
-    o8q: "function f2(a: number): number (+1 overload)"
+    o8q: ["function f2(a: number): number (+1 overload)", "this is signature 2\nthis is f2 var comment"],
 });
 
 verify.signatureHelp(
@@ -274,7 +274,7 @@ verify.signatureHelp(
 
 goTo.marker('17');
 verify.completionListContains('f1', 'function f1(a: number): number (+1 overload)', 'this is signature 1');
-verify.completionListContains('f2', 'function f2(a: number): number (+1 overload)', '');
+verify.completionListContains('f2', 'function f2(a: number): number (+1 overload)', 'this is signature 2\nthis is f2 var comment');
 verify.completionListContains('f3', 'function f3(a: number): number (+1 overload)', '');
 verify.completionListContains('f4', 'function f4(a: number): number (+1 overload)', 'this is signature 4 - with number parameter');
 
@@ -303,7 +303,7 @@ verify.quickInfoAt("22q", "var i1_i: i1\n(b: string) => number (+1 overload)", "
 
 goTo.marker('23');
 verify.completionListContains('foo', '(method) i1.foo(a: number): number (+1 overload)', 'foo 1');
-verify.completionListContains('foo2', '(method) i1.foo2(a: number): number (+1 overload)', '');
+verify.completionListContains('foo2', '(method) i1.foo2(a: number): number (+1 overload)', 'foo2 2');
 verify.completionListContains('foo3', '(method) i1.foo3(a: number): number (+1 overload)', '');
 verify.completionListContains('foo4', '(method) i1.foo4(a: number): number (+1 overload)', 'foo4 1');
 
@@ -314,7 +314,7 @@ verify.signatureHelp({ marker: "25", overloadsCount: 2, docComment: "foo 2" });
 verify.quickInfoAt("25q", "(method) i1.foo(b: string): number (+1 overload)", "foo 2");
 
 verify.signatureHelp({ marker: "26", overloadsCount: 2 });
-verify.quickInfoAt("26q", "(method) i1.foo2(a: number): number (+1 overload)");
+verify.quickInfoAt("26q", "(method) i1.foo2(a: number): number (+1 overload)", "foo2 2");
 
 verify.signatureHelp({ marker: "27", overloadsCount: 2, docComment: "foo2 2" });
 verify.quickInfoAt("27q", "(method) i1.foo2(b: string): number (+1 overload)", "foo2 2");
@@ -329,7 +329,7 @@ verify.signatureHelp({ marker: "30", overloadsCount: 2, docComment: "foo4 1" });
 verify.quickInfoAt("30q", "(method) i1.foo4(a: number): number (+1 overload)", "foo4 1");
 
 verify.signatureHelp({ marker: "31", overloadsCount: 2 });
-verify.quickInfoAt("31q", "(method) i1.foo4(b: string): number (+1 overload)");
+verify.quickInfoAt("31q", "(method) i1.foo4(b: string): number (+1 overload)", "foo4 1");
 
 verify.signatureHelp({ marker: "32", overloadsCount: 2, docComment: "new 2" });
 verify.quickInfoAt("32q", "var i2_i: i2\nnew (b: number) => any (+1 overload)", "new 2");
@@ -370,7 +370,7 @@ verify.quickInfoAt("43q", "var i4_i: i4\n(b: string) => number (+1 overload)");
 goTo.marker('44');
 verify.completionListContains('prop1', '(method) c.prop1(a: number): number (+1 overload)', '');
 verify.completionListContains('prop2', '(method) c.prop2(a: number): number (+1 overload)', 'prop2 1');
-verify.completionListContains('prop3', '(method) c.prop3(a: number): number (+1 overload)', '');
+verify.completionListContains('prop3', '(method) c.prop3(a: number): number (+1 overload)', 'prop3 2');
 verify.completionListContains('prop4', '(method) c.prop4(a: number): number (+1 overload)', 'prop4 1');
 verify.completionListContains('prop5', '(method) c.prop5(a: number): number (+1 overload)', 'prop5 1');
 
@@ -384,10 +384,10 @@ verify.signatureHelp({ marker: "47", overloadsCount: 2, docComment: "prop2 1" })
 verify.quickInfoAt("47q", "(method) c.prop2(a: number): number (+1 overload)", "prop2 1");
 
 verify.signatureHelp({ marker: "48", overloadsCount: 2 });
-verify.quickInfoAt("48q", "(method) c.prop2(b: string): number (+1 overload)");
+verify.quickInfoAt("48q", "(method) c.prop2(b: string): number (+1 overload)", "prop2 1");
 
 verify.signatureHelp({ marker: "49", overloadsCount: 2 });
-verify.quickInfoAt("49q", "(method) c.prop3(a: number): number (+1 overload)");
+verify.quickInfoAt("49q", "(method) c.prop3(a: number): number (+1 overload)", "prop3 2");
 
 verify.signatureHelp({ marker: "50", overloadsCount: 2, docComment: "prop3 2" });
 verify.quickInfoAt("50q", "(method) c.prop3(b: string): number (+1 overload)", "prop3 2");
@@ -487,11 +487,11 @@ verify.quickInfos({
     94: "(method) c.prop1(b: string): number (+1 overload)",
     95: "(method) c.prop1(a: number): number (+1 overload)",
     96: ["(method) c.prop2(a: number): number (+1 overload)", "prop2 1"],
-    97: "(method) c.prop2(b: string): number (+1 overload)",
+    97: ["(method) c.prop2(b: string): number (+1 overload)", "prop2 1"],
     98: ["(method) c.prop2(a: number): number (+1 overload)", "prop2 1"],
-    99: "(method) c.prop3(a: number): number (+1 overload)",
+    99: ["(method) c.prop3(a: number): number (+1 overload)", "prop3 2"],
     100: ["(method) c.prop3(b: string): number (+1 overload)", "prop3 2"],
-    101: "(method) c.prop3(a: number): number (+1 overload)",
+    101: ["(method) c.prop3(a: number): number (+1 overload)", "prop3 2"],
     102: ["(method) c.prop4(a: number): number (+1 overload)", "prop4 1"],
     103: ["(method) c.prop4(b: string): number (+1 overload)", "prop4 2"],
     104: ["(method) c.prop4(a: number): number (+1 overload)", "prop4 1"],
