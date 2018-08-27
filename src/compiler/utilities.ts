@@ -4814,13 +4814,13 @@ namespace ts {
         if (isDeclaration(hostNode)) {
             return getDeclarationIdentifier(hostNode);
         }
-        // Covers remaining cases
+        // Covers remaining cases (returning undefined if none match).
         switch (hostNode.kind) {
             case SyntaxKind.VariableStatement:
                 if (hostNode.declarationList && hostNode.declarationList.declarations[0]) {
                     return getDeclarationIdentifier(hostNode.declarationList.declarations[0]);
                 }
-                return undefined;
+                break;
             case SyntaxKind.ExpressionStatement:
                 const expr = hostNode.expression;
                 switch (expr.kind) {
@@ -4832,9 +4832,7 @@ namespace ts {
                             return arg;
                         }
                 }
-                return undefined;
-            case SyntaxKind.EndOfFileToken:
-                return undefined;
+                break;
             case SyntaxKind.ParenthesizedExpression: {
                 return getDeclarationIdentifier(hostNode.expression);
             }
@@ -4842,10 +4840,8 @@ namespace ts {
                 if (isDeclaration(hostNode.statement) || isExpression(hostNode.statement)) {
                     return getDeclarationIdentifier(hostNode.statement);
                 }
-                return undefined;
+                break;
             }
-            default:
-                Debug.assertNever(hostNode, "Found typedef tag attached to node which it should not be!");
         }
     }
 
