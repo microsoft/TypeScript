@@ -28,8 +28,8 @@ var r = c["   "];
 >"   " : "   "
 
 var r2 = c["    "];
->r2 : any
->c["    "] : any
+>r2 : error
+>c["    "] : error
 >c : C
 >"    " : "    "
 
@@ -67,8 +67,8 @@ var r = i["   "];
 >"   " : "   "
 
 var r2 = i["    "];
->r2 : any
->i["    "] : any
+>r2 : error
+>i["    "] : error
 >i : I
 >"    " : "    "
 
@@ -106,8 +106,8 @@ var r = a["   "];
 >"   " : "   "
 
 var r2 = a["    "];
->r2 : any
->a["    "] : any
+>r2 : error
+>a["    "] : error
 >a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 >"    " : "    "
 
@@ -148,8 +148,8 @@ var r = b["   "];
 >"   " : "   "
 
 var r2 = b["    "];
->r2 : any
->b["    "] : any
+>r2 : error
+>b["    "] : error
 >b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 >"    " : "    "
 

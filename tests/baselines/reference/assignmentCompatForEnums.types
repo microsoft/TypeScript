@@ -23,7 +23,7 @@ function foo() {
 
     var x: TokenType = list['one'];
 >x : TokenType
->list['one'] : any
+>list['one'] : error
 >list : {}
 >'one' : "one"
 }
