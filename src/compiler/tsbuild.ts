@@ -1,3 +1,5 @@
+// Currently we do not want to expose API for build, we should work out the API, and then expose it just like we did for builder/watch
+/*@internal*/
 namespace ts {
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
@@ -843,14 +845,18 @@ namespace ts {
                 return buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
 
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            if (context.options.verbose) {
+                buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            }
+
             const now = new Date();
             const outputs = getAllProjectOutputs(proj);
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file));
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file) || missingFileModifiedTime);
                 }
+
                 compilerHost.setModifiedTime!(file, now);
             }
 
@@ -1057,7 +1063,7 @@ namespace ts {
                 };
             }
 
-            const inputTime = host.getModifiedTime(inputFile);
+            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
             if (inputTime > newestInputFileTime) {
                 newestInputFileName = inputFile;
                 newestInputFileTime = inputTime;
@@ -1089,7 +1095,7 @@ namespace ts {
                 break;
             }
 
-            const outputTime = host.getModifiedTime(output);
+            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
             if (outputTime < oldestOutputFileTime) {
                 oldestOutputFileTime = outputTime;
                 oldestOutputFileName = output;
@@ -1117,7 +1123,8 @@ namespace ts {
                     newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                 }
                 else {
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, host.getModifiedTime(output));
+                    const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                 }
             }
         }
@@ -1263,7 +1270,7 @@ namespace ts {
                 // Don't report status on "solution" projects
                 break;
             default:
-                assertTypeIsNever(status);
+                assertType<never>(status);
         }
     }
 }

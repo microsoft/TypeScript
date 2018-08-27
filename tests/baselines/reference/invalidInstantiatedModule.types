@@ -16,7 +16,6 @@ module M2 {
 >M2 : typeof M2
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 
@@ -32,7 +31,6 @@ var m = M2;
 var p: m.Point; // Error
 >p : any
 >m : any
->Point : No type information available!
 
 
  

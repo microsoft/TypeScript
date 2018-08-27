@@ -1,14 +1,10 @@
 === tests/cases/conformance/types/primitives/number/assignFromNumberInterface2.ts ===
 interface Number {
->Number : Number
-
     doStuff(): string;
 >doStuff : () => string
 }
 
 interface NotNumber {
->NotNumber : NotNumber
-
     toString(radix?: number): string;
 >toString : (radix?: number) => string
 >radix : number
@@ -38,11 +34,9 @@ var x = 1;
 
 var a: Number;
 >a : Number
->Number : Number
 
 var b: NotNumber;
 >b : NotNumber
->NotNumber : NotNumber
 
 a = x; 
 >a = x : number

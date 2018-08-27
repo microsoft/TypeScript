@@ -705,7 +705,7 @@ namespace ts.server.protocol {
         /**
          * Errorcodes we want to get the fixes for.
          */
-        errorCodes?: ReadonlyArray<number>;
+        errorCodes: ReadonlyArray<number>;
     }
 
     export interface GetCombinedCodeFixRequestArgs {
@@ -2434,6 +2434,27 @@ namespace ts.server.protocol {
          * Current set of open files
          */
         openFiles: string[];
+    }
+
+    export type LargeFileReferencedEventName = "largeFileReferenced";
+    export interface LargeFileReferencedEvent extends Event {
+        event: LargeFileReferencedEventName;
+        body: LargeFileReferencedEventBody;
+    }
+
+    export interface LargeFileReferencedEventBody {
+        /**
+         * name of the large file being loaded
+         */
+        file: string;
+        /**
+         * size of the file
+         */
+        fileSize: number;
+        /**
+         * max file size allowed on the server
+         */
+        maxFileSize: number;
     }
 
     /**

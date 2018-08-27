@@ -34,7 +34,6 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
 >strIndex : { [n: string]: Compass; }
 >n : string
->Compass : Compass
 >{ 'N': Compass.North, 'E': Compass.East } : { 'N': Compass.North; 'E': Compass.East; }
 >'N' : Compass.North
 >Compass.North : Compass.North
@@ -50,11 +49,9 @@ var bothIndex:
     {
         [n: string]: A;
 >n : string
->A : A
 
         [m: number]: B;
 >m : number
->B : B
 
     };
 
@@ -249,7 +246,6 @@ var mm = strIndex['N'];
 
 var mm: Compass;
 >mm : Compass
->Compass : Compass
 
 var mm2 = strIndex['zzz'];
 >mm2 : Compass
@@ -259,7 +255,6 @@ var mm2 = strIndex['zzz'];
 
 var mm2: Compass;
 >mm2 : Compass
->Compass : Compass
 
 // Bracket notation property access using numeric value on type with string index signature and no numeric index signature
 var nn = strIndex[10];
@@ -270,7 +265,6 @@ var nn = strIndex[10];
 
 var nn: Compass;
 >nn : Compass
->Compass : Compass
 
 // Bracket notation property access using enum value on type with string index signature and no numeric index signature
 var oo = strIndex[Compass.East];
@@ -283,7 +277,6 @@ var oo = strIndex[Compass.East];
 
 var oo: Compass;
 >oo : Compass
->Compass : Compass
 
 // Bracket notation property access using value of type 'any' on type with string index signature and no numeric index signature
 var pp = strIndex[<any>null];
@@ -295,7 +288,6 @@ var pp = strIndex[<any>null];
 
 var pp: Compass;
 >pp : Compass
->Compass : Compass
 
 // Bracket notation property access using numeric value on type with no index signatures
 var qq = noIndex[123];
@@ -368,7 +360,6 @@ var ww = bothIndex[Compass.East];
 
 var ww: B;
 >ww : B
->B : B
 
 // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
 var xx = bothIndex[<any>null];
@@ -380,7 +371,6 @@ var xx = bothIndex[<any>null];
 
 var xx: B;
 >xx : B
->B : B
 
 // Bracket notation property access using string value on type with numeric index signature and string index signature
 var yy = bothIndex['foo'];
@@ -391,7 +381,6 @@ var yy = bothIndex['foo'];
 
 var yy: A;
 >yy : A
->A : A
 
 // Bracket notation property access using numeric string value on type with numeric index signature and string index signature
 var zz = bothIndex['1.0'];
@@ -402,7 +391,6 @@ var zz = bothIndex['1.0'];
 
 var zz: A;
 >zz : A
->A : A
 
 // Bracket notation property access using value of other type on type with numeric index signature and no string index signature and string index signature
 var zzzz = bothIndex[someObject]; // Error
@@ -428,7 +416,6 @@ var x2 = strIndex[stringOrNumber];
 
 var x2: Compass;
 >x2 : Compass
->Compass : Compass
 
 var x3 = bothIndex[stringOrNumber];
 >x3 : A | B
@@ -438,5 +425,4 @@ var x3 = bothIndex[stringOrNumber];
 
 var x3: A;
 >x3 : A | B
->A : A
 

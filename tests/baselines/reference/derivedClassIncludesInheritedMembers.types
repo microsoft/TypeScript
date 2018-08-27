@@ -41,7 +41,6 @@ class Derived extends Base {
 
 var d: Derived = new Derived(1);
 >d : Derived
->Derived : Derived
 >new Derived(1) : Derived
 >Derived : typeof Derived
 >1 : 1
@@ -103,11 +102,9 @@ class Base2 {
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     [x: number]: Date;
 >x : number
->Date : Date
 }
 
 class Derived2 extends Base2 {
@@ -117,7 +114,6 @@ class Derived2 extends Base2 {
 
 var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
 var r7 = d2[''];
 >r7 : Object

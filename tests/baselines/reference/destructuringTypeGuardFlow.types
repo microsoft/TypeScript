@@ -23,7 +23,6 @@ type foo = {
 
 const aFoo: foo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };
 >aFoo : foo
->foo : foo
 >{ bar: 3, baz: "b", nested: { a: 1, b: "y" } } : { bar: number; baz: string; nested: { a: number; b: string; }; }
 >bar : number
 >3 : 3
@@ -88,7 +87,6 @@ type bar = {
 
   elem2: foo | null;
 >elem2 : foo | null
->foo : foo
 >null : null
 
 };

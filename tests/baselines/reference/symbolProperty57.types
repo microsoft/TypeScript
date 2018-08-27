@@ -14,9 +14,9 @@ var obj = {
 
 // Should give type 'any'.
 obj[Symbol["nonsense"]];
->obj[Symbol["nonsense"]] : any
+>obj[Symbol["nonsense"]] : error
 >obj : { [Symbol.iterator]: number; }
->Symbol["nonsense"] : any
+>Symbol["nonsense"] : error
 >Symbol : SymbolConstructor
 >"nonsense" : "nonsense"
 

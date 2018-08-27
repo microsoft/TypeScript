@@ -1933,6 +1933,7 @@ namespace ts {
 
         function scanJSDocToken(): JsDocSyntaxKind {
             startPos = tokenPos = pos;
+            tokenFlags = 0;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
@@ -1952,6 +1953,7 @@ namespace ts {
                     return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
                     return token = SyntaxKind.AsteriskToken;

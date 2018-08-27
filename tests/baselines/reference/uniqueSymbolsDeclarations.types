@@ -123,7 +123,6 @@ function* genFuncYieldVarCall() { yield varCall; }
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 >genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
->IterableIterator : IterableIterator<T>
 >constCall : unique symbol
 >yield constCall : any
 >constCall : unique symbol
@@ -191,7 +190,6 @@ class C {
 }
 declare const c: C;
 >c : C
->C : C
 
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 >constInitToCReadonlyStaticCall : symbol
@@ -285,28 +283,23 @@ const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwri
 
 const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"] = c.readonlyCall;
 >constInitToCReadonlyCallWithIndexedAccess : symbol
->C : C
 >c.readonlyCall : symbol
 >c : C
 >readonlyCall : symbol
 
 const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwriteCall;
 >constInitToCReadwriteCallWithIndexedAccess : symbol
->C : C
 >c.readwriteCall : symbol
 >c : C
 >readwriteCall : symbol
 
 // interfaces
 interface I {
->I : I
-
     readonly readonlyType: unique symbol;
 >readonlyType : unique symbol
 }
 declare const i: I;
 >i : I
->I : I
 
 const constInitToIReadonlyType = i.readonlyType;
 >constInitToIReadonlyType : symbol
@@ -325,7 +318,6 @@ const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyT
 
 const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
 >constInitToIReadonlyTypeWithIndexedAccess : unique symbol
->I : I
 >i.readonlyType : unique symbol
 >i : I
 >readonlyType : unique symbol
@@ -346,7 +338,6 @@ type L = {
 };
 declare const l: L;
 >l : L
->L : L
 
 const constInitToLReadonlyType = l.readonlyType;
 >constInitToLReadonlyType : symbol
@@ -386,14 +377,12 @@ const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNeste
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
 >constInitToLReadonlyTypeWithIndexedAccess : unique symbol
->L : L
 >l.readonlyType : unique symbol
 >l : L
 >readonlyType : unique symbol
 
 const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithIndexedAccess : unique symbol
->L : L
 >l.nested.readonlyNestedType : unique symbol
 >l.nested : { readonly readonlyNestedType: unique symbol; }
 >l : L
@@ -433,10 +422,7 @@ declare const o: { [s]: "a", [N.s]: "b" };
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 declare function g(x: typeof s): void;
 >g : { (x: unique symbol): void; (x: unique symbol): void; }
@@ -801,25 +787,20 @@ class C1 {
 // contextual types
 
 interface Context {
->Context : Context
-
     method1(): typeof s;
 >method1 : () => unique symbol
 >s : unique symbol
 
     method2(): Promise<typeof s>;
 >method2 : () => Promise<unique symbol>
->Promise : Promise<T>
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
 >method3 : () => AsyncIterableIterator<unique symbol>
->AsyncIterableIterator : AsyncIterableIterator<T>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
 >method4 : () => IterableIterator<unique symbol>
->IterableIterator : IterableIterator<T>
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;
@@ -831,7 +812,6 @@ interface Context {
 
 const o4: Context = {
 >o4 : Context
->Context : Context
 >{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    }} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncIterableIterator<unique symbol>; method4(): IterableIterator<unique symbol>; method5(p?: unique symbol): unique symbol; }
 
     method1() {

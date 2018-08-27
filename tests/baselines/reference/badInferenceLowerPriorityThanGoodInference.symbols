@@ -1,0 +1,65 @@
+=== tests/cases/compiler/badInferenceLowerPriorityThanGoodInference.ts ===
+// Repro from #13118
+
+interface Foo<A> {
+>Foo : Symbol(Foo, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 0))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+
+    a: A;
+>a : Symbol(Foo.a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 18))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+
+    b: (x: A) => void;
+>b : Symbol(Foo.b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 3, 9))
+>x : Symbol(x, Decl(badInferenceLowerPriorityThanGoodInference.ts, 4, 8))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 2, 14))
+}
+
+declare function canYouInferThis<A>(fn: () => Foo<A>): A;
+>canYouInferThis : Symbol(canYouInferThis, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 1))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 33))
+>fn : Symbol(fn, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 36))
+>Foo : Symbol(Foo, Decl(badInferenceLowerPriorityThanGoodInference.ts, 0, 0))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 33))
+>A : Symbol(A, Decl(badInferenceLowerPriorityThanGoodInference.ts, 7, 33))
+
+const result = canYouInferThis(() => ({
+>result : Symbol(result, Decl(badInferenceLowerPriorityThanGoodInference.ts, 9, 5))
+>canYouInferThis : Symbol(canYouInferThis, Decl(badInferenceLowerPriorityThanGoodInference.ts, 5, 1))
+
+    a: { BLAH: 33 },
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 9, 39))
+>BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 10, 8))
+
+    b: x => { }
+>b : Symbol(b, Decl(badInferenceLowerPriorityThanGoodInference.ts, 10, 20))
+>x : Symbol(x, Decl(badInferenceLowerPriorityThanGoodInference.ts, 11, 6))
+
+}))
+
+result.BLAH;
+>result.BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 10, 8))
+>result : Symbol(result, Decl(badInferenceLowerPriorityThanGoodInference.ts, 9, 5))
+>BLAH : Symbol(BLAH, Decl(badInferenceLowerPriorityThanGoodInference.ts, 10, 8))
+
+// Repro from #26629
+
+function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
+>goofus : Symbol(goofus, Decl(badInferenceLowerPriorityThanGoodInference.ts, 14, 12))
+>ARGS : Symbol(ARGS, Decl(badInferenceLowerPriorityThanGoodInference.ts, 18, 17))
+>f : Symbol(f, Decl(badInferenceLowerPriorityThanGoodInference.ts, 18, 38))
+>args : Symbol(args, Decl(badInferenceLowerPriorityThanGoodInference.ts, 18, 42))
+>ARGS : Symbol(ARGS, Decl(badInferenceLowerPriorityThanGoodInference.ts, 18, 17))
+
+goofus((a: string) => ({ dog() { return a; } }));
+>goofus : Symbol(goofus, Decl(badInferenceLowerPriorityThanGoodInference.ts, 14, 12))
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 20, 8))
+>dog : Symbol(dog, Decl(badInferenceLowerPriorityThanGoodInference.ts, 20, 24))
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 20, 8))
+
+goofus((a: string) => ({ dog: function() { return a; } }));
+>goofus : Symbol(goofus, Decl(badInferenceLowerPriorityThanGoodInference.ts, 14, 12))
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 21, 8))
+>dog : Symbol(dog, Decl(badInferenceLowerPriorityThanGoodInference.ts, 21, 24))
+>a : Symbol(a, Decl(badInferenceLowerPriorityThanGoodInference.ts, 21, 8))
+

@@ -45,33 +45,23 @@ module Generic {
 
     class C<T,U> {
 >C : C<T, U>
->T : T
->U : U
 
         foo: T;
 >foo : T
->T : T
 
         bar: U;
 >bar : U
->U : U
     }
 
     class D<T,U> extends C<T,U> {
 >D : D<T, U>
->T : T
->U : U
 >C : C<T, U>
->T : T
->U : U
 
         baz: T;
 >baz : T
->T : T
 
         bing: U;
 >bing : U
->U : U
     }
 
     var r = C.prototype; // C<any, any>

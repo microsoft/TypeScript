@@ -6,31 +6,22 @@ module MsPortal.Controls.Base.ItemList {
 >ItemList : typeof ItemList
 
     export interface Interface<TValue> {
->Interface : Interface<TValue>
->TValue : TValue
-
         // Removing this line fixes the constructor of ItemValue
         options: ViewModel<TValue>;
 >options : ViewModel<TValue>
->ViewModel : ViewModel<TValue>
->TValue : TValue
     }    
 
     export class ItemValue<T> {
 >ItemValue : ItemValue<T>
->T : T
 
         constructor(value: T) {
 >value : T
->T : T
         }
     }    
  
     export class ViewModel<TValue> extends ItemValue<TValue> {
 >ViewModel : ViewModel<TValue>
->TValue : TValue
 >ItemValue : ItemValue<TValue>
->TValue : TValue
     }
 }
 

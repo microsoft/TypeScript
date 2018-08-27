@@ -1058,7 +1058,7 @@ namespace ts {
             : node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @deprecated */ export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
     export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     /** @internal */
     export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral): TaggedTemplateExpression;
@@ -1076,7 +1076,7 @@ namespace ts {
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @deprecated */ export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
     export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral) {
         return node.tag !== tag
@@ -1168,14 +1168,6 @@ namespace ts {
         node.body = parenthesizeConciseBody(body);
         return node;
     }
-
-    /** @deprecated */ export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
@@ -1183,28 +1175,8 @@ namespace ts {
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
         equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
-        body: ConciseBody): ArrowFunction;
-    export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
-        bodyOrUndefined?: ConciseBody,
+        body: ConciseBody
     ): ArrowFunction {
-        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
-        let body: ConciseBody;
-        if (bodyOrUndefined === undefined) {
-            equalsGreaterThanToken = node.equalsGreaterThanToken;
-            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
-        }
-        else {
-            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
-                n.kind === SyntaxKind.EqualsGreaterThanToken);
-            body = bodyOrUndefined;
-        }
-
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
@@ -1306,7 +1278,7 @@ namespace ts {
             : node;
     }
 
-    export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    /** @deprecated */ export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
     export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
     export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
         const node = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
@@ -1317,26 +1289,14 @@ namespace ts {
         node.whenFalse = parenthesizeSubexpressionOfConditionalExpression(whenFalse ? whenFalse : whenTrueOrWhenFalse);
         return node;
     }
-
-    /** @deprecated */ export function updateConditional(
-        node: ConditionalExpression,
-        condition: Expression,
-        whenTrue: Expression,
-        whenFalse: Expression): ConditionalExpression;
     export function updateConditional(
         node: ConditionalExpression,
         condition: Expression,
         questionToken: Token<SyntaxKind.QuestionToken>,
         whenTrue: Expression,
         colonToken: Token<SyntaxKind.ColonToken>,
-        whenFalse: Expression): ConditionalExpression;
-    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
-        if (args.length === 2) {
-            const [whenTrue, whenFalse] = args;
-            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
-        }
-        Debug.assert(args.length === 4);
-        const [questionToken, whenTrue, colonToken, whenFalse] = args;
+        whenFalse: Expression
+    ): ConditionalExpression {
         return node.condition !== condition
             || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
@@ -2231,7 +2191,7 @@ namespace ts {
     export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxSelfClosingElement>createSynthesizedNode(SyntaxKind.JsxSelfClosingElement);
         node.tagName = tagName;
-        node.typeArguments = typeArguments && createNodeArray(typeArguments);
+        node.typeArguments = asNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
@@ -2247,7 +2207,7 @@ namespace ts {
     export function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxOpeningElement>createSynthesizedNode(SyntaxKind.JsxOpeningElement);
         node.tagName = tagName;
-        node.typeArguments = typeArguments && createNodeArray(typeArguments);
+        node.typeArguments = asNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
@@ -4024,6 +3984,11 @@ namespace ts {
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 4) {
+            // We need to parenthesize arrow functions on the right side to avoid it being
+            // parsed as parenthesized expression: `a && (() => {})`
+            return true;
+        }
         const operandPrecedence = getExpressionPrecedence(emittedOperand);
         switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
@@ -4355,6 +4320,11 @@ namespace ts {
                 case SyntaxKind.ConditionalExpression:
                     node = (<ConditionalExpression>node).condition;
                     continue;
+
+                case SyntaxKind.TaggedTemplateExpression:
+                    node = (<TaggedTemplateExpression>node).tag;
+                    continue;
+
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;
@@ -4739,7 +4709,7 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement) {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -4782,6 +4752,12 @@ namespace ts {
         }
 
         Debug.fail("Invalid property name for binding element.");
+    }
+
+    function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NumericLiteral;
     }
 
     /**

@@ -10,18 +10,14 @@ class B { b: number; }
 class C { b: Object; }
 >C : C
 >b : Object
->Object : Object
 
 class D { a: Date; }
 >D : D
 >a : Date
->Date : Date
 
 function namedClasses(x: A | B) {
 >namedClasses : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -48,10 +44,6 @@ function namedClasses(x: A | B) {
 function multipleClasses(x: A | B | C | D) {
 >multipleClasses : (x: A | B | C | D) => void
 >x : A | B | C | D
->A : A
->B : B
->C : C
->D : D
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -60,7 +52,6 @@ function multipleClasses(x: A | B | C | D) {
 
         let y: string | Date = x.a;
 >y : string | Date
->Date : Date
 >x.a : string | Date
 >x : A | D
 >a : string | Date
@@ -68,7 +59,6 @@ function multipleClasses(x: A | B | C | D) {
     } else {
         let z: number | Object = x.b;
 >z : number | Object
->Object : Object
 >x.b : number | Object
 >x : B | C
 >b : number | Object
@@ -112,8 +102,6 @@ class BWithOptionalProp { b?: string; }
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
 >x : AWithOptionalProp | BWithOptionalProp
->AWithOptionalProp : AWithOptionalProp
->BWithOptionalProp : BWithOptionalProp
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -150,8 +138,6 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
 function inParenthesizedExpression(x: A | B) {
 >inParenthesizedExpression : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     if ("a" in (x)) {
 >"a" in (x) : boolean
@@ -177,13 +163,10 @@ function inParenthesizedExpression(x: A | B) {
 class ClassWithUnionProp { prop: A | B; }
 >ClassWithUnionProp : ClassWithUnionProp
 >prop : A | B
->A : A
->B : B
 
 function inProperty(x: ClassWithUnionProp) {
 >inProperty : (x: ClassWithUnionProp) => void
 >x : ClassWithUnionProp
->ClassWithUnionProp : ClassWithUnionProp
 
     if ("a" in x.prop) {
 >"a" in x.prop : boolean
@@ -214,12 +197,10 @@ function inProperty(x: ClassWithUnionProp) {
 class NestedClassWithProp { outer: ClassWithUnionProp; }
 >NestedClassWithProp : NestedClassWithProp
 >outer : ClassWithUnionProp
->ClassWithUnionProp : ClassWithUnionProp
 
 function innestedProperty(x: NestedClassWithProp) {
 >innestedProperty : (x: NestedClassWithProp) => void
 >x : NestedClassWithProp
->NestedClassWithProp : NestedClassWithProp
 
     if ("a" in x.outer.prop) {
 >"a" in x.outer.prop : boolean
@@ -258,8 +239,6 @@ class InMemberOfClass {
 
     protected prop: A | B;
 >prop : A | B
->A : A
->B : B
 
     inThis() {
 >inThis : () => void
@@ -318,8 +297,6 @@ class SelfAssert {
 }
 
 interface Indexed {
->Indexed : Indexed
-
     [s: string]: any;
 >s : string
 }
@@ -327,7 +304,6 @@ interface Indexed {
 function f(i: Indexed) {
 >f : (i: Indexed) => any
 >i : Indexed
->Indexed : Indexed
 
     if ("a" in i) {
 >"a" in i : boolean

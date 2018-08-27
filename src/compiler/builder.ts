@@ -31,9 +31,17 @@ namespace ts {
          */
         currentAffectedFilesSignatures: Map<string> | undefined;
         /**
+         * Newly computed visible to outside referencedSet
+         */
+        currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
+        /**
          * Already seen affected files
          */
         seenAffectedFiles: Map<true> | undefined;
+        /**
+         * True if the semantic diagnostics were copied from the old state
+         */
+        semanticDiagnosticsFromOldState?: Map<true>;
         /**
          * program corresponding to this state
          */
@@ -57,7 +65,8 @@ namespace ts {
         }
         state.changedFilesSet = createMap<true>();
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
-        const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile;
+        const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
+            !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldState!.program.getCompilerOptions());
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
@@ -96,6 +105,10 @@ namespace ts {
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
                     state.semanticDiagnosticsPerFile!.set(sourceFilePath, diagnostics);
+                    if (!state.semanticDiagnosticsFromOldState) {
+                        state.semanticDiagnosticsFromOldState = createMap<true>();
+                    }
+                    state.semanticDiagnosticsFromOldState.set(sourceFilePath, true);
                 }
             }
         });
@@ -120,17 +133,17 @@ namespace ts {
         while (true) {
             const { affectedFiles } = state;
             if (affectedFiles) {
-                const { seenAffectedFiles, semanticDiagnosticsPerFile } = state;
+                const seenAffectedFiles = state.seenAffectedFiles!;
                 let affectedFilesIndex = state.affectedFilesIndex!; // TODO: GH#18217
                 while (affectedFilesIndex < affectedFiles.length) {
                     const affectedFile = affectedFiles[affectedFilesIndex];
-                    if (!seenAffectedFiles!.has(affectedFile.path)) {
+                    if (!seenAffectedFiles.has(affectedFile.path)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
-                        semanticDiagnosticsPerFile!.delete(affectedFile.path);
+                        cleanSemanticDiagnosticsOfAffectedFile(state, affectedFile);
                         return affectedFile;
                     }
-                    seenAffectedFiles!.set(affectedFile.path, true);
+                    seenAffectedFiles.set(affectedFile.path, true);
                     affectedFilesIndex++;
                 }
 
@@ -140,6 +153,7 @@ namespace ts {
                 // Commit the changes in file signature
                 BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures!);
                 state.currentAffectedFilesSignatures!.clear();
+                BuilderState.updateExportedFilesMapFromCache(state, state.currentAffectedFilesExportedModulesMap);
                 state.affectedFiles = undefined;
             }
 
@@ -160,12 +174,72 @@ namespace ts {
 
             // Get next batch of affected files
             state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
-            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
+            if (state.exportedModulesMap) {
+                state.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap || createMap<BuilderState.ReferencedSet | false>();
+            }
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value as Path;
-            state.semanticDiagnosticsPerFile!.delete(nextKey.value as Path);
             state.affectedFilesIndex = 0;
             state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
         }
+    }
+
+    /**
+     * Remove the semantic diagnostics cached from old state for affected File and the files that are referencing modules that export entities from affected file
+     */
+    function cleanSemanticDiagnosticsOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
+        if (removeSemanticDiagnosticsOf(state, affectedFile.path)) {
+            // If there are no more diagnostics from old cache, done
+            return;
+        }
+
+        // If there was change in signature for the changed file,
+        // then delete the semantic diagnostics for files that are affected by using exports of this module
+
+        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+            return;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(affectedFile.path) &&
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path)
+        )) {
+            return;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(affectedFile.path) &&
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path)
+        );
+    }
+
+    /**
+     * removes the semantic diagnostics of files referencing referencedPath and
+     * returns true if there are no more semantic diagnostics from old state
+     */
+    function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path) {
+        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
+            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOf(state, filePath as Path)
+        );
+    }
+
+    /**
+     * Removes semantic diagnostics for path and
+     * returns true if there are no more semantic diagnostics from the old state
+     */
+    function removeSemanticDiagnosticsOf(state: BuilderProgramState, path: Path) {
+        if (!state.semanticDiagnosticsFromOldState) {
+            return false;
+        }
+        state.semanticDiagnosticsFromOldState.delete(path);
+        state.semanticDiagnosticsPerFile!.delete(path);
+        return !state.semanticDiagnosticsFromOldState.size;
     }
 
     /**

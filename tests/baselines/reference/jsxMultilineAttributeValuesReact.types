@@ -3,8 +3,8 @@ declare var React: any;
 >React : any
 
 const a = <input value="
->a : any
-><input value="foo: 23"></input> : any
+>a : error
+><input value="foo: 23"></input> : error
 >input : any
 >value : string
 
@@ -13,8 +13,8 @@ foo: 23
 >input : any
 
 const b = <input value='
->b : any
-><input value='foo: 23'></input> : any
+>b : error
+><input value='foo: 23'></input> : error
 >input : any
 >value : string
 
@@ -23,8 +23,8 @@ foo: 23
 >input : any
 
 const c = <input value='
->c : any
-><input value='foo: 23\n'></input> : any
+>c : error
+><input value='foo: 23\n'></input> : error
 >input : any
 >value : string
 

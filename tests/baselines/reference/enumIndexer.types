@@ -31,7 +31,7 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
 >o : { key: string; }
 >MyEnumType[o.key] === enumValue : boolean
->MyEnumType[o.key] : any
+>MyEnumType[o.key] : error
 >MyEnumType : typeof MyEnumType
 >o.key : string
 >o : { key: string; }

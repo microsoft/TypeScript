@@ -8,12 +8,10 @@ class Road {
 
     public cars: Car[];
 >cars : Car[]
->Car : Car
 
     public AddCars(cars: Car[]) {
 >AddCars : (cars: Car[]) => void
 >cars : Car[]
->Car : Car
 
         this.cars = cars;
 >this.cars = cars : Car[]

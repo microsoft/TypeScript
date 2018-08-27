@@ -1,7 +1,5 @@
 === tests/cases/compiler/protoAssignment.ts ===
 interface Number extends Comparable<number> {
->Number : Number
->Comparable : No type information available!
 
     compareTo(other: number);
 >compareTo : (other: number) => any

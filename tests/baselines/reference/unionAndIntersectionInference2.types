@@ -1,10 +1,7 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference2.ts ===
 declare function f1<T>(x: T | string): T;
 >f1 : <T>(x: string | T) => T
->T : T
 >x : string | T
->T : T
->T : T
 
 var a1: string;
 >a1 : string
@@ -49,11 +46,8 @@ f1(e1); // number | boolean
 
 declare function f2<T>(x: T & { name: string }): T;
 >f2 : <T>(x: T & { name: string; }) => T
->T : T
 >x : T & { name: string; }
->T : T
 >name : string
->T : T
 
 var a2: string & { name: string };
 >a2 : string & { name: string; }

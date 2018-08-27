@@ -22,19 +22,15 @@ class C {
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     [x: number]: Object;
 >x : number
->Object : Object
 
     0: number;
 >0 : number
 }
 
 interface I {
->I : I
-
     x: string;
 >x : string
 
@@ -47,11 +43,9 @@ interface I {
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     [x: number]: Object;
 >x : number
->Object : Object
 
     0: number;
 >0 : number
@@ -59,11 +53,9 @@ interface I {
 
 var c: C;
 >c : C
->C : C
 
 var i: I;
 >i : I
->I : I
 
 c = i;
 >c = i : I

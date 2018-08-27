@@ -4,7 +4,6 @@ import B = require("./unusedImportDeclaration_testerB");
 
 var thingy: B = {
 >thingy : B
->B : B
 >{    me: "A"} : { me: string; }
 
     me: "A"

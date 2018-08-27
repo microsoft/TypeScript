@@ -1,7 +1,6 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck14.ts ===
 var union: string | Set<number>
 >union : string | Set<number>
->Set : Set<T>
 
 for (const e of union) { }
 >e : string

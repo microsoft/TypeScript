@@ -183,6 +183,8 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
             preferences?: UserPreferences,
+            applyChanges?: boolean,
+            commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
@@ -228,6 +230,7 @@ declare namespace FourSlashInterface {
         eval(expr: string, value: any): void;
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
+        formatDocumentChangesNothing(): void;
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
         goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
@@ -335,9 +338,10 @@ declare namespace FourSlashInterface {
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
         getEditsForFileRename(options: {
-            oldPath: string;
-            newPath: string;
-            newFileContents: { [fileName: string]: string };
+            readonly oldPath: string;
+            readonly newPath: string;
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
@@ -607,7 +611,7 @@ declare namespace FourSlashInterface {
     export interface VerifyCodeFixAvailableOptions {
         readonly description: string;
         readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
-        readonly commands?: ReadonlyArray<{}?;
+        readonly commands?: ReadonlyArray<{}>;
     }
 
     interface VerifyNavigateToOptions {

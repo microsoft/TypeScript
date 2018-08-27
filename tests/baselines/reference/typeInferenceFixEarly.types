@@ -1,12 +1,8 @@
 === tests/cases/compiler/typeInferenceFixEarly.ts ===
 declare function f<T>(p: (t: T) => T): T;
 >f : <T>(p: (t: T) => T) => T
->T : T
 >p : (t: T) => T
 >t : T
->T : T
->T : T
->T : T
 
 f(n => 3);
 >f(n => 3) : {}

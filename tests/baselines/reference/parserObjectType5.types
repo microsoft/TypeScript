@@ -4,9 +4,6 @@ var v: {
 
    A: B
 >A : any
->B : No type information available!
 
    <T>;
->T : T
-
 };

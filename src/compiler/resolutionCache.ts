@@ -52,7 +52,7 @@ namespace ts {
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
         maxNumberOfFilesToIterateForInvalidation?: number;
-        getCurrentProgram(): Program;
+        getCurrentProgram(): Program | undefined;
     }
 
     interface DirectoryWatchesOfFailedLookup {
@@ -398,8 +398,17 @@ namespace ts {
 
         function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
-                // Always watch root directory recursively
-                return { dir: rootDir!, dirPath: rootPath }; // TODO: GH#18217
+                failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? failedLookupLocation : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
+                Debug.assert(failedLookupLocation.length === failedLookupLocationPath.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`); // tslint:disable-line
+                const subDirectoryInRoot = failedLookupLocationPath.indexOf(directorySeparator, rootPath.length + 1);
+                if (subDirectoryInRoot !== -1) {
+                    // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
+                    return { dir: failedLookupLocation.substr(0, subDirectoryInRoot), dirPath: failedLookupLocationPath.substr(0, subDirectoryInRoot) as Path };
+                }
+                else {
+                    // Always watch root directory non recursively
+                    return { dir: rootDir!, dirPath: rootPath, nonRecursive: false }; // TODO: GH#18217
+                }
             }
 
             return getDirectoryToWatchFromFailedLookupLocationDirectory(
@@ -410,7 +419,7 @@ namespace ts {
 
         function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path) {
             // If directory path contains node module, get the most parent node_modules directory for watching
-            while (stringContains(dirPath, "/node_modules/")) {
+            while (stringContains(dirPath, nodeModulesPathPart)) {
                 dir = getDirectoryPath(dir);
                 dirPath = getDirectoryPath(dirPath);
             }
@@ -478,6 +487,7 @@ namespace ts {
                         customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
                     }
                     if (dirPath === rootPath) {
+                        Debug.assert(!nonRecursive);
                         setAtRoot = true;
                     }
                     else {
@@ -487,8 +497,8 @@ namespace ts {
             }
 
             if (setAtRoot) {
-                // This is always recursive
-                setDirectoryWatcher(rootDir!, rootPath); // TODO: GH#18217
+                // This is always non recursive
+                setDirectoryWatcher(rootDir!, rootPath, /*nonRecursive*/ true); // TODO: GH#18217
             }
         }
 
@@ -497,7 +507,8 @@ namespace ts {
         }
 
         function watchFailedLookupLocationOfNonRelativeModuleResolutions(resolutions: ResolutionWithFailedLookupLocations[], name: string) {
-            const updateResolution = resolutionHost.getCurrentProgram().getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name) ?
+            const program = resolutionHost.getCurrentProgram();
+            const updateResolution = program && program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name) ?
                 setRefCountToUndefined : watchFailedLookupLocationOfResolution;
             resolutions.forEach(updateResolution);
         }

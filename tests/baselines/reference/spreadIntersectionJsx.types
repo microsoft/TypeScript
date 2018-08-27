@@ -13,12 +13,10 @@ class C { c; }
 
 let intersected: A & C;
 >intersected : A & C
->A : A
->C : C
 
 let element = <div { ...intersected } />;
->element : any
-><div { ...intersected } /> : any
+>element : error
+><div { ...intersected } /> : error
 >div : any
 >intersected : A & C
 

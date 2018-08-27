@@ -2,102 +2,52 @@
 // type parameter names are relevant when choosing whether to merge interface declarations
 
 interface B<T, U> {
->B : B<T, U>
->T : T
->U : U
-
     x: U;
 >x : U
->U : U
 }
 
 interface B<U, T> { // error
->B : B<T, U>
->U : U
->T : T
-
     y: V;
 >y : any
->V : No type information available!
 }
 
 module M {
->M : any
-
     interface B<T, U> {
->B : B<T, U>
->T : T
->U : U
-
         x: U;
 >x : U
->U : U
     }
 
     interface B<U, T> { // error
->B : B<T, U>
->U : U
->T : T
-
         y: T;
 >y : T
->T : T
     }
 }
 
 module M2 {
->M2 : any
-
     interface B<T, U> {
->B : B<T, U>
->T : T
->U : U
-
         x: U;
 >x : U
->U : U
     }
 }
 
 module M2 {
->M2 : any
-
     interface B<U, T> { // ok, different declaration space than other M2
->B : B<U, T>
->U : U
->T : T
-
         y: T;
 >y : T
->T : T
     }
 }
 
 module M3 {
->M3 : any
-
     export interface B<T, U> {
->B : B<T, U>
->T : T
->U : U
-
         x: U;
 >x : U
->U : U
     }
 }
 
 module M3 {
->M3 : any
-
     export interface B<U, T> { // error
->B : B<T, U>
->U : U
->T : T
-
         y: T;
 >y : T
->T : T
     }
 }
 

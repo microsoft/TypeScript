@@ -72,7 +72,6 @@ class C1 {
 }
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string

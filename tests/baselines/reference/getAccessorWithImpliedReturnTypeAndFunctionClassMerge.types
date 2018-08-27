@@ -1,27 +1,17 @@
 === tests/cases/compiler/getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts ===
 declare function _<T>(value: Array<T>): _<T>;
 >_ : typeof _
->T : T
 >value : T[]
->Array : T[]
->T : T
->_ : No type information available!
->T : T
 
 declare function _<T>(value: T): _<T>;
 >_ : typeof _
->T : T
 >value : T
->T : T
->_ : No type information available!
->T : T
 
 declare module _ {
 >_ : typeof _
 
     export function each<T>(
 >each : <T>(context?: any) => void
->T : T
 
         //list: List<T>,
         //iterator: ListIterator<T, void>,
@@ -29,30 +19,20 @@ declare module _ {
 >context : any
 
     interface ListIterator<T, TResult> {
->ListIterator : ListIterator<T, TResult>
->T : T
->TResult : TResult
-
         (value: T, index: number, list: T[]): TResult;
 >value : T
->T : T
 >index : number
 >list : T[]
->T : T
->TResult : TResult
     }
 }
 
 declare class _<T> {
 >_ : _<T>
->T : T
 
     each(iterator: _.ListIterator<T, void>, context?: any): void;
 >each : (iterator: _.ListIterator<T, void>, context?: any) => void
 >iterator : _.ListIterator<T, void>
 >_ : any
->ListIterator : _.ListIterator<T, TResult>
->T : T
 >context : any
 }
 
