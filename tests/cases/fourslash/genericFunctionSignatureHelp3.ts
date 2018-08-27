@@ -18,17 +18,14 @@
 
 verify.signatureHelp(
     { marker: "1", text: "foo1(x: number, callback: (y1: {}) => number): void" },
-    // TODO: GH#23631
-    // { marker: "2", text: "foo2(x: number, callback: (y2: {}) => number): void" },
+    { marker: "2", text: "foo2(x: number, callback: (y2: {}) => number): void" },
     { marker: "3", text: "callback(y3: {}): number" },
-    // TODO: GH#23631
-    // { marker: "4", text: "foo4(x: number, callback: (y4: string) => number): void" },
+    { marker: "4", text: "foo4(x: number, callback: (y4: string) => number): void" },
     { marker: "5", text: "callback(y5: string): number" },
 );
 
 goTo.marker('6');
-// TODO: GH#23631
-// verify.signatureHelp({ text: "foo6(x: number, callback: (y6: {}) => number): void" });
+verify.signatureHelp({ text: "foo6(x: number, callback: (y6: {}) => number): void" });
 edit.insert('string>(null,null);'); // need to make this line parse so we can get reasonable LS answers to later tests
 
 verify.signatureHelp({ marker: "7", text: "foo7(x: number, callback: (y7: {}) => number): void" });

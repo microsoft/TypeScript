@@ -12,7 +12,7 @@
 ////class Bar<T> extends testClass</*type3*/
 ////var x : testClass<,, /*type4*/any>;
 
-// TODO: GH#23631
+// TODO: GH#26699
 
 if (false) {
     verify.signatureHelp(
