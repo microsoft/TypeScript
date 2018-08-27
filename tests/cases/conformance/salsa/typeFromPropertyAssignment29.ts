@@ -46,6 +46,14 @@ namespace ExpandoMerge {
 }
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
 
+namespace Ns {
+    function ExpandoNamespace(): void {}
+    ExpandoNamespace.p6 = 42;
+    export function foo() {
+        return ExpandoNamespace;
+    }
+}
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
     return n.toString();

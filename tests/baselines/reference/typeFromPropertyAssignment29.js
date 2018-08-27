@@ -46,6 +46,14 @@ namespace ExpandoMerge {
 }
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
 
+namespace Ns {
+    function ExpandoNamespace(): void {}
+    ExpandoNamespace.p6 = 42;
+    export function foo() {
+        return ExpandoNamespace;
+    }
+}
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
     return n.toString();
@@ -120,6 +128,15 @@ ExpandoMerge.p1 = 111;
     ExpandoMerge.p3 = 333;
 })(ExpandoMerge || (ExpandoMerge = {}));
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+var Ns;
+(function (Ns) {
+    function ExpandoNamespace() { }
+    ExpandoNamespace.p6 = 42;
+    function foo() {
+        return ExpandoNamespace;
+    }
+    Ns.foo = foo;
+})(Ns || (Ns = {}));
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n) {
     return n.toString();
@@ -197,6 +214,13 @@ declare namespace ExpandoMerge {
     var p3: number;
 }
 declare var n: number;
+declare namespace Ns {
+    function ExpandoNamespace(): void;
+    namespace ExpandoNamespace {
+        var p6: number;
+    }
+    function foo(): typeof ExpandoNamespace;
+}
 declare var ExpandoExpr2: (n: number) => string;
 declare var n: number;
 declare class ExpandoClass {

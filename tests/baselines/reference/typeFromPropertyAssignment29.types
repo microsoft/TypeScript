@@ -226,6 +226,27 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
 >ExpandoMerge : typeof ExpandoMerge
 >1 : 1
 
+namespace Ns {
+>Ns : typeof Ns
+
+    function ExpandoNamespace(): void {}
+>ExpandoNamespace : { (): void; p6: number; }
+
+    ExpandoNamespace.p6 = 42;
+>ExpandoNamespace.p6 = 42 : 42
+>ExpandoNamespace.p6 : number
+>ExpandoNamespace : { (): void; p6: number; }
+>p6 : number
+>42 : 42
+
+    export function foo() {
+>foo : () => { (): void; p6: number; }
+
+        return ExpandoNamespace;
+>ExpandoNamespace : { (): void; p6: number; }
+    }
+}
+
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n: number) {
 >ExpandoExpr2 : (n: number) => string
