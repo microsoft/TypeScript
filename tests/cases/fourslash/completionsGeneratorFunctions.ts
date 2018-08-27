@@ -2,16 +2,21 @@
 
 ////function /*a*/ ;
 ////function* /*b*/ ;
-////class C {
-////    */*c*/
+////interface I {
+////    abstract baseMethod(): Iterable<number>;
+////}
+////class C implements I {
+////    */*c*/ ;
 ////    public */*d*/
 ////}
-////const o = {
+////const o: I = {
 ////    */*e*/
 ////};
 ////1 * /*f*/
 
 verify.completions(
-    { marker: ["a", "b", "c", "d", "e"], exact: undefined, isNewIdentifierLocation: true },
+    { marker: ["a", "b"], exact: undefined, isNewIdentifierLocation: true },
+    { marker: ["c", "d"], exact: ["baseMethod"], isNewIdentifierLocation: true },
+    { marker: "e", exact: ["baseMethod"] },
     { marker: "f", includes: ["Number"] },
 );
