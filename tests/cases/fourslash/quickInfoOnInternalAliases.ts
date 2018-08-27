@@ -24,7 +24,7 @@ verify.quickInfos({
     2: ["(alias) class internalAlias\nimport internalAlias = m1.m2.c", "This is on import declaration"],
     3: ["class m1.m2.c", "class comment;"],
     4: "var newVar: internalAlias",
-    5: "(alias) new internalAlias(): internalAlias\nimport internalAlias = m1.m2.c",
+    5: ["(alias) new internalAlias(): internalAlias\nimport internalAlias = m1.m2.c", "This is on import declaration"],
     6: "var anotherAliasVar: typeof internalAlias",
     7: ["(alias) class internalAlias\nimport internalAlias = m1.m2.c", "This is on import declaration"],
     8: "(alias) function internalFoo(): void\nimport internalFoo = m1.foo",

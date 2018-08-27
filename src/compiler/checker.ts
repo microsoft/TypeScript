@@ -11178,7 +11178,7 @@ namespace ts {
                 }
 
                 if (relation !== comparableRelation &&
-                    !(source.flags & TypeFlags.UnionOrIntersection) &&
+                    !(source.flags & TypeFlags.Union) &&
                     !(target.flags & TypeFlags.Union) &&
                     !isIntersectionConstituent &&
                     source !== globalObjectType &&
@@ -13549,14 +13549,16 @@ namespace ts {
                 const sourceLen = sourceSignatures.length;
                 const targetLen = targetSignatures.length;
                 const len = sourceLen < targetLen ? sourceLen : targetLen;
+                const skipParameters = !!(source.flags & TypeFlags.ContainsAnyFunctionType);
                 for (let i = 0; i < len; i++) {
-                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]));
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]), skipParameters);
                 }
             }
 
-            function inferFromSignature(source: Signature, target: Signature) {
-                forEachMatchingParameterType(source, target, inferFromContravariantTypes);
-
+            function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
+                if (!skipParameters) {
+                    forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                }
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
                 if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind) {
@@ -20576,8 +20578,10 @@ namespace ts {
                         return links.contextFreeType;
                     }
                     const returnType = getReturnTypeFromBody(node, checkMode);
-                    const singleReturnSignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-                    return links.contextFreeType = createAnonymousType(node.symbol, emptySymbols, [singleReturnSignature], emptyArray, undefined, undefined);
+                    const returnOnlySignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+                    const returnOnlyType = createAnonymousType(node.symbol, emptySymbols, [returnOnlySignature], emptyArray, undefined, undefined);
+                    returnOnlyType.flags |= TypeFlags.ContainsAnyFunctionType;
+                    return links.contextFreeType = returnOnlyType;
                 }
                 return anyFunctionType;
             }
@@ -24250,7 +24254,7 @@ namespace ts {
                     if (nameText) {
                         const property = getPropertyOfType(parentType!, nameText)!; // TODO: GH#18217
                         markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                        if (parent.initializer && property && !isComputedPropertyName(name)) {
+                        if (parent.initializer && property) {
                             checkPropertyAccessibility(parent, parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
                         }
                     }

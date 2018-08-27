@@ -611,7 +611,8 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            documentation = signature.getDocumentationComment(typeChecker);
+            const docComment = signature.getDocumentationComment(typeChecker);
+            documentation = docComment.length === 0 ? undefined : docComment;
             tags = signature.getJsDocTags();
         }
 
