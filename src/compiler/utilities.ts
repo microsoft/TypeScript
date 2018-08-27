@@ -4116,6 +4116,10 @@ namespace ts {
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
     }
 
+    export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
+        return !positionsAreOnSameLine(list.pos, list.end, sourceFile);
+    }
+
     export function getStartPositionOfRange(range: TextRange, sourceFile: SourceFile) {
         return positionIsSynthesized(range.pos) ? -1 : skipTrivia(sourceFile.text, range.pos);
     }
@@ -8252,5 +8256,28 @@ namespace ts {
         // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
         // '/// <reference no-default-lib="true"/>' directive.
         return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
+    }
+
+    export function getBodyOfFunctionLike(node: FunctionLike): Node | undefined {
+        switch (node.kind) {
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.JSDocFunctionType:
+                return undefined;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return node.body;
+            default:
+                return Debug.assertNever(node);
+        }
     }
 }

@@ -50,6 +50,13 @@ namespace ts.OutliningElementsCollector {
                 depthRemaining--;
             }
             else {
+                if (isFunctionLike(n)) {
+                    const body = getBodyOfFunctionLike(n);
+                    append(out, body && spanForNode(body, sourceFile, n, /*autoCollapse*/ !isArrowFunction(n)));
+                    if (isNodeArrayMultiLine(n.parameters, sourceFile)) {
+                        append(out, spanForNode(n, sourceFile, /*hintSpanNode*/ n, /*autoCollapse*/ false, /*useFullStart*/ false, /*open*/ SyntaxKind.OpenParenToken));
+                    }
+                }
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
@@ -142,7 +149,7 @@ namespace ts.OutliningElementsCollector {
         switch (n.kind) {
             case SyntaxKind.Block:
                 if (isFunctionBlock(n)) {
-                    return spanForNode(n.parent, /*autoCollapse*/ n.parent.kind !== SyntaxKind.ArrowFunction);
+                    return undefined; // Already handled by visitNonImportNode
                 }
                 // Check if the block is standalone, or 'attached' to some parent statement.
                 // If the latter, we want to collapse the block, but consider its hint span
@@ -156,15 +163,15 @@ namespace ts.OutliningElementsCollector {
                     case SyntaxKind.WhileStatement:
                     case SyntaxKind.WithStatement:
                     case SyntaxKind.CatchClause:
-                        return spanForNode(n.parent);
+                        return spanForNode(n, sourceFile, n.parent);
                     case SyntaxKind.TryStatement:
                         // Could be the try-block, or the finally-block.
                         const tryStatement = <TryStatement>n.parent;
                         if (tryStatement.tryBlock === n) {
-                            return spanForNode(n.parent);
+                            return spanForNode(n, sourceFile, n.parent);
                         }
                         else if (tryStatement.finallyBlock === n) {
-                            return spanForNode(findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
+                            return spanForNode(n, sourceFile, findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!);
                         }
                         // falls through
                     default:
@@ -173,16 +180,16 @@ namespace ts.OutliningElementsCollector {
                         return createOutliningSpan(createTextSpanFromNode(n, sourceFile), OutliningSpanKind.Code);
                 }
             case SyntaxKind.ModuleBlock:
-                return spanForNode(n.parent);
+                return spanForNode(n, sourceFile, n.parent);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
-                return spanForNode(n);
+                return spanForNode(n, sourceFile, n);
             case SyntaxKind.ObjectLiteralExpression:
-                return spanForObjectOrArrayLiteral(n);
+                return spanForObjectOrArrayLiteral(n, sourceFile, SyntaxKind.OpenBraceToken);
             case SyntaxKind.ArrayLiteralExpression:
-                return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
+                return spanForObjectOrArrayLiteral(n, sourceFile, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
                 return spanForJSXElement(<JsxElement>n);
             case SyntaxKind.JsxSelfClosingElement:
@@ -204,24 +211,31 @@ namespace ts.OutliningElementsCollector {
 
             return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
+    }
 
-        function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
-            // If the block has no leading keywords and is inside an array literal,
-            // we only want to collapse the span of the block.
-            // Otherwise, the collapsed section will include the end of the previous line.
-            return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
-        }
+    function spanForObjectOrArrayLiteral(node: Node, sourceFile: SourceFile, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken): OutliningSpan | undefined {
+        // If the block has no leading keywords and is inside an array literal,
+        // we only want to collapse the span of the block.
+        // Otherwise, the collapsed section will include the end of the previous line.
+        return spanForNode(node, sourceFile, node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
+    }
 
-        function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
-            const openToken = findChildOfKind(n, open, sourceFile);
-            const close = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken;
-            const closeToken = findChildOfKind(n, close, sourceFile);
-            if (!openToken || !closeToken) {
-                return undefined;
-            }
-            const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
-            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+    function spanForNode(
+        n: Node,
+        sourceFile: SourceFile,
+        hintSpanNode: Node,
+        autoCollapse = false,
+        useFullStart = true,
+        open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken | SyntaxKind.OpenParenToken = SyntaxKind.OpenBraceToken,
+    ): OutliningSpan | undefined {
+        const openToken = findChildOfKind(n, open, sourceFile);
+        const close = getBraceMatching(open);
+        const closeToken = findChildOfKind(n, close, sourceFile);
+        if (!openToken || !closeToken) {
+            return undefined;
         }
+        const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
+        return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
     }
 
     function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {

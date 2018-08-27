@@ -1709,18 +1709,10 @@ namespace ts {
             return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
-        const braceMatching = createMapFromTemplate({
-            [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
-            [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
-            [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
-            [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
-        });
-        braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
-
         function getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const token = getTouchingToken(sourceFile, position);
-            const matchKind = token.getStart(sourceFile) === position ? braceMatching.get(token.kind.toString()) : undefined;
+            const matchKind = token.getStart(sourceFile) === position ? getBraceMatching(token.kind) : undefined;
             const match = matchKind && findChildOfKind(token.parent, matchKind, sourceFile);
             // We want to order the braces when we return the result.
             return match ? [createTextSpanFromNode(token, sourceFile), createTextSpanFromNode(match, sourceFile)].sort((a, b) => a.start - b.start) : emptyArray;
