@@ -5129,10 +5129,8 @@ namespace ts {
                 return decls;
             }
             const typeTag = getJSDocType(node);
-            if (typeTag) {
-                if (isFunctionTypeNode(typeTag) && typeTag.typeParameters) {
-                    return typeTag.typeParameters;
-                }
+            if (typeTag && isFunctionTypeNode(typeTag) && typeTag.typeParameters) {
+                return typeTag.typeParameters;
             }
         }
         return emptyArray;
