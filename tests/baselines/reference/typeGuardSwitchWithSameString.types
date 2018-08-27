@@ -1,0 +1,100 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts ===
+enum Foo {
+>Foo : Foo
+
+    baz = "baz"
+>baz : Foo
+>"baz" : "baz"
+}
+
+enum Bar {
+>Bar : Bar
+
+    baz = "baz"
+>baz : Bar
+>"baz" : "baz"
+}
+
+enum Baz {
+>Baz : Baz
+
+    baz = "ba" + "z"
+>baz : Baz
+>"ba" + "z" : string
+>"ba" : "ba"
+>"z" : "z"
+}
+
+interface IFoo {
+    type: Foo.baz
+>type : Foo
+>Foo : any
+
+    foo: string
+>foo : string
+}
+
+interface IBar {
+    type: Bar.baz
+>type : Bar
+>Bar : any
+
+    bar: number
+>bar : number
+}
+
+interface IBaz {
+    type: Baz.baz
+>type : Baz
+>Baz : any
+
+    baz: boolean
+>baz : boolean
+}
+
+type T = IFoo | IBar | IBaz
+>T : T
+
+function reduce(t: T) {
+>reduce : (t: T) => void
+>t : T
+
+    switch (t.type) {
+>t.type : Foo | Bar | Baz
+>t : T
+>type : Foo | Bar | Baz
+
+        case Foo.baz:
+>Foo.baz : Foo
+>Foo : typeof Foo
+>baz : Foo
+
+            t.foo
+>t.foo : any
+>t : T
+>foo : any
+
+            break
+        case Bar.baz:
+>Bar.baz : Bar
+>Bar : typeof Bar
+>baz : Bar
+
+            t.bar
+>t.bar : any
+>t : T
+>bar : any
+
+            break
+        case Baz.baz:
+>Baz.baz : Baz
+>Baz : typeof Baz
+>baz : Baz
+
+            t.baz
+>t.baz : any
+>t : T
+>baz : any
+    }
+}
+

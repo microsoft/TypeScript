@@ -14916,6 +14916,11 @@ namespace ts {
                 return getTypeWithFacts(type, facts);
             }
 
+            function areStringLiteralEnumComparable (source: Type, target: Type) {
+                const meaning = TypeFlags.StringLiteral | TypeFlags.EnumLiteral;
+                return !!(source.flags & meaning && target.flags & meaning && (<StringLiteralType>source).value === (<StringLiteralType>target).value);
+            }
+
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
                 // We only narrow if all case expressions specify values with unit types
                 const switchTypes = getSwitchClauseTypes(switchStatement);
@@ -14927,7 +14932,7 @@ namespace ts {
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =
                     discriminantType.flags & TypeFlags.Never ? neverType :
-                        replacePrimitivesWithLiterals(filterType(type, t => areTypesComparable(discriminantType, t)), discriminantType);
+                        replacePrimitivesWithLiterals(filterType(type, t => areTypesComparable(discriminantType, t) || areStringLiteralEnumComparable(discriminantType, t)), discriminantType);
                 if (!hasDefaultClause) {
                     return caseType;
                 }

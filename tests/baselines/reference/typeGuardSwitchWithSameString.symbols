@@ -1,0 +1,102 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts ===
+enum Foo {
+>Foo : Symbol(Foo, Decl(typeGuardSwitchWithSameString.ts, 0, 0))
+
+    baz = "baz"
+>baz : Symbol(Foo.baz, Decl(typeGuardSwitchWithSameString.ts, 0, 10))
+}
+
+enum Bar {
+>Bar : Symbol(Bar, Decl(typeGuardSwitchWithSameString.ts, 2, 1))
+
+    baz = "baz"
+>baz : Symbol(Bar.baz, Decl(typeGuardSwitchWithSameString.ts, 4, 10))
+}
+
+enum Baz {
+>Baz : Symbol(Baz, Decl(typeGuardSwitchWithSameString.ts, 6, 1))
+
+    baz = "ba" + "z"
+>baz : Symbol(Baz.baz, Decl(typeGuardSwitchWithSameString.ts, 8, 10))
+}
+
+interface IFoo {
+>IFoo : Symbol(IFoo, Decl(typeGuardSwitchWithSameString.ts, 10, 1))
+
+    type: Foo.baz
+>type : Symbol(IFoo.type, Decl(typeGuardSwitchWithSameString.ts, 12, 16))
+>Foo : Symbol(Foo, Decl(typeGuardSwitchWithSameString.ts, 0, 0))
+>baz : Symbol(Foo.baz, Decl(typeGuardSwitchWithSameString.ts, 0, 10))
+
+    foo: string
+>foo : Symbol(IFoo.foo, Decl(typeGuardSwitchWithSameString.ts, 13, 17))
+}
+
+interface IBar {
+>IBar : Symbol(IBar, Decl(typeGuardSwitchWithSameString.ts, 15, 1))
+
+    type: Bar.baz
+>type : Symbol(IBar.type, Decl(typeGuardSwitchWithSameString.ts, 17, 16))
+>Bar : Symbol(Bar, Decl(typeGuardSwitchWithSameString.ts, 2, 1))
+>baz : Symbol(Bar.baz, Decl(typeGuardSwitchWithSameString.ts, 4, 10))
+
+    bar: number
+>bar : Symbol(IBar.bar, Decl(typeGuardSwitchWithSameString.ts, 18, 17))
+}
+
+interface IBaz {
+>IBaz : Symbol(IBaz, Decl(typeGuardSwitchWithSameString.ts, 20, 1))
+
+    type: Baz.baz
+>type : Symbol(IBaz.type, Decl(typeGuardSwitchWithSameString.ts, 22, 16))
+>Baz : Symbol(Baz, Decl(typeGuardSwitchWithSameString.ts, 6, 1))
+>baz : Symbol(Baz.baz, Decl(typeGuardSwitchWithSameString.ts, 8, 10))
+
+    baz: boolean
+>baz : Symbol(IBaz.baz, Decl(typeGuardSwitchWithSameString.ts, 23, 17))
+}
+
+type T = IFoo | IBar | IBaz
+>T : Symbol(T, Decl(typeGuardSwitchWithSameString.ts, 25, 1))
+>IFoo : Symbol(IFoo, Decl(typeGuardSwitchWithSameString.ts, 10, 1))
+>IBar : Symbol(IBar, Decl(typeGuardSwitchWithSameString.ts, 15, 1))
+>IBaz : Symbol(IBaz, Decl(typeGuardSwitchWithSameString.ts, 20, 1))
+
+function reduce(t: T) {
+>reduce : Symbol(reduce, Decl(typeGuardSwitchWithSameString.ts, 27, 27))
+>t : Symbol(t, Decl(typeGuardSwitchWithSameString.ts, 29, 16))
+>T : Symbol(T, Decl(typeGuardSwitchWithSameString.ts, 25, 1))
+
+    switch (t.type) {
+>t.type : Symbol(type, Decl(typeGuardSwitchWithSameString.ts, 12, 16), Decl(typeGuardSwitchWithSameString.ts, 17, 16), Decl(typeGuardSwitchWithSameString.ts, 22, 16))
+>t : Symbol(t, Decl(typeGuardSwitchWithSameString.ts, 29, 16))
+>type : Symbol(type, Decl(typeGuardSwitchWithSameString.ts, 12, 16), Decl(typeGuardSwitchWithSameString.ts, 17, 16), Decl(typeGuardSwitchWithSameString.ts, 22, 16))
+
+        case Foo.baz:
+>Foo.baz : Symbol(Foo.baz, Decl(typeGuardSwitchWithSameString.ts, 0, 10))
+>Foo : Symbol(Foo, Decl(typeGuardSwitchWithSameString.ts, 0, 0))
+>baz : Symbol(Foo.baz, Decl(typeGuardSwitchWithSameString.ts, 0, 10))
+
+            t.foo
+>t : Symbol(t, Decl(typeGuardSwitchWithSameString.ts, 29, 16))
+
+            break
+        case Bar.baz:
+>Bar.baz : Symbol(Bar.baz, Decl(typeGuardSwitchWithSameString.ts, 4, 10))
+>Bar : Symbol(Bar, Decl(typeGuardSwitchWithSameString.ts, 2, 1))
+>baz : Symbol(Bar.baz, Decl(typeGuardSwitchWithSameString.ts, 4, 10))
+
+            t.bar
+>t : Symbol(t, Decl(typeGuardSwitchWithSameString.ts, 29, 16))
+
+            break
+        case Baz.baz:
+>Baz.baz : Symbol(Baz.baz, Decl(typeGuardSwitchWithSameString.ts, 8, 10))
+>Baz : Symbol(Baz, Decl(typeGuardSwitchWithSameString.ts, 6, 1))
+>baz : Symbol(Baz.baz, Decl(typeGuardSwitchWithSameString.ts, 8, 10))
+
+            t.baz
+>t : Symbol(t, Decl(typeGuardSwitchWithSameString.ts, 29, 16))
+    }
+}
+

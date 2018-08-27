@@ -1,0 +1,60 @@
+tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts(33,15): error TS2339: Property 'foo' does not exist on type 'T'.
+  Property 'foo' does not exist on type 'IBar'.
+tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts(36,15): error TS2339: Property 'bar' does not exist on type 'T'.
+  Property 'bar' does not exist on type 'IFoo'.
+tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts(39,15): error TS2339: Property 'baz' does not exist on type 'T'.
+  Property 'baz' does not exist on type 'IFoo'.
+
+
+==== tests/cases/conformance/expressions/typeGuards/typeGuardSwitchWithSameString.ts (3 errors) ====
+    enum Foo {
+        baz = "baz"
+    }
+    
+    enum Bar {
+        baz = "baz"
+    }
+    
+    enum Baz {
+        baz = "ba" + "z"
+    }
+    
+    interface IFoo {
+        type: Foo.baz
+        foo: string
+    }
+    
+    interface IBar {
+        type: Bar.baz
+        bar: number
+    }
+    
+    interface IBaz {
+        type: Baz.baz
+        baz: boolean
+    }
+    
+    type T = IFoo | IBar | IBaz
+    
+    function reduce(t: T) {
+        switch (t.type) {
+            case Foo.baz:
+                t.foo
+                  ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'T'.
+!!! error TS2339:   Property 'foo' does not exist on type 'IBar'.
+                break
+            case Bar.baz:
+                t.bar
+                  ~~~
+!!! error TS2339: Property 'bar' does not exist on type 'T'.
+!!! error TS2339:   Property 'bar' does not exist on type 'IFoo'.
+                break
+            case Baz.baz:
+                t.baz
+                  ~~~
+!!! error TS2339: Property 'baz' does not exist on type 'T'.
+!!! error TS2339:   Property 'baz' does not exist on type 'IFoo'.
+        }
+    }
+    
