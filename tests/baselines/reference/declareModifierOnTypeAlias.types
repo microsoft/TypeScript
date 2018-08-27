@@ -7,5 +7,4 @@ type Bar = number;
 
 declare type Baz = Bar;
 >Baz : number
->Bar : number
 

@@ -1,43 +1,25 @@
 === tests/cases/compiler/promiseTypeInference.ts ===
 declare class Promise<T> {
 >Promise : Promise<T>
->T : T
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
 >then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
->U : U
 >success : (value: T) => Promise<U>
 >value : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 }
 interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
-
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 >then : <U>(success?: (value: T) => IPromise<U>) => IPromise<U>
->U : U
 >success : (value: T) => IPromise<U>
 >value : T
->T : T
->IPromise : IPromise<T>
->U : U
->IPromise : IPromise<T>
->U : U
 }
 declare function load(name: string): Promise<string>;
 >load : (name: string) => Promise<string>
 >name : string
->Promise : Promise<T>
 
 declare function convert(s: string): IPromise<number>;
 >convert : (s: string) => IPromise<number>
 >s : string
->IPromise : IPromise<T>
 
 var $$x = load("something").then(s => convert(s));
 >$$x : any

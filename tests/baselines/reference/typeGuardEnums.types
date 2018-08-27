@@ -7,8 +7,6 @@ enum V {}
 
 let x: number|string|E|V;
 >x : string | number | E | V
->E : E
->V : V
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean

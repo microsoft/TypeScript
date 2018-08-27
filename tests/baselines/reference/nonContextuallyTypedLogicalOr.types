@@ -1,7 +1,5 @@
 === tests/cases/compiler/nonContextuallyTypedLogicalOr.ts ===
 interface Contextual {
->Contextual : Contextual
-
     dummy;
 >dummy : any
 
@@ -10,8 +8,6 @@ interface Contextual {
 }
 
 interface Ellement {
->Ellement : Ellement
-
     dummy;
 >dummy : any
 
@@ -21,11 +17,9 @@ interface Ellement {
 
 var c: Contextual;
 >c : Contextual
->Contextual : Contextual
 
 var e: Ellement;
 >e : Ellement
->Ellement : Ellement
 
 (c || e).dummy;
 >(c || e).dummy : any

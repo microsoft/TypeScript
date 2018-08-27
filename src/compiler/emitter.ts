@@ -113,6 +113,7 @@ namespace ts {
 
         let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let emitSkipped = false;
+        let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
         // Emit each output file
         performance.mark("beforePrint");
@@ -125,6 +126,7 @@ namespace ts {
             diagnostics: emitterDiagnostics.getDiagnostics(),
             emittedFiles: emittedFilesList,
             sourceMaps: sourceMapDataList,
+            exportedModulesFromDeclarationEmit
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
@@ -222,6 +224,10 @@ namespace ts {
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
                 printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
+                if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
+                    const sourceFile = declarationTransform.transformed[0] as SourceFile;
+                    exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
+                }
             }
             declarationTransform.dispose();
         }
@@ -2587,14 +2593,14 @@ namespace ts {
         }
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || []);
+            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
         }
 
         function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
-            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives);
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
         }
 
-        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>) {
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>, libs: ReadonlyArray<FileReference>) {
             if (hasNoDefaultLib) {
                 write(`/// <reference no-default-lib="true"/>`);
                 writeLine();
@@ -2620,6 +2626,10 @@ namespace ts {
             }
             for (const directive of types) {
                 write(`/// <reference types="${directive.fileName}" />`);
+                writeLine();
+            }
+            for (const directive of libs) {
+                write(`/// <reference lib="${directive.fileName}" />`);
                 writeLine();
             }
         }

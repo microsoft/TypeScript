@@ -16,7 +16,7 @@
 ////<div /**/></div>;
 
 goTo.marker();
-verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc ", "JSX attribute", []);
+verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute", []);
 edit.insert("f");
-verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc ", "JSX attribute", []);
+verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute", []);
 

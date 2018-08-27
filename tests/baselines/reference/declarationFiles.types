@@ -22,12 +22,8 @@ class C2 {
 }
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: T;
 >x : T
->T : T
 
     y: this;
 >y : this
@@ -44,11 +40,9 @@ class C3 {
 
     c: this | Date;
 >c : this | Date
->Date : Date
 
     d: this & Date;
 >d : this & Date
->Date : Date
 
     e: (((this)));
 >e : this
@@ -63,15 +57,12 @@ class C3 {
 
     h: Foo<this>;
 >h : Foo<this>
->Foo : Foo<T>
 
     i: Foo<this | (() => this)>;
 >i : Foo<this | (() => this)>
->Foo : Foo<T>
 
     j: (x: any) => x is this;
 >j : (x: any) => x is this
->x : any
 >x : any
 }
 

@@ -12,7 +12,6 @@ declare let obj: { then: string; };
 
 declare let thenable: Thenable;
 >thenable : Thenable
->Thenable : Thenable
 
 async function fn1() { } // valid: Promise<void>
 >fn1 : () => Promise<void>
@@ -28,11 +27,9 @@ async function fn4(): number { } // error
 
 async function fn5(): PromiseLike<void> { } // error
 >fn5 : () => PromiseLike<void>
->PromiseLike : PromiseLike<T>
 
 async function fn6(): Thenable { } // error
 >fn6 : () => Thenable
->Thenable : Thenable
 
 async function fn7() { return; } // valid: Promise<void>
 >fn7 : () => Promise<void>

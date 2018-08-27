@@ -1,23 +1,15 @@
 === tests/cases/compiler/func.ts ===
 interface ComponentOptions<V> {
->ComponentOptions : ComponentOptions<V>
->V : V
-
     watch: Record<string, WatchHandler<any>>;
 >watch : Record<string, WatchHandler<any>>
->Record : Record<K, T>
->WatchHandler : WatchHandler<T>
 }
 type WatchHandler<T> = (val: T) => void;
 >WatchHandler : WatchHandler<T>
->T : T
 >val : T
->T : T
 
 declare function extend(options: ComponentOptions<{}>): void;
 >extend : (options: ComponentOptions<{}>) => void
 >options : ComponentOptions<{}>
->ComponentOptions : ComponentOptions<V>
 
 export var vextend = extend;
 >vextend : (options: ComponentOptions<{}>) => void

@@ -272,14 +272,16 @@ namespace ts.JsDoc {
      */
 
     export function getDocCommentTemplateAtPosition(newLine: string, sourceFile: SourceFile, position: number): TextInsertion | undefined {
-        // Check if in a context where we don't want to perform any insertion
-        if (isInString(sourceFile, position) || isInComment(sourceFile, position) || hasDocComment(sourceFile, position)) {
+        const tokenAtPos = getTokenAtPosition(sourceFile, position);
+        const existingDocComment = findAncestor(tokenAtPos, isJSDoc);
+        if (existingDocComment && (existingDocComment.comment !== undefined || length(existingDocComment.tags))) {
+            // Non-empty comment already exists.
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position);
         const tokenStart = tokenAtPos.getStart(sourceFile);
-        if (!tokenAtPos || tokenStart < position) {
+        // Don't provide a doc comment template based on a *previous* node. (But an existing empty jsdoc comment will likely start before `position`.)
+        if (!existingDocComment && tokenStart < position) {
             return undefined;
         }
 
@@ -365,7 +367,7 @@ namespace ts.JsDoc {
                 const varStatement = <VariableStatement>commentOwner;
                 const varDeclarations = varStatement.declarationList.declarations;
                 const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
+                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
                     : undefined;
                 return { commentOwner, parameters };
             }

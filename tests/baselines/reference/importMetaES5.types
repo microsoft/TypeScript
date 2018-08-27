@@ -9,7 +9,7 @@
 >response : Response
 >await fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Response
 >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
->fetch : (input?: string | Request, init?: RequestInit) => Promise<Response>
+>fetch : { (input: RequestInfo, init?: RequestInit): Promise<Response>; (input: RequestInfo, init?: RequestInit): Promise<Response>; }
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL
@@ -123,7 +123,6 @@ let globalC = import.import.import.malkovich;
 === tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : ImportMeta
->ImportMeta : ImportMeta
 >import.meta.blah = import.meta.blue = import.meta : ImportMeta
 >import.meta.blah : any
 >import.meta : ImportMeta
@@ -148,8 +147,6 @@ declare global {
 >global : any
 
   interface ImportMeta {
->ImportMeta : ImportMeta
-
     wellKnownProperty: { a: number, b: string, c: boolean };
 >wellKnownProperty : { a: number; b: string; c: boolean; }
 >a : number

@@ -1,7 +1,6 @@
 === tests/cases/conformance/types/union/unionTypeConstructSignatures.ts ===
 var numOrDate: number | Date;
 >numOrDate : number | Date
->Date : Date
 
 var strOrBoolean: string | boolean;
 >strOrBoolean : string | boolean
@@ -15,7 +14,6 @@ var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number)
 >unionOfDifferentReturnType : (new (a: number) => number) | (new (a: number) => Date)
 >a : number
 >a : number
->Date : Date
 
 numOrDate = new unionOfDifferentReturnType(10);
 >numOrDate = new unionOfDifferentReturnType(10) : number | Date
@@ -41,7 +39,6 @@ var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): str
 >a : number
 >a : string
 >a : number
->Date : Date
 >a : string
 
 numOrDate = new unionOfDifferentReturnType1(10);
@@ -71,7 +68,6 @@ var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: str
 >unionOfDifferentParameterTypes : (new (a: number) => number) | (new (a: string) => Date)
 >a : number
 >a : string
->Date : Date
 
 new unionOfDifferentParameterTypes(10);// error - no call signatures
 >new unionOfDifferentParameterTypes(10) : any
@@ -91,7 +87,6 @@ var unionOfDifferentNumberOfSignatures: { new (a: number): number; } | { new (a:
 >unionOfDifferentNumberOfSignatures : (new (a: number) => number) | { new (a: number): Date; new (a: string): boolean; }
 >a : number
 >a : number
->Date : Date
 >a : string
 
 new unionOfDifferentNumberOfSignatures(); // error - no call signatures

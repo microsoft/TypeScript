@@ -3,31 +3,23 @@ module Test {
 >Test : typeof Test
 
     export interface MyFunc {
->MyFunc : MyFunc
-
         <T>(value1: T): T;
->T : T
 >value1 : T
->T : T
->T : T
     }
     export class MyClass {
 >MyClass : MyClass
 
         constructor(func: MyFunc) { }
 >func : MyFunc
->MyFunc : MyFunc
     }
  
  export function F(func: MyFunc) { }
 >F : (func: MyFunc) => void
 >func : MyFunc
->MyFunc : MyFunc
 }
 var func: Test.MyFunc;
 >func : Test.MyFunc
 >Test : any
->MyFunc : Test.MyFunc
 
 Test.F(func); // OK
 >Test.F(func) : void

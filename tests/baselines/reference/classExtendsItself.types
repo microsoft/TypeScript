@@ -5,12 +5,9 @@ class C extends C { } // error
 
 class D<T> extends D<T> { } // error
 >D : D<T>
->T : T
 >D : typeof D
->T : T
 
 class E<T> extends E<string> { } // error
 >E : E<T>
->T : T
 >E : typeof E
 

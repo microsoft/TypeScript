@@ -8,7 +8,6 @@ import process = require('process');
 export default function parseArgs(): minimist.ParsedArgs {
 >parseArgs : () => minimist.ParsedArgs
 >minimist : any
->ParsedArgs : minimist.ParsedArgs
 
   return minimist(process.argv.slice(2));
 >minimist(process.argv.slice(2)) : minimist.ParsedArgs
@@ -24,16 +23,12 @@ export default function parseArgs(): minimist.ParsedArgs {
 
 === /node_modules/@types/minimist/minimist.d.ts ===
 declare namespace thing {
->thing : (x: any) => ParsedArgs
-
     interface ParsedArgs {}
->ParsedArgs : ParsedArgs
 }
 declare function thing(x: any): thing.ParsedArgs;
 >thing : (x: any) => thing.ParsedArgs
 >x : any
 >thing : any
->ParsedArgs : thing.ParsedArgs
 
 export = thing;
 >thing : (x: any) => thing.ParsedArgs

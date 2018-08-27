@@ -10,7 +10,6 @@ module foo {
 
         y: C1;
 >y : C1
->C1 : C1
     }
  
     class C2 {
@@ -22,8 +21,6 @@ module foo {
     }
  
     interface I1 {
->I1 : I1
-
         (a: string, b: string): string;
 >a : string
 >b : string
@@ -31,12 +28,9 @@ module foo {
         (x: number, y: number): I1;
 >x : number
 >y : number
->I1 : I1
     }
  
     interface I2 {
->I2 : I2
-
         x: string;
 >x : string
 
@@ -47,19 +41,15 @@ module foo {
     // None of the types are exported, so per section 10.3, should all be errors
     export var e: C1;
 >e : C1
->C1 : C1
 
     export var f: I1;
 >f : I1
->I1 : I1
 
     export var g: C2;
 >g : C2
->C2 : C2
 
     export var h: I2;
 >h : I2
->I2 : I2
 }
  
 var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.

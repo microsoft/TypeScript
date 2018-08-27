@@ -756,8 +756,7 @@ namespace ts {
                     if (recursive) {
                         return watchDirectoryRecursively(directoryName, callback);
                     }
-                    watchDirectory(directoryName, callback);
-                    return undefined!; // TODO: GH#18217
+                    return watchDirectory(directoryName, callback);
                 };
             }
 

@@ -328,7 +328,6 @@ namespace ts {
     }
 
     export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
-        private files: string[];
         private loggingEnabled = false;
         private tracingEnabled = false;
 
@@ -408,7 +407,7 @@ namespace ts {
 
         public getScriptFileNames(): string[] {
             const encoded = this.shimHost.getScriptFileNames();
-            return this.files = JSON.parse(encoded);
+            return JSON.parse(encoded);
         }
 
         public getScriptSnapshot(fileName: string): IScriptSnapshot | undefined {

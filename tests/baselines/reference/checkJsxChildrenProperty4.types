@@ -3,21 +3,15 @@ import React = require('react');
 >React : typeof React
 
 interface IUser {
->IUser : IUser
-
     Name: string;
 >Name : string
 }
 
 interface IFetchUserProps {
->IFetchUserProps : IFetchUserProps
-
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => JSX.Element
 >user : IUser
->IUser : IUser
 >JSX : any
->Element : JSX.Element
 }
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
@@ -25,7 +19,6 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >React.Component : React.Component<IFetchUserProps, any>
 >React : typeof React
 >Component : typeof React.Component
->IFetchUserProps : IFetchUserProps
 
     render() {
 >render : () => JSX.Element

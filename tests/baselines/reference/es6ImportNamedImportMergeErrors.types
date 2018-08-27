@@ -20,15 +20,11 @@ import { a } from "./es6ImportNamedImportMergeErrors_0";
 >a : number
 
 interface a { } // shouldnt be error
->a : a
-
 import { x as x1 } from "./es6ImportNamedImportMergeErrors_0";
 >x : number
 >x1 : number
 
 interface x1 { } // shouldnt be error
->x1 : x1
-
 import { x } from "./es6ImportNamedImportMergeErrors_0"; // should be error
 >x : number
 

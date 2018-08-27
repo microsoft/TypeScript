@@ -1,20 +1,13 @@
 === tests/cases/compiler/types.d.ts ===
 declare namespace A {
->A : any
-
-    export namespace B {
->B : any
-
-        export namespace C {
->C : any
-
-            export namespace D {
->D : any
-            }
-        }
-    }
-}
-=== tests/cases/compiler/usage.ts ===
+No type information for this code.    export namespace B {
+No type information for this code.        export namespace C {
+No type information for this code.            export namespace D {
+No type information for this code.            }
+No type information for this code.        }
+No type information for this code.    }
+No type information for this code.}
+No type information for this code.=== tests/cases/compiler/usage.ts ===
 class Foo {
 >Foo : Foo
 
@@ -26,6 +19,5 @@ class Foo {
 >B : any
 >C : any
 >D : any
->E : No type information available!
 }
 

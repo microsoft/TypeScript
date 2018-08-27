@@ -1,5 +1,8 @@
 namespace ts {
     describe("FactoryAPI", () => {
+        function assertSyntaxKind(node: Node, expected: SyntaxKind) {
+            assert.strictEqual(node.kind, expected, `Actual: ${Debug.showSyntaxKind(node)} Expected: ${(ts as any).SyntaxKind[expected]}`);
+        }
         describe("createExportAssignment", () => {
             it("parenthesizes default export if necessary", () => {
                 function checkExpression(expression: Expression) {
@@ -9,7 +12,7 @@ namespace ts {
                         /*isExportEquals*/ false,
                         expression,
                     );
-                    assert.strictEqual(node.expression.kind, SyntaxKind.ParenthesizedExpression);
+                    assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
                 }
 
                 const clazz = createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
@@ -39,7 +42,7 @@ namespace ts {
                         /*equalsGreaterThanToken*/ undefined,
                         body,
                     );
-                    assert.strictEqual(node.body.kind, SyntaxKind.ParenthesizedExpression);
+                    assertSyntaxKind(node.body, SyntaxKind.ParenthesizedExpression);
                 }
 
                 checkBody(createObjectLiteral());
@@ -48,6 +51,31 @@ namespace ts {
                 checkBody(createNonNullExpression(createPropertyAccess(createObjectLiteral(), "prop")));
                 checkBody(createCommaList([createLiteral("a"), createLiteral("b")]));
                 checkBody(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
+            });
+        });
+
+        describe("createBinaryExpression", () => {
+            it("parenthesizes arrow function in RHS if necessary", () => {
+                const lhs = createIdentifier("foo");
+                const rhs = createArrowFunction(
+                    /*modifiers*/ undefined,
+                    /*typeParameters*/ undefined,
+                    [],
+                    /*type*/ undefined,
+                    /*equalsGreaterThanToken*/ undefined,
+                    createBlock([]),
+                );
+                function checkRhs(operator: BinaryOperator, expectParens: boolean) {
+                    const node = createBinary(lhs, operator, rhs);
+                    assertSyntaxKind(node.right, expectParens ? SyntaxKind.ParenthesizedExpression : SyntaxKind.ArrowFunction);
+                }
+
+                checkRhs(SyntaxKind.CommaToken, /*expectParens*/ false);
+                checkRhs(SyntaxKind.EqualsToken, /*expectParens*/ false);
+                checkRhs(SyntaxKind.PlusEqualsToken, /*expectParens*/ false);
+                checkRhs(SyntaxKind.BarBarToken, /*expectParens*/ true);
+                checkRhs(SyntaxKind.AmpersandAmpersandToken, /*expectParens*/ true);
+                checkRhs(SyntaxKind.EqualsEqualsToken, /*expectParens*/ true);
             });
         });
     });

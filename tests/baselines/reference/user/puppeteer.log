@@ -24,6 +24,8 @@ lib/FrameManager.js(28,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(54,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(76,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(685,57): error TS2345: Argument of type 'string | number | Function' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(174,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -39,6 +41,17 @@ lib/Page.js(185,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(394,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(407,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(731,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(928,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(929,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(930,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(931,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(932,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(933,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(934,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(935,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(936,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(937,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/Page.js(938,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/externs.d.ts(2,30): error TS2497: Module '"/puppeteer/puppeteer/lib/Browser"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.

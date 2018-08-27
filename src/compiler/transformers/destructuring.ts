@@ -447,7 +447,7 @@ namespace ts {
             const argumentExpression = ensureIdentifier(flattenContext, visitNode(propertyName.expression, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, /*location*/ propertyName);
             return createElementAccess(value, argumentExpression);
         }
-        else if (isStringOrNumericLiteral(propertyName)) {
+        else if (isStringOrNumericLiteralLike(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
             argumentExpression.text = argumentExpression.text;
             return createElementAccess(value, argumentExpression);

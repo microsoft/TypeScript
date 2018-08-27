@@ -1,7 +1,5 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeObjectOnOptionalProperty.ts ===
 interface I {
->I : I
-
     a: string;
 >a : string
 
@@ -10,19 +8,15 @@ interface I {
 }
 
 interface J {
->J : J
-
     a: string;
 >a : string
 }
 
 var a: I;
 >a : I
->I : I
 
 var b: J;
 >b : J
->J : J
 
 // operator <
 var ra1 = a < b;
