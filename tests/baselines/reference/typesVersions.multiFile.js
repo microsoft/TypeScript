@@ -6,7 +6,7 @@
     "version": "1.0.0",
     "types": "index",
     "typesVersions": {
-        "3.0": "ts3.0"
+        "3.0": { "*" : ["ts3.0/*"] }
     }
 }
 

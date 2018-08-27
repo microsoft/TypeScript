@@ -107,24 +107,10 @@ namespace ts.Completions.PathCompletions {
 
         // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
         const absolutePath = resolvePath(scriptPath, fragment);
-        let baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
+        const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
 
         if (tryDirectoryExists(host, baseDirectory)) {
-            // check for a version redirect
-            const packageJsonPath = findPackageJson(baseDirectory, host);
-            if (packageJsonPath) {
-                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
-                const typesVersions = (packageJson as any).typesVersions;
-                if (typeof typesVersions === "object") {
-                    const result = getPackageJsonTypesVersionsOverride(typesVersions);
-                    const versionPath = result && result.directory;
-                    if (versionPath) {
-                        baseDirectory = resolvePath(baseDirectory, versionPath);
-                    }
-                }
-            }
-
             // Enumerate the available files if possible
             const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/ undefined, /*include*/ ["./*"]);
 
@@ -165,9 +151,39 @@ namespace ts.Completions.PathCompletions {
                     }
                 }
             }
+
+            // check for a version redirect
+            const packageJsonPath = findPackageJson(baseDirectory, host);
+            if (packageJsonPath) {
+                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+                const typesVersions = (packageJson as any).typesVersions;
+                if (typeof typesVersions === "object") {
+                    const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
+                    const versionPaths = versionResult && versionResult.paths;
+                    const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
+                    if (versionPaths) {
+                        addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
+                    }
+                }
+            }
         }
 
         return result;
+    }
+
+    function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: ReadonlyArray<string>, paths: MapLike<string[]>, host: LanguageServiceHost) {
+        for (const path in paths) {
+            if (!hasProperty(paths, path)) continue;
+            const patterns = paths[path];
+            if (patterns) {
+                for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
+                    // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+                    if (!result.some(entry => entry.name === name)) {
+                        result.push(nameAndKind(name, kind));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -185,19 +201,10 @@ namespace ts.Completions.PathCompletions {
         const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
-            const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-            getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
-
-            for (const path in paths!) {
-                const patterns = paths![path];
-                if (paths!.hasOwnProperty(path) && patterns) {
-                    for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
-                        // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                        if (!result.some(entry => entry.name === name)) {
-                            result.push(nameAndKind(name, kind));
-                        }
-                    }
-                }
+            const absolute = normalizePath(combinePaths(projectDir, baseUrl));
+            getCompletionEntriesForDirectoryFragment(fragment, absolute, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
+            if (paths) {
+                addCompletionEntriesFromPaths(result, fragment, absolute, fileExtensions, paths, host);
             }
         }
 

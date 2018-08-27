@@ -1,6 +1,7 @@
 // @traceResolution: true
 // @target: esnext
 // @module: commonjs
+// @declaration: true
 // @filename: node_modules/ext/package.json
 {
     "name": "ext",
@@ -12,23 +13,27 @@
 }
 
 // @filename: node_modules/ext/index.d.ts
-export const a = "default a";
+export interface A {}
+export function fa(): A;
 
 // @filename: node_modules/ext/other.d.ts
-export const b = "default b";
+export interface B {}
+export function fb(): B;
 
 // @filename: node_modules/ext/ts3.0/index.d.ts
-export const a = "ts3.0 a";
+export interface A {}
+export function fa(): A;
 
 // @filename: node_modules/ext/ts3.0/other.d.ts
-export const b = "ts3.0 b";
+export interface B {}
+export function fb(): B;
 
 // @filename: main.ts
-import { a } from "ext";
-import { b } from "ext/other";
+import { fa } from "ext";
+import { fb } from "ext/other";
 
-const aa: "ts3.0 a" = a;
-const bb: "ts3.0 b" = b;
+export const va = fa();
+export const vb = fb();
 
 // @filename: tsconfig.json
 {}
