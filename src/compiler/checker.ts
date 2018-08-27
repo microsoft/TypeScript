@@ -13549,14 +13549,16 @@ namespace ts {
                 const sourceLen = sourceSignatures.length;
                 const targetLen = targetSignatures.length;
                 const len = sourceLen < targetLen ? sourceLen : targetLen;
+                const skipParameters = !!(source.flags & TypeFlags.ContainsAnyFunctionType);
                 for (let i = 0; i < len; i++) {
-                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]));
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getBaseSignature(targetSignatures[targetLen - len + i]), skipParameters);
                 }
             }
 
-            function inferFromSignature(source: Signature, target: Signature) {
-                forEachMatchingParameterType(source, target, inferFromContravariantTypes);
-
+            function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
+                if (!skipParameters) {
+                    forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                }
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
                 if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind) {
@@ -18636,7 +18638,7 @@ namespace ts {
             return getInferredTypes(context);
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: boolean[] | undefined, context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: ReadonlyArray<boolean> | undefined, context: InferenceContext): Type[] {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
@@ -19050,19 +19052,7 @@ namespace ts {
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-            let excludeArgument: boolean[] | undefined;
-            if (!isDecorator && !isSingleNonGenericCandidate) {
-                // We do not need to call `getEffectiveArgumentCount` here as it only
-                // applies when calculating the number of arguments for a decorator.
-                for (let i = 0; i < args.length; i++) {
-                    if (isContextSensitive(args[i])) {
-                        if (!excludeArgument) {
-                            excludeArgument = new Array(args.length);
-                        }
-                        excludeArgument[i] = true;
-                    }
-                }
-            }
+            let excludeArgument = !isDecorator && !isSingleNonGenericCandidate ? getExcludeArgument(args) : undefined;
 
             // The following variables are captured and modified by calls to chooseOverload.
             // If overload resolution or type argument inference fails, we want to report the
@@ -19225,6 +19215,21 @@ namespace ts {
             }
         }
 
+        function getExcludeArgument(args: ReadonlyArray<Expression>): boolean[] | undefined {
+            let excludeArgument: boolean[] | undefined;
+            // We do not need to call `getEffectiveArgumentCount` here as it only
+            // applies when calculating the number of arguments for a decorator.
+            for (let i = 0; i < args.length; i++) {
+                if (isContextSensitive(args[i])) {
+                    if (!excludeArgument) {
+                        excludeArgument = new Array(args.length);
+                    }
+                    excludeArgument[i] = true;
+                }
+            }
+            return excludeArgument;
+        }
+
         // No signature was applicable. We have already reported the errors for the invalid signature.
         // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
         function getCandidateForOverloadFailure(
@@ -19303,17 +19308,29 @@ namespace ts {
                 return candidate;
             }
 
-            const typeArgumentNodes: ReadonlyArray<TypeNode> = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments || emptyArray : emptyArray;
+            const typeArgumentNodes: ReadonlyArray<TypeNode> | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
+            const instantiated = typeArgumentNodes
+                ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJavaScriptFile(node)))
+                : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args);
+            candidates[bestIndex] = instantiated;
+            return instantiated;
+        }
+
+        function getTypeArgumentsFromNodes(typeArgumentNodes: ReadonlyArray<TypeNode>, typeParameters: ReadonlyArray<TypeParameter>, isJs: boolean): ReadonlyArray<Type> {
             const typeArguments = typeArgumentNodes.map(getTypeOfNode);
             while (typeArguments.length > typeParameters.length) {
                 typeArguments.pop();
             }
             while (typeArguments.length < typeParameters.length) {
-                typeArguments.push(getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+                typeArguments.push(getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isJs));
             }
-            const instantiated = createSignatureInstantiation(candidate, typeArguments);
-            candidates[bestIndex] = instantiated;
-            return instantiated;
+            return typeArguments;
+        }
+
+        function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: ReadonlyArray<TypeParameter>, candidate: Signature, args: ReadonlyArray<Expression>): Signature {
+            const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+            const typeArgumentTypes = inferTypeArguments(node, candidate, args, getExcludeArgument(args), inferenceContext);
+            return createSignatureInstantiation(candidate, typeArgumentTypes);
         }
 
         function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
@@ -20576,8 +20593,10 @@ namespace ts {
                         return links.contextFreeType;
                     }
                     const returnType = getReturnTypeFromBody(node, checkMode);
-                    const singleReturnSignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
-                    return links.contextFreeType = createAnonymousType(node.symbol, emptySymbols, [singleReturnSignature], emptyArray, undefined, undefined);
+                    const returnOnlySignature = createSignature(undefined, undefined, undefined, emptyArray, returnType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
+                    const returnOnlyType = createAnonymousType(node.symbol, emptySymbols, [returnOnlySignature], emptyArray, undefined, undefined);
+                    returnOnlyType.flags |= TypeFlags.ContainsAnyFunctionType;
+                    return links.contextFreeType = returnOnlyType;
                 }
                 return anyFunctionType;
             }
@@ -24250,7 +24269,7 @@ namespace ts {
                     if (nameText) {
                         const property = getPropertyOfType(parentType!, nameText)!; // TODO: GH#18217
                         markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                        if (parent.initializer && property && !isComputedPropertyName(name)) {
+                        if (parent.initializer && property) {
                             checkPropertyAccessibility(parent, parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
                         }
                     }
@@ -27763,6 +27782,27 @@ namespace ts {
                 hasModifier(parameter, ModifierFlags.ParameterPropertyModifier);
         }
 
+        function isJSContainerFunctionDeclaration(node: Declaration): boolean {
+            const declaration = getParseTreeNode(node, isFunctionDeclaration);
+            if (!declaration) {
+                return false;
+            }
+            const symbol = getSymbolOfNode(declaration);
+            if (!symbol || !(symbol.flags & SymbolFlags.Function)) {
+                return false;
+            }
+            return !!forEachEntry(getExportsOfSymbol(symbol), p => isPropertyAccessExpression(p.valueDeclaration));
+        }
+
+        function getPropertiesOfContainerFunction(node: Declaration): Symbol[] {
+            const declaration = getParseTreeNode(node, isFunctionDeclaration);
+            if (!declaration) {
+                return emptyArray;
+            }
+            const symbol = getSymbolOfNode(declaration);
+            return symbol && getPropertiesOfType(getTypeOfSymbol(symbol)) || emptyArray;
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags || 0;
         }
@@ -27870,7 +27910,7 @@ namespace ts {
             }
         }
 
-        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
+        function createTypeOfDeclaration(declarationIn: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean) {
             const declaration = getParseTreeNode(declarationIn, isVariableLikeOrAccessor);
             if (!declaration) {
                 return createToken(SyntaxKind.AnyKeyword) as KeywordTypeNode;
@@ -28003,6 +28043,8 @@ namespace ts {
                 isImplementationOfOverload,
                 isRequiredInitializedParameter,
                 isOptionalUninitializedParameterProperty,
+                isJSContainerFunctionDeclaration,
+                getPropertiesOfContainerFunction,
                 createTypeOfDeclaration,
                 createReturnTypeOfSignatureDeclaration,
                 createTypeOfExpression,
