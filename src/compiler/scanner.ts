@@ -31,7 +31,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
-        reScanLessThanToken(): SyntaxKind;
+        reScanLesserToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
@@ -846,7 +846,7 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
-            reScanLessThanToken,
+            reScanLesserToken,
             scanJsxToken,
             scanJSDocToken,
             scan,
@@ -1842,7 +1842,7 @@ namespace ts {
             return token = scanJsxToken();
         }
 
-        function reScanLessThanToken(): SyntaxKind {
+        function reScanLesserToken(): SyntaxKind {
             if (token === SyntaxKind.LessThanLessThanToken) {
                 pos = tokenPos + 1;
                 return token = SyntaxKind.LessThanToken;

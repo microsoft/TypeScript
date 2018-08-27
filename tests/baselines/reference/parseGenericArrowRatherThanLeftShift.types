@@ -6,3 +6,15 @@ type Bar = ReturnType<<T>(x: T) => number>;
 declare const a: Bar;
 >a : number
 
+function foo<T>(_x: T) {}
+>foo : <T>(_x: T) => void
+>_x : T
+
+const b = foo<<T>(x: T) => number>(() => 1);
+>b : void
+>foo<<T>(x: T) => number>(() => 1) : void
+>foo : <T>(_x: T) => void
+>x : T
+>() => 1 : () => number
+>1 : 1
+
