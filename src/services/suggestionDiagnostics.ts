@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts {
+    // Syntactic suggestion diagnostics should be calculated in the check function here.
+    // Semantic suggestion diagnostics should be calculated while typechecking, and be reported via program.getSuggestionDiagnostics.
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
