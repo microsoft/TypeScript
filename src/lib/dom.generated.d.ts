@@ -3930,7 +3930,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /**
      * Specifies the beginning and end of the document body.
      */
-    body: HTMLElement | null;
+    body: HTMLElement;
     /**
      * Returns document's encoding.
      */
@@ -4096,6 +4096,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /** @deprecated */
     captureEvents(): void;
     caretPositionFromPoint(x: number, y: number): CaretPosition | null;
+    caretRangeFromPoint(x: number, y: number): Range;
     /** @deprecated */
     clear(): void;
     /**
@@ -4320,7 +4321,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * @param filter A custom NodeFilter function to use.
      * @param entityReferenceExpansion A flag that specifies whether entity reference nodes are expanded.
      */
-    createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter | null): TreeWalker;
+    createTreeWalker(root: Node, whatToShow?: number, filter?: NodeFilter | null, entityReferenceExpansion?: boolean): TreeWalker;
     /**
      * Returns the element for the specified x coordinate and the specified y coordinate.
      * @param x The x-offset
@@ -4364,13 +4365,43 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
     getElementsByTagName(qualifiedName: string): HTMLCollectionOf<Element>;
     /**
+     * If namespace and localName are
+     * "*" returns a HTMLCollection of all descendant elements.
+     * If only namespace is "*" returns a HTMLCollection of all descendant elements whose local name is localName.
+     * If only localName is "*" returns a HTMLCollection of all descendant elements whose namespace is namespace.
+     * Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
+     */
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
+    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
+    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
+    /**
+     * Gets a value indicating whether the object currently has focus.
+     */
+    hasFocus(): boolean;
+    importNode<T extends Node>(importedNode: T, deep: boolean): T;
+    /**
+     * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
+     * @param url Specifies a MIME type for the document.
+     * @param name Specifies the name of the window. This name is used as the value for the TARGET attribute on a form or an anchor element.
+     * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
+     * @param replace Specifies whether the existing entry for the document is replaced in the history list.
+     */
+    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
+    /**
+     * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
+     * @param commandId Specifies a command identifier.
+     */
+    queryCommandEnabled(commandId: string): boolean;
+    /**
      * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
      * @param commandId String that specifies a command identifier.
      */
     queryCommandIndeterm(commandId: string): boolean;
     /**
-     * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
+     * Returns a Boolean value that indicates the current state of the command.
+     * @param commandId String that specifies a command identifier.
      */
+    queryCommandState(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates whether the current command is supported on the current range.
      * @param commandId Specifies a command identifier.
@@ -4381,51 +4412,21 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * @param commandId String that specifies a command identifier.
      */
     queryCommandValue(commandId: string): string;
-    /**
-     * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
-     * @param commandId Specifies a command identifier.
-     */
-    queryCommandEnabled(commandId: string): boolean;
-    /**
-     * Gets a value indicating whether the object currently has focus.
-     */
-    hasFocus(): boolean;
-    /**
-     * Returns a Boolean value that indicates the current state of the command.
-     * @param commandId String that specifies a command identifier.
-     */
-    queryCommandState(commandId: string): boolean;
-    /**
-     * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window.
-     * @param content The text and HTML tags to write.
-     */
-    writeln(...text: string[]): void;
+    /** @deprecated */
+    releaseEvents(): void;
     /**
      * Writes one or more HTML expressions to a document in the specified window.
      * @param content Specifies the text and HTML tags to write.
      */
     write(...text: string[]): void;
     /**
-     * Opens a new window and loads a document specified by a given URL. Also, opens a new window that uses the url parameter and the name parameter to collect the output of the write method and the writeln method.
-     * @param url Specifies a MIME type for the document.
-     * @param name Specifies the name of the window. This name is used as the value for the TARGET attribute on a form or an anchor element.
-     * @param features Contains a list of items separated by commas. Each item consists of an option and a value, separated by an equals sign (for example, "fullscreen=yes, toolbar=yes"). The following values are supported.
-     * @param replace Specifies whether the existing entry for the document is replaced in the history list.
+     * Writes one or more HTML expressions, followed by a carriage return, to a document in the specified window.
+     * @param content The text and HTML tags to write.
      */
-    open(url?: string, name?: string, features?: string, replace?: boolean): Document;
+    writeln(...text: string[]): void;
     /**
-     * If namespace and localName are
-     * "*" returns a HTMLCollection of all descendant elements.
-     * If only namespace is "*" returns a HTMLCollection of all descendant elements whose local name is localName.
-     * If only localName is "*" returns a HTMLCollection of all descendant elements whose namespace is namespace.
-     * Otherwise, returns a HTMLCollection of all descendant elements whose namespace is namespace and local name is localName.
+     * Returns an object representing the current selection of the document that is loaded into the object displaying a webpage.
      */
-    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
-    getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
-    getElementsByTagNameNS(namespaceURI: string, localName: string): HTMLCollectionOf<Element>;
-    importNode<T extends Node>(importedNode: T, deep: boolean): T;
-    /** @deprecated */
-    releaseEvents(): void;
     addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -4846,6 +4847,7 @@ interface Event {
      */
     readonly isTrusted: boolean;
     returnValue: boolean;
+    readonly srcElement: Element | null;
     /**
      * Returns the object to which event is dispatched (its target).
      */
@@ -5335,7 +5337,7 @@ interface GlobalEventHandlers {
      * Fires when an error occurs during object loading.
      * @param ev The event.
      */
-    onerror: ((this: GlobalEventHandlers, ev: ErrorEvent) => any) | null;
+    onerror: ErrorEventHandler;
     /**
      * Fires when the object receives focus.
      * @param ev The event.
@@ -9282,7 +9284,7 @@ interface Location {
     /**
      * Reloads the current page.
      */
-    reload(): void;
+    reload(forcedReload?: boolean): void;
     /**
      * Removes the current page from the session history and navigates to the given URL.
      */
@@ -10256,6 +10258,7 @@ interface Node extends EventTarget {
      * Returns the last child.
      */
     readonly lastChild: ChildNode | null;
+    readonly namespaceURI: string | null;
     /**
      * Returns the next sibling.
      */
@@ -10293,7 +10296,7 @@ interface Node extends EventTarget {
     /**
      * Returns the parent element.
      */
-    readonly parentElement: Element | null;
+    readonly parentElement: HTMLElement | null;
     /**
      * Returns the parent.
      */
@@ -17365,7 +17368,7 @@ declare var onended: ((this: Window, ev: Event) => any) | null;
  * Fires when an error occurs during object loading.
  * @param ev The event.
  */
-declare var onerror: ((this: Window, ev: ErrorEvent) => any) | null;
+declare var onerror: ErrorEventHandler;
 /**
  * Fires when the object receives focus.
  * @param ev The event.
@@ -17623,6 +17626,7 @@ type IDBKeyPath = string;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type RTCIceGatherCandidate = RTCIceCandidateDictionary | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
+type MouseWheelEvent = WheelEvent;
 type WindowProxy = Window;
 type AlignSetting = "start" | "center" | "end" | "left" | "right";
 type AnimationPlayState = "idle" | "running" | "paused" | "finished";

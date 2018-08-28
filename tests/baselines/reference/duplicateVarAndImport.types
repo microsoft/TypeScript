@@ -7,5 +7,5 @@ var a;
 module M { }
 import a = M;
 >a : any
->M : any
+>M : error
 

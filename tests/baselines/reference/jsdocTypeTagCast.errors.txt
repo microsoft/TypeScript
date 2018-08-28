@@ -11,9 +11,7 @@ tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type 'SomeFakeClass' is 
   Types of property 'p' are incompatible.
     Type 'string | number' is not assignable to type 'number'.
       Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsdoc/b.js(66,8): error TS2352: Conversion of type 'boolean' to type 'string | number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-tests/cases/conformance/jsdoc/b.js(66,15): error TS2304: Cannot find name 'numOrStr'.
-tests/cases/conformance/jsdoc/b.js(66,24): error TS1005: '}' expected.
+tests/cases/conformance/jsdoc/b.js(66,15): error TS1228: A type predicate is only allowed in return type position for functions and methods.
 tests/cases/conformance/jsdoc/b.js(66,38): error TS2454: Variable 'numOrStr' is used before being assigned.
 tests/cases/conformance/jsdoc/b.js(67,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
@@ -23,7 +21,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
 ==== tests/cases/conformance/jsdoc/a.ts (0 errors) ====
     var W: string;
     
-==== tests/cases/conformance/jsdoc/b.js (12 errors) ====
+==== tests/cases/conformance/jsdoc/b.js (10 errors) ====
     // @ts-check
     var W = /** @type {string} */(/** @type {*} */ (4));
     
@@ -109,12 +107,8 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     /** @type {string} */
     var str;
     if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
-           ~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type 'boolean' to type 'string | number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'numOrStr'.
-                           ~~
-!!! error TS1005: '}' expected.
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
                                          ~~~~~~~~
 !!! error TS2454: Variable 'numOrStr' is used before being assigned.
     	str = numOrStr; // Error, no narrowing occurred

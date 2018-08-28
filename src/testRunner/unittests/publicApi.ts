@@ -10,7 +10,7 @@ describe("Public APIs", () => {
         });
 
         it("should be acknowledged when they change", () => {
-            Harness.Baseline.runBaseline(api, () => fileContent);
+            Harness.Baseline.runBaseline(api, fileContent);
         });
 
         it("should compile", () => {

@@ -96,3 +96,25 @@ for (x of a) {
 >x : string
 }
 
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+>AOrArrA : AOrArrA<T>
+
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+>arr : AOrArrA<{ x?: "ok"; }>
+>x : "ok"
+>[{ x: "ok" }] : { x: "ok"; }[]
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
+
+arr.push({ x: "ok" });
+>arr.push({ x: "ok" }) : number
+>arr.push : (...items: { x?: "ok"; }[]) => number
+>arr : { x?: "ok"; }[]
+>push : (...items: { x?: "ok"; }[]) => number
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
+

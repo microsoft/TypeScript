@@ -6,8 +6,8 @@ declare var o: any;
 >o : any
 
 export const x = <span {...o} />
->x : any
-><span {...o} /> : any
+>x : error
+><span {...o} /> : error
 >span : any
 >o : any
 
@@ -19,8 +19,8 @@ declare var o: any;
 >o : any
 
 const x = <span {...o} />
->x : any
-><span {...o} /> : any
+>x : error
+><span {...o} /> : error
 >span : any
 >o : any
 

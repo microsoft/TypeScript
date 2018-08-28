@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/bug25618.js ===
+/** @type {<T>(param?: T) => T | undefined} */
+function typed(param) {
+>typed : Symbol(typed, Decl(bug25618.js, 0, 0))
+>param : Symbol(param, Decl(bug25618.js, 1, 15))
+
+    return param;
+>param : Symbol(param, Decl(bug25618.js, 1, 15))
+}
+
+var n = typed(1);
+>n : Symbol(n, Decl(bug25618.js, 5, 3))
+>typed : Symbol(typed, Decl(bug25618.js, 0, 0))
+
+

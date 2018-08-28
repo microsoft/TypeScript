@@ -26,7 +26,7 @@ declare class Point
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
 function Point(x, y) {
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >x : any
 >y : any
 
@@ -69,10 +69,10 @@ var x = EF1(1,2);
 Point.origin = new Point(0, 0);
 >Point.origin = new Point(0, 0) : any
 >Point.origin : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >origin : any
 >new Point(0, 0) : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >0 : 0
 >0 : 0
 
@@ -83,7 +83,7 @@ Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
 >Point.prototype.add : any
 >Point.prototype : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >prototype : any
 >add : any
 >function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
@@ -92,7 +92,7 @@ Point.prototype.add = function(dx, dy) {
 
     return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >this.x + dx : any
 >this.x : any
 >this : any
@@ -116,7 +116,7 @@ var f : number = 5;
 Point.prototype = {
 >Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
 >Point.prototype : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >prototype : any
 >{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
 
@@ -136,7 +136,7 @@ Point.prototype = {
 
         return new Point(this.x + dx, this.y + dy);
 >new Point(this.x + dx, this.y + dy) : any
->Point : (x: any, y: any) => void
+>Point : { (x: any, y: any): void; origin: any; }
 >this.x + dx : any
 >this.x : any
 >this : any

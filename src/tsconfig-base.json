@@ -3,6 +3,7 @@
         "pretty": true,
         "lib": ["es2015"],
         "target": "es5",
+        "rootDir": ".",
 
         "declaration": true,
         "declarationMap": true,

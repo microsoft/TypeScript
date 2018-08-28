@@ -8,13 +8,13 @@ module b.a {
 module c.a.b {
     import ma = a;
 >ma : any
->a : any
+>a : error
 }
 
 module mImport {
     import d = a;
 >d : any
->a : any
+>a : error
 
     import e = b.a;
 >e : any
@@ -23,7 +23,7 @@ module mImport {
 
     import d1 = a;
 >d1 : any
->a : any
+>a : error
 
     import e1 = b.a;
 >e1 : any
@@ -75,11 +75,11 @@ module m0 {
 
     import m2 = a;
 >m2 : any
->a : any
+>a : error
 
     import m3 = b;
 >m3 : any
->b : any
+>b : error
 
     import m4 = b.a;
 >m4 : any
@@ -88,7 +88,7 @@ module m0 {
 
     import m5 = c;
 >m5 : any
->c : any
+>c : error
 
     import m6 = c.a;
 >m6 : any
@@ -165,11 +165,11 @@ module m1 {
 
     import m2 = a;
 >m2 : any
->a : any
+>a : error
 
     import m3 = b;
 >m3 : any
->b : any
+>b : error
 
     import m4 = b.a;
 >m4 : any
@@ -178,7 +178,7 @@ module m1 {
 
     import m5 = c;
 >m5 : any
->c : any
+>c : error
 
     import m6 = c.a;
 >m6 : any

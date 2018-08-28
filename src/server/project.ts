@@ -149,6 +149,8 @@ namespace ts.server {
          */
         private projectStateVersion = 0;
 
+        protected isInitialLoadPending: () => boolean = returnFalse;
+
         /*@internal*/
         dirty = false;
 
@@ -164,12 +166,12 @@ namespace ts.server {
         private readonly cancellationToken: ThrottledCancellationToken;
 
         public isNonTsProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return allFilesAreJsOrDts(this);
         }
 
         public isJsOnlyProject() {
-            this.updateGraph();
+            updateProjectIfDirty(this);
             return hasOneOrMoreJsAndNoTsFiles(this);
         }
 
@@ -459,7 +461,7 @@ namespace ts.server {
 
         getLanguageService(ensureSynchronized = true): LanguageService {
             if (ensureSynchronized) {
-                this.updateGraph();
+                updateProjectIfDirty(this);
             }
             return this.languageService;
         }
@@ -477,7 +479,7 @@ namespace ts.server {
             if (!this.languageServiceEnabled) {
                 return [];
             }
-            this.updateGraph();
+            updateProjectIfDirty(this);
             this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
             return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
@@ -571,6 +573,14 @@ namespace ts.server {
                 // The project could have pending update remaining and hence the info could be in the files but not in program graph
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
+                }
+                const projectReferences = this.program.getProjectReferences();
+                if (projectReferences) {
+                    for (const ref of projectReferences) {
+                        if (ref) {
+                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
+                        }
+                    }
                 }
             }
             // Release external files
@@ -1025,7 +1035,10 @@ namespace ts.server {
 
         /* @internal */
         getChangesSinceVersion(lastKnownVersion?: number): ProjectFilesWithTSDiagnostics {
-            this.updateGraph();
+            // Update the graph only if initial configured project load is not pending
+            if (!this.isInitialLoadPending()) {
+                updateProjectIfDirty(this);
+            }
 
             const info: protocol.ProjectVersionInfo = {
                 projectName: this.getProjectName(),
@@ -1083,9 +1096,8 @@ namespace ts.server {
             this.rootFilesMap.delete(info.path);
         }
 
-        protected enableGlobalPlugins() {
+        protected enableGlobalPlugins(options: CompilerOptions) {
             const host = this.projectService.host;
-            const options = this.getCompilationSettings();
 
             if (!host.require) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
@@ -1236,7 +1248,7 @@ namespace ts.server {
             if (!projectRootPath && !projectService.useSingleInferredProject) {
                 this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
             }
-            this.enableGlobalPlugins();
+            this.enableGlobalPlugins(this.getCompilerOptions());
         }
 
         addRoot(info: ScriptInfo) {
@@ -1308,28 +1320,29 @@ namespace ts.server {
 
         private projectErrors: Diagnostic[] | undefined;
 
+        private projectReferences: ReadonlyArray<ProjectReference> | undefined;
+
+        /*@internal*/
+        projectOptions?: ProjectOptions | true;
+
+        protected isInitialLoadPending: () => boolean = returnTrue;
+
         /*@internal*/
         constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
-            hasExplicitListOfFiles: boolean,
-            compilerOptions: CompilerOptions,
-            lastFileExceededProgramSize: string | undefined,
-            public compileOnSaveEnabled: boolean,
-            cachedDirectoryStructureHost: CachedDirectoryStructureHost,
-            private projectReferences: ReadonlyArray<ProjectReference> | undefined) {
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,
                 documentRegistry,
-                hasExplicitListOfFiles,
-                lastFileExceededProgramSize,
-                compilerOptions,
-                compileOnSaveEnabled,
+                /*hasExplicitListOfFiles*/ false,
+                /*lastFileExceededProgramSize*/ undefined,
+                /*compilerOptions*/ {},
+                /*compileOnSaveEnabled*/ false,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName));
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
-            this.enablePlugins();
         }
 
         /**
@@ -1337,17 +1350,23 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
+            this.isInitialLoadPending = returnFalse;
             const reloadLevel = this.pendingReload;
             this.pendingReload = ConfigFileProgramReloadLevel.None;
+            let result: boolean;
             switch (reloadLevel) {
                 case ConfigFileProgramReloadLevel.Partial:
-                    return this.projectService.reloadFileNamesOfConfiguredProject(this);
+                    result = this.projectService.reloadFileNamesOfConfiguredProject(this);
+                    break;
                 case ConfigFileProgramReloadLevel.Full:
                     this.projectService.reloadConfiguredProject(this);
-                    return true;
+                    result = true;
+                    break;
                 default:
-                    return super.updateGraph();
+                    result = super.updateGraph();
             }
+            this.projectService.sendProjectTelemetry(this);
+            return result;
         }
 
         /*@internal*/
@@ -1367,9 +1386,19 @@ namespace ts.server {
             this.projectReferences = refs;
         }
 
+        /*@internal*/
+        getResolvedProjectReferences() {
+            const program = this.getCurrentProgram();
+            return program && program.getProjectReferences();
+        }
+
         enablePlugins() {
+            this.enablePluginsWithOptions(this.getCompilerOptions());
+        }
+
+        /*@internal*/
+        enablePluginsWithOptions(options: CompilerOptions) {
             const host = this.projectService.host;
-            const options = this.getCompilationSettings();
 
             if (!host.require) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
@@ -1393,7 +1422,7 @@ namespace ts.server {
                 }
             }
 
-            this.enableGlobalPlugins();
+            this.enableGlobalPlugins(options);
         }
 
         /**
@@ -1531,6 +1560,12 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+        }
+
+        updateGraph() {
+            const result = super.updateGraph();
+            this.projectService.sendProjectTelemetry(this);
+            return result;
         }
 
         getExcludedFiles() {
