@@ -16,7 +16,7 @@ namespace ts {
 namespace ts {
     export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
-    export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
