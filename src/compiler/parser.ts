@@ -515,7 +515,7 @@ namespace ts {
         performance.mark("beforeParse");
         let result: SourceFile;
         if (languageVersion === ScriptTarget.JSON) {
-            result = Parser.parseJsonText(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes);
+            result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON);
         }
         else {
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind);
@@ -689,8 +689,12 @@ namespace ts {
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
                 convertToObjectWorker(result, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
+                result.referencedFiles = emptyArray;
                 result.typeReferenceDirectives = emptyArray;
+                result.libReferenceDirectives = emptyArray;
                 result.amdDependencies = emptyArray;
+                result.hasNoDefaultLib = false;
+                result.pragmas = emptyMap;
                 return result;
             }
 
@@ -719,7 +723,6 @@ namespace ts {
             // Set source file so that errors will be reported with this file name
             sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON, /*isDeclaration*/ false);
             sourceFile.flags = contextFlags;
-            noPragmas(sourceFile);
 
             // Prime the scanner.
             nextToken();
@@ -7740,15 +7743,6 @@ namespace ts {
     }
 
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
-
-    function noPragmas(sf: SourceFile) {
-        sf.referencedFiles = emptyArray;
-        sf.typeReferenceDirectives = emptyArray;
-        sf.libReferenceDirectives = emptyArray;
-        sf.amdDependencies = emptyArray;
-        sf.hasNoDefaultLib = false;
-        sf.pragmas = emptyMap;
-    }
 
     /*@internal*/
     export function processPragmasIntoFields(context: PragmaContext, reportDiagnostic: PragmaDiagnosticReporter): void {
