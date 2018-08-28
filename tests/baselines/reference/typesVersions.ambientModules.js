@@ -6,7 +6,7 @@
     "version": "1.0.0",
     "types": "index",
     "typesVersions": {
-        "3.0": { "*" : ["ts3.0/*"] }
+        "3.1": { "*" : ["ts3.1/*"] }
     }
 }
 
@@ -20,18 +20,18 @@ declare module "ext/other" {
 
 //// [index.d.ts]
 declare module "ext" {
-    export const a = "ts3.0 a";
+    export const a = "ts3.1 a";
 }
 declare module "ext/other" {
-    export const b = "ts3.0 b";
+    export const b = "ts3.1 b";
 }
 
 //// [main.ts]
 import { a } from "ext";
 import { b } from "ext/other";
 
-const aa: "ts3.0 a" = a;
-const bb: "ts3.0 b" = b;
+const aa: "ts3.1 a" = a;
+const bb: "ts3.1 b" = b;
 
 
 //// [main.js]

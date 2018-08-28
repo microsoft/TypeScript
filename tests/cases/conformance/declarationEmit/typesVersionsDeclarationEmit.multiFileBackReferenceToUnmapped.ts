@@ -8,7 +8,9 @@
     "version": "1.0.0",
     "types": "index",
     "typesVersions": {
-        "3.1": { "*" : ["ts3.1/*"] }
+        "3.1": {
+            "index" : ["ts3.1/index"]
+        }
     }
 }
 
@@ -17,23 +19,18 @@ export interface A {}
 export function fa(): A;
 
 // @filename: node_modules/ext/other.d.ts
-export interface B {}
-export function fb(): B;
+export interface A2 {}
+export function fa(): A2;
 
 // @filename: node_modules/ext/ts3.1/index.d.ts
-export interface A {}
-export function fa(): A;
-
-// @filename: node_modules/ext/ts3.1/other.d.ts
-export interface B {}
-export function fb(): B;
+export * from "../other";
 
 // @filename: main.ts
 import { fa } from "ext";
-import { fb } from "ext/other";
+import { fa as fa2 } from "ext/other";
 
 export const va = fa();
-export const vb = fb();
+export const va2 = fa2();
 
 // @filename: tsconfig.json
 {}

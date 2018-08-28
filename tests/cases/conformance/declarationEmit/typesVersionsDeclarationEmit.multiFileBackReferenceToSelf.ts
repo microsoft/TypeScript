@@ -2,7 +2,6 @@
 // @target: esnext
 // @module: commonjs
 // @declaration: true
-// @noImplicitReferences: true
 // @filename: node_modules/ext/package.json
 {
     "name": "ext",
@@ -14,23 +13,18 @@
 }
 
 // @filename: node_modules/ext/index.d.ts
-declare module "ext" {
-    export interface A {}
-    export function fa(): A;
-}
-declare module "ext/other" {
-    export interface B {}
-    export function fb(): B;
-}
+export interface A {}
+export function fa(): A;
+
+// @filename: node_modules/ext/other.d.ts
+export interface B {}
+export function fb(): B;
+
 // @filename: node_modules/ext/ts3.1/index.d.ts
-declare module "ext" {
-    export interface A {}
-    export function fa(): A;
-}
-declare module "ext/other" {
-    export interface B {}
-    export function fb(): B;
-}
+export * from "../";
+
+// @filename: node_modules/ext/ts3.1/other.d.ts
+export * from "../other";
 
 // @filename: main.ts
 import { fa } from "ext";

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFile.ts] ////
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.ts] ////
 
 //// [package.json]
 {
@@ -6,7 +6,9 @@
     "version": "1.0.0",
     "types": "index",
     "typesVersions": {
-        "3.1": { "*" : ["ts3.1/*"] }
+        "3.1": {
+            "index" : ["ts3.1/index"]
+        }
     }
 }
 
@@ -15,23 +17,18 @@ export interface A {}
 export function fa(): A;
 
 //// [other.d.ts]
-export interface B {}
-export function fb(): B;
+export interface A2 {}
+export function fa(): A2;
 
 //// [index.d.ts]
-export interface A {}
-export function fa(): A;
-
-//// [other.d.ts]
-export interface B {}
-export function fb(): B;
+export * from "../other";
 
 //// [main.ts]
 import { fa } from "ext";
-import { fb } from "ext/other";
+import { fa as fa2 } from "ext/other";
 
 export const va = fa();
-export const vb = fb();
+export const va2 = fa2();
 
 
 //// [main.js]
@@ -40,9 +37,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const ext_1 = require("ext");
 const other_1 = require("ext/other");
 exports.va = ext_1.fa();
-exports.vb = other_1.fb();
+exports.va2 = other_1.fa();
 
 
 //// [main.d.ts]
-export declare const va: import("ext").A;
-export declare const vb: import("ext/other").B;
+export declare const va: import("ext/other").A2;
+export declare const va2: import("ext/other").A2;

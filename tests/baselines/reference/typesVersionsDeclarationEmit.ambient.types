@@ -15,7 +15,7 @@ export const vb = fb();
 >fb() : import("ext/other").B
 >fb : () => import("ext/other").B
 
-=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.0/index.d.ts ===
+=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
 declare module "ext" {
 >"ext" : typeof import("ext")
 

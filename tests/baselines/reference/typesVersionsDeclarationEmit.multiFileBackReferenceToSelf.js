@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFile.ts] ////
+//// [tests/cases/conformance/declarationEmit/typesVersionsDeclarationEmit.multiFileBackReferenceToSelf.ts] ////
 
 //// [package.json]
 {
@@ -19,12 +19,10 @@ export interface B {}
 export function fb(): B;
 
 //// [index.d.ts]
-export interface A {}
-export function fa(): A;
+export * from "../";
 
 //// [other.d.ts]
-export interface B {}
-export function fb(): B;
+export * from "../other";
 
 //// [main.ts]
 import { fa } from "ext";
@@ -44,5 +42,5 @@ exports.vb = other_1.fb();
 
 
 //// [main.d.ts]
-export declare const va: import("ext").A;
+export declare const va: any;
 export declare const vb: import("ext/other").B;
