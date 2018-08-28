@@ -462,6 +462,9 @@ namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
 
+        /** Tracks projects that we have already sent survey events for. */
+        private readonly seenSurveyProjects = createMap<true>();
+
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
@@ -1486,6 +1489,20 @@ namespace ts.server {
         }
 
         /*@internal*/
+        sendSurveyReady(project: ExternalProject | ConfiguredProject): void {
+            if (this.seenSurveyProjects.has(project.projectName)) {
+                return;
+            }
+
+            if (project.getCompilerOptions().checkJs !== undefined) {
+                const name = "checkJs";
+                this.logger.info(`Survey ${name} is ready`);
+                this.sendSurveyReadyEvent(name);
+                this.seenSurveyProjects.set(project.projectName, true);
+            }
+        }
+
+        /*@internal*/
         sendProjectTelemetry(project: ExternalProject | ConfiguredProject): void {
             if (this.seenProjects.has(project.projectName)) {
                 setProjectOptionsUsed(project);
@@ -1493,16 +1510,7 @@ namespace ts.server {
             }
             this.seenProjects.set(project.projectName, true);
 
-            if (!this.eventHandler) {
-                setProjectOptionsUsed(project);
-                return;
-            }
-            if (project.getCompilerOptions().checkJs !== undefined) {
-                const name = "checkJs";
-                this.logger.info(`Survey ${name} is ready`);
-                this.sendSurveyReadyEvent(name);
-            }
-            if (!this.host.createSHA256Hash) {
+            if (!this.eventHandler || !this.host.createSHA256Hash) {
                 setProjectOptionsUsed(project);
                 return;
             }
