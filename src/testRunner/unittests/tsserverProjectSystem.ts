@@ -656,7 +656,8 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
-                const service = createProjectService(host, /*parameters*/ undefined, { lazyConfiguredProjectsFromExternalProject });
+                const service = createProjectService(host);
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
                 const upperCaseConfigFilePath = combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path));
                 service.openExternalProject(<protocol.ExternalProject>{
                     projectFileName: "/a/b/project.csproj",
@@ -670,7 +671,7 @@ namespace ts.projectSystem {
                     checkProjectActualFiles(project, emptyArray);
                 }
                 else {
-                    assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project pending to be reloaded
+                    assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
                     checkProjectActualFiles(project, [upperCaseConfigFilePath]);
                 }
 
@@ -2978,7 +2979,8 @@ namespace ts.projectSystem {
                 };
                 const projectFileName = "/user/someuser/project/WebApplication6.csproj";
                 const host = createServerHost([libFile, site, configFile]);
-                const projectService = createProjectService(host, /*parameters*/ undefined, { lazyConfiguredProjectsFromExternalProject });
+                const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
 
                 const externalProject: protocol.ExternalProject = {
                     projectFileName,
@@ -3341,8 +3343,12 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, file2, tsconfig]);
-                const session = createSession(host, { lazyConfiguredProjectsFromExternalProject });
+                const session = createSession(host);
                 const projectService = session.getProjectService();
+                session.executeCommandSeq<protocol.ConfigureRequest>({
+                    command: protocol.CommandTypes.Configure,
+                    arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } }
+                });
 
                 // Configure the deferred extension.
                 const extraFileExtensions = [{ extension: ".deferred", scriptKind: ScriptKind.Deferred, isMixedContent: true }];
@@ -3995,7 +4001,8 @@ namespace ts.projectSystem {
                     content: ""
                 };
                 const host = createServerHost([f1, f2]);
-                const projectService = createProjectService(host, /*parameters*/ undefined, { lazyConfiguredProjectsFromExternalProject });
+                const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
 
                 // open external project
                 const projectName = "/a/b/proj1";
@@ -4064,7 +4071,8 @@ namespace ts.projectSystem {
                     content: "{}"
                 };
                 const host = createServerHost([f1, cLib, cTsconfig, dLib, dTsconfig]);
-                const projectService = createProjectService(host, /*parameters*/ undefined, { lazyConfiguredProjectsFromExternalProject });
+                const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
 
                 // open external project
                 const projectName = "/a/b/proj1";
@@ -4232,6 +4240,47 @@ namespace ts.projectSystem {
             assert.strictEqual(projectService.configuredProjects.get(config.path), project);
             assert.isTrue(project.hasOpenRef()); // f
             assert.isFalse(project.isClosed());
+        });
+
+        it("handles loads existing configured projects of external projects when lazyConfiguredProjectsFromExternalProject is disabled", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({})
+            };
+            const projectFileName = "/a/b/project.csproj";
+            const host = createServerHost([f1, config]);
+            const service = createProjectService(host);
+            service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: true } });
+            service.openExternalProject(<protocol.ExternalProject>{
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, config.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            const project = service.configuredProjects.get(config.path)!;
+            assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
+            checkProjectActualFiles(project, emptyArray);
+
+            service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
+            assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
+            checkProjectActualFiles(project, [config.path, f1.path]);
+
+            service.closeExternalProject(projectFileName);
+            service.checkNumberOfProjects({});
+
+            service.openExternalProject(<protocol.ExternalProject>{
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, config.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            const project2 = service.configuredProjects.get(config.path)!;
+            assert.equal(project2.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
+            checkProjectActualFiles(project2, [config.path, f1.path]);
         });
     });
 

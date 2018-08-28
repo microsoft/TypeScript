@@ -323,7 +323,6 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
-        lazyConfiguredProjectsFromExternalProject?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -441,7 +440,6 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
-        private readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         private readonly globalCacheLocationDirectoryPath: Path | undefined;
         public readonly throttleWaitMilliseconds?: number;
@@ -467,7 +465,6 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
-            this.lazyConfiguredProjectsFromExternalProject = opts.lazyConfiguredProjectsFromExternalProject;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
@@ -1989,7 +1986,19 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
+                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
+                    if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
+                        // Load configured projects for external projects that are pending reload
+                        this.configuredProjects.forEach(project => {
+                            if (project.hasExternalProjectRef() &&
+                                project.pendingReload === ConfigFileProgramReloadLevel.Full &&
+                                !this.pendingProjectUpdates.has(project.getProjectName())) {
+                                this.loadConfiguredProject(project);
+                                project.updateGraph();
+                            }
+                        });
+                    }
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -2642,7 +2651,7 @@ namespace ts.server {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
-                        project = this.lazyConfiguredProjectsFromExternalProject ?
+                        project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
                             this.createConfiguredProjectWithDelayLoad(tsconfigFile) :
                             this.createLoadAndUpdateConfiguredProject(tsconfigFile);
                     }

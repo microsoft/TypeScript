@@ -1520,6 +1520,11 @@ namespace ts.server {
             ) || false;
         }
 
+        /*@internal*/
+        hasExternalProjectRef() {
+            return !!this.externalProjectRefCount;
+        }
+
         getEffectiveTypeRoots() {
             return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
         }
