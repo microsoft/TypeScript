@@ -290,7 +290,7 @@ namespace ts {
         return changeExtension(outputPath, Extension.Dts);
     }
 
-    function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
+    export function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
