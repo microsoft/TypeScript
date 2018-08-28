@@ -6905,10 +6905,15 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
-            const objectType = getBaseConstraintOfType(type.objectType) || type.objectType;
-            const indexType = getBaseConstraintOfType(type.indexType) || type.indexType;
-            const constraint = !isGenericObjectType(objectType) && !isGenericIndexType(indexType) ? getIndexedAccessType(objectType, indexType, /*accessNode*/ undefined, errorType) : undefined;
-            return constraint && constraint !== errorType ? constraint : undefined;
+            const objectType = getConstraintOfType(type.objectType) || type.objectType;
+            if (objectType !== type.objectType) {
+                const constraint = getIndexedAccessType(objectType, type.indexType, /*accessNode*/ undefined, errorType);
+                if (constraint && constraint !== errorType) {
+                    return constraint;
+                }
+            }
+            const baseConstraint = getBaseConstraintOfType(type);
+            return baseConstraint && baseConstraint !== type ? baseConstraint : undefined;
         }
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
@@ -7079,9 +7084,6 @@ namespace ts {
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
-                }
-                if (isGenericMappedType(t)) {
-                    return emptyObjectType;
                 }
                 return t;
             }
@@ -11648,12 +11650,13 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // A type S is related to a type T[K] if S is related to C, where C is the
-                    // constraint of T[K]
-                    const constraint = getConstraintForRelation(target);
-                    if (constraint) {
-                        if (result = isRelatedTo(source, constraint, reportErrors)) {
-                            return result;
+                    // A type S is related to a type T[K] if S is related to C, where C is the base constraint of T[K]
+                    if (relation !== identityRelation) {
+                        const constraint = getBaseConstraintOfType(target);
+                        if (constraint && constraint !== target) {
+                            if (result = isRelatedTo(source, constraint, reportErrors)) {
+                                return result;
+                            }
                         }
                     }
                 }
