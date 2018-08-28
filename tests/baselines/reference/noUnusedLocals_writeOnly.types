@@ -6,6 +6,7 @@ function f(x = 0, b = false) {
 >b : boolean
 >false : false
 
+    // None of these statements read from 'x', so it will be marked unused.
     x = 1;
 >x = 1 : 1
 >x : number

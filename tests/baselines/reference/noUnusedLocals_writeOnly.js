@@ -1,5 +1,6 @@
 //// [noUnusedLocals_writeOnly.ts]
 function f(x = 0, b = false) {
+    // None of these statements read from 'x', so it will be marked unused.
     x = 1;
     x++;
     x /= 2;
@@ -27,6 +28,7 @@ function f(x, b) {
     if (x === void 0) { x = 0; }
     if (b === void 0) { b = false; }
     var _a, _b;
+    // None of these statements read from 'x', so it will be marked unused.
     x = 1;
     x++;
     x /= 2;
