@@ -363,6 +363,8 @@ interface Array<T> {}`
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === diagnosticDescription.message);
             assert.exists(diagnostic);
+            assert.equal(diagnostic!.start, context.span.start);
+            assert.equal(diagnostic!.length, context.span.length);
 
             const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === codeFixDescription.message)!;
@@ -424,6 +426,10 @@ interface Array<T> {}`
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+}`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicWithComments", `
 function [#|f|](): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
@@ -435,6 +441,10 @@ function [#|f|](): Promise<void>{
 
         _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
 [#|():Promise<void> => {|]
+    return fetch('https://typescriptlang.org').then(result => console.log(result));
+}`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunctionNoAnnotation", `
+[#|() => {|]
     return fetch('https://typescriptlang.org').then(result => console.log(result));
 }`);
         _testConvertToAsyncFunction("convertToAsyncFunction_Catch", `
@@ -1176,6 +1186,12 @@ function [#|f|]() {
     function [#|f|]() {
         return Promise.resolve().then(() => 1, () => "a");
     }
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpression", `
+const [#|foo|] = function () {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
 `);
 
 
