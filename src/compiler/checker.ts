@@ -16180,9 +16180,9 @@ namespace ts {
             //  // js
             //  ...
             //  asyncMethod() {
-            //      const _super = name => super[name];
+            //      const _super_asyncMethod = name => super.asyncMethod;
             //      return __awaiter(this, arguments, Promise, function *() {
-            //          let x = yield _super("asyncMethod").call(this);
+            //          let x = yield _super_asyncMethod.call(this);
             //          return x;
             //      });
             //  }
@@ -16201,19 +16201,19 @@ namespace ts {
             //  // js
             //  ...
             //  asyncMethod(ar) {
-            //      const _super = (function (geti, seti) {
-            //          const cache = Object.create(null);
-            //          return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-            //      })(name => super[name], (name, value) => super[name] = value);
+            //      const _super_a = {get value() { return super.a; }, set value(v) { super.a = v; }};
+            //      const _super_b = {get value() { return super.b; }, set value(v) { super.b = v; }};
             //      return __awaiter(this, arguments, Promise, function *() {
-            //          [_super("a").value, _super("b").value] = yield ar;
+            //          [_super_a.value, _super_b.value] = yield ar;
             //      });
             //  }
             //  ...
             //
-            // This helper creates an object with a "value" property that wraps the `super` property or indexed access for both get and set.
-            // This is required for destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment
-            // while a property access can.
+            // This helper creates an object with a "value" property that wraps the `super` property for both get and set. This is required for
+            // destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment while a property
+            // access can.
+            //
+            // For element access expressions (`super[x]`), we emit a generic helper that forwards the element access in both situations.
             if (container.kind === SyntaxKind.MethodDeclaration && hasModifier(container, ModifierFlags.Async)) {
                 if (isSuperProperty(node.parent) && isAssignmentTarget(node.parent)) {
                     getNodeLinks(container).flags |= NodeCheckFlags.AsyncMethodWithSuperBinding;
