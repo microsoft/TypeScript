@@ -114,39 +114,4 @@ namespace ts {
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
-
-    /** @internal */
-    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
-        const returnStatements: Node[] = [];
-        if (isFunctionLike(node)) {
-            forEachChild(node, visit);
-        }
-        else {
-            visit(node);
-        }
-
-        function visit(child: Node) {
-            if (isFunctionLike(child)) {
-                return;
-            }
-
-            if (isReturnStatement(child)) {
-                forEachChild(child, addHandlers);
-            }
-
-            function addHandlers(returnChild: Node) {
-                if (isPromiseHandler(returnChild)) {
-                    returnStatements.push(child as ReturnStatement);
-                }
-            }
-
-            forEachChild(child, visit);
-        }
-        return returnStatements;
-    }
-
-    function isPromiseHandler(node: Node): boolean {
-        return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
-            (node.expression.name.text === "then" || node.expression.name.text === "catch"));
-    }
 }
