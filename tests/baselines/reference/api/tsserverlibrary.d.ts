@@ -7929,14 +7929,14 @@ declare namespace ts.server {
         getSnapshot(): IScriptSnapshot;
         private ensureRealPath;
         getFormatCodeSettings(): FormatCodeSettings | undefined;
-        getPreferences(): UserPreferences | undefined;
+        getPreferences(): protocol.UserPreferences | undefined;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
         registerFileUpdate(): void;
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): boolean;
@@ -8201,11 +8201,6 @@ declare namespace ts.server {
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
 }
-declare namespace ts {
-    interface UserPreferences {
-        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
-    }
-}
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
@@ -8319,7 +8314,7 @@ declare namespace ts.server {
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -8438,9 +8433,9 @@ declare namespace ts.server {
          */
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
-        getPreferences(file: NormalizedPath): UserPreferences;
+        getPreferences(file: NormalizedPath): protocol.UserPreferences;
         getHostFormatCodeOptions(): FormatCodeSettings;
-        getHostPreferences(): UserPreferences;
+        getHostPreferences(): protocol.UserPreferences;
         private onSourceFileChanged;
         private handleDeletedFile;
         private onConfigChangedForConfiguredProject;

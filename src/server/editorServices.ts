@@ -1,9 +1,3 @@
-namespace ts {
-    export interface UserPreferences {
-        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
-    }
-}
-
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
     /*@internal*/
@@ -224,9 +218,15 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export function convertUserPreferences(preferences: protocol.UserPreferences): UserPreferences {
+        const { lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
+        return userPreferences;
+    }
+
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -808,7 +808,7 @@ namespace ts.server {
             return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
         }
 
-        getPreferences(file: NormalizedPath): UserPreferences {
+        getPreferences(file: NormalizedPath): protocol.UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
         }
@@ -817,7 +817,7 @@ namespace ts.server {
             return this.hostConfiguration.formatCodeOptions;
         }
 
-        getHostPreferences(): UserPreferences {
+        getHostPreferences(): protocol.UserPreferences {
             return this.hostConfiguration.preferences;
         }
 
