@@ -3926,13 +3926,22 @@ namespace ts {
                 const links = getSymbolLinks(symbol);
                 let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
                 if (!specifier) {
-                    specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
+                    const isBundle = (compilerOptions.out || compilerOptions.outFile);
+                    // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
+                    // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
+                    // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
+                    // specifier preference
+                    const { moduleResolverHost } = context.tracker;
+                    const specifierCompilerOptions = isBundle ? { ...compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : compilerOptions;
+                    specifier = first(first(moduleSpecifiers.getModuleSpecifiers(
                         symbol,
-                        compilerOptions,
+                        specifierCompilerOptions,
                         contextFile,
-                        context.tracker.moduleResolverHost,
+                        moduleResolverHost,
+                        host.getSourceFiles(),
+                        { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" },
                         host.redirectTargetsMap,
-                    );
+                    )));
                     links.specifierCache = links.specifierCache || createMap();
                     links.specifierCache.set(contextFile.path, specifier);
                 }

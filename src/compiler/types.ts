@@ -5331,8 +5331,6 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
-        getCommonSourceDirectory?(): string;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -5345,7 +5343,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost;
+        moduleResolverHost?: EmitHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
@@ -5594,5 +5592,16 @@ namespace ts {
         set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
         get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    }
+
+    export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
 }

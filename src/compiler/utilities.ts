@@ -7936,6 +7936,7 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    export const supportedJavaScriptAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
@@ -7959,6 +7960,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string): boolean {
         return some(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasJavaScriptOrJsonFileExtension(fileName: string): boolean {
+        return supportedJavaScriptAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
     }
 
     export function hasTypeScriptFileExtension(fileName: string): boolean {
