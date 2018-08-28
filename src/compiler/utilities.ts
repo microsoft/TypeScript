@@ -4870,6 +4870,7 @@ namespace ts {
         return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
+    /** @internal */
     export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
         const returnStatements: Node[] = [];
         if (isFunctionLike(node)) {
