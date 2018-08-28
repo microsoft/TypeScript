@@ -445,9 +445,9 @@ new h["a-b"]["a-b"](1, 2, ...a, "string");
 
 // Element access expression with a number
 new i["a-b"][1](1, 2, "string");
->new i["a-b"][1](1, 2, "string") : any
->i["a-b"][1] : any
->i["a-b"] : any
+>new i["a-b"][1](1, 2, "string") : error
+>i["a-b"][1] : error
+>i["a-b"] : error
 >i : C[][]
 >"a-b" : "a-b"
 >1 : 1
@@ -456,9 +456,9 @@ new i["a-b"][1](1, 2, "string");
 >"string" : "string"
 
 new i["a-b"][1](1, 2, ...a);
->new i["a-b"][1](1, 2, ...a) : any
->i["a-b"][1] : any
->i["a-b"] : any
+>new i["a-b"][1](1, 2, ...a) : error
+>i["a-b"][1] : error
+>i["a-b"] : error
 >i : C[][]
 >"a-b" : "a-b"
 >1 : 1
@@ -468,9 +468,9 @@ new i["a-b"][1](1, 2, ...a);
 >a : string[]
 
 new i["a-b"][1](1, 2, ...a, "string");
->new i["a-b"][1](1, 2, ...a, "string") : any
->i["a-b"][1] : any
->i["a-b"] : any
+>new i["a-b"][1](1, 2, ...a, "string") : error
+>i["a-b"][1] : error
+>i["a-b"] : error
 >i : C[][]
 >"a-b" : "a-b"
 >1 : 1

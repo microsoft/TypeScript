@@ -49,7 +49,7 @@ verify.quickInfos({
 verify.completions({
     marker: "10",
     exact:  [
-        { name: "c", text: "constructor extMod.m1.m2.c(): extMod.m1.m2.c" },
+        { name: "c", text: "constructor extMod.m1.m2.c(): extMod.m1.m2.c", documentation: "class comment;" },
         { name: "i", text: "var extMod.m1.m2.i: extMod.m1.m2.c", documentation: "i" },
     ],
 });
