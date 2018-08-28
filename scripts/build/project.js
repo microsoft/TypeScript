@@ -13,8 +13,27 @@ const del = require("del");
 const needsUpdate = require("./needsUpdate");
 const mkdirp = require("./mkdirp");
 const { reportDiagnostics } = require("./diagnostics");
+const { Countdown } = require("./countdown");
+const { CancelToken } = require("./cancellation");
+
+const countdown = new Countdown();
 
 class CompilationGulp extends gulp.Gulp {
+    constructor() {
+        super();
+        this.on("start", () => {
+            const onDone = () => {
+                this.removeListener("stop", onDone);
+                this.removeListener("err", onDone);
+                countdown.signal();
+            };
+    
+            this.on("stop", onDone);
+            this.on("err", onDone);
+            countdown.add();
+        });
+    }
+
     /**
      * @param {boolean} [verbose]
      */
@@ -38,6 +57,17 @@ class ForkedGulp extends gulp.Gulp {
     constructor(tasks) {
         super();
         this.tasks = tasks;
+        this.on("start", () => {
+            const onDone = () => {
+                this.removeListener("stop", onDone);
+                this.removeListener("err", onDone);
+                countdown.signal();
+            };
+    
+            this.on("stop", onDone);
+            this.on("err", onDone);
+            countdown.add();
+        });
     }
 
     // Do not reset tasks
@@ -211,22 +241,10 @@ exports.flatten = flatten;
 
 /**
  * Returns a Promise that resolves when all pending build tasks have completed
+ * @param {CancelToken} [token]
  */
-function wait() {
-    return new Promise(resolve => {
-        if (compilationGulp.allDone()) {
-            resolve();
-        }
-        else {
-            const onDone = () => {
-                compilationGulp.removeListener("onDone", onDone);
-                compilationGulp.removeListener("err", onDone);
-                resolve();
-            };
-            compilationGulp.on("stop", onDone);
-            compilationGulp.on("err", onDone);
-        }
-    });
+function wait(token) {
+    return countdown.wait(token);
 }
 exports.wait = wait;
 

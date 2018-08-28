@@ -30,6 +30,8 @@ namespace ts {
      * Describes a precise semantic version number, https://semver.org
      */
     export class Version {
+        static readonly zero = new Version(0, 0, 0);
+
         readonly major: number;
         readonly minor: number;
         readonly patch: number;
@@ -83,6 +85,15 @@ namespace ts {
                 || compareValues(this.minor, other.minor)
                 || compareValues(this.patch, other.patch)
                 || comparePrerelaseIdentifiers(this.prerelease, other.prerelease);
+        }
+
+        increment(field: "major" | "minor" | "patch") {
+            switch (field) {
+                case "major": return new Version(this.major + 1, 0, 0);
+                case "minor": return new Version(this.major, this.minor + 1, 0);
+                case "patch": return new Version(this.major, this.minor, this.patch + 1);
+                default: return Debug.assertNever(field);
+            }
         }
 
         toString() {
@@ -151,5 +162,230 @@ namespace ts {
         // > A larger set of pre-release fields has a higher precedence than a smaller set, if all
         // > of the preceding identifiers are equal.
         return compareValues(left.length, right.length);
+    }
+
+    /**
+     * Describes a semantic version range, per https://github.com/npm/node-semver#ranges
+     */
+    export class VersionRange {
+        private _alternatives: ReadonlyArray<ReadonlyArray<Comparator>>;
+
+        constructor(spec: string) {
+            this._alternatives = spec ? Debug.assertDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+        }
+
+        static tryParse(text: string) {
+            const sets = parseRange(text);
+            if (sets) {
+                const range = new VersionRange("");
+                range._alternatives = sets;
+                return range;
+            }
+            return undefined;
+        }
+
+        test(version: Version | string) {
+            if (typeof version === "string") version = new Version(version);
+            return testDisjunction(version, this._alternatives);
+        }
+
+        toString() {
+            return formatDisjunction(this._alternatives);
+        }
+    }
+
+    interface Comparator {
+        readonly operator: "<" | "<=" | ">" | ">=" | "=";
+        readonly operand: Version;
+    }
+
+    // https://github.com/npm/node-semver#range-grammar
+    //
+    // range-set    ::= range ( logical-or range ) *
+    // range        ::= hyphen | simple ( ' ' simple ) * | ''
+    // logical-or   ::= ( ' ' ) * '||' ( ' ' ) *
+    const logicalOrRegExp = /\s*\|\|\s*/g;
+    const whitespaceRegExp = /\s+/g;
+
+    // https://github.com/npm/node-semver#range-grammar
+    //
+    // partial      ::= xr ( '.' xr ( '.' xr qualifier ? )? )?
+    // xr           ::= 'x' | 'X' | '*' | nr
+    // nr           ::= '0' | ['1'-'9'] ( ['0'-'9'] ) *
+    // qualifier    ::= ( '-' pre )? ( '+' build )?
+    // pre          ::= parts
+    // build        ::= parts
+    // parts        ::= part ( '.' part ) *
+    // part         ::= nr | [-0-9A-Za-z]+
+    const partialRegExp = /^([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:\.([xX*0]|[1-9]\d*)(?:-([a-z0-9-.]+))?(?:\+([a-z0-9-.]+))?)?)?$/i;
+
+    // https://github.com/npm/node-semver#range-grammar
+    //
+    // hyphen       ::= partial ' - ' partial
+    const hyphenRegExp = /^\s*([a-z0-9-+.*]+)\s+-\s+([a-z0-9-+.*]+)\s*$/i;
+
+    // https://github.com/npm/node-semver#range-grammar
+    //
+    // simple       ::= primitive | partial | tilde | caret
+    // primitive    ::= ( '<' | '>' | '>=' | '<=' | '=' ) partial
+    // tilde        ::= '~' partial
+    // caret        ::= '^' partial
+    const rangeRegExp = /^\s*(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
+
+    function parseRange(text: string) {
+        const alternatives: Comparator[][] = [];
+        for (const range of text.trim().split(logicalOrRegExp)) {
+            if (!range) continue;
+            const comparators: Comparator[] = [];
+            const match = hyphenRegExp.exec(range);
+            if (match) {
+                if (!parseHyphen(match[1], match[2], comparators)) return undefined;
+            }
+            else {
+                for (const simple of range.split(whitespaceRegExp)) {
+                    const match = rangeRegExp.exec(simple);
+                    if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
+                }
+            }
+            alternatives.push(comparators);
+        }
+        return alternatives;
+    }
+
+    function parsePartial(text: string) {
+        const match = partialRegExp.exec(text);
+        if (!match) return undefined;
+
+        const [, major, minor = "*", patch = "*", prerelease, build] = match;
+        const version = new Version(
+            isWildcard(major) ? 0 : parseInt(major, 10),
+            isWildcard(major) || isWildcard(minor) ? 0 : parseInt(minor, 10),
+            isWildcard(major) || isWildcard(minor) || isWildcard(patch) ? 0 : parseInt(patch, 10),
+            prerelease,
+            build);
+
+        return { version, major, minor, patch };
+    }
+
+    function parseHyphen(left: string, right: string, comparators: Comparator[]) {
+        const leftResult = parsePartial(left);
+        if (!leftResult) return false;
+
+        const rightResult = parsePartial(right);
+        if (!rightResult) return false;
+
+        if (!isWildcard(leftResult.major)) {
+            comparators.push(createComparator(">=", leftResult.version));
+        }
+
+        if (!isWildcard(rightResult.major)) {
+            comparators.push(
+                isWildcard(rightResult.minor) ? createComparator("<", rightResult.version.increment("major")) :
+                isWildcard(rightResult.patch) ? createComparator("<", rightResult.version.increment("minor")) :
+                createComparator("<=", rightResult.version));
+        }
+
+        return true;
+    }
+
+    function parseComparator(operator: string, text: string, comparators: Comparator[]) {
+        const result = parsePartial(text);
+        if (!result) return false;
+
+        const { version, major, minor, patch } = result;
+        if (!isWildcard(major)) {
+            switch (operator) {
+                case "~":
+                    comparators.push(createComparator(">=", version));
+                    comparators.push(createComparator("<", version.increment(
+                        isWildcard(minor) ? "major" :
+                        "minor")));
+                    break;
+                case "^":
+                    comparators.push(createComparator(">=", version));
+                    comparators.push(createComparator("<", version.increment(
+                        version.major > 0 || isWildcard(minor) ? "major" :
+                        version.minor > 0 || isWildcard(patch) ? "minor" :
+                        "patch")));
+                    break;
+                case "<":
+                case ">=":
+                    comparators.push(createComparator(operator, version));
+                    break;
+                case "<=":
+                case ">":
+                    comparators.push(
+                        isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major")) :
+                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor")) :
+                        createComparator(operator, version));
+                    break;
+                case "=":
+                case undefined:
+                    if (isWildcard(minor) || isWildcard(patch)) {
+                        comparators.push(createComparator(">=", version));
+                        comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor")));
+                    }
+                    else {
+                        comparators.push(createComparator("=", version));
+                    }
+                    break;
+                default:
+                    // unrecognized
+                    return false;
+            }
+        }
+        else if (operator === "<" || operator === ">") {
+            comparators.push(createComparator("<", Version.zero));
+        }
+
+        return true;
+    }
+
+    function isWildcard(part: string) {
+        return part === "*" || part === "x" || part === "X";
+    }
+
+    function createComparator(operator: Comparator["operator"], operand: Version) {
+        return { operator, operand };
+    }
+
+    function testDisjunction(version: Version, alternatives: ReadonlyArray<ReadonlyArray<Comparator>>) {
+        // an empty disjunction is treated as "*" (all versions)
+        if (alternatives.length === 0) return true;
+        for (const alternative of alternatives) {
+            if (testAlternative(version, alternative)) return true;
+        }
+        return false;
+    }
+
+    function testAlternative(version: Version, comparators: ReadonlyArray<Comparator>) {
+        for (const comparator of comparators) {
+            if (!testComparator(version, comparator.operator, comparator.operand)) return false;
+        }
+        return true;
+    }
+
+    function testComparator(version: Version, operator: Comparator["operator"], operand: Version) {
+        const cmp = version.compareTo(operand);
+        switch (operator) {
+            case "<": return cmp < 0;
+            case "<=": return cmp <= 0;
+            case ">": return cmp > 0;
+            case ">=": return cmp >= 0;
+            case "=": return cmp === 0;
+            default: return Debug.assertNever(operator);
+        }
+    }
+
+    function formatDisjunction(alternatives: ReadonlyArray<ReadonlyArray<Comparator>>) {
+        return map(alternatives, formatAlternative).join(" || ") || "*";
+    }
+
+    function formatAlternative(comparators: ReadonlyArray<Comparator>) {
+        return map(comparators, formatComparator).join(" ");
+    }
+
+    function formatComparator(comparator: Comparator) {
+        return `${comparator.operator}${comparator.operand}`;
     }
 }

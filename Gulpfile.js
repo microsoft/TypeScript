@@ -570,12 +570,12 @@ gulp.task(
             });
         }, /*timeout*/ 100, { max: 500 });
 
-        gulp.watch(watchPatterns, () => project.wait().then(fn));
+        gulp.watch(watchPatterns, () => project.wait(runTestsSource && runTestsSource.token).then(fn));
 
         // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
         const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
         fs.watch("tests/cases", { recursive: true }, (_, file) => {
-            if (testFilePattern.test(file)) project.wait().then(fn);
+            if (testFilePattern.test(file)) project.wait(runTestsSource && runTestsSource.token).then(fn);
         });
 
         function runTests() {

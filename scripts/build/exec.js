@@ -25,8 +25,10 @@ function exec(cmd, args, options = {}) {
         const command = isWin ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];
         const ex = cp.spawn(isWin ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true });
         const subscription = options.cancelToken && options.cancelToken.subscribe(() => {
+            log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
             ex.kill("SIGINT");
             ex.kill("SIGTERM");
+            ex.kill();
             reject(new CancelError());
         });
         ex.on("exit", exitCode => {
