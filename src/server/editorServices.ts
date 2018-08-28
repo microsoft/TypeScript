@@ -218,9 +218,15 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export function convertUserPreferences(preferences: protocol.UserPreferences): UserPreferences {
+        const { lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
+        return userPreferences;
+    }
+
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -802,7 +808,7 @@ namespace ts.server {
             return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
         }
 
-        getPreferences(file: NormalizedPath): UserPreferences {
+        getPreferences(file: NormalizedPath): protocol.UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
         }
@@ -811,7 +817,7 @@ namespace ts.server {
             return this.hostConfiguration.formatCodeOptions;
         }
 
-        getHostPreferences(): UserPreferences {
+        getHostPreferences(): protocol.UserPreferences {
             return this.hostConfiguration.preferences;
         }
 
@@ -1561,6 +1567,13 @@ namespace ts.server {
             return project;
         }
 
+        /* @internal */
+        private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath) {
+            const project = this.createAndLoadConfiguredProject(configFileName);
+            project.updateGraph();
+            return project;
+        }
+
         /**
          * Read the config file of the project, and update the project root file names.
          */
@@ -1979,7 +1992,19 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
+                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
+                    if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
+                        // Load configured projects for external projects that are pending reload
+                        this.configuredProjects.forEach(project => {
+                            if (project.hasExternalProjectRef() &&
+                                project.pendingReload === ConfigFileProgramReloadLevel.Full &&
+                                !this.pendingProjectUpdates.has(project.getProjectName())) {
+                                this.loadConfiguredProject(project);
+                                project.updateGraph();
+                            }
+                        });
+                    }
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -2192,8 +2217,7 @@ namespace ts.server {
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
-                        project = this.createAndLoadConfiguredProject(configFileName);
-                        project.updateGraph();
+                        project = this.createLoadAndUpdateConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info
@@ -2633,7 +2657,9 @@ namespace ts.server {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
-                        project = this.createConfiguredProjectWithDelayLoad(tsconfigFile);
+                        project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
+                            this.createConfiguredProjectWithDelayLoad(tsconfigFile) :
+                            this.createLoadAndUpdateConfiguredProject(tsconfigFile);
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project
