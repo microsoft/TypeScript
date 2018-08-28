@@ -22,8 +22,8 @@ class B extends A {
 >_super : any
 >null : null
 
-        const _superProps = null;
->_superProps : any
+        const _superIndex = null;
+>_superIndex : any
 >null : null
 
         // call with property access
@@ -70,8 +70,8 @@ class B extends A {
 >_super : any
 >null : null
 
-        const _superProps = null;
->_superProps : any
+        const _superIndex = null;
+>_superIndex : any
 >null : null
 
         const f = () => {};

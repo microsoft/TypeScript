@@ -10,7 +10,7 @@ class B extends A {
     // async method with only call/get on 'super' does not require a binding
     async simple() {
         const _super = null;
-        const _superProps = null;
+        const _superIndex = null;
         // call with property access
         super.x();
         // call additional property.
@@ -29,7 +29,7 @@ class B extends A {
     // async method with assignment/destructuring on 'super' requires a binding
     async advanced() {
         const _super = null;
-        const _superProps = null;
+        const _superIndex = null;
         const f = () => {};
 
         // call with property access
@@ -77,29 +77,29 @@ class A {
 class B extends A {
     // async method with only call/get on 'super' does not require a binding
     simple() {
-        const _superIndex = name => super[name];
+        const _superIndex_1 = name => super[name];
         const _super_1 = Object.create(null, {
             x: { get: () => super.x },
             y: { get: () => super.y }
         });
         return __awaiter(this, void 0, void 0, function* () {
             const _super = null;
-            const _superProps = null;
+            const _superIndex = null;
             // call with property access
             _super_1.x.call(this);
             // call additional property.
             _super_1.y.call(this);
             // call with element access
-            _superIndex("x").call(this);
+            _superIndex_1("x").call(this);
             // property access (read)
             const a = _super_1.x;
             // element access (read)
-            const b = _superIndex("x");
+            const b = _superIndex_1("x");
         });
     }
     // async method with assignment/destructuring on 'super' requires a binding
     advanced() {
-        const _superIndex = (function (geti, seti) {
+        const _superIndex_1 = (function (geti, seti) {
             const cache = Object.create(null);
             return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
         })(name => super[name], (name, value) => super[name] = value);
@@ -108,24 +108,24 @@ class B extends A {
         });
         return __awaiter(this, void 0, void 0, function* () {
             const _super = null;
-            const _superProps = null;
+            const _superIndex = null;
             const f = () => { };
             // call with property access
             _super_1.x.call(this);
             // call with element access
-            _superIndex("x").value.call(this);
+            _superIndex_1("x").value.call(this);
             // property access (read)
             const a = _super_1.x;
             // element access (read)
-            const b = _superIndex("x").value;
+            const b = _superIndex_1("x").value;
             // property access (assign)
             _super_1.x = f;
             // element access (assign)
-            _superIndex("x").value = f;
+            _superIndex_1("x").value = f;
             // destructuring assign with property access
             ({ f: _super_1.x } = { f });
             // destructuring assign with element access
-            ({ f: _superIndex("x").value } = { f });
+            ({ f: _superIndex_1("x").value } = { f });
         });
     }
 }
