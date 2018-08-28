@@ -2286,8 +2286,6 @@ namespace ts {
             return getPackagesSet().has(getTypesPackageName(packageName));
         }
 
-        // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
-        // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
