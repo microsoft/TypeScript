@@ -3522,8 +3522,8 @@ namespace ts {
                     }
                     if (resolvedType.indexInfos) {
                         for (let info of resolvedType.indexInfos) {
-                            if (info.indexType === stringType && resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
-                                info = createIndexInfo(stringType, anyType, info.isReadonly, info.declaration); 
+                            if (resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
+                                info = createIndexInfo(info.indexType, anyType, info.isReadonly, info.declaration); 
                             }
                             typeElements.push(indexInfoToIndexSignatureDeclarationHelper(info, context));
                         }
@@ -6302,7 +6302,9 @@ namespace ts {
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
                     const baseInfos = getIndexInfosOfType(instantiatedBaseType);
-                    indexInfos = intersectIndexInfos(indexInfos, baseInfos);
+                    if (baseInfos) {
+                        indexInfos = overrideIndexInfos(baseInfos, indexInfos);
+                    }
                     if (!resolveIndexOnIndexInfos(stringType, indexInfos)) {
                         if (instantiatedBaseType === anyType) {
                             indexInfos = indexInfos || [];
@@ -6502,6 +6504,35 @@ namespace ts {
             return !type1 ? type2 : !type2 ? type1 : getIntersectionType([type1, type2]);
         }
 
+        function overrideIndexInfos(infos1: IndexInfo[] | undefined, infos2: IndexInfo[] | undefined): IndexInfo[] | undefined {
+            if (!infos1) {
+                return infos2;
+            }
+            if (!infos2) {
+                return infos1;
+            }
+            let infos: IndexInfo[] | undefined;
+            for (const info1 of infos1) {
+                for (const info2 of infos2) {
+                    const intersectedKeys = getIntersectionType([info1.indexType, info2.indexType]);
+                    // Merge all index signatures which overlap, taking the second to override the first (as with class inheritance)
+                    if (intersectedKeys && !(intersectedKeys.flags & TypeFlags.Never) && !(intersectedKeys.flags & TypeFlags.Intersection)) {
+                        infos = appendIfUnique(infos, info2);
+                    }
+                }
+            }
+            let baseInfos: IndexInfo[] | undefined;
+            for (const originalInfos of [infos1, infos2]) {
+                for (const info of originalInfos) {
+                    // And also add all index signatures which did not get perfectly subsumed by another signature
+                    if (!some(infos, i => i.indexType === info.indexType)) {
+                        baseInfos = append(baseInfos, info);
+                    }
+                }
+            }
+            return concatenate(infos, baseInfos);
+        }
+
         function intersectIndexInfos(infos1: IndexInfo[] | undefined, infos2: IndexInfo[] | undefined): IndexInfo[] | undefined {
             if (!infos1) {
                 return infos2;
@@ -6514,8 +6545,8 @@ namespace ts {
                 for (const info2 of infos2) {
                     const intersectedKeys = getIntersectionType([info1.indexType, info2.indexType]);
                     // Merge all index signatures which overlap
-                    if (intersectedKeys && intersectedKeys !== neverType && !(intersectedKeys.flags & TypeFlags.Intersection)) {
-                        infos = concatenate(infos, [createIndexInfo(intersectedKeys, getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly)]);
+                    if (intersectedKeys && !(intersectedKeys.flags & TypeFlags.Never) && !(intersectedKeys.flags & TypeFlags.Intersection)) {
+                        infos = append(infos, createIndexInfo(intersectedKeys, getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly));
                     }
                 }
             }
@@ -6524,7 +6555,7 @@ namespace ts {
                 for (const info of originalInfos) {
                     // And also add all index signatures which did not get perfectly subsumed by another signature
                     if (!some(infos, i => i.indexType === info.indexType)) {
-                        baseInfos = concatenate(baseInfos, [info]);
+                        baseInfos = append(baseInfos, info);
                     }
                 }
             }
@@ -6540,8 +6571,8 @@ namespace ts {
                 for (const info2 of infos2) {
                     const intersectedKeys = getIntersectionType([info1.indexType, info2.indexType]);
                     // Merge all index signatures which overlap
-                    if (intersectedKeys && intersectedKeys !== neverType && !(intersectedKeys.flags & TypeFlags.Intersection)) {
-                        infos = concatenate(infos, [createIndexInfo(intersectedKeys, getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly)]);
+                    if (intersectedKeys && !(intersectedKeys.flags & TypeFlags.Never) && !(intersectedKeys.flags & TypeFlags.Intersection)) {
+                        infos = append(infos, createIndexInfo(intersectedKeys, getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly));
                     }
                 }
             }
@@ -6663,9 +6694,11 @@ namespace ts {
             const modifiers = getMappedTypeModifiers(type.mappedType);
             const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
             const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-            const mappedIndexInfos = indexInfos && map(indexInfos, indexInfo =>
-                createIndexInfo(indexInfo.indexType, inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly)
-            );
+            // TODO: Fix #26724 using the below once #26725 is fixed and `mappedRecursiveInference.ts` doesn't blow up with the change
+            //const mappedIndexInfos = indexInfos && map(indexInfos, indexInfo =>
+            //    createIndexInfo(indexInfo.indexType, inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly)
+            //);
+            const mappedIndexInfos = map(filter(indexInfos, i => !!(i.indexType.flags & TypeFlags.String)), i => createIndexInfo(i.indexType, inferReverseMappedType(i.type, type.mappedType), readonlyMask && i.isReadonly));
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(type.source)) {
                 const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
@@ -6712,7 +6745,7 @@ namespace ts {
                 // First, if the constraint type is a type parameter, obtain the base constraint. Then,
                 // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
                 // Finally, iterate over the constituents of the resulting iteration type.
-                const keyType = constraintType.flags & TypeFlags.InstantiableNonPrimitive ? getApparentType(constraintType) : constraintType;
+                const keyType = constraintType.flags & TypeFlags.InstantiableNonPrimitive ? getBaseConstraintOrType(constraintType) : constraintType;
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
             }
@@ -6747,7 +6780,9 @@ namespace ts {
                     prop.nameType = t;
                     members.set(propName, prop);
                 }
-                else {
+                // Well-known symbols produce a key type of never when pushed through `getLiteralTypeFromPropertyName` right now, so we need to handle that
+                // Gracefully by _not_ making a `never` indexer (which would be a huge problem for assignability)
+                else if (!(t.flags & TypeFlags.Never)) {
                     indexInfos = indexInfos || [];
                     if (isTypeAny(t)) {
                         // Legacy behavior. TODO: Remove.
@@ -7392,7 +7427,7 @@ namespace ts {
             return resolveIndexOnIndexInfos(indexType, getIndexInfosOfType(type));
         }
 
-        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type): IndexInfo[] | undefined {
+        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type, contravariant?: boolean): IndexInfo[] | undefined {
             if (!(indexType.flags & TypeFlags.Union)) {
                 const result = getResultingIndexInfoOfIndexOnType(type, indexType);
                 return result && [result];
@@ -7400,16 +7435,18 @@ namespace ts {
             let resultList: IndexInfo[] | undefined;
             for (const nameType of (indexType as UnionType).types) {
                 const result = getResultingIndexInfoOfIndexOnType(type, nameType);
-                if (!result) {
+                if (!result && !contravariant) {
                     return;
                 }
-                resultList = appendIfUnique(resultList, result);
+                if (result) {
+                    resultList = appendIfUnique(resultList, result);
+                }
             }
             return resultList;
         }
 
-        function getResultingTypeOfIndexOnType(type: Type, indexType: Type): Type | undefined {
-            const resultInfos = getApplicableIndexInfosOfIndexOnType(type, indexType);
+        function getResultingTypeOfIndexOnType(type: Type, indexType: Type, contravariant?: boolean): Type | undefined {
+            const resultInfos = getApplicableIndexInfosOfIndexOnType(type, indexType, contravariant);
             return resultInfos && getUnionType(map(resultInfos, i => i.type));
         }
 
@@ -7970,6 +8007,12 @@ namespace ts {
          */
         function resolveIndexOnIndexInfos(indexType: Type, infos: IndexInfo[] | undefined): IndexInfo | undefined {
             Debug.assert(!(indexType.flags & TypeFlags.Union));
+            if (indexType.flags & TypeFlags.StringLiteral) {
+                // Prioritize equivalent numeric representation over the string one, since the "number"s in this case _are_ just a subdomain of the strings
+                if (isNumericLiteralName((indexType as StringLiteralType).value)) {
+                    indexType = getLiteralType(+(indexType as StringLiteralType).value);
+                }
+            }
             const applicable = filter(infos, info => isTypeIndexAssignableTo(indexType, info.indexType));
             if (!length(applicable)) return;
             // OK, now for the hard part - ranking the derivedness of an index signature!
@@ -12239,7 +12282,7 @@ namespace ts {
                     }
                     const targetType = getResultingTypeOfIndexOnType(target, getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique));
                     if (targetType) {
-                        const related = isIndexTypeRelatedTo(getTypeOfSymbol(prop), targetType, sourceIsPrimitive, reportErrors);
+                        const related = isIndexTypeRelatedTo(getTypeOfSymbol(prop), targetType, sourceIsPrimitive, reportErrors, /*skipIndexError*/ true);
                         if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
@@ -12261,14 +12304,31 @@ namespace ts {
                     return Ternary.True;
                 }
                 const sourceInfo = getIndexInfosOfType(source)
-                if (sourceInfo) {
-                    return indexInfosRelated(sourceInfo, targetInfo, sourceIsPrimitive, reportErrors);
+                const result = sourceInfo && indexInfosRelated(sourceInfo, targetInfo, sourceIsPrimitive, reportErrors);
+                if (result !== undefined && result !== Ternary.Maybe) {
+                    return result;
                 }
                 if (isGenericMappedType(source)) {
                     // A generic mapped type { [P in K]: T } is related to an index signature { [x: string]: U }
                     // if T is related to U.
-                    const result = getResultingTypeOfIndexOnType(target, getConstraintTypeFromMappedType(source));
-                    return result ? isIndexTypeRelatedTo(getTemplateTypeFromMappedType(source), result, sourceIsPrimitive, reportErrors) : Ternary.False;
+                    const keyType = getBaseConstraintOrType(getConstraintTypeFromMappedType(source));
+                    let hadSomeMatch = false;
+                    const failed = forEachType(keyType, key => {
+                        const result = getResultingTypeOfIndexOnType(target, key);
+                        if (!result) {
+                            return;
+                        }
+                        hadSomeMatch = true;
+                        // TODO: Revise? For each type in `K`'s constraint, instantiate T with the key type being compared?
+                        // const instantiated = instantiateType(getTemplateTypeFromMappedType(source), makeUnaryTypeMapper(getTypeParameterFromMappedType(source), key));
+                        if (!isIndexTypeRelatedTo(getTemplateTypeFromMappedType(source), result, sourceIsPrimitive, reportErrors)) {
+                            return true;
+                        }
+                    });
+                    if (failed) {
+                        return Ternary.False;
+                    }
+                    return hadSomeMatch ? Ternary.True : Ternary.False;
                 }
                 if (isObjectTypeWithInferableIndex(source)) {
                     return eachPropertyRelatedToIndexesOf(source, target, sourceIsPrimitive, reportErrors);
@@ -12288,13 +12348,13 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function isIndexTypeRelatedTo(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
+            function isIndexTypeRelatedTo(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean, skipIndexError?: boolean): Ternary {
                 // Index signature of type any permits assignment from everything but primitives
                 if (!sourceIsPrimitive && target.flags & TypeFlags.AnyOrUnknown) {
                     return Ternary.True;
                 }
                 const related = isRelatedTo(source, target, reportErrors);
-                if (!related && reportErrors) {
+                if (!related && reportErrors && !skipIndexError) {
                     reportError(Diagnostics.Index_signatures_are_incompatible);
                 }
                 return related;
@@ -12305,16 +12365,17 @@ namespace ts {
                     return Ternary.True;
                 }
                 if (sourceInfos && targetInfos) {
-                    const isIndexRelatedToHelper = identityRelation ? isRelatedTo : isTypeIndexAssignableTo;
+                    const isIndexRelatedToHelper = relation === identityRelation ? isRelatedTo : isTypeIndexAssignableTo;
                     // If for every index signature in S there exists a related signature in T
                     targetLoop: for (const targetInfo of targetInfos) {
                         for (const sourceInfo of sourceInfos) {
-                            if (isIndexRelatedToHelper(sourceInfo.indexType, targetInfo.indexType) && isIndexTypeRelatedTo(sourceInfo.type, targetInfo.type, sourceIsPrimitive, reportErrors)) {
+                            if (isIndexRelatedToHelper(sourceInfo.indexType, targetInfo.indexType)) {
+                                if (!isIndexTypeRelatedTo(sourceInfo.type, targetInfo.type, sourceIsPrimitive, reportErrors)) return Ternary.False;
                                 if (relation === identityRelation && sourceInfo.isReadonly !== targetInfo.isReadonly) return Ternary.False;
                                 continue targetLoop;
                             }
                         }
-                        return identityRelation ? Ternary.False : Ternary.True;
+                        return relation === identityRelation ? Ternary.False : Ternary.Maybe;
                     }
                     if (relation === identityRelation) {
                         // And for every index signature in T there exists and identical signature in S
@@ -13257,7 +13318,7 @@ namespace ts {
 
         function createReverseMappedType(source: Type, target: MappedType) {
             const properties = getPropertiesOfType(source);
-            if (properties.length === 0 && !getResultingIndexInfoOfIndexOnType(source, stringType)) {
+            if (properties.length === 0 && !getIndexInfosOfType(source)) {
                 return undefined;
             }
             // If any property contains context sensitive functions that have been skipped, the source type
@@ -22705,7 +22766,7 @@ namespace ts {
             }
             // Check if we're indexing with a numeric type and if either object or index types
             // is a generic type with a constraint that has a numeric index signature.
-            if (getResultingIndexInfoOfIndexOnType(objectType, indexType)) {
+            if (getApplicableIndexInfosOfIndexOnType(objectType, getBaseConstraintOrType(indexType))) {
                 return type;
             }
             error(accessNode, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(objectType));
@@ -25225,7 +25286,14 @@ namespace ts {
             if (indexInfos) {
                 forEach(getPropertiesOfObjectType(type), prop => {
                     const propType = getTypeOfSymbol(prop);
-                    checkIndexConstraintForProperty(prop, propType, type, declaredIndexers);
+                    // TODO: Well known symbols should _probably_ be subject to a symbol indexer, but unfortunately they have no associated literal
+                    // type right now, so they're very difficult to check/flow. They're on the chopping block for removal thanks to advancements,
+                    // and other issues though, so it's probably OK to just let their removal and simultaneous replacement with `unique symbol`s
+                    // fix this.
+                    if (isKnownSymbol(prop)) {
+                        return;
+                    }
+                    checkIndexConstraintForProperty(prop, getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique), propType, type, declaredIndexers);
                 });
 
                 const classDeclaration = type.symbol.valueDeclaration;
@@ -25237,7 +25305,7 @@ namespace ts {
                         if (!hasModifier(member, ModifierFlags.Static) && hasNonBindableDynamicName(member)) {
                             const symbol = getSymbolOfNode(member);
                             const propType = getTypeOfSymbol(symbol);
-                            checkIndexConstraintForProperty(symbol, propType, type, declaredIndexers);
+                            checkIndexConstraintForProperty(symbol, checkExpressionCached((member as DynamicNamedDeclaration).name.expression), propType, type, declaredIndexers);
                         }
                     }
                 }
@@ -25283,23 +25351,14 @@ namespace ts {
 
             function checkIndexConstraintForProperty(
                 prop: Symbol,
+                propName: Type,
                 propertyType: Type,
                 containingType: Type,
                 indexDeclarations: Declaration[] | undefined
             ): void {
-                // TODO: Well known symbols should _probably_ be subject to a symbol indexer, but unfortunately they have no associated literal
-                // type right now, so they're very difficult to check/flow. They're on the chopping block for removal thanks to advancements,
-                // and other issues though, so it's probably OK to just let their removal and simultaneous replacement with `unique symbol`s
-                // fix this.
-                if (isKnownSymbol(prop)) {
-                    return;
-                }
-
-                const propName = getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique);
-
                 const indexInfos = getIndexInfosOfType(containingType);
                 const resolvedInfo = resolveIndexOnIndexInfos(propName, indexInfos);
-                if (!resolvedInfo || isTypeIndexAssignableTo(propertyType, resolvedInfo.type)) {
+                if (!resolvedInfo || isTypeAssignableTo(propertyType, resolvedInfo.type)) {
                     return; // No errors
                 }
                 const indexDeclaration = contains(indexDeclarations, resolvedInfo.declaration) ? resolvedInfo.declaration : undefined;

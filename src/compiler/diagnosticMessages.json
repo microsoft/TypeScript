@@ -1432,7 +1432,7 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
+    "Property '{0}' of type '{1}' is not assignable to {2} index type '{3}'.": {
         "category": "Error",
         "code": 2411
     },

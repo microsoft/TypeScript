@@ -99,12 +99,12 @@ type ItemMap = {
     [x: string]: Item;
 }
 
-function f50<T extends ItemMap>(obj: T, key: keyof T) {
+function f50<T extends ItemMap>(obj: T, key: keyof T & string) {
     let item: Item = obj[key];
     return obj[key].name;
 }
 
-function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
+function f51<T extends ItemMap, K extends keyof T & string>(obj: T, key: K) {
     let item: Item = obj[key];
     return obj[key].name;
 }
