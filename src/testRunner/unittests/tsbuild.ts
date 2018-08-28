@@ -5,8 +5,8 @@ namespace ts {
         const projFs = loadProjectFromDisk("tests/projects/sample1");
 
         const allExpectedOutputs = ["/src/tests/index.js",
-            "/src/core/index.js", "/src/core/index.d.ts",
-            "/src/logic/index.js", "/src/logic/index.d.ts"];
+            "/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map",
+            "/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
 
         describe("tsbuild - sanity check of clean build of 'sample1' project", () => {
             it("can build the sample project 'sample1' without error", () => {
