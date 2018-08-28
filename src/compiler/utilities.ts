@@ -4870,6 +4870,40 @@ namespace ts {
         return unescapeLeadingUnderscores(symbol.escapedName);
     }
 
+    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
+        const returnStatements: Node[] = [];
+        if (isFunctionLike(node)) {
+            forEachChild(node, visit);
+        }
+        else {
+            visit(node);
+        }
+
+        function visit(child: Node) {
+            if (isFunctionLike(child)) {
+                return;
+            }
+
+            if (isReturnStatement(child)) {
+                forEachChild(child, addHandlers);
+            }
+
+            function addHandlers(returnChild: Node) {
+                if (isPromiseHandler(returnChild)) {
+                    returnStatements.push(child as ReturnStatement);
+                }
+            }
+
+            forEachChild(child, visit);
+        }
+        return returnStatements;
+    }
+
+    function isPromiseHandler(node: Node): boolean {
+        return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
+            (node.expression.name.escapedText === "then" || node.expression.name.escapedText === "catch"));
+    }
+
     /**
      * A JSDocTypedef tag has an _optional_ name field - if a name is not directly present, we should
      * attempt to draw the name from the node the declaration is on (as that declaration is what its' symbol

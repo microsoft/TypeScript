@@ -5,7 +5,6 @@ namespace ts {
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
-        const checker = program.getDiagnosticsProducingTypeChecker();
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
@@ -71,9 +70,6 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
-                addConvertToAsyncFunctionDiagnostics(node, checker, diags);
-            }
             node.forEachChild(check);
         }
     }
@@ -112,32 +108,6 @@ namespace ts {
                 return node.name;
             default:
                 return undefined;
-        }
-    }
-
-    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
-        if (isAsyncFunction(node) || !node.body) {
-            return;
-        }
-
-        const functionType = checker.getTypeAtLocation(node);
-
-        if (!functionType) {
-            return;
-        }
-
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
-        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
-
-        if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
-            return;
-        }
-
-        // collect all the return statements
-        // check that a property access expression exists in there and that it is a handler
-        const returnStatements = getReturnStatementsWithPromiseHandlers(node);
-        if (returnStatements.length > 0) {
-            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
         }
     }
 
