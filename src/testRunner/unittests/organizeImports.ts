@@ -745,15 +745,13 @@ export * from "lib";
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 
-                Harness.Baseline.runBaseline(baselinePath, () => {
-                    const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
-                    return [
-                        "// ==ORIGINAL==",
-                        testContent,
-                        "// ==ORGANIZED==",
-                        newText,
-                    ].join(newLineCharacter);
-                });
+                const newText = textChanges.applyChanges(testContent, changes[0].textChanges);
+                Harness.Baseline.runBaseline(baselinePath, [
+                    "// ==ORIGINAL==",
+                    testContent,
+                    "// ==ORGANIZED==",
+                    newText,
+                ].join(newLineCharacter));
             }
 
             function makeLanguageService(...files: TestFSWithWatch.File[]) {

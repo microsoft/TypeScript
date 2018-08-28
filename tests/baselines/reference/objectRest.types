@@ -175,7 +175,7 @@ var removable = new Removable();
 
 var { removed, ...removableRest } = removable;
 >removed : string
->removableRest : { both: number; remainder: string; }
+>removableRest : { remainder: string; }
 >removable : Removable
 
 var i: I = removable;

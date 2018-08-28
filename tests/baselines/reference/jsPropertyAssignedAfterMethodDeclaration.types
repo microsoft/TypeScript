@@ -1,7 +1,7 @@
 === /a.js ===
 const o = {
->o : { [x: string]: any; a(): void; }
->{    a() {        // Should not be treated as a declaration. Should be an error.        this.a = 0;    }} : { [x: string]: any; a(): void; }
+>o : { a(): void; }
+>{    a() {        // Should not be treated as a declaration. Should be an error.        this.a = 0;    }} : { a(): void; }
 
     a() {
 >a : () => void
@@ -10,7 +10,7 @@ const o = {
         this.a = 0;
 >this.a = 0 : 0
 >this.a : () => void
->this : { [x: string]: any; a(): void; }
+>this : { a(): void; }
 >a : () => void
 >0 : 0
     }

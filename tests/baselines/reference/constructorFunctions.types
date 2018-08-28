@@ -168,3 +168,17 @@ var c6_v1 = new C6();
 >new C6() : C6
 >C6 : typeof C6
 
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+>C7 : typeof C7
+>num : number
+
+var c7_v1 = new C7();
+>c7_v1 : any
+>new C7() : any
+>C7 : typeof C7
+

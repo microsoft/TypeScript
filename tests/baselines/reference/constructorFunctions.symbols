@@ -116,3 +116,16 @@ var c6_v1 = new C6();
 >c6_v1 : Symbol(c6_v1, Decl(index.js, 45, 3))
 >C6 : Symbol(C6, Decl(index.js, 38, 12))
 
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
+>num : Symbol(num, Decl(index.js, 52, 12))
+
+var c7_v1 = new C7();
+>c7_v1 : Symbol(c7_v1, Decl(index.js, 54, 3))
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
+

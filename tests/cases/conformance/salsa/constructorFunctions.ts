@@ -49,3 +49,12 @@ function C6() {
 };
 
 var c6_v1 = new C6();
+
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+
+var c7_v1 = new C7();

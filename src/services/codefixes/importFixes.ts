@@ -168,8 +168,13 @@ namespace ts.codefix {
         // We sort the best codefixes first, so taking `first` is best for completions.
         const moduleSpecifier = first(getNewImportInfos(program, sourceFile, position, exportInfos, host, preferences)).moduleSpecifier;
         const fix = first(getFixForImport(exportInfos, symbolName, position, program, sourceFile, host, preferences));
-        return { moduleSpecifier, codeAction: codeActionForFix({ host, formatContext }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences)) };
+        return { moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
     }
+
+    function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
+        return { description, changes, commands };
+    }
+
     function getAllReExportingModules(exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, sourceFile: SourceFile, checker: TypeChecker, allSourceFiles: ReadonlyArray<SourceFile>): ReadonlyArray<SymbolExportInfo> {
         const result: SymbolExportInfo[] = [];
         forEachExternalModule(checker, allSourceFiles, (moduleSymbol, moduleFile) => {
@@ -414,8 +419,6 @@ namespace ts.codefix {
     }
 
     function getDefaultExportInfo(defaultExport: Symbol, moduleSymbol: Symbol, program: Program): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
-        const checker = program.getTypeChecker();
-
         const localSymbol = getLocalSymbolForExportDefault(defaultExport);
         if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
 
@@ -423,12 +426,11 @@ namespace ts.codefix {
         if (name !== undefined) return { symbolForMeaning: defaultExport, name };
 
         if (defaultExport.flags & SymbolFlags.Alias) {
-            const aliased = checker.getAliasedSymbol(defaultExport);
-            return getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
+            const aliased = program.getTypeChecker().getImmediateAliasedSymbol(defaultExport);
+            return aliased && getDefaultExportInfo(aliased, Debug.assertDefined(aliased.parent), program);
         }
         else {
-            const moduleName = moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!);
-            return moduleName === undefined ? undefined : { symbolForMeaning: defaultExport, name: moduleName };
+            return { symbolForMeaning: defaultExport, name: moduleSymbolToValidIdentifier(moduleSymbol, program.getCompilerOptions().target!) };
         }
     }
 

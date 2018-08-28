@@ -1,0 +1,5 @@
+=== tests/cases/conformance/jsdoc/bug26693.js ===
+/** @typedef {module:locale} hi */
+import { nope } from 'nope';
+>nope : any
+

@@ -29,7 +29,7 @@ namespace ts.Rename {
         if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
             ? stripQuotes(getTextOfIdentifierOrLiteral(node))
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);

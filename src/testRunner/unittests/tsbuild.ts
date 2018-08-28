@@ -284,11 +284,9 @@ namespace ts {
                 fs = undefined;
             });
             it(`Generates files matching the baseline`, () => {
-                Harness.Baseline.runBaseline("outfile-concat.js", () => {
-                    const patch = fs!.diff();
-                    // tslint:disable-next-line:no-null-keyword
-                    return patch ? vfs.formatPatch(patch) : null;
-                });
+                const patch = fs!.diff();
+                // tslint:disable-next-line:no-null-keyword
+                Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
             });
         });
 
