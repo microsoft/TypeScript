@@ -79,6 +79,7 @@
         "unittests/transform.ts",
         "unittests/transpile.ts",
         "unittests/tsbuild.ts",
+        "unittests/tsbuildWatchMode.ts",
         "unittests/tsconfigParsing.ts",
         "unittests/tscWatchMode.ts",
         "unittests/versionCache.ts",

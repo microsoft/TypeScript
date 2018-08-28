@@ -1,17 +1,16 @@
 namespace ts.tscWatch {
-    import WatchedSystem = TestFSWithWatch.TestServerHost;
-    type File = TestFSWithWatch.File;
-    type SymLink = TestFSWithWatch.SymLink;
-    import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
-    import checkArray = TestFSWithWatch.checkArray;
-    import libFile = TestFSWithWatch.libFile;
-    import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-    import checkOutputContains = TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+    export import WatchedSystem = TestFSWithWatch.TestServerHost;
+    export type File = TestFSWithWatch.File;
+    export type SymLink = TestFSWithWatch.SymLink;
+    export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
+    export import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+    export import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);

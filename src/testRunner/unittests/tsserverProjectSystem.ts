@@ -8074,7 +8074,7 @@ new C();`
 
                         verifyProjectWithResolvedModule(session);
 
-                        host.removeFolder(recognizersTextDist, /*recursive*/ true);
+                        host.deleteFolder(recognizersTextDist, /*recursive*/ true);
                         host.runQueuedTimeoutCallbacks();
 
                         verifyProjectWithUnresolvedModule(session);
@@ -8906,7 +8906,7 @@ describe("Test Suite 1", () => {
             checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
             const navBarResultUnitTest1 = navBarFull(session, unitTest1);
-            host.removeFile(unitTest1.path);
+            host.deleteFile(unitTest1.path);
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
 
@@ -9011,7 +9011,7 @@ export function Test2() {
         checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
         // Testing what happens if we delete the original sources.
-        host.removeFile(bTs.path);
+        host.deleteFile(bTs.path);
 
         openFilesForSession([userTs], session);
 
