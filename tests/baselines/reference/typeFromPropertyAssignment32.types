@@ -1,34 +1,3 @@
-=== tests/cases/conformance/salsa/ns.ts ===
-namespace ExpandoMerge {
->ExpandoMerge : typeof ExpandoMerge
-
-    export var p3 = 333;
->p3 : number
->333 : 333
-
-    export var p4 = 4; // ok
->p4 : number
->4 : 4
-
-    export var p5 = 5; // ok
->p5 : number
->5 : 5
-
-    export let p6 = 6; // error: duplicate
->p6 : number
->6 : 6
-
-    export let p7 = 7; // error: duplicate
->p7 : number
->7 : 7
-}
-namespace ExpandoMerge {
->ExpandoMerge : typeof ExpandoMerge
-
-    export var p2 = 222;
->p2 : number
->222 : 222
-}
 === tests/cases/conformance/salsa/expando.ts ===
 function ExpandoMerge(n: number) {
 >ExpandoMerge : typeof ExpandoMerge
@@ -59,9 +28,9 @@ ExpandoMerge.m = function(n: number) {
 }
 ExpandoMerge.p4 = 44444; // ok
 >ExpandoMerge.p4 = 44444 : 44444
->ExpandoMerge.p4 : number
+>ExpandoMerge.p4 : any
 >ExpandoMerge : typeof ExpandoMerge
->p4 : number
+>p4 : any
 >44444 : 44444
 
 ExpandoMerge.p6 = 66666; // error: duplicate
@@ -73,9 +42,9 @@ ExpandoMerge.p6 = 66666; // error: duplicate
 
 ExpandoMerge.p5 = 555555; // should be ok
 >ExpandoMerge.p5 = 555555 : 555555
->ExpandoMerge.p5 : number
+>ExpandoMerge.p5 : any
 >ExpandoMerge : typeof ExpandoMerge
->p5 : number
+>p5 : any
 >555555 : 555555
 
 ExpandoMerge.p7 = 777777; // error: duplicate
@@ -86,11 +55,11 @@ ExpandoMerge.p7 = 777777; // error: duplicate
 >777777 : 777777
 
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001);
->n : number
->ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001) : number
->ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) : number
->ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 : number
->ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 : number
+>n : any
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001) : any
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) : any
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 : any
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 : any
 >ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 : number
 >ExpandoMerge.p1 + ExpandoMerge.p2 : number
 >ExpandoMerge.p1 : number
@@ -102,12 +71,12 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >ExpandoMerge.p3 : number
 >ExpandoMerge : typeof ExpandoMerge
 >p3 : number
->ExpandoMerge.p4 : number
+>ExpandoMerge.p4 : any
 >ExpandoMerge : typeof ExpandoMerge
->p4 : number
->ExpandoMerge.p5 : number
+>p4 : any
+>ExpandoMerge.p5 : any
 >ExpandoMerge : typeof ExpandoMerge
->p5 : number
+>p5 : any
 >ExpandoMerge.m(12) : number
 >ExpandoMerge.m : (n: number) => number
 >ExpandoMerge : typeof ExpandoMerge
@@ -116,4 +85,36 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >ExpandoMerge(1001) : number
 >ExpandoMerge : typeof ExpandoMerge
 >1001 : 1001
+
+=== tests/cases/conformance/salsa/ns.ts ===
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p3 = 333;
+>p3 : number
+>333 : 333
+
+    export var p4 = 4; // ok
+>p4 : any
+>4 : 4
+
+    export var p5 = 5; // ok
+>p5 : any
+>5 : 5
+
+    export let p6 = 6; // error: duplicate
+>p6 : number
+>6 : 6
+
+    export let p7 = 7; // error: duplicate
+>p7 : number
+>7 : 7
+}
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p2 = 222;
+>p2 : number
+>222 : 222
+}
 
