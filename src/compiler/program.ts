@@ -189,10 +189,7 @@ namespace ts {
             getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => system.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
-            getModifiedTime: system.getModifiedTime && (path => system.getModifiedTime!(path)),
-            setModifiedTime: system.setModifiedTime && ((path, date) => system.setModifiedTime!(path, date)),
-            deleteFile: system.deleteFile && (path => system.deleteFile!(path))
+            readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth)
         };
     }
 

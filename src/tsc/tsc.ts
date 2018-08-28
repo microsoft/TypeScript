@@ -243,6 +243,11 @@ namespace ts {
         // Update to pretty if host supports it
         updateReportDiagnostic({});
 
+        if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+        }
+
         // Nonsensical combinations
         if (buildOptions.clean && buildOptions.force) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
@@ -274,7 +279,7 @@ namespace ts {
             errorDiagnostic: d => reportDiagnostic(d)
         };
 
-        const builder = createSolutionBuilder(createCompilerHost({}), buildHost, projects, buildOptions);
+        const builder = createSolutionBuilder(createSolutionBuilderHost(), buildHost, projects, buildOptions);
         if (buildOptions.clean) {
             return builder.cleanAllProjects();
         }
