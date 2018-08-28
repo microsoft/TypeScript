@@ -323,6 +323,7 @@ namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        lazyConfiguredProjectsFromExternalProject?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -440,6 +441,7 @@ namespace ts.server {
         public readonly cancellationToken: HostCancellationToken;
         public readonly useSingleInferredProject: boolean;
         public readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         private readonly globalCacheLocationDirectoryPath: Path | undefined;
         public readonly throttleWaitMilliseconds?: number;
@@ -465,6 +467,7 @@ namespace ts.server {
             this.cancellationToken = opts.cancellationToken;
             this.useSingleInferredProject = opts.useSingleInferredProject;
             this.useInferredProjectPerProjectRoot = opts.useInferredProjectPerProjectRoot;
+            this.lazyConfiguredProjectsFromExternalProject = opts.lazyConfiguredProjectsFromExternalProject;
             this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
             this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
             this.eventHandler = opts.eventHandler;
@@ -1561,6 +1564,13 @@ namespace ts.server {
             return project;
         }
 
+        /* @internal */
+        private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath) {
+            const project = this.createAndLoadConfiguredProject(configFileName);
+            project.updateGraph();
+            return project;
+        }
+
         /**
          * Read the config file of the project, and update the project root file names.
          */
@@ -2192,8 +2202,7 @@ namespace ts.server {
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
-                        project = this.createAndLoadConfiguredProject(configFileName);
-                        project.updateGraph();
+                        project = this.createLoadAndUpdateConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info
@@ -2633,7 +2642,9 @@ namespace ts.server {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
-                        project = this.createConfiguredProjectWithDelayLoad(tsconfigFile);
+                        project = this.lazyConfiguredProjectsFromExternalProject ?
+                            this.createConfiguredProjectWithDelayLoad(tsconfigFile) :
+                            this.createLoadAndUpdateConfiguredProject(tsconfigFile);
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project

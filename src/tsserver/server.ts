@@ -499,6 +499,7 @@ namespace ts.server {
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot,
+                lazyConfiguredProjectsFromExternalProject,
                 typingsInstaller: typingsInstaller || nullTypingsInstaller,
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
@@ -937,6 +938,7 @@ namespace ts.server {
 
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const useInferredProjectPerProjectRoot = hasArgument("--useInferredProjectPerProjectRoot");
+    const lazyConfiguredProjectsFromExternalProject = hasArgument("--lazyConfiguredProjectsFromExternalProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const suppressDiagnosticEvents = hasArgument("--suppressDiagnosticEvents");
     const syntaxOnly = hasArgument("--syntaxOnly");

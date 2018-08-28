@@ -8325,6 +8325,7 @@ declare namespace ts.server {
         cancellationToken: HostCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        lazyConfiguredProjectsFromExternalProject?: boolean;
         typingsInstaller: ITypingsInstaller;
         eventHandler?: ProjectServiceEventHandler;
         suppressDiagnosticEvents?: boolean;
@@ -8397,6 +8398,7 @@ declare namespace ts.server {
         readonly cancellationToken: HostCancellationToken;
         readonly useSingleInferredProject: boolean;
         readonly useInferredProjectPerProjectRoot: boolean;
+        private readonly lazyConfiguredProjectsFromExternalProject?;
         readonly typingsInstaller: ITypingsInstaller;
         private readonly globalCacheLocationDirectoryPath;
         readonly throttleWaitMilliseconds?: number;
@@ -8598,6 +8600,7 @@ declare namespace ts.server {
         cancellationToken: ServerCancellationToken;
         useSingleInferredProject: boolean;
         useInferredProjectPerProjectRoot: boolean;
+        lazyConfiguredProjectsFromExternalProject?: boolean;
         typingsInstaller: ITypingsInstaller;
         byteLength: (buf: string, encoding?: string) => number;
         hrtime: (start?: number[]) => number[];
