@@ -23,7 +23,8 @@ namespace ts.Completions {
     type SymbolOriginInfoMap = (SymbolOriginInfo | undefined)[];
 
     const enum KeywordCompletionFilters {
-        None,
+        None,                           // No keywords
+        All,                            // Every possible keyword (TODO: This is never appropriate)
         ClassElementKeywords,           // Keywords inside class body
         InterfaceElementKeywords,       // Keywords inside interface body
         ConstructorParameterKeywords,   // Keywords at constructor parameter
@@ -143,21 +144,13 @@ namespace ts.Completions {
             getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target!, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
         }
 
-        // TODO add filter for keyword based on type/value/namespace and also location
-
-        // Add all keywords if
-        // - this is not a member completion list (all the keywords)
-        // - other filters are enabled in required scenario so add those keywords
-        const isMemberCompletion = isMemberCompletionKind(completionKind);
-        if (keywordFilters !== KeywordCompletionFilters.None || !isMemberCompletion) {
-            addRange(entries, getKeywordCompletions(keywordFilters));
-        }
+        addRange(entries, getKeywordCompletions(keywordFilters));
 
         for (const literal of literals) {
             entries.push(createCompletionEntryForLiteral(literal));
         }
 
-        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
+        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion: isMemberCompletionKind(completionKind), isNewIdentifierLocation, entries };
     }
 
     function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
@@ -1014,6 +1007,7 @@ namespace ts.Completions {
             tryGetGlobalSymbols();
             symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
+            keywordFilters = KeywordCompletionFilters.None;
         }
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
@@ -1022,6 +1016,7 @@ namespace ts.Completions {
                 symbols = [tagSymbol];
             }
             completionKind = CompletionKind.MemberLike;
+            keywordFilters = KeywordCompletionFilters.None;
         }
         else {
             // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
@@ -1191,9 +1186,7 @@ namespace ts.Completions {
         }
 
         function getGlobalCompletions(): void {
-            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
-                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
-            }
+            keywordFilters = tryGetFunctionLikeBodyCompletionContainer(contextToken) ? KeywordCompletionFilters.FunctionLikeBodyKeywords : KeywordCompletionFilters.All;
 
             // Get all entities in the current scope.
             completionKind = CompletionKind.Global;
@@ -2120,6 +2113,8 @@ namespace ts.Completions {
             const kind = stringToToken(entry.name)!;
             switch (keywordFilter) {
                 case KeywordCompletionFilters.None:
+                    return false;
+                case KeywordCompletionFilters.All:
                     // "undefined" is a global variable, so don't need a keyword completion for it.
                     return kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.ClassElementKeywords:
