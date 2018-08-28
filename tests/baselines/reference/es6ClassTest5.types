@@ -16,7 +16,6 @@ class C1T5 {
 	    }
 }
 module C2T5 {}
->C2T5 : any
 
 class  bigClass {
 >bigClass : bigClass

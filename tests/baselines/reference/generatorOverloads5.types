@@ -5,15 +5,12 @@ module M {
     function f(s: string): Iterable<any>;
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
 >s : string
->Iterable : Iterable<T>
 
     function f(s: number): Iterable<any>;
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
 >s : number
->Iterable : Iterable<T>
 
     function* f(s: any): Iterable<any> { }
 >f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
 >s : any
->Iterable : Iterable<T>
 }

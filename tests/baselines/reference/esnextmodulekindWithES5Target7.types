@@ -8,9 +8,6 @@ export namespace N {
 }
 
 export namespace N2 {
->N2 : any
-
     export interface I { }
->I : I
 }
 

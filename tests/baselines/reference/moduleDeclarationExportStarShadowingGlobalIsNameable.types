@@ -3,14 +3,10 @@ export * from "./account";
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/model/account.ts ===
 export interface Account {
->Account : Account
-
     myAccNum: number;
 >myAccNum : number
 }
 interface Account2 {
->Account2 : Account2
-
     myAccNum: number;
 >myAccNum : number
 }
@@ -23,14 +19,10 @@ declare global {
 >global : any
 
     interface Account {
->Account : Account
-
         someProp: number;
 >someProp : number
     }
     interface Acc {
->Acc : Acc
-
         someProp: number;
 >someProp : number
     }
@@ -43,8 +35,6 @@ export const func = (account: model.Account, acc2: model.Acc) => {};
 >(account: model.Account, acc2: model.Acc) => {} : (account: model.Account, acc2: model.Acc) => void
 >account : model.Account
 >model : any
->Account : model.Account
 >acc2 : model.Acc
 >model : any
->Acc : model.Acc
 

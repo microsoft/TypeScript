@@ -1,21 +1,12 @@
 === tests/cases/compiler/inheritedConstructorWithRestParams2.ts ===
 class IBaseBase<T, U> {
 >IBaseBase : IBaseBase<T, U>
->T : T
->U : U
 
     constructor(x: U) { }
 >x : U
->U : U
 }
 
 interface IBase<T, U> extends IBaseBase<T, U> { }
->IBase : IBase<T, U>
->T : T
->U : U
->IBaseBase : IBaseBase<T, U>
->T : T
->U : U
 
 class BaseBase2 {
 >BaseBase2 : BaseBase2
@@ -26,34 +17,21 @@ class BaseBase2 {
 
 declare class BaseBase<T, U> extends BaseBase2 implements IBase<T, U> {
 >BaseBase : BaseBase<T, U>
->T : T
->U : U
 >BaseBase2 : BaseBase2
->IBase : IBase<T, U>
->T : T
->U : U
 
     constructor(x: T, ...y: U[]);
 >x : T
->T : T
 >y : U[]
->U : U
 
     constructor(x1: T, x2: T, ...y: U[]);
 >x1 : T
->T : T
 >x2 : T
->T : T
 >y : U[]
->U : U
 
     constructor(x1: T, x2: U, y: T);
 >x1 : T
->T : T
 >x2 : U
->U : U
 >y : T
->T : T
 }
 
 class Base extends BaseBase<string, number> {

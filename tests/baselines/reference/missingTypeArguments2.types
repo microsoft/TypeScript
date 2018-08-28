@@ -1,24 +1,18 @@
 === tests/cases/compiler/missingTypeArguments2.ts ===
 class A<T> { }
 >A : A<T>
->T : T
 
 var x: () => A;
 >x : () => any
->A : A<T>
 
 (a: A) => { };
 >(a: A) => { } : (a: any) => void
 >a : any
->A : A<T>
 
 var y: A<A>;
 >y : A<any>
->A : A<T>
->A : A<T>
 
 (): A => null;
 >(): A => null : () => any
->A : A<T>
 >null : null
 

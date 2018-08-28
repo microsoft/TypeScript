@@ -1,14 +1,9 @@
 === tests/cases/compiler/matchingOfObjectLiteralConstraints.ts ===
 function foo2<T, U extends { y: T; }>(x: U, z: T) { }
 >foo2 : <T, U extends { y: T; }>(x: U, z: T) => void
->T : T
->U : U
 >y : T
->T : T
 >x : U
->U : U
 >z : T
->T : T
 
 foo2({ y: "foo" }, "foo");
 >foo2({ y: "foo" }, "foo") : void

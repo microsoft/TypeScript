@@ -3,7 +3,7 @@ namespace ts {
         function makePrintsCorrectly(prefix: string) {
             return function printsCorrectly(name: string, options: PrinterOptions, printCallback: (printer: Printer) => string) {
                 it(name, () => {
-                    Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`, () =>
+                    Harness.Baseline.runBaseline(`printerApi/${prefix}.${name}.js`,
                         printCallback(createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed, ...options })));
                 });
             };

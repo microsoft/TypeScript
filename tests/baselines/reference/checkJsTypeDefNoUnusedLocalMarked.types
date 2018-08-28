@@ -23,9 +23,9 @@ export = Foo;
 
 module.exports = /** @type {FooFun} */(void 0);
 >module.exports = /** @type {FooFun} */(void 0) : (foo: typeof Foo) => string
->module.exports : any
->module : any
->exports : any
+>module.exports : (foo: typeof Foo) => string
+>module : { "tests/cases/compiler/something": (foo: typeof Foo) => string; }
+>exports : (foo: typeof Foo) => string
 >(void 0) : (foo: typeof Foo) => string
 >void 0 : undefined
 >0 : 0

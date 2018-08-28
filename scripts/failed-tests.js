@@ -4,9 +4,11 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
+const failingHookRegExp = /^(.*) "(before|after) (all|each)" hook$/;
+
 /**
  * .failed-tests reporter
- * 
+ *
  * @typedef {Object} ReporterOptions
  * @property {string} [file]
  * @property {boolean} [keepFailed]
@@ -15,7 +17,7 @@ const os = require("os");
  */
 class FailedTestsReporter extends Mocha.reporters.Base {
     /**
-     * @param {Mocha.Runner} runner 
+     * @param {Mocha.Runner} runner
      * @param {{ reporterOptions?: ReporterOptions }} [options]
      */
     constructor(runner, options) {
@@ -44,40 +46,66 @@ class FailedTestsReporter extends Mocha.reporters.Base {
             }
 
             const newOptions = Object.assign({}, options, { reporterOptions: reporterOptions.reporterOptions || {} });
+            if (reporterOptions.reporter === "xunit") {
+                newOptions.reporterOptions.output = "TEST-results.xml";
+            }
             this.reporter = new reporter(runner, newOptions);
         }
 
         /** @type {Mocha.Test[]} */
         this.passes = [];
-        
-        /** @type {Mocha.Test[]} */
+
+        /** @type {(Mocha.Test)[]} */
         this.failures = [];
-        
+
         runner.on("pass", test => this.passes.push(test));
         runner.on("fail", test => this.failures.push(test));
     }
 
     /**
-     * @param {string} file 
-     * @param {ReadonlyArray<Mocha.Test>} passes 
-     * @param {ReadonlyArray<Mocha.Test>} failures 
-     * @param {boolean} keepFailed 
-     * @param {(err?: NodeJS.ErrnoException) => void} done 
+     * @param {string} file
+     * @param {ReadonlyArray<Mocha.Test>} passes
+     * @param {ReadonlyArray<Mocha.Test | Mocha.Hook>} failures
+     * @param {boolean} keepFailed
+     * @param {(err?: NodeJS.ErrnoException) => void} done
      */
     static writeFailures(file, passes, failures, keepFailed, done) {
         const failingTests = new Set(fs.existsSync(file) ? readTests() : undefined);
-        if (failingTests.size > 0) {
+        const possiblyPassingSuites = /**@type {Set<string>}*/(new Set());
+
+        // Remove tests that are now passing and track suites that are now
+        // possibly passing.
+        if (failingTests.size > 0 && !keepFailed) {
             for (const test of passes) {
-                const title = test.fullTitle().trim();
-                if (title) failingTests.delete(title);
+                failingTests.delete(test.fullTitle().trim());
+                possiblyPassingSuites.add(test.parent.fullTitle().trim());
             }
         }
+
+        // Add tests that are now failing. If a hook failed, track its
+        // containing suite as failing. If the suite for a test or hook was
+        // possibly passing then it is now definitely failing.
         for (const test of failures) {
-            const title = test.fullTitle().trim();
-            if (title) failingTests.add(title);
+            const suiteTitle = test.parent.fullTitle().trim();
+            if (test.type === "test") {
+                failingTests.add(test.fullTitle().trim());
+            }
+            else {
+                failingTests.add(suiteTitle);
+            }
+            possiblyPassingSuites.delete(suiteTitle);
         }
+
+        // Remove all definitely passing suites.
+        for (const suite of possiblyPassingSuites) {
+            failingTests.delete(suite);
+        }
+
         if (failingTests.size > 0) {
-            const failed = Array.from(failingTests).join(os.EOL);
+            const failed = Array
+                .from(failingTests)
+                .sort()
+                .join(os.EOL);
             fs.writeFile(file, failed, "utf8", done);
         }
         else if (!keepFailed && fs.existsSync(file)) {
@@ -96,7 +124,7 @@ class FailedTestsReporter extends Mocha.reporters.Base {
     }
 
     /**
-     * @param {number} failures 
+     * @param {number} failures
      * @param {(failures: number) => void} [fn]
      */
     done(failures, fn) {

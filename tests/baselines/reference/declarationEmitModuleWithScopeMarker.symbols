@@ -1,0 +1,22 @@
+=== tests/cases/compiler/declarationEmitModuleWithScopeMarker.ts ===
+declare module "bar" {
+>"bar" : Symbol("bar", Decl(declarationEmitModuleWithScopeMarker.ts, 0, 0))
+
+    var before: typeof func;
+>before : Symbol(before, Decl(declarationEmitModuleWithScopeMarker.ts, 1, 7))
+>func : Symbol(func, Decl(declarationEmitModuleWithScopeMarker.ts, 3, 35))
+
+    export function normal(): void;
+>normal : Symbol(normal, Decl(declarationEmitModuleWithScopeMarker.ts, 1, 28))
+
+    export default function func(): typeof func;
+>func : Symbol(func, Decl(declarationEmitModuleWithScopeMarker.ts, 3, 35))
+>func : Symbol(func, Decl(declarationEmitModuleWithScopeMarker.ts, 3, 35))
+
+    var after: typeof func;
+>after : Symbol(after, Decl(declarationEmitModuleWithScopeMarker.ts, 7, 7))
+>func : Symbol(func, Decl(declarationEmitModuleWithScopeMarker.ts, 3, 35))
+
+    export {}
+}
+

@@ -7,17 +7,9 @@ class Foo { foo: number; }
 
 function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 >f : <T extends Foo, U extends Foo, V>(t: T, u: U, v: V) => void
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >t : T
->T : T
 >u : U
->U : U
 >v : V
->V : V
 
     // ok
     var r = true ? t : u;
@@ -119,180 +111,106 @@ function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 
 class B1<T> {
 >B1 : B1<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 class D1<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D1 : D1<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<Foo>
->Foo : Foo
 
     [x: string]: Foo;
 >x : string
->Foo : Foo
 
     foo: T; // ok
 >foo : T
->T : T
 }
 
 class D2<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D2 : D2<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<Foo>
->Foo : Foo
 
     [x: string]: Foo;
 >x : string
->Foo : Foo
 
     foo: U; // ok
 >foo : U
->U : U
 }
 
 class D3<T extends Foo, U extends Foo, V> extends B1<Foo> {
 >D3 : D3<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<Foo>
->Foo : Foo
 
     [x: string]: Foo;
 >x : string
->Foo : Foo
 
     foo: V; // error
 >foo : V
->V : V
 }
 
 class D4<T extends Foo, U extends Foo, V> extends B1<T> {
 >D4 : D4<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<T>
->T : T
 
     [x: string]: T;
 >x : string
->T : T
 
     foo: T; // ok
 >foo : T
->T : T
 }
 
 class D5<T extends Foo, U extends Foo, V> extends B1<T> {
 >D5 : D5<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<T>
->T : T
 
     [x: string]: T;
 >x : string
->T : T
 
     foo: U; // error
 >foo : U
->U : U
 }
 
 class D6<T extends Foo, U extends Foo, V> extends B1<T> {
 >D6 : D6<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<T>
->T : T
 
     [x: string]: T;
 >x : string
->T : T
 
     foo: V; // error
 >foo : V
->V : V
 }
 
 class D7<T extends Foo, U extends Foo, V> extends B1<U> {
 >D7 : D7<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<U>
->U : U
 
     [x: string]: U;
 >x : string
->U : U
 
     foo: T; // error
 >foo : T
->T : T
 }
 
 class D8<T extends Foo, U extends Foo, V> extends B1<U> {
 >D8 : D8<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<U>
->U : U
 
     [x: string]: U;
 >x : string
->U : U
 
     foo: U; // ok
 >foo : U
->U : U
 }
 
 class D9<T extends Foo, U extends Foo, V> extends B1<U> {
 >D9 : D9<T, U, V>
->T : T
->Foo : Foo
->U : U
->Foo : Foo
->V : V
 >B1 : B1<U>
->U : U
 
     [x: string]: U;
 >x : string
->U : U
 
     foo: V; // error
 >foo : V
->V : V
 }

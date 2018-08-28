@@ -5,7 +5,6 @@ export var v = 1;
 
 === tests/cases/compiler/file1.ts ===
 export interface Foo { x }
->Foo : Foo
 >x : any
 
 === tests/cases/compiler/file2.ts ===

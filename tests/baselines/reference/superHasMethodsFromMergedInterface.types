@@ -4,7 +4,6 @@ class C { m1() { } }
 >m1 : () => void
 
 interface C { m2(): void }
->C : C
 >m2 : () => void
 
 class Sub extends C {

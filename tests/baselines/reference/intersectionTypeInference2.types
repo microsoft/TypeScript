@@ -1,11 +1,8 @@
 === tests/cases/conformance/types/intersection/intersectionTypeInference2.ts ===
 declare function f<T>(x: { prop: T }): T;
 >f : <T>(x: { prop: T; }) => T
->T : T
 >x : { prop: T; }
 >prop : T
->T : T
->T : T
 
 declare const a: { prop: string } & { prop: number };
 >a : { prop: string; } & { prop: number; }
@@ -30,18 +27,8 @@ f(b);  // string & number
 
 declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Key): T[Key];
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
->T : T
->Key : Key
->T : T
 >obj : { [K in keyof T]: T[K]; }
->K : K
->T : T
->T : T
->K : K
 >key : Key
->Key : Key
->T : T
->Key : Key
 
 declare const obj: { a: string } & { b: string };
 >obj : { a: string; } & { b: string; }

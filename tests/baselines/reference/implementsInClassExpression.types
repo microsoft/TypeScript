@@ -1,7 +1,5 @@
 === tests/cases/compiler/implementsInClassExpression.ts ===
 interface Foo {
->Foo : Foo
-
     doThing(): void;
 >doThing : () => void
 }
@@ -9,7 +7,6 @@ interface Foo {
 let cls = class implements Foo {
 >cls : typeof cls
 >class implements Foo {    doThing() { }} : typeof cls
->Foo : Foo
 
     doThing() { }
 >doThing : () => void

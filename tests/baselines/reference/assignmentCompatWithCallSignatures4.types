@@ -35,31 +35,19 @@ module Errors {
 >a7 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >x : (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived2 : Derived2
 
         var a8: (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >y : (arg2: Base) => Derived
 >arg2 : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived : Derived
 
         var a10: (...x: Base[]) => Base;
 >a10 : (...x: Base[]) => Base
 >x : Base[]
->Base : Base
->Base : Base
 
         var a11: (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -68,18 +56,11 @@ module Errors {
 >y : { foo: string; bar: string; }
 >foo : string
 >bar : string
->Base : Base
 
         var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Derived2[]
->Array : T[]
->Derived2 : Derived2
->Array : T[]
->Derived : Derived
 
         var a14: {
 >a14 : { (x: number): number[]; (x: string): string[]; }
@@ -128,47 +109,27 @@ module Errors {
 >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
 
                     <T extends Derived>(a: T): T;
->T : T
->Derived : Derived
 >a : T
->T : T
->T : T
 
                     <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
                 }): any[];
                 (x: {
 >x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
 
                     <T extends Derived2>(a: T): T;
->T : T
->Derived2 : Derived2
 >a : T
->T : T
->T : T
 
                     <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
                 }): any[];
             };
 
         var b2: <T, U>(x: T) => U[]; 
 >b2 : <T, U>(x: T) => U[]
->T : T
->U : U
 >x : T
->T : T
->U : U
 
         a2 = b2;
 >a2 = b2 : <T, U>(x: T) => U[]
@@ -182,19 +143,9 @@ module Errors {
 
         var b7: <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >b7 : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->T : T
->Base : Base
->U : U
->Derived : Derived
->V : V
->Derived2 : Derived2
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
 >r : T
->T : T
->V : V
 
         a7 = b7;
 >a7 = b7 : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
@@ -208,21 +159,12 @@ module Errors {
 
         var b8: <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; 
 >b8 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->T : T
->Base : Base
->U : U
->Derived : Derived
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
 >y : (arg2: { foo: number; }) => U
 >arg2 : { foo: number; }
 >foo : number
->U : U
 >r : T
->T : T
->U : U
 
         a8 = b8; // error, { foo: number } and Base are incompatible
 >a8 = b8 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
@@ -237,11 +179,7 @@ module Errors {
         
         var b10: <T extends Derived>(...x: T[]) => T; 
 >b10 : <T extends Derived>(...x: T[]) => T
->T : T
->Derived : Derived
 >x : T[]
->T : T
->T : T
 
         a10 = b10;
 >a10 = b10 : <T extends Derived>(...x: T[]) => T
@@ -255,13 +193,8 @@ module Errors {
 
         var b11: <T extends Derived>(x: T, y: T) => T; 
 >b11 : <T extends Derived>(x: T, y: T) => T
->T : T
->Derived : Derived
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         a11 = b11;
 >a11 = b11 : <T extends Derived>(x: T, y: T) => T
@@ -275,16 +208,8 @@ module Errors {
 
         var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 >b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
->T : T
->Array : T[]
->Derived2 : Derived2
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Base[]
->Array : T[]
->Base : Base
->T : T
 
         a12 = b12;
 >a12 = b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
@@ -298,13 +223,9 @@ module Errors {
 
         var b15: <T>(x: { a: T; b: T }) => T; 
 >b15 : <T>(x: { a: T; b: T; }) => T
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
         a15 = b15;
 >a15 = b15 : <T>(x: { a: T; b: T; }) => T
@@ -318,13 +239,9 @@ module Errors {
 
         var b15a: <T extends Base>(x: { a: T; b: T }) => number; 
 >b15a : <T extends Base>(x: { a: T; b: T; }) => number
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
 
         a15 = b15a;
 >a15 = b15a : <T extends Base>(x: { a: T; b: T; }) => number
@@ -338,12 +255,8 @@ module Errors {
 
         var b16: <T>(x: (a: T) => T) => T[];
 >b16 : <T>(x: (a: T) => T) => T[]
->T : T
 >x : (a: T) => T
 >a : T
->T : T
->T : T
->T : T
 
         a16 = b16;
 >a16 = b16 : <T>(x: (a: T) => T) => T[]
@@ -357,11 +270,8 @@ module Errors {
 
         var b17: <T>(x: (a: T) => T) => any[];
 >b17 : <T>(x: (a: T) => T) => any[]
->T : T
 >x : (a: T) => T
 >a : T
->T : T
->T : T
 
         a17 = b17;
 >a17 = b17 : <T>(x: (a: T) => T) => any[]
@@ -380,16 +290,11 @@ module Errors {
         // target type has generic call signature
         var a2: <T>(x: T) => T[];
 >a2 : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
         var b2: <T>(x: T) => string[];
 >b2 : <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
         a2 = b2;
 >a2 = b2 : <T>(x: T) => string[]
@@ -404,16 +309,11 @@ module Errors {
         // target type has generic call signature
         var a3: <T>(x: T) => string[];
 >a3 : <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
         var b3: <T>(x: T) => T[]; 
 >b3 : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
         a3 = b3;
 >a3 = b3 : <T>(x: T) => T[]

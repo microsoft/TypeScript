@@ -9,3 +9,4 @@ tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts(2,10): error TS
 !!! error TS2304: Cannot find name 'c'.
              ~~~~~
 !!! error TS2552: Cannot find name 'tupel'. Did you mean 'tuple'?
+!!! related TS2728 tests/cases/compiler/assignmentRestElementWithErrorSourceType.ts:1:5: 'tuple' is declared here.

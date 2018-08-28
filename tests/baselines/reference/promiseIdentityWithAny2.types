@@ -1,88 +1,42 @@
 === tests/cases/compiler/promiseIdentityWithAny2.ts ===
 export interface IPromise<T, V> {
->IPromise : IPromise<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise<U, W>
 >x : T
->T : T
->IPromise : IPromise<T, V>
->U : U
->W : W
->IPromise : IPromise<T, V>
->U : U
->W : W
 }
 interface Promise<T, V> {
->Promise : Promise<T, V>
->T : T
->V : V
-
     then(callback: (x: T) => Promise<any, any>): Promise<any, any>;
 >then : (callback: (x: T) => Promise<any, any>) => Promise<any, any>
 >callback : (x: T) => Promise<any, any>
 >x : T
->T : T
->Promise : Promise<T, V>
->Promise : Promise<T, V>
 }
 
 // Error because type parameter arity doesn't match
 var x: IPromise<string, number>;
 >x : IPromise<string, number>
->IPromise : IPromise<T, V>
 
 var x: Promise<string, boolean>;
 >x : IPromise<string, number>
->Promise : Promise<T, V>
 
 
 interface IPromise2<T, V> {
->IPromise2 : IPromise2<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => IPromise2<U, W>): IPromise2<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise2<U, W>) => IPromise2<U, W>
->U : U
->W : W
 >callback : (x: T) => IPromise2<U, W>
 >x : T
->T : T
->IPromise2 : IPromise2<T, V>
->U : U
->W : W
->IPromise2 : IPromise2<T, V>
->U : U
->W : W
 }
 interface Promise2<T, V> {
->Promise2 : Promise2<T, V>
->T : T
->V : V
-
     then<U, W>(callback: (x: T) => Promise2<string, any>): Promise2<any, any>; // Uses string instead of any!
 >then : <U, W>(callback: (x: T) => Promise2<string, any>) => Promise2<any, any>
->U : U
->W : W
 >callback : (x: T) => Promise2<string, any>
 >x : T
->T : T
->Promise2 : Promise2<T, V>
->Promise2 : Promise2<T, V>
 }
 
 // Error because string and any don't match
 var y: IPromise2<string, number>;
 >y : IPromise2<string, number>
->IPromise2 : IPromise2<T, V>
 
 var y: Promise2<string, boolean>;
 >y : IPromise2<string, number>
->Promise2 : Promise2<T, V>
 

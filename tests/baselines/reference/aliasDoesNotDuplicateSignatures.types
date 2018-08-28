@@ -6,7 +6,7 @@ declare namespace demoNS {
 >f : () => void
 }
 declare module 'demoModule' {
->'demoModule' : typeof 'demoModule'
+>'demoModule' : typeof import("demoModule")
 
     import alias = demoNS;
 >alias : typeof alias

@@ -622,3 +622,32 @@ events.emit('done');
 >events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
 >emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
 
+// Repro from #25871
+
+declare var ff1: (... args: any[]) => void;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 157, 18))
+
+declare var ff2: () => void;
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 159, 11))
+
+declare var ff3: (...args: []) => void;
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 160, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 160, 18))
+
+declare var ff4: (a: never) => void;
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 161, 11))
+>a : Symbol(a, Decl(genericRestParameters1.ts, 161, 18))
+
+ff1 = ff2;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 159, 11))
+
+ff1 = ff3;
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 160, 11))
+
+ff1 = ff4;  // Error
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 161, 11))
+

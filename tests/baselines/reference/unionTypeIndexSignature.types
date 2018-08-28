@@ -1,7 +1,6 @@
 === tests/cases/conformance/types/union/unionTypeIndexSignature.ts ===
 var numOrDate: number | Date;
 >numOrDate : number | Date
->Date : Date
 
 var anyVar: number;
 >anyVar : number
@@ -13,7 +12,6 @@ var unionOfDifferentReturnType: { [a: string]: number; } | { [a: string]: Date; 
 >unionOfDifferentReturnType : { [a: string]: number; } | { [a: string]: Date; }
 >a : string
 >a : string
->Date : Date
 
 numOrDate = unionOfDifferentReturnType["hello"]; // number | Date
 >numOrDate = unionOfDifferentReturnType["hello"] : number | Date
@@ -53,7 +51,6 @@ var unionOfDifferentReturnType1: { [a: number]: number; } | { [a: number]: Date;
 >unionOfDifferentReturnType1 : { [a: number]: number; } | { [a: number]: Date; }
 >a : number
 >a : number
->Date : Date
 
 numOrDate = unionOfDifferentReturnType1["hello"]; // any
 >numOrDate = unionOfDifferentReturnType1["hello"] : any

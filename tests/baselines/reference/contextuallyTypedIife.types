@@ -101,12 +101,12 @@
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
->((...numbers) => numbers.every(n => n > 0)) : (...numbers: number[]) => boolean
->(...numbers) => numbers.every(n => n > 0) : (...numbers: number[]) => boolean
->numbers : number[]
+>((...numbers) => numbers.every(n => n > 0)) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>numbers : [number, number, number]
 >numbers.every(n => n > 0) : boolean
 >numbers.every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
->numbers : number[]
+>numbers : [number, number, number]
 >every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
 >n => n > 0 : (n: number) => boolean
 >n : number
@@ -119,12 +119,12 @@
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
->((...mixed) => mixed.every(n => !!n)) : (...mixed: (string | number)[]) => boolean
->(...mixed) => mixed.every(n => !!n) : (...mixed: (string | number)[]) => boolean
->mixed : (string | number)[]
+>((...mixed) => mixed.every(n => !!n)) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>mixed : [number, string, string]
 >mixed.every(n => !!n) : boolean
 >mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
->mixed : (string | number)[]
+>mixed : [number, string, string]
 >every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
 >n => !!n : (n: string | number) => boolean
 >n : string | number
@@ -137,31 +137,31 @@
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
->((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: any[]) => boolean
->(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
->noNumbers : any[]
+>((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
+>(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
+>noNumbers : []
 >noNumbers.some(n => n > 0) : boolean
->noNumbers.some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
->noNumbers : any[]
->some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
->n => n > 0 : (n: any) => boolean
->n : any
+>noNumbers.some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>noNumbers : []
+>some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>n => n > 0 : (n: never) => boolean
+>n : never
 >n > 0 : boolean
->n : any
+>n : never
 >0 : 0
 
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
 >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
->((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, ...rest: number[]) => boolean[]
->(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, ...rest: number[]) => boolean[]
+>((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
+>(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
 >first : number
->rest : number[]
+>rest : [number, number]
 >first ? [] : rest.map(n => n > 0) : boolean[]
 >first : number
 >[] : undefined[]
 >rest.map(n => n > 0) : boolean[]
 >rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->rest : number[]
+>rest : [number, number]
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >n => n > 0 : (n: number) => boolean
 >n : number

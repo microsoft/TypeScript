@@ -43,3 +43,18 @@ var c5_v2;
 c5_v2 = class { };
 new c5_v2();
 
+/** @class */
+function C6() {
+  this.functions = [x => x, x => x + 1, x => x - 1]
+};
+
+var c6_v1 = new C6();
+
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+
+var c7_v1 = new C7();

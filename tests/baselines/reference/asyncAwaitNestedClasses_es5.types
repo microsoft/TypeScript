@@ -10,7 +10,6 @@ class A {
 
         static func2(): Promise<void> {
 >func2 : () => Promise<void>
->Promise : Promise<T>
 
             return new Promise((resolve) => { resolve(null); });
 >new Promise((resolve) => { resolve(null); }) : Promise<void>

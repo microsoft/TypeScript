@@ -1,14 +1,11 @@
 === tests/cases/compiler/incompatibleTypes.ts ===
 interface IFoo1 {
->IFoo1 : IFoo1
-
     p1(): number;
 >p1 : () => number
 }
 
 class C1 implements IFoo1 { // incompatible on the return type
 >C1 : C1
->IFoo1 : IFoo1
 
     public p1() {
 >p1 : () => string
@@ -19,8 +16,6 @@ class C1 implements IFoo1 { // incompatible on the return type
 }
 
 interface IFoo2 {
->IFoo2 : IFoo2
-
     p1(s:string): number;
 >p1 : (s: string) => number
 >s : string
@@ -28,7 +23,6 @@ interface IFoo2 {
 
 class C2 implements IFoo2 { // incompatible on the param type
 >C2 : C2
->IFoo2 : IFoo2
 
     public p1(n:number) {
 >p1 : (n: number) => number
@@ -40,23 +34,18 @@ class C2 implements IFoo2 { // incompatible on the param type
 }
 
 interface IFoo3 {
->IFoo3 : IFoo3
-
     p1: string;
 >p1 : string
 }
 
 class C3 implements IFoo3 { // incompatible on the property type
 >C3 : C3
->IFoo3 : IFoo3
 
     public p1: number;
 >p1 : number
 }
 
 interface IFoo4 {
->IFoo4 : IFoo4
-
     p1: { a: { a: string; }; b: string; };
 >p1 : { a: { a: string; }; b: string; }
 >a : { a: string; }
@@ -66,7 +55,6 @@ interface IFoo4 {
 
 class C4 implements IFoo4 { // incompatible on the property type
 >C4 : C4
->IFoo4 : IFoo4
 
     public p1: { c: { b: string; }; d: string; };
 >p1 : { c: { b: string; }; d: string; }
@@ -78,12 +66,10 @@ class C4 implements IFoo4 { // incompatible on the property type
 function if1(i: IFoo1): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
 >i : IFoo1
->IFoo1 : IFoo1
 
 function if1(i: IFoo2): void;
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
 >i : IFoo2
->IFoo2 : IFoo2
 
 function if1(a: any) { }
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
@@ -91,11 +77,9 @@ function if1(a: any) { }
 
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 var c2: C2;
 >c2 : C2
->C2 : C2
 
 if1(c1);
 >if1(c1) : any
@@ -132,8 +116,6 @@ of1({ e: 0, f: 0 });
 >0 : 0
 
 interface IMap {
->IMap : IMap
-
  [key:string]:string;
 >key : string
 }
@@ -149,7 +131,6 @@ function bar() {
 
  var map:IMap;
 >map : IMap
->IMap : IMap
 
  foo(() => {
 >foo(() => {  map = {}; }) : void

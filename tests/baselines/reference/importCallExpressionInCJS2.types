@@ -12,7 +12,6 @@ export function backup() { return "backup"; }
 async function compute(promise: Promise<any>) {
 >compute : (promise: Promise<any>) => Promise<any>
 >promise : Promise<any>
->Promise : Promise<T>
 
     let j = await promise;
 >j : any

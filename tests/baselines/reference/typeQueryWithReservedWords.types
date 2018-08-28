@@ -14,8 +14,6 @@ class Controller {
 }
 
 interface IScope {
->IScope : IScope
-
     create: typeof Controller.prototype.create;  
 >create : () => void
 >Controller.prototype.create : () => void

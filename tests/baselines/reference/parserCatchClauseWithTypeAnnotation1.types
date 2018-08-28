@@ -2,6 +2,5 @@
 try {
 } catch (e: Error) {
 >e : any
->Error : Error
 }
 

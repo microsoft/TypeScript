@@ -14,16 +14,9 @@ class Bar {
 }
 
 interface I3 extends Foo, Bar { // error
->I3 : I3
->Foo : Foo
->Bar : Bar
 }
 
 interface I4 extends Foo, Bar { // error
->I4 : I4
->Foo : Foo
->Bar : Bar
-
     x: string;
 >x : string
 }
@@ -36,17 +29,12 @@ class Baz {
 }
 
 interface I5 extends Foo, Baz {
->I5 : I5
->Foo : Foo
->Baz : Baz
-
     z: string;
 >z : string
 }
 
 var i: I5;
 >i : I5
->I5 : I5
 
 var r: string = i.z;
 >r : string

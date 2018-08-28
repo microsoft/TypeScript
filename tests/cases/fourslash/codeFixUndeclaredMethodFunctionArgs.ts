@@ -15,6 +15,7 @@ verify.codeFix({
         throw new Error("Method not implemented.");
     }
     `,
+    applyChanges: true,
 });
 
 verify.codeFix({

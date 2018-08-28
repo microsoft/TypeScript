@@ -1,14 +1,10 @@
 === tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts ===
 interface Boolean {
->Boolean : Boolean
-
     doStuff(): string;
 >doStuff : () => string
 }
 
 interface NotBoolean {
->NotBoolean : NotBoolean
-
     doStuff(): string;
 >doStuff : () => string
 }
@@ -19,11 +15,9 @@ var x = true;
 
 var a: Boolean;
 >a : Boolean
->Boolean : Boolean
 
 var b: NotBoolean;
 >b : NotBoolean
->NotBoolean : NotBoolean
 
 a = x;
 >a = x : true

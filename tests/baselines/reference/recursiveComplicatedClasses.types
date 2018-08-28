@@ -4,14 +4,12 @@ class Signature {
 
     public parameters: ParameterSymbol[] = null;
 >parameters : ParameterSymbol[]
->ParameterSymbol : ParameterSymbol
 >null : null
 }
 
 function aEnclosesB(a: Symbol) {
 >aEnclosesB : (a: Symbol) => boolean
 >a : Symbol
->Symbol : Symbol
 
     return true;
 >true : true
@@ -28,7 +26,6 @@ class Symbol {
 
         var b: TypeSymbol;
 >b : TypeSymbol
->TypeSymbol : TypeSymbol
 
         return aEnclosesB(b);
 >aEnclosesB(b) : boolean

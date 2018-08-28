@@ -4,14 +4,11 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(6,25): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(11,23): error TS2322: Type '{ show: (v: number) => number; }' is not assignable to type 'Show'.
-  Types of property 'show' are incompatible.
-    Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(11,40): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(16,23): error TS2322: Type '(arg: string) => number' is not assignable to type '(s: string) => string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(21,14): error TS2322: Type '[number, number]' is not assignable to type '[string, number]'.
-  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(21,22): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(26,14): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
 
 
@@ -36,11 +33,10 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
         nested: Show
     }
     function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
-                          ~~~~~~~~~~~~
-!!! error TS2322: Type '{ show: (v: number) => number; }' is not assignable to type 'Show'.
-!!! error TS2322:   Types of property 'show' are incompatible.
-!!! error TS2322:     Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+                                           ~~~~
+!!! error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:5: The expected type comes from property 'show' which is declared here on type 'Show'
     
     interface StringIdentity {
         stringIdentity(s: string): string;
@@ -54,9 +50,8 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
         prop: [string, number];
     }
     function g({ prop = [101, 1234] }: Tuples) {}
-                 ~~~~
-!!! error TS2322: Type '[number, number]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                         ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     interface StringUnion {
         prop: "foo" | "bar";

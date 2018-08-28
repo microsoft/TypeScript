@@ -2,7 +2,6 @@
 // Should all be allowed
 
 module M {
->M : any
 }
 M = null;
 >M = null : null

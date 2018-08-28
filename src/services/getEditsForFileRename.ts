@@ -1,10 +1,18 @@
 /* @internal */
 namespace ts {
-    export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges> {
+    export function getEditsForFileRename(
+        program: Program,
+        oldFileOrDirPath: string,
+        newFileOrDirPath: string,
+        host: LanguageServiceHost,
+        formatContext: formatting.FormatContext,
+        preferences: UserPreferences,
+        sourceMapper: SourceMapper,
+    ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName);
-        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName);
+        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
+        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
             updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
@@ -14,13 +22,27 @@ namespace ts {
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
     // exported for tests
-    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
+    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            if (getCanonicalFileName(path) === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(path, canonicalOldPath, getCanonicalFileName);
-            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+            const originalPath = sourceMapper && sourceMapper.tryGetOriginalLocation({ fileName: path, position: 0 });
+            const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
+            return originalPath
+                ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
+                : updatedPath;
         };
+
+        function getUpdatedPath(pathToUpdate: string): string | undefined {
+            if (getCanonicalFileName(pathToUpdate) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(pathToUpdate, canonicalOldPath, getCanonicalFileName);
+            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+        }
+    }
+
+    // Relative path from a0 to b0 should be same as relative path from a1 to b1. Returns b1.
+    function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
+        return combinePathsSafe(getDirectoryPath(a1), rel);
     }
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
@@ -104,8 +126,8 @@ namespace ts {
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
-            const newFromOld = oldToNew(sourceFile.fileName);
-            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.fileName;
+            const newFromOld = oldToNew(sourceFile.path) as Path;
+            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.path;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
@@ -129,12 +151,12 @@ namespace ts {
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences)
+                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences, program.redirectTargetsMap)
                         : undefined;
                 });
         }
@@ -170,18 +192,18 @@ namespace ts {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, program);
+            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, program: Program): ToImport | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
         return resolved && (
-            (resolved.resolvedModule && getIfInProgram(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfInProgram));
+            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
 
-        function getIfInProgram(oldLocation: string): ToImport | undefined {
+        function getIfExists(oldLocation: string): ToImport | undefined {
             const newLocation = oldToNew(oldLocation);
 
-            return program.getSourceFile(oldLocation) || newLocation !== undefined && program.getSourceFile(newLocation)
+            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
                 ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
                 : undefined;
         }

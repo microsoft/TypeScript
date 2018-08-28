@@ -172,7 +172,7 @@ namespace ts.SymbolDisplay {
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
-                const allSignatures = useConstructSignatures ? type!.getConstructSignatures() : type!.getCallSignatures();
+                const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
                 if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
                     // Get the first signature if there is one -- allSignatures may contain
@@ -184,7 +184,7 @@ namespace ts.SymbolDisplay {
                     if (useConstructSignatures && (symbolFlags & SymbolFlags.Class)) {
                         // Constructor
                         symbolKind = ScriptElementKind.constructorImplementationElement;
-                        addPrefixForAnyFunctionOrVar(type!.symbol, symbolKind);
+                        addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                     }
                     else if (symbolFlags & SymbolFlags.Alias) {
                         symbolKind = ScriptElementKind.alias;
@@ -211,8 +211,8 @@ namespace ts.SymbolDisplay {
                             // If it is call or construct signature of lambda's write type name
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
-                            if (!(getObjectFlags(type!) & ObjectFlags.Anonymous) && type!.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type!.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
+                            if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
                                 displayParts.push(lineBreakPart());
                             }
                             if (useConstructSignatures) {
@@ -238,7 +238,7 @@ namespace ts.SymbolDisplay {
                     declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
                 if (locationIsSymbolDeclaration) {
-                    const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type!.getNonNullableType().getConstructSignatures() : type!.getNonNullableType().getCallSignatures();
+                    const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
                     if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
                         signature = typeChecker.getSignatureFromDeclaration(functionDeclaration)!; // TODO: GH#18217
                     }
@@ -249,12 +249,12 @@ namespace ts.SymbolDisplay {
                     if (functionDeclaration.kind === SyntaxKind.Constructor) {
                         // show (constructor) Type(...) signature
                         symbolKind = ScriptElementKind.constructorImplementationElement;
-                        addPrefixForAnyFunctionOrVar(type!.symbol, symbolKind);
+                        addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
                     }
                     else {
                         // (function/method) symbol(..signature)
                         addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
-                            !(type!.symbol.flags & SymbolFlags.TypeLiteral || type!.symbol.flags & SymbolFlags.ObjectLiteral) ? type!.symbol : symbol, symbolKind);
+                            !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
                     }
 
                     addSignatureDisplayParts(signature, allSignatures);

@@ -1,9 +1,7 @@
 === tests/cases/compiler/foo.ts ===
 function id<T>(x: T) {
 >id : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
   return x;
 >x : T

@@ -135,7 +135,7 @@ namespace ts {
 
             sys.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -329,16 +329,17 @@ namespace ts {
         return context;
     }
 
-    function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost) {
+    /* @internal */
+    export function formatLocation(file: SourceFile, start: number, host: FormatDiagnosticsHost, color = formatColorAndReset) {
         const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start); // TODO: GH#18217
         const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
 
         let output = "";
-        output += formatColorAndReset(relativeFileName, ForegroundColorEscapeSequences.Cyan);
+        output += color(relativeFileName, ForegroundColorEscapeSequences.Cyan);
         output += ":";
-        output += formatColorAndReset(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLine + 1}`, ForegroundColorEscapeSequences.Yellow);
         output += ":";
-        output += formatColorAndReset(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
+        output += color(`${firstLineChar + 1}`, ForegroundColorEscapeSequences.Yellow);
         return output;
     }
 
@@ -591,6 +592,7 @@ namespace ts {
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
+        const supportedExtensionsWithJsonIfResolveJsonModule = options.resolveJsonModule ? [...supportedExtensions, Extension.Json] : undefined;
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
@@ -632,7 +634,8 @@ namespace ts {
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = createMap<string>();
-        let redirectTargetsSet = createMap<true>();
+        // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
+        let redirectTargetsMap = createMultiMap<string>();
 
         const filesByName = createMap<SourceFile | undefined>();
         let missingFilePaths: ReadonlyArray<Path> | undefined;
@@ -750,7 +753,7 @@ namespace ts {
             getSourceFileFromReference,
             getLibFileFromReference,
             sourceFileToPackageName,
-            redirectTargetsSet,
+            redirectTargetsMap,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1071,7 +1074,7 @@ namespace ts {
                     fileChanged = false;
                     newSourceFile = oldSourceFile; // Use the redirect.
                 }
-                else if (oldProgram.redirectTargetsSet.has(oldSourceFile.path)) {
+                else if (oldProgram.redirectTargetsMap.has(oldSourceFile.path)) {
                     // If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1218,7 +1221,7 @@ namespace ts {
             resolvedProjectReferences = oldProgram.getProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
-            redirectTargetsSet = oldProgram.redirectTargetsSet;
+            redirectTargetsMap = oldProgram.redirectTargetsMap;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -1234,6 +1237,7 @@ namespace ts {
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
                 getSourceFiles: program.getSourceFiles,
+                getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
@@ -1473,10 +1477,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] | undefined {
             return runWithCancellationToken(() => {
-                // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
-                // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
-                // '/// <reference no-default-lib="true"/>' directive.
-                if (options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) {
+                if (skipTypeChecking(sourceFile, options)) {
                     return emptyArray;
                 }
 
@@ -1924,7 +1925,7 @@ namespace ts {
             refFile?: SourceFile): SourceFile | undefined {
 
             if (hasExtension(fileName)) {
-                if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
+                if (!options.allowNonTsExtensions && !forEach(supportedExtensionsWithJsonIfResolveJsonModule || supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
                     if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
                     return undefined;
                 }
@@ -2006,9 +2007,17 @@ namespace ts {
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
-                // NOTE: this only makes sense for case-insensitive file systems
-                if (file && options.forceConsistentCasingInFileNames && getNormalizedAbsolutePath(file.fileName, currentDirectory) !== getNormalizedAbsolutePath(fileName, currentDirectory)) {
-                    reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
+                // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
+                if (file && options.forceConsistentCasingInFileNames) {
+                    let inputName = fileName;
+                    const checkedName = file.fileName;
+                    const isRedirect = toPath(checkedName) !== toPath(inputName);
+                    if (isRedirect) {
+                        inputName = getProjectReferenceRedirect(fileName) || fileName;
+                    }
+                    if (getNormalizedAbsolutePath(checkedName, currentDirectory) !== getNormalizedAbsolutePath(inputName, currentDirectory)) {
+                        reportFileNamesDifferOnlyInCasingError(inputName, checkedName, refFile, refPos, refEnd);
+                    }
                 }
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
@@ -2069,7 +2078,7 @@ namespace ts {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path); // TODO: GH#18217
-                    redirectTargetsSet.set(fileFromPackageId.path, true);
+                    redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
                     processingOtherFiles!.push(dupFile);
@@ -2328,7 +2337,7 @@ namespace ts {
                     if (!sourceFile.isDeclarationFile) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, rootDirectory));
                             allFilesBelongToPath = false;
                         }
                     }
@@ -2343,11 +2352,11 @@ namespace ts {
             const refPath = resolveProjectReferencePath(host, ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile;
+            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
             if (sourceFile === undefined) {
                 return undefined;
             }
-
+            sourceFile.path = toPath(refPath);
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             return { commandLine, sourceFile };
         }
@@ -2364,7 +2373,7 @@ namespace ts {
         }
 
         function verifyCompilerOptions() {
-            if (options.strictPropertyInitialization && !options.strictNullChecks) {
+            if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
 
@@ -2499,7 +2508,7 @@ namespace ts {
                 }
             }
 
-            if (options.declarationMap && !options.declaration) {
+            if (options.declarationMap && !getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
             }
 
@@ -2546,6 +2555,10 @@ namespace ts {
             if (options.resolveJsonModule) {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+                }
+                // Any emit other than common js is error
+                else if (getEmitModuleKind(options) !== ModuleKind.CommonJS) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs, "resolveJsonModule", "module");
                 }
             }
 
@@ -2697,12 +2710,12 @@ namespace ts {
 
         function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
             const referencesSyntax = getProjectReferencesSyntax();
-            if (referencesSyntax) {
-                if (createOptionDiagnosticInArrayLiteralSyntax(referencesSyntax, index, message, arg0, arg1)) {
-                    return;
-                }
+            if (referencesSyntax && referencesSyntax.elements.length > index) {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
             }
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            else {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            }
         }
 
         function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
@@ -2753,15 +2766,6 @@ namespace ts {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
             }
             return !!props.length;
-        }
-
-        function createOptionDiagnosticInArrayLiteralSyntax(arrayLiteral: ArrayLiteralExpression, index: number, message: DiagnosticMessage, arg0: string | number | undefined, arg1?: string | number, arg2?: string | number): boolean {
-            if (arrayLiteral.elements.length <= index) {
-                // Out-of-bounds
-                return false;
-            }
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, arrayLiteral.elements[index], message, arg0, arg1, arg2));
-            return false; // TODO: GH#18217 This function always returns `false`!`
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
@@ -2822,10 +2826,14 @@ namespace ts {
         };
     }
 
+    export interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
     /**
-     * Returns the target config filename of a project reference
+     * Returns the target config filename of a project reference.
+     * Note: The file might not exist.
      */
-    export function resolveProjectReferencePath(host: CompilerHost | UpToDateHost, ref: ProjectReference): ResolvedConfigFileName {
+    export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName {
         if (!host.fileExists(ref.path)) {
             return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
         }
@@ -2842,7 +2850,6 @@ namespace ts {
         switch (extension) {
             case Extension.Ts:
             case Extension.Dts:
-            case Extension.Json: // Since module is resolved to json file only when --resolveJsonModule, we dont need further check
                 // These are always allowed.
                 return undefined;
             case Extension.Tsx:
@@ -2851,6 +2858,8 @@ namespace ts {
                 return needJsx() || needAllowJs();
             case Extension.Js:
                 return needAllowJs();
+            case Extension.Json:
+                return needResolveJsonModule();
         }
 
         function needJsx() {
@@ -2858,6 +2867,9 @@ namespace ts {
         }
         function needAllowJs() {
             return options.allowJs || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
+        }
+        function needResolveJsonModule() {
+            return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
         }
     }
 

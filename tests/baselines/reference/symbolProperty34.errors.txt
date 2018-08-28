@@ -6,6 +6,7 @@ tests/cases/conformance/es6/Symbols/symbolProperty34.ts(7,6): error TS1023: An i
     class C1 extends C2 {
                      ~~
 !!! error TS2449: Class 'C2' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty34.ts:6:7: 'C2' is declared here.
         [Symbol.toStringTag]() {
             return { x: "" };
         }

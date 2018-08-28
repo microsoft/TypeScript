@@ -27,7 +27,6 @@ class Derived extends Base {
 
 var d: Derived;
 >d : Derived
->Derived : Derived
 
 d.p;  // public, OK
 >d.p : number

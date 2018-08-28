@@ -1,28 +1,16 @@
 === tests/cases/compiler/genericFunctionsWithOptionalParameters1.ts ===
 interface Utils {
->Utils : Utils
-
    fold<T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
 >fold : <T, S>(c?: T[], folder?: (s: S, t: T) => T, init?: S) => T
->T : T
->S : S
 >c : T[]
->Array : T[]
->T : T
 >folder : (s: S, t: T) => T
 >s : S
->S : S
 >t : T
->T : T
->T : T
 >init : S
->S : S
->T : T
 }
 
 var utils: Utils;
 >utils : Utils
->Utils : Utils
 
 utils.fold(); // no error
 >utils.fold() : {}

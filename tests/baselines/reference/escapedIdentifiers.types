@@ -142,14 +142,10 @@ classType2Object2.foo2 = 2;
 
 // interfaces
 interface interfaceType1 { 
->interfaceType1 : interfaceType1
-
     bar1: number;
 >bar1 : number
 }
 interface interfaceType\u0032 { 
->interfaceType\u0032 : interfaceType\u0032
-
     bar2: number;
 >bar2 : number
 }
@@ -157,7 +153,6 @@ interface interfaceType\u0032 {
 var interfaceType1Object1 = <interfaceType1>{ bar1: 0 };
 >interfaceType1Object1 : interfaceType1
 ><interfaceType1>{ bar1: 0 } : interfaceType1
->interfaceType1 : interfaceType1
 >{ bar1: 0 } : { bar1: number; }
 >bar1 : number
 >0 : 0
@@ -172,7 +167,6 @@ interfaceType1Object1.bar1 = 2;
 var interfaceType1Object2 = <interfaceType\u0031>{ bar1: 0 };
 >interfaceType1Object2 : interfaceType1
 ><interfaceType\u0031>{ bar1: 0 } : interfaceType1
->interfaceType\u0031 : interfaceType1
 >{ bar1: 0 } : { bar1: number; }
 >bar1 : number
 >0 : 0
@@ -187,7 +181,6 @@ interfaceType1Object2.bar1 = 2;
 var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
 >interfaceType2Object1 : interfaceType\u0032
 ><interfaceType2>{ bar2: 0 } : interfaceType\u0032
->interfaceType2 : interfaceType\u0032
 >{ bar2: 0 } : { bar2: number; }
 >bar2 : number
 >0 : 0
@@ -202,7 +195,6 @@ interfaceType2Object1.bar2 = 2;
 var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
 >interfaceType2Object2 : interfaceType\u0032
 ><interfaceType\u0032>{ bar2: 0 } : interfaceType\u0032
->interfaceType\u0032 : interfaceType\u0032
 >{ bar2: 0 } : { bar2: number; }
 >bar2 : number
 >0 : 0

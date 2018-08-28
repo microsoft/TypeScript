@@ -13,7 +13,6 @@ var b: number;
 
 var c: E;
 >c : E
->E : E
 
 var x1: any;
 >x1 : any
@@ -73,7 +72,6 @@ x2 *= undefined;
 
 var x3: E;
 >x3 : E
->E : E
 
 x3 *= a;
 >x3 *= a : number

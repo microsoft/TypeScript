@@ -156,7 +156,6 @@ namespace ts {
                 sourceMapNames: [],
                 sourceMapMappings: "",
                 sourceMapSourcesContent: compilerOptions.inlineSources ? [] : undefined,
-                sourceMapDecodedMappings: []
             };
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
@@ -171,7 +170,7 @@ namespace ts {
                 if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) { // emitting single module file
                     // For modules or multiple emit files the mapRoot will have directory structure like the sources
                     // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle, host, sourceMapDir));
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle.fileName, host, sourceMapDir));
                 }
 
                 if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -214,17 +213,6 @@ namespace ts {
             lastEncodedNameIndex = undefined;
             sourceMapData = undefined!;
             sourceMapDataList = undefined!;
-        }
-
-        interface SourceMapSection {
-            version: 3;
-            file: string;
-            sourceRoot?: string;
-            sources: string[];
-            names?: string[];
-            mappings: string;
-            sourcesContent?: (string | null)[];
-            sections?: undefined;
         }
 
         type SourceMapSectionDefinition =
@@ -299,7 +287,6 @@ namespace ts {
             }
 
             lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
-            sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
         /**
@@ -393,24 +380,29 @@ namespace ts {
 
                     const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
                     const resolvedPathCache = createMap<string>();
-                    sourcemaps.calculateDecodedMappings(originalMap, (raw): void => {
+                    const absolutePathCache = createMap<string>();
+                    const sourcemapIterator = sourcemaps.decodeMappings(originalMap);
+                    for (let { value: raw, done } = sourcemapIterator.next(); !done; { value: raw, done } = sourcemapIterator.next()) {
+                        const pathCacheKey = "" + raw.sourceIndex;
                         // Apply offsets to each position and fixup source entries
-                        const rawPath = originalMap.sources[raw.sourceIndex];
-                        const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
-                        const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
-                        if (!resolvedPathCache.has(combinedPath)) {
-                            resolvedPathCache.set(combinedPath, getRelativePathToDirectoryOrUrl(
+                        if (!resolvedPathCache.has(pathCacheKey)) {
+                            const rawPath = originalMap.sources[raw.sourceIndex];
+                            const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
+                            const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                            const resolvedPath = getRelativePathToDirectoryOrUrl(
                                 sourcesDirectoryPath,
                                 combinedPath,
                                 host.getCurrentDirectory(),
                                 host.getCanonicalFileName,
                                 /*isAbsolutePathAnUrl*/ true
-                            ));
+                            );
+                            resolvedPathCache.set(pathCacheKey, resolvedPath);
+                            absolutePathCache.set(pathCacheKey, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
                         }
-                        const resolvedPath = resolvedPathCache.get(combinedPath)!;
-                        const absolutePath = getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath);
+                        const resolvedPath = resolvedPathCache.get(pathCacheKey)!;
+                        const absolutePath = absolutePathCache.get(pathCacheKey)!;
                         // tslint:disable-next-line:no-null-keyword
-                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null); // TODO: Lookup content for inlining?
+                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null, resolvedPath); // TODO: Lookup content for inlining?
                         const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
                         // Then reencode all the updated spans into the overall map
                         encodeLastRecordedSourceMapSpan();
@@ -420,7 +412,7 @@ namespace ts {
                             emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
                             sourceIndex: newIndex,
                         };
-                    });
+                    }
                     // And actually emit the text these sourcemaps are for
                     return emitCallback(hint, node);
                 }
@@ -519,17 +511,19 @@ namespace ts {
             setupSourceEntry(sourceFile.fileName, sourceFile.text);
         }
 
-        function setupSourceEntry(fileName: string, content: string | null) {
-            // Add the file to tsFilePaths
-            // If sourceroot option: Use the relative path corresponding to the common directory path
-            // otherwise source locations relative to map file location
-            const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+        function setupSourceEntry(fileName: string, content: string | null, source?: string) {
+            if (!source) {
+                // Add the file to tsFilePaths
+                // If sourceroot option: Use the relative path corresponding to the common directory path
+                // otherwise source locations relative to map file location
+                const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
-            const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                fileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-                /*isAbsolutePathAnUrl*/ true);
+                source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
+                    fileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ true);
+            }
 
             sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {
@@ -575,6 +569,17 @@ namespace ts {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    export interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

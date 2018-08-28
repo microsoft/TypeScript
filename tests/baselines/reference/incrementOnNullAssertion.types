@@ -1,11 +1,7 @@
 === tests/cases/compiler/incrementOnNullAssertion.ts ===
 interface Dictionary<T> {
->Dictionary : Dictionary<T>
->T : T
-
     [myFavouriteType: string]: T | undefined
 >myFavouriteType : string
->T : T
 }
 const x = 'bar'
 >x : "bar"
@@ -13,7 +9,6 @@ const x = 'bar'
 
 let foo: Dictionary<number> = {}
 >foo : Dictionary<number>
->Dictionary : Dictionary<T>
 >{} : {}
 
 if (foo[x] === undefined) {

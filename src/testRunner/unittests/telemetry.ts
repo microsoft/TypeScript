@@ -68,6 +68,7 @@ namespace ts.projectSystem {
             }, "/hunter2/foo.csproj");
 
             // Also test that opening an external project only sends an event once.
+            et.service.closeClientFile(file1.path);
 
             et.service.closeExternalProject(projectFileName);
             checkNumberOfProjects(et.service, { externalProjects: 0 });
@@ -82,6 +83,7 @@ namespace ts.projectSystem {
                     projectFileName,
                 });
                 checkNumberOfProjects(et.service, { externalProjects: 1 });
+                et.service.openClientFile(file1.path); // Only on file open the project will be updated
             }
         });
 
