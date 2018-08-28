@@ -4717,16 +4717,6 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
-    /*@internal*/
-    export interface UpToDateHost {
-        fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date | undefined;
-        getUnchangedTime?(fileName: string): Date | undefined;
-        getLastStatus?(fileName: string): UpToDateStatus | undefined;
-        setLastStatus?(fileName: string, status: UpToDateStatus): void;
-        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
-    }
-
     export interface ModuleResolutionHost {
         // TODO: GH#18217 Optional methods frequently used as non-optional
 
@@ -4857,10 +4847,6 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
-
-        getModifiedTime?(fileName: string): Date | undefined;
-        setModifiedTime?(fileName: string, date: Date): void;
-        deleteFile?(fileName: string): void;
     }
 
     /* @internal */
