@@ -8257,7 +8257,7 @@ new C();`
 
                         verifyProjectWithResolvedModule(session);
 
-                        host.removeFolder(recognizersTextDist, /*recursive*/ true);
+                        host.deleteFolder(recognizersTextDist, /*recursive*/ true);
                         host.runQueuedTimeoutCallbacks();
 
                         verifyProjectWithUnresolvedModule(session);
@@ -9173,7 +9173,7 @@ describe("Test Suite 1", () => {
             checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
             const navBarResultUnitTest1 = navBarFull(session, unitTest1);
-            host.removeFile(unitTest1.path);
+            host.deleteFile(unitTest1.path);
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(project, expectedFilesWithoutUnitTest1);
 
@@ -9207,6 +9207,128 @@ export function Test2() {
 
             const navBarResultUnitTest1WithChangedContent = navBarFull(session, unitTest1WithChangedContent);
             assert.notStrictEqual(navBarResultUnitTest1WithChangedContent, navBarResultUnitTest1, "With changes in contents of unitTest file, we should see changed naviagation bar item result");
+        });
+    });
+
+    describe("tsserverProjectSystem completions", () => {
+        it("works", () => {
+            const aTs: File = {
+                path: "/a.ts",
+                content: "export const foo = 0;",
+            };
+            const bTs: File = {
+                path: "/b.ts",
+                content: "foo",
+            };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: "{}",
+            };
+
+            const host = createServerHost([aTs, bTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs, bTs], session);
+
+            const requestLocation: protocol.FileLocationRequestArgs = {
+                file: bTs.path,
+                line: 1,
+                offset: 3,
+            };
+
+            const response = executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+                ...requestLocation,
+                includeExternalModuleExports: true,
+                prefix: "foo",
+            });
+            const entry: protocol.CompletionEntry = {
+                hasAction: true,
+                insertText: undefined,
+                isRecommended: undefined,
+                kind: ScriptElementKind.constElement,
+                kindModifiers: ScriptElementKindModifier.exportedModifier,
+                name: "foo",
+                replacementSpan: undefined,
+                sortText: "0",
+                source: "/a",
+            };
+            assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
+                isGlobalCompletion: true,
+                isMemberCompletion: false,
+                isNewIdentifierLocation: false,
+                entries: [entry],
+            });
+
+            const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
+                ...requestLocation,
+                entryNames: [{ name: "foo", source: "/a" }],
+            };
+
+            const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
+            const detailsCommon: protocol.CompletionEntryDetails & CompletionEntryDetails = {
+                displayParts: [
+                    keywordPart(SyntaxKind.ConstKeyword),
+                    spacePart(),
+                    displayPart("foo", SymbolDisplayPartKind.localName),
+                    punctuationPart(SyntaxKind.ColonToken),
+                    spacePart(),
+                    displayPart("0", SymbolDisplayPartKind.stringLiteral),
+                ],
+                documentation: emptyArray,
+                kind: ScriptElementKind.constElement,
+                kindModifiers: ScriptElementKindModifier.exportedModifier,
+                name: "foo",
+                source: [{ text: "./a", kind: "text" }],
+                tags: emptyArray,
+            };
+            assert.deepEqual<ReadonlyArray<protocol.CompletionEntryDetails> | undefined>(detailsResponse, [
+                {
+                    codeActions: [
+                        {
+                            description: `Import 'foo' from module "./a"`,
+                            changes: [
+                                {
+                                    fileName: "/b.ts",
+                                    textChanges: [
+                                        {
+                                            start: { line: 1, offset: 1 },
+                                            end: { line: 1, offset: 1 },
+                                            newText: 'import { foo } from "./a";\n\n',
+                                        },
+                                    ],
+                                },
+                            ],
+                            commands: undefined,
+                        },
+                    ],
+                    ...detailsCommon,
+                },
+            ]);
+
+            interface CompletionDetailsFullRequest extends protocol.FileLocationRequest {
+                readonly command: protocol.CommandTypes.CompletionDetailsFull;
+                readonly arguments: protocol.CompletionDetailsRequestArgs;
+            }
+            interface CompletionDetailsFullResponse extends protocol.Response {
+                readonly body?: ReadonlyArray<CompletionEntryDetails>;
+            }
+            const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
+            assert.deepEqual<ReadonlyArray<CompletionEntryDetails> | undefined>(detailsFullResponse, [
+                {
+                    codeActions: [
+                        {
+                            description: `Import 'foo' from module "./a"`,
+                            changes: [
+                                {
+                                    fileName: "/b.ts",
+                                    textChanges: [createTextChange(createTextSpan(0, 0), 'import { foo } from "./a";\n\n')],
+                                },
+                            ],
+                            commands: undefined,
+                        }
+                    ],
+                    ...detailsCommon,
+                }
+            ]);
         });
     });
 
@@ -9297,7 +9419,7 @@ export function Test2() {
             checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
 
             // Testing what happens if we delete the original sources.
-            host.removeFile(bTs.path);
+            host.deleteFile(bTs.path);
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();

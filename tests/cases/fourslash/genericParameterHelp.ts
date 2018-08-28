@@ -14,8 +14,6 @@
 ////testFunction<, ,/*5*/>(null, null, null);
 
 verify.signatureHelp(
-    // TODO: GH#23631
-    /*
     {
         marker: "1",
         text: "testFunction<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): M",
@@ -24,7 +22,6 @@ verify.signatureHelp(
         parameterSpan: "T extends IFoo",
     },
     { marker: "2", parameterName: "U", parameterSpan: "U" },
-    */
     { marker: "3", parameterName: "a", parameterSpan: "a: any" },
     { marker: "4", parameterName: "M", parameterSpan: "M extends IFoo" },
     { marker: "5", parameterName: "M", parameterSpan: "M extends IFoo" },
