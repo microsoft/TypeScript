@@ -44,6 +44,8 @@ namespace ts.codefix {
         // get the function declaration - returns a promise
         const tokenAtPosition = getTokenAtPosition(sourceFile, position);
         let functionToConvert: FunctionLikeDeclaration;
+
+        // if the parent of a FunctionLikeDeclaration is a variable declaration, the convertToAsync diagnostic will be reported on the variable name
         if (isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
             tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)) {
             functionToConvert = tokenAtPosition.parent.initializer;
