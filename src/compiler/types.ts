@@ -3097,6 +3097,10 @@ namespace ts {
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
+        /**
+         * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
+         * and an external module with no 'export =' declaration resolves to the module itself.
+         */
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
         /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
@@ -3114,6 +3118,8 @@ namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+
+        /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
     }
 
     /* @internal */
@@ -4717,16 +4723,6 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
-    /*@internal*/
-    export interface UpToDateHost {
-        fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date | undefined;
-        getUnchangedTime?(fileName: string): Date | undefined;
-        getLastStatus?(fileName: string): UpToDateStatus | undefined;
-        setLastStatus?(fileName: string, status: UpToDateStatus): void;
-        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
-    }
-
     export interface ModuleResolutionHost {
         // TODO: GH#18217 Optional methods frequently used as non-optional
 
@@ -4857,10 +4853,6 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
-
-        getModifiedTime?(fileName: string): Date | undefined;
-        setModifiedTime?(fileName: string, date: Date): void;
-        deleteFile?(fileName: string): void;
     }
 
     /* @internal */
@@ -5345,8 +5337,6 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
-        getCommonSourceDirectory?(): string;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -5359,7 +5349,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost;
+        moduleResolverHost?: EmitHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
@@ -5608,5 +5598,16 @@ namespace ts {
         set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
         get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
         forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    }
+
+    export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
 }

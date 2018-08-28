@@ -5,12 +5,22 @@
 // @Filename: /node_modules/@types/foo/index.d.ts
 ////export const xyz: number;
 
+// @Filename: /node_modules/bar/index.d.ts
+////export const qrs: number;
+
 // @Filename: /a.ts
-////[|xyz|]
+////xyz;
+////qrs;
 
 goTo.file("/a.ts");
-verify.importFixAtPosition([
+verify.codeFixAll({
+    fixId: "fixMissingImport",
+    fixAllDescription: "Add all missing imports",
+    newFileContent:
 `import { xyz } from "foo";
 
-xyz`
-]);
+import { qrs } from "./node_modules/bar/index";
+
+xyz;
+qrs;`,
+});

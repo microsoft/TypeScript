@@ -370,7 +370,9 @@ namespace ts {
                 finally {
                     cancellationToken = undefined;
                 }
-            }
+            },
+
+            getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, isForSignatureHelp: boolean): Signature | undefined {
@@ -1208,17 +1210,23 @@ namespace ts {
                                     // local types not visible outside the function body
                                     : false;
                             }
-                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
-                                // parameters are visible only inside function body, parameter list and return type
-                                // technically for parameter list case here we might mix parameters and variables declared in function,
-                                // however it is detected separately when checking initializers of parameters
-                                // to make sure that they reference no variables declared after them.
-                                useResult =
+                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.Variable) {
+                                // parameter initializer will lookup as normal variable scope when targeting es2015+
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && result.valueDeclaration !== lastLocation) {
+                                    useResult = false;
+                                }
+                                else if (result.flags & SymbolFlags.FunctionScopedVariable) {
+                                    // parameters are visible only inside function body, parameter list and return type
+                                    // technically for parameter list case here we might mix parameters and variables declared in function,
+                                    // however it is detected separately when checking initializers of parameters
+                                    // to make sure that they reference no variables declared after them.
+                                    useResult =
                                     lastLocation.kind === SyntaxKind.Parameter ||
                                     (
                                         lastLocation === (<FunctionLikeDeclaration>location).type &&
                                         !!findAncestor(result.valueDeclaration, isParameter)
                                     );
+                                }
                             }
                         }
                         else if (location.kind === SyntaxKind.ConditionalType) {
@@ -2280,8 +2288,6 @@ namespace ts {
             return getPackagesSet().has(getTypesPackageName(packageName));
         }
 
-        // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
-        // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
@@ -3920,13 +3926,22 @@ namespace ts {
                 const links = getSymbolLinks(symbol);
                 let specifier = links.specifierCache && links.specifierCache.get(contextFile.path);
                 if (!specifier) {
-                    specifier = moduleSpecifiers.getModuleSpecifierForDeclarationFile(
+                    const isBundle = (compilerOptions.out || compilerOptions.outFile);
+                    // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
+                    // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
+                    // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
+                    // specifier preference
+                    const { moduleResolverHost } = context.tracker;
+                    const specifierCompilerOptions = isBundle ? { ...compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : compilerOptions;
+                    specifier = first(first(moduleSpecifiers.getModuleSpecifiers(
                         symbol,
-                        compilerOptions,
+                        specifierCompilerOptions,
                         contextFile,
-                        context.tracker.moduleResolverHost,
+                        moduleResolverHost,
+                        host.getSourceFiles(),
+                        { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" },
                         host.redirectTargetsMap,
-                    );
+                    )));
                     links.specifierCache = links.specifierCache || createMap();
                     links.specifierCache.set(contextFile.path, specifier);
                 }

@@ -1,3 +1,9 @@
+namespace ts {
+    export interface UserPreferences {
+        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
+    }
+}
+
 namespace ts.server {
     export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
     /*@internal*/
