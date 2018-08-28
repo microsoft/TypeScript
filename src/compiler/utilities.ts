@@ -2331,6 +2331,13 @@ namespace ts {
         return node;
     }
 
+    function skipParenthesesUp(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        return node;
+    }
+
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
@@ -4206,6 +4213,8 @@ namespace ts {
         if (!parent) return AccessKind.Read;
 
         switch (parent.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return accessKind(parent);
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.PrefixUnaryExpression:
                 const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
@@ -4217,13 +4226,35 @@ namespace ts {
                     : AccessKind.Read;
             case SyntaxKind.PropertyAccessExpression:
                 return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
+            case SyntaxKind.PropertyAssignment: {
+                const parentAccess = accessKind(parent.parent);
+                // In `({ x: varname }) = { x: 1 }`, the left `x` is a read, the right `x` is a write.
+                return node === (parent as PropertyAssignment).name ? reverseAccessKind(parentAccess) : parentAccess;
+            }
+            case SyntaxKind.ShorthandPropertyAssignment:
+                // Assume it's the local variable being accessed, since we don't check public properties for --noUnusedLocals.
+                return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
+            case SyntaxKind.ArrayLiteralExpression:
+                return accessKind(parent);
             default:
                 return AccessKind.Read;
         }
 
         function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-            return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+            return parent.parent && skipParenthesesUp(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+        }
+    }
+    function reverseAccessKind(a: AccessKind): AccessKind {
+        switch (a) {
+            case AccessKind.Read:
+                return AccessKind.Write;
+            case AccessKind.Write:
+                return AccessKind.Read;
+            case AccessKind.ReadWrite:
+                return AccessKind.ReadWrite;
+            default:
+                return Debug.assertNever(a);
         }
     }
 
