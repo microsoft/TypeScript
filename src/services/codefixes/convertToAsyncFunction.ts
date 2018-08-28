@@ -42,7 +42,16 @@ namespace ts.codefix {
 
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
         // get the function declaration - returns a promise
-        const functionToConvert: FunctionLikeDeclaration = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
+        const tokenAtPosition = getTokenAtPosition(sourceFile, position);
+        let functionToConvert: FunctionLikeDeclaration;
+        if (isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
+            tokenAtPosition.parent.initializer && isFunctionLikeDeclaration(tokenAtPosition.parent.initializer)) {
+            functionToConvert = tokenAtPosition.parent.initializer;
+        }
+        else {
+            functionToConvert = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
+        }
+
         if (!functionToConvert) {
             return;
         }
