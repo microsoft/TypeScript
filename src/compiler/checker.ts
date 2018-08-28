@@ -16213,7 +16213,7 @@ namespace ts {
             //  }
             //  ...
             //
-            // Creating an object that has getter and setters instead of just an accessor funtion is required for destructuring assignments
+            // Creating an object that has getter and setters instead of just an accessor function is required for destructuring assignments
             // as a call expression cannot be used as the target of a destructuring assignment while a property access can.
             //
             // For element access expressions (`super[x]`), we emit a generic helper that forwards the element access in both situations.

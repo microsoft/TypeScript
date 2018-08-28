@@ -667,10 +667,10 @@ namespace ts {
         }
     }
 
-    /** Creates a variable named `_superProps` with accessor properties for the given property names. */
+    /** Creates a variable named `_super` with accessor properties for the given property names. */
     export function createSuperAccessVariableStatement(resolver: EmitResolver, node: FunctionLikeDeclaration, names: UnderscoreEscapedMap<true>) {
         // Create a variable declaration with a getter/setter (if binding) definition for each name:
-        //   const _superProps = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
+        //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
         const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) !== 0;
         const accessors: PropertyAssignment[] = [];
         names.forEach((_, key) => {
