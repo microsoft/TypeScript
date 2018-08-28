@@ -25,3 +25,7 @@ function f5 (a = a) {
 function f6 (async = async) {
     return async
 }
+
+function f7({[foo]: bar}: any[]) {
+    let foo: number = 2;
+}

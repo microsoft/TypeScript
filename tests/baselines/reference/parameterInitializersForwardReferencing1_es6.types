@@ -24,8 +24,8 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 >foo : string
 >baz : string
 
-    var fooo: number = 2;
->fooo : number
+    var foo: number = 2;
+>foo : number
 >2 : 2
 
     return bar(); // returns 1
@@ -71,3 +71,14 @@ function f6 (async = async) {
     return async
 >async : any
 }
+
+function f7({[foo]: bar}: any[]) {
+>f7 : ({ [foo]: bar }: any[]) => void
+>foo : string
+>bar : any
+
+    let foo: number = 2;
+>foo : number
+>2 : 2
+}
+

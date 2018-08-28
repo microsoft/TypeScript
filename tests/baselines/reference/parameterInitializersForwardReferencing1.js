@@ -27,6 +27,11 @@ function f6 (async = async) {
     return async
 }
 
+function f7({[foo]: bar}: any[]) {
+    let foo: number = 2;
+}
+
+
 //// [parameterInitializersForwardReferencing1.js]
 var foo = "";
 function f1(bar) {
@@ -58,4 +63,8 @@ function f5(a) {
 function f6(async) {
     if (async === void 0) { async = async; }
     return async;
+}
+function f7(_a) {
+    var _b = foo, bar = _a[_b];
+    var foo = 2;
 }

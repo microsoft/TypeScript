@@ -8,7 +8,7 @@ function f1 (bar = foo) { // unexpected compiler error; works at runtime
 }
 
 function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
-    var fooo: number = 2;
+    var foo: number = 2;
     return bar(); // returns 1
 }
 
@@ -26,4 +26,8 @@ function f5 (a = a) {
 
 function f6 (async = async) {
     return async
+}
+
+function f7({[foo]: bar}: any[]) {
+    let foo: number = 2;
 }

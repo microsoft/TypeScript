@@ -1196,12 +1196,12 @@ namespace ts {
                                     // local types not visible outside the function body
                                     : false;
                             }
-                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
+                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.Variable) {
                                 // parameter initializer will lookup as normal variable scope when targeting es2015+
-                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && lastLocation.initializer === originalLocation && result.valueDeclaration !== lastLocation) {
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && result.valueDeclaration !== lastLocation) {
                                     useResult = false;
                                 }
-                                else {
+                                else if (result.flags & SymbolFlags.FunctionScopedVariable) {
                                     // parameters are visible only inside function body, parameter list and return type
                                     // technically for parameter list case here we might mix parameters and variables declared in function,
                                     // however it is detected separately when checking initializers of parameters

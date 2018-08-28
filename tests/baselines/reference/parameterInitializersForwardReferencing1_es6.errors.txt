@@ -11,7 +11,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.t
     }
     
     function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
-        var fooo: number = 2;
+        var foo: number = 2;
         return bar(); // returns 1
     }
     
@@ -34,3 +34,8 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.t
 !!! error TS2372: Parameter 'async' cannot be referenced in its initializer.
         return async
     }
+    
+    function f7({[foo]: bar}: any[]) {
+        let foo: number = 2;
+    }
+    

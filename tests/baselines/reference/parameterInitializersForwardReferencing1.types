@@ -71,3 +71,14 @@ function f6 (async = async) {
     return async
 >async : any
 }
+
+function f7({[foo]: bar}: any[]) {
+>f7 : ({ [foo]: bar }: any[]) => void
+>foo : number
+>bar : any
+
+    let foo: number = 2;
+>foo : number
+>2 : 2
+}
+
