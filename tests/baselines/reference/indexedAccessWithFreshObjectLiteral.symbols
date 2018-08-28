@@ -1,0 +1,63 @@
+=== tests/cases/compiler/indexedAccessWithFreshObjectLiteral.ts ===
+function foo (id: string) {
+>foo : Symbol(foo, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 0))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 14))
+
+    return {
+        a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 1, 12))
+
+        b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 2, 13))
+
+        c: true
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 3, 14))
+
+    }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 0, 14))
+}
+
+function bar (id: 'a' | 'b') {
+>bar : Symbol(bar, Decl(indexedAccessWithFreshObjectLiteral.ts, 6, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 8, 14))
+
+    return {
+        a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 9, 12))
+
+        b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 10, 13))
+
+        c: false
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 11, 14))
+
+    }[id]
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 8, 14))
+}
+
+function baz () {
+>baz : Symbol(baz, Decl(indexedAccessWithFreshObjectLiteral.ts, 14, 1))
+
+    const a = {
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
+
+        a: 1,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 15))
+
+        b: "",
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 18, 13))
+
+        c: false
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 19, 14))
+    }
+    for (var k in a) {
+>k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 22, 12))
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
+
+        const c = a[k]
+>c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 23, 13))
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
+>k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 22, 12))
+    }
+}
+

@@ -9190,9 +9190,17 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
-                const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
+                let indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
                     getIndexInfoOfType(objectType, IndexKind.String) ||
                     undefined;
+
+                // create index info for fresh object literal from keys
+                // if index type cannot assignable to keys, put a undefined type into index info
+                if (!indexInfo && accessExpression && isObjectLiteralExpression(walkUpParenthesizedExpressions(accessExpression.expression)) && isFreshObjectLiteralType(objectType)) {
+                    const keysType = getUnionType(arrayFrom(objectType.members.keys(), x => getLiteralType(x as string)));
+                    const indexInfoType = append(arrayFrom(objectType.members.values(), symbol => getTypeOfSymbol(symbol)), !isTypeAssignableTo(indexType, keysType) ? undefinedType : undefined);
+                    indexInfo = createIndexInfo(getUnionType(indexInfoType), /* isReadonly */ false);
+                }
                 if (indexInfo) {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
@@ -13600,8 +13608,12 @@ namespace ts {
             return !!constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
-        function isObjectLiteralType(type: Type) {
+        function isObjectLiteralType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.ObjectLiteral);
+        }
+
+        function isFreshObjectLiteralType(type: Type): type is FreshObjectLiteralType {
+            return !!(isObjectLiteralType(type) && type.flags & TypeFlags.FreshLiteral);
         }
 
         function widenObjectLiteralCandidates(candidates: Type[]): Type[] {
