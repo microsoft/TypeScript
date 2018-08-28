@@ -39,7 +39,7 @@ namespace ts {
 
         invalidateProject(project: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined): void;
         getNextInvalidatedProject(): ResolvedConfigFileName | undefined;
-        pendingInvalidatedProjects(): boolean;
+        hasPendingInvalidatedProjects(): boolean;
         missingRoots: Map<true>;
     }
 
@@ -396,20 +396,21 @@ namespace ts {
             unchangedOutputs: createFileMap(),
             invalidateProject,
             getNextInvalidatedProject,
-            pendingInvalidatedProjects,
+            hasPendingInvalidatedProjects,
             missingRoots
         };
 
-        function invalidateProject(proj: ResolvedConfigFileName, dependancyGraph: DependencyGraph | undefined) {
+        function invalidateProject(proj: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined) {
             if (!projectPendingBuild.hasKey(proj)) {
                 addProjToQueue(proj);
-                if (dependancyGraph) {
-                    queueBuildForDownstreamReferences(proj, dependancyGraph);
+                if (dependencyGraph) {
+                    queueBuildForDownstreamReferences(proj, dependencyGraph);
                 }
             }
         }
 
         function addProjToQueue(proj: ResolvedConfigFileName) {
+            Debug.assert(!projectPendingBuild.hasKey(proj));
             projectPendingBuild.setValue(proj, true);
             invalidatedProjectQueue.push(proj);
         }
@@ -426,18 +427,18 @@ namespace ts {
             }
         }
 
-        function pendingInvalidatedProjects() {
+        function hasPendingInvalidatedProjects() {
             return !!projectPendingBuild.getSize();
         }
 
         // Mark all downstream projects of this one needing to be built "later"
-        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName, dependancyGraph: DependencyGraph) {
-            const deps = dependancyGraph.dependencyMap.getReferencesTo(root);
+        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName, dependencyGraph: DependencyGraph) {
+            const deps = dependencyGraph.dependencyMap.getReferencesTo(root);
             for (const ref of deps) {
                 // Can skip circular references
                 if (!projectPendingBuild.hasKey(ref)) {
                     addProjToQueue(ref);
-                    queueBuildForDownstreamReferences(ref, dependancyGraph);
+                    queueBuildForDownstreamReferences(ref, dependencyGraph);
                 }
             }
         }
@@ -810,7 +811,7 @@ namespace ts {
             timerToBuildInvalidatedProject = undefined;
             const buildProject = context.getNextInvalidatedProject();
             buildSomeProjects(p => p === buildProject);
-            if (context.pendingInvalidatedProjects()) {
+            if (context.hasPendingInvalidatedProjects()) {
                 if (!timerToBuildInvalidatedProject) {
                     scheduleBuildInvalidatedProject();
                 }
