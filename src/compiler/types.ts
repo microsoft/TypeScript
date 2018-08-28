@@ -3118,6 +3118,8 @@ namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+
+        /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
     }
 
     /* @internal */
