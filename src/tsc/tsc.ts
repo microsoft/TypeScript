@@ -208,6 +208,7 @@ namespace ts {
             },
             {
                 name: "watch",
+                shortName:"w",
                 category: Diagnostics.Command_line_Options,
                 description: Diagnostics.Watch_input_files,
                 type: "boolean"
