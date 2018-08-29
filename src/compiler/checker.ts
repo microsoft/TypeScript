@@ -13658,7 +13658,7 @@ namespace ts {
             return inference.priority! & InferencePriority.PriorityImpliesCombination ? getIntersectionType(inference.contraCandidates!) : getCommonSubtype(inference.contraCandidates!);
         }
 
-        function getCovariantInference(inference: InferenceInfo, context: InferenceContext, signature: Signature) {
+        function getCovariantInference(inference: InferenceInfo, signature: Signature) {
             // Extract all object literal types and replace them with a single widened and normalized type.
             const candidates = widenObjectLiteralCandidates(inference.candidates!);
             // We widen inferred literal types if
@@ -13671,10 +13671,9 @@ namespace ts {
             const baseCandidates = primitiveConstraint ? sameMap(candidates, getRegularTypeOfLiteralType) :
                 widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) :
                 candidates;
-            // If all inferences were made from contravariant positions, infer a common subtype. Otherwise, if
-            // union types were requested or if all inferences were made from the return type position, infer a
-            // union type. Otherwise, infer a common supertype.
-            const unwidenedType = context.flags & InferenceFlags.InferUnionTypes || inference.priority! & InferencePriority.PriorityImpliesCombination ?
+            // If all inferences were made from a position that implies a combined result, infer a union type.
+            // Otherwise, infer a common supertype.
+            const unwidenedType = inference.priority! & InferencePriority.PriorityImpliesCombination ?
                 getUnionType(baseCandidates, UnionReduction.Subtype) :
                 getCommonSupertype(baseCandidates);
             return getWidenedType(unwidenedType);
@@ -13694,7 +13693,7 @@ namespace ts {
                         inference.contraCandidates = undefined;
                     }
                     if (inference.candidates) {
-                        inferredType = getCovariantInference(inference, context, signature);
+                        inferredType = getCovariantInference(inference, signature);
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
@@ -18633,7 +18632,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper, compareTypes?: TypeComparer): Signature {
-            const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.InferUnionTypes, compareTypes);
+            const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.None, compareTypes);
             const sourceSignature = contextualMapper ? instantiateSignature(contextualSignature, contextualMapper) : contextualSignature;
             forEachMatchingParameterType(sourceSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
