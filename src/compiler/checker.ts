@@ -10725,7 +10725,7 @@ namespace ts {
             const sourceRestType = getNonArrayRestType(source);
             const targetRestType = getNonArrayRestType(target);
             if (sourceRestType && targetRestType && sourceCount !== targetCount) {
-                // We're not able to relate misaliged complex rest parameters
+                // We're not able to relate misaligned complex rest parameters
                 return Ternary.False;
             }
 
