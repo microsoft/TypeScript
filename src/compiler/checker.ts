@@ -1211,8 +1211,8 @@ namespace ts {
                                     : false;
                             }
                             if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.Variable) {
-                                // parameter initializer will lookup as normal variable scope when targeting es2015+
-                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && result.valueDeclaration !== lastLocation) {
+                                // expression inside parameter will lookup as normal variable scope when targeting es2015+
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && !isParameterPropertyDeclaration(lastLocation) && result.valueDeclaration !== lastLocation) {
                                     useResult = false;
                                 }
                                 else if (result.flags & SymbolFlags.FunctionScopedVariable) {
