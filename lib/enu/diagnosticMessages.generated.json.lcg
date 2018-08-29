@@ -5937,6 +5937,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Unknown_build_option_0_5072" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Unknown build option '{0}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Unknown_compiler_option_0_5023" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Unknown compiler option '{0}'.]]></Val>
