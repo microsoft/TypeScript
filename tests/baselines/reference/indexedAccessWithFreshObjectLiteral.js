@@ -15,15 +15,18 @@ function bar (id: 'a' | 'b') {
     }[id]
 }
 
-function baz () {
-    const a = {
-        a: 1,
-        b: "",
-        c: false
-    }
-    for (var k in a) {
-        const c = a[k]
-    }
+function baz(id: string) {
+    return ({
+        a: 123,
+        b: ""
+    } as Record<string, number | string>)[id]
+}
+
+function bazz(id: string) {
+    return ({
+        a: 123,
+        b: ""
+    } as { [k: string]: string | number})[id]
 }
 
 
@@ -43,13 +46,15 @@ function bar(id) {
         c: false
     }[id];
 }
-function baz() {
-    var a = {
-        a: 1,
-        b: "",
-        c: false
-    };
-    for (var k in a) {
-        var c = a[k];
-    }
+function baz(id) {
+    return {
+        a: 123,
+        b: ""
+    }[id];
+}
+function bazz(id) {
+    return {
+        a: 123,
+        b: ""
+    }[id];
 }

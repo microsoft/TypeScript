@@ -1,8 +1,0 @@
-tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts(1,9): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
-
-
-==== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts (1 errors) ====
-    var x = {}["hello"];
-            ~~~~~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
-    var y: string = { '': 'foo' }[''];

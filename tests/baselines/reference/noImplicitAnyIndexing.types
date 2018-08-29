@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should report an implicit 'any'.
 var x = {}["hi"];
->x : any
->{}["hi"] : any
+>x : undefined
+>{}["hi"] : undefined
 >{} : {}
 >"hi" : "hi"
 
 // Should report an implicit 'any'.
 var y = {}[10];
->y : any
->{}[10] : any
+>y : undefined
+>{}[10] : undefined
 >{} : {}
 >10 : 10
 

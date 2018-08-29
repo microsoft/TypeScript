@@ -16,8 +16,8 @@ interface Function {
 }
 
 var a = {}[0]; // Should be Foo
->a : error
->{}[0] : error
+>a : undefined
+>{}[0] : undefined
 >{} : {}
 >0 : 0
 

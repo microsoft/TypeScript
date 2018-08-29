@@ -1,10 +1,8 @@
 tests/cases/compiler/noImplicitAnyIndexing.ts(12,37): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
-tests/cases/compiler/noImplicitAnyIndexing.ts(19,9): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
-tests/cases/compiler/noImplicitAnyIndexing.ts(22,9): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
 tests/cases/compiler/noImplicitAnyIndexing.ts(30,10): error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
 
 
-==== tests/cases/compiler/noImplicitAnyIndexing.ts (4 errors) ====
+==== tests/cases/compiler/noImplicitAnyIndexing.ts (2 errors) ====
     enum MyEmusEnum {
         emu
     }
@@ -26,13 +24,9 @@ tests/cases/compiler/noImplicitAnyIndexing.ts(30,10): error TS7017: Element impl
     
     // Should report an implicit 'any'.
     var x = {}["hi"];
-            ~~~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
     
     // Should report an implicit 'any'.
     var y = {}[10];
-            ~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type '{}' has no index signature.
     
     
     var hi: any = "hi";

@@ -35,29 +35,35 @@ function bar (id: 'a' | 'b') {
 >id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 8, 14))
 }
 
-function baz () {
+function baz(id: string) {
 >baz : Symbol(baz, Decl(indexedAccessWithFreshObjectLiteral.ts, 14, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 16, 13))
 
-    const a = {
->a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
+    return ({
+        a: 123,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 13))
 
-        a: 1,
->a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 15))
+        b: ""
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 18, 15))
 
-        b: "",
->b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 18, 13))
+    } as Record<string, number | string>)[id]
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 16, 13))
+}
 
-        c: false
->c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 19, 14))
-    }
-    for (var k in a) {
->k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 22, 12))
->a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
+function bazz(id: string) {
+>bazz : Symbol(bazz, Decl(indexedAccessWithFreshObjectLiteral.ts, 21, 1))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 23, 14))
 
-        const c = a[k]
->c : Symbol(c, Decl(indexedAccessWithFreshObjectLiteral.ts, 23, 13))
->a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 17, 9))
->k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 22, 12))
-    }
+    return ({
+        a: 123,
+>a : Symbol(a, Decl(indexedAccessWithFreshObjectLiteral.ts, 24, 13))
+
+        b: ""
+>b : Symbol(b, Decl(indexedAccessWithFreshObjectLiteral.ts, 25, 15))
+
+    } as { [k: string]: string | number})[id]
+>k : Symbol(k, Decl(indexedAccessWithFreshObjectLiteral.ts, 27, 12))
+>id : Symbol(id, Decl(indexedAccessWithFreshObjectLiteral.ts, 23, 14))
 }
 

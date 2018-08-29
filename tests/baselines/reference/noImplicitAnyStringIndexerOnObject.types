@@ -1,7 +1,7 @@
 === tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
 var x = {}["hello"];
->x : any
->{}["hello"] : any
+>x : undefined
+>{}["hello"] : undefined
 >{} : {}
 >"hello" : "hello"
 

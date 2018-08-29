@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
->x : error
->{}["hi"] : error
+>x : undefined
+>{}["hi"] : undefined
 >{} : {}
 >"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
->y : error
->{}[10] : error
+>y : undefined
+>{}[10] : undefined
 >{} : {}
 >10 : 10
 

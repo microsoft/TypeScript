@@ -47,34 +47,48 @@ function bar (id: 'a' | 'b') {
 >id : "a" | "b"
 }
 
-function baz () {
->baz : () => void
+function baz(id: string) {
+>baz : (id: string) => string | number
+>id : string
 
-    const a = {
->a : { a: number; b: string; c: boolean; }
->{        a: 1,        b: "",        c: false    } : { a: number; b: string; c: boolean; }
+    return ({
+>({        a: 123,        b: ""    } as Record<string, number | string>)[id] : string | number
+>({        a: 123,        b: ""    } as Record<string, number | string>) : Record<string, string | number>
+>{        a: 123,        b: ""    } as Record<string, number | string> : Record<string, string | number>
+>{        a: 123,        b: ""    } : { a: number; b: string; }
 
-        a: 1,
+        a: 123,
 >a : number
->1 : 1
+>123 : 123
 
-        b: "",
+        b: ""
 >b : string
 >"" : ""
 
-        c: false
->c : boolean
->false : false
-    }
-    for (var k in a) {
->k : string
->a : { a: number; b: string; c: boolean; }
+    } as Record<string, number | string>)[id]
+>id : string
+}
 
-        const c = a[k]
->c : any
->a[k] : any
->a : { a: number; b: string; c: boolean; }
+function bazz(id: string) {
+>bazz : (id: string) => string | number
+>id : string
+
+    return ({
+>({        a: 123,        b: ""    } as { [k: string]: string | number})[id] : string | number
+>({        a: 123,        b: ""    } as { [k: string]: string | number}) : { [k: string]: string | number; }
+>{        a: 123,        b: ""    } as { [k: string]: string | number} : { [k: string]: string | number; }
+>{        a: 123,        b: ""    } : { a: number; b: string; }
+
+        a: 123,
+>a : number
+>123 : 123
+
+        b: ""
+>b : string
+>"" : ""
+
+    } as { [k: string]: string | number})[id]
 >k : string
-    }
+>id : string
 }
 
