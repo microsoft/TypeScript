@@ -9190,17 +9190,10 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
-                let indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
+                const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
                     getIndexInfoOfType(objectType, IndexKind.String) ||
                     undefined;
 
-                // create index info for fresh object literal from keys
-                // if index type cannot assignable to keys, put a undefined type into index info
-                if (!indexInfo && accessExpression && isObjectLiteralExpression(walkUpParenthesizedExpressions(accessExpression.expression)) && isFreshObjectLiteralType(objectType)) {
-                    const keysType = getUnionType(arrayFrom(objectType.members.keys(), x => getLiteralType(x as string)));
-                    const indexInfoType = append(arrayFrom(objectType.members.values(), symbol => getTypeOfSymbol(symbol)), !isTypeAssignableTo(indexType, keysType) ? undefinedType : undefined);
-                    indexInfo = createIndexInfo(getUnionType(indexInfoType), /* isReadonly */ false);
-                }
                 if (indexInfo) {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
@@ -13610,10 +13603,6 @@ namespace ts {
 
         function isObjectLiteralType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.ObjectLiteral);
-        }
-
-        function isFreshObjectLiteralType(type: Type): type is FreshObjectLiteralType {
-            return !!(isObjectLiteralType(type) && type.flags & TypeFlags.FreshLiteral);
         }
 
         function widenObjectLiteralCandidates(candidates: Type[]): Type[] {
@@ -18388,6 +18377,32 @@ namespace ts {
             if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
+            }
+
+            const expression = walkUpParenthesizedExpressions(node.expression);
+            if (isObjectLiteralExpression(expression) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike) && !getIndexInfoOfType(objectType, IndexKind.Number | IndexKind.String)) {
+                const members = (<ResolvedType>objectType).members;
+                let hasNotMatch = false;
+                const matchedIndex = filterType(indexType, type => {
+                    if (!(type.flags & TypeFlags.StringOrNumberLiteral && members.has((<LiteralType>type).value as __String))) {
+                        hasNotMatch = true;
+                        return false;
+                    }
+                    return true;
+                });
+
+                // hasNotMatch and matchedIndex not never - partial match
+                // not hasNotMatch and matchedIndex not never - all match
+                if (matchedIndex !== neverType) {
+                    return getUnionType(append([mapType(matchedIndex, type => getTypeOfSymbol(members.get((<LiteralType>type).value as __String)!))],
+                        hasNotMatch ? undefinedType : undefined
+                    ));
+                }
+                // hasNotMatch and matchedIndex is never - not bounded
+                else if (hasNotMatch) {
+                    return getUnionType(append(arrayFrom(members.values(), getTypeOfSymbol), undefinedType));
+                }
+                // not hasNotMatch and matchedIndex is never - impossible, fallback
             }
 
             return checkIndexedAccessIndexType(getIndexedAccessType(objectType, isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType, node), node);
