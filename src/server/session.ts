@@ -572,6 +572,10 @@ namespace ts.server {
                         diagnostics: bakedDiags
                     }, "configFileDiag");
                     break;
+                case SurveyReady:
+                    const { surveyId } = event.data;
+                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, "surveyReady");
+                    break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
                     this.event<protocol.ProjectLanguageServiceStateEventBody>({
