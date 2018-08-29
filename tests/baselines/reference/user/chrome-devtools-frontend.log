@@ -6656,7 +6656,6 @@ node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(27
   Index signature is missing in type '{}'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(407,19): error TS2694: Namespace 'Adb' has no exported member 'Config'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(445,48): error TS2694: Namespace 'InspectorFrontendHostAPI' has no exported member 'ContextMenuDescriptor'.
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(471,12): error TS2538: Type 'string[]' cannot be used as an index type.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(521,8): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(527,14): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(557,10): error TS2339: Property 'InspectorFrontendAPI' does not exist on type 'Window'.
