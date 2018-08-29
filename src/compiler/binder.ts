@@ -2460,7 +2460,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs, lhs, SpecialPropertyAssignmentKind.Prototype);
+            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2478,7 +2478,7 @@ namespace ts {
             constructorFunction.parent = classPrototype;
             classPrototype.parent = lhs;
 
-            bindPropertyAssignment(constructorFunction, lhs, SpecialPropertyAssignmentKind.PrototypeProperty);
+            bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
         }
 
 
@@ -2509,16 +2509,16 @@ namespace ts {
          */
         function bindStaticPropertyAssignment(node: PropertyAccessEntityNameExpression) {
             node.expression.parent = node;
-            bindPropertyAssignment(node.expression, node, SpecialPropertyAssignmentKind.Property);
+            bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
-        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, special: SpecialPropertyAssignmentKind) {
+        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(name);
             const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
                     !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (special !== SpecialPropertyAssignmentKind.PrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
+            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
@@ -2537,11 +2537,10 @@ namespace ts {
             }
 
             // Set up the members collection if it doesn't exist already
-            const symbolTable = special === SpecialPropertyAssignmentKind.PrototypeProperty ?
+            const symbolTable = isPrototypeProperty ?
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            // Declare the symbol
             const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
             const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
             const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
