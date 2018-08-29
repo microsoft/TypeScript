@@ -21,7 +21,7 @@ var b: { (x: C): C };
 >x : any
 
 var d: { [x: C]: C };
->d : {}
+>d : { [x: any]: any; }
 >x : any
 
 var e = (x: C) => { var y: C; return y; }

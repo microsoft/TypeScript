@@ -1,4 +1,4 @@
-tests/cases/compiler/classIndexer4.ts(9,5): error TS2411: Property 'y' of type 'string' is not assignable to string index type 'number'.
+tests/cases/compiler/classIndexer4.ts(9,5): error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
 
 
 ==== tests/cases/compiler/classIndexer4.ts (1 errors) ====
@@ -12,5 +12,5 @@ tests/cases/compiler/classIndexer4.ts(9,5): error TS2411: Property 'y' of type '
         x: number;
         y: string;
         ~
-!!! error TS2411: Property 'y' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property 'y' of type 'string' is not assignable to 'string' index type 'number'.
     }

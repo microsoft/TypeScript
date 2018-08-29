@@ -621,6 +621,7 @@ namespace ts {
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
         const definitelyAssignableRelation = createMap<RelationComparisonResult>();
+        const indexAccessAssignableRelation = createMap<RelationComparisonResult>();
         const indexAssignableRelation = createMap<RelationComparisonResult>();
         const comparableRelation = createMap<RelationComparisonResult>();
         const identityRelation = createMap<RelationComparisonResult>();
@@ -7455,7 +7456,7 @@ namespace ts {
                 const propTypes: Type[] = [];
                 for (const prop of getPropertiesOfType(type)) {
                     const nameType = getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique);
-                    if (isTypeIndexAssignableTo(nameType, targetIndexType)) {
+                    if (isTypeIndexAccessAssignableTo(nameType, targetIndexType)) {
                         propTypes.push(getTypeOfSymbol(prop));
                     }
                 }
@@ -8013,17 +8014,17 @@ namespace ts {
                     indexType = getLiteralType(+(indexType as StringLiteralType).value);
                 }
             }
-            const applicable = filter(infos, info => isTypeIndexAssignableTo(indexType, info.indexType));
+            const applicable = filter(infos, info => isTypeIndexAccessAssignableTo(indexType, info.indexType));
             if (!length(applicable)) return;
             // OK, now for the hard part - ranking the derivedness of an index signature!
             let candidate = applicable![0];
-            let filteredCandidateIndexType = filterType(candidate.indexType, c => isTypeIndexAssignableTo(indexType, c));
+            let filteredCandidateIndexType = filterType(candidate.indexType, c => isTypeIndexAccessAssignableTo(indexType, c));
             for (const info of applicable!) {
                 if (info === candidate) continue;
-                const filteredInfoIndexType = filterType(info.indexType, c => isTypeIndexAssignableTo(indexType, c));
+                const filteredInfoIndexType = filterType(info.indexType, c => isTypeIndexAccessAssignableTo(indexType, c));
                 // The identity check is here so that in situations where multiple index signatures with the same index type are present
                 // (which is usually an error), we'll align with older behavior and use the type from the first signature we encountered
-                if (!isTypeIdenticalTo(filteredInfoIndexType, filteredCandidateIndexType) && isTypeIndexAssignableTo(filteredInfoIndexType, filteredCandidateIndexType)) {
+                if (!isTypeIdenticalTo(filteredInfoIndexType, filteredCandidateIndexType) && isTypeIndexAccessAssignableTo(filteredInfoIndexType, filteredCandidateIndexType)) {
                     candidate = info;
                     filteredCandidateIndexType = filteredInfoIndexType;
                 }
@@ -10588,6 +10589,10 @@ namespace ts {
             return isTypeRelatedTo(source, target, assignableRelation);
         }
 
+        function isTypeIndexAccessAssignableTo(source: Type, target: Type): boolean {
+            return isTypeRelatedTo(source, target, indexAccessAssignableRelation);
+        }
+
         function isTypeIndexAssignableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, indexAssignableRelation);
         }
@@ -11054,7 +11059,7 @@ namespace ts {
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
-            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation || relation === indexAssignableRelation) {
+            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation || relation === indexAssignableRelation || relation === indexAccessAssignableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -11062,9 +11067,13 @@ namespace ts {
                 if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
                     t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
             }
-            if (relation === indexAssignableRelation) {
+            if (relation === indexAccessAssignableRelation) {
                 if (s & TypeFlags.NumberLike && t & TypeFlags.String) return true;
                 if (s & TypeFlags.NumberLiteral && t & TypeFlags.StringLiteral) return (source as LiteralType).value === +(target as LiteralType).value;
+            }
+            if (relation === indexAssignableRelation) {
+                if (s & TypeFlags.String && t & TypeFlags.Number) return true;
+                if (s & TypeFlags.StringLiteral && t & TypeFlags.NumberLiteral) return +(source as LiteralType).value === (target as LiteralType).value;
             }
             return false;
         }
@@ -11421,7 +11430,7 @@ namespace ts {
                 }
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation || relation === indexAssignableRelation) &&
+                    if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation || relation === indexAssignableRelation || relation === indexAccessAssignableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
@@ -12274,7 +12283,7 @@ namespace ts {
                 return result;
             }
 
-            function eachPropertyRelatedToIndexesOf(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
+            function eachPropertyRelatedToIndexesOf(source: Type, target: Type, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 for (const prop of getPropertiesOfObjectType(source)) {
                     if (isIgnoredJsxProperty(source, prop, /*targetMemberType*/ undefined)) {
@@ -12282,7 +12291,7 @@ namespace ts {
                     }
                     const targetType = getResultingTypeOfIndexOnType(target, getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique));
                     if (targetType) {
-                        const related = isIndexTypeRelatedTo(getTypeOfSymbol(prop), targetType, sourceIsPrimitive, reportErrors, /*skipIndexError*/ true);
+                        const related = isRelatedTo(getTypeOfSymbol(prop), targetType, reportErrors);
                         if (!related) {
                             if (reportErrors) {
                                 reportError(Diagnostics.Property_0_is_incompatible_with_index_signature, symbolToString(prop));
@@ -12297,7 +12306,7 @@ namespace ts {
 
             function indexTypesRelatedTo(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
                 if (relation === identityRelation) {
-                    return indexInfosRelated(getIndexInfosOfType(source), getIndexInfosOfType(target), sourceIsPrimitive, reportErrors);
+                    return indexInfosIdentical(getIndexInfosOfType(source), getIndexInfosOfType(target));
                 }
                 const targetInfo = getIndexInfosOfType(target);
                 if (!targetInfo) {
@@ -12321,7 +12330,7 @@ namespace ts {
                         hadSomeMatch = true;
                         // TODO: Revise? For each type in `K`'s constraint, instantiate T with the key type being compared?
                         // const instantiated = instantiateType(getTemplateTypeFromMappedType(source), makeUnaryTypeMapper(getTypeParameterFromMappedType(source), key));
-                        if (!isIndexTypeRelatedTo(getTemplateTypeFromMappedType(source), result, sourceIsPrimitive, reportErrors)) {
+                        if (!isRelatedTo(getTemplateTypeFromMappedType(source), result, reportErrors)) {
                             return true;
                         }
                     });
@@ -12331,7 +12340,7 @@ namespace ts {
                     return hadSomeMatch ? Ternary.True : Ternary.False;
                 }
                 if (isObjectTypeWithInferableIndex(source)) {
-                    return eachPropertyRelatedToIndexesOf(source, target, sourceIsPrimitive, reportErrors);
+                    return eachPropertyRelatedToIndexesOf(source, target, reportErrors);
                 }
                 let hasTypedSignature = false;
                 for (const info of targetInfo) {
@@ -12348,16 +12357,40 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function isIndexTypeRelatedTo(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean, skipIndexError?: boolean): Ternary {
+            function isIndexTypeRelatedTo(source: IndexInfo, target: IndexInfo, sourceIsPrimitive: boolean, reportErrors: boolean, skipIndexError?: boolean): Ternary {
                 // Index signature of type any permits assignment from everything but primitives
-                if (!sourceIsPrimitive && target.flags & TypeFlags.AnyOrUnknown) {
+                if (!sourceIsPrimitive && target.type.flags & TypeFlags.AnyOrUnknown) {
                     return Ternary.True;
                 }
-                const related = isRelatedTo(source, target, reportErrors);
+                const related = isRelatedTo(source.type, target.type, reportErrors);
                 if (!related && reportErrors && !skipIndexError) {
-                    reportError(Diagnostics.Index_signatures_are_incompatible);
+                    const sourceType = typeToString(source.indexType);
+                    const targetType = typeToString(target.indexType);
+                    reportError(sourceType === targetType ? Diagnostics._0_index_signatures_are_incompatible : Diagnostics._0_and_1_index_signatures_are_incompatible, sourceType, targetType);
                 }
                 return related;
+            }
+
+            function indexInfosIdentical(sourceInfos: IndexInfo[] | undefined, targetInfos: IndexInfo[] | undefined) {
+                if (length(sourceInfos) !== length(targetInfos)) return Ternary.False;
+                if (!sourceInfos || !targetInfos) return Ternary.True;
+                targetLoop: for (const targetInfo of targetInfos) {
+                    for (const sourceInfo of sourceInfos) {
+                        if (isRelatedTo(sourceInfo.indexType, targetInfo.indexType) && isRelatedTo(sourceInfo.type, targetInfo.type) && sourceInfo.isReadonly === targetInfo.isReadonly) {
+                            continue targetLoop;
+                        }
+                    }
+                    return Ternary.False;
+                }
+                sourceLoop: for (const sourceInfo of sourceInfos) {
+                    for (const targetInfo of targetInfos) {
+                        if (isRelatedTo(sourceInfo.indexType, targetInfo.indexType) && isRelatedTo(sourceInfo.type, targetInfo.type) && sourceInfo.isReadonly === targetInfo.isReadonly) {
+                            continue sourceLoop;
+                        }
+                    }
+                    return Ternary.False;
+                }
+                return Ternary.True;
             }
 
             function indexInfosRelated(sourceInfos: IndexInfo[] | undefined, targetInfos: IndexInfo[] | undefined, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
@@ -12365,28 +12398,17 @@ namespace ts {
                     return Ternary.True;
                 }
                 if (sourceInfos && targetInfos) {
-                    const isIndexRelatedToHelper = relation === identityRelation ? isRelatedTo : isTypeIndexAssignableTo;
                     // If for every index signature in S there exists a related signature in T
                     targetLoop: for (const targetInfo of targetInfos) {
                         for (const sourceInfo of sourceInfos) {
-                            if (isIndexRelatedToHelper(sourceInfo.indexType, targetInfo.indexType)) {
-                                if (!isIndexTypeRelatedTo(sourceInfo.type, targetInfo.type, sourceIsPrimitive, reportErrors)) return Ternary.False;
+                            if (isTypeIndexAssignableTo(sourceInfo.indexType, targetInfo.indexType)) {
+                                if (!isIndexTypeRelatedTo(sourceInfo, targetInfo, sourceIsPrimitive, reportErrors)) return Ternary.False;
                                 if (relation === identityRelation && sourceInfo.isReadonly !== targetInfo.isReadonly) return Ternary.False;
                                 continue targetLoop;
                             }
                         }
-                        return relation === identityRelation ? Ternary.False : Ternary.Maybe;
-                    }
-                    if (relation === identityRelation) {
-                        // And for every index signature in T there exists and identical signature in S
-                        sourceLoop: for (const sourceInfo of sourceInfos) {
-                            for (const targetInfo of targetInfos) {
-                                if (isIndexRelatedToHelper(sourceInfo.indexType, targetInfo.indexType) && isIndexTypeRelatedTo(sourceInfo.type, targetInfo.type, sourceIsPrimitive, /*reportErrors*/ false)) {
-                                    if (sourceInfo.isReadonly !== targetInfo.isReadonly) return Ternary.False;
-                                    continue sourceLoop;
-                                }
-                            }
-                            return Ternary.False;
+                        if (targetInfo === targetInfos[targetInfos.length - 1]) {
+                            return Ternary.Maybe; // Iterated over every target signature without a definitive yes or no on every signature; allow fallback to inferred signature
                         }
                     }
                     // Then the signature lists are related
@@ -13741,6 +13763,7 @@ namespace ts {
                 for (const sourceInfo of sourceInfos) {
                     for (const targetInfo of targetInfos) {
                         // if this source info is applicable to the target info
+                        // Infers from string -> number, as a string signature can fulfill a number one
                         if (isTypeIndexAssignableTo(sourceInfo.indexType, targetInfo.indexType)) {
                             // then infer
                             inferFromTypes(sourceInfo.type, targetInfo.type);
@@ -25326,7 +25349,7 @@ namespace ts {
                         if (someBaseTypeHasBothIndexers) continue;
                     }
                     forEachType(info1.indexType, indexType => {
-                        if (isTypeIndexAssignableTo(indexType, info2.indexType)) {
+                        if (isTypeIndexAccessAssignableTo(indexType, info2.indexType)) {
                             if (!isTypeAssignableTo(info1.type, info2.type)) {
                                 // Error - not compatable
                                 const errorNode = (contains(declaredIndexers, info1.declaration)

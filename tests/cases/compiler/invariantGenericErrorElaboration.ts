@@ -15,7 +15,7 @@ interface Num extends Runtype<number> {
 }
 declare const Num: Num
 
-interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
+interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in string & keyof O]: O[K]['witness'] }> {}
 declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
 
 interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {

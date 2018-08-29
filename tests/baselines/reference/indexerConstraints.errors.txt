@@ -1,7 +1,12 @@
-tests/cases/compiler/indexerConstraints.ts(17,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(25,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(33,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+tests/cases/compiler/indexerConstraints.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
+    Property 'b' is missing in type 'A'.
+tests/cases/compiler/indexerConstraints.ts(25,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
+tests/cases/compiler/indexerConstraints.ts(33,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
+tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
 
 
 ==== tests/cases/compiler/indexerConstraints.ts (4 errors) ====
@@ -23,7 +28,9 @@ tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: Numeric index ty
     interface E {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
+!!! error TS2413:     Property 'b' is missing in type 'A'.
     }
     
     // Inheritance
@@ -33,7 +40,8 @@ tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: Numeric index ty
     interface G extends F {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
     }
     
     // Other way
@@ -43,7 +51,8 @@ tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: Numeric index ty
     interface I extends H {
         [s: string]: B;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
     }
     
     // With hidden indexer
@@ -53,6 +62,7 @@ tests/cases/compiler/indexerConstraints.ts(41,5): error TS2413: Numeric index ty
     interface K extends J {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
         [s: string]: B;
     }

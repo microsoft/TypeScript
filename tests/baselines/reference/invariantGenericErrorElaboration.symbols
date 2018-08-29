@@ -8,7 +8,7 @@ const wat: Runtype<any> = Num;
 
 const Foo = Obj({ foo: Num })
 >Foo : Symbol(Foo, Decl(invariantGenericErrorElaboration.ts, 3, 5))
->Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 120), Decl(invariantGenericErrorElaboration.ts, 13, 22))
 >foo : Symbol(foo, Decl(invariantGenericErrorElaboration.ts, 3, 17))
 >Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
 
@@ -36,8 +36,8 @@ declare const Num: Num
 >Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
 >Num : Symbol(Num, Decl(invariantGenericErrorElaboration.ts, 8, 1), Decl(invariantGenericErrorElaboration.ts, 13, 13))
 
-interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in keyof O]: O[K]['witness'] }> {}
->Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in string & keyof O]: O[K]['witness'] }> {}
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 120), Decl(invariantGenericErrorElaboration.ts, 13, 22))
 >O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 15, 14))
 >_ : Symbol(_, Decl(invariantGenericErrorElaboration.ts, 15, 27))
 >Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
@@ -48,13 +48,13 @@ interface Obj<O extends { [_ in string]: Runtype<any> }> extends Runtype<{[K in 
 >K : Symbol(K, Decl(invariantGenericErrorElaboration.ts, 15, 75))
 
 declare function Obj<O extends { [_: string]: Runtype<any> }>(fields: O): Obj<O>;
->Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 120), Decl(invariantGenericErrorElaboration.ts, 13, 22))
 >O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
 >_ : Symbol(_, Decl(invariantGenericErrorElaboration.ts, 16, 34))
 >Runtype : Symbol(Runtype, Decl(invariantGenericErrorElaboration.ts, 3, 29))
 >fields : Symbol(fields, Decl(invariantGenericErrorElaboration.ts, 16, 62))
 >O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
->Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 111), Decl(invariantGenericErrorElaboration.ts, 13, 22))
+>Obj : Symbol(Obj, Decl(invariantGenericErrorElaboration.ts, 15, 120), Decl(invariantGenericErrorElaboration.ts, 13, 22))
 >O : Symbol(O, Decl(invariantGenericErrorElaboration.ts, 16, 21))
 
 interface Constraint<A extends Runtype<any>> extends Runtype<A['witness']> {

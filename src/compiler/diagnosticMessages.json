@@ -1112,7 +1112,7 @@
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible.": {
+    "'{0}' and '{1}' index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -1432,7 +1432,7 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to {2} index type '{3}'.": {
+    "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2411
     },
@@ -1459,6 +1459,10 @@
     "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
         "category": "Error",
         "code": 2418
+    },
+    "'{0}' index signatures are incompatible.": {
+        "category": "Error",
+        "code": 2419
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",

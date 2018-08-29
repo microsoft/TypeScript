@@ -268,7 +268,7 @@ function f82() {
     let x2 = f81({ a: { x: 42 } });  // number
 }
 
-function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+function f83<T extends { [x: string]: { x: any } }, K extends string & keyof T>(obj: T, key: K) {
     return obj[key]['x'] as T[K]['x'];
 }
 
@@ -507,7 +507,7 @@ function updateIds<T extends Record<K, string>, K extends string>(
 
 // Repro from #13285
 
-function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+function updateIds2<T extends { [x: string]: string }, K extends string & keyof T>(
     obj: T,
     key: K,
     stringMap: { [oldId: string]: string }

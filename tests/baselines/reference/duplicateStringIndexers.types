@@ -47,7 +47,7 @@ module test {
     }
 
     var a: {
->a : { [x: string]: string; }
+>a : { [x: string]: string; [x: string]: string; }
 
         [x: string]: string;
 >x : string

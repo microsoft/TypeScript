@@ -1,8 +1,13 @@
 tests/cases/compiler/indexTypeCheck.ts(2,2): error TS1021: An index signature must have a type annotation.
 tests/cases/compiler/indexTypeCheck.ts(3,2): error TS1021: An index signature must have a type annotation.
-tests/cases/compiler/indexTypeCheck.ts(17,2): error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
-tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: Numeric index type 'Orange' is not assignable to string index type 'Yellow'.
-tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
+tests/cases/compiler/indexTypeCheck.ts(17,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
+  Type 'Orange' is not assignable to type 'Yellow'.
+    'number' index signatures are incompatible.
+      Type 'number' is not assignable to type 'Red'.
+tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/indexTypeCheck.ts(32,3): error TS1096: An index signature must have exactly one parameter.
 tests/cases/compiler/indexTypeCheck.ts(36,3): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index type.
@@ -31,21 +36,26 @@ tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot b
     interface Orange {
     	[n:number]: number; // ok
     	~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
+!!! error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+!!! error TS2413:   Type 'number' is not assignable to type 'string'.
     	[s:string]: string; // error
     }
     
     interface Green {
     	[n:number]: Orange; // error
     	~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'Orange' is not assignable to string index type 'Yellow'.
+!!! error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
+!!! error TS2413:   Type 'Orange' is not assignable to type 'Yellow'.
+!!! error TS2413:     'number' index signatures are incompatible.
+!!! error TS2413:       Type 'number' is not assignable to type 'Red'.
     	[s:string]: Yellow; // ok
     }
     
     interface Cyan {
     	[n:number]: number; // error
     	~~~~~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'number' is not assignable to string index type 'string'.
+!!! error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
+!!! error TS2413:   Type 'number' is not assignable to type 'string'.
     	[s:string]: string; // ok
     }
     

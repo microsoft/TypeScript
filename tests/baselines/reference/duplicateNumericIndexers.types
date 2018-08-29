@@ -44,7 +44,7 @@ interface I {
 }
 
 var a: {
->a : { [x: number]: string; }
+>a : { [x: number]: string; [x: number]: string; }
 
     [x: number]: string;
 >x : number

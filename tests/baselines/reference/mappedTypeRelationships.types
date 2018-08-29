@@ -404,27 +404,27 @@ type ItemMap = {
 >x : string
 }
 
-function f50<T extends ItemMap>(obj: T, key: keyof T) {
->f50 : <T extends ItemMap>(obj: T, key: keyof T) => string
+function f50<T extends ItemMap>(obj: T, key: keyof T & string) {
+>f50 : <T extends ItemMap>(obj: T, key: keyof T & string) => string
 >obj : T
->key : keyof T
+>key : keyof T & string
 
     let item: Item = obj[key];
 >item : Item
->obj[key] : T[keyof T]
+>obj[key] : T[keyof T & string]
 >obj : T
->key : keyof T
+>key : keyof T & string
 
     return obj[key].name;
 >obj[key].name : string
->obj[key] : T[keyof T]
+>obj[key] : T[keyof T & string]
 >obj : T
->key : keyof T
+>key : keyof T & string
 >name : string
 }
 
-function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
->f51 : <T extends ItemMap, K extends keyof T>(obj: T, key: K) => string
+function f51<T extends ItemMap, K extends keyof T & string>(obj: T, key: K) {
+>f51 : <T extends ItemMap, K extends keyof T & string>(obj: T, key: K) => string
 >obj : T
 >key : K
 

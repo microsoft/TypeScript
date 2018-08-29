@@ -1,6 +1,10 @@
-tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
+    Property 'b' is missing in type 'A'.
+tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+  Type 'A' is not assignable to type 'B'.
 tests/cases/compiler/indexerConstraints2.ts(34,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[n: number]: A' instead.
 tests/cases/compiler/indexerConstraints2.ts(40,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[s: string]: A' instead.
 tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
@@ -22,7 +26,9 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     class G extends F {
         [n: number]: A
         ~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
+!!! error TS2413:     Property 'b' is missing in type 'A'.
     }
     
     // Other way
@@ -32,7 +38,8 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     class I extends H {
         [s: string]: B
         ~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
     }
     
     // With hidden indexer
@@ -43,7 +50,8 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     class K extends J {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+!!! error TS2413:   Type 'A' is not assignable to type 'B'.
         [s: string]: B;
     }
     

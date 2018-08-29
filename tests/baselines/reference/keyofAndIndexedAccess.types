@@ -58,7 +58,7 @@ type K00 = keyof any;  // string
 >K00 : string | number | symbol
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : number | "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : number | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "toString" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
@@ -83,7 +83,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : "name" | "width" | "height" | "visible"
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : number | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : number | "concat" | "indexOf" | "lastIndexOf" | "slice" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "join" | "reverse" | "shift" | "sort" | "splice" | "unshift" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string | number
@@ -98,7 +98,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : number | "0" | "1" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : number | "0" | "1" | "concat" | "indexOf" | "lastIndexOf" | "slice" | "length" | "toString" | "toLocaleString" | "pop" | "push" | "join" | "reverse" | "shift" | "sort" | "splice" | "unshift" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
@@ -1066,8 +1066,8 @@ function f82() {
 >42 : 42
 }
 
-function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+function f83<T extends { [x: string]: { x: any } }, K extends string & keyof T>(obj: T, key: K) {
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends string & keyof T>(obj: T, key: K) => T[K]["x"]
 >x : string
 >x : any
 >obj : T
@@ -1088,7 +1088,7 @@ function f84() {
     let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
 >x1 : string
 >f83({ foo: { x: "hello" } }, "foo") : string
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends string & keyof T>(obj: T, key: K) => T[K]["x"]
 >{ foo: { x: "hello" } } : { foo: { x: string; }; }
 >foo : { x: string; }
 >{ x: "hello" } : { x: string; }
@@ -1099,7 +1099,7 @@ function f84() {
     let x2 = f83({ bar: { x: 42 } }, "bar");  // number
 >x2 : number
 >f83({ bar: { x: 42 } }, "bar") : number
->f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends string & keyof T>(obj: T, key: K) => T[K]["x"]
 >{ bar: { x: 42 } } : { bar: { x: number; }; }
 >bar : { x: number; }
 >{ x: 42 } : { x: number; }
@@ -1813,8 +1813,8 @@ function updateIds<T extends Record<K, string>, K extends string>(
 
 // Repro from #13285
 
-function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
->updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+function updateIds2<T extends { [x: string]: string }, K extends string & keyof T>(
+>updateIds2 : <T extends { [x: string]: string; }, K extends string & keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
 >x : string
 
     obj: T,

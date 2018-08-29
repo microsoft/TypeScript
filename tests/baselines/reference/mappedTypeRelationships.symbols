@@ -435,7 +435,7 @@ type ItemMap = {
 >Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
 }
 
-function f50<T extends ItemMap>(obj: T, key: keyof T) {
+function f50<T extends ItemMap>(obj: T, key: keyof T & string) {
 >f50 : Symbol(f50, Decl(mappedTypeRelationships.ts, 96, 1))
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 98, 13))
 >ItemMap : Symbol(ItemMap, Decl(mappedTypeRelationships.ts, 92, 1))
@@ -457,27 +457,27 @@ function f50<T extends ItemMap>(obj: T, key: keyof T) {
 >name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
 }
 
-function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
+function f51<T extends ItemMap, K extends keyof T & string>(obj: T, key: K) {
 >f51 : Symbol(f51, Decl(mappedTypeRelationships.ts, 101, 1))
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
 >ItemMap : Symbol(ItemMap, Decl(mappedTypeRelationships.ts, 92, 1))
 >K : Symbol(K, Decl(mappedTypeRelationships.ts, 103, 31))
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
->obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 60))
 >T : Symbol(T, Decl(mappedTypeRelationships.ts, 103, 13))
->key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 67))
 >K : Symbol(K, Decl(mappedTypeRelationships.ts, 103, 31))
 
     let item: Item = obj[key];
 >item : Symbol(item, Decl(mappedTypeRelationships.ts, 104, 7))
 >Item : Symbol(Item, Decl(mappedTypeRelationships.ts, 88, 1))
->obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
->key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 60))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 67))
 
     return obj[key].name;
 >obj[key].name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
->obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 51))
->key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 58))
+>obj : Symbol(obj, Decl(mappedTypeRelationships.ts, 103, 60))
+>key : Symbol(key, Decl(mappedTypeRelationships.ts, 103, 67))
 >name : Symbol(name, Decl(mappedTypeRelationships.ts, 90, 13))
 }
 

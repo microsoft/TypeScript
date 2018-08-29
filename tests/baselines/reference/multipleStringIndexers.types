@@ -20,7 +20,7 @@ interface I {
 }
 
 var a: {
->a : { [x: string]: string; }
+>a : { [x: string]: string; [x: string]: string; }
 
     [x: string]: string;
 >x : string
@@ -30,7 +30,7 @@ var a: {
 }
 
 var b: {
->b : { [x: string]: string; }
+>b : { [x: string]: string; [x: string]: string; }
 
     [x: string]: string;
 >x : string

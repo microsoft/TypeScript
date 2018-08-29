@@ -1,4 +1,4 @@
-tests/cases/compiler/stringIndexerAndConstructor1.ts(3,5): error TS2411: Property '""' of type 'string' is not assignable to string index type 'number'.
+tests/cases/compiler/stringIndexerAndConstructor1.ts(3,5): error TS2411: Property '""' of type 'string' is not assignable to 'string' index type 'number'.
 
 
 ==== tests/cases/compiler/stringIndexerAndConstructor1.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/compiler/stringIndexerAndConstructor1.ts(3,5): error TS2411: Propert
         [s: string]: number;
         "": string;
         ~~
-!!! error TS2411: Property '""' of type 'string' is not assignable to string index type 'number'.
+!!! error TS2411: Property '""' of type 'string' is not assignable to 'string' index type 'number'.
     }

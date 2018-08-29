@@ -1030,21 +1030,21 @@ function f82() {
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 264, 23))
 }
 
-function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+function f83<T extends { [x: string]: { x: any } }, K extends string & keyof T>(obj: T, key: K) {
 >f83 : Symbol(f83, Decl(keyofAndIndexedAccess.ts, 265, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 267, 13))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 267, 26))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 267, 39))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 267, 51))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 267, 13))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 267, 71))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 267, 80))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 267, 13))
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 267, 78))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 267, 87))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 267, 51))
 
     return obj[key]['x'] as T[K]['x'];
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 267, 71))
->key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 267, 78))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 267, 80))
+>key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 267, 87))
 >'x' : Symbol(x, Decl(keyofAndIndexedAccess.ts, 267, 39))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 267, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 267, 51))
@@ -1837,7 +1837,7 @@ function updateIds<T extends Record<K, string>, K extends string>(
 
 // Repro from #13285
 
-function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+function updateIds2<T extends { [x: string]: string }, K extends string & keyof T>(
 >updateIds2 : Symbol(updateIds2, Decl(keyofAndIndexedAccess.ts, 502, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 506, 20))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 506, 33))
@@ -1845,7 +1845,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 506, 20))
 
     obj: T,
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 506, 74))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 506, 83))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 506, 20))
 
     key: K,
@@ -1859,7 +1859,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 ) {
     var x = obj[key];
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 511, 7))
->obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 506, 74))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 506, 83))
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 507, 11))
 
     stringMap[x]; // Should be OK.

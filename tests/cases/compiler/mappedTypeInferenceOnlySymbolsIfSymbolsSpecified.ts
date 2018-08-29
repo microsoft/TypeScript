@@ -1,3 +1,4 @@
+// @target: es6
 const directive = Symbol('directive');
 declare function foo<TArg, TRet, TDir>(options:
     {[x in string]: (arg: TArg) => TRet}

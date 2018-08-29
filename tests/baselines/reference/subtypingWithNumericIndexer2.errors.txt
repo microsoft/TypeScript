@@ -1,16 +1,16 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(11,11): error TS2430: Interface 'B' incorrectly extends interface 'A'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
       Property 'bar' is missing in type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(24,27): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(32,15): error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(36,15): error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer2.ts(40,15): error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
-  Index signatures are incompatible.
+  'number' index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
 
 
@@ -28,7 +28,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     interface B extends A {
               ~
 !!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
-!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:   'number' index signatures are incompatible.
 !!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
 !!! error TS2430:       Property 'bar' is missing in type 'Base'.
         [x: number]: Base; // error
@@ -56,7 +56,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface B3<T extends Derived> extends A<T> {
                   ~~
 !!! error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
-!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:   'number' index signatures are incompatible.
 !!! error TS2430:     Type 'Base' is not assignable to type 'T'.
             [x: number]: Base; // error
         }
@@ -64,7 +64,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface B4<T extends Derived> extends A<T> {
                   ~~
 !!! error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
-!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:   'number' index signatures are incompatible.
 !!! error TS2430:     Type 'Derived' is not assignable to type 'T'.
             [x: number]: Derived; // error
         }
@@ -72,7 +72,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
         interface B5<T extends Derived2> extends A<T> {
                   ~~
 !!! error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
-!!! error TS2430:   Index signatures are incompatible.
+!!! error TS2430:   'number' index signatures are incompatible.
 !!! error TS2430:     Type 'Derived2' is not assignable to type 'T'.
             [x: number]: Derived2; // error
         }

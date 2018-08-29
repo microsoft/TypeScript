@@ -1,0 +1,199 @@
+=== tests/cases/compiler/mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts ===
+const directive = Symbol('directive');
+>directive : Symbol(directive, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function foo<TArg, TRet, TDir>(options:
+>foo : Symbol(foo, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 38))
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 26))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 32))
+>options : Symbol(options, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 39))
+
+    {[x in string]: (arg: TArg) => TRet}
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 2, 6))
+>arg : Symbol(arg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 2, 21))
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 26))
+
+    & {[directive]?: TDir}
+>[directive] : Symbol([directive], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 3, 7))
+>directive : Symbol(directive, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 5))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 32))
+
+): [TArg, TRet, TDir];
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 26))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 1, 32))
+
+
+let case1 = foo({
+>case1 : Symbol(case1, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 7, 3))
+>foo : Symbol(foo, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 38))
+
+    [directive]: (x: string) => 'str',
+>[directive] : Symbol([directive], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 7, 17))
+>directive : Symbol(directive, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 8, 18))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 8, 38))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 9, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 9, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 9, 33))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 10, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 10, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 10, 13))
+
+}); // [number, number, string => string]
+
+let case2 = foo({
+>case2 : Symbol(case2, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 13, 3))
+>foo : Symbol(foo, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 38))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 13, 17))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 14, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 14, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 14, 33))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 15, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 15, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 15, 13))
+
+    [directive]: (x: string) => 'str',
+>[directive] : Symbol([directive], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 15, 33))
+>directive : Symbol(directive, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 16, 18))
+
+}); // [number, number, string => string]
+
+let case3 = foo({
+>case3 : Symbol(case3, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 19, 3))
+>foo : Symbol(foo, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 38))
+
+    [directive]: 'str',
+>[directive] : Symbol([directive], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 19, 17))
+>directive : Symbol(directive, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 0, 5))
+
+    addOne: (x: number) => x + 1,
+>addOne : Symbol(addOne, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 20, 23))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 21, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 21, 13))
+
+    double: (x: number) => x + x,
+>double : Symbol(double, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 21, 33))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 22, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 22, 13))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 22, 13))
+
+}); // [number, number, string]
+
+const strdirective = "directive";
+>strdirective : Symbol(strdirective, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 5))
+
+declare function bar<TArg, TRet, TDir>(options:
+>bar : Symbol(bar, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 33))
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 26))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 32))
+>options : Symbol(options, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 39))
+
+    {[x in symbol]: (arg: TArg) => TRet}
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 27, 6))
+>arg : Symbol(arg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 27, 21))
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 26))
+
+    & {[strdirective]?: TDir}
+>[strdirective] : Symbol([strdirective], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 28, 7))
+>strdirective : Symbol(strdirective, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 5))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 32))
+
+): [TArg, TRet, TDir];
+>TArg : Symbol(TArg, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 21))
+>TRet : Symbol(TRet, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 26))
+>TDir : Symbol(TDir, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 26, 32))
+
+const s1 = Symbol("s1");
+>s1 : Symbol(s1, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 31, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const s2 = Symbol("s2");
+>s2 : Symbol(s2, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 32, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+let case4 = bar({
+>case4 : Symbol(case4, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 33, 3))
+>bar : Symbol(bar, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 33))
+
+    [strdirective]: (x: string) => 'str',
+>[strdirective] : Symbol([strdirective], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 33, 17))
+>strdirective : Symbol(strdirective, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 34, 21))
+
+    [s1]: (x: number) => x + 1,
+>[s1] : Symbol([s1], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 34, 41))
+>s1 : Symbol(s1, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 31, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 35, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 35, 11))
+
+    [s2]: (x: number) => x + x,
+>[s2] : Symbol([s2], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 35, 31))
+>s2 : Symbol(s2, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 32, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 36, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 36, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 36, 11))
+
+}); // [number, number, string => string]
+
+let case5 = bar({
+>case5 : Symbol(case5, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 39, 3))
+>bar : Symbol(bar, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 33))
+
+    [s1]: (x: number) => x + 1,
+>[s1] : Symbol([s1], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 39, 17))
+>s1 : Symbol(s1, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 31, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 40, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 40, 11))
+
+    [s2]: (x: number) => x + x,
+>[s2] : Symbol([s2], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 40, 31))
+>s2 : Symbol(s2, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 32, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 41, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 41, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 41, 11))
+
+    [strdirective]: (x: string) => 'str',
+>[strdirective] : Symbol([strdirective], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 41, 31))
+>strdirective : Symbol(strdirective, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 42, 21))
+
+}); // [number, number, string => string]
+
+let case6 = bar({
+>case6 : Symbol(case6, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 45, 3))
+>bar : Symbol(bar, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 33))
+
+    [strdirective]: 'str',
+>[strdirective] : Symbol([strdirective], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 45, 17))
+>strdirective : Symbol(strdirective, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 25, 5))
+
+    [s1]: (x: number) => x + 1,
+>[s1] : Symbol([s1], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 46, 26))
+>s1 : Symbol(s1, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 31, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 47, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 47, 11))
+
+    [s2]: (x: number) => x + x,
+>[s2] : Symbol([s2], Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 47, 31))
+>s2 : Symbol(s2, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 32, 5))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 48, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 48, 11))
+>x : Symbol(x, Decl(mappedTypeInferenceOnlySymbolsIfSymbolsSpecified.ts, 48, 11))
+
+}); // [number, number, string]
+

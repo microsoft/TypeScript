@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts(8,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts(8,5): error TS2411: Property '[""]' of type '() => Foo' is not assignable to string index type '() => Foo2'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts(8,5): error TS2411: Property '[""]' of type '() => Foo' is not assignable to 'string' index type '() => Foo2'.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts(9,5): error TS2393: Duplicate function implementation.
 
 
@@ -15,7 +15,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames40_ES6.ts(9,
         ~~~~
 !!! error TS2393: Duplicate function implementation.
         ~~~~
-!!! error TS2411: Property '[""]' of type '() => Foo' is not assignable to string index type '() => Foo2'.
+!!! error TS2411: Property '[""]' of type '() => Foo' is not assignable to 'string' index type '() => Foo2'.
         [""]() { return new Foo2 }
         ~~~~
 !!! error TS2393: Duplicate function implementation.

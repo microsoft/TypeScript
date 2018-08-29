@@ -19,7 +19,7 @@ var b: { (x: I): I };
 >x : any
 
 var d: { [x: I]: I };
->d : {}
+>d : { [x: any]: any; }
 >x : any
 
 var e = (x: I) => { var y: I; return y; }

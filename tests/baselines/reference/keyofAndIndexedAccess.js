@@ -266,7 +266,7 @@ function f82() {
     let x2 = f81({ a: { x: 42 } });  // number
 }
 
-function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+function f83<T extends { [x: string]: { x: any } }, K extends string & keyof T>(obj: T, key: K) {
     return obj[key]['x'] as T[K]['x'];
 }
 
@@ -505,7 +505,7 @@ function updateIds<T extends Record<K, string>, K extends string>(
 
 // Repro from #13285
 
-function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+function updateIds2<T extends { [x: string]: string }, K extends string & keyof T>(
     obj: T,
     key: K,
     stringMap: { [oldId: string]: string }
@@ -1228,7 +1228,7 @@ declare function f83<T extends {
     [x: string]: {
         x: any;
     };
-}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+}, K extends string & keyof T>(obj: T, key: K): T[K]["x"];
 declare function f84(): void;
 declare class C1 {
     x: number;
@@ -1333,7 +1333,7 @@ declare function updateIds<T extends Record<K, string>, K extends string>(obj: T
 }): Record<K, string>;
 declare function updateIds2<T extends {
     [x: string]: string;
-}, K extends keyof T>(obj: T, key: K, stringMap: {
+}, K extends string & keyof T>(obj: T, key: K, stringMap: {
     [oldId: string]: string;
 }): void;
 declare function head<T extends Array<any>>(list: T): T[0];

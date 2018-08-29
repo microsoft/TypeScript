@@ -1864,9 +1864,9 @@ declare namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
-        getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
+        getIndexInfosOfType(type: Type, indexType?: Type): IndexInfo[] | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
-        getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
+        getIndexTypeOfType(type: Type, indexType: Type): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
@@ -1880,7 +1880,7 @@ declare namespace ts {
             typeArguments?: NodeArray<TypeNode>;
         }) | undefined;
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -2251,8 +2251,7 @@ declare namespace ts {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
-        declaredStringIndexInfo?: IndexInfo;
-        declaredNumberIndexInfo?: IndexInfo;
+        declaredIndexInfos?: IndexInfo[];
     }
     /**
      * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
@@ -2342,6 +2341,7 @@ declare namespace ts {
         Number = 1
     }
     interface IndexInfo {
+        indexType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
@@ -4527,8 +4527,7 @@ declare namespace ts {
         getApparentProperties(): Symbol[];
         getCallSignatures(): ReadonlyArray<Signature>;
         getConstructSignatures(): ReadonlyArray<Signature>;
-        getStringIndexType(): Type | undefined;
-        getNumberIndexType(): Type | undefined;
+        getTypeIndexedByType(indexType: Type): Type | undefined;
         getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
         getConstraint(): Type | undefined;
