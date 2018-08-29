@@ -1366,6 +1366,7 @@ namespace ts.server {
                     result = super.updateGraph();
             }
             this.projectService.sendProjectTelemetry(this);
+            this.projectService.sendSurveyReady(this);
             return result;
         }
 
@@ -1520,6 +1521,11 @@ namespace ts.server {
             ) || false;
         }
 
+        /*@internal*/
+        hasExternalProjectRef() {
+            return !!this.externalProjectRefCount;
+        }
+
         getEffectiveTypeRoots() {
             return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
         }
@@ -1565,6 +1571,7 @@ namespace ts.server {
         updateGraph() {
             const result = super.updateGraph();
             this.projectService.sendProjectTelemetry(this);
+            this.projectService.sendSurveyReady(this);
             return result;
         }
 

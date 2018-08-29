@@ -18,6 +18,9 @@
 
 goTo.file("/b.ts");
 verify.importFixAtPosition([
+`import { foo } from "./a";
+
+foo;`,
 `import { foo } from "@root/a";
 
 foo;`,
