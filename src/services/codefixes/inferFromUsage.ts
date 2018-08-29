@@ -564,7 +564,7 @@ namespace ts.codefix {
                 }
 
                 if (usageContext.stringIndexContext) {
-                    stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext) || checker.getAnyType(), /*isReadonly*/ false);
+                    stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext), /*isReadonly*/ false);
                 }
 
                 return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
