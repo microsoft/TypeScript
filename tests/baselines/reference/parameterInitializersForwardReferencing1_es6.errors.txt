@@ -39,3 +39,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1_es6.t
         let foo: number = 2;
     }
     
+    class Foo {
+        constructor(public x = 12, public y = x) {}
+    }
+    

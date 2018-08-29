@@ -644,14 +644,18 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
-        const logFileName = cmdLineLogFileName
+        const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
+        const substitutedLogFileName = unsubstitutedLogFileName
+            ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
+            : undefined;
+
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+        return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable

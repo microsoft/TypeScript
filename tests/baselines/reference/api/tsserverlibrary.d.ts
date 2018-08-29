@@ -7462,6 +7462,15 @@ declare namespace ts.server.protocol {
          */
         openFiles: string[];
     }
+    type SurveyReadyEventName = "surveyReady";
+    interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+    interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+    }
     type LargeFileReferencedEventName = "largeFileReferenced";
     interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -7797,6 +7806,7 @@ declare namespace ts.server.protocol {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -7928,14 +7938,14 @@ declare namespace ts.server {
         getSnapshot(): IScriptSnapshot;
         private ensureRealPath;
         getFormatCodeSettings(): FormatCodeSettings | undefined;
-        getPreferences(): UserPreferences | undefined;
+        getPreferences(): protocol.UserPreferences | undefined;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
         registerFileUpdate(): void;
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): boolean;
@@ -8203,6 +8213,7 @@ declare namespace ts.server {
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    const SurveyReady = "surveyReady";
     const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -8212,6 +8223,12 @@ declare namespace ts.server {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
             openFiles: string[];
+        };
+    }
+    interface SurveyReady {
+        eventName: typeof SurveyReady;
+        data: {
+            surveyId: string;
         };
     }
     interface LargeFileReferencedEvent {
@@ -8292,7 +8309,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8313,7 +8330,7 @@ declare namespace ts.server {
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -8411,6 +8428,8 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
+        /** Tracks projects that we have already sent survey events for. */
+        private readonly seenSurveyProjects;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -8432,9 +8451,9 @@ declare namespace ts.server {
          */
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
-        getPreferences(file: NormalizedPath): UserPreferences;
+        getPreferences(file: NormalizedPath): protocol.UserPreferences;
         getHostFormatCodeOptions(): FormatCodeSettings;
-        getHostPreferences(): UserPreferences;
+        getHostPreferences(): protocol.UserPreferences;
         private onSourceFileChanged;
         private handleDeletedFile;
         private onConfigChangedForConfiguredProject;

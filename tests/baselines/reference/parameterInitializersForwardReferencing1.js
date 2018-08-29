@@ -31,6 +31,10 @@ function f7({[foo]: bar}: any[]) {
     let foo: number = 2;
 }
 
+class Foo {
+    constructor(public x = 12, public y = x) {}
+}
+
 
 //// [parameterInitializersForwardReferencing1.js]
 var foo = "";
@@ -68,3 +72,12 @@ function f7(_a) {
     var _b = foo, bar = _a[_b];
     var foo = 2;
 }
+var Foo = /** @class */ (function () {
+    function Foo(x, y) {
+        if (x === void 0) { x = 12; }
+        if (y === void 0) { y = x; }
+        this.x = x;
+        this.y = y;
+    }
+    return Foo;
+}());

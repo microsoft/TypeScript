@@ -126,53 +126,25 @@ namespace ts.moduleSpecifiers {
         }
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        if (paths) {
-            const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-            if (fromPaths) {
-                return fromPaths;
-            }
-        }
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (relativePreference === RelativePreference.NonRelative) {
-            return importRelativeToBaseUrl;
+            return nonRelative;
         }
 
         if (relativePreference !== RelativePreference.Auto) Debug.assertNever(relativePreference);
 
-        if (isPathRelativeToParent(relativeToBaseUrl)) {
-            return relativePath;
+        // Prefer a relative import over a baseUrl import if it has fewer components.
+        return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
+    }
+
+    function countPathComponents(path: string): number {
+        let count = 0;
+        for (let i = startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
+            if (path.charCodeAt(i) === CharacterCodes.slash) count++;
         }
-
-        /*
-        Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/a/b
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../../foo/bar
-            getRelativePathNParents(relativePath) = 2
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            2 < 2 = false
-        In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/foo/a
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../a
-            getRelativePathNParents(relativePath) = 1
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            1 < 2 = true
-        In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
-        */
-        const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, baseUrl, getCanonicalFileName));
-        const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
-        return relativeFirst ? relativePath : importRelativeToBaseUrl;
+        return count;
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
@@ -242,15 +214,6 @@ namespace ts.moduleSpecifiers {
         });
         result.push(...targets);
         return result;
-    }
-
-    function getRelativePathNParents(relativePath: string): number {
-        const components = getPathComponents(relativePath);
-        if (components[0] || components.length === 1) return 0;
-        for (let i = 1; i < components.length; i++) {
-            if (components[i] !== "..") return i - 1;
-        }
-        return components.length - 1;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
@@ -428,6 +391,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
+        if (fileExtensionIs(fileName, Extension.Json)) return fileName;
         const noExtension = removeFileExtension(fileName);
         switch (ending) {
             case Ending.Minimal:
