@@ -3,7 +3,7 @@ const cp = require("child_process");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
 const isWin = /^win/.test(process.platform);
 const chalk = require("./chalk");
-const { CancelToken, CancelError } = require("./cancellation");
+const { CancelError } = require("prex");
 
 module.exports = exec;
 
@@ -15,16 +15,20 @@ module.exports = exec;
  *
  * @typedef ExecOptions
  * @property {boolean} [ignoreExitCode]
- * @property {CancelToken} [cancelToken]
+ * @property {import("prex").CancellationToken} [cancelToken]
  */
 function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode: number}>}*/(new Promise((resolve, reject) => {
+        if (options.cancelToken) {
+            options.cancelToken.throwIfCancellationRequested();
+        }
+    
         log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
         // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
         const subshellFlag = isWin ? "/c" : "-c";
         const command = isWin ? [possiblyQuote(cmd), ...args] : [`${cmd} ${args.join(" ")}`];
         const ex = cp.spawn(isWin ? "cmd" : "/bin/sh", [subshellFlag, ...command], { stdio: "inherit", windowsVerbatimArguments: true });
-        const subscription = options.cancelToken && options.cancelToken.subscribe(() => {
+        const subscription = options.cancelToken && options.cancelToken.register(() => {
             log(`${chalk.red("killing")} '${chalk.green(cmd)} ${args.join(" ")}'...`);
             ex.kill("SIGINT");
             ex.kill("SIGTERM");
@@ -32,7 +36,7 @@ function exec(cmd, args, options = {}) {
             reject(new CancelError());
         });
         ex.on("exit", exitCode => {
-            subscription && subscription.unsubscribe();
+            if (subscription) subscription.unregister();
             if (exitCode === 0 || options.ignoreExitCode) {
                 resolve({ exitCode });
             }
@@ -41,7 +45,7 @@ function exec(cmd, args, options = {}) {
             }
         });
         ex.on("error", error => {
-            subscription && subscription.unsubscribe();
+            if (subscription) subscription.unregister();
             reject(error);
         });
     }));

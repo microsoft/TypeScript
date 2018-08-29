@@ -21,7 +21,7 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {boolean} watchMode
- * @param {InstanceType<typeof import("./cancellation").CancelToken>} [cancelToken]
+ * @param {import("prex").CancellationToken} [cancelToken]
  */
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken) {
     let testTimeout = cmdLineOptions.timeout;
@@ -37,6 +37,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const keepFailed = cmdLineOptions.keepFailed;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
+        if (cancelToken) cancelToken.throwIfCancellationRequested();
     }
 
     if (fs.existsSync(testConfigFile)) {

@@ -188,31 +188,21 @@ namespace ts {
 
     /* @internal */
     export function getPackageJsonTypesVersionsPaths(typesVersions: MapLike<MapLike<string[]>>) {
-        if (!typeScriptVersion) typeScriptVersion = new Version(versionMajorMinor);
+        if (!typeScriptVersion) typeScriptVersion = new Version(version);
 
-        let bestVersion: Version | undefined;
-        let bestVersionKey: string | undefined;
         for (const key in typesVersions) {
             if (!hasProperty(typesVersions, key)) continue;
 
-            const keyVersion = Version.tryParse(key);
-            if (keyVersion === undefined) {
+            const keyRange = VersionRange.tryParse(key);
+            if (keyRange === undefined) {
                 continue;
             }
 
-            // match the greatest version less than the current TypeScript version
-            if (keyVersion.compareTo(bestVersion) > 0 &&
-                keyVersion.compareTo(typeScriptVersion) <= 0) {
-                bestVersion = keyVersion;
-                bestVersionKey = key;
+            // return the first entry whose range matches the current compiler version.
+            if (keyRange.test(typeScriptVersion)) {
+                return { version: key, paths: typesVersions[key] };
             }
         }
-
-        if (!bestVersionKey) {
-            return;
-        }
-
-        return { version: bestVersionKey, paths: typesVersions[bestVersionKey] };
     }
 
     export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined {
@@ -1132,7 +1122,7 @@ namespace ts {
         if (versionPaths && containsPath(candidate, file)) {
             const moduleName = getRelativePathFromDirectory(candidate, file, /*ignoreCase*/ false);
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, versionMajorMinor, moduleName);
+                trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
             const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailures, state);
             if (result) {
@@ -1255,7 +1245,7 @@ namespace ts {
             if (packageInfo) ({ packageId, versionPaths } = packageInfo);
             if (versionPaths) {
                 if (state.traceEnabled) {
-                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, versionMajorMinor, rest);
+                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, rest);
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
                 const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, versionPaths.paths, loader, !packageDirectoryExists, state);

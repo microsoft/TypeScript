@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const gulp = require("./gulp");
 const gulpif = require("gulp-if");
+const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
+const chalk = require("./chalk");
 const sourcemaps = require("gulp-sourcemaps");
 const merge2 = require("merge2");
 const tsc = require("gulp-typescript");
@@ -12,41 +14,50 @@ const ts = require("../../lib/typescript");
 const del = require("del");
 const needsUpdate = require("./needsUpdate");
 const mkdirp = require("./mkdirp");
+const prettyTime = require("pretty-hrtime");
 const { reportDiagnostics } = require("./diagnostics");
-const { Countdown } = require("./countdown");
-const { CancelToken } = require("./cancellation");
+const { CountdownEvent, Pulsar } = require("prex");
 
-const countdown = new Countdown();
+const workStartedEvent = new Pulsar();
+const countdown = new CountdownEvent(0);
 
 class CompilationGulp extends gulp.Gulp {
-    constructor() {
-        super();
-        this.on("start", () => {
-            const onDone = () => {
-                this.removeListener("stop", onDone);
-                this.removeListener("err", onDone);
-                countdown.signal();
-            };
-    
-            this.on("stop", onDone);
-            this.on("err", onDone);
-            countdown.add();
-        });
-    }
-
     /**
      * @param {boolean} [verbose]
      */
     fork(verbose) {
         const child = new ForkedGulp(this.tasks);
-        if (verbose) {
-            child.on("task_start", e => gulp.emit("task_start", e));
-            child.on("task_stop", e => gulp.emit("task_stop", e));
-            child.on("task_err", e => gulp.emit("task_err", e));
-            child.on("task_not_found", e => gulp.emit("task_not_found", e));
-            child.on("task_recursion", e => gulp.emit("task_recursion", e));
-        }
+        child.on("task_start", e => {
+            if (countdown.remainingCount === 0) {
+                countdown.reset(1);
+                workStartedEvent.pulseAll();
+            }
+            else {
+                countdown.add();
+            }
+            if (verbose) {
+                log('Starting', `'${chalk.cyan(e.task)}' ${chalk.gray(`(${countdown.remainingCount} remaining)`)}...`);
+            }
+        });
+        child.on("task_stop", e => {
+            countdown.signal();
+            if (verbose) {
+                log('Finished', `'${chalk.cyan(e.task)}' after ${chalk.magenta(prettyTime(/** @type {*}*/(e).hrDuration))} ${chalk.gray(`(${countdown.remainingCount} remaining)`)}`);
+            }
+        });
+        child.on("task_err", e => {
+            countdown.signal();
+            if (verbose) {
+                log(`'${chalk.cyan(e.task)}' ${chalk.red("errored after")} ${chalk.magenta(prettyTime(/** @type {*}*/(e).hrDuration))} ${chalk.gray(`(${countdown.remainingCount} remaining)`)}`);
+                log(e.err ? e.err.stack : e.message);
+            }
+        });
         return child;
+    }
+
+    // @ts-ignore
+    start() {
+        throw new Error("Not supported, use fork.");
     }
 }
 
@@ -57,17 +68,6 @@ class ForkedGulp extends gulp.Gulp {
     constructor(tasks) {
         super();
         this.tasks = tasks;
-        this.on("start", () => {
-            const onDone = () => {
-                this.removeListener("stop", onDone);
-                this.removeListener("err", onDone);
-                countdown.signal();
-            };
-    
-            this.on("stop", onDone);
-            this.on("err", onDone);
-            countdown.add();
-        });
     }
 
     // Do not reset tasks
@@ -241,12 +241,26 @@ exports.flatten = flatten;
 
 /**
  * Returns a Promise that resolves when all pending build tasks have completed
- * @param {CancelToken} [token]
+ * @param {import("prex").CancellationToken} [token]
  */
-function wait(token) {
+function waitForWorkToComplete(token) {
     return countdown.wait(token);
 }
-exports.wait = wait;
+exports.waitForWorkToComplete = waitForWorkToComplete;
+
+/**
+ * Returns a Promise that resolves when all pending build tasks have completed
+ * @param {import("prex").CancellationToken} [token]
+ */
+function waitForWorkToStart(token) {
+    return workStartedEvent.wait(token);
+}
+exports.waitForWorkToStart = waitForWorkToStart;
+
+function getRemainingWork() {
+    return countdown.remainingCount > 0;
+}
+exports.hasRemainingWork = getRemainingWork;
 
 /**
  * Resolve a TypeScript specifier into a fully-qualified module specifier and any requisite dependencies.
