@@ -4118,6 +4118,10 @@ namespace ts {
         return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
     }
 
+    export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
+        return !positionsAreOnSameLine(list.pos, list.end, sourceFile);
+    }
+
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
         return pos1 === pos2 ||
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);

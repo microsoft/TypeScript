@@ -141,8 +141,8 @@ namespace ts.OutliningElementsCollector {
     function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan | undefined {
         switch (n.kind) {
             case SyntaxKind.Block:
-                if (isFunctionBlock(n)) {
-                    return spanForNode(n.parent, /*autoCollapse*/ n.parent.kind !== SyntaxKind.ArrowFunction);
+                if (isFunctionLike(n.parent)) {
+                    return functionSpan(n.parent, n as Block, sourceFile);
                 }
                 // Check if the block is standalone, or 'attached' to some parent statement.
                 // If the latter, we want to collapse the block, but consider its hint span
@@ -212,16 +212,30 @@ namespace ts.OutliningElementsCollector {
             return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
         }
 
-        function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
+        function spanForNode(
+            hintSpanNode: Node,
+            autoCollapse = false,
+            useFullStart = true,
+            open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken | SyntaxKind.OpenParenToken = SyntaxKind.OpenBraceToken,
+            close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken,
+        ): OutliningSpan | undefined {
             const openToken = findChildOfKind(n, open, sourceFile);
-            const close = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken;
             const closeToken = findChildOfKind(n, close, sourceFile);
-            if (!openToken || !closeToken) {
-                return undefined;
-            }
-            const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
-            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+            return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
         }
+    }
+
+    function functionSpan(node: FunctionLike, body: Block, sourceFile: SourceFile): OutliningSpan | undefined {
+        const openToken = isNodeArrayMultiLine(node.parameters, sourceFile)
+            ? findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile)
+            : findChildOfKind(body, SyntaxKind.OpenBraceToken, sourceFile);
+        const closeToken = findChildOfKind(body, SyntaxKind.CloseBraceToken, sourceFile);
+        return openToken && closeToken && spanBetweenTokens(openToken, closeToken, node.parent, sourceFile, /*autoCollapse*/ node.parent.kind !== SyntaxKind.ArrowFunction);
+    }
+
+    function spanBetweenTokens(openToken: Node, closeToken: Node, hintSpanNode: Node, sourceFile: SourceFile, autoCollapse = false, useFullStart = true): OutliningSpan {
+        const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
+        return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
     }
 
     function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
