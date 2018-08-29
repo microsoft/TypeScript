@@ -1964,10 +1964,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2900,6 +2896,11 @@
         "category": "Error",
         "code": 5071
     },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

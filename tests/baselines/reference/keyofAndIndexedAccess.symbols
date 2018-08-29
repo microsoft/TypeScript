@@ -2319,3 +2319,54 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
 >k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 646, 75))
 }
 
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+>cf1 : Symbol(cf1, Decl(keyofAndIndexedAccess.ts, 653, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 653, 26))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+>cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 653, 90))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+{
+    const s: string = t[k];
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 655, 9))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 653, 90))
+
+    t.cool;
+>t.cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+>cf2 : Symbol(cf2, Decl(keyofAndIndexedAccess.ts, 659, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 659, 26))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 659, 79))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+{
+    const s: string = t[k];
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 661, 9))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 659, 79))
+
+    t.cool;
+>t.cool : Symbol(cool)
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>cool : Symbol(cool)
+
+};
+

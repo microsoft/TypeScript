@@ -11,7 +11,7 @@
 ////fooB/*1*/
 
 goTo.marker("0");
-const preferences = { includeCompletionsForModuleExports: true };
+const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 verify.completions(
     { marker: "0", excludes: { name: "default", source: "/src/foo-bar" }, preferences },
     { marker: "1", includes: { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) default: 0", kind: "property", hasAction: true }, preferences }

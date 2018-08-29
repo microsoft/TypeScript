@@ -15,7 +15,7 @@ namespace ts {
 /* @internal */
 namespace ts {
     export const resolvingEmptyArray: never[] = [] as never[];
-    export const emptyMap: ReadonlyMap<never> = createMap<never>();
+    export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
 
     export const externalHelpersModuleNameText = "tslib";
@@ -2330,6 +2330,13 @@ namespace ts {
         return node;
     }
 
+    function skipParenthesesUp(node: Node): Node {
+        while (node.kind === SyntaxKind.ParenthesizedExpression) {
+            node = node.parent;
+        }
+        return node;
+    }
+
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
@@ -4226,6 +4233,8 @@ namespace ts {
         if (!parent) return AccessKind.Read;
 
         switch (parent.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return accessKind(parent);
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.PrefixUnaryExpression:
                 const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
@@ -4237,13 +4246,35 @@ namespace ts {
                     : AccessKind.Read;
             case SyntaxKind.PropertyAccessExpression:
                 return (parent as PropertyAccessExpression).name !== node ? AccessKind.Read : accessKind(parent);
+            case SyntaxKind.PropertyAssignment: {
+                const parentAccess = accessKind(parent.parent);
+                // In `({ x: varname }) = { x: 1 }`, the left `x` is a read, the right `x` is a write.
+                return node === (parent as PropertyAssignment).name ? reverseAccessKind(parentAccess) : parentAccess;
+            }
+            case SyntaxKind.ShorthandPropertyAssignment:
+                // Assume it's the local variable being accessed, since we don't check public properties for --noUnusedLocals.
+                return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
+            case SyntaxKind.ArrayLiteralExpression:
+                return accessKind(parent);
             default:
                 return AccessKind.Read;
         }
 
         function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-            return parent.parent && parent.parent.kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+            return parent.parent && skipParenthesesUp(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+        }
+    }
+    function reverseAccessKind(a: AccessKind): AccessKind {
+        switch (a) {
+            case AccessKind.Read:
+                return AccessKind.Write;
+            case AccessKind.Write:
+                return AccessKind.Read;
+            case AccessKind.ReadWrite:
+                return AccessKind.ReadWrite;
+            default:
+                return Debug.assertNever(a);
         }
     }
 
@@ -4873,13 +4904,13 @@ namespace ts {
         if (isDeclaration(hostNode)) {
             return getDeclarationIdentifier(hostNode);
         }
-        // Covers remaining cases
+        // Covers remaining cases (returning undefined if none match).
         switch (hostNode.kind) {
             case SyntaxKind.VariableStatement:
                 if (hostNode.declarationList && hostNode.declarationList.declarations[0]) {
                     return getDeclarationIdentifier(hostNode.declarationList.declarations[0]);
                 }
-                return undefined;
+                break;
             case SyntaxKind.ExpressionStatement:
                 const expr = hostNode.expression;
                 switch (expr.kind) {
@@ -4891,9 +4922,7 @@ namespace ts {
                             return arg;
                         }
                 }
-                return undefined;
-            case SyntaxKind.EndOfFileToken:
-                return undefined;
+                break;
             case SyntaxKind.ParenthesizedExpression: {
                 return getDeclarationIdentifier(hostNode.expression);
             }
@@ -4901,10 +4930,8 @@ namespace ts {
                 if (isDeclaration(hostNode.statement) || isExpression(hostNode.statement)) {
                     return getDeclarationIdentifier(hostNode.statement);
                 }
-                return undefined;
+                break;
             }
-            default:
-                Debug.assertNever(hostNode, "Found typedef tag attached to node which it should not be!");
         }
     }
 
@@ -5140,7 +5167,20 @@ namespace ts {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
         }
-        return node.typeParameters || (isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : emptyArray);
+        if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (isInJavaScriptFile(node)) {
+            const decls = getJSDocTypeParameterDeclarations(node);
+            if (decls.length) {
+                return decls;
+            }
+            const typeTag = getJSDocType(node);
+            if (typeTag && isFunctionTypeNode(typeTag) && typeTag.typeParameters) {
+                return typeTag.typeParameters;
+            }
+        }
+        return emptyArray;
     }
 
     export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {
@@ -7313,8 +7353,6 @@ namespace ts {
         if (pathComponents.length === 0) return "";
 
         const root = pathComponents[0] && ensureTrailingDirectorySeparator(pathComponents[0]);
-        if (pathComponents.length === 1) return root;
-
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
@@ -7918,6 +7956,7 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    export const supportedJavaScriptAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
@@ -7941,6 +7980,10 @@ namespace ts {
 
     export function hasJavaScriptFileExtension(fileName: string): boolean {
         return some(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasJavaScriptOrJsonFileExtension(fileName: string): boolean {
+        return supportedJavaScriptAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
     }
 
     export function hasTypeScriptFileExtension(fileName: string): boolean {
