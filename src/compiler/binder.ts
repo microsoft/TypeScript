@@ -236,6 +236,7 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
+                    (isOverridableDeclaration(valueDeclaration) && !isOverridableDeclaration(node)) ||
                     (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
@@ -372,6 +373,9 @@ namespace ts {
                         // Javascript constructor-declared symbols can be discarded in favor of
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
+                    }
+                    else if (isOverridableSymbol(symbol, includes)) {
+                        // TODO: This predicate still needs work. Might be able to move it outside the fail-case check too
                     }
                     else {
                         if (isNamedDeclaration(node)) {
@@ -2538,13 +2542,9 @@ namespace ts {
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
             // Declare the symbol
-            const isMethod = special === SpecialPropertyAssignmentKind.PrototypeProperty && isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
-            const includes = isMethod ? SymbolFlags.Method :
-                special === SpecialPropertyAssignmentKind.Property ? SymbolFlags.FunctionScopedVariable :
-                SymbolFlags.Property;
-            const excludes = isMethod ? SymbolFlags.MethodExcludes :
-                special === SpecialPropertyAssignmentKind.Property ? SymbolFlags.FunctionScopedVariableExcludes :
-                SymbolFlags.PropertyExcludes;
+            const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
+            const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
+            const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
             const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
             declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | jsContainerFlag, excludes & ~jsContainerFlag);
         }

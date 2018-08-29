@@ -188,13 +188,13 @@ declare const ExpandoExpr: {
         y: string;
         x?: undefined;
     };
-    m: (n: number) => number;
+    m(n: number): number;
 };
 declare var n: number;
 declare const ExpandoArrow: {
     (n: number): string;
     prop: number;
-    m: (n: number) => number;
+    m(n: number): number;
 };
 declare function ExpandoNested(n: number): {
     (m: number): number;

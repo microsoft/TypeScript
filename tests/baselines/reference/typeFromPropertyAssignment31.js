@@ -10,17 +10,21 @@ namespace ExpandoMerge {
     export var p2 = 222;
 }
 ExpandoMerge.p4 = 44444; // ok
-ExpandoMerge.p6 = 66666; // error: duplicate
+ExpandoMerge.p6 = 66666; // ok
+ExpandoMerge.p8 = false; // type error
 namespace ExpandoMerge {
     export var p3 = 333;
-    export var p4 = 4; // ok
-    export var p5 = 5; // ok
-    export let p6 = 6; // error: duplicate
-    export let p7 = 7; // error: duplicate
+    export var p4 = 4;
+    export var p5 = 5;
+    export let p6 = 6;
+    export let p7 = 7;
+    export var p8 = 6;
+    export let p9 = 7;
 }
-ExpandoMerge.p5 = 555555; // should be ok
-ExpandoMerge.p7 = 777777; // error: duplicate
-var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+ExpandoMerge.p5 = 555555; // ok
+ExpandoMerge.p7 = 777777; // ok
+ExpandoMerge.p9 = false; // type error
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
 
 
 //// [typeFromPropertyAssignment31.js]
@@ -35,14 +39,18 @@ ExpandoMerge.m = function (n) {
     ExpandoMerge.p2 = 222;
 })(ExpandoMerge || (ExpandoMerge = {}));
 ExpandoMerge.p4 = 44444; // ok
-ExpandoMerge.p6 = 66666; // error: duplicate
+ExpandoMerge.p6 = 66666; // ok
+ExpandoMerge.p8 = false; // type error
 (function (ExpandoMerge) {
     ExpandoMerge.p3 = 333;
-    ExpandoMerge.p4 = 4; // ok
-    ExpandoMerge.p5 = 5; // ok
-    ExpandoMerge.p6 = 6; // error: duplicate
-    ExpandoMerge.p7 = 7; // error: duplicate
+    ExpandoMerge.p4 = 4;
+    ExpandoMerge.p5 = 5;
+    ExpandoMerge.p6 = 6;
+    ExpandoMerge.p7 = 7;
+    ExpandoMerge.p8 = 6;
+    ExpandoMerge.p9 = 7;
 })(ExpandoMerge || (ExpandoMerge = {}));
-ExpandoMerge.p5 = 555555; // should be ok
-ExpandoMerge.p7 = 777777; // error: duplicate
-var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.m(12) + ExpandoMerge(1001);
+ExpandoMerge.p5 = 555555; // ok
+ExpandoMerge.p7 = 777777; // ok
+ExpandoMerge.p9 = false; // type error
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);

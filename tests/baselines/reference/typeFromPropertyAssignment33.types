@@ -1,3 +1,44 @@
+=== tests/cases/conformance/salsa/ns.ts ===
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p3 = 333;
+>p3 : number
+>333 : 333
+
+    export var p4 = 4;
+>p4 : number
+>4 : 4
+
+    export var p5 = 5;
+>p5 : number
+>5 : 5
+
+    export let p6 = 6;
+>p6 : number
+>6 : 6
+
+    export let p7 = 7;
+>p7 : number
+>7 : 7
+
+    export var p8 = 6;
+>p8 : number
+>6 : 6
+
+    export let p9 = 7;
+>p9 : number
+>7 : 7
+}
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p2 = 222;
+>p2 : number
+>222 : 222
+}
+
+
 === tests/cases/conformance/salsa/expando.ts ===
 function ExpandoMerge(n: number) {
 >ExpandoMerge : typeof ExpandoMerge
@@ -116,43 +157,4 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >ExpandoMerge : typeof ExpandoMerge
 >1001 : 1001
 
-=== tests/cases/conformance/salsa/ns.ts ===
-namespace ExpandoMerge {
->ExpandoMerge : typeof ExpandoMerge
-
-    export var p3 = 333;
->p3 : number
->333 : 333
-
-    export var p4 = 4;
->p4 : number
->4 : 4
-
-    export var p5 = 5;
->p5 : number
->5 : 5
-
-    export let p6 = 6;
->p6 : number
->6 : 6
-
-    export let p7 = 7;
->p7 : number
->7 : 7
-
-    export var p8 = 6;
->p8 : number
->6 : 6
-
-    export let p9 = 7;
->p9 : number
->7 : 7
-}
-namespace ExpandoMerge {
->ExpandoMerge : typeof ExpandoMerge
-
-    export var p2 = 222;
->p2 : number
->222 : 222
-}
 

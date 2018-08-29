@@ -822,6 +822,7 @@ namespace ts {
          */
         function mergeSymbol(target: Symbol, source: Symbol): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
+                isOverridableSymbol(target, source.flags) ||
                 (source.flags | target.flags) & SymbolFlags.JSContainer) {
                 Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
@@ -835,6 +836,7 @@ namespace ts {
                 target.flags |= source.flags;
                 if (source.valueDeclaration &&
                     (!target.valueDeclaration ||
+                     isOverridableDeclaration(target.valueDeclaration) ||
                      isEffectiveModuleDeclaration(target.valueDeclaration) && !isEffectiveModuleDeclaration(source.valueDeclaration))) {
                     // other kinds of value declarations take precedence over modules
                     target.valueDeclaration = source.valueDeclaration;
