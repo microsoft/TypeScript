@@ -16140,6 +16140,16 @@ namespace ts {
                         return true;
                     }
                 case SpecialPropertyAssignmentKind.ThisProperty:
+                    if (!binaryExpression.symbol ||
+                        binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration)) {
+                        return true;
+                    }
+                    const thisAccess = binaryExpression.left as PropertyAccessExpression;
+                    if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
+                        return false;
+                    }
+                    const thisType = checkThisExpression(thisAccess.expression);
+                    return thisType && !!getPropertyOfType(thisType, thisAccess.name.escapedText);
                 case SpecialPropertyAssignmentKind.ModuleExports:
                     return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
                 default:
