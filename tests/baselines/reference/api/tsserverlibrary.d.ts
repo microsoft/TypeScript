@@ -988,7 +988,6 @@ declare namespace ts {
     }
     interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
-        templateFlags?: TokenFlags;
     }
     interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
@@ -996,17 +995,14 @@ declare namespace ts {
     interface TemplateHead extends LiteralLikeNode {
         kind: SyntaxKind.TemplateHead;
         parent: TemplateExpression;
-        templateFlags?: TokenFlags;
     }
     interface TemplateMiddle extends LiteralLikeNode {
         kind: SyntaxKind.TemplateMiddle;
         parent: TemplateSpan;
-        templateFlags?: TokenFlags;
     }
     interface TemplateTail extends LiteralLikeNode {
         kind: SyntaxKind.TemplateTail;
         parent: TemplateSpan;
-        templateFlags?: TokenFlags;
     }
     type TemplateLiteral = TemplateExpression | NoSubstitutionTemplateLiteral;
     interface TemplateExpression extends PrimaryExpression {
