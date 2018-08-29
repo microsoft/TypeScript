@@ -3933,7 +3933,7 @@ namespace ts {
                     // specifier preference
                     const { moduleResolverHost } = context.tracker;
                     const specifierCompilerOptions = isBundle ? { ...compilerOptions, baseUrl: moduleResolverHost.getCommonSourceDirectory() } : compilerOptions;
-                    specifier = first(first(moduleSpecifiers.getModuleSpecifiers(
+                    specifier = first(moduleSpecifiers.getModuleSpecifiers(
                         symbol,
                         specifierCompilerOptions,
                         contextFile,
@@ -3941,7 +3941,7 @@ namespace ts {
                         host.getSourceFiles(),
                         { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" },
                         host.redirectTargetsMap,
-                    )));
+                    ));
                     links.specifierCache = links.specifierCache || createMap();
                     links.specifierCache.set(contextFile.path, specifier);
                 }
