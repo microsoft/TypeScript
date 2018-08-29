@@ -82,3 +82,13 @@ function f7({[foo]: bar}: any[]) {
 >2 : 2
 }
 
+class Foo {
+>Foo : Foo
+
+    constructor(public x = 12, public y = x) {}
+>x : number
+>12 : 12
+>y : number
+>x : number
+}
+
