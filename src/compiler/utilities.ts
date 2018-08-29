@@ -3743,7 +3743,7 @@ namespace ts {
         return false;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): node is ExpressionWithTypeArguments {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
