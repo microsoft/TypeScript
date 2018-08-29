@@ -11,4 +11,7 @@ exports.__esModule = true;
 
 
 //// [/foo/out/test.d.ts]
+interface Foo {
+    x: number;
+}
 export default Foo;
