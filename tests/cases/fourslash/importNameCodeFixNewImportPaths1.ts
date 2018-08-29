@@ -18,5 +18,8 @@
 verify.importFixAtPosition([
 `import { foo } from "b/f2";
 
-foo();`
+foo();`,
+`import { foo } from "./folder_b/f2";
+
+foo();`,
 ]);
