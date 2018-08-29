@@ -1813,4 +1813,20 @@ namespace ts {
         if (idx === -1) idx = change.indexOf('"' + name);
         return idx === -1 ? -1 : idx + 1;
     }
+
+    const braceMatching = createMapFromTemplate({
+        [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
+        [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
+        [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
+        [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
+    });
+    braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
+    export function getBraceMatching(
+        kind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.GreaterThanToken
+           | SyntaxKind.CloseBraceToken | SyntaxKind.CloseParenToken | SyntaxKind.CloseBracketToken | SyntaxKind.LessThanToken
+    ): SyntaxKind;
+    export function getBraceMatching(kind: SyntaxKind): SyntaxKind | undefined;
+    export function getBraceMatching(kind: SyntaxKind): SyntaxKind | undefined {
+        return braceMatching.get(kind.toString());
+    }
 }
