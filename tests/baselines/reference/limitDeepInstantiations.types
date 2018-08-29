@@ -9,5 +9,5 @@ let f1: Foo<"true", {}>;
 >f1 : any
 
 let f2: Foo<"false", {}>;
->f2 : any
+>f2 : unknown
 

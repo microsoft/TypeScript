@@ -5,6 +5,7 @@ namespace ts.server {
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    export const SurveyReady = "surveyReady";
     export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -15,6 +16,11 @@ namespace ts.server {
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
+    }
+
+    export interface SurveyReady {
+        eventName: typeof SurveyReady;
+        data: { surveyId: string; };
     }
 
     export interface LargeFileReferencedEvent {
@@ -98,7 +104,7 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    export type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -218,9 +224,15 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export function convertUserPreferences(preferences: protocol.UserPreferences): UserPreferences {
+        const { lazyConfiguredProjectsFromExternalProject, ...userPreferences } = preferences;
+        return userPreferences;
+    }
+
     export interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -456,6 +468,9 @@ namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
 
+        /** Tracks projects that we have already sent survey events for. */
+        private readonly seenSurveyProjects = createMap<true>();
+
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
@@ -658,6 +673,14 @@ namespace ts.server {
         }
 
         /* @internal */
+        sendSurveyReadyEvent(surveyId: string) {
+            if (!this.eventHandler) {
+                return;
+            }
+            this.eventHandler({ eventName: SurveyReady, data: { surveyId } });
+        }
+
+        /* @internal */
         sendLargeFileReferencedEvent(file: string, fileSize: number) {
             if (!this.eventHandler) {
                 return;
@@ -802,7 +825,7 @@ namespace ts.server {
             return info && info.getFormatCodeSettings() || this.hostConfiguration.formatCodeOptions;
         }
 
-        getPreferences(file: NormalizedPath): UserPreferences {
+        getPreferences(file: NormalizedPath): protocol.UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
             return info && info.getPreferences() || this.hostConfiguration.preferences;
         }
@@ -811,7 +834,7 @@ namespace ts.server {
             return this.hostConfiguration.formatCodeOptions;
         }
 
-        getHostPreferences(): UserPreferences {
+        getHostPreferences(): protocol.UserPreferences {
             return this.hostConfiguration.preferences;
         }
 
@@ -1472,6 +1495,20 @@ namespace ts.server {
         }
 
         /*@internal*/
+        sendSurveyReady(project: ExternalProject | ConfiguredProject): void {
+            if (this.seenSurveyProjects.has(project.projectName)) {
+                return;
+            }
+
+            if (project.getCompilerOptions().checkJs !== undefined) {
+                const name = "checkJs";
+                this.logger.info(`Survey ${name} is ready`);
+                this.sendSurveyReadyEvent(name);
+                this.seenSurveyProjects.set(project.projectName, true);
+            }
+        }
+
+        /*@internal*/
         sendProjectTelemetry(project: ExternalProject | ConfiguredProject): void {
             if (this.seenProjects.has(project.projectName)) {
                 setProjectOptionsUsed(project);
@@ -1558,6 +1595,13 @@ namespace ts.server {
         private createAndLoadConfiguredProject(configFileName: NormalizedPath) {
             const project = this.createConfiguredProject(configFileName);
             this.loadConfiguredProject(project);
+            return project;
+        }
+
+        /* @internal */
+        private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath) {
+            const project = this.createAndLoadConfiguredProject(configFileName);
+            project.updateGraph();
             return project;
         }
 
@@ -1979,7 +2023,19 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
+                    const { lazyConfiguredProjectsFromExternalProject } = this.hostConfiguration.preferences;
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
+                    if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
+                        // Load configured projects for external projects that are pending reload
+                        this.configuredProjects.forEach(project => {
+                            if (project.hasExternalProjectRef() &&
+                                project.pendingReload === ConfigFileProgramReloadLevel.Full &&
+                                !this.pendingProjectUpdates.has(project.getProjectName())) {
+                                this.loadConfiguredProject(project);
+                                project.updateGraph();
+                            }
+                        });
+                    }
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
@@ -2192,8 +2248,7 @@ namespace ts.server {
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
-                        project = this.createAndLoadConfiguredProject(configFileName);
-                        project.updateGraph();
+                        project = this.createLoadAndUpdateConfiguredProject(configFileName);
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info
@@ -2633,7 +2688,9 @@ namespace ts.server {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
-                        project = this.createConfiguredProjectWithDelayLoad(tsconfigFile);
+                        project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
+                            this.createConfiguredProjectWithDelayLoad(tsconfigFile) :
+                            this.createLoadAndUpdateConfiguredProject(tsconfigFile);
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project

@@ -50,10 +50,8 @@ namespace FourSlash {
         data?: {};
     }
 
-    export interface Range {
+    export interface Range extends ts.TextRange {
         fileName: string;
-        pos: number;
-        end: number;
         marker?: Marker;
     }
 
@@ -870,8 +868,7 @@ namespace FourSlash {
             const actualByName = ts.createMap<ts.CompletionEntry>();
             for (const entry of actualCompletions.entries) {
                 if (actualByName.has(entry.name)) {
-                    // TODO: GH#23587
-                    if (entry.name !== "undefined" && entry.name !== "require") this.raiseError(`Duplicate (${actualCompletions.entries.filter(a => a.name === entry.name).length}) completions for ${entry.name}`);
+                    this.raiseError(`Duplicate (${actualCompletions.entries.filter(a => a.name === entry.name).length}) completions for ${entry.name}`);
                 }
                 else {
                     actualByName.set(entry.name, entry);
@@ -911,8 +908,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, sourceDisplay } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, sourceDisplay: undefined }
+            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, source, sourceDisplay } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, source: undefined, sourceDisplay: undefined }
                 : expected;
 
             if (actual.insertText !== insertText) {
@@ -930,6 +927,7 @@ namespace FourSlash {
 
             assert.equal(actual.hasAction, hasAction);
             assert.equal(actual.isRecommended, isRecommended);
+            assert.equal(actual.source, source);
 
             if (text) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
@@ -1103,7 +1101,7 @@ namespace FourSlash {
             return node;
         }
 
-        private verifyRange(desc: string, expected: Range, actual: ts.Node) {
+        private verifyRange(desc: string, expected: ts.TextRange, actual: ts.Node) {
             const actualStart = actual.getStart();
             const actualEnd = actual.getEnd();
             if (actualStart !== expected.pos || actualEnd !== expected.end) {
@@ -1713,11 +1711,8 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineQuickInfo() {
-            let baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile];
-            if (!baselineFile) {
-                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
-            }
-
+            const baselineFile = this.testData.globalOptions[MetadataOptionNames.baselineFile] ||
+                ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
             Harness.Baseline.runBaseline(
                 baselineFile,
                 stringify(
@@ -1958,18 +1953,11 @@ Actual: ${stringify(fullActual)}`);
          * May be negative.
          */
         private applyEdits(fileName: string, edits: ReadonlyArray<ts.TextChange>, isFormattingEdit: boolean): number {
-            // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
-            // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
-
-            // Copy this so we don't ruin someone else's copy
-            edits = JSON.parse(JSON.stringify(edits));
-
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             const oldContent = this.getFileContent(fileName);
             let runningOffset = 0;
 
-            for (let i = 0; i < edits.length; i++) {
-                const edit = edits[i];
+            forEachTextChange(edits, edit => {
                 const offsetStart = edit.span.start;
                 const offsetEnd = offsetStart + edit.span.length;
                 this.editScriptAndUpdateMarkers(fileName, offsetStart, offsetEnd, edit.newText);
@@ -1985,14 +1973,7 @@ Actual: ${stringify(fullActual)}`);
                     }
                 }
                 runningOffset += editDelta;
-
-                // Update positions of any future edits affected by this change
-                for (let j = i + 1; j < edits.length; j++) {
-                    if (edits[j].span.start >= edits[i].span.start) {
-                        edits[j].span.start += editDelta;
-                    }
-                }
-            }
+            });
 
             if (isFormattingEdit) {
                 const newContent = this.getFileContent(fileName);
@@ -2034,30 +2015,14 @@ Actual: ${stringify(fullActual)}`);
             this.languageServiceAdapterHost.editScript(fileName, editStart, editEnd, newText);
             for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
-                    marker.position = updatePosition(marker.position);
+                    marker.position = updatePosition(marker.position, editStart, editEnd, newText);
                 }
             }
 
             for (const range of this.testData.ranges) {
                 if (range.fileName === fileName) {
-                    range.pos = updatePosition(range.pos);
-                    range.end = updatePosition(range.end);
-                }
-            }
-
-            function updatePosition(position: number) {
-                if (position > editStart) {
-                    if (position < editEnd) {
-                        // Inside the edit - mark it as invalidated (?)
-                        return -1;
-                    }
-                    else {
-                        // Move marker back/forward by the appropriate amount
-                        return position + (editStart - editEnd) + newText.length;
-                    }
-                }
-                else {
-                    return position;
+                    range.pos = updatePosition(range.pos, editStart, editEnd, newText);
+                    range.end = updatePosition(range.end, editStart, editEnd, newText);
                 }
             }
         }
@@ -2488,22 +2453,24 @@ Actual: ${stringify(fullActual)}`);
 
             this.applyCodeActions(codeActions);
 
-            this.verifyNewContent(options, ts.flatMap(codeActions, a => a.changes.map(c => c.fileName)));
+            this.verifyNewContentAfterChange(options, ts.flatMap(codeActions, a => a.changes.map(c => c.fileName)));
         }
 
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
+            this.verifyTextMatches(this.rangeText(this.getOnlyRange()), !!includeWhiteSpace, expectedText);
+        }
+
+        private getOnlyRange() {
             const ranges = this.getRanges();
             if (ranges.length !== 1) {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
+            return ts.first(ranges);
+        }
 
-            const actualText = this.rangeText(ranges[0]);
-
-            const result = includeWhiteSpace
-                ? actualText === expectedText
-                : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
-
-            if (!result) {
+        private verifyTextMatches(actualText: string, includeWhitespace: boolean, expectedText: string) {
+            const removeWhitespace = (s: string): string => includeWhitespace ? s : this.removeWhitespace(s);
+            if (removeWhitespace(actualText) !== removeWhitespace(expectedText)) {
                 this.raiseError(`Actual range text doesn't match expected text.\n${showTextDiff(expectedText, actualText)}`);
             }
         }
@@ -2570,33 +2537,68 @@ Actual: ${stringify(fullActual)}`);
             const action = actions[index];
 
             assert.equal(action.description, options.description);
+            assert.deepEqual(action.commands, options.commands);
 
-            for (const change of action.changes) {
-                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+            if (options.applyChanges) {
+                for (const change of action.changes) {
+                    this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+                }
+                this.verifyNewContentAfterChange(options, action.changes.map(c => c.fileName));
             }
-
-            this.verifyNewContent(options, action.changes.map(c => c.fileName));
+            else {
+                this.verifyNewContent(options, action.changes);
+            }
         }
 
-        private verifyNewContent(options: FourSlashInterface.NewContentOptions, changedFiles: ReadonlyArray<string>) {
-            const assertedChangedFiles = !options.newFileContent || typeof options.newFileContent === "string"
+        private verifyNewContent({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changes: ReadonlyArray<ts.FileTextChanges>): void {
+            if (newRangeContent !== undefined) {
+                assert(newFileContent === undefined);
+                assert(changes.length === 1, "Affected 0 or more than 1 file, must use 'newFileContent' instead of 'newRangeContent'");
+                const change = ts.first(changes);
+                assert(change.fileName = this.activeFile.fileName);
+                const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
+                const newRange = updateTextRangeForTextChanges(this.getOnlyRange(), change.textChanges);
+                const actualText = newText.slice(newRange.pos, newRange.end);
+                this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
+            }
+            else {
+                if (newFileContent === undefined) throw ts.Debug.fail();
+                if (typeof newFileContent !== "object") newFileContent = { [this.activeFile.fileName]: newFileContent };
+                for (const change of changes) {
+                    const expectedNewContent = newFileContent[change.fileName];
+                    if (expectedNewContent === undefined) {
+                        ts.Debug.fail(`Did not expect a change in ${change.fileName}`);
+                    }
+                    const oldText = this.tryGetFileContent(change.fileName);
+                    ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
+                    const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
+                    assert.equal(newContent, expectedNewContent);
+                }
+                for (const newFileName in newFileContent) {
+                    ts.Debug.assert(changes.some(c => c.fileName === newFileName), "No change in file", () => newFileName);
+                }
+            }
+        }
+
+        private verifyNewContentAfterChange({ newFileContent, newRangeContent }: FourSlashInterface.NewContentOptions, changedFiles: ReadonlyArray<string>) {
+            const assertedChangedFiles = !newFileContent || typeof newFileContent === "string"
                 ? [this.activeFile.fileName]
-                : ts.getOwnKeys(options.newFileContent);
+                : ts.getOwnKeys(newFileContent);
             assert.deepEqual(assertedChangedFiles, changedFiles);
 
-            if (options.newFileContent !== undefined) {
-                assert(!options.newRangeContent);
-                if (typeof options.newFileContent === "string") {
-                    this.verifyCurrentFileContent(options.newFileContent);
+            if (newFileContent !== undefined) {
+                assert(!newRangeContent);
+                if (typeof newFileContent === "string") {
+                    this.verifyCurrentFileContent(newFileContent);
                 }
                 else {
-                    for (const fileName in options.newFileContent) {
-                        this.verifyFileContent(fileName, options.newFileContent[fileName]);
+                    for (const fileName in newFileContent) {
+                        this.verifyFileContent(fileName, newFileContent[fileName]);
                     }
                 }
             }
             else {
-                this.verifyRangeIs(options.newRangeContent!, /*includeWhitespace*/ true);
+                this.verifyRangeIs(newRangeContent!, /*includeWhitespace*/ true);
             }
         }
 
@@ -3114,7 +3116,7 @@ Actual: ${stringify(fullActual)}`);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
             const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
-            this.testNewFileContents(editInfo.edits, options.newFileContents, "move to new file");
+            this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
         }
 
         private testNewFileContents(edits: ReadonlyArray<ts.FileTextChanges>, newFileContents: { [fileName: string]: string }, description: string): void {
@@ -3378,6 +3380,36 @@ Actual: ${stringify(fullActual)}`);
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
         }
+    }
+
+    function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: ReadonlyArray<ts.TextChange>): ts.TextRange {
+        forEachTextChange(textChanges, change => {
+            const update = (p: number): number => updatePosition(p, change.span.start, ts.textSpanEnd(change.span), change.newText);
+            pos = update(pos);
+            end = update(end);
+        });
+        return { pos, end };
+    }
+
+    /** Apply each textChange in order, updating future changes to account for the text offset of previous changes. */
+    function forEachTextChange(changes: ReadonlyArray<ts.TextChange>, cb: (change: ts.TextChange) => void): void {
+        // Copy this so we don't ruin someone else's copy
+        changes = JSON.parse(JSON.stringify(changes));
+        for (let i = 0; i < changes.length; i++) {
+            const change = changes[i];
+            cb(change);
+            const changeDelta = change.newText.length - change.span.length;
+            for (let j = i + 1; j < changes.length; j++) {
+                if (changes[j].span.start >= change.span.start) {
+                    changes[j].span.start += changeDelta;
+                }
+            }
+        }
+    }
+
+    function updatePosition(position: number, editStart: number, editEnd: number, { length }: string): number {
+        // If inside the edit, return -1 to mark as invalid
+        return position <= editStart ? position : position < editEnd ? -1 : position + length - + (editEnd - editStart);
     }
 
     function renameKeys<T>(obj: { readonly [key: string]: T }, renameKey: (key: string) => string): { readonly [key: string]: T } {
@@ -4758,6 +4790,7 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | {
         readonly name: string,
+        readonly source?: string,
         readonly insertText?: string,
         readonly replacementSpan?: FourSlash.Range,
         readonly hasAction?: boolean, // If not specified, will assert that this is false.
@@ -4842,10 +4875,12 @@ namespace FourSlashInterface {
     }
 
     export interface VerifyCodeFixOptions extends NewContentOptions {
-        description: string;
-        errorCode?: number;
-        index?: number;
-        preferences?: ts.UserPreferences;
+        readonly description: string;
+        readonly errorCode?: number;
+        readonly index?: number;
+        readonly preferences?: ts.UserPreferences;
+        readonly applyChanges?: boolean;
+        readonly commands?: ReadonlyArray<ts.CodeActionCommand>;
     }
 
     export interface VerifyCodeFixAvailableOptions {

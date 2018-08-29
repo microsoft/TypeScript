@@ -323,7 +323,7 @@ verify.quickInfos({
 
 verify.signatureHelp({ marker: "26", overloadsCount: 2, docComment: "" });
 verify.quickInfos({
-    "26q": "function f1(b: string): any (+1 overload)",
+    "26q": ["function f1(b: string): any (+1 overload)", "fn f1 with number"],
     "26aq": "(parameter) b: string"
 });
 

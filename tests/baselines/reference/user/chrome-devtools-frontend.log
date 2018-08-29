@@ -14,8 +14,6 @@ Standard output:
 ../../../../built/local/lib.es5.d.ts(1346,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1382,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
-definitions.js(3,5): error TS2322: Type '{}' is not assignable to type 'typeof Animation'.
-  Property 'AnimationGroupPreviewUI' is missing in type '{}'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(95,28): error TS2339: Property 'response' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(147,37): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
@@ -3801,15 +3799,15 @@ node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(508,33):
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(513,36): error TS2694: Namespace 'Components.Linkifier' has no exported member 'LinkHandler'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(517,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(525,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(564,9): error TS2322: Type '({ section: string; title: string; handler: any; } | { section: string; title: any; handler: () => void; })[]' is not assignable to type '{ title: string; handler: () => any; }[]'.
-  Type '{ section: string; title: string; handler: any; } | { section: string; title: any; handler: () => void; }' is not assignable to type '{ title: string; handler: () => any; }'.
+node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(564,9): error TS2322: Type '({ section: string; title: any; handler: () => void; } | { section: string; title: string; handler: any; })[]' is not assignable to type '{ title: string; handler: () => any; }[]'.
+  Type '{ section: string; title: any; handler: () => void; } | { section: string; title: string; handler: any; }' is not assignable to type '{ title: string; handler: () => any; }'.
     Type '{ section: string; title: any; handler: () => void; }' is not assignable to type '{ title: string; handler: () => any; }'.
       Object literal may only specify known properties, and 'section' does not exist in type '{ title: string; handler: () => any; }'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(565,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(572,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(580,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(587,16): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(616,5): error TS2322: Type '({ section: string; title: string; handler: any; } | { section: string; title: any; handler: () => void; })[]' is not assignable to type '{ title: string; handler: () => any; }[]'.
+node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(616,5): error TS2322: Type '({ section: string; title: any; handler: () => void; } | { section: string; title: string; handler: any; })[]' is not assignable to type '{ title: string; handler: () => any; }[]'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(631,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(646,2): error TS1131: Property or signature expected.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(666,22): error TS2551: Property 'LinkHandler' does not exist on type 'typeof Linkifier'. Did you mean '_linkHandlers'?
