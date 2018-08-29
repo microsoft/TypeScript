@@ -27,8 +27,6 @@ lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(685,57): error TS2345: Argument of type 'string | number | Function' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(82,5): error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }'.
-  Index signature is missing in type '{}'.
 lib/NetworkManager.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(174,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(207,15): error TS2503: Cannot find namespace 'Protocol'.

@@ -1,17 +1,16 @@
 namespace ts.tscWatch {
-    import WatchedSystem = TestFSWithWatch.TestServerHost;
-    type File = TestFSWithWatch.File;
-    type SymLink = TestFSWithWatch.SymLink;
-    import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
-    import checkArray = TestFSWithWatch.checkArray;
-    import libFile = TestFSWithWatch.libFile;
-    import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-    import checkOutputContains = TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+    export import WatchedSystem = TestFSWithWatch.TestServerHost;
+    export type File = TestFSWithWatch.File;
+    export type SymLink = TestFSWithWatch.SymLink;
+    export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
+    export import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+    export import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -111,7 +110,7 @@ namespace ts.tscWatch {
 
         function assertWatchDiagnostic(diagnostic: Diagnostic) {
             const expected = getWatchDiagnosticWithoutDate(diagnostic);
-            if (!disableConsoleClears && !contains(nonClearingMessageCodes, diagnostic.code)) {
+            if (!disableConsoleClears && contains(screenStartingMessageCodes, diagnostic.code)) {
                 assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
                 screenClears++;
             }
@@ -137,7 +136,7 @@ namespace ts.tscWatch {
             : createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length);
     }
 
-    function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             /*logsBeforeWatchDiagnostic*/ undefined,
@@ -148,7 +147,7 @@ namespace ts.tscWatch {
             createErrorsFoundCompilerDiagnostic(errors));
     }
 
-    function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             logsBeforeWatchDiagnostic,
@@ -1141,7 +1140,6 @@ namespace ts.tscWatch {
             }
 
             it("without outDir or outFile is specified", () => {
-                debugger;
                 verifyWithOptions({ module: ModuleKind.AMD }, ["file1.js", "src/file2.js"]);
             });
 
@@ -1310,6 +1308,49 @@ export class B
             checkOutputErrorsIncremental(host, [
                 getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
             ]);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+        });
+
+        it("updates errors when strictNullChecks changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `declare function foo(): null | { hello: any };
+foo().hello`
+            };
+            const compilerOptions: CompilerOptions = {
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions })
+            };
+            const files = [aFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
+            compilerOptions.strictNullChecks = true;
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            const expectedStrictNullErrors = [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("foo()"), 5, Diagnostics.Object_is_possibly_null)
+            ];
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            compilerOptions.strict = true;
+            delete (compilerOptions.strictNullChecks);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            delete (compilerOptions.strict);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, emptyArray);
             // File a need not be rewritten
             assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });

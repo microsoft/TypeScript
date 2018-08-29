@@ -13,9 +13,9 @@ namespace ts.textStorage {
         it("text based storage should be have exactly the same as script version cache", () => {
 
             const host = projectSystem.createServerHost([f]);
-
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
-            const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path));
+            // Since script info is not used in these tests, just cheat by passing undefined
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, /*info*/undefined!);
+            const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, /*info*/undefined!);
 
             ts1.useScriptVersionCache_TestOnly();
             ts2.useText();
@@ -48,7 +48,8 @@ namespace ts.textStorage {
 
         it("should switch to script version cache if necessary", () => {
             const host = projectSystem.createServerHost([f]);
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path));
+            // Since script info is not used in these tests, just cheat by passing undefined
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, /*info*/undefined!);
 
             ts1.getSnapshot();
             assert.isTrue(!ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 1");

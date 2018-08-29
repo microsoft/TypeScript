@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-/////** This is class c2 without constuctor*/
+/////** This is class c2 without constructor*/
 ////class c/*1*/2 {
 ////}
 ////var i/*2*/2 = new c/*28*/2(/*3*/);
@@ -59,7 +59,7 @@
 ////var myVar = new m.m2.c/*33*/1();
 
 verify.quickInfos({
-    1: ["class c2", "This is class c2 without constuctor"],
+    1: ["class c2", "This is class c2 without constructor"],
     2: "var i2: c2"
 });
 
@@ -67,7 +67,7 @@ verify.signatureHelp({ marker: "3", docComment: "" });
 
 verify.quickInfos({
     4: "var i2_c: typeof c2",
-    5: ["class c2", "This is class c2 without constuctor"],
+    5: ["class c2", "This is class c2 without constructor"],
     6: "class c3",
     7: "var i3: c3"
 });
@@ -107,7 +107,7 @@ verify.quickInfos({
 });
 
 goTo.marker('26');
-verify.completionListContains("c2", "class c2", "This is class c2 without constuctor");
+verify.completionListContains("c2", "class c2", "This is class c2 without constructor");
 verify.completionListContains("i2", "var i2: c2", "");
 verify.completionListContains("i2_c", "var i2_c: typeof c2", "");
 verify.completionListContains("c3", "class c3", "");
@@ -131,10 +131,10 @@ verify.signatureHelp({
 });
 
 verify.quickInfos({
-    28: "constructor c2(): c2",
+    28: ["constructor c2(): c2", "This is class c2 without constructor"],
     29: ["constructor c3(): c3", "Constructor comment"],
     30: ["constructor c4(): c4", "Constructor comment"],
-    31: "constructor c5(): c5",
+    31: ["constructor c5(): c5", "Class with statics"],
     32: ["constructor c6(): c6", "constructor comment"],
     33: ["constructor m.m2.c1(): m.m2.c1", "constructor comment"]
 });

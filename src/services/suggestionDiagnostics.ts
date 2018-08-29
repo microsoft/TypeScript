@@ -3,6 +3,7 @@ namespace ts {
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
+        const checker = program.getDiagnosticsProducingTypeChecker();
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
@@ -68,6 +69,9 @@ namespace ts {
                 }
             }
 
+            if (isFunctionLikeDeclaration(node)) {
+                addConvertToAsyncFunctionDiagnostics(node, checker, diags);
+            }
             node.forEachChild(check);
         }
     }
@@ -109,7 +113,64 @@ namespace ts {
         }
     }
 
+    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
+
+        const functionType = node.type ? checker.getTypeFromTypeNode(node.type) : undefined;
+        if (isAsyncFunction(node) || !node.body || !functionType) {
+            return;
+        }
+
+        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
+        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+
+        if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
+            return;
+        }
+
+        // collect all the return statements
+        // check that a property access expression exists in there and that it is a handler
+        const returnStatements = getReturnStatementsWithPromiseHandlers(node);
+        if (returnStatements.length > 0) {
+            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
+        }
+    }
+
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
+    }
+
+    /** @internal */
+    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
+        const returnStatements: Node[] = [];
+        if (isFunctionLike(node)) {
+            forEachChild(node, visit);
+        }
+        else {
+            visit(node);
+        }
+
+        function visit(child: Node) {
+            if (isFunctionLike(child)) {
+                return;
+            }
+
+            if (isReturnStatement(child)) {
+                forEachChild(child, addHandlers);
+            }
+
+            function addHandlers(returnChild: Node) {
+                if (isPromiseHandler(returnChild)) {
+                    returnStatements.push(child as ReturnStatement);
+                }
+            }
+
+            forEachChild(child, visit);
+        }
+        return returnStatements;
+    }
+
+    function isPromiseHandler(node: Node): boolean {
+        return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
+            (node.expression.name.text === "then" || node.expression.name.text === "catch"));
     }
 }

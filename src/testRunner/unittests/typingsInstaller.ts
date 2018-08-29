@@ -430,7 +430,6 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-
             checkProjectActualFiles(p, [jqueryJs.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
