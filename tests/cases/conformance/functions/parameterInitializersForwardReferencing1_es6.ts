@@ -31,3 +31,7 @@ function f6 (async = async) {
 function f7({[foo]: bar}: any[]) {
     let foo: number = 2;
 }
+
+class Foo {
+    constructor(public x = 12, public y = x) {}
+}

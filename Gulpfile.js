@@ -26,7 +26,7 @@ const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
 const prepend = require("./scripts/build/prepend");
 const { removeSourceMaps } = require("./scripts/build/sourcemaps");
-const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex");
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -534,33 +534,38 @@ gulp.task(
     () => project.watch(tsserverProject, { typescript: useCompiler }));
 
 gulp.task(
-    "watch-local",
-    /*help*/ false,
-    ["watch-lib", "watch-tsc", "watch-services", "watch-server"]);
-
-gulp.task(
     "watch-runner",
     /*help*/ false,
     useCompilerDeps,
     () => project.watch(testRunnerProject, { typescript: useCompiler }));
 
-const watchPatterns = [
-    runJs,
-    typescriptDts,
-    tsserverlibraryDts
-];
+gulp.task(
+    "watch-local",
+    "Watches for changes to projects in src/ (but does not execute tests).",
+    ["watch-lib", "watch-tsc", "watch-services", "watch-server", "watch-runner", "watch-lssl"]);
 
 gulp.task(
     "watch",
-    "Watches for changes to the build inputs for built/local/run.js, then executes runtests-parallel.",
+    "Watches for changes to the build inputs for built/local/run.js, then runs tests.",
     ["build-rules", "watch-runner", "watch-services", "watch-lssl"],
     () => {
-        const runTestsSemaphore = new Semaphore(1);
-        const fn = async () => {
+        const sem = new Semaphore(1);
+
+        gulp.watch([runJs, typescriptDts, tsserverlibraryDts], () => {
+            runTests();
+        });
+
+        // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
+        const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
+        fs.watch("tests/cases", { recursive: true }, (_, file) => {
+            if (testFilePattern.test(file)) runTests();
+        });
+
+        async function runTests() {
             try {
                 // Ensure only one instance of the test runner is running at any given time.
-                if (runTestsSemaphore.count > 0) {
-                    await runTestsSemaphore.wait();
+                if (sem.count > 0) {
+                    await sem.wait();
                     try {
                         // Wait for any concurrent recompilations to complete...
                         try {
@@ -576,20 +581,20 @@ gulp.task(
                         }
 
                         // cancel any pending or active test run if a new recompilation is triggered
-                        const runTestsSource = new CancellationTokenSource();
+                        const source = new CancellationTokenSource();
                         project.waitForWorkToStart().then(() => {
-                            runTestsSource.cancel();
+                            source.cancel();
                         });
                     
                         if (cmdLineOptions.tests || cmdLineOptions.failed) {
-                            await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, runTestsSource.token);
+                            await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
                         }
                         else {
-                            await runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ true, runTestsSource.token);
+                            await runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ true, source.token);
                         }
                     }
                     finally {
-                        runTestsSemaphore.release();
+                        sem.release();
                     }
                 }
             }
@@ -602,14 +607,6 @@ gulp.task(
                 }
             }
         };
-
-        gulp.watch(watchPatterns, (e) => fn());
-
-        // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
-        const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
-        fs.watch("tests/cases", { recursive: true }, (_, file) => {
-            if (testFilePattern.test(file)) fn();
-        });
     });
 
 gulp.task("clean-built", /*help*/ false, [`clean:${diagnosticInformationMapTs}`], () => del(["built"]));

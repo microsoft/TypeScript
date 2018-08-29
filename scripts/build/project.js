@@ -16,9 +16,9 @@ const needsUpdate = require("./needsUpdate");
 const mkdirp = require("./mkdirp");
 const prettyTime = require("pretty-hrtime");
 const { reportDiagnostics } = require("./diagnostics");
-const { CountdownEvent, Pulsar } = require("prex");
+const { CountdownEvent, ManualResetEvent } = require("prex");
 
-const workStartedEvent = new Pulsar();
+const workStartedEvent = new ManualResetEvent();
 const countdown = new CountdownEvent(0);
 
 class CompilationGulp extends gulp.Gulp {
@@ -30,7 +30,8 @@ class CompilationGulp extends gulp.Gulp {
         child.on("task_start", e => {
             if (countdown.remainingCount === 0) {
                 countdown.reset(1);
-                workStartedEvent.pulseAll();
+                workStartedEvent.set();
+                workStartedEvent.reset();
             }
             else {
                 countdown.add();

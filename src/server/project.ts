@@ -1366,6 +1366,7 @@ namespace ts.server {
                     result = super.updateGraph();
             }
             this.projectService.sendProjectTelemetry(this);
+            this.projectService.sendSurveyReady(this);
             return result;
         }
 
@@ -1570,6 +1571,7 @@ namespace ts.server {
         updateGraph() {
             const result = super.updateGraph();
             this.projectService.sendProjectTelemetry(this);
+            this.projectService.sendSurveyReady(this);
             return result;
         }
 

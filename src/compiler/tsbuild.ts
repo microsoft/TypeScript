@@ -317,12 +317,16 @@ namespace ts {
         }
 
         const outputs: string[] = [];
-        outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
+        const js = getOutputJavaScriptFileName(inputFileName, configFile);
+        outputs.push(js);
+        if (configFile.options.sourceMap) {
+            outputs.push(`${js}.map`);
+        }
         if (getEmitDeclarations(configFile.options) && !fileExtensionIs(inputFileName, Extension.Json)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile);
             outputs.push(dts);
             if (configFile.options.declarationMap) {
-                outputs.push(dts + ".map");
+                outputs.push(`${dts}.map`);
             }
         }
         return outputs;
@@ -334,11 +338,14 @@ namespace ts {
         }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
+        if (project.options.sourceMap) {
+            outputs.push(`${project.options.outFile}.map`);
+        }
         if (getEmitDeclarations(project.options)) {
             const dts = changeExtension(project.options.outFile, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
-                outputs.push(dts + ".map");
+                outputs.push(`${dts}.map`);
             }
         }
         return outputs;
