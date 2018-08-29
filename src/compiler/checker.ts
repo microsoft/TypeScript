@@ -3524,7 +3524,7 @@ namespace ts {
                     if (resolvedType.indexInfos) {
                         for (let info of resolvedType.indexInfos) {
                             if (resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
-                                info = createIndexInfo(info.indexType, anyType, info.isReadonly, info.declaration); 
+                                info = createIndexInfo(info.indexType, anyType, info.isReadonly, info.declaration);
                             }
                             typeElements.push(indexInfoToIndexSignatureDeclarationHelper(info, context));
                         }
@@ -6696,9 +6696,9 @@ namespace ts {
             const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
             const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
             // TODO: Fix #26724 using the below once #26725 is fixed and `mappedRecursiveInference.ts` doesn't blow up with the change
-            //const mappedIndexInfos = indexInfos && map(indexInfos, indexInfo =>
+            // const mappedIndexInfos = indexInfos && map(indexInfos, indexInfo =>
             //    createIndexInfo(indexInfo.indexType, inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly)
-            //);
+            // );
             const mappedIndexInfos = map(filter(indexInfos, i => !!(i.indexType.flags & TypeFlags.String)), i => createIndexInfo(i.indexType, inferReverseMappedType(i.type, type.mappedType), readonlyMask && i.isReadonly));
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(type.source)) {
@@ -7428,7 +7428,7 @@ namespace ts {
             return resolveIndexOnIndexInfos(indexType, getIndexInfosOfType(type));
         }
 
-        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type, contravariant?: boolean): IndexInfo[] | undefined {
+        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type, returnPartialSuccess?: boolean): IndexInfo[] | undefined {
             if (!(indexType.flags & TypeFlags.Union)) {
                 const result = getResultingIndexInfoOfIndexOnType(type, indexType);
                 return result && [result];
@@ -7436,7 +7436,7 @@ namespace ts {
             let resultList: IndexInfo[] | undefined;
             for (const nameType of (indexType as UnionType).types) {
                 const result = getResultingIndexInfoOfIndexOnType(type, nameType);
-                if (!result && !contravariant) {
+                if (!result && !returnPartialSuccess) {
                     return;
                 }
                 if (result) {
@@ -7446,8 +7446,8 @@ namespace ts {
             return resultList;
         }
 
-        function getResultingTypeOfIndexOnType(type: Type, indexType: Type, contravariant?: boolean): Type | undefined {
-            const resultInfos = getApplicableIndexInfosOfIndexOnType(type, indexType, contravariant);
+        function getResultingTypeOfIndexOnType(type: Type, indexType: Type, returnPartialSuccess?: boolean): Type | undefined {
+            const resultInfos = getApplicableIndexInfosOfIndexOnType(type, indexType, returnPartialSuccess);
             return resultInfos && getUnionType(map(resultInfos, i => i.type));
         }
 
@@ -9212,7 +9212,7 @@ namespace ts {
             const base = getUnionType([
                 filterType(getUnionType(map(filter(getIndexInfosOfType(type) || emptyArray, info => info !== enumNumberIndexInfo), t => t.indexType)), t => !stringsOnly || isTypeAssignableTo(t, stringType)),
                 getLiteralTypeFromPropertyNames(type, stringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique),
-            ])
+            ]);
             if (!stringsOnly && maybeTypeOfKind(base, TypeFlags.String)) {
                 return getUnionType([base, numberType]);
             }
@@ -10988,7 +10988,7 @@ namespace ts {
             return t.properties.length === 0 &&
                 t.callSignatures.length === 0 &&
                 t.constructSignatures.length === 0 &&
-                !length(t.indexInfos)
+                !length(t.indexInfos);
         }
 
         function isEmptyObjectType(type: Type): boolean {
@@ -12289,7 +12289,9 @@ namespace ts {
                     if (isIgnoredJsxProperty(source, prop, /*targetMemberType*/ undefined)) {
                         continue;
                     }
-                    const targetType = getResultingTypeOfIndexOnType(target, getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique));
+                    const nameType = getLiteralTypeFromPropertyName(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                    if (nameType.flags & TypeFlags.Never) continue;
+                    const targetType = getResultingTypeOfIndexOnType(target, nameType);
                     if (targetType) {
                         const related = isRelatedTo(getTypeOfSymbol(prop), targetType, reportErrors);
                         if (!related) {
@@ -12312,10 +12314,9 @@ namespace ts {
                 if (!targetInfo) {
                     return Ternary.True;
                 }
-                const sourceInfo = getIndexInfosOfType(source)
-                const result = sourceInfo && indexInfosRelated(sourceInfo, targetInfo, sourceIsPrimitive, reportErrors);
-                if (result !== undefined && result !== Ternary.Maybe) {
-                    return result;
+                const sourceInfo = getIndexInfosOfType(source);
+                if (sourceInfo) {
+                    return indexInfosRelated(source, target, sourceIsPrimitive, reportErrors);
                 }
                 if (isGenericMappedType(source)) {
                     // A generic mapped type { [P in K]: T } is related to an index signature { [x: string]: U }
@@ -12357,20 +12358,6 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function isIndexTypeRelatedTo(source: IndexInfo, target: IndexInfo, sourceIsPrimitive: boolean, reportErrors: boolean, skipIndexError?: boolean): Ternary {
-                // Index signature of type any permits assignment from everything but primitives
-                if (!sourceIsPrimitive && target.type.flags & TypeFlags.AnyOrUnknown) {
-                    return Ternary.True;
-                }
-                const related = isRelatedTo(source.type, target.type, reportErrors);
-                if (!related && reportErrors && !skipIndexError) {
-                    const sourceType = typeToString(source.indexType);
-                    const targetType = typeToString(target.indexType);
-                    reportError(sourceType === targetType ? Diagnostics._0_index_signatures_are_incompatible : Diagnostics._0_and_1_index_signatures_are_incompatible, sourceType, targetType);
-                }
-                return related;
-            }
-
             function indexInfosIdentical(sourceInfos: IndexInfo[] | undefined, targetInfos: IndexInfo[] | undefined) {
                 if (length(sourceInfos) !== length(targetInfos)) return Ternary.False;
                 if (!sourceInfos || !targetInfos) return Ternary.True;
@@ -12393,28 +12380,46 @@ namespace ts {
                 return Ternary.True;
             }
 
-            function indexInfosRelated(sourceInfos: IndexInfo[] | undefined, targetInfos: IndexInfo[] | undefined, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
-                if (!sourceInfos && !targetInfos) {
-                    return Ternary.True;
-                }
-                if (sourceInfos && targetInfos) {
-                    // If for every index signature in S there exists a related signature in T
-                    targetLoop: for (const targetInfo of targetInfos) {
-                        for (const sourceInfo of sourceInfos) {
-                            if (isTypeIndexAssignableTo(sourceInfo.indexType, targetInfo.indexType)) {
-                                if (!isIndexTypeRelatedTo(sourceInfo, targetInfo, sourceIsPrimitive, reportErrors)) return Ternary.False;
-                                if (relation === identityRelation && sourceInfo.isReadonly !== targetInfo.isReadonly) return Ternary.False;
-                                continue targetLoop;
+            function indexInfosRelated(source: Type, target: Type, sourceIsPrimitive: boolean, reportErrors: boolean): Ternary {
+                const targetInfos = getIndexInfosOfType(target);
+                if (!targetInfos) return Debug.fail("Existance of index infos in target should have been checked beforehand");
+                const sourceHasInferableIndex = isObjectTypeWithInferableIndex(source);
+                let result = Ternary.True;
+                for (const targetInfo of targetInfos) {
+                    if (!sourceIsPrimitive && targetInfo.type.flags & TypeFlags.AnyOrUnknown) {
+                        continue;
+                    }
+                    const indexingResult = getResultingTypeOfIndexOnType(source, targetInfo.indexType, sourceHasInferableIndex);
+                    if (!indexingResult) {
+                        if (sourceHasInferableIndex) {
+                            continue;
+                        }
+                        if (reportErrors) {
+                            reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
+                        }
+                        return Ternary.False;
+                    }
+                    result &= isRelatedTo(indexingResult, targetInfo.type, reportErrors);
+                    if (!result) {
+                        if (reportErrors) {
+                            const sourceInfos = getApplicableIndexInfosOfIndexOnType(source, targetInfo.indexType, sourceHasInferableIndex);
+                            for (const info of sourceInfos!) {
+                                if (!isRelatedTo(info.type, targetInfo.type)) {
+                                    const sourceType = typeToString(info.indexType);
+                                    const targetType = typeToString(targetInfo.indexType);
+                                    reportError(sourceType === targetType ? Diagnostics._0_index_signatures_are_incompatible : Diagnostics._0_and_1_index_signatures_are_incompatible, sourceType, targetType);
+                                    break;
+                                }
                             }
                         }
-                        if (targetInfo === targetInfos[targetInfos.length - 1]) {
-                            return Ternary.Maybe; // Iterated over every target signature without a definitive yes or no on every signature; allow fallback to inferred signature
-                        }
+                        return result;
                     }
-                    // Then the signature lists are related
-                    return Ternary.True;
                 }
-                return Ternary.False;
+                if (result && sourceHasInferableIndex) {
+                    // A type with an inferable index, provided none of its indexes are strictly incompatible, is compatible so long as its existing props are compatible
+                    result &= eachPropertyRelatedToIndexesOf(source, target, reportErrors);
+                }
+                return result;
             }
 
             function constructorVisibilitiesAreCompatible(sourceSignature: Signature, targetSignature: Signature, reportErrors: boolean) {
@@ -25305,7 +25310,7 @@ namespace ts {
         function checkIndexConstraints(type: Type) {
             const declaredIndexers = getIndexDeclarationsOfSymbol(type.symbol);
             const indexInfos = getIndexInfosOfType(type);
-            
+
             if (indexInfos) {
                 forEach(getPropertiesOfObjectType(type), prop => {
                     const propType = getTypeOfSymbol(prop);
@@ -25365,10 +25370,10 @@ namespace ts {
                                     typeToString(info2.indexType),
                                     typeToString(info2.type)
                                 );
-                                checkTypeAssignableTo(info1.type, info2.type, errorNode, undefined, rootChain);
+                                checkTypeAssignableTo(info1.type, info2.type, errorNode, /*diagnosticMessage*/ undefined, rootChain);
                             }
                         }
-                    })
+                    });
                 }
             }
 
