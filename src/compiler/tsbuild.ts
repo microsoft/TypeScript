@@ -421,6 +421,7 @@ namespace ts {
                 projectPendingBuild.removeKey(proj);
                 if (!projectPendingBuild.getSize()) {
                     invalidatedProjectQueue.length = 0;
+                    nextIndex = 0;
                 }
                 return proj;
             }
