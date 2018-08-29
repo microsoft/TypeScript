@@ -381,14 +381,14 @@ var r11 = foo11(r11arg);
 >r11arg : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
 var r11a = [r11arg, r11arg2];
->r11a : (<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg, r11arg2] : (<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11a : (<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg, r11arg2] : (<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >r11arg2 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
 var r11b = [r11arg2, r11arg];
->r11b : (<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg2, r11arg] : (<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11b : (<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg2, r11arg] : (<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg2 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >r11arg : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
