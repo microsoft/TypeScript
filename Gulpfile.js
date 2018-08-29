@@ -24,10 +24,9 @@ const baselineAccept = require("./scripts/build/baselineAccept");
 const cmdLineOptions = require("./scripts/build/options");
 const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
-const debounce = require("./scripts/build/debounce");
 const prepend = require("./scripts/build/prepend");
 const { removeSourceMaps } = require("./scripts/build/sourcemaps");
-const { CancelSource, CancelError } = require("./scripts/build/cancellation");
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -535,56 +534,79 @@ gulp.task(
     () => project.watch(tsserverProject, { typescript: useCompiler }));
 
 gulp.task(
-    "watch-local",
-    /*help*/ false,
-    ["watch-lib", "watch-tsc", "watch-services", "watch-server"]);
-
-gulp.task(
     "watch-runner",
     /*help*/ false,
     useCompilerDeps,
     () => project.watch(testRunnerProject, { typescript: useCompiler }));
 
-const watchPatterns = [
-    runJs,
-    typescriptDts,
-    tsserverlibraryDts
-];
+gulp.task(
+    "watch-local",
+    "Watches for changes to projects in src/ (but does not execute tests).",
+    ["watch-lib", "watch-tsc", "watch-services", "watch-server", "watch-runner", "watch-lssl"]);
 
 gulp.task(
     "watch",
-    "Watches for changes to the build inputs for built/local/run.js, then executes runtests-parallel.",
+    "Watches for changes to the build inputs for built/local/run.js, then runs tests.",
     ["build-rules", "watch-runner", "watch-services", "watch-lssl"],
     () => {
-        /** @type {CancelSource | undefined} */
-        let runTestsSource;
+        const sem = new Semaphore(1);
 
-        const fn = debounce(() => {
-            runTests().catch(error => {
-                if (error instanceof CancelError) {
-                    log.warn("Operation was canceled");
-                }
-                else {
-                    log.error(error);
-                }
-            });
-        }, /*timeout*/ 100, { max: 500 });
-
-        gulp.watch(watchPatterns, () => project.wait().then(fn));
+        gulp.watch([runJs, typescriptDts, tsserverlibraryDts], () => {
+            runTests();
+        });
 
         // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
         const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
         fs.watch("tests/cases", { recursive: true }, (_, file) => {
-            if (testFilePattern.test(file)) project.wait().then(fn);
+            if (testFilePattern.test(file)) runTests();
         });
 
-        function runTests() {
-            if (runTestsSource) runTestsSource.cancel();
-            runTestsSource = new CancelSource();
-            return cmdLineOptions.tests || cmdLineOptions.failed
-                ? runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, runTestsSource.token)
-                : runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ true, runTestsSource.token);
-        }
+        async function runTests() {
+            try {
+                // Ensure only one instance of the test runner is running at any given time.
+                if (sem.count > 0) {
+                    await sem.wait();
+                    try {
+                        // Wait for any concurrent recompilations to complete...
+                        try {
+                            await delay(100);
+                            while (project.hasRemainingWork()) {
+                                await project.waitForWorkToComplete();
+                                await delay(500);
+                            }
+                        }
+                        catch (e) {
+                            if (e instanceof CancelError) return;
+                            throw e;
+                        }
+
+                        // cancel any pending or active test run if a new recompilation is triggered
+                        const source = new CancellationTokenSource();
+                        project.waitForWorkToStart().then(() => {
+                            source.cancel();
+                        });
+                    
+                        if (cmdLineOptions.tests || cmdLineOptions.failed) {
+                            await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
+                        }
+                        else {
+                            await runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ true, source.token);
+                        }
+                    }
+                    finally {
+                        sem.release();
+                    }
+                }
+            }
+            catch (e) {
+                if (e instanceof CancelError) {
+                    log.warn("Operation was canceled");
+                }
+                else {
+                    log.error(e);
+                }
+            }
+        };
     });
 
 gulp.task("clean-built", /*help*/ false, [`clean:${diagnosticInformationMapTs}`], () => del(["built"]));
