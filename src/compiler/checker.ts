@@ -20700,6 +20700,8 @@ namespace ts {
                     getReturnTypeOfSignature(getSignatureFromDeclaration(node));
                 }
 
+                checkForAsyncCodeFix(node);
+
                 if (node.body.kind === SyntaxKind.Block) {
                     checkSourceElement(node.body);
                 }
@@ -22157,6 +22159,19 @@ namespace ts {
                 }
                 if (node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.JSDocFunctionType) {
                     registerForUnusedIdentifiersCheck(node);
+                }
+            }
+        }
+
+        function checkForAsyncCodeFix(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | ArrowFunction) {
+            if (!isAsyncFunction(node)) {
+                const returnType = getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                if (getPromisedTypeOfPromise(returnType)) {
+                    const returnStatements = getReturnStatementsWithPromiseHandlers(node);
+                    if (returnStatements.length > 0) {
+                        const nodeToReport = isVariableDeclaration(node.parent) ? node.parent.name : node;
+                        errorOrSuggestion(/*isError*/ false, nodeToReport, Diagnostics.This_may_be_converted_to_an_async_function);
+                    }
                 }
             }
         }
@@ -23664,18 +23679,24 @@ namespace ts {
                 checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
             }
 
-            if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
-                // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
-                // in an ambient context
-                if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
-                    reportImplicitAnyError(node, anyType);
+            if (produceDiagnostics) {
+                if (!getEffectiveReturnTypeNode(node)) {
+                    // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
+                    // in an ambient context
+                    if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
+                        reportImplicitAnyError(node, anyType);
+                    }
+
+                    if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
+                        // A generator with a body and no type annotation can still cause errors. It can error if the
+                        // yielded values have no common supertype, or it can give an implicit any error if it has no
+                        // yielded values. The only way to trigger these errors is to try checking its return type.
+                        getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                    }
                 }
 
-                if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
-                    // A generator with a body and no type annotation can still cause errors. It can error if the
-                    // yielded values have no common supertype, or it can give an implicit any error if it has no
-                    // yielded values. The only way to trigger these errors is to try checking its return type.
-                    getReturnTypeOfSignature(getSignatureFromDeclaration(node));
+                if (node.kind !== SyntaxKind.MethodSignature) {
+                    checkForAsyncCodeFix(node);
                 }
             }
 
