@@ -3574,6 +3574,8 @@ namespace ts.projectSystem {
             const { session, verifySurveyReadyEvent } = createSessionWithEventHandler(host);
             openFilesForSession([file], session);
 
+            verifySurveyReadyEvent(1);
+
             closeFilesForSession([file], session);
             openFilesForSession([rando], session);
             openFilesForSession([file], session);
