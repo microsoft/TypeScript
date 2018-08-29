@@ -4175,9 +4175,8 @@ namespace ts {
     /* @internal */
     export const enum InferenceFlags {
         None            =      0,  // No special inference behaviors
-        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
-        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
-        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
     /**
