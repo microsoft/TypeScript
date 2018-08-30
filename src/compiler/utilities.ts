@@ -1766,7 +1766,6 @@ namespace ts {
         return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
     }
 
-
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
         if (isInJavaScriptFile(node) && node.initializer &&
