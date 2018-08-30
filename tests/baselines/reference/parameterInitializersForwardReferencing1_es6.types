@@ -45,13 +45,13 @@ function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
 }
 
 function f4 (foo, bar = foo) {
->f4 : (foo: any, bar?: string) => string
+>f4 : (foo: any, bar?: any) => any
 >foo : any
->bar : string
->foo : string
+>bar : any
+>foo : any
 
     return bar
->bar : string
+>bar : any
 }
 
 function f5 (a = a) {

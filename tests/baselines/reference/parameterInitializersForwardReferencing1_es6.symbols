@@ -42,7 +42,7 @@ function f4 (foo, bar = foo) {
 >f4 : Symbol(f4, Decl(parameterInitializersForwardReferencing1_es6.ts, 14, 1))
 >foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 13))
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 17))
->foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 0, 3))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 13))
 
     return bar
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 17))
