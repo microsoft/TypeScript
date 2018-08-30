@@ -13066,6 +13066,14 @@ namespace ts {
             const paramCount = targetRestType ? Math.min(targetCount - 1, sourceCount) :
                 sourceRestType ? targetCount :
                 Math.min(sourceCount, targetCount);
+
+            const sourceThisType = getThisTypeOfSignature(source);
+            if (sourceThisType) {
+                const targetThisType = getThisTypeOfSignature(target);
+                if (targetThisType) {
+                    callback(sourceThisType, targetThisType);
+                }
+            }
             for (let i = 0; i < paramCount; i++) {
                 callback(getTypeAtPosition(source, i), getTypeAtPosition(target, i));
             }
