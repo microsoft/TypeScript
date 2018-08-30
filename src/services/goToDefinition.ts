@@ -29,7 +29,7 @@ namespace ts.GoToDefinition {
 
         const calledDeclaration = tryGetSignatureDeclaration(typeChecker, node);
         // Don't go to the component constructor definition for a JSX element, just go to the component definition.
-        if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorDeclaration(calledDeclaration))) {
+        if (calledDeclaration && !(isJsxOpeningLikeElement(node.parent) && isConstructorLike(calledDeclaration))) {
             const sigInfo = createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration);
             // For a function, if this is the original function definition, return just sigInfo.
             // If this is the original constructor definition, parent is the class.
@@ -318,5 +318,16 @@ namespace ts.GoToDefinition {
         const signature = callLike && typeChecker.getResolvedSignature(callLike);
         // Don't go to a function type, go to the value having that type.
         return tryCast(signature && signature.declaration, (d): d is SignatureDeclaration => isFunctionLike(d) && !isFunctionTypeNode(d));
+    }
+
+    function isConstructorLike(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.ConstructSignature:
+                return true;
+            default:
+                return false;
+        }
     }
 }
