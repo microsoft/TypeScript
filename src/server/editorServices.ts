@@ -472,7 +472,7 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
             this.syntaxOnly = opts.syntaxOnly;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
