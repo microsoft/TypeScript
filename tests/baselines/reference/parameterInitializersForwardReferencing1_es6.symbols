@@ -42,7 +42,7 @@ function f4 (foo, bar = foo) {
 >f4 : Symbol(f4, Decl(parameterInitializersForwardReferencing1_es6.ts, 14, 1))
 >foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 13))
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 17))
->foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 0, 3))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 13))
 
     return bar
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 16, 17))
@@ -83,4 +83,10 @@ class Foo {
 >y : Symbol(Foo.y, Decl(parameterInitializersForwardReferencing1_es6.ts, 33, 30))
 >x : Symbol(x, Decl(parameterInitializersForwardReferencing1_es6.ts, 33, 16))
 }
+
+function f8(foo1: string, bar = foo1) { }
+>f8 : Symbol(f8, Decl(parameterInitializersForwardReferencing1_es6.ts, 34, 1))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1_es6.ts, 36, 12))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 36, 25))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1_es6.ts, 36, 12))
 
