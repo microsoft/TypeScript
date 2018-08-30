@@ -11324,7 +11324,7 @@ namespace ts {
                         return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (!isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                        if (!isPropertyFromSpread(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
@@ -11366,6 +11366,10 @@ namespace ts {
                     }
                 }
                 return false;
+            }
+
+            function isPropertyFromSpread(prop: Symbol, container: Symbol) {
+                return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent !== container.valueDeclaration;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
