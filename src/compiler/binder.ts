@@ -236,9 +236,9 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
-                    (isOverridableDeclaration(valueDeclaration) && !isOverridableDeclaration(node)) ||
+                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
                     (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules
+                    // other kinds of value declarations take precedence over modules and assignment declarations
                     symbol.valueDeclaration = node;
                 }
             }
@@ -374,10 +374,8 @@ namespace ts {
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
-                    else if (isOverridableSymbol(symbol, includes)) {
-                        // TODO: This predicate still needs work. Might be able to move it outside the fail-case check too
-                    }
-                    else {
+                    else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.JSContainer)) {
+                        // JSContainers are allowed to merge with variables, no matter what other flags they have.
                         if (isNamedDeclaration(node)) {
                             node.name.parent = node;
                         }
@@ -2544,8 +2542,7 @@ namespace ts {
             const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
             const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
             const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
-            const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
-            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | jsContainerFlag, excludes & ~jsContainerFlag);
+            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.JSContainer, excludes & ~SymbolFlags.JSContainer);
         }
 
         /**

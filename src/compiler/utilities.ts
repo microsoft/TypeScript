@@ -1283,14 +1283,6 @@ namespace ts {
         return findAncestor(node.parent, isClassLike);
     }
 
-    export function isOverridableSymbol(symbol: Symbol, flags: SymbolFlags) {
-        return flags & SymbolFlags.Variable && symbol.valueDeclaration && isOverridableDeclaration(symbol.valueDeclaration);
-    }
-
-    export function isOverridableDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
-    }
-
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {
@@ -1769,6 +1761,11 @@ namespace ts {
         }
         return decl;
     }
+
+    export function isAssignmentDeclaration(decl: Declaration) {
+        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
+    }
+
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
