@@ -43,7 +43,7 @@ namespace ts.codefix {
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
         // get the function declaration - returns a promise
         const tokenAtPosition = getTokenAtPosition(sourceFile, position);
-        let functionToConvert: FunctionLikeDeclaration;
+        let functionToConvert: FunctionLikeDeclaration | undefined;
 
         // if the parent of a FunctionLikeDeclaration is a variable declaration, the convertToAsync diagnostic will be reported on the variable name
         if (isIdentifier(tokenAtPosition) && isVariableDeclaration(tokenAtPosition.parent) &&
@@ -51,7 +51,7 @@ namespace ts.codefix {
             functionToConvert = tokenAtPosition.parent.initializer;
         }
         else {
-            functionToConvert = getContainingFunction(getTokenAtPosition(sourceFile, position)) as FunctionLikeDeclaration;
+            functionToConvert = tryCast(getContainingFunction(getTokenAtPosition(sourceFile, position)), isFunctionLikeDeclaration);
         }
 
         if (!functionToConvert) {
