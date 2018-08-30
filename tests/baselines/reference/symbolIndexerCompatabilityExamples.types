@@ -1,0 +1,295 @@
+=== tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts ===
+interface Dict<T> {
+    [index: string]: T;
+>index : string
+
+    [index: symbol]: T;
+>index : symbol
+
+    [index: number]: T;
+>index : number
+}
+
+const keyMap: Dict<number> = {};
+>keyMap : Dict<number>
+>{} : {}
+
+function set<T extends object>(index: keyof T) {
+>set : <T extends object>(index: keyof T) => void
+>index : keyof T
+
+    keyMap[index] = 1;
+>keyMap[index] = 1 : 1
+>keyMap[index] : Dict<number>[keyof T]
+>keyMap : Dict<number>
+>index : keyof T
+>1 : 1
+}
+
+interface Dict2<T> {
+    [index: string | number | symbol]: T;
+>index : string | number | symbol
+}
+
+const keyMap2: Dict2<number> = {};
+>keyMap2 : Dict2<number>
+>{} : {}
+
+function set2<T extends object>(index: keyof T) {
+>set2 : <T extends object>(index: keyof T) => void
+>index : keyof T
+
+    keyMap2[index] = 1;
+>keyMap2[index] = 1 : 1
+>keyMap2[index] : Dict2<number>[keyof T]
+>keyMap2 : Dict2<number>
+>index : keyof T
+>1 : 1
+}
+
+interface Dict3<T> {
+    [index: string | symbol]: T;
+>index : string | symbol
+}
+
+const keyMap3: Dict3<number> = {};
+>keyMap3 : Dict3<number>
+>{} : {}
+
+function set3<T extends object>(index: keyof T) {
+>set3 : <T extends object>(index: keyof T) => void
+>index : keyof T
+
+    keyMap3[index] = 1;
+>keyMap3[index] = 1 : 1
+>keyMap3[index] : Dict3<number>[keyof T]
+>keyMap3 : Dict3<number>
+>index : keyof T
+>1 : 1
+}
+
+interface Dict4<T> {
+    [index: string]: T;
+>index : string
+
+    [index: symbol]: T;
+>index : symbol
+}
+
+const keyMap4: Dict4<number> = {};
+>keyMap4 : Dict4<number>
+>{} : {}
+
+function set4<T extends object>(index: keyof T) {
+>set4 : <T extends object>(index: keyof T) => void
+>index : keyof T
+
+    keyMap4[index] = 1;
+>keyMap4[index] = 1 : 1
+>keyMap4[index] : Dict4<number>[keyof T]
+>keyMap4 : Dict4<number>
+>index : keyof T
+>1 : 1
+}
+
+/**
+ * Key can only be number, string or symbol
+ * */
+class SimpleMapMap<K extends PropertyKey, V> {
+>SimpleMapMap : SimpleMapMap<K, V>
+
+    private o: { [k: K]: V } = {};
+>o : { [k: K]: V; }
+>k : K
+>{} : {}
+
+    public has(k: K): boolean {
+>has : (k: K) => boolean
+>k : K
+
+        return k in this.o;
+>k in this.o : boolean
+>k : K
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+    }
+
+    public get(k: K): V {
+>get : (k: K) => V
+>k : K
+
+        return this.o[k];
+>this.o[k] : { [k: K]: V; }[K]
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+>k : K
+    }
+
+    public set(k: K, v: V) {
+>set : (k: K, v: V) => void
+>k : K
+>v : V
+
+        this.o[k] = v;
+>this.o[k] = v : V
+>this.o[k] : { [k: K]: V; }[K]
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+>k : K
+>v : V
+    }
+
+    public getMap(k: K): V {
+>getMap : (k: K) => V
+>k : K
+
+        if (k in this.o) {
+>k in this.o : boolean
+>k : K
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+
+            return this.o[k];
+>this.o[k] : { [k: K]: V; }[K]
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+>k : K
+        }
+        const res = new SimpleMapMap<K, V>();
+>res : SimpleMapMap<K, V>
+>new SimpleMapMap<K, V>() : SimpleMapMap<K, V>
+>SimpleMapMap : typeof SimpleMapMap
+
+        this.o[k] = res as any as V;
+>this.o[k] = res as any as V : V
+>this.o[k] : { [k: K]: V; }[K]
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+>k : K
+>res as any as V : V
+>res as any : any
+>res : SimpleMapMap<K, V>
+
+        return res as any as V;
+>res as any as V : V
+>res as any : any
+>res : SimpleMapMap<K, V>
+    }
+
+    public clear() {
+>clear : () => void
+
+        this.o = {};
+>this.o = {} : {}
+>this.o : { [k: K]: V; }
+>this : this
+>o : { [k: K]: V; }
+>{} : {}
+    }
+}
+
+class SimpleMapMap2<K extends PropertyKey, V> {
+>SimpleMapMap2 : SimpleMapMap2<K, V>
+
+    private o: { [k: PropertyKey]: V } = {};
+>o : { [k: string | number | symbol]: V; }
+>k : string | number | symbol
+>{} : {}
+
+    public has(k: K): boolean {
+>has : (k: K) => boolean
+>k : K
+
+        return k in this.o;
+>k in this.o : boolean
+>k : K
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+    }
+
+    public get(k: K): V {
+>get : (k: K) => V
+>k : K
+
+        return this.o[k];
+>this.o[k] : { [k: string | number | symbol]: V; }[K]
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+>k : K
+    }
+
+    public set(k: K, v: V) {
+>set : (k: K, v: V) => void
+>k : K
+>v : V
+
+        this.o[k] = v;
+>this.o[k] = v : V
+>this.o[k] : { [k: string | number | symbol]: V; }[K]
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+>k : K
+>v : V
+    }
+
+    public getMap(k: K): V {
+>getMap : (k: K) => V
+>k : K
+
+        if (k in this.o) {
+>k in this.o : boolean
+>k : K
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+
+            return this.o[k];
+>this.o[k] : { [k: string | number | symbol]: V; }[K]
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+>k : K
+        }
+        const res = new SimpleMapMap2<K, V>();
+>res : SimpleMapMap2<K, V>
+>new SimpleMapMap2<K, V>() : SimpleMapMap2<K, V>
+>SimpleMapMap2 : typeof SimpleMapMap2
+
+        this.o[k] = res as any as V;
+>this.o[k] = res as any as V : V
+>this.o[k] : { [k: string | number | symbol]: V; }[K]
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+>k : K
+>res as any as V : V
+>res as any : any
+>res : SimpleMapMap2<K, V>
+
+        return res as any as V;
+>res as any as V : V
+>res as any : any
+>res : SimpleMapMap2<K, V>
+    }
+
+    public clear() {
+>clear : () => void
+
+        this.o = {};
+>this.o = {} : {}
+>this.o : { [k: string | number | symbol]: V; }
+>this : this
+>o : { [k: string | number | symbol]: V; }
+>{} : {}
+    }
+}
+

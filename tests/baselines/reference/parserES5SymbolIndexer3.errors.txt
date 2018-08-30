@@ -1,9 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts(2,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-
-
-==== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolIndexer3.ts (1 errors) ====
-    var x: {
-        [s: symbol]: string;
-         ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
-    }

@@ -1,0 +1,310 @@
+=== tests/cases/conformance/types/members/symbolIndexerCompatabilityExamples.ts ===
+interface Dict<T> {
+>Dict : Symbol(Dict, Decl(symbolIndexerCompatabilityExamples.ts, 0, 0))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 0, 15))
+
+    [index: string]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 1, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 0, 15))
+
+    [index: symbol]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 2, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 0, 15))
+
+    [index: number]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 3, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 0, 15))
+}
+
+const keyMap: Dict<number> = {};
+>keyMap : Symbol(keyMap, Decl(symbolIndexerCompatabilityExamples.ts, 6, 5))
+>Dict : Symbol(Dict, Decl(symbolIndexerCompatabilityExamples.ts, 0, 0))
+
+function set<T extends object>(index: keyof T) {
+>set : Symbol(set, Decl(symbolIndexerCompatabilityExamples.ts, 6, 32))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 8, 13))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 8, 31))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 8, 13))
+
+    keyMap[index] = 1;
+>keyMap : Symbol(keyMap, Decl(symbolIndexerCompatabilityExamples.ts, 6, 5))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 8, 31))
+}
+
+interface Dict2<T> {
+>Dict2 : Symbol(Dict2, Decl(symbolIndexerCompatabilityExamples.ts, 10, 1))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 12, 16))
+
+    [index: string | number | symbol]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 13, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 12, 16))
+}
+
+const keyMap2: Dict2<number> = {};
+>keyMap2 : Symbol(keyMap2, Decl(symbolIndexerCompatabilityExamples.ts, 16, 5))
+>Dict2 : Symbol(Dict2, Decl(symbolIndexerCompatabilityExamples.ts, 10, 1))
+
+function set2<T extends object>(index: keyof T) {
+>set2 : Symbol(set2, Decl(symbolIndexerCompatabilityExamples.ts, 16, 34))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 18, 14))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 18, 32))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 18, 14))
+
+    keyMap2[index] = 1;
+>keyMap2 : Symbol(keyMap2, Decl(symbolIndexerCompatabilityExamples.ts, 16, 5))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 18, 32))
+}
+
+interface Dict3<T> {
+>Dict3 : Symbol(Dict3, Decl(symbolIndexerCompatabilityExamples.ts, 20, 1))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 22, 16))
+
+    [index: string | symbol]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 23, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 22, 16))
+}
+
+const keyMap3: Dict3<number> = {};
+>keyMap3 : Symbol(keyMap3, Decl(symbolIndexerCompatabilityExamples.ts, 26, 5))
+>Dict3 : Symbol(Dict3, Decl(symbolIndexerCompatabilityExamples.ts, 20, 1))
+
+function set3<T extends object>(index: keyof T) {
+>set3 : Symbol(set3, Decl(symbolIndexerCompatabilityExamples.ts, 26, 34))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 28, 14))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 28, 32))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 28, 14))
+
+    keyMap3[index] = 1;
+>keyMap3 : Symbol(keyMap3, Decl(symbolIndexerCompatabilityExamples.ts, 26, 5))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 28, 32))
+}
+
+interface Dict4<T> {
+>Dict4 : Symbol(Dict4, Decl(symbolIndexerCompatabilityExamples.ts, 30, 1))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 32, 16))
+
+    [index: string]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 33, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 32, 16))
+
+    [index: symbol]: T;
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 34, 5))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 32, 16))
+}
+
+const keyMap4: Dict4<number> = {};
+>keyMap4 : Symbol(keyMap4, Decl(symbolIndexerCompatabilityExamples.ts, 37, 5))
+>Dict4 : Symbol(Dict4, Decl(symbolIndexerCompatabilityExamples.ts, 30, 1))
+
+function set4<T extends object>(index: keyof T) {
+>set4 : Symbol(set4, Decl(symbolIndexerCompatabilityExamples.ts, 37, 34))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 39, 14))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 39, 32))
+>T : Symbol(T, Decl(symbolIndexerCompatabilityExamples.ts, 39, 14))
+
+    keyMap4[index] = 1;
+>keyMap4 : Symbol(keyMap4, Decl(symbolIndexerCompatabilityExamples.ts, 37, 5))
+>index : Symbol(index, Decl(symbolIndexerCompatabilityExamples.ts, 39, 32))
+}
+
+/**
+ * Key can only be number, string or symbol
+ * */
+class SimpleMapMap<K extends PropertyKey, V> {
+>SimpleMapMap : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+    private o: { [k: K]: V } = {};
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 47, 18))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+    public has(k: K): boolean {
+>has : Symbol(SimpleMapMap.has, Decl(symbolIndexerCompatabilityExamples.ts, 47, 34))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 49, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+
+        return k in this.o;
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 49, 15))
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+    }
+
+    public get(k: K): V {
+>get : Symbol(SimpleMapMap.get, Decl(symbolIndexerCompatabilityExamples.ts, 51, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 53, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+        return this.o[k];
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 53, 15))
+    }
+
+    public set(k: K, v: V) {
+>set : Symbol(SimpleMapMap.set, Decl(symbolIndexerCompatabilityExamples.ts, 55, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 57, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>v : Symbol(v, Decl(symbolIndexerCompatabilityExamples.ts, 57, 20))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+        this.o[k] = v;
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 57, 15))
+>v : Symbol(v, Decl(symbolIndexerCompatabilityExamples.ts, 57, 20))
+    }
+
+    public getMap(k: K): V {
+>getMap : Symbol(SimpleMapMap.getMap, Decl(symbolIndexerCompatabilityExamples.ts, 59, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 61, 18))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+        if (k in this.o) {
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 61, 18))
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+
+            return this.o[k];
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 61, 18))
+        }
+        const res = new SimpleMapMap<K, V>();
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 65, 13))
+>SimpleMapMap : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 46, 19))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+        this.o[k] = res as any as V;
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 61, 18))
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 65, 13))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+
+        return res as any as V;
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 65, 13))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 46, 41))
+    }
+
+    public clear() {
+>clear : Symbol(SimpleMapMap.clear, Decl(symbolIndexerCompatabilityExamples.ts, 68, 5))
+
+        this.o = {};
+>this.o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+>this : Symbol(SimpleMapMap, Decl(symbolIndexerCompatabilityExamples.ts, 41, 1))
+>o : Symbol(SimpleMapMap.o, Decl(symbolIndexerCompatabilityExamples.ts, 46, 46))
+    }
+}
+
+class SimpleMapMap2<K extends PropertyKey, V> {
+>SimpleMapMap2 : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+    private o: { [k: PropertyKey]: V } = {};
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 76, 18))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+    public has(k: K): boolean {
+>has : Symbol(SimpleMapMap2.has, Decl(symbolIndexerCompatabilityExamples.ts, 76, 44))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 78, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+
+        return k in this.o;
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 78, 15))
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+    }
+
+    public get(k: K): V {
+>get : Symbol(SimpleMapMap2.get, Decl(symbolIndexerCompatabilityExamples.ts, 80, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 82, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+        return this.o[k];
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 82, 15))
+    }
+
+    public set(k: K, v: V) {
+>set : Symbol(SimpleMapMap2.set, Decl(symbolIndexerCompatabilityExamples.ts, 84, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 86, 15))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+>v : Symbol(v, Decl(symbolIndexerCompatabilityExamples.ts, 86, 20))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+        this.o[k] = v;
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 86, 15))
+>v : Symbol(v, Decl(symbolIndexerCompatabilityExamples.ts, 86, 20))
+    }
+
+    public getMap(k: K): V {
+>getMap : Symbol(SimpleMapMap2.getMap, Decl(symbolIndexerCompatabilityExamples.ts, 88, 5))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 90, 18))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+        if (k in this.o) {
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 90, 18))
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+
+            return this.o[k];
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 90, 18))
+        }
+        const res = new SimpleMapMap2<K, V>();
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 94, 13))
+>SimpleMapMap2 : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>K : Symbol(K, Decl(symbolIndexerCompatabilityExamples.ts, 75, 20))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+        this.o[k] = res as any as V;
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>k : Symbol(k, Decl(symbolIndexerCompatabilityExamples.ts, 90, 18))
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 94, 13))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+
+        return res as any as V;
+>res : Symbol(res, Decl(symbolIndexerCompatabilityExamples.ts, 94, 13))
+>V : Symbol(V, Decl(symbolIndexerCompatabilityExamples.ts, 75, 42))
+    }
+
+    public clear() {
+>clear : Symbol(SimpleMapMap2.clear, Decl(symbolIndexerCompatabilityExamples.ts, 97, 5))
+
+        this.o = {};
+>this.o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+>this : Symbol(SimpleMapMap2, Decl(symbolIndexerCompatabilityExamples.ts, 73, 1))
+>o : Symbol(SimpleMapMap2.o, Decl(symbolIndexerCompatabilityExamples.ts, 75, 47))
+    }
+}
+

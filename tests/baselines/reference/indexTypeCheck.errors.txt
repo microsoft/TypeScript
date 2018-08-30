@@ -9,11 +9,14 @@ tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: 'number' index type 
 tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/indexTypeCheck.ts(32,3): error TS1096: An index signature must have exactly one parameter.
-tests/cases/compiler/indexTypeCheck.ts(36,3): error TS1023: An index signature parameter type must be 'string' or 'number'.
+tests/cases/compiler/indexTypeCheck.ts(36,2): error TS1021: An index signature must have a type annotation.
+tests/cases/compiler/indexTypeCheck.ts(36,3): error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+  Type 'Purple' is not assignable to type 'string | number | symbol'.
+    Type 'Purple' is not assignable to type 'symbol'.
 tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot be used as an index type.
 
 
-==== tests/cases/compiler/indexTypeCheck.ts (8 errors) ====
+==== tests/cases/compiler/indexTypeCheck.ts (9 errors) ====
     interface Red {
     	[n:number]; // ok
     	~~~~~~~~~~~
@@ -67,8 +70,12 @@ tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot b
     
     interface Magenta {
     	[p:Purple]; // error
+    	~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
     	 ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+!!! error TS1023:   Type 'Purple' is not assignable to type 'string | number | symbol'.
+!!! error TS1023:     Type 'Purple' is not assignable to type 'symbol'.
     }
     
     var yellow: Yellow;

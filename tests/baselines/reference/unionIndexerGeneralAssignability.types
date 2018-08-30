@@ -1,0 +1,544 @@
+=== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts ===
+interface A {
+    [x: "a" | "b" | "c"]: string;
+>x : "a" | "b" | "c"
+}
+
+interface B {
+    [x: "b" | "c" | "d"]: string;
+>x : "b" | "c" | "d"
+}
+
+interface AB {
+    [x: "b" | "c"]: string;
+>x : "b" | "c"
+}
+
+function f1<
+>f1 : <K1 extends "a" | "b" | "c", K2 extends K1>(a: A, b: B, ab: AB, k1: K1, k2: K2) => void
+
+    K1 extends "a" | "b" | "c",
+    K2 extends K1
+>(a: A, b: B, ab: AB, k1: K1, k2: K2) {
+>a : A
+>b : B
+>ab : AB
+>k1 : K1
+>k2 : K2
+
+    a = b; // error: B is missing `"a"`
+>a = b : B
+>a : A
+>b : B
+
+    a = ab; // error: AB is missing `"a"`
+>a = ab : AB
+>a : A
+>ab : AB
+
+    b = a; // error: A is missing `"d"`
+>b = a : A
+>b : B
+>a : A
+
+    b = ab; // error: AB is missing `"d"`
+>b = ab : AB
+>b : B
+>ab : AB
+
+    ab = a;
+>ab = a : A
+>ab : AB
+>a : A
+
+    ab = b;
+>ab = b : B
+>ab : AB
+>b : B
+
+    interface SubA {
+        [x: K1]: string;
+>x : K1
+    }
+    let s: SubA = {};
+>s : SubA
+>{} : {}
+
+    s[k1]; // valid
+>s[k1] : SubA[K1]
+>s : SubA
+>k1 : K1
+
+    s = a;
+>s = a : A
+>s : SubA
+>a : A
+
+    s = b; // error: doesn't provide `"b"`
+>s = b : B
+>s : SubA
+>b : B
+
+    s = ab; // error: doesn't provide `"b"`
+>s = ab : AB
+>s : SubA
+>ab : AB
+
+    a = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>a = s : SubA
+>a : A
+>s : SubA
+
+    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>b = s : SubA
+>b : B
+>s : SubA
+
+    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>ab = s : SubA
+>ab : AB
+>s : SubA
+
+    interface SubB {
+        [x: K2]: string;
+>x : K2
+    }
+    let s2: SubB = {};
+>s2 : SubB
+>{} : {}
+
+    s2[k2]; // valid
+>s2[k2] : SubB[K2]
+>s2 : SubB
+>k2 : K2
+
+    s2[k1]; // invalid
+>s2[k1] : SubB[K1]
+>s2 : SubB
+>k1 : K1
+
+    s2 = a;
+>s2 = a : A
+>s2 : SubB
+>a : A
+
+    s2 = b; // error: doesn't provide `"b"`
+>s2 = b : B
+>s2 : SubB
+>b : B
+
+    s2 = ab; // error: doesn't provide `"b"`
+>s2 = ab : AB
+>s2 : SubB
+>ab : AB
+
+    s2 = s;
+>s2 = s : SubA
+>s2 : SubB
+>s : SubA
+
+    a = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>a = s2 : SubB
+>a : A
+>s2 : SubB
+
+    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>b = s2 : SubB
+>b : B
+>s2 : SubB
+
+    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>ab = s2 : SubB
+>ab : AB
+>s2 : SubB
+
+    s = s2; // error: might not provide any of the keys of K1
+>s = s2 : SubB
+>s : SubA
+>s2 : SubB
+}
+
+interface C {
+    [x: "a" | "b" | "c"]: string;
+>x : "a" | "b" | "c"
+
+    [y: 1 | 2 | 3]: string;
+>y : 1 | 2 | 3
+}
+
+interface D {
+    [x: "a" | "b" | "c" | "d"]: string;
+>x : "a" | "b" | "c" | "d"
+
+    [y: 1 | 2 | 3 | 4]: string;
+>y : 1 | 2 | 3 | 4
+}
+
+interface E {
+    [x: "a" | "b" | "c" | "d" | 1 | 2 | 3 | 4]: string;
+>x : "a" | "b" | "c" | "d" | 1 | 2 | 3 | 4
+}
+
+function f2(c: C, d: D, e: E) {
+>f2 : (c: C, d: D, e: E) => void
+>c : C
+>d : D
+>e : E
+
+    c = d;
+>c = d : D
+>c : C
+>d : D
+
+    c = e;
+>c = e : E
+>c : C
+>e : E
+
+    d = c; // error: C is missing an index for `"d"` and `4`
+>d = c : C
+>d : D
+>c : C
+
+    d = e;
+>d = e : E
+>d : D
+>e : E
+
+    e = c; // error: C is missing an index for `"d"` and `4`
+>e = c : C
+>e : E
+>c : C
+
+    e = d;
+>e = d : D
+>e : E
+>d : D
+}
+
+enum S1 {
+>S1 : S1
+
+    A = "a",
+>A : S1.A
+>"a" : "a"
+
+    B = "b",
+>B : S1.B
+>"b" : "b"
+
+    C = "c"
+>C : S1.C
+>"c" : "c"
+}
+
+enum S2 {
+>S2 : S2
+
+    A = "a",
+>A : S2.A
+>"a" : "a"
+
+    B = "b",
+>B : S2.B
+>"b" : "b"
+
+    C = "c"
+>C : S2.C
+>"c" : "c"
+}
+
+interface F {
+    [x: S1]: string;
+>x : S1
+}
+
+interface G {
+    [x: S2]: string;
+>x : S2
+}
+
+interface FG {
+    [x: S1 | S2]: string;
+>x : S1 | S2
+}
+
+interface IFG extends F, G {}
+
+function f3(f: F, g: G, fg: FG, fg2: F & G, fg3: IFG) {
+>f3 : (f: F, g: G, fg: FG, fg2: F & G, fg3: IFG) => void
+>f : F
+>g : G
+>fg : FG
+>fg2 : F & G
+>fg3 : IFG
+
+    f = g; // error: incompatible string enums
+>f = g : G
+>f : F
+>g : G
+
+    f = fg; // OK
+>f = fg : FG
+>f : F
+>fg : FG
+
+    f = fg2; // OK
+>f = fg2 : F & G
+>f : F
+>fg2 : F & G
+
+    f = fg3; // OK
+>f = fg3 : IFG
+>f : F
+>fg3 : IFG
+
+    g = f; // error: incompatible string enums
+>g = f : F
+>g : G
+>f : F
+
+    g = fg; // OK
+>g = fg : FG
+>g : G
+>fg : FG
+
+    g = fg2; // OK
+>g = fg2 : F & G
+>g : G
+>fg2 : F & G
+
+    g = fg3; // OK
+>g = fg3 : IFG
+>g : G
+>fg3 : IFG
+
+    fg = f; // error: doesn't provide S2
+>fg = f : F
+>fg : FG
+>f : F
+
+    fg = g; // error: doesn't provide S1
+>fg = g : G
+>fg : FG
+>g : G
+
+    fg = fg2; // OK
+>fg = fg2 : F & G
+>fg : FG
+>fg2 : F & G
+
+    fg = fg3; // OK
+>fg = fg3 : IFG
+>fg : FG
+>fg3 : IFG
+
+    fg2 = f; // error: doesn't provide S2
+>fg2 = f : F
+>fg2 : F & G
+>f : F
+
+    fg2 = g; // error: doesn't provide S1
+>fg2 = g : G
+>fg2 : F & G
+>g : G
+
+    fg2 = fg; // OK
+>fg2 = fg : FG
+>fg2 : F & G
+>fg : FG
+
+    fg2 = fg3; // OK
+>fg2 = fg3 : IFG
+>fg2 : F & G
+>fg3 : IFG
+
+    fg3 = f; // error: doesn't provide S2
+>fg3 = f : F
+>fg3 : IFG
+>f : F
+
+    fg3 = g; // error: doesn't provide S1
+>fg3 = g : G
+>fg3 : IFG
+>g : G
+
+    fg3 = fg; // OK
+>fg3 = fg : FG
+>fg3 : IFG
+>fg : FG
+
+    fg3 = fg2; // OK
+>fg3 = fg2 : F & G
+>fg3 : IFG
+>fg2 : F & G
+}
+
+enum S3 {
+>S3 : S3
+
+    A = "a",
+>A : S3.A
+>"a" : "a"
+
+    B = "b",
+>B : S3.B
+>"b" : "b"
+
+    C = "c"
+>C : S3.C
+>"c" : "c"
+}
+
+interface H {
+    [x: S3]: string;
+>x : S3
+
+    [S3.A]: "a";
+>[S3.A] : "a"
+>S3.A : S3.A
+>S3 : typeof S3
+>A : S3.A
+}
+
+interface I {
+    [x: S3]: string;
+>x : S3
+
+    [x: S3.A]: "a";
+>x : S3.A
+>S3 : any
+}
+
+interface J {
+    [x: S3]: string;
+>x : S3
+
+    [x: S3.A]: never;
+>x : S3.A
+>S3 : any
+}
+
+type K = {[K in S3]: string} & {[S3.A]: "a"};
+>K : K
+>[S3.A] : "a"
+>S3.A : S3.A
+>S3 : typeof S3
+>A : S3.A
+
+type L = {[K in S3]: string} & {[x: S3.A]: "a"};
+>L : L
+>x : S3.A
+>S3 : any
+
+// TODO: reconcile union signatures with properties?
+// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
+function f4(h: H, i: I, j: J, k: K, l: L) {
+>f4 : (h: H, i: I, j: J, k: K, l: L) => void
+>h : H
+>i : I
+>j : J
+>k : K
+>l : L
+
+    h = i;
+>h = i : I
+>h : H
+>i : I
+
+    h = j;
+>h = j : J
+>h : H
+>j : J
+
+    h = k;
+>h = k : K
+>h : H
+>k : K
+
+    h = l;
+>h = l : L
+>h : H
+>l : L
+
+    i = h;
+>i = h : H
+>i : I
+>h : H
+
+    i = j;
+>i = j : J
+>i : I
+>j : J
+
+    i = k;
+>i = k : K
+>i : I
+>k : K
+
+    i = l;
+>i = l : L
+>i : I
+>l : L
+
+    j = h;
+>j = h : H
+>j : J
+>h : H
+
+    j = i;
+>j = i : I
+>j : J
+>i : I
+
+    j = k;
+>j = k : K
+>j : J
+>k : K
+
+    j = l;
+>j = l : L
+>j : J
+>l : L
+
+    k = h;
+>k = h : H
+>k : K
+>h : H
+
+    h = i;
+>h = i : I
+>h : H
+>i : I
+
+    k = j;
+>k = j : J
+>k : K
+>j : J
+
+    k = l;
+>k = l : L
+>k : K
+>l : L
+
+    l = h;
+>l = h : H
+>l : L
+>h : H
+
+    l = i;
+>l = i : I
+>l : L
+>i : I
+
+    l = j;
+>l = j : J
+>l : L
+>j : J
+
+    l = k;
+>l = k : K
+>l : L
+>k : K
+}
+

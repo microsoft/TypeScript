@@ -30,6 +30,13 @@ namespace ts {
             (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
+    function getIndexSignatureParameterErrorChain() {
+        return chainDiagnosticMessages(
+            /*details*/ undefined,
+            Diagnostics.An_index_signature_parameter_type_must_be_assignable_to_string_number_symbol
+        );
+    }
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         const getPackagesSet: () => Map<true> = memoize(() => {
             const set = createMap<true>();
@@ -9444,6 +9451,10 @@ namespace ts {
             if (isGenericMappedType(objectType)) {
                 return type.simplified = substituteIndexedMappedType(objectType, type);
             }
+            const indexedType = getResultingTypeOfIndexOnType(objectType, indexType);
+            if (indexedType) {
+                return type.simplified = getSimplifiedType(indexedType);
+            }
             if (objectType.flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
@@ -11081,7 +11092,7 @@ namespace ts {
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
-            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation || relation === indexAssignableRelation || relation === indexAccessAssignableRelation) {
+            if (relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
@@ -11090,10 +11101,12 @@ namespace ts {
                     t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
             }
             if (relation === indexAccessAssignableRelation) {
+                if (s & TypeFlags.Any) return true;
                 if (s & TypeFlags.NumberLike && t & TypeFlags.String) return true;
                 if (s & TypeFlags.NumberLiteral && t & TypeFlags.StringLiteral) return (source as LiteralType).value === +(target as LiteralType).value;
             }
             if (relation === indexAssignableRelation) {
+                if (s & TypeFlags.Any) return true;
                 if (s & TypeFlags.String && t & TypeFlags.Number) return true;
                 if (s & TypeFlags.StringLiteral && t & TypeFlags.NumberLiteral) return +(source as LiteralType).value === (target as LiteralType).value;
             }
@@ -18938,7 +18951,7 @@ namespace ts {
 
         function getArrayifiedType(type: Type) {
             if (forEachType(type, t => !(t.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isArrayType(t) || isTupleType(t)))) {
-                return createArrayType(getIndexTypeOfType(type, IndexKind.Number) || errorType);
+                return createArrayType(getResultingTypeOfIndexOnType(type, numberType) || errorType);
             }
             return type;
         }
@@ -29011,23 +29024,8 @@ namespace ts {
             if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
-                const type = getTypeFromTypeNode(parameter.type);
-
-                if (type.flags & TypeFlags.String || type.flags & TypeFlags.Number) {
-                    return grammarErrorOnNode(parameter.name,
-                                              Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead,
-                                              getTextOfNode(parameter.name),
-                                              typeToString(type),
-                                              typeToString(getTypeFromTypeNode(node.type!)));
-                }
-
-                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.StringLiteral, /*strict*/ true)) {
-                    return grammarErrorOnNode(parameter.name,
-                                              Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
-                }
-
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_or_number);
+            else {
+                checkTypeAssignableTo(getTypeFromTypeNode(parameter.type), stringNumberSymbolType, parameter.name, /*headMessage*/ undefined, getIndexSignatureParameterErrorChain);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);

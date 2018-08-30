@@ -2,7 +2,6 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(10,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(11,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,11): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,14): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(12,18): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(14,13): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
@@ -24,7 +23,7 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts(37,10): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts (24 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument2.ts (23 errors) ====
     // it is an error to use a generic type without type arguments
     // all of these are errors 
     
@@ -45,8 +44,6 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
                      ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
     var d: { [x: I]: I };
-              ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
                  ~
 !!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
                      ~

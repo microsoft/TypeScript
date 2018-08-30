@@ -1,0 +1,110 @@
+=== tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts ===
+export interface UserInterfaceColors {
+    [index: UserInterfaceElement]: ColorInfo;
+>index : UserInterfaceElement
+}
+export interface ColorInfo {
+    r: number;
+>r : number
+
+    g: number;
+>g : number
+
+    b: number;
+>b : number
+
+    a: number;
+>a : number
+}
+export enum UserInterfaceElement {
+>UserInterfaceElement : UserInterfaceElement
+
+    ActiveTitleBar = 0,
+>ActiveTitleBar : UserInterfaceElement.ActiveTitleBar
+>0 : 0
+
+    InactiveTitleBar = 1,
+>InactiveTitleBar : UserInterfaceElement.InactiveTitleBar
+>1 : 1
+}
+
+const x: UserInterfaceColors = null as any;
+>x : UserInterfaceColors
+>null as any : any
+>null : null
+
+declare function expectColInfo(x: ColorInfo): void;
+>expectColInfo : (x: ColorInfo) => void
+>x : ColorInfo
+
+// correct uses
+expectColInfo(x[UserInterfaceElement.ActiveTitleBar]);
+>expectColInfo(x[UserInterfaceElement.ActiveTitleBar]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[UserInterfaceElement.ActiveTitleBar] : ColorInfo
+>x : UserInterfaceColors
+>UserInterfaceElement.ActiveTitleBar : UserInterfaceElement.ActiveTitleBar
+>UserInterfaceElement : typeof UserInterfaceElement
+>ActiveTitleBar : UserInterfaceElement.ActiveTitleBar
+
+expectColInfo(x[UserInterfaceElement.InactiveTitleBar]);
+>expectColInfo(x[UserInterfaceElement.InactiveTitleBar]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[UserInterfaceElement.InactiveTitleBar] : ColorInfo
+>x : UserInterfaceColors
+>UserInterfaceElement.InactiveTitleBar : UserInterfaceElement.InactiveTitleBar
+>UserInterfaceElement : typeof UserInterfaceElement
+>InactiveTitleBar : UserInterfaceElement.InactiveTitleBar
+
+// errors
+expectColInfo(x[0]);
+>expectColInfo(x[0]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[0] : any
+>x : UserInterfaceColors
+>0 : 0
+
+expectColInfo(x[1]);
+>expectColInfo(x[1]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[1] : any
+>x : UserInterfaceColors
+>1 : 1
+
+expectColInfo(x["0"]);
+>expectColInfo(x["0"]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x["0"] : any
+>x : UserInterfaceColors
+>"0" : "0"
+
+expectColInfo(x["1"]);
+>expectColInfo(x["1"]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x["1"] : any
+>x : UserInterfaceColors
+>"1" : "1"
+
+expectColInfo(x[0 as number]);
+>expectColInfo(x[0 as number]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[0 as number] : any
+>x : UserInterfaceColors
+>0 as number : number
+>0 : 0
+
+expectColInfo(x["0" as string]);
+>expectColInfo(x["0" as string]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x["0" as string] : any
+>x : UserInterfaceColors
+>"0" as string : string
+>"0" : "0"
+
+expectColInfo(x[12]);
+>expectColInfo(x[12]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x[12] : any
+>x : UserInterfaceColors
+>12 : 12
+

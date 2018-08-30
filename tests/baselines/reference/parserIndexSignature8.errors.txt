@@ -1,12 +1,19 @@
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(1,13): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,14): error TS1023: An index signature parameter type must be 'string' or 'number'.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(1,12): error TS1021: An index signature must have a type annotation.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,13): error TS1021: An index signature must have a type annotation.
+tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts(2,14): error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+  Type 'RegExp' is not assignable to type 'string | number | symbol'.
+    Type 'RegExp' is not assignable to type 'symbol'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts (2 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts (3 errors) ====
     var foo: { [index: any]; }; // expect an error here
-                ~~~~~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+               ~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
     var foo2: { [index: RegExp]; }; // expect an error here
+                ~~~~~~~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
                  ~~~~~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+!!! error TS1023:   Type 'RegExp' is not assignable to type 'string | number | symbol'.
+!!! error TS1023:     Type 'RegExp' is not assignable to type 'symbol'.
     

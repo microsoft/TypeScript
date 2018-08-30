@@ -5,17 +5,14 @@ tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: 'number' index 
   Type 'A' is not assignable to type 'B'.
 tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
   Type 'A' is not assignable to type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(34,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[n: number]: A' instead.
-tests/cases/compiler/indexerConstraints2.ts(40,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[s: string]: A' instead.
-tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(64,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
+tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+  Type 'boolean' is not assignable to type 'string | number | symbol'.
+tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+  Type 'NonIndexableUnion' is not assignable to type 'string | number | symbol'.
+    Type 'false' is not assignable to type 'string | number | symbol'.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (11 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (5 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -60,16 +57,12 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     
     interface L {
         [n: AliasedNumber]: A;
-         ~
-!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[n: number]: A' instead.
     }
     
     type AliasedString = string;
     
     interface M {
         [s: AliasedString]: A;
-         ~
-!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[s: string]: A' instead.
     }
     
     type AliasedBoolean = boolean;
@@ -77,15 +70,14 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     interface N {
         [b: AliasedBoolean]: A;
          ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+!!! error TS1023:   Type 'boolean' is not assignable to type 'string | number | symbol'.
     }
     
     type IndexableUnion = "foo" | "bar";
     
     interface O {
         [u: IndexableUnion]: A;
-         ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
     }
     
     type NonIndexableUnion = boolean | {};
@@ -93,27 +85,23 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
     interface P {
         [u: NonIndexableUnion]: A;
          ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be assignable to 'string | number | symbol'.
+!!! error TS1023:   Type 'NonIndexableUnion' is not assignable to type 'string | number | symbol'.
+!!! error TS1023:     Type 'false' is not assignable to type 'string | number | symbol'.
     }
     
     type NonIndexableUnion2 = string | number;
     
     interface Q {
         [u: NonIndexableUnion2]: A;
-         ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
     
     type NonIndexableUnion3 = "foo" | 42;
     
     interface R {
         [u: NonIndexableUnion3]: A;
-         ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
     
     interface S {
         [u: "foo" | "bar"]: A;
-         ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
     }

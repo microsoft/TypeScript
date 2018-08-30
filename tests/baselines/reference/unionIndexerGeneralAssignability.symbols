@@ -1,0 +1,537 @@
+=== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts ===
+interface A {
+>A : Symbol(A, Decl(unionIndexerGeneralAssignability.ts, 0, 0))
+
+    [x: "a" | "b" | "c"]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 1, 5))
+}
+
+interface B {
+>B : Symbol(B, Decl(unionIndexerGeneralAssignability.ts, 2, 1))
+
+    [x: "b" | "c" | "d"]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 5, 5))
+}
+
+interface AB {
+>AB : Symbol(AB, Decl(unionIndexerGeneralAssignability.ts, 6, 1))
+
+    [x: "b" | "c"]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 9, 5))
+}
+
+function f1<
+>f1 : Symbol(f1, Decl(unionIndexerGeneralAssignability.ts, 10, 1))
+
+    K1 extends "a" | "b" | "c",
+>K1 : Symbol(K1, Decl(unionIndexerGeneralAssignability.ts, 12, 12))
+
+    K2 extends K1
+>K2 : Symbol(K2, Decl(unionIndexerGeneralAssignability.ts, 13, 31))
+>K1 : Symbol(K1, Decl(unionIndexerGeneralAssignability.ts, 12, 12))
+
+>(a: A, b: B, ab: AB, k1: K1, k2: K2) {
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+>A : Symbol(A, Decl(unionIndexerGeneralAssignability.ts, 0, 0))
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+>B : Symbol(B, Decl(unionIndexerGeneralAssignability.ts, 2, 1))
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+>AB : Symbol(AB, Decl(unionIndexerGeneralAssignability.ts, 6, 1))
+>k1 : Symbol(k1, Decl(unionIndexerGeneralAssignability.ts, 15, 21))
+>K1 : Symbol(K1, Decl(unionIndexerGeneralAssignability.ts, 12, 12))
+>k2 : Symbol(k2, Decl(unionIndexerGeneralAssignability.ts, 15, 29))
+>K2 : Symbol(K2, Decl(unionIndexerGeneralAssignability.ts, 13, 31))
+
+    a = b; // error: B is missing `"a"`
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+
+    a = ab; // error: AB is missing `"a"`
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+
+    b = a; // error: A is missing `"d"`
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+
+    b = ab; // error: AB is missing `"d"`
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+
+    ab = a;
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+
+    ab = b;
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+
+    interface SubA {
+>SubA : Symbol(SubA, Decl(unionIndexerGeneralAssignability.ts, 23, 11))
+
+        [x: K1]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 26, 9))
+>K1 : Symbol(K1, Decl(unionIndexerGeneralAssignability.ts, 12, 12))
+    }
+    let s: SubA = {};
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>SubA : Symbol(SubA, Decl(unionIndexerGeneralAssignability.ts, 23, 11))
+
+    s[k1]; // valid
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>k1 : Symbol(k1, Decl(unionIndexerGeneralAssignability.ts, 15, 21))
+
+    s = a;
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+
+    s = b; // error: doesn't provide `"b"`
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+
+    s = ab; // error: doesn't provide `"b"`
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+
+    a = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+
+    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+
+    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+
+    interface SubB {
+>SubB : Symbol(SubB, Decl(unionIndexerGeneralAssignability.ts, 36, 11))
+
+        [x: K2]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 39, 9))
+>K2 : Symbol(K2, Decl(unionIndexerGeneralAssignability.ts, 13, 31))
+    }
+    let s2: SubB = {};
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>SubB : Symbol(SubB, Decl(unionIndexerGeneralAssignability.ts, 36, 11))
+
+    s2[k2]; // valid
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>k2 : Symbol(k2, Decl(unionIndexerGeneralAssignability.ts, 15, 29))
+
+    s2[k1]; // invalid
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>k1 : Symbol(k1, Decl(unionIndexerGeneralAssignability.ts, 15, 21))
+
+    s2 = a;
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+
+    s2 = b; // error: doesn't provide `"b"`
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+
+    s2 = ab; // error: doesn't provide `"b"`
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+
+    s2 = s;
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+
+    a = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+
+    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+
+    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+>ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+
+    s = s2; // error: might not provide any of the keys of K1
+>s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
+>s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
+}
+
+interface C {
+>C : Symbol(C, Decl(unionIndexerGeneralAssignability.ts, 53, 1))
+
+    [x: "a" | "b" | "c"]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 56, 5))
+
+    [y: 1 | 2 | 3]: string;
+>y : Symbol(y, Decl(unionIndexerGeneralAssignability.ts, 57, 5))
+}
+
+interface D {
+>D : Symbol(D, Decl(unionIndexerGeneralAssignability.ts, 58, 1))
+
+    [x: "a" | "b" | "c" | "d"]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 61, 5))
+
+    [y: 1 | 2 | 3 | 4]: string;
+>y : Symbol(y, Decl(unionIndexerGeneralAssignability.ts, 62, 5))
+}
+
+interface E {
+>E : Symbol(E, Decl(unionIndexerGeneralAssignability.ts, 63, 1))
+
+    [x: "a" | "b" | "c" | "d" | 1 | 2 | 3 | 4]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 66, 5))
+}
+
+function f2(c: C, d: D, e: E) {
+>f2 : Symbol(f2, Decl(unionIndexerGeneralAssignability.ts, 67, 1))
+>c : Symbol(c, Decl(unionIndexerGeneralAssignability.ts, 69, 12))
+>C : Symbol(C, Decl(unionIndexerGeneralAssignability.ts, 53, 1))
+>d : Symbol(d, Decl(unionIndexerGeneralAssignability.ts, 69, 17))
+>D : Symbol(D, Decl(unionIndexerGeneralAssignability.ts, 58, 1))
+>e : Symbol(e, Decl(unionIndexerGeneralAssignability.ts, 69, 23))
+>E : Symbol(E, Decl(unionIndexerGeneralAssignability.ts, 63, 1))
+
+    c = d;
+>c : Symbol(c, Decl(unionIndexerGeneralAssignability.ts, 69, 12))
+>d : Symbol(d, Decl(unionIndexerGeneralAssignability.ts, 69, 17))
+
+    c = e;
+>c : Symbol(c, Decl(unionIndexerGeneralAssignability.ts, 69, 12))
+>e : Symbol(e, Decl(unionIndexerGeneralAssignability.ts, 69, 23))
+
+    d = c; // error: C is missing an index for `"d"` and `4`
+>d : Symbol(d, Decl(unionIndexerGeneralAssignability.ts, 69, 17))
+>c : Symbol(c, Decl(unionIndexerGeneralAssignability.ts, 69, 12))
+
+    d = e;
+>d : Symbol(d, Decl(unionIndexerGeneralAssignability.ts, 69, 17))
+>e : Symbol(e, Decl(unionIndexerGeneralAssignability.ts, 69, 23))
+
+    e = c; // error: C is missing an index for `"d"` and `4`
+>e : Symbol(e, Decl(unionIndexerGeneralAssignability.ts, 69, 23))
+>c : Symbol(c, Decl(unionIndexerGeneralAssignability.ts, 69, 12))
+
+    e = d;
+>e : Symbol(e, Decl(unionIndexerGeneralAssignability.ts, 69, 23))
+>d : Symbol(d, Decl(unionIndexerGeneralAssignability.ts, 69, 17))
+}
+
+enum S1 {
+>S1 : Symbol(S1, Decl(unionIndexerGeneralAssignability.ts, 78, 1))
+
+    A = "a",
+>A : Symbol(S1.A, Decl(unionIndexerGeneralAssignability.ts, 80, 9))
+
+    B = "b",
+>B : Symbol(S1.B, Decl(unionIndexerGeneralAssignability.ts, 81, 12))
+
+    C = "c"
+>C : Symbol(S1.C, Decl(unionIndexerGeneralAssignability.ts, 82, 12))
+}
+
+enum S2 {
+>S2 : Symbol(S2, Decl(unionIndexerGeneralAssignability.ts, 84, 1))
+
+    A = "a",
+>A : Symbol(S2.A, Decl(unionIndexerGeneralAssignability.ts, 86, 9))
+
+    B = "b",
+>B : Symbol(S2.B, Decl(unionIndexerGeneralAssignability.ts, 87, 12))
+
+    C = "c"
+>C : Symbol(S2.C, Decl(unionIndexerGeneralAssignability.ts, 88, 12))
+}
+
+interface F {
+>F : Symbol(F, Decl(unionIndexerGeneralAssignability.ts, 90, 1))
+
+    [x: S1]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 93, 5))
+>S1 : Symbol(S1, Decl(unionIndexerGeneralAssignability.ts, 78, 1))
+}
+
+interface G {
+>G : Symbol(G, Decl(unionIndexerGeneralAssignability.ts, 94, 1))
+
+    [x: S2]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 97, 5))
+>S2 : Symbol(S2, Decl(unionIndexerGeneralAssignability.ts, 84, 1))
+}
+
+interface FG {
+>FG : Symbol(FG, Decl(unionIndexerGeneralAssignability.ts, 98, 1))
+
+    [x: S1 | S2]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 101, 5))
+>S1 : Symbol(S1, Decl(unionIndexerGeneralAssignability.ts, 78, 1))
+>S2 : Symbol(S2, Decl(unionIndexerGeneralAssignability.ts, 84, 1))
+}
+
+interface IFG extends F, G {}
+>IFG : Symbol(IFG, Decl(unionIndexerGeneralAssignability.ts, 102, 1))
+>F : Symbol(F, Decl(unionIndexerGeneralAssignability.ts, 90, 1))
+>G : Symbol(G, Decl(unionIndexerGeneralAssignability.ts, 94, 1))
+
+function f3(f: F, g: G, fg: FG, fg2: F & G, fg3: IFG) {
+>f3 : Symbol(f3, Decl(unionIndexerGeneralAssignability.ts, 104, 29))
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+>F : Symbol(F, Decl(unionIndexerGeneralAssignability.ts, 90, 1))
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+>G : Symbol(G, Decl(unionIndexerGeneralAssignability.ts, 94, 1))
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+>FG : Symbol(FG, Decl(unionIndexerGeneralAssignability.ts, 98, 1))
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+>F : Symbol(F, Decl(unionIndexerGeneralAssignability.ts, 90, 1))
+>G : Symbol(G, Decl(unionIndexerGeneralAssignability.ts, 94, 1))
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+>IFG : Symbol(IFG, Decl(unionIndexerGeneralAssignability.ts, 102, 1))
+
+    f = g; // error: incompatible string enums
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+
+    f = fg; // OK
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+
+    f = fg2; // OK
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+
+    f = fg3; // OK
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+
+    g = f; // error: incompatible string enums
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+
+    g = fg; // OK
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+
+    g = fg2; // OK
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+
+    g = fg3; // OK
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+
+    fg = f; // error: doesn't provide S2
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+
+    fg = g; // error: doesn't provide S1
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+
+    fg = fg2; // OK
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+
+    fg = fg3; // OK
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+
+    fg2 = f; // error: doesn't provide S2
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+
+    fg2 = g; // error: doesn't provide S1
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+
+    fg2 = fg; // OK
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+
+    fg2 = fg3; // OK
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+
+    fg3 = f; // error: doesn't provide S2
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+>f : Symbol(f, Decl(unionIndexerGeneralAssignability.ts, 106, 12))
+
+    fg3 = g; // error: doesn't provide S1
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+>g : Symbol(g, Decl(unionIndexerGeneralAssignability.ts, 106, 17))
+
+    fg3 = fg; // OK
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+>fg : Symbol(fg, Decl(unionIndexerGeneralAssignability.ts, 106, 23))
+
+    fg3 = fg2; // OK
+>fg3 : Symbol(fg3, Decl(unionIndexerGeneralAssignability.ts, 106, 43))
+>fg2 : Symbol(fg2, Decl(unionIndexerGeneralAssignability.ts, 106, 31))
+}
+
+enum S3 {
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+
+    A = "a",
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+
+    B = "b",
+>B : Symbol(S3.B, Decl(unionIndexerGeneralAssignability.ts, 134, 12))
+
+    C = "c"
+>C : Symbol(S3.C, Decl(unionIndexerGeneralAssignability.ts, 135, 12))
+}
+
+interface H {
+>H : Symbol(H, Decl(unionIndexerGeneralAssignability.ts, 137, 1))
+
+    [x: S3]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 140, 5))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+
+    [S3.A]: "a";
+>[S3.A] : Symbol(H[S3.A], Decl(unionIndexerGeneralAssignability.ts, 140, 20))
+>S3.A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+}
+
+interface I {
+>I : Symbol(I, Decl(unionIndexerGeneralAssignability.ts, 142, 1))
+
+    [x: S3]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 145, 5))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+
+    [x: S3.A]: "a";
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 146, 5))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+}
+
+interface J {
+>J : Symbol(J, Decl(unionIndexerGeneralAssignability.ts, 147, 1))
+
+    [x: S3]: string;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 150, 5))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+
+    [x: S3.A]: never;
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 151, 5))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+}
+
+type K = {[K in S3]: string} & {[S3.A]: "a"};
+>K : Symbol(K, Decl(unionIndexerGeneralAssignability.ts, 152, 1))
+>K : Symbol(K, Decl(unionIndexerGeneralAssignability.ts, 154, 11))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>[S3.A] : Symbol([S3.A], Decl(unionIndexerGeneralAssignability.ts, 154, 32))
+>S3.A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+
+type L = {[K in S3]: string} & {[x: S3.A]: "a"};
+>L : Symbol(L, Decl(unionIndexerGeneralAssignability.ts, 154, 45))
+>K : Symbol(K, Decl(unionIndexerGeneralAssignability.ts, 155, 11))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>x : Symbol(x, Decl(unionIndexerGeneralAssignability.ts, 155, 33))
+>S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
+>A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
+
+// TODO: reconcile union signatures with properties?
+// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
+function f4(h: H, i: I, j: J, k: K, l: L) {
+>f4 : Symbol(f4, Decl(unionIndexerGeneralAssignability.ts, 155, 48))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>H : Symbol(H, Decl(unionIndexerGeneralAssignability.ts, 137, 1))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>I : Symbol(I, Decl(unionIndexerGeneralAssignability.ts, 142, 1))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>J : Symbol(J, Decl(unionIndexerGeneralAssignability.ts, 147, 1))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+>K : Symbol(K, Decl(unionIndexerGeneralAssignability.ts, 152, 1))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>L : Symbol(L, Decl(unionIndexerGeneralAssignability.ts, 154, 45))
+
+    h = i;
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+
+    h = j;
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+
+    h = k;
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+
+    h = l;
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+
+    i = h;
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+
+    i = j;
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+
+    i = k;
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+
+    i = l;
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+
+    j = h;
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+
+    j = i;
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+
+    j = k;
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+
+    j = l;
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+
+    k = h;
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+
+    h = i;
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+
+    k = j;
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+
+    k = l;
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+
+    l = h;
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+
+    l = i;
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+
+    l = j;
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+
+    l = k;
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+}
+

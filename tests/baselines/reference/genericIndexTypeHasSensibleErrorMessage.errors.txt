@@ -1,7 +1,0 @@
-tests/cases/compiler/genericIndexTypeHasSensibleErrorMessage.ts(1,33): error TS1023: An index signature parameter type must be 'string' or 'number'.
-
-
-==== tests/cases/compiler/genericIndexTypeHasSensibleErrorMessage.ts (1 errors) ====
-    type Wat<T extends string> = { [x: T]: string };
-                                    ~
-!!! error TS1023: An index signature parameter type must be 'string' or 'number'.

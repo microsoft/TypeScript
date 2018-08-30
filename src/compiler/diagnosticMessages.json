@@ -71,7 +71,7 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be 'string' or 'number'.": {
+    "An index signature parameter type must be assignable to 'string | number | symbol'.": {
         "category": "Error",
         "code": 1023
     },
@@ -954,14 +954,6 @@
     "'unique symbol' types are not allowed here.": {
         "category": "Error",
         "code": 1335
-    },
-    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
-        "category": "Error",
-        "code": 1336
-    },
-    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
-        "category": "Error",
-        "code": 1337
     },
     "'infer' declarations are only permitted in the 'extends' clause of a conditional type.": {
         "category": "Error",
