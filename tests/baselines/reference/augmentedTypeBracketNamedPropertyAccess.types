@@ -22,8 +22,8 @@ var r1 = o['data']; // Should be number
 >'data' : "data"
 
 var r2 = o['functionData']; // Should be any (no property found)
->r2 : any
->o['functionData'] : any
+>r2 : error
+>o['functionData'] : error
 >o : {}
 >'functionData' : "functionData"
 

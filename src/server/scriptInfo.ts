@@ -234,7 +234,7 @@ namespace ts.server {
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private preferences: UserPreferences | undefined;
+        private preferences: protocol.UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher | undefined;
@@ -333,7 +333,7 @@ namespace ts.server {
         }
 
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-        getPreferences(): UserPreferences | undefined { return this.preferences; }
+        getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -432,7 +432,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);

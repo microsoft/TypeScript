@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/mod1.js ===
+/** 
+ * @typedef {function(string): boolean}
+ * MyType
+ */
+
+/**
+ * Tries to use a type whose name is on a different
+ * line than the typedef tag.
+ * @param {MyType} func The function to call.
+ * @param {string} arg The argument to call it with.
+ * @returns {boolean} The return.
+ */
+function callIt(func, arg) {
+>callIt : Symbol(callIt, Decl(mod1.js, 0, 0))
+>func : Symbol(func, Decl(mod1.js, 12, 16))
+>arg : Symbol(arg, Decl(mod1.js, 12, 21))
+
+  return func(arg);
+>func : Symbol(func, Decl(mod1.js, 12, 16))
+>arg : Symbol(arg, Decl(mod1.js, 12, 21))
+}
+
