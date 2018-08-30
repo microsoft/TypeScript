@@ -16096,7 +16096,14 @@ namespace ts {
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
-                    return node === right && isContextSensitiveAssignment(binaryExpression) ? getTypeOfExpression(left) : undefined;
+                    if (node !== right) {
+                        return undefined;
+                    }
+                    const contextSensitive = isContextSensitiveAssignment(binaryExpression);
+                    if (!contextSensitive) {
+                        return undefined;
+                    }
+                    return contextSensitive === true ? getTypeOfExpression(left) : contextSensitive;
                 case SyntaxKind.BarBarToken:
                     // When an || expression has a contextual type, the operands are contextually typed by that type. When an ||
                     // expression has no contextual type, the right operand is contextually typed by the type of the left operand,
@@ -16114,7 +16121,7 @@ namespace ts {
 
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
-        function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean {
+        function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean | Type {
             const kind = getSpecialPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
@@ -16139,7 +16146,15 @@ namespace ts {
                         else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
                             const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
-                            return !isFunctionSymbol(parentSymbol);
+                            if (parentSymbol && isFunctionSymbol(parentSymbol)) {
+                                const annotated = getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
+                                if (annotated) {
+                                    const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), (binaryExpression.left as PropertyAccessExpression).name.escapedText);
+                                    return type || false;
+                                }
+                                return false;
+                            }
+                            return true;
                         }
                         return true;
                     }
