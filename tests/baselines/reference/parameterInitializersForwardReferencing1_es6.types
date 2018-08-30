@@ -92,3 +92,9 @@ class Foo {
 >x : number
 }
 
+function f8(foo1: string, bar = foo1) { }
+>f8 : (foo1: string, bar?: string) => void
+>foo1 : string
+>bar : string
+>foo1 : string
+
