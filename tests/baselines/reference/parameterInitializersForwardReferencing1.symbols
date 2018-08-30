@@ -84,3 +84,9 @@ class Foo {
 >x : Symbol(x, Decl(parameterInitializersForwardReferencing1.ts, 33, 16))
 }
 
+function f8(foo1: string, bar = foo1) { }
+>f8 : Symbol(f8, Decl(parameterInitializersForwardReferencing1.ts, 34, 1))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 36, 25))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+

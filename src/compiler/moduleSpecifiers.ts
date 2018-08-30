@@ -75,10 +75,10 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
         return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions)) ||
-            first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
+            getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
     }
 
-    // For each symlink/original for a module, returns a list of ways to import that file.
+    // Returns an import for each symlink and for the realpath.
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
         compilerOptions: CompilerOptions,
@@ -87,9 +87,9 @@ namespace ts.moduleSpecifiers {
         files: ReadonlyArray<SourceFile>,
         userPreferences: UserPreferences,
         redirectTargetsMap: RedirectTargetsMap,
-    ): ReadonlyArray<ReadonlyArray<string>> {
+    ): ReadonlyArray<string> {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
-        if (ambient) return [[ambient]];
+        if (ambient) return [ambient];
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
@@ -97,8 +97,7 @@ namespace ts.moduleSpecifiers {
 
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
-        return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
-            getLocalModuleSpecifiers(moduleFileName, info, compilerOptions, preferences));
+        return global.length ? global : modulePaths.map(moduleFileName => getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences));
     }
 
     interface Info {
@@ -112,18 +111,18 @@ namespace ts.moduleSpecifiers {
         return { getCanonicalFileName, sourceDirectory };
     }
 
-    function getLocalModuleSpecifiers(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): ReadonlyArray<string> {
+    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl || relativePreference === RelativePreference.Relative) {
-            return [relativePath];
+            return relativePath;
         }
 
         const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
         if (!relativeToBaseUrl) {
-            return [relativePath];
+            return relativePath;
         }
 
         const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
@@ -131,18 +130,13 @@ namespace ts.moduleSpecifiers {
         const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
 
         if (relativePreference === RelativePreference.NonRelative) {
-            return [nonRelative];
+            return nonRelative;
         }
 
         if (relativePreference !== RelativePreference.Auto) Debug.assertNever(relativePreference);
 
-        if (isPathRelativeToParent(nonRelative)) {
-            return [relativePath];
-        }
-
         // Prefer a relative import over a baseUrl import if it has fewer components.
-        const relativeFirst = countPathComponents(relativePath) < countPathComponents(nonRelative);
-        return relativeFirst ? [relativePath, nonRelative] : [nonRelative, relativePath];
+        return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
     }
 
     function countPathComponents(path: string): number {

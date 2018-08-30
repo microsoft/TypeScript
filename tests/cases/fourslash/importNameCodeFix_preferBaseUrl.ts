@@ -13,8 +13,5 @@ goTo.file("/src/d0/d1/d2/file.ts");
 verify.importFixAtPosition([
 `import { foo } from "d0/a";
 
-foo;`,
-`import { foo } from "../../a";
-
-foo;`,
+foo;`
 ]);

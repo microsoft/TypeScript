@@ -19,8 +19,5 @@
 verify.importFixAtPosition([
 `import { foo } from "foo";
 
-foo`,
-`import { foo } from "./thisHasPathMapping";
-
-foo`,
+foo`
 ]);
