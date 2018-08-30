@@ -10527,9 +10527,13 @@ namespace ts {
          * attempt to issue more specific errors on, for example, specific object literal properties or tuple members.
          */
         function checkTypeAssignableToAndOptionallyElaborate(source: Type, target: Type, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
-            if (isTypeAssignableTo(source, target)) return true;
-            if (!elaborateError(expr, source, target)) {
-                return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
+            return checkTypeRelatedToAndOptionallyElaborate(source, target, assignableRelation, errorNode, expr, headMessage, containingMessageChain);
+        }
+
+        function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
+            if (isTypeRelatedTo(source, target, relation)) return true;
+            if (!errorNode || !elaborateError(expr, source, target)) {
+                return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain);
             }
             return false;
         }
@@ -18868,7 +18872,7 @@ namespace ts {
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
                     const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
-                    if (!checkTypeRelatedTo(checkArgType, paramType, relation, reportErrors ? arg : undefined, headMessage)) {
+                    if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage)) {
                         return false;
                     }
                 }
