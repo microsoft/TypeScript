@@ -2075,7 +2075,7 @@ declare namespace ts {
         InterfaceExcludes = 67897736,
         RegularEnumExcludes = 68008191,
         ConstEnumExcludes = 68008831,
-        ValueModuleExcludes = 67219599,
+        ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
         MethodExcludes = 67212223,
         GetAccessorExcludes = 67154879,
