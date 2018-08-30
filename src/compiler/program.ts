@@ -1441,9 +1441,9 @@ namespace ts {
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJavascript(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
-                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                    sourceFile.additionalSyntacticDiagnostics = getJavascriptSyntacticDiagnosticsForFile(sourceFile);
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1541,7 +1541,7 @@ namespace ts {
             return true;
         }
 
-        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
+        function getJavascriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
                 let parent: Node = sourceFile;
@@ -1804,7 +1804,7 @@ namespace ts {
                 return;
             }
 
-            const isJavaScriptFile = isSourceFileJavaScript(file);
+            const isJavaScriptFile = isSourceFileJavascript(file);
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
@@ -2298,7 +2298,7 @@ namespace ts {
                         && i < file.imports.length
                         && !elideImport
                         && !(isJsFile && !options.allowJs)
-                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
+                        && (isInJavascriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);

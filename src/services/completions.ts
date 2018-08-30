@@ -134,7 +134,7 @@ namespace ts.Completions {
 
         if (isUncheckedFile(sourceFile, compilerOptions)) {
             const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target!, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
-            getJavaScriptCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
+            getJavascriptCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
         else {
             if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
@@ -154,7 +154,7 @@ namespace ts.Completions {
     }
 
     function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        return isSourceFileJavaScript(sourceFile) && !isCheckJsEnabledForFile(sourceFile, compilerOptions);
+        return isSourceFileJavascript(sourceFile) && !isCheckJsEnabledForFile(sourceFile, compilerOptions);
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -168,7 +168,7 @@ namespace ts.Completions {
         }
     }
 
-    function getJavaScriptCompletionEntries(
+    function getJavascriptCompletionEntries(
         sourceFile: SourceFile,
         position: number,
         uniqueNames: Map<true>,

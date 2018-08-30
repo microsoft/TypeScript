@@ -122,7 +122,7 @@ namespace ts.JsTyping {
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
             const path = normalizePath(fileName);
-            if (hasJavaScriptFileExtension(path)) {
+            if (hasJavascriptFileExtension(path)) {
                 return path;
             }
         });
@@ -218,7 +218,7 @@ namespace ts.JsTyping {
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
             const fromFileNames = mapDefined(fileNames, j => {
-                if (!hasJavaScriptFileExtension(j)) return undefined;
+                if (!hasJavascriptFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
                 const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);

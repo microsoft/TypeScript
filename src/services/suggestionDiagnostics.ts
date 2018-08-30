@@ -11,7 +11,7 @@ namespace ts {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
-        const isJsFile = isSourceFileJavaScript(sourceFile);
+        const isJsFile = isSourceFileJavascript(sourceFile);
 
         check(sourceFile);
 
@@ -36,7 +36,7 @@ namespace ts {
             if (isJsFile) {
                 switch (node.kind) {
                     case SyntaxKind.FunctionExpression:
-                        const decl = getDeclarationOfJSInitializer(node);
+                        const decl = getDeclarationOfExpando(node);
                         if (decl) {
                             const symbol = decl.symbol;
                             if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
@@ -86,8 +86,8 @@ namespace ts {
                 case SyntaxKind.ExpressionStatement: {
                     const { expression } = statement as ExpressionStatement;
                     if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
-                    const kind = getSpecialPropertyAssignmentKind(expression);
-                    return kind === SpecialPropertyAssignmentKind.ExportsProperty || kind === SpecialPropertyAssignmentKind.ModuleExports;
+                    const kind = getAssignmentDeclarationKind(expression);
+                    return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
                 }
                 default:
                     return false;

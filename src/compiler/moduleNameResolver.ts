@@ -739,7 +739,7 @@ namespace ts {
      * Throws an error if the module can't be resolved.
      */
     /* @internal */
-    export function resolveJavaScriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+    export function resolveJavascriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
         const { resolvedModule, failedLookupLocations } =
             nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
         if (!resolvedModule) {
@@ -920,7 +920,7 @@ namespace ts {
 
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJavaScriptFileExtension(candidate)) {
+        if (hasJavascriptFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);

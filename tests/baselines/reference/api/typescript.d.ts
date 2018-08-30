@@ -2056,7 +2056,7 @@ declare namespace ts {
         ExportStar = 8388608,
         Optional = 16777216,
         Transient = 33554432,
-        JSContainer = 67108864,
+        Assignment = 67108864,
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,

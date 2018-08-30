@@ -1,11 +1,11 @@
 /*@internal*/
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
-        if (file && isSourceFileJavaScript(file)) {
+        if (file && isSourceFileJavascript(file)) {
             return []; // No declaration diagnostics for js for now
         }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJavaScript), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJavascript), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -157,7 +157,7 @@ namespace ts {
         function transformRoot(node: SourceFile): SourceFile;
         function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
         function transformRoot(node: SourceFile | Bundle) {
-            if (node.kind === SyntaxKind.SourceFile && (node.isDeclarationFile || isSourceFileJavaScript(node))) {
+            if (node.kind === SyntaxKind.SourceFile && (node.isDeclarationFile || isSourceFileJavascript(node))) {
                 return node;
             }
 
@@ -168,7 +168,7 @@ namespace ts {
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
-                        if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
+                        if (sourceFile.isDeclarationFile || isSourceFileJavascript(sourceFile)) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
                         hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
@@ -296,7 +296,7 @@ namespace ts {
         }
 
         function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJavaScript(sourceFile)) return ret;
+            if (noResolve || isSourceFileJavascript(sourceFile)) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
@@ -982,7 +982,7 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
-                    if (clean && resolver.isJSContainerFunctionDeclaration(input)) {
+                    if (clean && resolver.isExpandoFunctionDeclaration(input)) {
                         const declarations = mapDefined(resolver.getPropertiesOfContainerFunction(input), p => {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined;

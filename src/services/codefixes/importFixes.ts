@@ -267,7 +267,7 @@ namespace ts.codefix {
 
     function getExistingImportDeclarations({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }: SymbolExportInfo, checker: TypeChecker, sourceFile: SourceFile): ReadonlyArray<FixAddToExistingImportInfo> {
         // Can't use an es6 import for a type in JS.
-        return exportedSymbolIsTypeOnly && isSourceFileJavaScript(sourceFile) ? emptyArray : mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(sourceFile.imports, moduleSpecifier => {
+        return exportedSymbolIsTypeOnly && isSourceFileJavascript(sourceFile) ? emptyArray : mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(sourceFile.imports, moduleSpecifier => {
             const i = importFromModuleSpecifier(moduleSpecifier);
             return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
                 && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
@@ -282,7 +282,7 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
-        const isJs = isSourceFileJavaScript(sourceFile);
+        const isJs = isSourceFileJavascript(sourceFile);
         const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
             moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
             .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>

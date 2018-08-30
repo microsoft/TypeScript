@@ -50,7 +50,7 @@ namespace ts.codefix {
         const synthNamesMap: Map<SynthIdentifier> = createMap();
         const originalTypeMap: Map<Type> = createMap();
         const allVarNames: SymbolAndIdentifier[] = [];
-        const isInJSFile = isInJavaScriptFile(functionToConvert);
+        const isInJSFile = isInJavascriptFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
