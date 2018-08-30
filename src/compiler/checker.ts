@@ -5109,7 +5109,6 @@ namespace ts {
             }
             let type: Type | undefined;
             if (isInJavascriptFile(declaration) &&
-                // TODO: This is the predicate I should use in fix-namespace-expando-*
                 (isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
                 type = getWidenedTypeFromAssignmentDeclaration(symbol);
             }
