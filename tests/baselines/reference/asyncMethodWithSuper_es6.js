@@ -65,51 +65,51 @@ class A {
 class B extends A {
     // async method with only call/get on 'super' does not require a binding
     simple() {
-        const _super = name => super[name];
-        const _superProps = Object.create(null, {
+        const _superIndex = name => super[name];
+        const _super = Object.create(null, {
             x: { get: () => super.x },
             y: { get: () => super.y }
         });
         return __awaiter(this, void 0, void 0, function* () {
             // call with property access
-            _superProps.x.call(this);
+            _super.x.call(this);
             // call additional property.
-            _superProps.y.call(this);
+            _super.y.call(this);
             // call with element access
-            _super("x").call(this);
+            _superIndex("x").call(this);
             // property access (read)
-            const a = _superProps.x;
+            const a = _super.x;
             // element access (read)
-            const b = _super("x");
+            const b = _superIndex("x");
         });
     }
     // async method with assignment/destructuring on 'super' requires a binding
     advanced() {
-        const _super = (function (geti, seti) {
+        const _superIndex = (function (geti, seti) {
             const cache = Object.create(null);
             return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
         })(name => super[name], (name, value) => super[name] = value);
-        const _superProps = Object.create(null, {
+        const _super = Object.create(null, {
             x: { get: () => super.x, set: v => super.x = v }
         });
         return __awaiter(this, void 0, void 0, function* () {
             const f = () => { };
             // call with property access
-            _superProps.x.call(this);
+            _super.x.call(this);
             // call with element access
-            _super("x").value.call(this);
+            _superIndex("x").value.call(this);
             // property access (read)
-            const a = _superProps.x;
+            const a = _super.x;
             // element access (read)
-            const b = _super("x").value;
+            const b = _superIndex("x").value;
             // property access (assign)
-            _superProps.x = f;
+            _super.x = f;
             // element access (assign)
-            _super("x").value = f;
+            _superIndex("x").value = f;
             // destructuring assign with property access
-            ({ f: _superProps.x } = { f });
+            ({ f: _super.x } = { f });
             // destructuring assign with element access
-            ({ f: _super("x").value } = { f });
+            ({ f: _superIndex("x").value } = { f });
         });
     }
 }

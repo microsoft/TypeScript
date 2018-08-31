@@ -61,6 +61,9 @@ namespace ts {
         }
 
         function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
+            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+                return node;
+            }
             switch (node.kind) {
                 case SyntaxKind.AwaitExpression:
                     return visitAwaitExpression(node as AwaitExpression);
@@ -854,7 +857,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
                     createPropertyAccess(
-                        createFileLevelUniqueName("_superProps"),
+                        createFileLevelUniqueName("_super"),
                         node.name),
                     node
                 );
@@ -904,7 +907,7 @@ namespace ts {
                 return setTextRange(
                     createPropertyAccess(
                         createCall(
-                            createIdentifier("_super"),
+                            createIdentifier("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -916,7 +919,7 @@ namespace ts {
             else {
                 return setTextRange(
                     createCall(
-                        createIdentifier("_super"),
+                        createIdentifier("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),

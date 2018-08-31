@@ -16180,16 +16180,18 @@ namespace ts {
             //  // js
             //  ...
             //  asyncMethod() {
-            //      const _super_asyncMethod = name => super.asyncMethod;
+            //      const _super = Object.create(null, {
+            //        asyncMethod: { get: () => super.asyncMethod },
+            //      });
             //      return __awaiter(this, arguments, Promise, function *() {
-            //          let x = yield _super_asyncMethod.call(this);
+            //          let x = yield _super.asyncMethod.call(this);
             //          return x;
             //      });
             //  }
             //  ...
             //
             // The more complex case is when we wish to assign a value, especially as part of a destructuring assignment. As both cases
-            // are legal in ES6, but also likely less frequent, we emit the same more complex helper for both scenarios:
+            // are legal in ES6, but also likely less frequent, we only emit setters if there is an assignment:
             //
             //  // ts
             //  ...
@@ -16201,17 +16203,18 @@ namespace ts {
             //  // js
             //  ...
             //  asyncMethod(ar) {
-            //      const _super_a = {get value() { return super.a; }, set value(v) { super.a = v; }};
-            //      const _super_b = {get value() { return super.b; }, set value(v) { super.b = v; }};
+            //      const _super = Object.create(null, {
+            //        a: { get: () => super.a, set: (v) => super.a = v },
+            //        b: { get: () => super.b, set: (v) => super.b = v }
+            //      };
             //      return __awaiter(this, arguments, Promise, function *() {
-            //          [_super_a.value, _super_b.value] = yield ar;
+            //          [_super.a, _super.b] = yield ar;
             //      });
             //  }
             //  ...
             //
-            // This helper creates an object with a "value" property that wraps the `super` property for both get and set. This is required for
-            // destructuring assignments, as a call expression cannot be used as the target of a destructuring assignment while a property
-            // access can.
+            // Creating an object that has getter and setters instead of just an accessor funtion is required for destructuring assignments
+            // as a call expression cannot be used as the target of a destructuring assignment while a property access can.
             //
             // For element access expressions (`super[x]`), we emit a generic helper that forwards the element access in both situations.
             if (container.kind === SyntaxKind.MethodDeclaration && hasModifier(container, ModifierFlags.Async)) {

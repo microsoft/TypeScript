@@ -62,6 +62,9 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
+            if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+                return node;
+            }
             switch (node.kind) {
                 case SyntaxKind.AsyncKeyword:
                     // ES2017 async modifier should be elided for targets < ES2017
@@ -553,7 +556,7 @@ namespace ts {
             // Disable substitution in the generated super accessor itself.
             else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
-                enclosingSuperContainerFlags = 0 as NodeCheckFlags;
+                enclosingSuperContainerFlags = 0;
                 previousOnEmitNode(hint, node, emitCallback);
                 enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
                 return;
@@ -592,7 +595,7 @@ namespace ts {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 return setTextRange(
                     createPropertyAccess(
-                        createFileLevelUniqueName("_superProps"),
+                        createFileLevelUniqueName("_super"),
                         node.name),
                     node
                 );
@@ -642,7 +645,7 @@ namespace ts {
                 return setTextRange(
                     createPropertyAccess(
                         createCall(
-                            createFileLevelUniqueName("_super"),
+                            createFileLevelUniqueName("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -654,7 +657,7 @@ namespace ts {
             else {
                 return setTextRange(
                     createCall(
-                        createFileLevelUniqueName("_super"),
+                        createFileLevelUniqueName("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -729,7 +732,7 @@ namespace ts {
             createVariableDeclarationList(
                 [
                     createVariableDeclaration(
-                        createFileLevelUniqueName("_superProps"),
+                        createFileLevelUniqueName("_super"),
                         /* type */ undefined,
                         createCall(
                             createPropertyAccess(
@@ -794,14 +797,14 @@ namespace ts {
         name: "typescript:async-super",
         scoped: true,
         text: helperString`
-            const ${"_super"} = name => super[name];`
+            const ${"_superIndex"} = name => super[name];`
     };
 
     export const advancedAsyncSuperHelper: EmitHelper = {
         name: "typescript:advanced-async-super",
         scoped: true,
         text: helperString`
-            const ${"_super"} = (function (geti, seti) {
+            const ${"_superIndex"} = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
             })(name => super[name], (name, value) => super[name] = value);`
