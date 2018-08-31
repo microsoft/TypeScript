@@ -2549,9 +2549,9 @@ namespace ts {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
-                // Any emit other than common js is error
-                else if (getEmitModuleKind(options) !== ModuleKind.CommonJS) {
-                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs, "resolveJsonModule", "module");
+                // Any emit other than common js, amd, es2015 or esnext is error
+                else if (!hasJsonModuleEmitEnabled(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs_amd_es2015_or_esNext, "resolveJsonModule", "module");
                 }
             }
 

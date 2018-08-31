@@ -7004,6 +7004,18 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
+        switch (getEmitModuleKind(options)) {
+            case ModuleKind.CommonJS:
+            case ModuleKind.AMD:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function unreachableCodeIsError(options: CompilerOptions): boolean {
         return options.allowUnreachableCode === false;
     }

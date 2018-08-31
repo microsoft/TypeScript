@@ -1780,7 +1780,9 @@ namespace ts {
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
-            if (!isJsonSourceFile(currentSourceFile)) {
+            // Emit semicolon in non json files
+            // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
+            if (!isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
                 writeSemicolon();
             }
         }
