@@ -264,6 +264,9 @@ namespace ts.Completions {
     }
 
     function quote(text: string, preferences: UserPreferences): string {
+        if (/^\d+$/.test(text)) {
+            return text;
+        }
         const quoted = JSON.stringify(text);
         switch (preferences.quotePreference) {
             case undefined:

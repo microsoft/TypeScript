@@ -33,3 +33,5 @@ function f7({[foo]: bar}: any[]) {
 class Foo {
     constructor(public x = 12, public y = x) {}
 }
+
+function f8(foo1: string, bar = foo1) { }

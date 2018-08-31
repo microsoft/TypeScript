@@ -3,7 +3,7 @@
 // @Filename: /a.ts
 ////export const foo = 0;
 
-// @Filename: /b.ts
+// @Filename: /x/y.ts
 ////foo;
 
 // @Filename: /tsconfig.json
@@ -16,7 +16,7 @@
 ////    }
 ////}
 
-goTo.file("/b.ts");
+goTo.file("/x/y.ts");
 verify.importFixAtPosition([
 `import { foo } from "@root/a";
 
