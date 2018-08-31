@@ -34,14 +34,14 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 }
 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
->f3 : (bar?: string, foo?: number) => string
->bar : string
->foo : string
+>f3 : (bar?: number, foo?: number) => number
+>bar : number
+>foo : number
 >foo : number
 >2 : 2
 
     return bar;
->bar : string
+>bar : number
 }
 
 function f4 (foo, bar = foo) {

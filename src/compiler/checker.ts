@@ -1213,7 +1213,9 @@ namespace ts {
                             }
                             if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.Variable) {
                                 // expression inside parameter will lookup as normal variable scope when targeting es2015+
-                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) && !isParameterPropertyDeclaration(lastLocation) && result.valueDeclaration.pos > lastLocation.end) {
+                                const functionLocation = <FunctionLikeDeclaration>location;
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) &&
+                                        functionLocation.body && result.valueDeclaration.pos >= functionLocation.body.pos && result.valueDeclaration.end <= functionLocation.body.end) {
                                     useResult = false;
                                 }
                                 else if (result.flags & SymbolFlags.FunctionScopedVariable) {

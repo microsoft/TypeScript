@@ -31,7 +31,7 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
 >f3 : Symbol(f3, Decl(parameterInitializersForwardReferencing1_es6.ts, 10, 1))
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1_es6.ts, 12, 13))
->foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 0, 3))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 12, 23))
 >foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1_es6.ts, 12, 23))
 
     return bar;
