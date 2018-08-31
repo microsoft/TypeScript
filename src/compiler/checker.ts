@@ -2140,7 +2140,7 @@ namespace ts {
             }
         }
 
-        function getJSSpecialAssignmentLocation(node: TypeReferenceNode): Declaration | undefined {
+        function getJSSpecialAssignmentLocation(node: TypeReferenceNode): Node | undefined {
             const typeAlias = findAncestor(node, node => !(isJSDocNode(node) || node.flags & NodeFlags.JSDoc) ? "quit" : isJSDocTypeAlias(node));
             if (typeAlias) {
                 return;
@@ -2150,7 +2150,13 @@ namespace ts {
                 isBinaryExpression(host.expression) &&
                 getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
                 const symbol = getSymbolOfNode(host.expression.left);
-                return symbol && symbol.parent!.valueDeclaration;
+                if (symbol) {
+                    const decl = symbol.parent!.valueDeclaration;
+                    const initializer = isAssignmentDeclaration(decl) ? getAssignedJavascriptInitializer(decl) :
+                        hasOnlyExpressionInitializer(decl) ? getDeclaredJavascriptInitializer(decl) :
+                        undefined;
+                    return initializer || decl;
+                }
             }
             const sig = getHostSignatureFromJSDocHost(host);
             if (sig) {
