@@ -11190,13 +11190,10 @@ namespace ts {
                     }
                 }
 
-                if (relation !== comparableRelation &&
-                    !(source.flags & TypeFlags.Union) &&
-                    !(target.flags & TypeFlags.Union) &&
-                    !isIntersectionConstituent &&
-                    source !== globalObjectType &&
+                if (relation !== comparableRelation && !isIntersectionConstituent &&
+                    source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
+                    target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source)) &&
-                    isWeakType(target) &&
                     !hasCommonProperties(source, target)) {
                     if (reportErrors) {
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
@@ -11841,6 +11838,9 @@ namespace ts {
                             errorInfo = saveErrorInfo;
                         }
                     }
+                    else if (isTupleType(source) && (isArrayType(target) || isReadonlyArrayType(target)) || isArrayType(source) && isReadonlyArrayType(target)) {
+                        return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
+                    }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
                     // it may hold in a structural comparison.
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
@@ -12018,34 +12018,6 @@ namespace ts {
                     }
                 }
                 return result;
-            }
-
-            /**
-             * A type is 'weak' if it is an object type with at least one optional property
-             * and no required properties, call/construct signatures or index signatures
-             */
-            function isWeakType(type: Type): boolean {
-                if (type.flags & TypeFlags.Object) {
-                    const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                    return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 &&
-                        !resolved.stringIndexInfo && !resolved.numberIndexInfo &&
-                        resolved.properties.length > 0 &&
-                        every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
-                }
-                if (type.flags & TypeFlags.Intersection) {
-                    return every((<IntersectionType>type).types, isWeakType);
-                }
-                return false;
-            }
-
-            function hasCommonProperties(source: Type, target: Type) {
-                const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                for (const prop of getPropertiesOfType(source)) {
-                    if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
-                        return true;
-                    }
-                }
-                return false;
             }
 
             function propertiesIdenticalTo(source: Type, target: Type): Ternary {
@@ -12290,6 +12262,34 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        /**
+         * A type is 'weak' if it is an object type with at least one optional property
+         * and no required properties, call/construct signatures or index signatures
+         */
+        function isWeakType(type: Type): boolean {
+            if (type.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 &&
+                    !resolved.stringIndexInfo && !resolved.numberIndexInfo &&
+                    resolved.properties.length > 0 &&
+                    every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return every((<IntersectionType>type).types, isWeakType);
+            }
+            return false;
+        }
+
+        function hasCommonProperties(source: Type, target: Type) {
+            const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
+            for (const prop of getPropertiesOfType(source)) {
+                if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         // Return a type reference where the source type parameter is replaced with the target marker
