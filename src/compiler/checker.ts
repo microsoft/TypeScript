@@ -2149,13 +2149,19 @@ namespace ts {
             if (isExpressionStatement(host) &&
                 isBinaryExpression(host.expression) &&
                 getSpecialPropertyAssignmentKind(host.expression) === SpecialPropertyAssignmentKind.PrototypeProperty) {
+                // X.prototype.m = /** @param {K} p */ function () { } <-- look for K on X's declaration
                 const symbol = getSymbolOfNode(host.expression.left);
                 if (symbol) {
-                    const decl = symbol.parent!.valueDeclaration;
-                    const initializer = isAssignmentDeclaration(decl) ? getAssignedJavascriptInitializer(decl) :
-                        hasOnlyExpressionInitializer(decl) ? getDeclaredJavascriptInitializer(decl) :
-                        undefined;
-                    return initializer || decl;
+                    return getDeclarationOfJSPrototypeContainer(symbol);
+                }
+            }
+            if (isObjectLiteralMethod(host) &&
+                isBinaryExpression(host.parent.parent) &&
+                getSpecialPropertyAssignmentKind(host.parent.parent) === SpecialPropertyAssignmentKind.Prototype) {
+                // X.prototype = { /** @param {K} p */m() { } } <-- look for K on X's declaration
+                const symbol = getSymbolOfNode(host.parent.parent.left);
+                if (symbol) {
+                    return getDeclarationOfJSPrototypeContainer(symbol);
                 }
             }
             const sig = getHostSignatureFromJSDocHost(host);
@@ -2163,6 +2169,14 @@ namespace ts {
                 const symbol = getSymbolOfNode(sig);
                 return symbol && symbol.valueDeclaration;
             }
+        }
+
+        function getDeclarationOfJSPrototypeContainer(symbol: Symbol) {
+            const decl = symbol.parent!.valueDeclaration;
+            const initializer = isAssignmentDeclaration(decl) ? getAssignedJavascriptInitializer(decl) :
+                hasOnlyExpressionInitializer(decl) ? getDeclaredJavascriptInitializer(decl) :
+                undefined;
+            return initializer || decl;
         }
 
         function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol | undefined {
