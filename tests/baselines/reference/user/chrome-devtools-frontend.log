@@ -727,6 +727,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17089,45): error TS2339: Property '__proto__' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(17501,1): error TS2322: Type 'any[]' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18010,1): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(18744,9): error TS2304: Cannot find name 'tabTrace'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19499,6): error TS2339: Property 'Util' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19585,1): error TS2322: Type 'Promise<{ artifacts: any; auditResults: any[]; }>' is not assignable to type 'Promise<void>'.
   Type '{ artifacts: any; auditResults: any[]; }' is not assignable to type 'void'.
@@ -6656,7 +6657,6 @@ node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(27
   Index signature is missing in type '{}'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(407,19): error TS2694: Namespace 'Adb' has no exported member 'Config'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(445,48): error TS2694: Namespace 'InspectorFrontendHostAPI' has no exported member 'ContextMenuDescriptor'.
-node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(471,12): error TS2538: Type 'string[]' cannot be used as an index type.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(521,8): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(527,14): error TS2339: Property 'InspectorFrontendHost' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/host/InspectorFrontendHost.js(557,10): error TS2339: Property 'InspectorFrontendAPI' does not exist on type 'Window'.
