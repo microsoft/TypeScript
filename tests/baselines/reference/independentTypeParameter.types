@@ -1,0 +1,18 @@
+=== tests/cases/compiler/independentTypeParameter.ts ===
+// Repro for #26815
+interface Foo<T> {}
+function f<T>(arg: Foo<T>): T { return undefined!; }
+>f : <T>(arg: Foo<T>) => T
+>arg : Foo<T>
+>undefined! : undefined
+>undefined : undefined
+
+let x: Foo<number> = {};
+>x : Foo<number>
+>{} : {}
+
+f(x);
+>f(x) : {}
+>f : <T>(arg: Foo<T>) => T
+>x : Foo<number>
+

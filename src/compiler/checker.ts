@@ -12298,12 +12298,9 @@ namespace ts {
         // a digest of the type comparisons that occur for each type argument when instantiations of the
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
-        // returns the emptyArray singleton if we're not in strictFunctionTypes mode or if the function
-        // has been invoked recursively for the given generic type.
+        // returns the emptyArray singleton if the function has been invoked recursively for the given
+        // generic type.
         function getVariances(type: GenericType): Variance[] {
-            if (!strictFunctionTypes) {
-                return emptyArray;
-            }
             const typeParameters = type.typeParameters || emptyArray;
             let variances = type.variances;
             if (!variances) {
@@ -13379,7 +13376,7 @@ namespace ts {
                         if (i < variances.length && variances[i] === Variance.Contravariant) {
                             inferFromContravariantTypes(sourceTypes[i], targetTypes[i]);
                         }
-                        else {
+                        else if (!(i < variances.length && variances[i] === Variance.Independent)) {
                             inferFromTypes(sourceTypes[i], targetTypes[i]);
                         }
                     }

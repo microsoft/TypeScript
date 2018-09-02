@@ -1,6 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface Collection<T, U> {
+////    dummyT: T;
+////    dummyU: U;
 ////}
 ////
 ////interface Combinators {

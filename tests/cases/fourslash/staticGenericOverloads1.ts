@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////class A<T> {
+////    dummy: T;
 ////    static B<S>(v: A<S>): A<S>;
 ////    static B<S>(v: S): A<S>;
 ////    static B<S>(v: any): A<S> {

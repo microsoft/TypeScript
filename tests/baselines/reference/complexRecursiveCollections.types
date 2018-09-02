@@ -1137,7 +1137,7 @@ declare module Immutable {
 >Seq : typeof Seq
 
     function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
->isSeq : (maybeSeq: any) => maybeSeq is Keyed<any, any> | Indexed<any>
+>isSeq : (maybeSeq: any) => maybeSeq is Indexed<any> | Keyed<any, any>
 >maybeSeq : any
 >Seq : any
 >Seq : any

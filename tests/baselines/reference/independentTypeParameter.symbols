@@ -1,0 +1,23 @@
+=== tests/cases/compiler/independentTypeParameter.ts ===
+// Repro for #26815
+interface Foo<T> {}
+>Foo : Symbol(Foo, Decl(independentTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(independentTypeParameter.ts, 1, 14))
+
+function f<T>(arg: Foo<T>): T { return undefined!; }
+>f : Symbol(f, Decl(independentTypeParameter.ts, 1, 19))
+>T : Symbol(T, Decl(independentTypeParameter.ts, 2, 11))
+>arg : Symbol(arg, Decl(independentTypeParameter.ts, 2, 14))
+>Foo : Symbol(Foo, Decl(independentTypeParameter.ts, 0, 0))
+>T : Symbol(T, Decl(independentTypeParameter.ts, 2, 11))
+>T : Symbol(T, Decl(independentTypeParameter.ts, 2, 11))
+>undefined : Symbol(undefined)
+
+let x: Foo<number> = {};
+>x : Symbol(x, Decl(independentTypeParameter.ts, 3, 3))
+>Foo : Symbol(Foo, Decl(independentTypeParameter.ts, 0, 0))
+
+f(x);
+>f : Symbol(f, Decl(independentTypeParameter.ts, 1, 19))
+>x : Symbol(x, Decl(independentTypeParameter.ts, 3, 3))
+
