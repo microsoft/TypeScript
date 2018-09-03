@@ -46,6 +46,7 @@
         "unittests/cancellableLanguageServiceOperations.ts",
         "unittests/commandLineParsing.ts",
         "unittests/compileOnSave.ts",
+        "unittests/compilerCore.ts",
         "unittests/configurationExtension.ts",
         "unittests/convertCompilerOptionsFromJson.ts",
         "unittests/convertToAsyncFunction.ts",
