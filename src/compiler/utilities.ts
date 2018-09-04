@@ -490,12 +490,23 @@ namespace ts {
         return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
     }
 
+    function isJSDocTypeExpressionOrChild(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+    }
+
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
-        return sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+        let text = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+
+        if (isJSDocTypeExpressionOrChild(node)) {
+            // strip space + asterisk at line start
+            text = text.replace(/(^|\r?\n|\r)\s*\*\s*/g, "$1");
+        }
+
+        return text;
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
