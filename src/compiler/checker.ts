@@ -9361,7 +9361,7 @@ namespace ts {
             const apparentObjectType = getApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
-                let wasMissingProp: boolean | undefined;
+                let wasMissingProp = false;
                 for (const t of (<UnionType>indexType).types) {
                     const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false, missingType);
                     if (propType === missingType) {
