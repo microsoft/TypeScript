@@ -74,8 +74,8 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >"test" : "test"
 
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
->shouldBeError : any
->ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : any
+>shouldBeError : void
+>ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : void
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("dup"), alternate: value("dup")} : { main: Record<"val", "dup">; alternate: Record<"val", "dup">; }
 >main : Record<"val", "dup">

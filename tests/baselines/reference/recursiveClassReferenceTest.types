@@ -192,7 +192,7 @@ module Sample.Thing.Languages.PlainText {
 >getInitialState : () => IState
 
 			return new State(self);
->new State(self) : any
+>new State(self) : State
 >State : typeof State
 >self : Window
 		}

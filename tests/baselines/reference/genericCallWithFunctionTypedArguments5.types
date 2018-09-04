@@ -31,8 +31,8 @@ var r = foo(arg); // {}
 
 // more args not allowed
 var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
->r2 : any
->foo({ cb: <T>(x: T, y: T) => '' }) : any
+>r2 : string
+>foo({ cb: <T>(x: T, y: T) => '' }) : string
 >foo : <T, U>(arg: { cb: (t: T) => U; }) => U
 >{ cb: <T>(x: T, y: T) => '' } : { cb: <T>(x: T, y: T) => string; }
 >cb : <T>(x: T, y: T) => string
@@ -42,8 +42,8 @@ var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
 >'' : ""
 
 var r3 = foo({ cb: (x: string, y: number) => '' }); // error
->r3 : any
->foo({ cb: (x: string, y: number) => '' }) : any
+>r3 : string
+>foo({ cb: (x: string, y: number) => '' }) : string
 >foo : <T, U>(arg: { cb: (t: T) => U; }) => U
 >{ cb: (x: string, y: number) => '' } : { cb: (x: string, y: number) => string; }
 >cb : (x: string, y: number) => string

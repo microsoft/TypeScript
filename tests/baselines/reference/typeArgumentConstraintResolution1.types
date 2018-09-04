@@ -32,7 +32,7 @@ function foo2<T extends String>(test: any): any { return null; }
 >null : null
 
 foo2<Date>(""); // Type Date does not satisfy the constraint 'Number' for type parameter 'T extends Number'
->foo2<Date>("") : any
+>foo2<Date>("") : Date
 >foo2 : { <T extends Date>(test: T): T; <T extends Number>(test: string): T; }
 >"" : ""
 

@@ -1,8 +1,9 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts (2 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInferenceES6.ts (3 errors) ====
     // Generic tag with one parameter
     function noParams<T>(n: T) { }
     noParams ``;
@@ -68,6 +69,8 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
                                        ~
 !!! error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
     var a9a: {};
+        ~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
     
     // Generic tag with multiple parameters of generic type passed arguments with multiple best common types
     interface A91 {

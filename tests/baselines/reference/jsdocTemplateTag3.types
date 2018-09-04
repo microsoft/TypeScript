@@ -73,7 +73,7 @@ f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101
 >'nope' : "nope"
 
 f({ a: 12  }, undefined, undefined, 101, 'nope');
->f({ a: 12  }, undefined, undefined, 101, 'nope') : any
+>f({ a: 12  }, undefined, undefined, 101, 'nope') : string | number
 >f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 >{ a: 12  } : { a: number; }
 >a : number

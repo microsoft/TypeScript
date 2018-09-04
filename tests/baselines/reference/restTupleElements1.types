@@ -57,11 +57,11 @@ assign<[...number[]], number[]>();
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], number[]>();  // Error
->assign<[number, ...number[]], number[]>() : any
+>assign<[number, ...number[]], number[]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], []>();  // Error
->assign<[number, ...number[]], []>() : any
+>assign<[number, ...number[]], []>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number]>();
@@ -77,27 +77,27 @@ assign<[number, ...number[]], [number, number, ...number[]]>();
 >assign : <T, S extends T>() => void
 
 assign<[number], [...number[]]>();  // Error
->assign<[number], [...number[]]>() : any
+>assign<[number], [...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number], [number, ...number[]]>();  // Error
->assign<[number], [number, ...number[]]>() : any
+>assign<[number], [number, ...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, ...string[]]>();  // Error
->assign<[number, ...number[]], [number, ...string[]]>() : any
+>assign<[number, ...number[]], [number, ...string[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [string, ...number[]]>();  // Error
->assign<[number, ...number[]], [string, ...number[]]>() : any
+>assign<[number, ...number[]], [string, ...number[]]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, number, string]>();  // Error
->assign<[number, ...number[]], [number, number, string]>() : any
+>assign<[number, ...number[]], [number, number, string]>() : void
 >assign : <T, S extends T>() => void
 
 assign<[number, ...number[]], [number, number, number, string]>();  // Error
->assign<[number, ...number[]], [number, number, number, string]>() : any
+>assign<[number, ...number[]], [number, number, number, string]>() : void
 >assign : <T, S extends T>() => void
 
 type T20 = [number, string, ...boolean[]];
@@ -168,9 +168,9 @@ declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >x : [T, ...U[]]
 
 f0([]);  // Error
->f0([]) : any
+>f0([]) : [{}, {}]
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->[] : never[]
+>[] : []
 
 f0([1]);
 >f0([1]) : [number, {}]

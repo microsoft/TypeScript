@@ -144,8 +144,8 @@ var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
 >X : E1
 
 var v3 = f1({ w: x => x, r: () => E1.X }, E2.X);  // Error
->v3 : any
->f1({ w: x => x, r: () => E1.X }, E2.X) : any
+>v3 : {}
+>f1({ w: x => x, r: () => E1.X }, E2.X) : {}
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
 >{ w: x => x, r: () => E1.X } : { w: (x: E1) => E1; r: () => E1; }
 >w : (x: E1) => E1

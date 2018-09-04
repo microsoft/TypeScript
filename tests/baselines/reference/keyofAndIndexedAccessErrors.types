@@ -162,15 +162,15 @@ function f10(shape: Shape) {
 >"name" : "name"
 
     let x2 = getProperty(shape, "size");  // Error
->x2 : any
->getProperty(shape, "size") : any
+>x2 : string | number | boolean
+>getProperty(shape, "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >"size" : "size"
 
     let x3 = getProperty(shape, cond ? "name" : "size");  // Error
->x3 : any
->getProperty(shape, cond ? "name" : "size") : any
+>x3 : string | number | boolean
+>getProperty(shape, cond ? "name" : "size") : string | number | boolean
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"
@@ -186,14 +186,14 @@ function f10(shape: Shape) {
 >"rectangle" : "rectangle"
 
     setProperty(shape, "size", 10);  // Error
->setProperty(shape, "size", 10) : any
+>setProperty(shape, "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >"size" : "size"
 >10 : 10
 
     setProperty(shape, cond ? "name" : "size", 10);  // Error
->setProperty(shape, cond ? "name" : "size", 10) : any
+>setProperty(shape, cond ? "name" : "size", 10) : void
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
 >shape : Shape
 >cond ? "name" : "size" : "name" | "size"

@@ -26,12 +26,12 @@ generic<object>(a);
 >a : {}
 
 generic<object>(123); // expect error
->generic<object>(123) : any
+>generic<object>(123) : void
 >generic : <T>(t: T) => void
 >123 : 123
 
 generic<object>(b); // expect error
->generic<object>(b) : any
+>generic<object>(b) : void
 >generic : <T>(t: T) => void
 >b : string
 
@@ -55,12 +55,12 @@ bound(a);
 >a : {}
 
 bound(123); // expect error
->bound(123) : any
+>bound(123) : void
 >bound : <T extends object>(t: T) => void
 >123 : 123
 
 bound(b); // expect error
->bound(b) : any
+>bound(b) : void
 >bound : <T extends object>(t: T) => void
 >b : string
 
@@ -76,11 +76,11 @@ bound2<Object>();
 >bound2 : <T extends object>() => void
 
 bound2<number>(); // expect error
->bound2<number>() : any
+>bound2<number>() : void
 >bound2 : <T extends object>() => void
 
 bound2<string>(); // expect error
->bound2<string>() : any
+>bound2<string>() : void
 >bound2 : <T extends object>() => void
 
 function bound3<T extends {}>(t: T) {

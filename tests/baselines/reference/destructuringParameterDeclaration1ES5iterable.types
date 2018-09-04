@@ -54,7 +54,7 @@ a1([1, 2, [["world"]]]);
 a1([1, 2, [["world"]], 3]);
 >a1([1, 2, [["world"]], 3]) : void
 >a1 : ([a, b, [[c]]]: [number, number, string[][]]) => void
->[1, 2, [["world"]], 3] : (number | string[][])[]
+>[1, 2, [["world"]], 3] : [number, number, string[][], number]
 >1 : 1
 >2 : 2
 >[["world"]] : string[][]
@@ -302,11 +302,11 @@ c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]
 c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
 >c5([1, 2, [["string"]], false, true]) : void
 >c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
+>[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >1 : 1
 >2 : 2
->[["string"]] : string[][]
->["string"] : string[]
+>[["string"]] : [[string]]
+>["string"] : [string]
 >"string" : "string"
 >false : false
 >true : true

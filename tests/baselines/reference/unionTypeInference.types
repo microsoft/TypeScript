@@ -16,7 +16,7 @@ var a1: number;
 
 var a1 = f(1, 2);
 >a1 : number
->f(1, 2) : any
+>f(1, 2) : 1
 >f : <T>(x: T, y: string | T) => T
 >1 : 1
 >2 : 2

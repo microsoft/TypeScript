@@ -96,16 +96,16 @@ declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >args : T
 
 foo<CoolArray<any>>();     // Error
->foo<CoolArray<any>>() : any
+>foo<CoolArray<any>>() : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 
 foo<CoolArray<any>>(100);  // Error
->foo<CoolArray<any>>(100) : any
+>foo<CoolArray<any>>(100) : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 >100 : 100
 
 foo<CoolArray<any>>(foo);  // Error
->foo<CoolArray<any>>(foo) : any
+>foo<CoolArray<any>>(foo) : void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 
@@ -125,8 +125,8 @@ let a = bar(10, 20);
 >20 : 20
 
 let b = bar<CoolArray<number>>(10, 20);  // Error
->b : any
->bar<CoolArray<number>>(10, 20) : any
+>b : CoolArray<number>
+>bar<CoolArray<number>>(10, 20) : CoolArray<number>
 >bar : <T extends any[]>(...args: T) => T
 >10 : 10
 >20 : 20
@@ -139,22 +139,22 @@ declare const ca: CoolArray<number>;
 >ca : CoolArray<number>
 
 baz();       // Error
->baz() : any
+>baz() : void
 >baz : <T>(...args: CoolArray<T>) => void
 
 baz(1);      // Error
->baz(1) : any
+>baz(1) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >1 : 1
 
 baz(1, 2);   // Error
->baz(1, 2) : any
+>baz(1, 2) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >1 : 1
 >2 : 2
 
 baz(...ca);  // Error
->baz(...ca) : any
+>baz(...ca) : void
 >baz : <T>(...args: CoolArray<T>) => void
 >...ca : number
 >ca : CoolArray<number>
@@ -176,7 +176,7 @@ hmm(1, "s"); // okay, A = [1, "s"]
 >"s" : "s"
 
 hmm("what"); // no error?  A = [] | [number, string] ?
->hmm("what") : any
+>hmm("what") : void
 >hmm : <A extends [] | [number, string]>(...args: A) => void
 >"what" : "what"
 

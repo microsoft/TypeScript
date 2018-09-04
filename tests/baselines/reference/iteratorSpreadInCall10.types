@@ -39,7 +39,7 @@ class SymbolIterator {
 }
 
 foo(...new SymbolIterator);
->foo(...new SymbolIterator) : any
+>foo(...new SymbolIterator) : {}
 >foo : <T>(s: T[]) => T
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

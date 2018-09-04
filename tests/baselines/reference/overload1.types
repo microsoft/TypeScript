@@ -102,9 +102,9 @@ var z:string=x.g(x.g(3,3)); // good
 >3 : 3
 
 z=x.g(2,2,2); // no match
->z=x.g(2,2,2) : any
+>z=x.g(2,2,2) : number & string & O.C
 >z : string
->x.g(2,2,2) : any
+>x.g(2,2,2) : number & string & O.C
 >x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
 >x : O.I
 >g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
@@ -113,9 +113,9 @@ z=x.g(2,2,2); // no match
 >2 : 2
 
 z=x.g(); // no match
->z=x.g() : any
+>z=x.g() : number & string & O.C
 >z : string
->x.g() : any
+>x.g() : number & string & O.C
 >x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
 >x : O.I
 >g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
@@ -133,9 +133,9 @@ z=x.g(new O.B()); // ambiguous (up and down conversion)
 >B : typeof O.B
 
 z=x.h(2,2); // no match
->z=x.h(2,2) : any
+>z=x.h(2,2) : string & number
 >z : string
->x.h(2,2) : any
+>x.h(2,2) : string & number
 >x.h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
 >x : O.I
 >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }

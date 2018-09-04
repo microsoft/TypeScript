@@ -12,7 +12,7 @@ function foo<T>(x = class { prop: T }): T {
 // Should not infer string because it is a static property
 foo(class { static prop = "hello" }).length;
 >foo(class { static prop = "hello" }).length : any
->foo(class { static prop = "hello" }) : any
+>foo(class { static prop = "hello" }) : {}
 >foo : <T>(x?: typeof (Anonymous class)) => T
 >class { static prop = "hello" } : typeof (Anonymous class)
 >prop : string

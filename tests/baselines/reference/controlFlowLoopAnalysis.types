@@ -25,7 +25,7 @@ function test1() {
 >cond : true
 
                 x = foo(x);
->x = foo(x) : any
+>x = foo(x) : number
 >x : number | undefined
 >foo(x) : number
 >foo : (x: number) => number

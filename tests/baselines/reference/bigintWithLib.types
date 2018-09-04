@@ -94,9 +94,9 @@ bigIntArray = new BigInt64Array([1n, 2n, 3n]);
 >3n : 3n
 
 bigIntArray = new BigInt64Array([1, 2, 3]); // should error
->bigIntArray = new BigInt64Array([1, 2, 3]) : any
+>bigIntArray = new BigInt64Array([1, 2, 3]) : BigInt64Array
 >bigIntArray : BigInt64Array
->new BigInt64Array([1, 2, 3]) : any
+>new BigInt64Array([1, 2, 3]) : BigInt64Array
 >BigInt64Array : BigInt64ArrayConstructor
 >[1, 2, 3] : number[]
 >1 : 1
@@ -174,9 +174,9 @@ bigUintArray = new BigUint64Array([1n, 2n, 3n]);
 >3n : 3n
 
 bigUintArray = new BigUint64Array([1, 2, 3]); // should error
->bigUintArray = new BigUint64Array([1, 2, 3]) : any
+>bigUintArray = new BigUint64Array([1, 2, 3]) : BigUint64Array
 >bigUintArray : BigUint64Array
->new BigUint64Array([1, 2, 3]) : any
+>new BigUint64Array([1, 2, 3]) : BigUint64Array
 >BigUint64Array : BigUint64ArrayConstructor
 >[1, 2, 3] : number[]
 >1 : 1

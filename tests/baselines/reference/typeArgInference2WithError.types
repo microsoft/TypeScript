@@ -10,8 +10,8 @@ declare function foo<T extends Item>(x?: T, y?: T): T;
 >y : T
 
 var z7 = foo("abc", 5); // Error
->z7 : any
->foo("abc", 5) : any
+>z7 : Item
+>foo("abc", 5) : Item
 >foo : <T extends Item>(x?: T, y?: T) => T
 >"abc" : "abc"
 >5 : 5

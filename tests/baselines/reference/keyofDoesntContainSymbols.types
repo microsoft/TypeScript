@@ -47,8 +47,8 @@ const val = set(obj, 'str', '');
 
 // string
 const valB = set(obj, 'num', '');
->valB : any
->set(obj, 'num', '') : any
+>valB : number
+>set(obj, 'num', '') : number
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
 >obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >'num' : "num"
@@ -57,8 +57,8 @@ const valB = set(obj, 'num', '');
 // Expect type error
 // Argument of type '""' is not assignable to parameter of type 'number'.
 const valC = set(obj, sym, sym);
->valC : any
->set(obj, sym, sym) : any
+>valC : string | number
+>set(obj, sym, sym) : string | number
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
 >obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >sym : unique symbol
@@ -67,8 +67,8 @@ const valC = set(obj, sym, sym);
 // Expect type error
 // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
 const valD = set(obj, num, num);
->valD : any
->set(obj, num, num) : any
+>valD : string | number
+>set(obj, num, num) : string | number
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
 >obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 >num : 0

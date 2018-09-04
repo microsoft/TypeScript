@@ -82,7 +82,7 @@ var c2: C2;
 >c2 : C2
 
 if1(c1);
->if1(c1) : any
+>if1(c1) : void
 >if1 : { (i: IFoo1): void; (i: IFoo2): void; }
 >c1 : C1
 
@@ -107,7 +107,7 @@ function of1(a: any) { return null; }
 >null : null
 
 of1({ e: 0, f: 0 });
->of1({ e: 0, f: 0 }) : any
+>of1({ e: 0, f: 0 }) : number & string
 >of1 : { (n: { a: { a: string; }; b: string; }): number; (s: { c: { b: string; }; d: string; }): string; }
 >{ e: 0, f: 0 } : { e: number; f: number; }
 >e : number

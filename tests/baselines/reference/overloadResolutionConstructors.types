@@ -52,7 +52,7 @@ var s: string;
 
 // No candidate overloads found
 new fn1({}); // Error
->new fn1({}) : any
+>new fn1({}) : string & number
 >fn1 : fn1
 >{} : {}
 
@@ -89,7 +89,7 @@ var s = new fn2(0, '');
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 new fn2<Date>('', 0); // Error
->new fn2<Date>('', 0) : any
+>new fn2<Date>('', 0) : number
 >fn2 : fn2
 >'' : ""
 >0 : 0
@@ -169,7 +169,7 @@ var n = new fn3<number, string, string>('', '', 3);
 
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 new fn3<number, number, number, number>(); // Error
->new fn3<number, number, number, number>() : any
+>new fn3<number, number, number, number>() : string
 >fn3 : fn3
 
 // Generic overloads with constraints called with type arguments that satisfy the constraints

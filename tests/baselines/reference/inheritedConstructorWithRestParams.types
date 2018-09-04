@@ -28,13 +28,13 @@ new Derived();
 
 // Errors
 new Derived("", 3);
->new Derived("", 3) : any
+>new Derived("", 3) : Derived
 >Derived : typeof Derived
 >"" : ""
 >3 : 3
 
 new Derived(3);
->new Derived(3) : any
+>new Derived(3) : Derived
 >Derived : typeof Derived
 >3 : 3
 

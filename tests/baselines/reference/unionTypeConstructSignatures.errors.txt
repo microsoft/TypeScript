@@ -1,3 +1,5 @@
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(9,1): error TS2322: Type 'number | Date' is not assignable to type 'string | boolean'.
+  Type 'number' is not assignable to type 'string | boolean'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(9,47): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(10,33): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(15,33): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
@@ -30,7 +32,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,12): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): error TS2554: Expected 1 arguments, but got 0.
 
 
-==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (30 errors) ====
+==== tests/cases/conformance/types/union/unionTypeConstructSignatures.ts (31 errors) ====
     var numOrDate: number | Date;
     var strOrBoolean: string | boolean;
     var strOrNum: string | number;
@@ -40,6 +42,9 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
     numOrDate = new unionOfDifferentReturnType(10);
     strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+    ~~~~~~~~~~~~
+!!! error TS2322: Type 'number | Date' is not assignable to type 'string | boolean'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string | boolean'.
                                                   ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     new unionOfDifferentReturnType1(true); // error in type of parameter

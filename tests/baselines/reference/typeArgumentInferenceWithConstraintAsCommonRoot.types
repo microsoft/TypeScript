@@ -21,7 +21,7 @@ var e: Elephant;
 >e : Elephant
 
 f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
->f(g, e) : any
+>f(g, e) : Giraffe
 >f : <T extends Animal>(x: T, y: T) => T
 >g : Giraffe
 >e : Elephant

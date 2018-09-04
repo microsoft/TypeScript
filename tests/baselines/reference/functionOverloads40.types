@@ -16,8 +16,8 @@ function foo(bar:{a:any;}[]):any{ return bar }
 >bar : { a: any; }[]
 
 var x = foo([{a:'bar'}]);
->x : any
->foo([{a:'bar'}]) : any
+>x : string & number
+>foo([{a:'bar'}]) : string & number
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >[{a:'bar'}] : { a: string; }[]
 >{a:'bar'} : { a: string; }

@@ -3,6 +3,6 @@ class foo<T> { }
 >foo : foo<T>
 
 new foo<>();
->new foo<>() : any
+>new foo<>() : foo<{}>
 >foo : typeof foo
 

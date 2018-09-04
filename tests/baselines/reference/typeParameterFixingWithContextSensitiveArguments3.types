@@ -24,8 +24,8 @@ var a: A, b: B;
 >b : B
 
 var d = f(a, b, u2 => u2.b, t2 => t2);
->d : any
->f(a, b, u2 => u2.b, t2 => t2) : any
+>d : [A, B]
+>f(a, b, u2 => u2.b, t2 => t2) : [A, B]
 >f : <T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U) => [T, U]
 >a : A
 >b : B

@@ -1,10 +1,11 @@
 tests/cases/compiler/callOverloads1.ts(1,7): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads1.ts(9,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads1.ts(9,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/callOverloads1.ts(13,10): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/callOverloads1.ts(13,10): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== tests/cases/compiler/callOverloads1.ts (4 errors) ====
+==== tests/cases/compiler/callOverloads1.ts (5 errors) ====
     class Foo { // error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
@@ -24,6 +25,8 @@ tests/cases/compiler/callOverloads1.ts(13,10): error TS2554: Expected 0 argument
     function F1(a:any) { return a;}
     
     var f1 = new Foo("hey");
+             ~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
              ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 0 arguments, but got 1.
     

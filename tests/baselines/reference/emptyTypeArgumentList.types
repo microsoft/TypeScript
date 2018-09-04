@@ -3,6 +3,6 @@ function foo<T>() { }
 >foo : <T>() => void
 
 foo<>();
->foo<>() : any
+>foo<>() : void
 >foo : <T>() => void
 

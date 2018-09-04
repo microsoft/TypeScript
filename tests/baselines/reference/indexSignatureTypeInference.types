@@ -40,7 +40,7 @@ var v1 = numberMapToArray(stringMap);  // Ok
 
 var v1 = stringMapToArray(numberMap);  // Error expected here
 >v1 : Function[]
->stringMapToArray(numberMap) : any
+>stringMapToArray(numberMap) : {}[]
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
 >numberMap : NumberMap<Function>
 

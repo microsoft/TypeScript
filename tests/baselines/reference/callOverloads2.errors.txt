@@ -4,10 +4,11 @@ tests/cases/compiler/callOverloads2.ts(11,10): error TS2389: Function implementa
 tests/cases/compiler/callOverloads2.ts(11,10): error TS2393: Duplicate function implementation.
 tests/cases/compiler/callOverloads2.ts(12,10): error TS2393: Duplicate function implementation.
 tests/cases/compiler/callOverloads2.ts(14,10): error TS2391: Function implementation is missing or not immediately following the declaration.
+tests/cases/compiler/callOverloads2.ts(18,10): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/callOverloads2.ts(18,10): error TS2554: Expected 0 arguments, but got 1.
 
 
-==== tests/cases/compiler/callOverloads2.ts (7 errors) ====
+==== tests/cases/compiler/callOverloads2.ts (8 errors) ====
     class Foo { // error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
@@ -38,6 +39,8 @@ tests/cases/compiler/callOverloads2.ts(18,10): error TS2554: Expected 0 argument
     declare function Gar(s:String); // expect no error
     
     var f1 = new Foo("hey");
+             ~~~~~~~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
              ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 0 arguments, but got 1.
     

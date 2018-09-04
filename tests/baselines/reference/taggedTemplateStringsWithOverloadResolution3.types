@@ -23,7 +23,7 @@ var s: string = fn1 `${ undefined }`;
 
 // No candidate overloads found
 fn1 `${ {} }`; // Error
->fn1 `${ {} }` : any
+>fn1 `${ {} }` : string & number
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
 >`${ {} }` : string
 >{} : {}
@@ -166,7 +166,7 @@ var n = fn3 `${ '' }${ '' }${ 3 }`;
 
 // Generic overloads with differing arity tagging with argument count that doesn't match any overload
 fn3 ``; // Error
->fn3 `` : any
+>fn3 `` : string
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
 >`` : ""
 

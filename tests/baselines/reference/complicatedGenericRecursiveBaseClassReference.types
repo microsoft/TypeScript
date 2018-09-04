@@ -8,8 +8,8 @@ class S18<B, A, C> extends S18<A[], { S19: A; (): A }[], C[]>
 (new S18(123)).S18 = 0;
 >(new S18(123)).S18 = 0 : 0
 >(new S18(123)).S18 : any
->(new S18(123)) : any
->new S18(123) : any
+>(new S18(123)) : S18<{}, {}, {}>
+>new S18(123) : S18<{}, {}, {}>
 >S18 : typeof S18
 >123 : 123
 >S18 : any

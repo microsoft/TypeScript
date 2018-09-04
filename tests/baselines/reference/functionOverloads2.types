@@ -13,8 +13,8 @@ function foo(bar: any): any { return bar };
 >bar : any
 
 var x = foo(true);
->x : any
->foo(true) : any
+>x : string & number
+>foo(true) : string & number
 >foo : { (bar: string): string; (bar: number): number; }
 >true : true
 

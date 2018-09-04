@@ -12,8 +12,8 @@ function foo(bar?:any):any{ return '' }
 >'' : ""
 
 var x = foo(5);
->x : any
->foo(5) : any
+>x : string & number
+>foo(5) : string & number
 >foo : { (): string; (bar: string): number; }
 >5 : 5
 

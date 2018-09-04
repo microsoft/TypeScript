@@ -99,7 +99,7 @@ new MyPromise<void | number>(resolve => resolve()); // no error
 new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
 >new MyPromise<any>(resolve => resolve()) : MyPromise<any>
 >MyPromise : typeof MyPromise
->resolve => resolve() : (resolve: (value: any) => void) => any
+>resolve => resolve() : (resolve: (value: any) => void) => void
 >resolve : (value: any) => void
 >resolve() : void
 >resolve : (value: any) => void
@@ -107,7 +107,7 @@ new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be om
 new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cannot be omitted
 >new MyPromise<unknown>(resolve => resolve()) : MyPromise<unknown>
 >MyPromise : typeof MyPromise
->resolve => resolve() : (resolve: (value: unknown) => void) => any
+>resolve => resolve() : (resolve: (value: unknown) => void) => void
 >resolve : (value: unknown) => void
 >resolve() : void
 >resolve : (value: unknown) => void
@@ -115,7 +115,7 @@ new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cann
 new MyPromise<never>(resolve => resolve()); // error, `never` arguments cannot be omitted
 >new MyPromise<never>(resolve => resolve()) : MyPromise<never>
 >MyPromise : typeof MyPromise
->resolve => resolve() : (resolve: (value: never) => void) => any
+>resolve => resolve() : (resolve: (value: never) => void) => void
 >resolve : (value: never) => void
 >resolve() : void
 >resolve : (value: never) => void
@@ -234,7 +234,7 @@ declare function call<TS extends unknown[]>(
 >args : TS
 
 call((x: number, y: number) => x + y) // error
->call((x: number, y: number) => x + y) : any
+>call((x: number, y: number) => x + y) : void
 >call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number, y: number) => x + y : (x: number, y: number) => number
 >x : number

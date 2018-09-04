@@ -70,7 +70,7 @@ class StringIterator {
 }
 
 foo(...new SymbolIterator, ...new StringIterator);
->foo(...new SymbolIterator, ...new StringIterator) : any
+>foo(...new SymbolIterator, ...new StringIterator) : symbol
 >foo : <T>(...s: T[]) => T
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

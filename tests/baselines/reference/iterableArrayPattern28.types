@@ -9,14 +9,14 @@ function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
 takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
 >takeFirstTwoEntries(...new Map([["", 0], ["hello", true]])) : void
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
->...new Map([["", 0], ["hello", true]]) : any
->new Map([["", 0], ["hello", true]]) : any
+>...new Map([["", 0], ["hello", true]]) : [string, number]
+>new Map([["", 0], ["hello", true]]) : Map<string, number>
 >Map : MapConstructor
->[["", 0], ["hello", true]] : ((string | number)[] | (string | boolean)[])[]
->["", 0] : (string | number)[]
+>[["", 0], ["hello", true]] : ([string, number] | [string, boolean])[]
+>["", 0] : [string, number]
 >"" : ""
 >0 : 0
->["hello", true] : (string | boolean)[]
+>["hello", true] : [string, boolean]
 >"hello" : "hello"
 >true : true
 

@@ -44,9 +44,11 @@ var v: B;
 >B : Symbol(B, Decl(orderMattersForSignatureGroupIdentity.ts, 3, 1))
 
 v({ s: "", n: 0 }).toLowerCase();
+>v({ s: "", n: 0 }).toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(orderMattersForSignatureGroupIdentity.ts, 15, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 16, 3))
 >s : Symbol(s, Decl(orderMattersForSignatureGroupIdentity.ts, 18, 3))
 >n : Symbol(n, Decl(orderMattersForSignatureGroupIdentity.ts, 18, 10))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 var w: A;
 >w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 3))
@@ -57,7 +59,9 @@ var w: C;
 >C : Symbol(C, Decl(orderMattersForSignatureGroupIdentity.ts, 8, 1))
 
 w({ s: "", n: 0 }).toLowerCase();
+>w({ s: "", n: 0 }).toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >w : Symbol(w, Decl(orderMattersForSignatureGroupIdentity.ts, 20, 3), Decl(orderMattersForSignatureGroupIdentity.ts, 21, 3))
 >s : Symbol(s, Decl(orderMattersForSignatureGroupIdentity.ts, 23, 3))
 >n : Symbol(n, Decl(orderMattersForSignatureGroupIdentity.ts, 23, 10))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 

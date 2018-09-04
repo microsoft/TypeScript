@@ -57,13 +57,17 @@ var r7 = map<number, string>([1, ""], (x) => x.toString()); // error
 >r7 : Symbol(r7, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 3))
 >map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
 >x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 39))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 9, 39))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var r7b = map<number>([1, ""], (x) => x.toString()); // error
 >r7b : Symbol(r7b, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 3))
 >map : Symbol(map, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 0, 0))
 >x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 32))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 10, 32))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
 var r8 = map<any, string>([1, ""], (x) => x.toString());
 >r8 : Symbol(r8, Decl(mismatchedExplicitTypeParameterAndArgumentType.ts, 11, 3))

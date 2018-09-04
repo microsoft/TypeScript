@@ -27,7 +27,7 @@ function f1() {
 >cond : boolean
 
         x = len(x);
->x = len(x) : any
+>x = len(x) : number
 >x : string | number | boolean
 >len(x) : number
 >len : (s: string) => number
@@ -58,7 +58,7 @@ function f2() {
 >x : string | number
 
         x = len(x);
->x = len(x) : any
+>x = len(x) : number
 >x : string | number | boolean
 >len(x) : number
 >len : (s: string) => number
@@ -91,14 +91,14 @@ function g1() {
 >cond : boolean
 
         x = foo(x);
->x = foo(x) : any
+>x = foo(x) : number & string
 >x : string | number | boolean
->foo(x) : any
+>foo(x) : number & string
 >foo : { (x: string): number; (x: number): string; }
 >x : string | number
 
         x;
->x : string | number | boolean
+>x : string | number
     }
     x;
 >x : string | number
@@ -122,9 +122,9 @@ function g2() {
 >x : string | number
 
         x = foo(x);
->x = foo(x) : any
+>x = foo(x) : number & string
 >x : string | number | boolean
->foo(x) : any
+>foo(x) : number & string
 >foo : { (x: string): number; (x: number): string; }
 >x : string | number
     }

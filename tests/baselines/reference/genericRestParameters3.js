@@ -100,7 +100,7 @@ interface CoolArray<E> extends Array<E> {
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 declare function bar<T extends any[]>(...args: T): T;
 declare let a: [number, number];
-declare let b: any;
+declare let b: CoolArray<number>;
 declare function baz<T>(...args: CoolArray<T>): void;
 declare const ca: CoolArray<number>;
 declare function hmm<A extends [] | [number, string]>(...args: A): void;

@@ -27,7 +27,7 @@ const a = new tag `${100} ${200}`<string>("hello", "world");
 const b = new tag<number> `${"hello"} ${"world"}`(100, 200);
 >b : any
 >new tag<number> `${"hello"} ${"world"}`(100, 200) : any
->tag<number> `${"hello"} ${"world"}` : any
+>tag<number> `${"hello"} ${"world"}` : SomethingNewable
 >tag : SomethingTaggable
 >`${"hello"} ${"world"}` : string
 >"hello" : "hello"
@@ -51,7 +51,7 @@ const d = new tag<number> `${"hello"} ${"world"}`<string>(100, 200);
 >d : any
 >new tag<number> `${"hello"} ${"world"}`<string>(100, 200) : any
 >new tag<number> `${"hello"} ${"world"}` : any
->tag<number> `${"hello"} ${"world"}` : any
+>tag<number> `${"hello"} ${"world"}` : SomethingNewable
 >tag : SomethingTaggable
 >`${"hello"} ${"world"}` : string
 >"hello" : "hello"

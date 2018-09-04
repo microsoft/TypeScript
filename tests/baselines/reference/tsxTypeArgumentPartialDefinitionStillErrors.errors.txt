@@ -1,7 +1,8 @@
+tests/cases/compiler/file.tsx(11,1): error TS2605: JSX element type 'string' is not a constructor function for JSX elements.
 tests/cases/compiler/file.tsx(11,14): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/file.tsx (1 errors) ====
+==== tests/cases/compiler/file.tsx (2 errors) ====
     declare namespace JSX {
         interface Element {
             render(): Element | string | false;
@@ -13,6 +14,8 @@ tests/cases/compiler/file.tsx(11,14): error TS2322: Type 'number' is not assigna
     }
     
     <SFC<string> prop={1}></SFC>; // should error
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'string' is not a constructor function for JSX elements.
                  ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     

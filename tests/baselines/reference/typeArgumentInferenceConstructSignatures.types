@@ -392,15 +392,15 @@ var someGenerics9: someGenerics9;
 >someGenerics9 : someGenerics9
 
 var a9a = new someGenerics9('', 0, []);
->a9a : any
->new someGenerics9('', 0, []) : any
+>a9a : string
+>new someGenerics9('', 0, []) : ""
 >someGenerics9 : someGenerics9
 >'' : ""
 >0 : 0
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : string
 
 var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
@@ -456,8 +456,8 @@ var a9e: {};
 >a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9f : any
->new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
+>a9f : A92
+>new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : A92
 >someGenerics9 : someGenerics9
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: Window; }
@@ -472,7 +472,7 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 >'' : ""
 
 var a9f: A92;
->a9f : any
+>a9f : A92
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });

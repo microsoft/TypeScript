@@ -11,8 +11,8 @@ var b = [1, ""];
 >"" : ""
 
 var b1G = makeArray(1, ""); // any, no error
->b1G : any
->makeArray(1, "") : any
+>b1G : {}[]
+>makeArray(1, "") : {}[]
 >makeArray : <T>(items: T[]) => T[]
 >1 : 1
 >"" : ""

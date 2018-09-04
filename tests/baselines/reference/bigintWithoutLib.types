@@ -56,7 +56,7 @@ let stringVal: string = bigintVal.toString(); // should not error - bigintVal in
 >toString : () => string
 
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
->stringVal = bigintVal.toString(2) : any
+>stringVal = bigintVal.toString(2) : string
 >stringVal : string
 >bigintVal.toString(2) : string
 >bigintVal.toString : () => string

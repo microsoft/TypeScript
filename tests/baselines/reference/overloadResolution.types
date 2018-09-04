@@ -56,7 +56,7 @@ var s: string;
 
 // No candidate overloads found
 fn1({}); // Error
->fn1({}) : any
+>fn1({}) : string & number
 >fn1 : { (s: string): string; (s: number): number; }
 >{} : {}
 
@@ -95,7 +95,7 @@ var s = fn2(0, '');
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
 fn2<Date>('', 0); // Error
->fn2<Date>('', 0) : any
+>fn2<Date>('', 0) : number
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
 >'' : ""
 >0 : 0
@@ -178,7 +178,7 @@ var n = fn3<number, string, string>('', '', 3);
 
 // Generic overloads with differing arity called with type argument count that doesn't match any overload
 fn3<number, number, number, number>(); // Error
->fn3<number, number, number, number>() : any
+>fn3<number, number, number, number>() : string
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
 
 // Generic overloads with constraints called with type arguments that satisfy the constraints

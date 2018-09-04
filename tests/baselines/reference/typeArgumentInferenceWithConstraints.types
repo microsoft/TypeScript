@@ -31,7 +31,7 @@ noGenericParams<number>('');
 >'' : ""
 
 noGenericParams<{}>(''); // Error
->noGenericParams<{}>('') : any
+>noGenericParams<{}>('') : void
 >noGenericParams : <T extends number>(n: string) => void
 >'' : ""
 
@@ -48,13 +48,13 @@ someGenerics1(3, 4); // Valid
 >4 : 4
 
 someGenerics1<string, number>(3, 4); // Error
->someGenerics1<string, number>(3, 4) : any
+>someGenerics1<string, number>(3, 4) : void
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
 >3 : 3
 >4 : 4
 
 someGenerics1<number, {}>(3, 4); // Error
->someGenerics1<number, {}>(3, 4) : any
+>someGenerics1<number, {}>(3, 4) : void
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
 >3 : 3
 >4 : 4
@@ -138,7 +138,7 @@ function someGenerics3<T extends Window>(producer: () => T) { }
 >producer : () => T
 
 someGenerics3(() => ''); // Error
->someGenerics3(() => '') : any
+>someGenerics3(() => '') : void
 >someGenerics3 : <T extends Window>(producer: () => T) => void
 >() => '' : () => string
 >'' : ""
@@ -150,7 +150,7 @@ someGenerics3<Window>(() => undefined);
 >undefined : undefined
 
 someGenerics3<number>(() => 3); // Error
->someGenerics3<number>(() => 3) : any
+>someGenerics3<number>(() => 3) : void
 >someGenerics3 : <T extends Window>(producer: () => T) => void
 >() => 3 : () => number
 >3 : 3
@@ -177,7 +177,7 @@ someGenerics4<string, number>('', () => 3);
 >3 : 3
 
 someGenerics4<string, number>('', (x: string) => ''); // Error
->someGenerics4<string, number>('', (x: string) => '') : any
+>someGenerics4<string, number>('', (x: string) => '') : void
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -212,7 +212,7 @@ someGenerics5<number, string>('', () => 3);
 >3 : 3
 
 someGenerics5<number, string>('', (x: string) => ''); // Error
->someGenerics5<number, string>('', (x: string) => '') : any
+>someGenerics5<number, string>('', (x: string) => '') : void
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
 >'' : ""
 >(x: string) => '' : (x: string) => string
@@ -220,7 +220,7 @@ someGenerics5<number, string>('', (x: string) => ''); // Error
 >'' : ""
 
 someGenerics5<string, number>(null, null); // Error
->someGenerics5<string, number>(null, null) : any
+>someGenerics5<string, number>(null, null) : void
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
 >null : null
 >null : null
@@ -262,7 +262,7 @@ someGenerics6<number>(n => n, n => n, n => n);
 >n : number
 
 someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
->someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : any
+>someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : void
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
 >(n: number) => n : (n: number) => number
 >n : number
@@ -343,14 +343,14 @@ function someGenerics8<T extends string>(n: T): T { return n; }
 >n : T
 
 var x = someGenerics8<string>(someGenerics7); // Error
->x : any
->someGenerics8<string>(someGenerics7) : any
+>x : string
+>someGenerics8<string>(someGenerics7) : string
 >someGenerics8 : <T extends string>(n: T) => T
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
 
 x<string, string, string>(null, null, null); // Error
 >x<string, string, string>(null, null, null) : any
->x : any
+>x : string
 >null : null
 >null : null
 >null : null
@@ -366,15 +366,15 @@ function someGenerics9<T extends any>(a: T, b: T, c: T): T {
 >null : null
 }
 var a9a = someGenerics9('', 0, []);
->a9a : any
->someGenerics9('', 0, []) : any
+>a9a : string
+>someGenerics9('', 0, []) : ""
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >'' : ""
 >0 : 0
 >[] : undefined[]
 
 var a9a: {};
->a9a : any
+>a9a : string
 
 var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
@@ -430,8 +430,8 @@ var a9e: {};
 >a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9f : any
->someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
+>a9f : A92
+>someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : A92
 >someGenerics9 : <T extends any>(a: T, b: T, c: T) => T
 >undefined : undefined
 >{ x: 6, z: window } : { x: number; z: Window; }
@@ -446,7 +446,7 @@ var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9f: A92;
->a9f : any
+>a9f : A92
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });

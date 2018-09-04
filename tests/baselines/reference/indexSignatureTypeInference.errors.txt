@@ -1,8 +1,9 @@
+tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts(18,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'v1' must be of type 'Function[]', but here has type '{}[]'.
 tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts(18,27): error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<{}>'.
   Index signature is missing in type 'NumberMap<Function>'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts (2 errors) ====
     interface NumberMap<T> {
         [index: number]: T;
     }
@@ -21,6 +22,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureType
     var v1 = numberMapToArray(numberMap);  // Ok
     var v1 = numberMapToArray(stringMap);  // Ok
     var v1 = stringMapToArray(numberMap);  // Error expected here
+        ~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'v1' must be of type 'Function[]', but here has type '{}[]'.
                               ~~~~~~~~~
 !!! error TS2345: Argument of type 'NumberMap<Function>' is not assignable to parameter of type 'StringMap<{}>'.
 !!! error TS2345:   Index signature is missing in type 'NumberMap<Function>'.

@@ -47,8 +47,8 @@ var rf1 = (x: number, y: string) => { return x.toFixed() };
 >toFixed : (fractionDigits?: number) => string
 
 var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
->r5a : any
->_.map<number, string, Date>(c2, (x, y) => { return x.toFixed() }) : any
+>r5a : Collection<any, any>
+>_.map<number, string, Date>(c2, (x, y) => { return x.toFixed() }) : Collection<any, any>
 >_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
 >_ : Combinators
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
@@ -62,8 +62,8 @@ var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
 >toFixed : (fractionDigits?: number) => string
 
 var r5b = _.map<number, string, Date>(c2, rf1);
->r5b : any
->_.map<number, string, Date>(c2, rf1) : any
+>r5b : Collection<any, any>
+>_.map<number, string, Date>(c2, rf1) : Collection<any, any>
 >_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
 >_ : Combinators
 >map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }

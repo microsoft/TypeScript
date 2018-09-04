@@ -75,8 +75,8 @@ module GenericParameter {
 >y : T
 
     var r10 = foo6(b); // error
->r10 : any
->foo6(b) : any
+>r10 : { new (x: {}): string; new (x: {}, y?: {}): string; }
+>foo6(b) : { new (x: {}): string; new (x: {}, y?: {}): string; }
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >b : new <T>(x: T, y: T) => string
 

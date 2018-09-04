@@ -11,7 +11,7 @@ class D<T, U> {
 }
  
 var d = new D<number>();
->d : any
->new D<number>() : any
+>d : D<number, {}>
+>new D<number>() : D<number, {}>
 >D : typeof D
 

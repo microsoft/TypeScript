@@ -22,8 +22,8 @@ declare function convert(s: string): IPromise<number>;
 >s : string
 
 var $$x = load("something").then(s => convert(s));
->$$x : any
->load("something").then(s => convert(s)) : any
+>$$x : Promise<{}>
+>load("something").then(s => convert(s)) : Promise<{}>
 >load("something").then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>): Promise<U>; }
 >load("something") : Promise<string>
 >load : (name: string) => Promise<string>

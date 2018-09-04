@@ -156,7 +156,7 @@ d3({ y: new SubClass() });
 
 // Error
 d3({ y: new Class() });
->d3({ y: new Class() }) : any
+>d3({ y: new Class() }) : void
 >d3 : <T extends D>({ y }: { y: D; }) => void
 >{ y: new Class() } : { y: Class; }
 >y : Class
@@ -164,19 +164,19 @@ d3({ y: new Class() });
 >Class : typeof Class
 
 d3({});
->d3({}) : any
+>d3({}) : void
 >d3 : <T extends D>({ y }: { y: D; }) => void
 >{} : {}
 
 d3({ y: 1 });
->d3({ y: 1 }) : any
+>d3({ y: 1 }) : void
 >d3 : <T extends D>({ y }: { y: D; }) => void
 >{ y: 1 } : { y: number; }
 >y : number
 >1 : 1
 
 d3({ y: "world" });
->d3({ y: "world" }) : any
+>d3({ y: "world" }) : void
 >d3 : <T extends D>({ y }: { y: D; }) => void
 >{ y: "world" } : { y: string; }
 >y : string

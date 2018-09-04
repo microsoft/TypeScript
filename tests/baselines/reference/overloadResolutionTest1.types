@@ -34,8 +34,8 @@ var x11 = foo([{a:0}]); // works
 >0 : 0
 
 var x111 = foo([{a:"s"}]); // error - does not match any signature
->x111 : any
->foo([{a:"s"}]) : any
+>x111 : string & number
+>foo([{a:"s"}]) : string & number
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >[{a:"s"}] : { a: string; }[]
 >{a:"s"} : { a: string; }
@@ -86,8 +86,8 @@ var x3 = foo2({a:true}); // works
 >true : true
 
 var x4 = foo2({a:"s"}); // error
->x4 : any
->foo2({a:"s"}) : any
+>x4 : string & number
+>foo2({a:"s"}) : string & number
 >foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
 >{a:"s"} : { a: string; }
 >a : string
@@ -111,8 +111,8 @@ function foo4(bar:{a:any;}):any{ return bar };
 >bar : { a: any; }
 
 var x = foo4({a:true}); // error
->x : any
->foo4({a:true}) : any
+>x : number & string
+>foo4({a:true}) : number & string
 >foo4 : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
 >{a:true} : { a: boolean; }
 >a : boolean

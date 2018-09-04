@@ -23,7 +23,7 @@ module onlyT {
     var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
 >r1 : (x: {}) => {}
 >x : {}
->foo((x: number) => 1, (x: string) => '') : any
+>foo((x: number) => 1, (x: string) => '') : (x: number) => number
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >(x: number) => 1 : (x: number) => number
 >x : number
@@ -82,8 +82,8 @@ module onlyT {
 >x : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); // error
->r7 : any
->foo2((a: T) => a, (b: T) => b) : any
+>r7 : (x: Date) => Date
+>foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T
@@ -129,8 +129,8 @@ module onlyT {
     }
 
     var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
->r7 : any
->foo3(E.A, (x) => E.A, (x) => F.A) : any
+>r7 : (x: E) => E
+>foo3(E.A, (x) => E.A, (x) => F.A) : (x: E) => E
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >E.A : E
 >E : typeof E
@@ -226,8 +226,8 @@ module TU {
 >x : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); 
->r7 : any
->foo2((a: T) => a, (b: T) => b) : any
+>r7 : (x: Date) => Date
+>foo2((a: T) => a, (b: T) => b) : (x: Date) => Date
 >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T

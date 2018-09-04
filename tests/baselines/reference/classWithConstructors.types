@@ -10,8 +10,8 @@ module NonGeneric {
     }
 
     var c = new C(); // error
->c : any
->new C() : any
+>c : C
+>new C() : C
 >C : typeof C
 
     var c2 = new C(''); // ok
@@ -34,8 +34,8 @@ module NonGeneric {
     }
 
     var c3 = new C2(); // error
->c3 : any
->new C2() : any
+>c3 : C2
+>new C2() : C2
 >C2 : typeof C2
 
     var c4 = new C2(''); // ok
@@ -55,8 +55,8 @@ module NonGeneric {
 >C2 : C2
 
     var d = new D(); // error
->d : any
->new D() : any
+>d : D
+>new D() : D
 >D : typeof D
 
     var d2 = new D(1); // ok
@@ -83,8 +83,8 @@ module Generics {
     }
 
     var c = new C(); // error
->c : any
->new C() : any
+>c : C<{}>
+>new C() : C<{}>
 >C : typeof C
 
     var c2 = new C(''); // ok
@@ -108,8 +108,8 @@ module Generics {
     }
 
     var c3 = new C2(); // error
->c3 : any
->new C2() : any
+>c3 : C2<{}, {}>
+>new C2() : C2<{}, {}>
 >C2 : typeof C2
 
     var c4 = new C2(''); // ok
@@ -130,8 +130,8 @@ module Generics {
 >C2 : C2<T, U>
 
     var d = new D(); // error
->d : any
->new D() : any
+>d : D<{}, {}>
+>new D() : D<{}, {}>
 >D : typeof D
 
     var d2 = new D(1); // ok
