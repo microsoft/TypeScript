@@ -20,16 +20,16 @@ export module uninstantiated {
 
 === tests/cases/compiler/client.ts ===
 export { c } from "./server";
->c : typeof c
+>c : typeof import("tests/cases/compiler/server").c
 
 export { c as c2 } from "./server";
->c : typeof c
->c2 : typeof c
+>c : typeof import("tests/cases/compiler/server").c
+>c2 : typeof import("tests/cases/compiler/server").c
 
 export { i, m as instantiatedModule } from "./server";
 >i : any
->m : typeof instantiatedModule
->instantiatedModule : typeof instantiatedModule
+>m : typeof import("tests/cases/compiler/server").m
+>instantiatedModule : typeof import("tests/cases/compiler/server").m
 
 export { uninstantiated } from "./server";
 >uninstantiated : any
