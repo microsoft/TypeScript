@@ -29363,9 +29363,10 @@ namespace ts {
         }
 
         function isSimpleLiteralEnumReference(expr: Expression) {
-            if (!(isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression)))) return false;
-            if (!isEntityNameExpression(expr.expression)) return false;
-            return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+            if (
+                (isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
+                isEntityNameExpression(expr.expression)
+            ) return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
         }
 
         function checkGrammarVariableDeclaration(node: VariableDeclaration) {
