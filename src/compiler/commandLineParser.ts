@@ -1843,7 +1843,9 @@ namespace ts {
             if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
                 if (isArray(raw.files)) {
                     filesSpecs = <ReadonlyArray<string>>raw.files;
-                    if (filesSpecs.length === 0) {
+                    const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
+                    const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
+                    if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
                         createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
                     }
                 }
@@ -2067,11 +2069,6 @@ namespace ts {
                                 createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
                         );
                         return;
-                    case "files":
-                        if ((<ReadonlyArray<string>>value).length === 0) {
-                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueNode, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
-                        }
-                        return;
                 }
             },
             onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
@@ -2081,6 +2078,13 @@ namespace ts {
             }
         };
         const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+        const hasZeroFiles = json && json.files && json.files.length === 0;
+        const hasZeroOrNoReferences = !(json && json.references) || json.references.length === 0;
+
+        if (hasZeroFiles && hasZeroOrNoReferences) {
+            errors.push(createCompilerDiagnostic(Diagnostics.The_files_list_in_config_file_0_is_empty, sourceFile.fileName));
+        }
+
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
                 typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?
