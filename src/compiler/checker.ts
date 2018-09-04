@@ -2748,7 +2748,11 @@ namespace ts {
                         && symbolFromSymbolTable.escapedName !== InternalSymbolName.Default
                         && !(isUMDExportSymbol(symbolFromSymbolTable) && enclosingDeclaration && isExternalModule(getSourceFileOfNode(enclosingDeclaration)))
                         // If `!useOnlyExternalAliasing`, we can use any type of alias to get the name
-                        && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))) {
+                        && (!useOnlyExternalAliasing || some(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration))
+                        // While exports are generally considered to be in scope, export-specifier declared symbols are _not_
+                        // See similar comment in `resolveName` for details
+                        && (ignoreQualification || !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier))
+                    ) {
 
                         const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
                         if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol, ignoreQualification)) {
