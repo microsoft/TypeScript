@@ -1,0 +1,19 @@
+=== tests/cases/compiler/errorsWithCallablesInUnions01.ts ===
+interface IDirectiveLinkFn<TScope> {
+    (scope: TScope): void;
+>scope : TScope
+}
+
+interface IDirectivePrePost<TScope> {
+    pre?: IDirectiveLinkFn<TScope>;
+>pre : IDirectiveLinkFn<TScope>
+
+    post?: IDirectiveLinkFn<TScope>;
+>post : IDirectiveLinkFn<TScope>
+}
+
+export let blah: IDirectiveLinkFn<number> | IDirectivePrePost<number> = (x: string) => {}
+>blah : IDirectiveLinkFn<number> | IDirectivePrePost<number>
+>(x: string) => {} : (x: string) => void
+>x : string
+
