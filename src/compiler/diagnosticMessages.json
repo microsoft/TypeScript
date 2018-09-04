@@ -4687,5 +4687,29 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Add '@class' tag": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Add '@this' tag": {
+        "category": "Message",
+        "code": 95070
+    },
+    "Add 'this' parameter.": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Convert function expression '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95072
+    },
+    "Convert function declaration '{0}' to arrow function": {
+        "category": "Message",
+        "code": 95073
+    },
+    "Fix all implicit-'this' errors": {
+        "category": "Message",
+        "code": 95074
     }
 }

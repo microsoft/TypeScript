@@ -339,6 +339,22 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
+        public insertJsdocCommentBefore(sourceFile: SourceFile, fn: FunctionDeclaration | FunctionExpression, tag: JSDocTag): void {
+            const existingJsdoc = fn.jsDoc && firstOrUndefined(fn.jsDoc);
+            if (existingJsdoc) {
+                // `/** foo */` --> `/**\n * @constructor\n * foo */`
+                const jsdocStart = existingJsdoc.getStart(sourceFile);
+                const indent = getIndent(sourceFile, jsdocStart);
+                const indentAsterisk = `${this.newLineCharacter}${indent} *`;
+                this.insertNodeAt(sourceFile, jsdocStart + "/**".length, tag, { prefix: `${indentAsterisk} `, suffix: indentAsterisk });
+            }
+            else {
+                const fnStart = fn.getStart(sourceFile);
+                const indent = getIndent(sourceFile, fnStart);
+                this.insertNodeAt(sourceFile, fnStart, tag, { prefix: "/** ", suffix: ` */${this.newLineCharacter}${indent}` });
+            }
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
@@ -720,6 +736,11 @@ namespace ts.textChanges {
         }
     }
 
+    function getIndent(sourceFile: SourceFile, position: number): string {
+        const lineStart = getStartPositionOfLine(getLineAndCharacterOfPosition(sourceFile, position).line, sourceFile);
+        return sourceFile.text.slice(lineStart, position);
+    }
+
     // find first non-whitespace position in the leading trivia of the node
     function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
@@ -788,21 +809,35 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
-            if (validate) validate(node, text);
-            const { options: formatOptions } = formatContext;
-            const initialIndentation =
-                indentation !== undefined
-                    ? indentation
-                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
-            if (delta === undefined) {
-                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+        export function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+            // Emitter doesn't handle JSDoc, so generate that here.
+            if (isJSDocTag(nodeIn)) {
+                switch (nodeIn.kind) {
+                    case SyntaxKind.JSDocClassTag:
+                        return "@class";
+                    case SyntaxKind.JSDocThisTag:
+                        const { typeExpression } = nodeIn as JSDocThisTag;
+                        return typeExpression ? `@this {${getNonformattedText(typeExpression.type, sourceFile, newLineCharacter).text}}` : "@this";
+                    default:
+                        return Debug.fail(); // TODO (if this is needed)
+                }
             }
+            else {
+                const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+                if (validate) validate(node, text);
+                const { options: formatOptions } = formatContext;
+                const initialIndentation =
+                    indentation !== undefined
+                        ? indentation
+                        : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+                if (delta === undefined) {
+                    delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+                }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
-            return applyChanges(text, changes);
+                const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+                const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
+                return applyChanges(text, changes);
+            }
         }
 
         /** Note: output node may be mutated input node. */
@@ -1103,15 +1138,23 @@ namespace ts.textChanges {
                     deleteImportBinding(changes, sourceFile, node as NamespaceImport);
                     break;
 
+                case SyntaxKind.SemicolonToken:
+                    deleteNode(changes, sourceFile, node, { useNonAdjustedEndPosition: true });
+                    break;
+
+                case SyntaxKind.FunctionKeyword:
+                    deleteNode(changes, sourceFile, node, { useNonAdjustedStartPosition: true });
+                    break;
+
                 default:
                     if (isImportClause(node.parent) && node.parent.name === node) {
                         deleteDefaultImport(changes, sourceFile, node.parent);
                     }
-                    else if (isCallLikeExpression(node.parent)) {
+                    else if (isCallExpression(node.parent) && contains(node.parent.arguments, node)) {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     else {
-                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { useNonAdjustedEndPosition: true } : undefined);
+                        deleteNode(changes, sourceFile, node);
                     }
             }
         }

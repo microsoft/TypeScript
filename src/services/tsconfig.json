@@ -51,6 +51,7 @@
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
+        "codefixes/fixImplicitThis.ts",
         "codefixes/fixSpelling.ts",
         "codefixes/fixAddMissingMember.ts",
         "codefixes/fixCannotFindModule.ts",

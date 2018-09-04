@@ -1788,6 +1788,32 @@ namespace ts {
         return node;
     }
 
+    /* @internal */
+    export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
+        const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function createJSDocThisTag(typeExpression: JSDocTypeExpression | TypeNode | undefined): JSDocThisTag {
+        const node = createJsDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, "this");
+        node.typeExpression = typeExpression && (isJSDocTypeExpression(typeExpression) ? typeExpression : createJSDocTypeExpression(typeExpression));
+        return node;
+    }
+
+    /* @internal */
+    export function createJSDocClassTag(): JSDocClassTag {
+        return createJsDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, "class");
+    }
+
+    function createJsDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+        const node = createSynthesizedNode(kind) as T;
+        node.atToken = createToken(SyntaxKind.AtToken);
+        node.tagName = createIdentifier(tagName);
+        return node;
+    }
+
     export function updateFunctionDeclaration(
         node: FunctionDeclaration,
         decorators: ReadonlyArray<Decorator> | undefined,
