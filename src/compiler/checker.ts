@@ -11985,9 +11985,36 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                            const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+
+                            const sourceType = getTypeOfSymbol(sourceProp);
+                            const targetType = getTypeOfSymbol(targetProp);
+                            const related = isRelatedTo(sourceType, targetType, reportErrors);
                             if (!related) {
                                 if (reportErrors) {
+                                    if (sourceProp.valueDeclaration && isLiteralType(targetType) && isPropertyAssignment(sourceProp.valueDeclaration) && sourceProp.valueDeclaration.initializer) {
+                                        const variableLikeDeclaration = findAncestor(sourceProp.valueDeclaration.parent, element => {
+                                            if (isParenthesizedExpression(element) || isPropertyAssignment(element) || isObjectLiteralExpression(element)) return false;
+                                            if (isVariableDeclaration(element)) return true;
+                                            return "quit";
+                                        }) as VariableDeclaration | undefined;
+                                        if (variableLikeDeclaration && !variableLikeDeclaration.type && variableLikeDeclaration.initializer) {
+                                            const initializer = sourceProp.valueDeclaration.initializer;
+                                            let value: string | undefined;
+                                            forEachType(targetType, t => {
+                                                if (isStringOrNumericLiteralLike(initializer) && t.flags & TypeFlags.StringOrNumberLiteral && (<LiteralType>t).value === initializer.text) {
+                                                    value = initializer.text;
+                                                    return true;
+                                                }
+                                                else if (initializer.kind === SyntaxKind.TrueKeyword || initializer.kind === SyntaxKind.FalseKeyword && t.flags & TypeFlags.BooleanLiteral) {
+                                                    return true;
+                                                }
+                                                return false;
+                                            });
+                                            if(value) {
+                                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2_as_2, typeToString(sourceType), typeToString(targetType), value);
+                                            }
+                                        }
+                                    }
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
                                 }
                                 return Ternary.False;

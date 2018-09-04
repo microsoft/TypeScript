@@ -1,0 +1,19 @@
+tests/cases/compiler/stringAssignToStringLiteralType.ts(6,10): error TS2345: Argument of type '{ cherry: string; }' is not assignable to parameter of type 'IceCreamOptions'.
+  Types of property 'cherry' are incompatible.
+    Type 'string' is not assignable to type '"yes" | "no"'. Did you mean 'yes as yes'?
+      Type 'string' is not assignable to type '"yes" | "no"'.
+
+
+==== tests/cases/compiler/stringAssignToStringLiteralType.ts (1 errors) ====
+    interface IceCreamOptions {
+        readonly cherry: "yes" | "no"
+    }
+    declare function iceCream(options: IceCreamOptions): void;
+    const options = { cherry: "yes" };
+    iceCream(options);
+             ~~~~~~~
+!!! error TS2345: Argument of type '{ cherry: string; }' is not assignable to parameter of type 'IceCreamOptions'.
+!!! error TS2345:   Types of property 'cherry' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type '"yes" | "no"'. Did you mean 'yes as yes'?
+!!! error TS2345:       Type 'string' is not assignable to type '"yes" | "no"'.
+    

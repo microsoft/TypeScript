@@ -1,0 +1,20 @@
+=== tests/cases/compiler/stringAssignToStringLiteralType.ts ===
+interface IceCreamOptions {
+    readonly cherry: "yes" | "no"
+>cherry : "yes" | "no"
+}
+declare function iceCream(options: IceCreamOptions): void;
+>iceCream : (options: IceCreamOptions) => void
+>options : IceCreamOptions
+
+const options = { cherry: "yes" };
+>options : { cherry: string; }
+>{ cherry: "yes" } : { cherry: string; }
+>cherry : string
+>"yes" : "yes"
+
+iceCream(options);
+>iceCream(options) : void
+>iceCream : (options: IceCreamOptions) => void
+>options : { cherry: string; }
+
