@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface Recursive {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}next|]?: Recursive;
+////    [|{| "isDefinition": true |}next|]?: Recursive;
 ////    value: any;
 ////}
 ////

@@ -739,6 +739,7 @@ namespace ts {
     }
 
     export interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
