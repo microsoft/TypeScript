@@ -17,10 +17,8 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,5): error TS2345: Argument of type '[number, [string, { y: false; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
-  Type '[string, { y: false; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
-    Type '{ y: false; }' is not assignable to type '{ x: any; y?: boolean; }'.
-      Property 'x' is missing in type '{ y: false; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,17): error TS2322: Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
+  Property 'x' is missing in type '{ y: boolean; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
@@ -170,11 +168,9 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     f14([2, ["abc", { x: 0, y: true }]]);
     f14([2, ["abc", { x: 0 }]]);
     f14([2, ["abc", { y: false }]]);  // Error, no x
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '[number, [string, { y: false; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
-!!! error TS2345:   Type '[string, { y: false; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
-!!! error TS2345:     Type '{ y: false; }' is not assignable to type '{ x: any; y?: boolean; }'.
-!!! error TS2345:       Property 'x' is missing in type '{ y: false; }'.
+                    ~~~~~~~~~~~~
+!!! error TS2322: Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
+!!! error TS2322:   Property 'x' is missing in type '{ y: boolean; }'.
     
     module M {
         export var [a, b] = [1, 2];

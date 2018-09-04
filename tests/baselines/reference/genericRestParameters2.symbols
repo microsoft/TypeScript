@@ -245,82 +245,71 @@ f20(42, "hello", ...t2, true);
 >f20 : Symbol(f20, Decl(genericRestParameters2.ts, 59, 13))
 >t2 : Symbol(t2, Decl(genericRestParameters2.ts, 1, 13))
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->T : Symbol(T, Decl(genericRestParameters2.ts, 66, 16))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(genericRestParameters2.ts, 66, 16))
->args : Symbol(args, Decl(genericRestParameters2.ts, 66, 50))
->U : Symbol(U, Decl(genericRestParameters2.ts, 66, 64), Decl(genericRestParameters2.ts, 66, 97))
->args : Symbol(args, Decl(genericRestParameters2.ts, 66, 83))
->U : Symbol(U, Decl(genericRestParameters2.ts, 66, 64), Decl(genericRestParameters2.ts, 66, 97))
->U : Symbol(U, Decl(genericRestParameters2.ts, 66, 64), Decl(genericRestParameters2.ts, 66, 97))
-
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
->T01 : Symbol(T01, Decl(genericRestParameters2.ts, 66, 121))
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->x : Symbol(x, Decl(genericRestParameters2.ts, 68, 23))
->y : Symbol(y, Decl(genericRestParameters2.ts, 68, 33))
->z : Symbol(z, Decl(genericRestParameters2.ts, 68, 44))
+>T01 : Symbol(T01, Decl(genericRestParameters2.ts, 64, 30))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters2.ts, 66, 23))
+>y : Symbol(y, Decl(genericRestParameters2.ts, 66, 33))
+>z : Symbol(z, Decl(genericRestParameters2.ts, 66, 44))
 
 type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
->T02 : Symbol(T02, Decl(genericRestParameters2.ts, 68, 71))
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->args : Symbol(args, Decl(genericRestParameters2.ts, 69, 23))
+>T02 : Symbol(T02, Decl(genericRestParameters2.ts, 66, 71))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters2.ts, 67, 23))
 
-type T03 = Parameters<new (x: number, y: string, ...z: boolean[]) => void>;
->T03 : Symbol(T03, Decl(genericRestParameters2.ts, 69, 73))
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->x : Symbol(x, Decl(genericRestParameters2.ts, 70, 27))
->y : Symbol(y, Decl(genericRestParameters2.ts, 70, 37))
->z : Symbol(z, Decl(genericRestParameters2.ts, 70, 48))
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
+>T03 : Symbol(T03, Decl(genericRestParameters2.ts, 67, 73))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters2.ts, 68, 38))
+>y : Symbol(y, Decl(genericRestParameters2.ts, 68, 48))
+>z : Symbol(z, Decl(genericRestParameters2.ts, 68, 59))
 
-type T04 = Parameters<new (...args: [number, string, ...boolean[]]) => void>;
->T04 : Symbol(T04, Decl(genericRestParameters2.ts, 70, 75))
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->args : Symbol(args, Decl(genericRestParameters2.ts, 71, 27))
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
+>T04 : Symbol(T04, Decl(genericRestParameters2.ts, 68, 86))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters2.ts, 69, 38))
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
->T05 : Symbol(T05, Decl(genericRestParameters2.ts, 71, 77))
->T : Symbol(T, Decl(genericRestParameters2.ts, 72, 9))
->Parameters : Symbol(Parameters, Decl(genericRestParameters2.ts, 64, 30))
->x : Symbol(x, Decl(genericRestParameters2.ts, 72, 40))
->args : Symbol(args, Decl(genericRestParameters2.ts, 72, 50))
->T : Symbol(T, Decl(genericRestParameters2.ts, 72, 9))
+>T05 : Symbol(T05, Decl(genericRestParameters2.ts, 69, 88))
+>T : Symbol(T, Decl(genericRestParameters2.ts, 70, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters2.ts, 70, 40))
+>args : Symbol(args, Decl(genericRestParameters2.ts, 70, 50))
+>T : Symbol(T, Decl(genericRestParameters2.ts, 70, 9))
 
 type T06 = T05<[number, ...boolean[]]>;
->T06 : Symbol(T06, Decl(genericRestParameters2.ts, 72, 72))
->T05 : Symbol(T05, Decl(genericRestParameters2.ts, 71, 77))
+>T06 : Symbol(T06, Decl(genericRestParameters2.ts, 70, 72))
+>T05 : Symbol(T05, Decl(genericRestParameters2.ts, 69, 88))
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
->P1 : Symbol(P1, Decl(genericRestParameters2.ts, 73, 39))
->T : Symbol(T, Decl(genericRestParameters2.ts, 75, 8))
+>P1 : Symbol(P1, Decl(genericRestParameters2.ts, 71, 39))
+>T : Symbol(T, Decl(genericRestParameters2.ts, 73, 8))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(genericRestParameters2.ts, 75, 8))
->head : Symbol(head, Decl(genericRestParameters2.ts, 75, 41))
->A : Symbol(A, Decl(genericRestParameters2.ts, 75, 52))
->tail : Symbol(tail, Decl(genericRestParameters2.ts, 75, 55))
->B : Symbol(B, Decl(genericRestParameters2.ts, 75, 70))
->head : Symbol(head, Decl(genericRestParameters2.ts, 75, 84))
->A : Symbol(A, Decl(genericRestParameters2.ts, 75, 52))
->tail : Symbol(tail, Decl(genericRestParameters2.ts, 75, 93))
->B : Symbol(B, Decl(genericRestParameters2.ts, 75, 70))
+>T : Symbol(T, Decl(genericRestParameters2.ts, 73, 8))
+>head : Symbol(head, Decl(genericRestParameters2.ts, 73, 41))
+>A : Symbol(A, Decl(genericRestParameters2.ts, 73, 52))
+>tail : Symbol(tail, Decl(genericRestParameters2.ts, 73, 55))
+>B : Symbol(B, Decl(genericRestParameters2.ts, 73, 70))
+>head : Symbol(head, Decl(genericRestParameters2.ts, 73, 84))
+>A : Symbol(A, Decl(genericRestParameters2.ts, 73, 52))
+>tail : Symbol(tail, Decl(genericRestParameters2.ts, 73, 93))
+>B : Symbol(B, Decl(genericRestParameters2.ts, 73, 70))
 
 type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
->T10 : Symbol(T10, Decl(genericRestParameters2.ts, 75, 112))
->P1 : Symbol(P1, Decl(genericRestParameters2.ts, 73, 39))
->x : Symbol(x, Decl(genericRestParameters2.ts, 77, 15))
->y : Symbol(y, Decl(genericRestParameters2.ts, 77, 25))
->z : Symbol(z, Decl(genericRestParameters2.ts, 77, 36))
+>T10 : Symbol(T10, Decl(genericRestParameters2.ts, 73, 112))
+>P1 : Symbol(P1, Decl(genericRestParameters2.ts, 71, 39))
+>x : Symbol(x, Decl(genericRestParameters2.ts, 75, 15))
+>y : Symbol(y, Decl(genericRestParameters2.ts, 75, 25))
+>z : Symbol(z, Decl(genericRestParameters2.ts, 75, 36))
 
 type T11 = P1<(...z: number[]) => void>;
->T11 : Symbol(T11, Decl(genericRestParameters2.ts, 77, 63))
->P1 : Symbol(P1, Decl(genericRestParameters2.ts, 73, 39))
->z : Symbol(z, Decl(genericRestParameters2.ts, 78, 15))
+>T11 : Symbol(T11, Decl(genericRestParameters2.ts, 75, 63))
+>P1 : Symbol(P1, Decl(genericRestParameters2.ts, 71, 39))
+>z : Symbol(z, Decl(genericRestParameters2.ts, 76, 15))
 
 type T12 = P1<(x: number, y: number) => void>;
->T12 : Symbol(T12, Decl(genericRestParameters2.ts, 78, 40))
->P1 : Symbol(P1, Decl(genericRestParameters2.ts, 73, 39))
->x : Symbol(x, Decl(genericRestParameters2.ts, 79, 15))
->y : Symbol(y, Decl(genericRestParameters2.ts, 79, 25))
+>T12 : Symbol(T12, Decl(genericRestParameters2.ts, 76, 40))
+>P1 : Symbol(P1, Decl(genericRestParameters2.ts, 71, 39))
+>x : Symbol(x, Decl(genericRestParameters2.ts, 77, 15))
+>y : Symbol(y, Decl(genericRestParameters2.ts, 77, 25))
 

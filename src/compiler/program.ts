@@ -1259,8 +1259,6 @@ namespace ts {
         }
 
         function getProjectReferences() {
-            if (!resolvedProjectReferences) return;
-
             return resolvedProjectReferences;
         }
 
