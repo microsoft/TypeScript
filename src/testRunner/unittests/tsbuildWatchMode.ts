@@ -112,9 +112,22 @@ export class someClass { }`);
             // Another change requeues and builds it
             verifyChange(core[1].content);
 
+            // Two changes together report only single time message: File change detected. Starting incremental compilation...
+            const outputFileStamps = getOutputFileStamps(host);
+            const change1 = `${core[1].content}
+export class someClass { }`;
+            host.writeFile(core[1].path, change1);
+            host.writeFile(core[1].path, `${change1}
+export class someClass2 { }`);
+            verifyChangeAfterTimeout(outputFileStamps);
+
             function verifyChange(coreContent: string) {
                 const outputFileStamps = getOutputFileStamps(host);
                 host.writeFile(core[1].path, coreContent);
+                verifyChangeAfterTimeout(outputFileStamps);
+            }
+
+            function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
                 host.checkTimeoutQueueLengthAndRun(1); // Builds core
                 const changedCore = getOutputFileStamps(host);
                 verifyChangedFiles(changedCore, outputFileStamps, [

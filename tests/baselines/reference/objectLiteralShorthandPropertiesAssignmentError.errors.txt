@@ -2,9 +2,7 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(6,81): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(6,87): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(8,5): error TS2345: Argument of type '{ name: string; id: number; }' is not assignable to parameter of type '{ name: string; id: boolean; }'.
-  Types of property 'id' are incompatible.
-    Type 'number' is not assignable to type 'boolean'.
+tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts(8,13): error TS2322: Type 'number' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts (4 errors) ====
@@ -25,9 +23,8 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
 !!! related TS6500 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:6:43: The expected type comes from property 'id' which is declared here on type '{ id: string; name: number; }'
     function bar(obj: { name: string; id: boolean }) { }
     bar({ name, id });  // error
-        ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ name: string; id: number; }' is not assignable to parameter of type '{ name: string; id: boolean; }'.
-!!! error TS2345:   Types of property 'id' are incompatible.
-!!! error TS2345:     Type 'number' is not assignable to type 'boolean'.
+                ~~
+!!! error TS2322: Type 'number' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:7:35: The expected type comes from property 'id' which is declared here on type '{ name: string; id: boolean; }'
     
     
