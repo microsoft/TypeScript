@@ -491,13 +491,7 @@ namespace ts {
     }
 
     function isJSDocTypeExpressionOrChild(node: Node): boolean {
-        if (node.kind === SyntaxKind.JSDocTypeExpression) {
-            return true;
-        }
-        if (node.parent) {
-            return isJSDocTypeExpressionOrChild(node.parent);
-        }
-        return false;
+        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
     }
 
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
