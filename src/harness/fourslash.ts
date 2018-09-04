@@ -868,8 +868,7 @@ namespace FourSlash {
             const actualByName = ts.createMap<ts.CompletionEntry>();
             for (const entry of actualCompletions.entries) {
                 if (actualByName.has(entry.name)) {
-                    // TODO: GH#23587
-                    if (entry.name !== "undefined" && entry.name !== "require") this.raiseError(`Duplicate (${actualCompletions.entries.filter(a => a.name === entry.name).length}) completions for ${entry.name}`);
+                    this.raiseError(`Duplicate (${actualCompletions.entries.filter(a => a.name === entry.name).length}) completions for ${entry.name}`);
                 }
                 else {
                     actualByName.set(entry.name, entry);
@@ -909,8 +908,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, sourceDisplay } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, sourceDisplay: undefined }
+            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, source, sourceDisplay } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, source: undefined, sourceDisplay: undefined }
                 : expected;
 
             if (actual.insertText !== insertText) {
@@ -928,6 +927,7 @@ namespace FourSlash {
 
             assert.equal(actual.hasAction, hasAction);
             assert.equal(actual.isRecommended, isRecommended);
+            assert.equal(actual.source, source);
 
             if (text) {
                 const actualDetails = this.getCompletionEntryDetails(actual.name, actual.source)!;
@@ -4813,6 +4813,7 @@ namespace FourSlashInterface {
 
     export type ExpectedCompletionEntry = string | {
         readonly name: string,
+        readonly source?: string,
         readonly insertText?: string,
         readonly replacementSpan?: FourSlash.Range,
         readonly hasAction?: boolean, // If not specified, will assert that this is false.

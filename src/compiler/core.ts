@@ -1272,7 +1272,7 @@ namespace ts {
         if (!left || !right) return false;
         for (const key in left) {
             if (hasOwnProperty.call(left, key)) {
-                if (!hasOwnProperty.call(right, key) === undefined) return false;
+                if (!hasOwnProperty.call(right, key)) return false;
                 if (!equalityComparer(left[key], right[key])) return false;
             }
         }

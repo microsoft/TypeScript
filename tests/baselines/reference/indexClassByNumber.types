@@ -11,7 +11,7 @@ var f = new foo();
 
 f[0] = 4; // Shouldn't be allowed
 >f[0] = 4 : 4
->f[0] : any
+>f[0] : error
 >f : foo
 >0 : 0
 >4 : 4

@@ -8,8 +8,7 @@
 ////var /*2*/r = foo(/*1*/1, "");
 ////var /*4*/r2 = r(/*3*/"");
 
-// TODO: GH##23631
-// verify.signatureHelp({ marker: "1", text: "foo(x: number, y: string): (a: string) => number" });
+verify.signatureHelp({ marker: "1", text: "foo(x: number, y: string): (a: string) => number" });
 
 verify.quickInfoAt("2", "var r: (a: string) => number");
 

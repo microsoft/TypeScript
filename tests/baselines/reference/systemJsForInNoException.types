@@ -14,7 +14,7 @@ for (var key in obj)
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->obj[key] : any
+>obj[key] : error
 >obj : { a: number; }
 >key : string
 

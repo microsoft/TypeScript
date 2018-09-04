@@ -67,19 +67,24 @@ namespace ts {
     }
 
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
+        return createCompilerHostWorker(options, setParentNodes);
+    }
+    /*@internal*/
+    // TODO(shkamat): update this after reworking ts build API
+    export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = createMap<boolean>();
 
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
             // otherwise use toLowerCase as a canonical form.
-            return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
+            return system.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
                 performance.mark("beforeIORead");
-                text = sys.readFile(fileName, options.charset);
+                text = system.readFile(fileName, options.charset);
                 performance.mark("afterIORead");
                 performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
@@ -97,7 +102,7 @@ namespace ts {
             if (existingDirectories.has(directoryPath)) {
                 return true;
             }
-            if (sys.directoryExists(directoryPath)) {
+            if (system.directoryExists(directoryPath)) {
                 existingDirectories.set(directoryPath, true);
                 return true;
             }
@@ -108,7 +113,7 @@ namespace ts {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 const parentDirectory = getDirectoryPath(directoryPath);
                 ensureDirectoriesExist(parentDirectory);
-                sys.createDirectory(directoryPath);
+                system.createDirectory(directoryPath);
             }
         }
 
@@ -119,8 +124,8 @@ namespace ts {
                 outputFingerprints = createMap<OutputFingerprint>();
             }
 
-            const hash = sys.createHash!(data); // TODO: GH#18217
-            const mtimeBefore = sys.getModifiedTime!(fileName); // TODO: GH#18217
+            const hash = system.createHash!(data); // TODO: GH#18217
+            const mtimeBefore = system.getModifiedTime!(fileName); // TODO: GH#18217
 
             if (mtimeBefore) {
                 const fingerprint = outputFingerprints.get(fileName);
@@ -133,9 +138,9 @@ namespace ts {
                 }
             }
 
-            sys.writeFile(fileName, data, writeByteOrderMark);
+            system.writeFile(fileName, data, writeByteOrderMark);
 
-            const mtimeAfter = sys.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
+            const mtimeAfter = system.getModifiedTime!(fileName) || missingFileModifiedTime; // TODO: GH#18217
 
             outputFingerprints.set(fileName, {
                 hash,
@@ -149,11 +154,11 @@ namespace ts {
                 performance.mark("beforeIOWrite");
                 ensureDirectoriesExist(getDirectoryPath(normalizePath(fileName)));
 
-                if (isWatchSet(options) && sys.createHash && sys.getModifiedTime) {
+                if (isWatchSet(options) && system.createHash && system.getModifiedTime) {
                     writeFileIfUpdated(fileName, data, writeByteOrderMark);
                 }
                 else {
-                    sys.writeFile(fileName, data, writeByteOrderMark);
+                    system.writeFile(fileName, data, writeByteOrderMark);
                 }
 
                 performance.mark("afterIOWrite");
@@ -167,32 +172,29 @@ namespace ts {
         }
 
         function getDefaultLibLocation(): string {
-            return getDirectoryPath(normalizePath(sys.getExecutingFilePath()));
+            return getDirectoryPath(normalizePath(system.getExecutingFilePath()));
         }
 
-        const newLine = getNewLineCharacter(options);
-        const realpath = sys.realpath && ((path: string) => sys.realpath!(path));
+        const newLine = getNewLineCharacter(options, () => system.newLine);
+        const realpath = system.realpath && ((path: string) => system.realpath!(path));
 
         return {
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
             writeFile,
-            getCurrentDirectory: memoize(() => sys.getCurrentDirectory()),
-            useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+            getCurrentDirectory: memoize(() => system.getCurrentDirectory()),
+            useCaseSensitiveFileNames: () => system.useCaseSensitiveFileNames,
             getCanonicalFileName,
             getNewLine: () => newLine,
-            fileExists: fileName => sys.fileExists(fileName),
-            readFile: fileName => sys.readFile(fileName),
-            trace: (s: string) => sys.write(s + newLine),
-            directoryExists: directoryName => sys.directoryExists(directoryName),
-            getEnvironmentVariable: name => sys.getEnvironmentVariable ? sys.getEnvironmentVariable(name) : "",
-            getDirectories: (path: string) => sys.getDirectories(path),
+            fileExists: fileName => system.fileExists(fileName),
+            readFile: fileName => system.readFile(fileName),
+            trace: (s: string) => system.write(s + newLine),
+            directoryExists: directoryName => system.directoryExists(directoryName),
+            getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
+            getDirectories: (path: string) => system.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => sys.readDirectory(path, extensions, include, exclude, depth),
-            getModifiedTime: sys.getModifiedTime && (path => sys.getModifiedTime!(path)),
-            setModifiedTime: sys.setModifiedTime && ((path, date) => sys.setModifiedTime!(path, date)),
-            deleteFile: sys.deleteFile && (path => sys.deleteFile!(path))
+            readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth)
         };
     }
 
@@ -1257,8 +1259,6 @@ namespace ts {
         }
 
         function getProjectReferences() {
-            if (!resolvedProjectReferences) return;
-
             return resolvedProjectReferences;
         }
 
@@ -2319,27 +2319,20 @@ namespace ts {
         }
 
         function computeCommonSourceDirectory(sourceFiles: SourceFile[]): string {
-            const fileNames: string[] = [];
-            for (const file of sourceFiles) {
-                if (!file.isDeclarationFile) {
-                    fileNames.push(file.fileName);
-                }
-            }
+            const fileNames = mapDefined(sourceFiles, file => file.isDeclarationFile ? undefined : file.fileName);
             return computeCommonSourceDirectoryOfFilenames(fileNames, currentDirectory, getCanonicalFileName);
         }
 
-        function checkSourceFilesBelongToPath(sourceFiles: SourceFile[], rootDirectory: string): boolean {
+        function checkSourceFilesBelongToPath(sourceFiles: ReadonlyArray<SourceFile>, rootDirectory: string): boolean {
             let allFilesBelongToPath = true;
-            if (sourceFiles) {
-                const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
+            const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
-                for (const sourceFile of sourceFiles) {
-                    if (!sourceFile.isDeclarationFile) {
-                        const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
-                        if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, rootDirectory));
-                            allFilesBelongToPath = false;
-                        }
+            for (const sourceFile of sourceFiles) {
+                if (!sourceFile.isDeclarationFile) {
+                    const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
+                    if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, rootDirectory));
+                        allFilesBelongToPath = false;
                     }
                 }
             }

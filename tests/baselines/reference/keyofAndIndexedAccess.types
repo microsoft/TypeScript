@@ -2184,3 +2184,44 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
 >k2 : T
 }
 
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+>cf1 : <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
+><T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) => void
+>cool : string
+>t : T
+>k : K
+{
+    const s: string = t[k];
+>s : string
+>t[k] : T[K]
+>t : T
+>k : K
+
+    t.cool;
+>t.cool : string
+>t : T
+>cool : string
+
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+>cf2 : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void
+><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void
+>t : T
+>k : K
+{
+    const s: string = t[k];
+>s : string
+>t[k] : T[K]
+>t : T
+>k : K
+
+    t.cool;
+>t.cool : string
+>t : T
+>cool : string
+
+};
+

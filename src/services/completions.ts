@@ -23,7 +23,8 @@ namespace ts.Completions {
     type SymbolOriginInfoMap = (SymbolOriginInfo | undefined)[];
 
     const enum KeywordCompletionFilters {
-        None,
+        None,                           // No keywords
+        All,                            // Every possible keyword (TODO: This is never appropriate)
         ClassElementKeywords,           // Keywords inside class body
         InterfaceElementKeywords,       // Keywords inside interface body
         ConstructorParameterKeywords,   // Keywords at constructor parameter
@@ -143,21 +144,13 @@ namespace ts.Completions {
             getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target!, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
         }
 
-        // TODO add filter for keyword based on type/value/namespace and also location
-
-        // Add all keywords if
-        // - this is not a member completion list (all the keywords)
-        // - other filters are enabled in required scenario so add those keywords
-        const isMemberCompletion = isMemberCompletionKind(completionKind);
-        if (keywordFilters !== KeywordCompletionFilters.None || !isMemberCompletion) {
-            addRange(entries, getKeywordCompletions(keywordFilters));
-        }
+        addRange(entries, getKeywordCompletions(keywordFilters));
 
         for (const literal of literals) {
             entries.push(createCompletionEntryForLiteral(literal));
         }
 
-        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion, isNewIdentifierLocation, entries };
+        return { isGlobalCompletion: isInSnippetScope, isMemberCompletion: isMemberCompletionKind(completionKind), isNewIdentifierLocation, entries };
     }
 
     function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
@@ -271,6 +264,9 @@ namespace ts.Completions {
     }
 
     function quote(text: string, preferences: UserPreferences): string {
+        if (/^\d+$/.test(text)) {
+            return text;
+        }
         const quoted = JSON.stringify(text);
         switch (preferences.quotePreference) {
             case undefined:
@@ -1014,6 +1010,7 @@ namespace ts.Completions {
             tryGetGlobalSymbols();
             symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.MemberLike;
+            keywordFilters = KeywordCompletionFilters.None;
         }
         else if (isStartingCloseTag) {
             const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
@@ -1022,6 +1019,7 @@ namespace ts.Completions {
                 symbols = [tagSymbol];
             }
             completionKind = CompletionKind.MemberLike;
+            keywordFilters = KeywordCompletionFilters.None;
         }
         else {
             // For JavaScript or TypeScript, if we're not after a dot, then just try to get the
@@ -1191,9 +1189,7 @@ namespace ts.Completions {
         }
 
         function getGlobalCompletions(): void {
-            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
-                keywordFilters = KeywordCompletionFilters.FunctionLikeBodyKeywords;
-            }
+            keywordFilters = tryGetFunctionLikeBodyCompletionContainer(contextToken) ? KeywordCompletionFilters.FunctionLikeBodyKeywords : KeywordCompletionFilters.All;
 
             // Get all entities in the current scope.
             completionKind = CompletionKind.Global;
@@ -1376,6 +1372,14 @@ namespace ts.Completions {
                 // resolvedModuleSymbol may be a namespace. A namespace may be `export =` by multiple module declarations, but only keep the first one.
                 if (!addToSeen(seenResolvedModules, getSymbolId(resolvedModuleSymbol))) {
                     return;
+                }
+
+                if (resolvedModuleSymbol !== moduleSymbol &&
+                    // Don't add another completion for `export =` of a symbol that's already global.
+                    // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
+                    resolvedModuleSymbol.declarations.some(d => !!d.getSourceFile().externalModuleIndicator)) {
+                    symbols.push(resolvedModuleSymbol);
+                    symbolToOriginInfoMap[getSymbolId(resolvedModuleSymbol)] = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport: false };
                 }
 
                 for (let symbol of typeChecker.getExportsOfModule(moduleSymbol)) {
@@ -1640,7 +1644,8 @@ namespace ts.Completions {
             completionKind = CompletionKind.MemberLike;
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
-            keywordFilters = isClassLike(decl) ? KeywordCompletionFilters.ClassElementKeywords : KeywordCompletionFilters.InterfaceElementKeywords;
+            keywordFilters = contextToken.kind === SyntaxKind.AsteriskToken ? KeywordCompletionFilters.None :
+                isClassLike(decl) ? KeywordCompletionFilters.ClassElementKeywords : KeywordCompletionFilters.InterfaceElementKeywords;
 
             // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
             if (!isClassLike(decl)) return GlobalsSearch.Success;
@@ -1678,14 +1683,16 @@ namespace ts.Completions {
          */
         function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | ObjectBindingPattern | undefined {
             if (contextToken) {
+                const { parent } = contextToken;
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenBraceToken:  // const x = { |
                     case SyntaxKind.CommaToken:      // const x = { a: 0, |
-                        const parent = contextToken.parent;
                         if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
                             return parent;
                         }
                         break;
+                    case SyntaxKind.AsteriskToken:
+                        return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
                 }
             }
 
@@ -1862,10 +1869,8 @@ namespace ts.Completions {
 
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
-                    if (isFromObjectTypeDeclaration(contextToken)) {
-                        return false;
-                    }
-                // falls through
+                    return !isFromObjectTypeDeclaration(contextToken);
+
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
@@ -1877,6 +1882,9 @@ namespace ts.Completions {
                 case SyntaxKind.YieldKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
+
+                case SyntaxKind.AsteriskToken:
+                    return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
             }
 
             // If the previous token is keyword correspoding to class member completion keyword
@@ -2116,8 +2124,10 @@ namespace ts.Completions {
             const kind = stringToToken(entry.name)!;
             switch (keywordFilter) {
                 case KeywordCompletionFilters.None:
-                    // "undefined" is a global variable, so don't need a keyword completion for it.
-                    return kind !== SyntaxKind.UndefinedKeyword;
+                    return false;
+                case KeywordCompletionFilters.All:
+                    return kind === SyntaxKind.AsyncKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind) || kind === SyntaxKind.DeclareKeyword || kind === SyntaxKind.ModuleKeyword
+                        || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.ClassElementKeywords:
                     return isClassMemberCompletionKeyword(kind);
                 case KeywordCompletionFilters.InterfaceElementKeywords:
@@ -2152,7 +2162,7 @@ namespace ts.Completions {
     }
 
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
-        return kind === SyntaxKind.AsyncKeyword || !isClassMemberCompletionKeyword(kind);
+        return kind === SyntaxKind.AsyncKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }
 
     function keywordForNode(node: Node): SyntaxKind {
@@ -2228,7 +2238,7 @@ namespace ts.Completions {
             default:
                 if (!isFromObjectTypeDeclaration(contextToken)) return undefined;
                 const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
-                return (isValidKeyword(contextToken.kind) || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
+                return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
                     ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
         }
     }

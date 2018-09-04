@@ -235,15 +235,6 @@ namespace ts {
         writeFile?(fileName: string, content: string): void;
     }
 
-
-    export interface UserPreferences {
-        readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
-        readonly includeCompletionsForModuleExports?: boolean;
-        readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
-        readonly allowTextChangesInNewFiles?: boolean;
-    }
     /* @internal */
     export const emptyOptions = {};
 
