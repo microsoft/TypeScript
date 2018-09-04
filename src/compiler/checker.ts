@@ -16156,7 +16156,6 @@ namespace ts {
                                 }
                                 return false;
                             }
-                            return !isInJavaScriptFile(decl);
                         }
                         return !isInJavaScriptFile(decl);
                     }
