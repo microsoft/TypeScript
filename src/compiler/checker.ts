@@ -16099,7 +16099,7 @@ namespace ts {
                     if (node !== right) {
                         return undefined;
                     }
-                    const contextSensitive = isContextSensitiveAssignment(binaryExpression);
+                    const contextSensitive = getIsContextSensitiveAssignmentOrContextType(binaryExpression);
                     if (!contextSensitive) {
                         return undefined;
                     }
@@ -16121,7 +16121,7 @@ namespace ts {
 
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for special property assignments unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
-        function isContextSensitiveAssignment(binaryExpression: BinaryExpression): boolean | Type {
+        function getIsContextSensitiveAssignmentOrContextType(binaryExpression: BinaryExpression): boolean | Type {
             const kind = getSpecialPropertyAssignmentKind(binaryExpression);
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
@@ -16140,37 +16140,45 @@ namespace ts {
                         if (!decl) {
                             return false;
                         }
-                        if (isInJavaScriptFile(decl)) {
-                            return !!getJSDocTypeTag(decl);
+                        const lhs = binaryExpression.left as PropertyAccessExpression;
+                        const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
+                        if (overallAnnotation) {
+                            return getTypeFromTypeNode(overallAnnotation);
                         }
-                        else if (isIdentifier((binaryExpression.left as PropertyAccessExpression).expression)) {
-                            const id = (binaryExpression.left as PropertyAccessExpression).expression as Identifier;
+                        else if (isIdentifier(lhs.expression)) {
+                            const id = lhs.expression;
                             const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
                             if (parentSymbol && isFunctionSymbol(parentSymbol)) {
                                 const annotated = getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
                                 if (annotated) {
-                                    const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), (binaryExpression.left as PropertyAccessExpression).name.escapedText);
+                                    const type = getTypeOfPropertyOfContextualType(getTypeFromTypeNode(annotated), lhs.name.escapedText);
                                     return type || false;
                                 }
                                 return false;
                             }
-                            return true;
+                            return !isInJavaScriptFile(decl);
                         }
-                        return true;
+                        return !isInJavaScriptFile(decl);
                     }
+                case SpecialPropertyAssignmentKind.ModuleExports:
                 case SpecialPropertyAssignmentKind.ThisProperty:
-                    if (!binaryExpression.symbol ||
-                        binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration)) {
-                        return true;
+                    if (!binaryExpression.symbol) return true;
+                    if (binaryExpression.symbol.valueDeclaration) {
+                        const annotated = getEffectiveTypeAnnotationNode(binaryExpression.symbol.valueDeclaration);
+                        if (annotated) {
+                            const type = getTypeFromTypeNode(annotated);
+                            if (type) {
+                                return type;
+                            }
+                        }
                     }
+                    if (kind === SpecialPropertyAssignmentKind.ModuleExports) return false;
                     const thisAccess = binaryExpression.left as PropertyAccessExpression;
                     if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                         return false;
                     }
                     const thisType = checkThisExpression(thisAccess.expression);
-                    return thisType && !!getPropertyOfType(thisType, thisAccess.name.escapedText);
-                case SpecialPropertyAssignmentKind.ModuleExports:
-                    return !binaryExpression.symbol || binaryExpression.symbol.valueDeclaration && !!getJSDocTypeTag(binaryExpression.symbol.valueDeclaration);
+                    return thisType && getTypeOfPropertyOfContextualType(thisType, thisAccess.name.escapedText) || false;
                 default:
                     return Debug.assertNever(kind);
             }
