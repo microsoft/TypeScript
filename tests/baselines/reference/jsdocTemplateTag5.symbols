@@ -59,13 +59,13 @@ Multimap2.prototype = {
      * @param {K} key the key ok
      * @returns {V} the value ok
      */
-    get(key) {
+    get: function(key) {
 >get : Symbol(get, Decl(a.js, 32, 23))
->key : Symbol(key, Decl(a.js, 37, 8))
+>key : Symbol(key, Decl(a.js, 37, 18))
 
         return this._map[key + ''];
 >this : Symbol(__object, Decl(a.js, 32, 21))
->key : Symbol(key, Decl(a.js, 37, 8))
+>key : Symbol(key, Decl(a.js, 37, 18))
     }
 }
 

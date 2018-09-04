@@ -41,7 +41,7 @@ Multimap2.prototype = {
      * @param {K} key the key ok
      * @returns {V} the value ok
      */
-    get(key) {
+    get: function(key) {
         return this._map[key + ''];
     }
 }
