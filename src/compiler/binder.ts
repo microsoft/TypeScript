@@ -2080,8 +2080,8 @@ namespace ts {
                     if (isInJavascriptFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
-                        !lookupSymbolForNameWorker(container, "module" as __String)) {
-                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        declareSymbol(file.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
                     break;

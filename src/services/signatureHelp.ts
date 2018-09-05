@@ -591,6 +591,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: emptyArray, displayParts, isOptional: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
     }
 }
