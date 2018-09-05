@@ -1,0 +1,8 @@
+=== /foo/test.ts ===
+interface Foo {
+    x: number;
+>x : number
+}
+export default Foo;
+>Foo : Foo
+

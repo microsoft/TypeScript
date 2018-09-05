@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="pt-BR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="HobbitID" Val="6d166059-1f22-4f75-80d1-261d6407ef5d" />
@@ -588,7 +588,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest element cannot have a property name.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Um elemento restante não pode ter um nome de propriedade.]]></Val>
+            <Val><![CDATA[Um elemento rest não pode ter um nome de propriedade.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1617,7 +1617,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Annotate everything with types from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Anotar tudo com tipos de JSDoc]]></Val>
+            <Val><![CDATA[Anotar tudo com tipos do JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3411,7 +3411,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations can only merge with namespace or other enum declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[As declarações de enum apenas podem se mescladas com namespaces ou com outras declarações de enum.]]></Val>
+            <Val><![CDATA[As declarações enum só podem ser mescladas com namespaces ou com outras declarações enum.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5307,7 +5307,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O módulo '{0}' não tem nenhum membro exportado '{1}'. Você quis dizer '{2}'?]]></Val>
+            <Val><![CDATA[O módulo '{0}' não tem nenhum membro '{1}' exportado. Você quis dizer '{2}'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5775,7 +5775,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '{0}' cannot be specified without specifying option '{1}' or option '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[A opção '{0}' não pode ser especificada sem especificar a opção '{1}' ou a opção '{2}'.]]></Val>
+            <Val><![CDATA[A opção '{0}' não pode ser especificada sem a especificação da opção '{1}' ou '{2}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6357,7 +6357,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Projects to reference]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Projetos para referência]]></Val>
+            <Val><![CDATA[Projetos a serem referenciados]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6849,7 +6849,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove import from '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Remover importação do '{0}']]></Val>
+            <Val><![CDATA[Remover importação de '{0}']]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6957,7 +6957,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Resolve 'keyof' to string valued property names only (no numbers or symbols).]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Resolva 'keyof' para nomes de propriedades com valores de cadeia de caracteres somente (sem números ou símbolos).]]></Val>
+            <Val><![CDATA[Resolva 'keyof' somente para nomes de propriedades com valores de cadeia de caracteres (sem números nem símbolos).]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7428,7 +7428,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignorando build do projeto '{0}' porque sua dependência '{1}' tem erros]]></Val>
+            <Val><![CDATA[Ignorando o build do projeto '{0}' porque a dependência '{1}' tem erros]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7437,7 +7437,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping clean because not all projects could be located]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignorando a limpeza porque nem todos os projetos foram localizados]]></Val>
+            <Val><![CDATA[Ignorando a limpeza porque não foram localizados todos os projetos]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8928,7 +8928,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token. A type parameter name was expected without curly braces.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Token inesperado. Um nome de parâmetro de tipo era esperado sem chaves.]]></Val>
+            <Val><![CDATA[Token inesperado. Era esperado um nome de parâmetro de tipo sem chaves.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9171,7 +9171,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Whether to keep outdated console output in watch mode instead of clearing the screen.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Se se deve manter a saída de console desatualizada no modo de inspeção, em vez de limpar a tela.]]></Val>
+            <Val><![CDATA[Se é necessário manter a saída de console desatualizada no modo de inspeção, em vez de limpar a tela.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

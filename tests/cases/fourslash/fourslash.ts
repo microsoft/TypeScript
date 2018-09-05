@@ -183,6 +183,8 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
             preferences?: UserPreferences,
+            applyChanges?: boolean,
+            commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
@@ -526,10 +528,11 @@ declare namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        quotePreference?: "double" | "single";
-        includeCompletionsForModuleExports?: boolean;
-        includeInsertTextCompletions?: boolean;
-        importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeInsertTextCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsAtOptions extends UserPreferences {
         triggerCharacter?: string;

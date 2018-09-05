@@ -1,4 +1,4 @@
-tests/cases/compiler/thisBinding2.ts(10,11): error TS7041: The containing arrow function captures the global value of 'this' which implicitly has type 'any'.
+tests/cases/compiler/thisBinding2.ts(10,11): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
 ==== tests/cases/compiler/thisBinding2.ts (1 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/thisBinding2.ts(10,11): error TS7041: The containing arrow 
        var x = 1;
        return this.x;
               ~~~~
-!!! error TS7041: The containing arrow function captures the global value of 'this' which implicitly has type 'any'.
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
       }();
         }  
     }

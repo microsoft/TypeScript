@@ -236,8 +236,9 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
+                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
                     (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules
+                    // other kinds of value declarations take precedence over modules and assignment declarations
                     symbol.valueDeclaration = node;
                 }
             }
@@ -259,7 +260,7 @@ namespace ts {
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
                     const nameExpression = name.expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
-                    if (isStringOrNumericLiteral(nameExpression)) {
+                    if (isStringOrNumericLiteralLike(nameExpression)) {
                         return escapeLeadingUnderscores(nameExpression.text);
                     }
 
@@ -373,7 +374,8 @@ namespace ts {
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
-                    else {
+                    else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.JSContainer)) {
+                        // JSContainers are allowed to merge with variables, no matter what other flags they have.
                         if (isNamedDeclaration(node)) {
                             node.name.parent = node;
                         }
@@ -723,6 +725,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                 case SyntaxKind.ThisKeyword:
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     return isNarrowableReference(expr);
                 case SyntaxKind.CallExpression:
                     return hasNarrowableArgument(<CallExpression>expr);
@@ -737,10 +740,11 @@ namespace ts {
         }
 
         function isNarrowableReference(expr: Expression): boolean {
-            return expr.kind === SyntaxKind.Identifier ||
-                expr.kind === SyntaxKind.ThisKeyword ||
-                expr.kind === SyntaxKind.SuperKeyword ||
-                expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
+            return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
+                isPropertyAccessExpression(expr) && isNarrowableReference(expr.expression) ||
+                isElementAccessExpression(expr) && expr.argumentExpression &&
+                (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
+                isNarrowableReference(expr.expression);
         }
 
         function hasNarrowableArgument(expr: CallExpression) {
@@ -2066,6 +2070,7 @@ namespace ts {
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
                 case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
                     if (currentFlow && isNarrowableReference(<Expression>node)) {
                         node.flowNode = currentFlow;
                     }
@@ -2075,8 +2080,8 @@ namespace ts {
                     if (isInJavaScriptFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
-                        !lookupSymbolForNameWorker(container, "module" as __String)) {
-                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        declareSymbol(file.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
                     break;
@@ -2477,6 +2482,11 @@ namespace ts {
 
         function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
+            // Class declarations in Typescript do not allow property declarations
+            const parentSymbol = lookupSymbolForPropertyAccess(lhs.expression);
+            if (!isInJavaScriptFile(node) && !isFunctionSymbol(parentSymbol)) {
+                return;
+            }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
             node.left.parent = node;
             node.right.parent = node;
@@ -2529,12 +2539,10 @@ namespace ts {
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            // Declare the method/property
-            const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
             const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
-            const symbolFlags = (isMethod ? SymbolFlags.Method : SymbolFlags.Property) | jsContainerFlag;
-            const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
-            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, symbolFlags, symbolExcludes);
+            const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
+            const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
+            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.JSContainer, excludes & ~SymbolFlags.JSContainer);
         }
 
         /**

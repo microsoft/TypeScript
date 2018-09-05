@@ -27,6 +27,33 @@ interface AddEventListenerOptions extends EventListenerOptions {
     passive?: boolean;
 }
 
+interface AesCbcParams extends Algorithm {
+    iv: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+}
+
+interface AesCtrParams extends Algorithm {
+    counter: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    length: number;
+}
+
+interface AesDerivedKeyParams extends Algorithm {
+    length: number;
+}
+
+interface AesGcmParams extends Algorithm {
+    additionalData?: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    iv: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+    tagLength?: number;
+}
+
+interface AesKeyAlgorithm extends KeyAlgorithm {
+    length: number;
+}
+
+interface AesKeyGenParams extends Algorithm {
+    length: number;
+}
+
 interface Algorithm {
     name: string;
 }
@@ -51,6 +78,15 @@ interface CloseEventInit extends EventInit {
     code?: number;
     reason?: string;
     wasClean?: boolean;
+}
+
+interface CryptoKeyPair {
+    privateKey?: CryptoKey;
+    publicKey?: CryptoKey;
+}
+
+interface CustomEventInit<T = any> extends EventInit {
+    detail?: T;
 }
 
 interface DOMMatrix2DInit {
@@ -103,6 +139,22 @@ interface DOMRectInit {
     y?: number;
 }
 
+interface EcKeyGenParams extends Algorithm {
+    namedCurve: NamedCurve;
+}
+
+interface EcKeyImportParams extends Algorithm {
+    namedCurve: NamedCurve;
+}
+
+interface EcdhKeyDeriveParams extends Algorithm {
+    public: CryptoKey;
+}
+
+interface EcdsaParams extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+}
+
 interface ErrorEventInit extends EventInit {
     colno?: number;
     error?: any;
@@ -129,12 +181,12 @@ interface ExtendableMessageEventInit extends ExtendableEventInit {
     lastEventId?: string;
     origin?: string;
     ports?: MessagePort[];
-    source?: Client | ServiceWorker | MessagePort;
+    source?: Client | ServiceWorker | MessagePort | null;
 }
 
 interface FetchEventInit extends ExtendableEventInit {
     clientId?: string;
-    preloadResponse: Promise<any>;
+    preloadResponse?: Promise<any>;
     request: Request;
     resultingClientId?: string;
     targetClientId?: string;
@@ -148,6 +200,16 @@ interface GetNotificationOptions {
     tag?: string;
 }
 
+interface HmacImportParams extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+    length?: number;
+}
+
+interface HmacKeyGenParams extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+    length?: number;
+}
+
 interface IDBIndexParameters {
     multiEntry?: boolean;
     unique?: boolean;
@@ -155,7 +217,7 @@ interface IDBIndexParameters {
 
 interface IDBObjectStoreParameters {
     autoIncrement?: boolean;
-    keyPath?: string | string[];
+    keyPath?: string | string[] | null;
 }
 
 interface IDBVersionChangeEventInit extends EventInit {
@@ -163,17 +225,37 @@ interface IDBVersionChangeEventInit extends EventInit {
     oldVersion?: number;
 }
 
+interface JsonWebKey {
+    alg?: string;
+    crv?: string;
+    d?: string;
+    dp?: string;
+    dq?: string;
+    e?: string;
+    ext?: boolean;
+    k?: string;
+    key_ops?: string[];
+    kty?: string;
+    n?: string;
+    oth?: RsaOtherPrimesInfo[];
+    p?: string;
+    q?: string;
+    qi?: string;
+    use?: string;
+    x?: string;
+    y?: string;
+}
+
 interface KeyAlgorithm {
     name: string;
 }
 
 interface MessageEventInit extends EventInit {
-    channel?: string;
     data?: any;
     lastEventId?: string;
     origin?: string;
     ports?: MessagePort[];
-    source?: object | null;
+    source?: MessageEventSource | null;
 }
 
 interface NavigationPreloadState {
@@ -209,6 +291,12 @@ interface NotificationOptions {
     vibrate?: VibratePattern;
 }
 
+interface Pbkdf2Params extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+    iterations: number;
+    salt: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+}
+
 interface PerformanceObserverInit {
     buffered?: boolean;
     entryTypes: string[];
@@ -241,7 +329,7 @@ interface PushSubscriptionJSON {
 }
 
 interface PushSubscriptionOptionsInit {
-    applicationServerKey?: BufferSource | string;
+    applicationServerKey?: BufferSource | string | null;
     userVisibleOnly?: boolean;
 }
 
@@ -263,7 +351,7 @@ interface RequestInit {
     redirect?: RequestRedirect;
     referrer?: string;
     referrerPolicy?: ReferrerPolicy;
-    signal?: object | null;
+    signal?: AbortSignal | null;
     window?: any;
 }
 
@@ -271,6 +359,33 @@ interface ResponseInit {
     headers?: HeadersInit;
     status?: number;
     statusText?: string;
+}
+
+interface RsaHashedImportParams extends Algorithm {
+    hash: HashAlgorithmIdentifier;
+}
+
+interface RsaHashedKeyGenParams extends RsaKeyGenParams {
+    hash: HashAlgorithmIdentifier;
+}
+
+interface RsaKeyGenParams extends Algorithm {
+    modulusLength: number;
+    publicExponent: BigInteger;
+}
+
+interface RsaOaepParams extends Algorithm {
+    label?: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer;
+}
+
+interface RsaOtherPrimesInfo {
+    d?: string;
+    r?: string;
+    t?: string;
+}
+
+interface RsaPssParams extends Algorithm {
+    saltLength: number;
 }
 
 interface StorageEstimate {
@@ -295,6 +410,45 @@ interface TextDecoderOptions {
 interface EventListener {
     (evt: Event): void;
 }
+
+interface AbortController {
+    /**
+     * Returns the AbortSignal object associated with this object.
+     */
+    readonly signal: AbortSignal;
+    /**
+     * Invoking this method will set this object's AbortSignal's aborted flag and
+     * signal to any observers that the associated activity is to be aborted.
+     */
+    abort(): void;
+}
+
+declare var AbortController: {
+    prototype: AbortController;
+    new(): AbortController;
+};
+
+interface AbortSignalEventMap {
+    "abort": ProgressEvent;
+}
+
+interface AbortSignal extends EventTarget {
+    /**
+     * Returns true if this AbortSignal's AbortController has signaled to abort, and false
+     * otherwise.
+     */
+    readonly aborted: boolean;
+    onabort: ((this: AbortSignal, ev: ProgressEvent) => any) | null;
+    addEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof AbortSignalEventMap>(type: K, listener: (this: AbortSignal, ev: AbortSignalEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var AbortSignal: {
+    prototype: AbortSignal;
+    new(): AbortSignal;
+};
 
 interface AbstractWorkerEventMap {
     "error": ErrorEvent;
@@ -401,11 +555,52 @@ declare var CacheStorage: {
     new(): CacheStorage;
 };
 
+interface CanvasGradient {
+    /**
+     * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset
+     * at one end of the gradient, 1.0 is the offset at the other end.
+     * Throws an "IndexSizeError" DOMException if the offset
+     * is out of range. Throws a "SyntaxError" DOMException if
+     * the color cannot be parsed.
+     */
+    addColorStop(offset: number, color: string): void;
+}
+
+declare var CanvasGradient: {
+    prototype: CanvasGradient;
+    new(): CanvasGradient;
+};
+
+interface CanvasPath {
+    arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+    arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void;
+    closePath(): void;
+    ellipse(x: number, y: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
+    lineTo(x: number, y: number): void;
+    moveTo(x: number, y: number): void;
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
+    rect(x: number, y: number, w: number, h: number): void;
+}
+
+interface CanvasPattern {
+    /**
+     * Sets the transformation matrix that will be used when rendering the pattern during a fill or
+     * stroke painting operation.
+     */
+    setTransform(transform?: DOMMatrix2DInit): void;
+}
+
+declare var CanvasPattern: {
+    prototype: CanvasPattern;
+    new(): CanvasPattern;
+};
+
 interface Client {
     readonly id: string;
     readonly type: ClientTypes;
     readonly url: string;
-    postMessage(message: any, transfer?: any[]): void;
+    postMessage(message: any, transfer?: Transferable[]): void;
 }
 
 declare var Client: {
@@ -463,10 +658,8 @@ interface Console {
     info(message?: any, ...optionalParams: any[]): void;
     log(message?: any, ...optionalParams: any[]): void;
     markTimeline(label?: string): void;
-    msIsIndependentlyComposed(element: object): boolean;
     profile(reportName?: string): void;
-    profileEnd(): void;
-    select(element: object): void;
+    profileEnd(reportName?: string): void;
     table(...tabularData: any[]): void;
     time(label?: string): void;
     timeEnd(label?: string): void;
@@ -482,16 +675,40 @@ declare var Console: {
     new(): Console;
 };
 
+interface Crypto {
+    readonly subtle: SubtleCrypto;
+    getRandomValues<T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | null>(array: T): T;
+}
+
+declare var Crypto: {
+    prototype: Crypto;
+    new(): Crypto;
+};
+
 interface CryptoKey {
     readonly algorithm: KeyAlgorithm;
     readonly extractable: boolean;
-    readonly type: string;
-    readonly usages: string[];
+    readonly type: KeyType;
+    readonly usages: KeyUsage[];
 }
 
 declare var CryptoKey: {
     prototype: CryptoKey;
     new(): CryptoKey;
+};
+
+interface CustomEvent<T = any> extends Event {
+    /**
+     * Returns any custom data event was created with.
+     * Typically used for synthetic events.
+     */
+    readonly detail: T;
+    initCustomEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, detailArg: T): void;
+}
+
+declare var CustomEvent: {
+    prototype: CustomEvent;
+    new<T>(typeArg: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
 };
 
 interface DOMException {
@@ -754,7 +971,7 @@ interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
     onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
     close(): void;
-    postMessage(message: any, transfer?: any[]): void;
+    postMessage(message: any, transfer?: Transferable[]): void;
     addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -791,32 +1008,65 @@ interface ErrorEvent extends Event {
     readonly filename: string;
     readonly lineno: number;
     readonly message: string;
-    initErrorEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, messageArg: string, filenameArg: string, linenoArg: number): void;
 }
 
 declare var ErrorEvent: {
     prototype: ErrorEvent;
-    new(typeArg: string, eventInitDict?: ErrorEventInit): ErrorEvent;
+    new(type: string, eventInitDict?: ErrorEventInit): ErrorEvent;
 };
 
 interface Event {
+    /**
+     * Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise.
+     */
     readonly bubbles: boolean;
     cancelBubble: boolean;
     readonly cancelable: boolean;
+    /**
+     * Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise.
+     */
     readonly composed: boolean;
+    /**
+     * Returns the object whose event listener's callback is currently being
+     * invoked.
+     */
     readonly currentTarget: EventTarget | null;
     readonly defaultPrevented: boolean;
     readonly eventPhase: number;
+    /**
+     * Returns true if event was dispatched by the user agent, and
+     * false otherwise.
+     */
     readonly isTrusted: boolean;
     returnValue: boolean;
     readonly srcElement: object | null;
+    /**
+     * Returns the object to which event is dispatched (its target).
+     */
     readonly target: EventTarget | null;
+    /**
+     * Returns the event's timestamp as the number of milliseconds measured relative to
+     * the time origin.
+     */
     readonly timeStamp: number;
+    /**
+     * Returns the type of event, e.g.
+     * "click", "hashchange", or
+     * "submit".
+     */
     readonly type: string;
-    deepPath(): EventTarget[];
+    composedPath(): EventTarget[];
     initEvent(type: string, bubbles?: boolean, cancelable?: boolean): void;
     preventDefault(): void;
+    /**
+     * Invoking this method prevents event from reaching
+     * any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any
+     * other objects.
+     */
     stopImmediatePropagation(): void;
+    /**
+     * When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object.
+     */
     stopPropagation(): void;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
@@ -826,7 +1076,7 @@ interface Event {
 
 declare var Event: {
     prototype: Event;
-    new(typeArg: string, eventInitDict?: EventInit): Event;
+    new(type: string, eventInitDict?: EventInit): Event;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
@@ -860,9 +1110,26 @@ interface EventSourceInit {
 }
 
 interface EventTarget {
+    /**
+     * Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched.
+     * The options argument sets listener-specific options. For compatibility this can be a
+     * boolean, in which case the method behaves exactly as if the value was specified as options's capture.
+     * When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET.
+     * When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in §2.8 Observing event listeners.
+     * When set to true, options's once indicates that the callback will only be invoked once after which the event listener will
+     * be removed.
+     * The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture.
+     */
     addEventListener(type: string, listener: EventListenerOrEventListenerObject | null, options?: boolean | AddEventListenerOptions): void;
-    dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
+    /**
+     * Dispatches a synthetic event event to target and returns true
+     * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+     */
+    dispatchEvent(event: Event): boolean;
+    /**
+     * Removes the event listener in target's event listener list with the same type, callback, and options.
+     */
+    removeEventListener(type: string, callback: EventListenerOrEventListenerObject | null, options?: EventListenerOptions | boolean): void;
 }
 
 declare var EventTarget: {
@@ -992,11 +1259,11 @@ interface FormData {
 
 declare var FormData: {
     prototype: FormData;
-    new(form?: object): FormData;
+    new(): FormData;
 };
 
 interface GlobalFetch {
-    fetch(input?: Request | string, init?: RequestInit): Promise<Response>;
+    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 interface Headers {
@@ -1061,13 +1328,13 @@ interface IDBCursor {
      * Delete the record pointed at by the cursor with a new value.
      * If successful, request's result will be undefined.
      */
-    delete(): IDBRequest;
+    delete(): IDBRequest<undefined>;
     /**
      * Updated the record pointed at by the cursor with a new value.
      * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
      * If successful, request's result will be the record's key.
      */
-    update(value: any): IDBRequest;
+    update(value: any): IDBRequest<IDBValidKey>;
 }
 
 declare var IDBCursor: {
@@ -1189,40 +1456,40 @@ interface IDBIndex {
      * If successful, request's result will be the
      * count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Retrieves the value of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    get(key: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the given key or key range in query (up to count if given).
      * If successful, request's result will be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the given key or key range in query (up to count if given).
      * If successful, request's result will be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
-    getKey(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    getKey(key: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     /**
      * Opens a cursor over the records matching query,
      * ordered by direction. If query is null, all records in index are matched.
      * If successful, request's result will be an IDBCursorWithValue, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in index are matched.
      * If successful, request's result will be an IDBCursor, or null if there were no matching records.
      */
-    openKeyCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openKeyCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
 }
 
 declare var IDBIndex: {
@@ -1301,19 +1568,19 @@ interface IDBObjectStore {
      * Returns the associated transaction.
      */
     readonly transaction: IDBTransaction;
-    add(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    add(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey>;
     /**
      * Deletes all records in store.
      * If successful, request's result will
      * be undefined.
      */
-    clear(): IDBRequest;
+    clear(): IDBRequest<undefined>;
     /**
      * Retrieves the number of records matching the
      * given key or key range in query.
      * If successful, request's result will be the count.
      */
-    count(key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    count(key?: IDBValidKey | IDBKeyRange): IDBRequest<number>;
     /**
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be
      * satisfied with the data already in store the upgrade
@@ -1328,7 +1595,7 @@ interface IDBObjectStore {
      * If successful, request's result will
      * be undefined.
      */
-    delete(key: IDBValidKey | IDBKeyRange): IDBRequest;
+    delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
      * Throws an "InvalidStateError" DOMException if not called within an upgrade
@@ -1340,41 +1607,41 @@ interface IDBObjectStore {
      * given key or key range in query.
      * If successful, request's result will be the value, or undefined if there was no matching record.
      */
-    get(query: IDBValidKey | IDBKeyRange): IDBRequest;
+    get(query: IDBValidKey | IDBKeyRange): IDBRequest<any | undefined>;
     /**
      * Retrieves the values of the records matching the
      * given key or key range in query (up to count if given).
      * If successful, request's result will
      * be an Array of the values.
      */
-    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAll(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<any[]>;
     /**
      * Retrieves the keys of records matching the
      * given key or key range in query (up to count if given).
      * If successful, request's result will
      * be an Array of the keys.
      */
-    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest;
+    getAllKeys(query?: IDBValidKey | IDBKeyRange, count?: number): IDBRequest<IDBValidKey[]>;
     /**
      * Retrieves the key of the first record matching the
      * given key or key range in query.
      * If successful, request's result will be the key, or undefined if there was no matching record.
      */
-    getKey(query: IDBValidKey | IDBKeyRange): IDBRequest;
+    getKey(query: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey | undefined>;
     index(name: string): IDBIndex;
     /**
      * Opens a cursor over the records matching query,
      * ordered by direction. If query is null, all records in store are matched.
      * If successful, request's result will be an IDBCursorWithValue pointing at the first matching record, or null if there were no matching records.
      */
-    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
+    openCursor(range?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursorWithValue | null>;
     /**
      * Opens a cursor with key only flag set over the records matching query, ordered by direction. If query is null, all records in store are matched.
      * If successful, request's result will be an IDBCursor pointing at the first matching record, or
      * null if there were no matching records.
      */
-    openKeyCursor(query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest;
-    put(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest;
+    openKeyCursor(query?: IDBValidKey | IDBKeyRange, direction?: IDBCursorDirection): IDBRequest<IDBCursor | null>;
+    put(value: any, key?: IDBValidKey | IDBKeyRange): IDBRequest<IDBValidKey>;
 }
 
 declare var IDBObjectStore: {
@@ -1387,7 +1654,7 @@ interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
     "upgradeneeded": IDBVersionChangeEvent;
 }
 
-interface IDBOpenDBRequest extends IDBRequest {
+interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
     onblocked: ((this: IDBOpenDBRequest, ev: Event) => any) | null;
     onupgradeneeded: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1406,14 +1673,14 @@ interface IDBRequestEventMap {
     "success": Event;
 }
 
-interface IDBRequest extends EventTarget {
+interface IDBRequest<T = any> extends EventTarget {
     /**
      * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws
      * a "InvalidStateError" DOMException if the request is still pending.
      */
     readonly error: DOMException | null;
-    onerror: ((this: IDBRequest, ev: Event) => any) | null;
-    onsuccess: ((this: IDBRequest, ev: Event) => any) | null;
+    onerror: ((this: IDBRequest<T>, ev: Event) => any) | null;
+    onsuccess: ((this: IDBRequest<T>, ev: Event) => any) | null;
     /**
      * Returns "pending" until a request is complete,
      * then returns "done".
@@ -1424,7 +1691,7 @@ interface IDBRequest extends EventTarget {
      * or undefined if the request failed. Throws a
      * "InvalidStateError" DOMException if the request is still pending.
      */
-    readonly result: any;
+    readonly result: T;
     /**
      * Returns the IDBObjectStore, IDBIndex, or IDBCursor the request was made against, or null if is was an open
      * request.
@@ -1435,9 +1702,9 @@ interface IDBRequest extends EventTarget {
      * If this as an open request, then it returns an upgrade transaction while it is running, or null otherwise.
      */
     readonly transaction: IDBTransaction | null;
-    addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest, ev: IDBRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest<T>, ev: IDBRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
@@ -1508,10 +1775,26 @@ declare var IDBVersionChangeEvent: {
 };
 
 interface ImageBitmap {
+    /**
+     * Returns the intrinsic height of the image, in CSS
+     * pixels.
+     */
     readonly height: number;
+    /**
+     * Returns the intrinsic width of the image, in CSS
+     * pixels.
+     */
     readonly width: number;
+    /**
+     * Releases imageBitmap's underlying bitmap data.
+     */
     close(): void;
 }
+
+declare var ImageBitmap: {
+    prototype: ImageBitmap;
+    new(): ImageBitmap;
+};
 
 interface ImageBitmapOptions {
     colorSpaceConversion?: "none" | "default";
@@ -1523,6 +1806,17 @@ interface ImageBitmapOptions {
 }
 
 interface ImageData {
+    /**
+     * Returns the one-dimensional array containing the data in RGBA order, as integers in the
+     * range 0 to 255.
+     */
+    readonly data: Uint8ClampedArray;
+    /**
+     * Returns the actual dimensions of the data in the ImageData object, in
+     * pixels.
+     */
+    readonly height: number;
+    readonly width: number;
 }
 
 declare var ImageData: {
@@ -1542,11 +1836,31 @@ declare var MessageChannel: {
 };
 
 interface MessageEvent extends Event {
+    /**
+     * Returns the data of the message.
+     */
     readonly data: any;
+    /**
+     * Returns the last event ID string, for
+     * server-sent events.
+     */
+    readonly lastEventId: string;
+    /**
+     * Returns the origin of the message, for server-sent events and
+     * cross-document messaging.
+     */
     readonly origin: string;
+    /**
+     * Returns the MessagePort array sent with the message, for cross-document
+     * messaging and channel messaging.
+     */
     readonly ports: ReadonlyArray<MessagePort>;
-    readonly source: MessageEventSource;
-    initMessageEvent(type: string, bubbles: boolean, cancelable: boolean, data: any, origin: string, lastEventId: string, source: object): void;
+    /**
+     * Returns the WindowProxy of the source window, for cross-document
+     * messaging, and the MessagePort being attached, in the connect event fired at
+     * SharedWorkerGlobalScope objects.
+     */
+    readonly source: MessageEventSource | null;
 }
 
 declare var MessageEvent: {
@@ -1573,7 +1887,7 @@ interface MessagePort extends EventTarget {
      * transfer contains duplicate objects or port, or if message
      * could not be cloned.
      */
-    postMessage(message: any, transfer?: any[]): void;
+    postMessage(message: any, transfer?: Transferable[]): void;
     /**
      * Begins dispatching messages received on the port.
      */
@@ -1678,6 +1992,15 @@ interface NotificationEvent extends ExtendableEvent {
 declare var NotificationEvent: {
     prototype: NotificationEvent;
     new(type: string, eventInitDict: NotificationEventInit): NotificationEvent;
+};
+
+interface Path2D extends CanvasPath {
+    addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
+}
+
+declare var Path2D: {
+    prototype: Path2D;
+    new(path?: Path2D | string): Path2D;
 };
 
 interface PerformanceEventMap {
@@ -1798,7 +2121,7 @@ declare var ProgressEvent: {
 };
 
 interface PromiseRejectionEvent extends Event {
-    readonly promise: PromiseLike<any>;
+    readonly promise: Promise<any>;
     readonly reason: any;
 }
 
@@ -1968,7 +2291,7 @@ interface Request extends Body {
      * Returns the signal associated with request, which is an AbortSignal object indicating whether or not request has been aborted, and its abort
      * event handler.
      */
-    readonly signal: object;
+    readonly signal: AbortSignal;
     /**
      * Returns the URL of request as a string.
      */
@@ -2008,7 +2331,7 @@ interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
-    postMessage(message: any, transfer?: any[]): void;
+    postMessage(message: any, transfer?: Transferable[]): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -2122,6 +2445,32 @@ interface StorageManager {
 declare var StorageManager: {
     prototype: StorageManager;
     new(): StorageManager;
+};
+
+interface SubtleCrypto {
+    decrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    deriveBits(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, length: number): PromiseLike<ArrayBuffer>;
+    deriveKey(algorithm: string | EcdhKeyDeriveParams | DhKeyDeriveParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: string | AesDerivedKeyParams | HmacImportParams | ConcatParams | HkdfCtrParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    digest(algorithm: string | Algorithm, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    encrypt(algorithm: string | RsaOaepParams | AesCtrParams | AesCbcParams | AesCmacParams | AesGcmParams | AesCfbParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    exportKey(format: "jwk", key: CryptoKey): PromiseLike<JsonWebKey>;
+    exportKey(format: "raw" | "pkcs8" | "spki", key: CryptoKey): PromiseLike<ArrayBuffer>;
+    exportKey(format: string, key: CryptoKey): PromiseLike<JsonWebKey | ArrayBuffer>;
+    generateKey(algorithm: string, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair | CryptoKey>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams | DhKeyGenParams, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: "raw" | "pkcs8" | "spki", keyData: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    importKey(format: string, keyData: JsonWebKey | Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, algorithm: string | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | DhImportKeyParams | AesKeyAlgorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    sign(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<ArrayBuffer>;
+    unwrapKey(format: string, wrappedKey: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, unwrappingKey: CryptoKey, unwrapAlgorithm: string | Algorithm, unwrappedKeyAlgorithm: string | Algorithm, extractable: boolean, keyUsages: string[]): PromiseLike<CryptoKey>;
+    verify(algorithm: string | RsaPssParams | EcdsaParams | AesCmacParams, key: CryptoKey, signature: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer, data: Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | ArrayBuffer): PromiseLike<boolean>;
+    wrapKey(format: string, key: CryptoKey, wrappingKey: CryptoKey, wrapAlgorithm: string | Algorithm): PromiseLike<ArrayBuffer>;
+}
+
+declare var SubtleCrypto: {
+    prototype: SubtleCrypto;
+    new(): SubtleCrypto;
 };
 
 interface SyncEvent extends ExtendableEvent {
@@ -2313,13 +2662,31 @@ interface WindowConsole {
     readonly console: Console;
 }
 
+interface WindowOrWorkerGlobalScope {
+    readonly caches: CacheStorage;
+    readonly crypto: Crypto;
+    readonly indexedDB: IDBFactory;
+    readonly origin: string;
+    readonly performance: Performance;
+    atob(data: string): string;
+    btoa(data: string): string;
+    clearInterval(handle?: number): void;
+    clearTimeout(handle?: number): void;
+    createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+    queueMicrotask(callback: Function): void;
+    setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+    setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+}
+
 interface WorkerEventMap extends AbstractWorkerEventMap {
     "message": MessageEvent;
 }
 
 interface Worker extends EventTarget, AbstractWorker {
     onmessage: ((this: Worker, ev: MessageEvent) => any) | null;
-    postMessage(message: any, transfer?: any[]): void;
+    postMessage(message: any, transfer?: Transferable[]): void;
     terminate(): void;
     addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -2336,15 +2703,13 @@ interface WorkerGlobalScopeEventMap {
     "error": ErrorEvent;
 }
 
-interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, GlobalFetch {
+interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, GlobalFetch, WindowOrWorkerGlobalScope {
     readonly caches: CacheStorage;
     readonly isSecureContext: boolean;
     readonly location: WorkerLocation;
     onerror: ((this: WorkerGlobalScope, ev: ErrorEvent) => any) | null;
     readonly performance: Performance;
     readonly self: WorkerGlobalScope;
-    createImageBitmap(image: ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-    createImageBitmap(image: ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     msWriteProfilerMark(profilerMarkName: string): void;
     addEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -2388,13 +2753,7 @@ interface WorkerUtils extends WindowBase64 {
     readonly indexedDB: IDBFactory;
     readonly msIndexedDB: IDBFactory;
     readonly navigator: WorkerNavigator;
-    clearImmediate(handle: number): void;
-    clearInterval(handle: number): void;
-    clearTimeout(handle: number): void;
     importScripts(...urls: string[]): void;
-    setImmediate(handler: any, ...args: any[]): number;
-    setInterval(handler: any, timeout?: any, ...args: any[]): number;
-    setTimeout(handler: any, timeout?: any, ...args: any[]): number;
 }
 
 interface XMLHttpRequestEventMap extends XMLHttpRequestEventTargetEventMap {
@@ -2478,7 +2837,7 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      * Initiates the request. The optional argument provides the request body. The argument is ignored if request method is GET or HEAD.
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
      */
-    send(body?: object | BodyInit): void;
+    send(body?: BodyInit | null): void;
     /**
      * Combines a header in author request headers.
      * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
@@ -2560,31 +2919,47 @@ interface PerformanceObserverCallback {
 
 declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
 declare function close(): void;
-declare function postMessage(message: any, transfer?: any[]): void;
-declare function dispatchEvent(evt: Event): boolean;
+declare function postMessage(message: any, transfer?: Transferable[]): void;
+/**
+ * Dispatches a synthetic event event to target and returns true
+ * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+ */
+declare function dispatchEvent(event: Event): boolean;
 declare var caches: CacheStorage;
 declare var isSecureContext: boolean;
 declare var location: WorkerLocation;
 declare var onerror: ((this: DedicatedWorkerGlobalScope, ev: ErrorEvent) => any) | null;
 declare var performance: Performance;
 declare var self: WorkerGlobalScope;
-declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
-declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
-declare function dispatchEvent(evt: Event): boolean;
+/**
+ * Dispatches a synthetic event event to target and returns true
+ * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
+ */
+declare function dispatchEvent(event: Event): boolean;
 declare var indexedDB: IDBFactory;
 declare var msIndexedDB: IDBFactory;
 declare var navigator: WorkerNavigator;
-declare function clearImmediate(handle: number): void;
-declare function clearInterval(handle: number): void;
-declare function clearTimeout(handle: number): void;
-declare function setImmediate(handler: any, ...args: any[]): number;
-declare function setInterval(handler: any, timeout?: any, ...args: any[]): number;
-declare function setTimeout(handler: any, timeout?: any, ...args: any[]): number;
+declare function importScripts(...urls: string[]): void;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
 declare var console: Console;
-declare function fetch(input?: Request | string, init?: RequestInit): Promise<Response>;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+declare var caches: CacheStorage;
+declare var crypto: Crypto;
+declare var indexedDB: IDBFactory;
+declare var origin: string;
+declare var performance: Performance;
+declare function atob(data: string): string;
+declare function btoa(data: string): string;
+declare function clearInterval(handle?: number): void;
+declare function clearTimeout(handle?: number): void;
+declare function createImageBitmap(image: ImageBitmapSource): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmapSource, sx: number, sy: number, sw: number, sh: number): Promise<ImageBitmap>;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+declare function queueMicrotask(callback: Function): void;
+declare function setInterval(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
+declare function setTimeout(handler: TimerHandler, timeout?: number, ...arguments: any[]): number;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 declare function removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -2594,19 +2969,30 @@ type HeadersInit = Headers | string[][] | Record<string, string>;
 type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream | string;
 type RequestInfo = Request | string;
 type DOMHighResTimeStamp = number;
+type CanvasImageSource = ImageBitmap;
+type MessageEventSource = MessagePort | ServiceWorker;
+type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
+type TimerHandler = string | Function;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
 type VibratePattern = number | number[];
+type AlgorithmIdentifier = string | Algorithm;
+type HashAlgorithmIdentifier = AlgorithmIdentifier;
+type BigInteger = Uint8Array;
+type NamedCurve = string;
 type BufferSource = ArrayBufferView | ArrayBuffer;
 type DOMTimeStamp = number;
 type FormDataEntryValue = File | string;
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
-type MessageEventSource = object | MessagePort | ServiceWorker;
+type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type BinaryType = "blob" | "arraybuffer";
 type ClientTypes = "window" | "worker" | "sharedworker" | "all";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "pending" | "done";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type KeyFormat = "raw" | "spki" | "pkcs8" | "jwk";
+type KeyType = "public" | "private" | "secret";
+type KeyUsage = "encrypt" | "decrypt" | "sign" | "verify" | "deriveKey" | "deriveBits" | "wrapKey" | "unwrapKey";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
 type PushEncryptionKeyName = "p256dh" | "auth";
@@ -2620,6 +3006,6 @@ type RequestRedirect = "follow" | "error" | "manual";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
 type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
 type ServiceWorkerUpdateViaCache = "imports" | "all" | "none";
-type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
+type VisibilityState = "hidden" | "visible" | "prerender";
 type WorkerType = "classic" | "module";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";

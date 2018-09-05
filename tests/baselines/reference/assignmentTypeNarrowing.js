@@ -28,6 +28,12 @@ for (x of a) {
     x; // string
 }
 
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+arr.push({ x: "ok" });
+
 
 //// [assignmentTypeNarrowing.js]
 var _a, _b, _c;
@@ -51,3 +57,5 @@ for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
     x = a_1[_i];
     x; // string
 }
+var arr = [{ x: "ok" }]; // weak type
+arr.push({ x: "ok" });

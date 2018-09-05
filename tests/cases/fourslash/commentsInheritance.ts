@@ -223,7 +223,7 @@
 goTo.marker('1');
 verify.completionListContains("i1_p1", "(property) i1.i1_p1: number", "i1_p1");
 verify.completionListContains("i1_f1", "(method) i1.i1_f1(): void", "i1_f1");
-verify.completionListContains("i1_l1", "(property) i1.i1_l1: () => void", "");
+verify.completionListContains("i1_l1", "(property) i1.i1_l1: () => void", "i1_l1");
 verify.completionListContains("i1_nc_p1", "(property) i1.i1_nc_p1: number", "");
 verify.completionListContains("i1_nc_f1", "(method) i1.i1_nc_f1(): void", "");
 verify.completionListContains("i1_nc_l1", "(property) i1.i1_nc_l1: () => void", "");
@@ -244,7 +244,7 @@ verify.quickInfos({
     "3q": "(method) i1.i1_nc_f1(): void",
     "4q": "(method) i1.f1(): void",
     "5q": "(method) i1.nc_f1(): void",
-    l2q: "(property) i1.i1_l1: () => void",
+    l2q: ["(property) i1.i1_l1: () => void", "i1_l1"],
     l3q: "(property) i1.i1_nc_l1: () => void",
     l4q: "(property) i1.l1: () => void",
     l5q: "(property) i1.nc_l1: () => void"
@@ -253,7 +253,7 @@ verify.quickInfos({
 goTo.marker('6');
 verify.completionListContains("i1_p1", "(property) c1.i1_p1: number", "i1_p1");
 verify.completionListContains("i1_f1", "(method) c1.i1_f1(): void", "i1_f1");
-verify.completionListContains("i1_l1", "(property) c1.i1_l1: () => void", "");
+verify.completionListContains("i1_l1", "(property) c1.i1_l1: () => void", "i1_l1");
 verify.completionListContains("i1_nc_p1", "(property) c1.i1_nc_p1: number", "");
 verify.completionListContains("i1_nc_f1", "(method) c1.i1_nc_f1(): void", "");
 verify.completionListContains("i1_nc_l1", "(property) c1.i1_nc_l1: () => void", "");
@@ -278,7 +278,7 @@ verify.quickInfos({
     "8q": "(method) c1.i1_nc_f1(): void",
     "9q": ["(method) c1.f1(): void", "c1_f1"],
     "10q": ["(method) c1.nc_f1(): void", "c1_nc_f1"],
-    l7q: "(property) c1.i1_l1: () => void",
+    l7q: ["(property) c1.i1_l1: () => void", "i1_l1"],
     l8q: "(property) c1.i1_nc_l1: () => void",
     l9q: ["(property) c1.l1: () => void", "c1_l1"],
     l10q: ["(property) c1.nc_l1: () => void", "c1_nc_l1"],
@@ -287,7 +287,7 @@ verify.quickInfos({
 goTo.marker('11');
 verify.completionListContains("i1_p1", "(property) i1.i1_p1: number", "i1_p1");
 verify.completionListContains("i1_f1", "(method) i1.i1_f1(): void", "i1_f1");
-verify.completionListContains("i1_l1", "(property) i1.i1_l1: () => void", "");
+verify.completionListContains("i1_l1", "(property) i1.i1_l1: () => void", "i1_l1");
 verify.completionListContains("i1_nc_p1", "(property) i1.i1_nc_p1: number", "");
 verify.completionListContains("i1_nc_f1", "(method) i1.i1_nc_f1(): void", "");
 verify.completionListContains("i1_nc_l1", "(property) i1.i1_nc_l1: () => void", "");
@@ -307,7 +307,7 @@ verify.quickInfos({
     "13q": "(method) i1.i1_nc_f1(): void",
     "14q": "(method) i1.f1(): void",
     "15q": "(method) i1.nc_f1(): void",
-    l12q: "(property) i1.i1_l1: () => void",
+    l12q: ["(property) i1.i1_l1: () => void", "i1_l1"],
     l13q: "(property) i1.i1_nc_l1: () => void",
     l14q: "(property) i1.l1: () => void",
     l15q: "(property) i1.nc_l1: () => void",
@@ -437,13 +437,13 @@ verify.completionListContains("c4_i", "var c4_i: c4", "");
 goTo.marker('36');
 verify.completionListContains("i2_p1", "(property) i2.i2_p1: number", "i2_p1");
 verify.completionListContains("i2_f1", "(method) i2.i2_f1(): void", "i2_f1");
-verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "");
+verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "i2_l1");
 verify.completionListContains("i2_nc_p1", "(property) i2.i2_nc_p1: number", "");
 verify.completionListContains("i2_nc_f1", "(method) i2.i2_nc_f1(): void", "");
 verify.completionListContains("i2_nc_l1", "(property) i2.i2_nc_l1: () => void", "");
 verify.completionListContains("p1", "(property) i2.p1: number", "i2 p1");
 verify.completionListContains("f1", "(method) i2.f1(): void", "i2 f1");
-verify.completionListContains("l1", "(property) i2.l1: () => void", "");
+verify.completionListContains("l1", "(property) i2.l1: () => void", "i2 l1");
 verify.completionListContains("nc_p1", "(property) i2.nc_p1: number", "");
 verify.completionListContains("nc_f1", "(method) i2.nc_f1(): void", "");
 verify.completionListContains("nc_l1", "(property) i2.nc_l1: () => void", "");
@@ -460,22 +460,22 @@ verify.quickInfos({
     "38q": "(method) i2.i2_nc_f1(): void",
     "39q": ["(method) i2.f1(): void", "i2 f1"],
     "40q": "(method) i2.nc_f1(): void",
-    "l37q": "(property) i2.i2_l1: () => void",
+    "l37q": ["(property) i2.i2_l1: () => void", "i2_l1"],
     "l38q": "(property) i2.i2_nc_l1: () => void",
-    "l39q": "(property) i2.l1: () => void",
+    "l39q": ["(property) i2.l1: () => void", "i2 l1"],
     "l40q": "(property) i2.nc_l1: () => void",
 });
 
 goTo.marker('41');
 verify.completionListContains("i2_p1", "(property) i2.i2_p1: number", "i2_p1");
 verify.completionListContains("i2_f1", "(method) i2.i2_f1(): void", "i2_f1");
-verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "");
+verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "i2_l1");
 verify.completionListContains("i2_nc_p1", "(property) i2.i2_nc_p1: number", "");
 verify.completionListContains("i2_nc_f1", "(method) i2.i2_nc_f1(): void", "");
 verify.completionListContains("i2_nc_l1", "(property) i2.i2_nc_l1: () => void", "");
 verify.completionListContains("p1", "(property) i3.p1: number", "i3 p1");
 verify.completionListContains("f1", "(method) i3.f1(): void", "i3 f1");
-verify.completionListContains("l1", "(property) i3.l1: () => void", "");
+verify.completionListContains("l1", "(property) i3.l1: () => void", "i3 l1");
 verify.completionListContains("nc_p1", "(property) i3.nc_p1: number", "");
 verify.completionListContains("nc_f1", "(method) i3.nc_f1(): void", "");
 verify.completionListContains("nc_l1", "(property) i3.nc_l1: () => void", "");
@@ -490,22 +490,22 @@ verify.quickInfos({
     "43q": "(method) i2.i2_nc_f1(): void",
     "44q": ["(method) i3.f1(): void", "i3 f1"],
     "45q": "(method) i3.nc_f1(): void",
-    l42q: "(property) i2.i2_l1: () => void",
+    l42q: ["(property) i2.i2_l1: () => void", "i2_l1"],
     l43q: "(property) i2.i2_nc_l1: () => void",
-    l44q: "(property) i3.l1: () => void",
+    l44q: ["(property) i3.l1: () => void", "i3 l1"],
     l45q: "(property) i3.nc_l1: () => void"
 });
 
 goTo.marker('46');
 verify.completionListContains("i2_p1", "(property) i2.i2_p1: number", "i2_p1");
 verify.completionListContains("i2_f1", "(method) i2.i2_f1(): void", "i2_f1");
-verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "");
+verify.completionListContains("i2_l1", "(property) i2.i2_l1: () => void", "i2_l1");
 verify.completionListContains("i2_nc_p1", "(property) i2.i2_nc_p1: number", "");
 verify.completionListContains("i2_nc_f1", "(method) i2.i2_nc_f1(): void", "");
 verify.completionListContains("i2_nc_l1", "(property) i2.i2_nc_l1: () => void", "");
 verify.completionListContains("p1", "(property) i2.p1: number", "i2 p1");
 verify.completionListContains("f1", "(method) i2.f1(): void", "i2 f1");
-verify.completionListContains("l1", "(property) i2.l1: () => void", "");
+verify.completionListContains("l1", "(property) i2.l1: () => void", "i2 l1");
 verify.completionListContains("nc_p1", "(property) i2.nc_p1: number", "");
 verify.completionListContains("nc_f1", "(method) i2.nc_f1(): void", "");
 verify.completionListContains("nc_l1", "(property) i2.nc_l1: () => void", "");
@@ -520,9 +520,9 @@ verify.quickInfos({
     "48q": "(method) i2.i2_nc_f1(): void",
     "49q": ["(method) i2.f1(): void", "i2 f1"],
     "50q": "(method) i2.nc_f1(): void",
-    l47q: "(property) i2.i2_l1: () => void",
+    l47q: ["(property) i2.i2_l1: () => void", "i2_l1"],
     l48q: "(property) i2.i2_nc_l1: () => void",
-    l49q: "(property) i2.l1: () => void",
+    l49q: ["(property) i2.l1: () => void", "i2 l1"],
     l40q: "(property) i2.nc_l1: () => void"
 });
 
@@ -537,7 +537,7 @@ verify.completionListContains("i2", "interface i2", "");
 verify.completionListContains("i3", "interface i3", "");
 
 verify.quickInfos({
-    52: "constructor c5(): c5",
+    52: ["constructor c5(): c5", "c5 class"],
     53: ["class c5", "c5 class"],
     54: "(property) c5.b: number",
     55: ["constructor c2(a: number): c2", "c2 constructor"],

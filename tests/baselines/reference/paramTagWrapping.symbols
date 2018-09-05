@@ -1,0 +1,39 @@
+=== tests/cases/conformance/jsdoc/good.js ===
+/**
+ * @param
+ * {number} x Arg x.
+ * @param {number}
+ * y Arg y.
+ * @param {number} z
+ * Arg z.
+ */
+function good(x, y, z) {
+>good : Symbol(good, Decl(good.js, 0, 0))
+>x : Symbol(x, Decl(good.js, 8, 14))
+>y : Symbol(y, Decl(good.js, 8, 16))
+>z : Symbol(z, Decl(good.js, 8, 19))
+}
+
+good(1, 2, 3)
+>good : Symbol(good, Decl(good.js, 0, 0))
+
+
+=== tests/cases/conformance/jsdoc/bad.js ===
+/**
+ * @param *
+ * {number} x Arg x.
+ * @param {number}
+ * * y Arg y.
+ * @param {number} * z
+ * Arg z.
+ */
+function bad(x, y, z) {
+>bad : Symbol(bad, Decl(bad.js, 0, 0))
+>x : Symbol(x, Decl(bad.js, 8, 13))
+>y : Symbol(y, Decl(bad.js, 8, 15))
+>z : Symbol(z, Decl(bad.js, 8, 18))
+}
+
+bad(1, 2, 3)
+>bad : Symbol(bad, Decl(bad.js, 0, 0))
+

@@ -29,6 +29,15 @@ namespace ts {
         path: string;
         extension: Extension;
         packageId: PackageId | undefined;
+        /**
+         * When the resolved is not created from cache, the value is
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - undefined if path is not a symbolic link
+         * When the resolved is created using value from cache of ResolvedModuleWithFailedLookupLocations, the value is:
+         *  - string if original Path if it is symbolic link to the resolved path
+         *  - true if path is not a symbolic link - this indicates that the originalPath calculation is already done and needs to be skipped
+         */
+        originalPath?: string | true;
     }
 
     /** Result of trying to resolve a module at a file. Needs to have 'packageId' added later. */
@@ -62,9 +71,9 @@ namespace ts {
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
-    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, originalPath: string | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
+    function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
         return {
-            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
+            resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations
         };
     }
@@ -362,9 +371,7 @@ namespace ts {
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string): PerModuleNameCache {
-            if (isExternalModuleNameRelative(nonRelativeModuleName)) {
-                return undefined!; // TODO: GH#18217
-            }
+            Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
             let perModuleNameCache = moduleNameToDirectoryMap.get(nonRelativeModuleName);
             if (!perModuleNameCache) {
                 perModuleNameCache = createPerModuleNameCache();
@@ -401,46 +408,47 @@ namespace ts {
                 }
                 directoryPathMap.set(path, result);
 
-                const resolvedFileName = result.resolvedModule && result.resolvedModule.resolvedFileName;
+                const resolvedFileName = result.resolvedModule &&
+                    (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
                 // find common prefix between directory and resolved file name
-                // this common prefix should be the shorted path that has the same resolution
+                // this common prefix should be the shortest path that has the same resolution
                 // directory: /a/b/c/d/e
                 // resolvedFileName: /a/b/foo.d.ts
-                const commonPrefix = getCommonPrefix(path, resolvedFileName);
+                // commonPrefix: /a/b
+                // for failed lookups cache the result for every directory up to root
+                const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
                 let current = path;
-                while (true) {
+                while (current !== commonPrefix) {
                     const parent = getDirectoryPath(current);
                     if (parent === current || directoryPathMap.has(parent)) {
                         break;
                     }
                     directoryPathMap.set(parent, result);
                     current = parent;
-
-                    if (current === commonPrefix) {
-                        break;
-                    }
                 }
             }
 
-            function getCommonPrefix(directory: Path, resolution: string | undefined) {
-                if (resolution === undefined) {
-                    return undefined;
-                }
+            function getCommonPrefix(directory: Path, resolution: string) {
                 const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
 
                 // find first position where directory and resolution differs
                 let i = 0;
-                while (i < Math.min(directory.length, resolutionDirectory.length) && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+                const limit = Math.min(directory.length, resolutionDirectory.length);
+                while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
                     i++;
                 }
-
-                // find last directory separator before position i
-                const sep = directory.lastIndexOf(directorySeparator, i);
-                if (sep < 0) {
+                if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+                    return directory;
+                }
+                const rootLength = getRootLength(directory);
+                if (i < rootLength) {
                     return undefined;
                 }
-
-                return directory.substr(0, sep);
+                const sep = directory.lastIndexOf(directorySeparator, i - 1);
+                if (sep === -1) {
+                    return undefined;
+                }
+                return directory.substr(0, Math.max(sep, rootLength));
             }
         }
     }
@@ -492,10 +500,9 @@ namespace ts {
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);
-                // put result in per-module name cache
-                const perModuleNameCache = cache!.getOrCreateCacheForModuleName(moduleName);
-                if (perModuleNameCache) {
-                    perModuleNameCache.set(containingDirectory, result);
+                if (!isExternalModuleNameRelative(moduleName)) {
+                    // put result in per-module name cache
+                    cache!.getOrCreateCacheForModuleName(moduleName).set(containingDirectory, result);
                 }
             }
         }
@@ -753,16 +760,16 @@ namespace ts {
                 tryResolve(Extensions.JavaScript) ||
                 (compilerOptions.resolveJsonModule ? tryResolve(Extensions.Json) : undefined));
         if (result && result.value) {
-            const { resolved, originalPath, isExternalLibraryImport } = result.value;
-            return createResolvedModuleWithFailedLookupLocations(resolved, originalPath, isExternalLibraryImport, failedLookupLocations);
+            const { resolved, isExternalLibraryImport } = result.value;
+            return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
         }
         return { resolvedModule: undefined, failedLookupLocations };
 
-        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, originalPath?: string, isExternalLibraryImport: boolean }> {
+        function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, failedLookupLocations, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, failedLookupLocations, state);
             if (resolved) {
-                return toSearchResult({ resolved, isExternalLibraryImport: false });
+                return toSearchResult({ resolved, isExternalLibraryImport: stringContains(resolved.path, nodeModulesPathPart) });
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -773,17 +780,13 @@ namespace ts {
                 if (!resolved) return undefined;
 
                 let resolvedValue = resolved.value;
-                let originalPath: string | undefined;
-                if (!compilerOptions.preserveSymlinks && resolvedValue) {
-                    originalPath = resolvedValue.path;
+                if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
-                    if (path === originalPath) {
-                        originalPath = undefined;
-                    }
-                    resolvedValue = { ...resolvedValue, path };
+                    const originalPath = path === resolvedValue.path ? undefined : resolvedValue.path;
+                    resolvedValue = { ...resolvedValue, path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-                return { value: resolvedValue && { resolved: resolvedValue, originalPath, isExternalLibraryImport: true } };
+                return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
                 const { path: candidate, parts } = normalizePathAndParts(combinePaths(containingDirectory, moduleName));
@@ -840,7 +843,8 @@ namespace ts {
         return loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, onlyRecordFailures, state, considerPackageJson);
     }
 
-    const nodeModulesPathPart = "/node_modules/";
+    /*@internal*/
+    export const nodeModulesPathPart = "/node_modules/";
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
@@ -1233,7 +1237,7 @@ namespace ts {
                 trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
             }
             failedLookupLocations.push(...result.failedLookupLocations);
-            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
+            return { value: result.resolvedModule && { path: result.resolvedModule.resolvedFileName, originalPath: result.resolvedModule.originalPath || true, extension: result.resolvedModule.extension, packageId: result.resolvedModule.packageId } };
         }
     }
 
@@ -1245,16 +1249,16 @@ namespace ts {
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
-        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*originalPath*/ undefined, /*isExternalLibraryImport*/ false, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved && resolved.value, /*isExternalLibraryImport*/ false, failedLookupLocations);
 
         function tryResolve(extensions: Extensions): SearchResult<Resolved> {
             const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loadModuleFromFileNoPackageId, failedLookupLocations, state);
             if (resolvedUsingSettings) {
                 return { value: resolvedUsingSettings };
             }
-            const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
 
             if (!isExternalModuleNameRelative(moduleName)) {
+                const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
                     const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, traceEnabled, host, failedLookupLocations);
@@ -1292,7 +1296,7 @@ namespace ts {
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled };
         const failedLookupLocations: string[] = [];
         const resolved = loadModuleFromNodeModulesOneLevel(Extensions.DtsOnly, moduleName, globalCache, failedLookupLocations, state);
-        return createResolvedModuleWithFailedLookupLocations(resolved, /*originalPath*/ undefined, /*isExternalLibraryImport*/ true, failedLookupLocations);
+        return createResolvedModuleWithFailedLookupLocations(resolved, /*isExternalLibraryImport*/ true, failedLookupLocations);
     }
 
     /**

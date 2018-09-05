@@ -651,3 +651,17 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
     const d: Dict<T> = dd[k1];
     return d[k2];
 }
+
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
