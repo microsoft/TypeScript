@@ -18,13 +18,13 @@ interface StatelessComponent<P> {
 }
 
 const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
->MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5))
+>MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5), Decl(expandoFunctionContextualTypes.ts, 9, 76))
 >StatelessComponent : Symbol(StatelessComponent, Decl(expandoFunctionContextualTypes.ts, 2, 1))
 >MyComponentProps : Symbol(MyComponentProps, Decl(expandoFunctionContextualTypes.ts, 0, 0))
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
->MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5))
+>MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5), Decl(expandoFunctionContextualTypes.ts, 9, 76))
 >defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
 
     color: "red"
