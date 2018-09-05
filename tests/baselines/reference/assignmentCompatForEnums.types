@@ -11,7 +11,6 @@ var list = {};
 
 function returnType(): TokenType { return null; }
 >returnType : () => TokenType
->TokenType : TokenType
 >null : null
 
 function foo() {
@@ -24,8 +23,7 @@ function foo() {
 
     var x: TokenType = list['one'];
 >x : TokenType
->TokenType : TokenType
->list['one'] : any
+>list['one'] : error
 >list : {}
 >'one' : "one"
 }

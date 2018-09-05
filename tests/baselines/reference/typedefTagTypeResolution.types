@@ -35,6 +35,6 @@ function g(vvvvv) {
 /** @type {Cb} */
 const cb = x => {}
 >cb : Cb
->x => {} : (x: any) => void
+>x => {} : (x: any) => any
 >x : any
 

@@ -332,9 +332,9 @@ namespace ts {
     /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
+        useCaseSensitiveFileNames: boolean;
         getAccessibleSortedChildDirectories(path: string): ReadonlyArray<string>;
         directoryExists(dir: string): boolean;
-        filePathComparer: Comparer<string>;
         realpath(s: string): string;
     }
 
@@ -345,60 +345,94 @@ namespace ts {
      */
     /*@internal*/
     export function createRecursiveDirectoryWatcher(host: RecursiveDirectoryWatcherHost): (directoryName: string, callback: DirectoryWatcherCallback) => FileWatcher {
-        type ChildWatches = ReadonlyArray<DirectoryWatcher>;
-        interface DirectoryWatcher extends FileWatcher {
-            childWatches: ChildWatches;
+        interface ChildDirectoryWatcher extends FileWatcher {
             dirName: string;
         }
+        type ChildWatches = ReadonlyArray<ChildDirectoryWatcher>;
+        interface HostDirectoryWatcher {
+            watcher: FileWatcher;
+            childWatches: ChildWatches;
+            refCount: number;
+        }
+
+        const cache = createMap<HostDirectoryWatcher>();
+        const callbackCache = createMultiMap<DirectoryWatcherCallback>();
+        const filePathComparer = getStringComparer(!host.useCaseSensitiveFileNames);
+        const toCanonicalFilePath = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
 
         return createDirectoryWatcher;
 
         /**
          * Create the directory watcher for the dirPath.
          */
-        function createDirectoryWatcher(dirName: string, callback: DirectoryWatcherCallback): DirectoryWatcher {
-            const watcher = host.watchDirectory(dirName, fileName => {
-                // Call the actual callback
-                callback(fileName);
+        function createDirectoryWatcher(dirName: string, callback?: DirectoryWatcherCallback): ChildDirectoryWatcher {
+            const dirPath = toCanonicalFilePath(dirName) as Path;
+            let directoryWatcher = cache.get(dirPath);
+            if (directoryWatcher) {
+                directoryWatcher.refCount++;
+            }
+            else {
+                directoryWatcher = {
+                    watcher: host.watchDirectory(dirName, fileName => {
+                        // Call the actual callback
+                        callbackCache.forEach((callbacks, rootDirName) => {
+                            if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
+                                callbacks.forEach(callback => callback(fileName));
+                            }
+                        });
 
-                // Iterate through existing children and update the watches if needed
-                updateChildWatches(result, callback);
-            });
+                        // Iterate through existing children and update the watches if needed
+                        updateChildWatches(dirName, dirPath);
+                    }),
+                    refCount: 1,
+                    childWatches: emptyArray
+                };
+                cache.set(dirPath, directoryWatcher);
+                updateChildWatches(dirName, dirPath);
+            }
 
-            let result: DirectoryWatcher = {
-                close: () => {
-                    watcher.close();
-                    result.childWatches.forEach(closeFileWatcher);
-                    result = undefined!;
-                },
+            if (callback) {
+                callbackCache.add(dirPath, callback);
+            }
+
+            return {
                 dirName,
-                childWatches: emptyArray
+                close: () => {
+                    const directoryWatcher = Debug.assertDefined(cache.get(dirPath));
+                    if (callback) callbackCache.remove(dirPath, callback);
+                    directoryWatcher.refCount--;
+
+                    if (directoryWatcher.refCount) return;
+
+                    cache.delete(dirPath);
+                    closeFileWatcherOf(directoryWatcher);
+                    directoryWatcher.childWatches.forEach(closeFileWatcher);
+                }
             };
-            updateChildWatches(result, callback);
-            return result;
         }
 
-        function updateChildWatches(watcher: DirectoryWatcher, callback: DirectoryWatcherCallback) {
+        function updateChildWatches(dirName: string, dirPath: Path) {
             // Iterate through existing children and update the watches if needed
-            if (watcher) {
-                watcher.childWatches = watchChildDirectories(watcher.dirName, watcher.childWatches, callback);
+            const parentWatcher = cache.get(dirPath);
+            if (parentWatcher) {
+                parentWatcher.childWatches = watchChildDirectories(dirName, parentWatcher.childWatches);
             }
         }
 
         /**
          * Watch the directories in the parentDir
          */
-        function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches, callback: DirectoryWatcherCallback): ChildWatches {
-            let newChildWatches: DirectoryWatcher[] | undefined;
-            enumerateInsertsAndDeletes<string, DirectoryWatcher>(
+        function watchChildDirectories(parentDir: string, existingChildWatches: ChildWatches): ChildWatches {
+            let newChildWatches: ChildDirectoryWatcher[] | undefined;
+            enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
                 host.directoryExists(parentDir) ? mapDefined(host.getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return host.filePathComparer(childFullName, host.realpath(childFullName)) === Comparison.EqualTo ? childFullName : undefined;
+                    return filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
-                (child, childWatcher) => host.filePathComparer(child, childWatcher.dirName),
+                (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
                 createAndAddChildDirectoryWatcher,
                 closeFileWatcher,
                 addChildDirectoryWatcher
@@ -410,14 +444,14 @@ namespace ts {
              * Create new childDirectoryWatcher and add it to the new ChildDirectoryWatcher list
              */
             function createAndAddChildDirectoryWatcher(childName: string) {
-                const result = createDirectoryWatcher(childName, callback);
+                const result = createDirectoryWatcher(childName);
                 addChildDirectoryWatcher(result);
             }
 
             /**
              * Add child directory watcher to the new ChildDirectoryWatcher list
              */
-            function addChildDirectoryWatcher(childWatcher: DirectoryWatcher) {
+            function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
                 (newChildWatches || (newChildWatches = [])).push(childWatcher);
             }
         }
@@ -433,6 +467,7 @@ namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
+
         /**
          * @pollingInterval - this parameter is used in polling-based watchers and ignored in watchers that
          * use native OS file watching
@@ -447,7 +482,9 @@ namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date | undefined;
+        setModifiedTime?(path: string, time: Date): void;
+        deleteFile?(path: string): void;
         /**
          * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
          */
@@ -466,6 +503,7 @@ namespace ts {
         /*@internal*/ setBlocking?(): void;
         base64decode?(input: string): string;
         base64encode?(input: string): string;
+        /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
     }
 
     export interface FileWatcher {
@@ -505,6 +543,9 @@ namespace ts {
         echo(s: string): void;
         quit(exitCode?: number): void;
         fileExists(path: string): boolean;
+        deleteFile(path: string): boolean;
+        getModifiedTime(path: string): Date;
+        setModifiedTime(path: string, time: Date): void;
         directoryExists(path: string): boolean;
         createDirectory(path: string): void;
         resolvePath(path: string): string;
@@ -518,7 +559,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string;
     };
 
-    // TODO: this is used as if it's certainly defined in many places.
+    // TODO: GH#18217 this is used as if it's certainly defined in many places.
     export let sys: System = (() => {
         // NodeJS detects "\uFEFF" at the start of the string and *replaces* it with the actual
         // byte order mark from the specified encoding. Using any other byte order mark does
@@ -592,6 +633,8 @@ namespace ts {
                 },
                 readDirectory,
                 getModifiedTime,
+                setModifiedTime,
+                deleteFile,
                 createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
                 createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
@@ -633,18 +676,18 @@ namespace ts {
                         process.stdout._handle.setBlocking(true);
                     }
                 },
-                base64decode: Buffer.from ? input => {
-                    return Buffer.from!(input, "base64").toString("utf8");
-                } : input => {
-                    return new Buffer(input, "base64").toString("utf8");
-                },
-                base64encode: Buffer.from ? input => {
-                    return Buffer.from!(input).toString("base64");
-                } : input => {
-                    return new Buffer(input).toString("base64");
-                }
+                bufferFrom,
+                base64decode: input => bufferFrom(input, "base64").toString("utf8"),
+                base64encode: input => bufferFrom(input).toString("base64"),
             };
             return nodeSystem;
+
+            function bufferFrom(input: string, encoding?: string): Buffer {
+                // See https://github.com/Microsoft/TypeScript/issues/25652
+                return Buffer.from && (Buffer.from as Function) !== Int8Array.from
+                    ? Buffer.from(input, encoding)
+                    : new Buffer(input, encoding);
+            }
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -702,7 +745,7 @@ namespace ts {
                         createWatchDirectoryUsing(dynamicPollingWatchFile || createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout })) :
                         watchDirectoryUsingFsWatch;
                 const watchDirectoryRecursively = createRecursiveDirectoryWatcher({
-                    filePathComparer: getStringComparer(!useCaseSensitiveFileNames),
+                    useCaseSensitiveFileNames,
                     directoryExists,
                     getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                     watchDirectory,
@@ -713,8 +756,7 @@ namespace ts {
                     if (recursive) {
                         return watchDirectoryRecursively(directoryName, callback);
                     }
-                    watchDirectory(directoryName, callback);
-                    return undefined!; // TODO: GH#18217
+                    return watchDirectory(directoryName, callback);
                 };
             }
 
@@ -1069,6 +1111,24 @@ namespace ts {
                 }
             }
 
+            function setModifiedTime(path: string, time: Date) {
+                try {
+                    _fs.utimesSync(path, time, time);
+                }
+                catch (e) {
+                    return;
+                }
+            }
+
+            function deleteFile(path: string) {
+                try {
+                    return _fs.unlinkSync(path);
+                }
+                catch (e) {
+                    return;
+                }
+            }
+
             /**
              * djb2 hashing algorithm
              * http://www.cse.yorku.ca/~oz/hash.html
@@ -1112,6 +1172,9 @@ namespace ts {
                 },
                 resolvePath: ChakraHost.resolvePath,
                 fileExists: ChakraHost.fileExists,
+                deleteFile: ChakraHost.deleteFile,
+                getModifiedTime: ChakraHost.getModifiedTime,
+                setModifiedTime: ChakraHost.setModifiedTime,
                 directoryExists: ChakraHost.directoryExists,
                 createDirectory: ChakraHost.createDirectory,
                 getExecutingFilePath: () => ChakraHost.executingFile,

@@ -21,7 +21,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(25,5): error
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(26,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number]'.
-  Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+  Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(27,5): error TS2322: Type '[string, number]' is not assignable to type '[string]'.
   Types of property 'length' are incompatible.
     Type '2' is not assignable to type '1'.
@@ -29,14 +29,14 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(28,5): error
   Types of property 'length' are incompatible.
     Type '2' is not assignable to type '1'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(29,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
-  Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+  Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(30,5): error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(31,5): error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.
   Types of property '0' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, string]'.
-  Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+  Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
 
 
 ==== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts (19 errors) ====
@@ -102,7 +102,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var l3: [number] = z;
         ~~
 !!! error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number]'.
-!!! error TS2322:   Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+!!! error TS2322:   Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
     var m1: [string] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[string]'.
@@ -116,7 +116,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var m3: [string] = z;
         ~~
 !!! error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string]'.
-!!! error TS2322:   Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+!!! error TS2322:   Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
     var n1: [number, string] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, string]'.
@@ -129,7 +129,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var n3: [number, string] = z;
         ~~
 !!! error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, string]'.
-!!! error TS2322:   Property 'push' is missing in type '{ 0: string; 1: number; length: 2; }'.
+!!! error TS2322:   Property 'pop' is missing in type '{ 0: string; 1: number; length: 2; }'.
     var o1: [string, number] = x;
     var o2: [string, number] = y;
     var o3: [string, number] = y;

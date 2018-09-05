@@ -1,7 +1,5 @@
 === tests/cases/compiler/paramterDestrcuturingDeclaration.ts ===
 interface C {
->C : C
-
     ({p: name}): any;
 >p : any
 >name : any

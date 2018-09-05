@@ -144,7 +144,7 @@ namespace ts {
         function visitVariableStatementInAsyncBody(node: VariableStatement) {
             if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
                 const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
-                return expression ? createStatement(expression) : undefined;
+                return expression ? createExpressionStatement(expression) : undefined;
             }
             return visitEachChild(node, visitor, context);
         }
@@ -413,7 +413,7 @@ namespace ts {
                     )
                 );
 
-                prependStatements(statements, endLexicalEnvironment());
+                addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);

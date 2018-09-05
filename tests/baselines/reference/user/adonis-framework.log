@@ -36,7 +36,7 @@ node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Event/index.js(128,5): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
-  Property 'flatMap' is missing in type '() => {}[]'.
+  Property 'pop' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
 node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot find name 'Sring'.
@@ -65,9 +65,17 @@ node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'bool
   Type '""' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Helpers/index.js(105,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(106,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(164,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/adonis-framework/src/Helpers/index.js(178,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(224,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(240,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/src/Middleware/index.js(92,19): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
@@ -107,6 +115,9 @@ node_modules/adonis-framework/src/Route/helpers.js(54,21): error TS8024: JSDoc '
 node_modules/adonis-framework/src/Route/helpers.js(131,21): error TS8024: JSDoc '@param' tag has name 'format', but there is no parameter with that name.
 node_modules/adonis-framework/src/Route/index.js(30,5): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(58,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(101,21): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
+node_modules/adonis-framework/src/Route/index.js(259,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
+node_modules/adonis-framework/src/Route/index.js(280,21): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/index.js(321,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/index.js(321,20): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
@@ -151,7 +162,6 @@ node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339
 node_modules/adonis-framework/src/Session/Store.js(28,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/Store.js(80,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(10,14): error TS2304: Cannot find name 'SessionDriver'.
-node_modules/adonis-framework/src/Session/index.js(11,2): error TS1003: Identifier expected.
 node_modules/adonis-framework/src/Session/index.js(11,11): error TS2304: Cannot find name 'Class'.
 node_modules/adonis-framework/src/Session/index.js(46,15): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(48,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

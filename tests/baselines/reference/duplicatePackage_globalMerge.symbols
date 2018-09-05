@@ -1,0 +1,29 @@
+=== /src/bug25410.ts ===
+import { x } from './index'
+>x : Symbol(x, Decl(bug25410.ts, 0, 8))
+
+import { y } from '../tests/index'
+>y : Symbol(y, Decl(bug25410.ts, 1, 8))
+
+=== /src/index.ts ===
+import * as React from 'react';
+>React : Symbol(React, Decl(index.ts, 0, 6))
+
+export var x = 1
+>x : Symbol(x, Decl(index.ts, 1, 10))
+
+=== /tests/index.ts ===
+import * as React from 'react';
+>React : Symbol(React, Decl(index.ts, 0, 6))
+
+export var y = 2
+>y : Symbol(y, Decl(index.ts, 1, 10))
+
+=== /tests/node_modules/@types/react/index.d.ts ===
+
+>global : Symbol(global, Decl(index.d.ts, 0, 0))
+
+=== /node_modules/@types/react/index.d.ts ===
+declare global { }
+>global : Symbol(global, Decl(index.d.ts, 0, 0))
+

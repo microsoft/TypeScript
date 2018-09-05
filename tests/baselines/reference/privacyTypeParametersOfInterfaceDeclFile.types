@@ -9,207 +9,121 @@ export class publicClass {
 
 class privateClassT<T> {
 >privateClassT : privateClassT<T>
->T : T
 }
 
 export class publicClassT<T> {
 >publicClassT : publicClassT<T>
->T : T
 }
 
 export interface publicInterfaceWithPrivateTypeParameters<T extends privateClass> { // Error
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>;
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 
     myMethod1(): privateClassT<privateClass>; 
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>;
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>;
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>; 
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
 }
 
 export interface publicInterfaceWithPublicTypeParameters<T extends publicClass> {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 
     myMethod1(): privateClassT<privateClass>;
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>;
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>;
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>;
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
 }
 
 interface privateInterfaceWithPrivateTypeParameters<T extends privateClass> {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClass : privateClass
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>;
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 
     myMethod1(): privateClassT<privateClass>;
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>;
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>;
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>;
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
 }
 
 interface privateInterfaceWithPublicTypeParameters<T extends publicClass> {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>
->T : T
->publicClass : publicClass
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>;
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 
     myMethod1(): privateClassT<privateClass>;
 >myMethod1 : () => privateClassT<privateClass>
->privateClassT : privateClassT<T>
->privateClass : privateClass
 
     myMethod2(): privateClassT<publicClass>;
 >myMethod2 : () => privateClassT<publicClass>
->privateClassT : privateClassT<T>
->publicClass : publicClass
 
     myMethod3(): publicClassT<privateClass>;
 >myMethod3 : () => publicClassT<privateClass>
->publicClassT : publicClassT<T>
->privateClass : privateClass
 
     myMethod4(): publicClassT<publicClass>;
 >myMethod4 : () => publicClassT<publicClass>
->publicClassT : publicClassT<T>
->publicClass : publicClass
 }
 
 export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>;
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 }
 
 interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
     myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
     myMethod0(): publicClassT<T>;
 >myMethod0 : () => publicClassT<T>
->publicClassT : publicClassT<T>
->T : T
 }
 
 
 export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->publicInterfaceWithPrivateModuleTypeParameterConstraints : publicInterfaceWithPrivateModuleTypeParameterConstraints<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 }
 
 interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateInterfaceWithPrivateModuleTypeParameterConstraints : privateInterfaceWithPrivateModuleTypeParameterConstraints<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 }
 
 export module publicModule {
@@ -225,206 +139,120 @@ export module publicModule {
 
     class privateClassInPublicModuleT<T> {
 >privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->T : T
     }
 
     export class publicClassInPublicModuleT<T> {
 >publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
     }
 
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> { // Error
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClassInPublicModule : privateClassInPublicModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>;
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
 
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : () => privateClassInPublicModuleT<privateClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : () => privateClassInPublicModuleT<publicClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : () => publicClassInPublicModuleT<privateClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : () => publicClassInPublicModuleT<publicClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
     }
 
     export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>
->T : T
->publicClassInPublicModule : publicClassInPublicModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
 
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : () => privateClassInPublicModuleT<privateClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : () => privateClassInPublicModuleT<publicClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : () => publicClassInPublicModuleT<privateClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : () => publicClassInPublicModuleT<publicClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
     }
 
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPublicModule> {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClassInPublicModule : privateClassInPublicModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>;
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
 
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : () => privateClassInPublicModuleT<privateClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : () => privateClassInPublicModuleT<publicClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : () => publicClassInPublicModuleT<privateClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : () => publicClassInPublicModuleT<publicClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
     }
 
     interface privateInterfaceWithPublicTypeParameters<T extends publicClassInPublicModule> {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>
->T : T
->publicClassInPublicModule : publicClassInPublicModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>;
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
 
         myMethod1(): privateClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod1 : () => privateClassInPublicModuleT<privateClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod2(): privateClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod2 : () => privateClassInPublicModuleT<publicClassInPublicModule>
->privateClassInPublicModuleT : privateClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
 
         myMethod3(): publicClassInPublicModuleT<privateClassInPublicModule>;
 >myMethod3 : () => publicClassInPublicModuleT<privateClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->privateClassInPublicModule : privateClassInPublicModule
 
         myMethod4(): publicClassInPublicModuleT<publicClassInPublicModule>;
 >myMethod4 : () => publicClassInPublicModuleT<publicClassInPublicModule>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->publicClassInPublicModule : publicClassInPublicModule
     }
 
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>;
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPublicModuleT<T>;
 >myMethod0 : () => publicClassInPublicModuleT<T>
->publicClassInPublicModuleT : publicClassInPublicModuleT<T>
->T : T
     }
 
     export interface publicInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->publicInterfaceWithPrivateModuleTypeParameterConstraints : publicInterfaceWithPrivateModuleTypeParameterConstraints<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
     }
 
     interface privateInterfaceWithPrivateModuleTypeParameterConstraints<T extends privateModule.publicClassInPrivateModule> { // Error
->privateInterfaceWithPrivateModuleTypeParameterConstraints : privateInterfaceWithPrivateModuleTypeParameterConstraints<T>
->T : T
 >privateModule : any
->publicClassInPrivateModule : privateModule.publicClassInPrivateModule
     }
 }
 
@@ -441,191 +269,111 @@ module privateModule {
 
     class privateClassInPrivateModuleT<T> {
 >privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->T : T
     }
 
     export class publicClassInPrivateModuleT<T> {
 >publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
     }
 
     export interface publicInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
->publicInterfaceWithPrivateTypeParameters : publicInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClassInPrivateModule : privateClassInPrivateModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>;
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
 
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : () => privateClassInPrivateModuleT<privateClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : () => privateClassInPrivateModuleT<publicClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : () => publicClassInPrivateModuleT<privateClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : () => publicClassInPrivateModuleT<publicClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
     }
 
     export interface publicInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
->publicInterfaceWithPublicTypeParameters : publicInterfaceWithPublicTypeParameters<T>
->T : T
->publicClassInPrivateModule : publicClassInPrivateModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
 
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : () => privateClassInPrivateModuleT<privateClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : () => privateClassInPrivateModuleT<publicClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : () => publicClassInPrivateModuleT<privateClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : () => publicClassInPrivateModuleT<publicClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
     }
 
     interface privateInterfaceWithPrivateTypeParameters<T extends privateClassInPrivateModule> {
->privateInterfaceWithPrivateTypeParameters : privateInterfaceWithPrivateTypeParameters<T>
->T : T
->privateClassInPrivateModule : privateClassInPrivateModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>;
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
 
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : () => privateClassInPrivateModuleT<privateClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : () => privateClassInPrivateModuleT<publicClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : () => publicClassInPrivateModuleT<privateClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : () => publicClassInPrivateModuleT<publicClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
     }
 
     interface privateInterfaceWithPublicTypeParameters<T extends publicClassInPrivateModule> {
->privateInterfaceWithPublicTypeParameters : privateInterfaceWithPublicTypeParameters<T>
->T : T
->publicClassInPrivateModule : publicClassInPrivateModule
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>;
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
 
         myMethod1(): privateClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod1 : () => privateClassInPrivateModuleT<privateClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod2(): privateClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod2 : () => privateClassInPrivateModuleT<publicClassInPrivateModule>
->privateClassInPrivateModuleT : privateClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
 
         myMethod3(): publicClassInPrivateModuleT<privateClassInPrivateModule>;
 >myMethod3 : () => publicClassInPrivateModuleT<privateClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->privateClassInPrivateModule : privateClassInPrivateModule
 
         myMethod4(): publicClassInPrivateModuleT<publicClassInPrivateModule>;
 >myMethod4 : () => publicClassInPrivateModuleT<publicClassInPrivateModule>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->publicClassInPrivateModule : publicClassInPrivateModule
     }
 
     export interface publicInterfaceWithPublicTypeParametersWithoutExtends<T> {
->publicInterfaceWithPublicTypeParametersWithoutExtends : publicInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>;
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
     }
 
     interface privateInterfaceWithPublicTypeParametersWithoutExtends<T> {
->privateInterfaceWithPublicTypeParametersWithoutExtends : privateInterfaceWithPublicTypeParametersWithoutExtends<T>
->T : T
-
         myMethod(val: T): T;
 >myMethod : (val: T) => T
 >val : T
->T : T
->T : T
 
         myMethod0(): publicClassInPrivateModuleT<T>;
 >myMethod0 : () => publicClassInPrivateModuleT<T>
->publicClassInPrivateModuleT : publicClassInPrivateModuleT<T>
->T : T
     }
 }

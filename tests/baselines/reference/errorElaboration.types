@@ -2,40 +2,36 @@
 // Repro for #5712
 
 interface Ref<T> {
->Ref : Ref<T>
->T : T
-
     prop: T;
 >prop : T
->T : T
 }
 interface Container<T> {
->Container : Container<T>
->T : T
-
     m1: Container<Ref<T>>;
 >m1 : Container<Ref<T>>
->Container : Container<T>
->Ref : Ref<T>
->T : T
 
     m2: T;
 >m2 : T
->T : T
 }
 declare function foo(x: () => Container<Ref<number>>): void;
 >foo : (x: () => Container<Ref<number>>) => void
 >x : () => Container<Ref<number>>
->Container : Container<T>
->Ref : Ref<T>
 
 let a: () => Container<Ref<string>>;
 >a : () => Container<Ref<string>>
->Container : Container<T>
->Ref : Ref<T>
 
 foo(a);
 >foo(a) : void
 >foo : (x: () => Container<Ref<number>>) => void
 >a : () => Container<Ref<string>>
+
+// Repro for #25498
+
+function test(): {[A in "foo"]: A} {
+>test : () => { foo: "foo"; }
+
+  return {foo: "bar"};
+>{foo: "bar"} : { foo: "bar"; }
+>foo : "bar"
+>"bar" : "bar"
+}
 

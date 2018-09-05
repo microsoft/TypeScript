@@ -23,7 +23,7 @@ x(
 // come comment
 // some other comment
 
-// @anohter
+// @another
 
 x();
 

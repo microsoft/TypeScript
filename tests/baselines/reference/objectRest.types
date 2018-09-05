@@ -159,8 +159,6 @@ class Removable {
 >remainder : string
 }
 interface I {
->I : I
-
     m(): void;
 >m : () => void
 
@@ -177,12 +175,11 @@ var removable = new Removable();
 
 var { removed, ...removableRest } = removable;
 >removed : string
->removableRest : { both: number; remainder: string; }
+>removableRest : { remainder: string; }
 >removable : Removable
 
 var i: I = removable;
 >i : I
->I : I
 >removable : Removable
 
 var { removed, ...removableRest2 } = i;

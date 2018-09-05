@@ -1,8 +1,15 @@
 // @module: commonjs
 // @skipLibCheck: true
-// @includebuiltfile: typescript_standalone.d.ts
-// @strict:true
+// @includebuiltfile: typescriptServices.d.ts
+// @noImplicitAny:true
+// @strictNullChecks:true
 
+// @filename: node_modules/typescript/index.d.ts
+declare module "typescript" {
+    export = ts;
+}
+
+// @filename: APISample_jsdoc.ts
 /*
  * Note: This test is a public API sample. The original sources can be found
  *       at: https://github.com/YousefED/typescript-json-schema

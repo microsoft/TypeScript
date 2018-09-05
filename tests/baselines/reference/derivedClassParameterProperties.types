@@ -199,15 +199,11 @@ class Derived8 extends Base {
 // generic cases of Derived7 and Derived8
 class Base2<T> { x: T; }
 >Base2 : Base2<T>
->T : T
 >x : T
->T : T
 
 class Derived9<T> extends Base2<T> {
 >Derived9 : Derived9<T>
->T : T
 >Base2 : Base2<T>
->T : T
 
     a = 1;
 >a : number
@@ -241,9 +237,7 @@ class Derived9<T> extends Base2<T> {
 
 class Derived10<T> extends Base2<T> {
 >Derived10 : Derived10<T>
->T : T
 >Base2 : Base2<T>
->T : T
 
     a = 1;
 >a : number

@@ -55,7 +55,6 @@ var x6 = 1;
 >1 : 1
 
 module x6 { } // ok since non-instantiated
->x6 : number
 
 var x6a = 1; // error
 >x6a : number

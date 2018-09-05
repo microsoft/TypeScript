@@ -1,7 +1,6 @@
 === tests/cases/compiler/arrayBufferIsViewNarrowsType.ts ===
 var obj: Object;
 >obj : Object
->Object : Object
 
 if (ArrayBuffer.isView(obj)) {
 >ArrayBuffer.isView(obj) : boolean
@@ -13,6 +12,5 @@ if (ArrayBuffer.isView(obj)) {
     // isView should be a guard that narrows type to ArrayBufferView.
     var ab: ArrayBufferView = obj;
 >ab : ArrayBufferView
->ArrayBufferView : ArrayBufferView
 >obj : ArrayBufferView
 }

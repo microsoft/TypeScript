@@ -81,3 +81,87 @@ var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
 >3 : 3
 >4 : 4
 
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+function D(n) {
+>D : typeof D
+>n : number
+
+  this.length = n;
+>this.length = n : number
+>this.length : number
+>this : D
+>length : number
+>n : number
+}
+
+var y2 = id2(D);
+>y2 : new (arg1: number) => { length: number; }
+>id2(D) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>D : typeof D
+
+var z2 = new y2(33);
+>z2 : { length: number; }
+>new y2(33) : { length: number; }
+>y2 : new (arg1: number) => { length: number; }
+>33 : 33
+
+z2.length;
+>z2.length : number
+>z2 : { length: number; }
+>length : number
+
+
+/** 
+ * @param {function(new: D, number)} dref
+ * @return {D}
+ */
+var construct = function(dref) { return new dref(33); }
+>construct : (dref: new (arg1: number) => D) => D
+>function(dref) { return new dref(33); } : (dref: new (arg1: number) => D) => D
+>dref : new (arg1: number) => D
+>new dref(33) : D
+>dref : new (arg1: number) => D
+>33 : 33
+
+var z3 = construct(D);
+>z3 : D
+>construct(D) : D
+>construct : (dref: new (arg1: number) => D) => D
+>D : typeof D
+
+z3.length;
+>z3.length : number
+>z3 : D
+>length : number
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+var E = function(n) {
+>E : typeof E
+>function(n) {  this.not_length_on_purpose = n;} : typeof E
+>n : number
+
+  this.not_length_on_purpose = n;
+>this.not_length_on_purpose = n : number
+>this.not_length_on_purpose : number
+>this : E
+>not_length_on_purpose : number
+>n : number
+
+};
+
+
+var y3 = id2(E);
+>y3 : new (arg1: number) => { length: number; }
+>id2(E) : new (arg1: number) => { length: number; }
+>id2 : (c: new (arg1: number) => { length: number; }) => new (arg1: number) => { length: number; }
+>E : typeof E
+

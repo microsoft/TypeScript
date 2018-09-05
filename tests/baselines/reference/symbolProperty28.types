@@ -21,7 +21,6 @@ class C2 extends C1 { }
 
 var c: C2;
 >c : C2
->C2 : C2
 
 var obj = c[Symbol.toStringTag]().x;
 >obj : string

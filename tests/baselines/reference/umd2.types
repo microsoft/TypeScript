@@ -8,7 +8,6 @@ Foo.fn();
 let x: Foo.Thing;
 >x : any
 >Foo : any
->Thing : No type information available!
 
 let y: number = x.n;
 >y : number

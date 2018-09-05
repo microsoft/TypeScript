@@ -15,7 +15,7 @@ declare module M {
     export function Function(...args: string[]): Function;
 >Function : Symbol(Function, Decl(constructorOverloads4.ts, 3, 5), Decl(constructorOverloads4.ts, 4, 50))
 >args : Symbol(args, Decl(constructorOverloads4.ts, 5, 29))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 

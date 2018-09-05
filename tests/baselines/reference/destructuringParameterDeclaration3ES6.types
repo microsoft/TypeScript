@@ -7,19 +7,12 @@
 
 type arrayString = Array<String>
 >arrayString : String[]
->Array : T[]
->String : String
 
 type someArray = Array<String> | number[];
 >someArray : someArray
->Array : T[]
->String : String
 
 type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : (String | Number)[]
->Array : T[]
->String : String
->Number : Number
 
 function a1(...x: (number|string)[]) { }
 >a1 : (...x: (string | number)[]) => void
@@ -32,18 +25,14 @@ function a2(...a) { }
 function a3(...a: Array<String>) { }
 >a3 : (...a: String[]) => void
 >a : String[]
->Array : T[]
->String : String
 
 function a4(...a: arrayString) { }
 >a4 : (...a: String[]) => void
 >a : String[]
->arrayString : String[]
 
 function a5(...a: stringOrNumArray) { }
 >a5 : (...a: (String | Number)[]) => void
 >a : (String | Number)[]
->stringOrNumArray : (String | Number)[]
 
 function a9([a, b, [[c]]]) { }
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
@@ -52,7 +41,7 @@ function a9([a, b, [[c]]]) { }
 >c : any
 
 function a10([a, b, [[c]], ...x]) { }
->a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >a : any
 >b : any
 >c : any
@@ -107,19 +96,19 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
->a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
->[1, 2, [["string"]], false, true] : (number | boolean | string[][])[]
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
+>[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >1 : 1
 >2 : 2
->[["string"]] : string[][]
->["string"] : string[]
+>[["string"]] : [[string]]
+>["string"] : [string]
 >"string" : "string"
 >false : false
 >true : true
 
 a10([1, 2, 3, false, true]);              // Parameter type is any[]
 >a10([1, 2, 3, false, true]) : void
->a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2, 3, false, true] : (number | boolean)[]
 >1 : 1
 >2 : 2
@@ -129,7 +118,7 @@ a10([1, 2, 3, false, true]);              // Parameter type is any[]
 
 a10([1, 2]);                              // Parameter type is any[]
 >a10([1, 2]) : void
->a10 : ([a, b, [[c]], ...x]: Iterable<any>) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2] : number[]
 >1 : 1
 >2 : 2
@@ -144,9 +133,7 @@ a11([1, 2]);                              // Parameter type is number[]
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
 >foo : <T>(...a: T[]) => void
->T : T
 >a : T[]
->T : T
 
 foo<number|string>("hello", 1, 2);
 >foo<number|string>("hello", 1, 2) : void
@@ -173,10 +160,7 @@ const enum E1 { a, b }
 
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->T : T
->Number : Number
 >a : T[]
->T : T
 
 foo1(1, 2, 3, E.a);
 >foo1(1, 2, 3, E.a) : void

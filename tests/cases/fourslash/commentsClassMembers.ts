@@ -572,12 +572,12 @@ verify.quickInfos({
 });
 
 goTo.marker('114');
-verify.completionListContains("a", "(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
-verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "this is first parameter a\nmore info about a");
+verify.completionListContains("a", "(property) cWithConstructorProperty.a: number", "more info about a\nthis is first parameter a");
+verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "more info about a\nthis is first parameter a");
 
 goTo.marker('115');
-verify.completionListContains("a", "(parameter) a: number", "this is first parameter a\nmore info about a");
-verify.quickInfoIs("(parameter) a: number", "this is first parameter a\nmore info about a");
+verify.completionListContains("a", "(parameter) a: number", "more info about a\nthis is first parameter a");
+verify.quickInfoIs("(parameter) a: number", "more info about a\nthis is first parameter a");
 
 verify.quickInfos({
     116: "this: this",

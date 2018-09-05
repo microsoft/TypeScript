@@ -44,8 +44,6 @@ var z = 0;
 
 === tests/cases/compiler/duplicateVarsAcrossFileBoundaries_4.ts ===
 module P { }
->P : any
-
 import p = P;
 >p : any
 >P : any
@@ -55,8 +53,6 @@ var q;
 
 === tests/cases/compiler/duplicateVarsAcrossFileBoundaries_5.ts ===
 module Q { }
->Q : any
-
 import q = Q;
 >q : any
 >Q : any

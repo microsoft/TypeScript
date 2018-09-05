@@ -1,0 +1,10 @@
+=== /foo/test.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(test.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(test.ts, 0, 15))
+}
+export default Foo;
+>Foo : Symbol(Foo, Decl(test.ts, 0, 0))
+

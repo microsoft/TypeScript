@@ -4,11 +4,8 @@
 
 function foo<T>(x: new(a: T) => T) {
 >foo : <T>(x: new (a: T) => T) => T
->T : T
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
 
     return new x(null);
 >new x(null) : T
@@ -17,39 +14,24 @@ function foo<T>(x: new(a: T) => T) {
 }
 
 interface I {
->I : I
-
     new <T>(x: T): T;
->T : T
 >x : T
->T : T
->T : T
 }
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     new (x: T): T;
 >x : T
->T : T
->T : T
 }
 var i: I;
 >i : I
->I : I
 
 var i2: I2<string>;
 >i2 : I2<string>
->I2 : I2<T>
 
 var a: {
 >a : new <T>(x: T) => T
 
     new <T>(x: T): T;
->T : T
 >x : T
->T : T
->T : T
 }
 
 var r = foo(i); // any
@@ -78,14 +60,9 @@ var r3b = foo(a); // any
 
 function foo2<T, U>(x: T, cb: new(a: T) => U) {
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
->T : T
->U : U
 >x : T
->T : T
 >cb : new (a: T) => U
 >a : T
->T : T
->U : U
 
     return new cb(x);
 >new cb(x) : U
@@ -123,16 +100,10 @@ var r6 = foo2<string, string>('', i2); // string
 
 function foo3<T, U>(x: T, cb: new(a: T) => U, y: U) {
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
->T : T
->U : U
 >x : T
->T : T
 >cb : new (a: T) => U
 >a : T
->T : T
->U : U
 >y : U
->U : U
 
     return new cb(x);
 >new cb(x) : U

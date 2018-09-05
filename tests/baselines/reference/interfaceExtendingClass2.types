@@ -16,13 +16,9 @@ class Foo {
     }
     [x: string]: Object;
 >x : string
->Object : Object
 }
 
 interface I2 extends Foo { // error
->I2 : I2
->Foo : Foo
-
     a: {
 >a : { toString: () => {}; }
 

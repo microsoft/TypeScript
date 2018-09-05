@@ -10,10 +10,10 @@ enum AnEnum {
 >AnEnum : Symbol(AnEnum, Decl(systemNamespaceAliasEmit.ts, 2, 1))
 
     ONE,
->ONE : Symbol(BarEnum.ONE, Decl(systemNamespaceAliasEmit.ts, 4, 13))
+>ONE : Symbol(AnEnum.ONE, Decl(systemNamespaceAliasEmit.ts, 4, 13))
 
     TWO
->TWO : Symbol(BarEnum.TWO, Decl(systemNamespaceAliasEmit.ts, 5, 8))
+>TWO : Symbol(AnEnum.TWO, Decl(systemNamespaceAliasEmit.ts, 5, 8))
 }
 
 export {ns, AnEnum, ns as FooBar, AnEnum as BarEnum};

@@ -3,14 +3,14 @@
 // @Filename: /src/foo/a.ts
 ////
 
-// @Filename: /src/dir/new.ts
+// @Filename: /src/old.ts
 ////import a from "./foo/a";
 
 verify.getEditsForFileRename({
     oldPath: "/src/old.ts",
     newPath: "/src/dir/new.ts",
     newFileContents: {
-        "/src/dir/new.ts":
+        "/src/old.ts":
 `import a from "../foo/a";`,
     },
 });

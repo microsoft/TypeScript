@@ -15,7 +15,6 @@ class FooComponent {
 // Glimmer-style tracked API:
 declare const tracked: PropertyDecorator & { (...watchedProperties: string[]): any; }
 >tracked : PropertyDecorator & ((...watchedProperties: string[]) => any)
->PropertyDecorator : PropertyDecorator
 >watchedProperties : string[]
 
 class Person {
@@ -55,44 +54,34 @@ class MultiplyByTwo {
 // Other fun stuff.
 
 interface OmniDecorator extends MethodDecorator, ClassDecorator, PropertyDecorator {
->OmniDecorator : OmniDecorator
->MethodDecorator : MethodDecorator
->ClassDecorator : ClassDecorator
->PropertyDecorator : PropertyDecorator
 }
 
 declare function noArgs(): OmniDecorator;
 >noArgs : () => OmniDecorator
->OmniDecorator : OmniDecorator
 
 declare function allRest(...args: any[]): OmniDecorator;
 >allRest : (...args: any[]) => OmniDecorator
 >args : any[]
->OmniDecorator : OmniDecorator
 
 declare function oneOptional(x?: any): OmniDecorator;
 >oneOptional : (x?: any) => OmniDecorator
 >x : any
->OmniDecorator : OmniDecorator
 
 declare function twoOptional(x?: any, y?: any): OmniDecorator;
 >twoOptional : (x?: any, y?: any) => OmniDecorator
 >x : any
 >y : any
->OmniDecorator : OmniDecorator
 
 declare function threeOptional(x?: any, y?: any, z?: any): OmniDecorator;
 >threeOptional : (x?: any, y?: any, z?: any) => OmniDecorator
 >x : any
 >y : any
 >z : any
->OmniDecorator : OmniDecorator
 
 declare function oneOptionalWithRest(x?: any, ...args: any[]): OmniDecorator;
 >oneOptionalWithRest : (x?: any, ...args: any[]) => OmniDecorator
 >x : any
 >args : any[]
->OmniDecorator : OmniDecorator
 
 declare const anyDec: any;
 >anyDec : any

@@ -5,7 +5,7 @@ class X {
     constructor() {
         this['__proto__'] = null; // used to cause ICE
 >this['__proto__'] = null : null
->this['__proto__'] : any
+>this['__proto__'] : error
 >this : this
 >'__proto__' : "__proto__"
 >null : null

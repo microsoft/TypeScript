@@ -12,15 +12,15 @@
 ////
 //// class T {
 ////
-////     a: string;
+////     a: boolean;
 ////
-////     static b: string;
+////     static b: boolean;
 ////
-////     private c: string;
+////     private c: boolean;
 ////
 ////     d: number | undefined;
 ////
-////     e: string | number;
+////     e: string | boolean;
 ////
 ////     f: 1;
 ////
@@ -46,9 +46,9 @@ function fixes(name: string, type: string, options: { isPrivate?: boolean, noIni
 }
 
 verify.codeFixAvailable([
-    ...fixes("a", "string"),
-    ...fixes("c", "string", { isPrivate: true }),
-    ...fixes("e", "string | number"),
+    ...fixes("a", "boolean"),
+    ...fixes("c", "boolean", { isPrivate: true }),
+    ...fixes("e", "string | boolean"),
     ...fixes("f", "1"),
     ...fixes("g", '"123" | "456"'),
     ...fixes("h", "boolean"),

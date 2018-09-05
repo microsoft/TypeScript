@@ -6,10 +6,7 @@ var x = {
     a: < <T>(x: T) => T > ((x: any) => 1),
 >a : <T>(x: T) => T
 >< <T>(x: T) => T > ((x: any) => 1) : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >((x: any) => 1) : (x: any) => number
 >(x: any) => 1 : (x: any) => number
 >x : any
@@ -18,9 +15,7 @@ var x = {
     b: <T>(x: T) => { x }
 >b : <T>(x: T) => void
 ><T>(x: T) => { x } : <T>(x: T) => void
->T : T
 >x : T
->T : T
 >x : T
 }
 x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition

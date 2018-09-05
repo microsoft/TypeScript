@@ -4,7 +4,7 @@ declare function dearray<T>(ara: ReadonlyArray<T>): T;
 >dearray : Symbol(dearray, Decl(doNotInferUnrelatedTypes.ts, 0, 0))
 >T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
 >ara : Symbol(ara, Decl(doNotInferUnrelatedTypes.ts, 1, 28))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
 >T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
 
@@ -13,7 +13,7 @@ type LiteralType = "foo" | "bar";
 
 declare var alt: Array<LiteralType>;
 >alt : Symbol(alt, Decl(doNotInferUnrelatedTypes.ts, 3, 11))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >LiteralType : Symbol(LiteralType, Decl(doNotInferUnrelatedTypes.ts, 1, 54))
 
 let foo: LiteralType = dearray(alt);

@@ -1,21 +1,20 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts(6,5): error TS2322: Type '{ [x: string]: string | number; }' is not assignable to type 'I'.
-  Index signatures are incompatible.
-    Type 'string | number' is not assignable to type 'boolean'.
-      Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts(7,5): error TS2418: Type of computed property's value is 'string', which is not assignable to type 'boolean'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts(8,5): error TS2418: Type of computed property's value is 'number', which is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts (1 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts (2 errors) ====
     interface I {
         [s: string]: boolean;
         [s: number]: boolean;
     }
     
     var o: I = {
-        ~
-!!! error TS2322: Type '{ [x: string]: string | number; }' is not assignable to type 'I'.
-!!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'string | number' is not assignable to type 'boolean'.
-!!! error TS2322:       Type 'string' is not assignable to type 'boolean'.
         [""+"foo"]: "",
+        ~~~~~~~~~~
+!!! error TS2418: Type of computed property's value is 'string', which is not assignable to type 'boolean'.
+!!! related TS6501 tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts:2:5: The expected type comes from this index signature.
         [""+"bar"]: 0
+        ~~~~~~~~~~
+!!! error TS2418: Type of computed property's value is 'number', which is not assignable to type 'boolean'.
+!!! related TS6501 tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts:2:5: The expected type comes from this index signature.
     }

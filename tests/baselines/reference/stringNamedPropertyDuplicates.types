@@ -16,8 +16,6 @@ class C {
 }
 
 interface I {
->I : I
-
     "a b": number;
 >"a b" : number
 

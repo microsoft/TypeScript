@@ -4,26 +4,14 @@ declare namespace React {
 >React : typeof React
 
   interface ComponentClass<P> { new (): Component<P, {}>; }
->ComponentClass : ComponentClass<P>
->P : P
->Component : Component<A, B>
->P : P
-
   class Component<A, B> {}
 >Component : Component<A, B>
->A : A
->B : B
 }
 declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
 >createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
->P : P
 >factory : () => React.ComponentClass<P>
 >React : any
->ComponentClass : React.ComponentClass<P>
->P : P
 >React : any
->ComponentClass : React.ComponentClass<P>
->P : P
 
 class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
 >Foo : Foo
@@ -39,7 +27,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >render : () => any
 
     return <span>Hello, world!</span>;
-><span>Hello, world!</span> : any
+><span>Hello, world!</span> : error
 >span : any
 >span : any
   }

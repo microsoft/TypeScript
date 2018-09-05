@@ -1,26 +1,14 @@
 === tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInInterfaceDeclaration1.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
    v: A<T>;
 >v : any
->A : No type information available!
->T : T
 
    f1<T>(): T;
 >f1 : <T>() => T
->T : T
->T : T
 
    f2?<T>(): T;
 >f2 : <T>() => T
->T : T
->T : T
 
    <T>(): void;
->T : T
-
    new <T>(): void;
->T : T
 }

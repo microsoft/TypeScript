@@ -19,8 +19,8 @@ var lengths = map(myItems, x => x.length);
 >map : Symbol(map, Decl(genericFunctions2.ts, 0, 0))
 >myItems : Symbol(myItems, Decl(genericFunctions2.ts, 2, 3))
 >x : Symbol(x, Decl(genericFunctions2.ts, 3, 26))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericFunctions2.ts, 3, 26))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 

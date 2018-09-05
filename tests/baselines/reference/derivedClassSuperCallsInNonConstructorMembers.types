@@ -14,7 +14,6 @@ class Derived extends Base {
 
     a: super();
 >a : any
->super : No type information available!
 >() : any
 > : any
 

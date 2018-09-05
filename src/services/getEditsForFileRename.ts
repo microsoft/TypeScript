@@ -1,26 +1,48 @@
 /* @internal */
 namespace ts {
-    export function getEditsForFileRename(program: Program, oldFileOrDirPath: string, newFileOrDirPath: string, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences): ReadonlyArray<FileTextChanges> {
+    export function getEditsForFileRename(
+        program: Program,
+        oldFileOrDirPath: string,
+        newFileOrDirPath: string,
+        host: LanguageServiceHost,
+        formatContext: formatting.FormatContext,
+        _preferences: UserPreferences,
+        sourceMapper: SourceMapper,
+    ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName);
-        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName);
+        const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
+        const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
-            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
+            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
     }
 
     /** If 'path' refers to an old directory, returns path in the new directory. */
     type PathUpdater = (path: string) => string | undefined;
-    function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName): PathUpdater {
+    // exported for tests
+    export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const canonicalPath = getCanonicalFileName(path);
-            if (canonicalPath === canonicalOldPath) return newFileOrDirPath;
-            const suffix = tryRemoveDirectoryPrefix(canonicalPath, canonicalOldPath);
-            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+            const originalPath = sourceMapper && sourceMapper.tryGetOriginalLocation({ fileName: path, position: 0 });
+            const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
+            return originalPath
+                ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
+                : updatedPath;
         };
+
+        function getUpdatedPath(pathToUpdate: string): string | undefined {
+            if (getCanonicalFileName(pathToUpdate) === canonicalOldPath) return newFileOrDirPath;
+            const suffix = tryRemoveDirectoryPrefix(pathToUpdate, canonicalOldPath, getCanonicalFileName);
+            return suffix === undefined ? undefined : newFileOrDirPath + "/" + suffix;
+        }
+    }
+
+    // Relative path from a0 to b0 should be same as relative path from a1 to b1. Returns b1.
+    function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, getCanonicalFileName: GetCanonicalFileName): string {
+        const rel = getRelativePathFromFile(a0, b0, getCanonicalFileName);
+        return combinePathsSafe(getDirectoryPath(a1), rel);
     }
 
     function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
@@ -100,15 +122,18 @@ namespace ts {
         newToOld: PathUpdater,
         host: LanguageServiceHost,
         getCanonicalFileName: GetCanonicalFileName,
-        preferences: UserPreferences,
     ): void {
-        for (const sourceFile of program.getSourceFiles()) {
-            const newImportFromPath = oldToNew(sourceFile.fileName) || sourceFile.fileName;
+        const allFiles = program.getSourceFiles();
+        for (const sourceFile of allFiles) {
+            const newFromOld = oldToNew(sourceFile.path) as Path;
+            const newImportFromPath = newFromOld !== undefined ? newFromOld : sourceFile.path;
             const newImportFromDirectory = getDirectoryPath(newImportFromPath);
 
             const oldFromNew: string | undefined = newToOld(sourceFile.fileName);
             const oldImportFromPath: string = oldFromNew || sourceFile.fileName;
             const oldImportFromDirectory = getDirectoryPath(oldImportFromPath);
+
+            const importingSourceFileMoved = newFromOld !== undefined || oldFromNew !== undefined;
 
             updateImportsWorker(sourceFile, changeTracker,
                 referenceText => {
@@ -118,12 +143,20 @@ namespace ts {
                     return newAbsolute === undefined ? undefined : ensurePathIsNonModuleName(getRelativePathFromDirectory(newImportFromDirectory, newAbsolute, getCanonicalFileName));
                 },
                 importLiteral => {
+                    const importedModuleSymbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
+                    // No need to update if it's an ambient module^M
+                    if (importedModuleSymbol && importedModuleSymbol.declarations.some(d => isAmbientModule(d))) return undefined;
+
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, program)
-                        : getSourceFileToImport(importLiteral, sourceFile, program, host, oldToNew);
-                    return toImport === undefined ? undefined : moduleSpecifiers.getModuleSpecifier(program, sourceFile, newImportFromPath, toImport, host, preferences);
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
+                        : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
+
+                    // Need an update if the imported file moved, or the importing file moved and was using a relative path.
+                    return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, program.redirectTargetsMap, importLiteral.text)
+                        : undefined;
                 });
         }
     }
@@ -135,35 +168,48 @@ namespace ts {
         return ensurePathIsNonModuleName(combineNormal(pathA, pathB));
     }
 
-    function getSourceFileToImport(importLiteral: StringLiteralLike, importingSourceFile: SourceFile, program: Program, host: LanguageServiceHost, oldToNew: PathUpdater): string | undefined {
-        const symbol = program.getTypeChecker().getSymbolAtLocation(importLiteral);
-        if (symbol) {
-            if (symbol.declarations.some(d => isAmbientModule(d))) return undefined; // No need to update if it's an ambient module
-            const oldFileName = find(symbol.declarations, isSourceFile)!.fileName;
-            return oldToNew(oldFileName) || oldFileName;
+    interface ToImport {
+        readonly newFileName: string;
+        /** True if the imported file was renamed. */
+        readonly updated: boolean;
+    }
+    function getSourceFileToImport(
+        importedModuleSymbol: Symbol | undefined,
+        importLiteral: StringLiteralLike,
+        importingSourceFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        oldToNew: PathUpdater,
+    ): ToImport | undefined {
+        if (importedModuleSymbol) {
+            // `find` should succeed because we checked for ambient modules before calling this function.
+            const oldFileName = find(importedModuleSymbol.declarations, isSourceFile)!.fileName;
+            const newFileName = oldToNew(oldFileName);
+            return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, program);
+            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, program: Program): string | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
         return resolved && (
-            (resolved.resolvedModule && getIfInProgram(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfInProgram));
+            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
 
-        function getIfInProgram(oldLocation: string): string | undefined {
+        function getIfExists(oldLocation: string): ToImport | undefined {
             const newLocation = oldToNew(oldLocation);
-            return program.getSourceFile(oldLocation) || newLocation !== undefined && program.getSourceFile(newLocation)
-                ? newLocation || oldLocation
+
+            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
+                ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
                 : undefined;
         }
     }
 
     function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
-        for (const ref of sourceFile.referencedFiles) {
+        for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
             const updated = updateRef(ref.fileName);
             if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
         }

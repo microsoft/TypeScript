@@ -20,10 +20,11 @@ verify.codeFix({
         this.prop1 = 10;
         A.prop2 = "asdf";
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
 }`,
+    applyChanges: true,
 });
 
 verify.codeFix({
@@ -37,13 +38,14 @@ verify.codeFix({
         this.prop1 = 10;
         A.prop2 = "asdf";
     }
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
 }`,
+    applyChanges: true,
 });
 
 verify.codeFix({
@@ -58,13 +60,14 @@ verify.codeFix({
         this.prop1 = 10;
         A.prop2 = "asdf";
     }
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
 }`,
+    applyChanges: true,
 });
 
 verify.codeFix({
@@ -80,11 +83,12 @@ verify.codeFix({
         this.prop1 = 10;
         A.prop2 = "asdf";
     }
-    static m2(arg0: any, arg1: any): any {
+    static m2(arg0: number, arg1: number): any {
         throw new Error("Method not implemented.");
     }
-    static m1(arg0: any, arg1: any, arg2: any): any {
+    static m1(arg0: number, arg1: number, arg2: number): any {
         throw new Error("Method not implemented.");
     }
 }`,
+    applyChanges: true,
 });

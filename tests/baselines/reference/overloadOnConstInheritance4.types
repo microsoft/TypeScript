@@ -1,7 +1,5 @@
 === tests/cases/compiler/overloadOnConstInheritance4.ts ===
 interface I {
->I : I
-
     x1(a: number, callback: (x: 'hi') => number);
 >x1 : (a: number, callback: (x: "hi") => number) => any
 >a : number
@@ -10,7 +8,6 @@ interface I {
 }
 class C implements I {
 >C : C
->I : I
 
     x1(a: number, callback: (x: 'hi') => number);
 >x1 : (a: number, callback: (x: "hi") => number) => any

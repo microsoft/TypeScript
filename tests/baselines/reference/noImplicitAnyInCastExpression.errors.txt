@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2352: Type '{ c: null; }' cannot be converted to type 'IFoo'.
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2352: Conversion of type '{ c: null; }' to type 'IFoo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'a' is missing in type '{ c: null; }'.
 
 
@@ -19,5 +19,5 @@ tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2352: Type 
     // Neither types is assignable to each other
     (<IFoo>{ c: null });
      ~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '{ c: null; }' cannot be converted to type 'IFoo'.
+!!! error TS2352: Conversion of type '{ c: null; }' to type 'IFoo' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'a' is missing in type '{ c: null; }'.

@@ -3,8 +3,6 @@ module A {
 >A : typeof A
 
     interface B {
->B : B
-
         name: string;
 >name : string
 

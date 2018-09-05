@@ -1,16 +1,10 @@
 === tests/cases/compiler/genericCallbackInvokedInsideItsContainingFunction1.ts ===
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >foo : <T, U>(x: T, y: U, f: (v: T) => U) => void
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 >f : (v: T) => U
 >v : T
->T : T
->U : U
 
     var r1 = f<number>(1);
 >r1 : U

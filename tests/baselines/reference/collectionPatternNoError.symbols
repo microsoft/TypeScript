@@ -6,7 +6,7 @@ interface MsgConstructor<T extends Message> {
 
   new(data: Array<{}>): T;
 >data : Symbol(data, Decl(collectionPatternNoError.ts, 1, 6))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(collectionPatternNoError.ts, 0, 25))
 }
 class Message {
