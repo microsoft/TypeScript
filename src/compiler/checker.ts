@@ -18498,6 +18498,13 @@ namespace ts {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
+            if (isTupleType(objectType) && !objectType.target.hasRestElement && isNumericLiteral(indexExpression)) {
+                const index = +indexExpression.text;
+                const maximumIndex = length(objectType.target.typeParameters);
+                if (index >= maximumIndex) {
+                    error(indexExpression, Diagnostics.Index_0_is_out_of_bounds_in_tuple_of_length_1, index, maximumIndex);
+                }
+            }
 
             return checkIndexedAccessIndexType(getIndexedAccessType(objectType, isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType, node), node);
         }

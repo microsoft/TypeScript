@@ -2437,6 +2437,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
