@@ -390,7 +390,6 @@ namespace ts.codefix {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
-            case SyntaxKind.UndefinedKeyword:
                 // do not produce a transformed statement for a null or undefined argument
                 break;
             case SyntaxKind.Identifier:
