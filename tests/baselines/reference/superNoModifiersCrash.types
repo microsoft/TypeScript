@@ -6,8 +6,8 @@ class Parent {
 >initialize : (...args: any[]) => string
 
         super.initialize(...arguments)
->super.initialize(...arguments) : any
->super.initialize : any
+>super.initialize(...arguments) : error
+>super.initialize : error
 >super : any
 >initialize : any
 >...arguments : any

@@ -41,17 +41,17 @@ module.exports = minimatch
 >module.exports : Symbol("tests/cases/conformance/salsa/minimatch", Decl(minimatch.js, 0, 0))
 >module : Symbol(export=, Decl(minimatch.js, 0, 0))
 >exports : Symbol(export=, Decl(minimatch.js, 0, 0))
->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26))
 
 minimatch.M = M
 >minimatch.M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26))
 >M : Symbol(minimatch.M, Decl(minimatch.js, 1, 26))
 >M : Symbol(M, Decl(minimatch.js, 13, 1), Decl(minimatch.js, 8, 1))
 
 minimatch.filter = filter
 >minimatch.filter : Symbol(minimatch.filter, Decl(minimatch.js, 2, 15))
->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26))
 >filter : Symbol(minimatch.filter, Decl(minimatch.js, 2, 15))
 >filter : Symbol(filter, Decl(minimatch.js, 3, 25))
 
@@ -59,10 +59,10 @@ function filter() {
 >filter : Symbol(filter, Decl(minimatch.js, 3, 25))
 
     return minimatch()
->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26))
 }
 function minimatch() {
->minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1))
+>minimatch : Symbol(minimatch, Decl(minimatch.js, 6, 1), Decl(minimatch.js, 1, 26))
 }
 M.defaults = function (def) {
 >M.defaults : Symbol(M.defaults, Decl(minimatch.js, 8, 1))

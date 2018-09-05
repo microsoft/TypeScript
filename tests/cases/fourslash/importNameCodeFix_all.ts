@@ -37,11 +37,11 @@ verify.codeFixAll({
     fixId: "fixMissingImport",
     fixAllDescription: "Add all missing imports",
     newFileContent:
-// TODO: GH#25135 (should import 'e')
 `import bd, * as b from "./b";
 import cd, { c0 } from "./c";
 import dd, { d0, d1 } from "./d";
 import ad, { a0 } from "./a";
+import e = require("./e");
 
 ad; ad; a0; a0;
 bd; bd; b.b0; b.b0;

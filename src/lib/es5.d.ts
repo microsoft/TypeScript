@@ -1379,6 +1379,16 @@ type Extract<T, U> = T extends U ? T : never;
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 /**
+ * Obtain the parameters of a function type in a tuple
+ */
+type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
+
+/**
+ * Obtain the parameters of a constructor function type in a tuple
+ */
+type ConstructorParameters<T extends new (...args: any[]) => any> = T extends new (...args: infer P) => any ? P : never;
+
+/**
  * Obtain the return type of a function type
  */
 type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any;

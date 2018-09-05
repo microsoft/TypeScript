@@ -41,8 +41,8 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >1 : 1
 
             return (<div></div>);
->(<div></div>) : any
-><div></div> : any
+>(<div></div>) : error
+><div></div> : error
 >div : any
 >div : any
         }

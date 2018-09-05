@@ -80,9 +80,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (install.status !== 0) throw new Error(`NPM Install types for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 args.push("--noEmit");
-                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
-                    return cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
-                });
+                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
             });
         });
     }

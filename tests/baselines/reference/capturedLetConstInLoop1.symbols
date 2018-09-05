@@ -258,3 +258,29 @@ for (const y = 0; y < 1;) {
 >x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 109, 9))
 >y : Symbol(y, Decl(capturedLetConstInLoop1.ts, 108, 10))
 }
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 115, 13))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 115, 23))
+
+for (let sx in sobj) {
+>sx : Symbol(sx, Decl(capturedLetConstInLoop1.ts, 116, 8))
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 115, 13))
+
+    (() => sobj[sx]);
+>sobj : Symbol(sobj, Decl(capturedLetConstInLoop1.ts, 115, 13))
+>sx : Symbol(sx, Decl(capturedLetConstInLoop1.ts, 116, 8))
+}
+declare const iobj: { [x: number]: any };
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 119, 13))
+>x : Symbol(x, Decl(capturedLetConstInLoop1.ts, 119, 23))
+
+for (let ix in iobj) {
+>ix : Symbol(ix, Decl(capturedLetConstInLoop1.ts, 120, 8))
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 119, 13))
+
+    (() => iobj[ix]);
+>iobj : Symbol(iobj, Decl(capturedLetConstInLoop1.ts, 119, 13))
+>ix : Symbol(ix, Decl(capturedLetConstInLoop1.ts, 120, 8))
+}

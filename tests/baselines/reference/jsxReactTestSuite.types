@@ -36,12 +36,12 @@ declare var hasOwnProperty:any;
 >hasOwnProperty : any
 
 <div>text</div>;
-><div>text</div> : any
+><div>text</div> : error
 >div : any
 >div : any
 
 <div>
-><div>  {this.props.children}</div> : any
+><div>  {this.props.children}</div> : error
 >div : any
 
   {this.props.children}
@@ -55,27 +55,27 @@ declare var hasOwnProperty:any;
 >div : any
 
 <div>
-><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : any
+><div>  <div><br /></div>  <Component>{foo}<br />{bar}</Component>  <br /></div> : error
 >div : any
 
   <div><br /></div>
-><div><br /></div> : any
+><div><br /></div> : error
 >div : any
-><br /> : any
+><br /> : error
 >br : any
 >div : any
 
   <Component>{foo}<br />{bar}</Component>
-><Component>{foo}<br />{bar}</Component> : any
+><Component>{foo}<br />{bar}</Component> : error
 >Component : any
 >foo : any
-><br /> : any
+><br /> : error
 >br : any
 >bar : any
 >Component : any
 
   <br />
-><br /> : any
+><br /> : error
 >br : any
 
 </div>;
@@ -83,7 +83,7 @@ declare var hasOwnProperty:any;
 
 
 <Composite>
-><Composite>    {this.props.children}</Composite> : any
+><Composite>    {this.props.children}</Composite> : error
 >Composite : any
 
     {this.props.children}
@@ -97,11 +97,11 @@ declare var hasOwnProperty:any;
 >Composite : any
 
 <Composite>
-><Composite>    <Composite2 /></Composite> : any
+><Composite>    <Composite2 /></Composite> : error
 >Composite : any
 
     <Composite2 />
-><Composite2 /> : any
+><Composite2 /> : error
 >Composite2 : any
 
 </Composite>;
@@ -111,7 +111,7 @@ var x =
 >x : any
 
   <div
-><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : any
+><div    attr1={      "foo" + "bar"    }    attr2={      "foo" + "bar" +            "baz" + "bug"    }    attr3={      "foo" + "bar" +      "baz" + "bug"      // Extra line here.    }    attr4="baz">  </div> : error
 >div : any
 
     attr1={
@@ -159,16 +159,16 @@ var x =
 >div : any
 
 (
->(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : any
+>(  <div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div>) : error
 
   <div>
-><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : any
+><div>    {/* A comment at the beginning */}    {/* A second comment at the beginning */}    <span>      {/* A nested comment */}    </span>    {/* A sandwiched comment */}    <br />    {/* A comment at the end */}    {/* A second comment at the end */}  </div> : error
 >div : any
 
     {/* A comment at the beginning */}
     {/* A second comment at the beginning */}
     <span>
-><span>      {/* A nested comment */}    </span> : any
+><span>      {/* A nested comment */}    </span> : error
 >span : any
 
       {/* A nested comment */}
@@ -177,7 +177,7 @@ var x =
 
     {/* A sandwiched comment */}
     <br />
-><br /> : any
+><br /> : error
 >br : any
 
     {/* A comment at the end */}
@@ -188,10 +188,10 @@ var x =
 );
 
 (
->(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : any
+>(  <div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div>) : error
 
   <div
-><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : any
+><div    /* a multi-line       comment */    attr1="foo">    <span // a double-slash comment      attr2="bar"    />  </div> : error
 >div : any
 
     /* a multi-line
@@ -200,7 +200,7 @@ var x =
 >attr1 : string
 
     <span // a double-slash comment
-><span // a double-slash comment      attr2="bar"    /> : any
+><span // a double-slash comment      attr2="bar"    /> : error
 >span : any
 
       attr2="bar"
@@ -213,33 +213,33 @@ var x =
 );
 
 <div>&nbsp;</div>;
-><div>&nbsp;</div> : any
+><div>&nbsp;</div> : error
 >div : any
 >div : any
 
 <div>&nbsp; </div>;
-><div>&nbsp; </div> : any
+><div>&nbsp; </div> : error
 >div : any
 >div : any
 
 <hasOwnProperty>testing</hasOwnProperty>;
-><hasOwnProperty>testing</hasOwnProperty> : any
+><hasOwnProperty>testing</hasOwnProperty> : error
 >hasOwnProperty : any
 >hasOwnProperty : any
 
 <Component constructor="foo" />;
-><Component constructor="foo" /> : any
+><Component constructor="foo" /> : error
 >Component : any
 >constructor : string
 
 <Namespace.Component />;
-><Namespace.Component /> : any
+><Namespace.Component /> : error
 >Namespace.Component : any
 >Namespace : any
 >Component : any
 
 <Namespace.DeepNamespace.Component />;
-><Namespace.DeepNamespace.Component /> : any
+><Namespace.DeepNamespace.Component /> : error
 >Namespace.DeepNamespace.Component : any
 >Namespace.DeepNamespace : any
 >Namespace : any
@@ -247,7 +247,7 @@ var x =
 >Component : any
 
 <Component { ... x } y
-><Component { ... x } y={2 } z /> : any
+><Component { ... x } y={2 } z /> : error
 >Component : any
 >x : any
 >y : number
@@ -257,7 +257,7 @@ var x =
 >z : true
 
 <Component
-><Component    {...this.props} sound="moo" /> : any
+><Component    {...this.props} sound="moo" /> : error
 >Component : any
 
     {...this.props} sound="moo" />;
@@ -267,33 +267,33 @@ var x =
 >sound : string
 
 <font-face />;
-><font-face /> : any
+><font-face /> : error
 >font-face : any
 
 <Component x={y} />;
-><Component x={y} /> : any
+><Component x={y} /> : error
 >Component : any
 >x : any
 >y : any
 
 <x-component />;
-><x-component /> : any
+><x-component /> : error
 >x-component : any
 
 <Component {...x} />;
-><Component {...x} /> : any
+><Component {...x} /> : error
 >Component : any
 >x : any
 
 <Component { ...x } y={2} />;
-><Component { ...x } y={2} /> : any
+><Component { ...x } y={2} /> : error
 >Component : any
 >x : any
 >y : number
 >2 : 2
 
 <Component { ... x } y={2} z />;
-><Component { ... x } y={2} z /> : any
+><Component { ... x } y={2} z /> : error
 >Component : any
 >x : any
 >y : number
@@ -301,7 +301,7 @@ var x =
 >z : true
 
 <Component x={1} {...y} />;
-><Component x={1} {...y} /> : any
+><Component x={1} {...y} /> : error
 >Component : any
 >x : number
 >1 : 1
@@ -309,19 +309,19 @@ var x =
 
 
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
-><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
+><Component x={1} y="2" {...z} {...z}><Child /></Component> : error
 >Component : any
 >x : number
 >1 : 1
 >y : string
 >z : any
 >z : any
-><Child /> : any
+><Child /> : error
 >Child : any
 >Component : any
 
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
-><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
+><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : error
 >Component : any
 >x : string
 >(z = { y: 2 }, z) : any

@@ -14,7 +14,7 @@ export class AppComponent {
 >createElement : any
 
         return <div />;
-><div /> : any
+><div /> : error
 >div : any
     }
 }

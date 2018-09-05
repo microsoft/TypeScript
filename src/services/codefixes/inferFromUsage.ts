@@ -534,17 +534,19 @@ namespace ts.codefix {
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
                 return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!);
             }
-            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
+            else if (usageContext.numberIndexContext) {
+                return checker.createArrayType(recur(usageContext.numberIndexContext));
+            }
+            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
                 let stringIndexInfo: IndexInfo | undefined;
-                let numberIndexInfo: IndexInfo | undefined;
 
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = getTypeFromUsageContext(context, checker) || checker.getAnyType();
+                        symbol.type = recur(context);
                         members.set(name, symbol);
                     });
                 }
@@ -561,18 +563,18 @@ namespace ts.codefix {
                     }
                 }
 
-                if (usageContext.numberIndexContext) {
-                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker) || checker.getAnyType(), /*isReadonly*/ false);
-                }
-
                 if (usageContext.stringIndexContext) {
-                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker) || checker.getAnyType(), /*isReadonly*/ false);
+                    stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext), /*isReadonly*/ false);
                 }
 
-                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo); // TODO: GH#18217
+                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
             }
             else {
                 return undefined;
+            }
+
+            function recur(innerContext: UsageContext): Type {
+                return getTypeFromUsageContext(innerContext, checker) || checker.getAnyType();
             }
         }
 

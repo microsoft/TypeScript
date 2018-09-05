@@ -226,7 +226,7 @@ namespace ts {
 
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
         return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
-     }
+    }
 
     export function isLabelOfLabeledStatement(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
@@ -396,7 +396,7 @@ namespace ts {
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
-            // case SyntaxKind.ThisType: TODO: GH#9267
+                // case SyntaxKind.ThisType: TODO: GH#9267
                 return true;
             case SyntaxKind.Identifier:
                 // 'this' as a parameter
@@ -755,7 +755,7 @@ namespace ts {
         return result;
 
         function find(n: Node): Node | undefined {
-            if (isNonWhitespaceToken(n)) {
+            if (isNonWhitespaceToken(n) && n.kind !== SyntaxKind.EndOfFileToken) {
                 return n;
             }
 
@@ -786,16 +786,14 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.EndOfFileToken || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
-                return candidate && findRightmostToken(candidate, sourceFile);
-            }
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+            return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
 
@@ -1048,7 +1046,7 @@ namespace ts {
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth(sourceFile) !== 0;
+        return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {
@@ -1165,7 +1163,7 @@ namespace ts {
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
-        return createTextRange(node.getStart(sourceFile), node.end);
+        return createRange(node.getStart(sourceFile), node.end);
     }
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
@@ -1173,7 +1171,7 @@ namespace ts {
     }
 
     export function createTextRangeFromSpan(span: TextSpan): TextRange {
-        return createTextRange(span.start, span.start + span.length);
+        return createRange(span.start, span.start + span.length);
     }
 
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
@@ -1234,13 +1232,13 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.isTypeParameter() ? type.getConstraint()! : type; // TODO: GH#18217
+        return type.isTypeParameter() ? type.getConstraint() || type : type;
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
         return name.kind === SyntaxKind.ComputedPropertyName
             // treat computed property names where expression is string/numeric literal as just string/numeric literal
-            ? isStringOrNumericLiteral(name.expression) ? name.expression.text : undefined
+            ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
             : getTextOfIdentifierOrLiteral(name);
     }
 
@@ -1656,8 +1654,34 @@ namespace ts {
         return clone;
     }
 
-    function getSynthesizedDeepCloneWorker<T extends Node>(node: T): T {
-        const visited = visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+    export function getSynthesizedDeepCloneWithRenames<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+
+        let clone;
+        if (node && isIdentifier(node!) && renameMap && checker) {
+            const symbol = checker.getSymbolAtLocation(node!);
+            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
+
+            if (renameInfo) {
+                clone = createIdentifier(renameInfo.text);
+            }
+        }
+
+        if (!clone) {
+            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
+        }
+
+        if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+        if (callback && node) callback(node!, clone);
+
+        return clone as T;
+    }
+
+
+    function getSynthesizedDeepCloneWorker<T extends Node>(node: T, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
+        const visited = (renameMap || checker || callback) ?
+        visitEachChild(node, wrapper, nullTransformationContext) :
+        visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
             const clone = getSynthesizedClone(node);
@@ -1675,6 +1699,10 @@ namespace ts {
         // would have made.
         visited.parent = undefined!;
         return visited;
+
+        function wrapper(node: T) {
+            return getSynthesizedDeepCloneWithRenames(node, /*includeTrivia*/ true, renameMap, checker, callback);
+        }
     }
 
     export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
