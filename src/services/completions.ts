@@ -1651,7 +1651,8 @@ namespace ts.Completions {
             if (!isClassLike(decl)) return GlobalsSearch.Success;
 
             const classElement = contextToken.parent;
-            let classElementModifierFlags = isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
+            // If the context token is semi token, we can think that it is already after the last entry
+            let classElementModifierFlags = contextToken.kind !== SyntaxKind.SemicolonToken && isClassElement(classElement) ? getModifierFlags(classElement) : ModifierFlags.None;
             // If this is context token is not something we are editing now, consider if this would lead to be modifier
             if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
                 switch (contextToken.getText()) {
