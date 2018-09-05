@@ -165,6 +165,14 @@ namespace ts {
         const typesVersions = readPackageJsonTypesVersionsField(jsonContent, state);
         if (typesVersions === undefined) return;
 
+        if (state.traceEnabled) {
+            for (const key in typesVersions) {
+                if (hasProperty(typesVersions, key) && !VersionRange.tryParse(key)) {
+                    trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_is_not_a_valid_semver_range, key);
+                }
+            }
+        }
+
         const result = getPackageJsonTypesVersionsPaths(typesVersions);
         if (!result) {
             if (state.traceEnabled) {

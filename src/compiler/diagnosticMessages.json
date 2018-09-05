@@ -3684,6 +3684,10 @@
         "category": "Message",
         "code": 6208
     },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
+    },
 
     "Projects to reference": {
         "category": "Message",
