@@ -1165,7 +1165,7 @@ namespace ts {
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
-        return createTextRange(node.getStart(sourceFile), node.end);
+        return createRange(node.getStart(sourceFile), node.end);
     }
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
@@ -1173,7 +1173,7 @@ namespace ts {
     }
 
     export function createTextRangeFromSpan(span: TextSpan): TextRange {
-        return createTextRange(span.start, span.start + span.length);
+        return createRange(span.start, span.start + span.length);
     }
 
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
