@@ -86,12 +86,12 @@ namespace ts {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
-        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
+        /* @internal */ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
+        /*@internal*/ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceMapSource {

@@ -410,7 +410,7 @@ namespace ts {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
                 if (!targetSourceFile) {
                     // Emit and report any errors we ran into.
-                    let sourceMaps: SourceMapData[] = [];
+                    let sourceMaps: SourceMapEmitResult[] = [];
                     let emitSkipped = false;
                     let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];

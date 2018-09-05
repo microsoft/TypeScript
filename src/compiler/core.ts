@@ -1140,13 +1140,26 @@ namespace ts {
      * @param offset An offset into `array` at which to start the search.
      */
     export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
-        if (!array || array.length === 0) {
+        return some(array) ? binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset) : -1;
+    }
+
+    /**
+     * Performs a binary search, finding the index at which an object with `key` occurs in `array`.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * `array[index]` exceeds `key`.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param key The key to be searched for in the array.
+     * @param keySelector A callback used to select the search key from each element of `array`.
+     * @param keyComparer A callback used to compare two keys in a sorted array.
+     * @param offset An offset into `array` at which to start the search.
+     */
+    export function binarySearchKey<T, U>(array: ReadonlyArray<T>, key: U, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
+        if (!some(array)) {
             return -1;
         }
 
         let low = offset || 0;
         let high = array.length - 1;
-        const key = keySelector(value);
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midKey = keySelector(array[middle]);
@@ -2128,6 +2141,76 @@ namespace ts {
         }
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
+        }
+    }
+
+    /**
+     * A list of sorted and unique values. Optimized for best performance when items are added
+     * in the sort order.
+     */
+    export class SortedUniqueList<T> implements Push<T> {
+        private relationalComparer: (a: T, b: T) => Comparison;
+        private equalityComparer: (a: T, b: T) => boolean;
+        private sortedAndUnique = true;
+        private copyOnWrite = false;
+        private unsafeArray: T[] = [];
+        private unsafeLast: T | undefined = undefined;
+
+        constructor(relationalComparer: Comparer<T>, equalityComparer: EqualityComparer<T>) {
+            this.relationalComparer = relationalComparer;
+            this.equalityComparer = equalityComparer;
+        }
+
+        get size() {
+            return this.unsafeArray.length;
+        }
+
+        get last() {
+            this.ensureSortedAndUnique();
+            return this.unsafeLast === undefined
+                ? this.unsafeLast = lastOrUndefined(this.unsafeArray)
+                : this.unsafeLast;
+        }
+
+        push(...values: T[]) {
+            for (const value of values) {
+                if (this.sortedAndUnique) {
+                    const last = this.last;
+                    if (last === undefined || this.relationalComparer(value, last) > 0) {
+                        this.unsafeAdd(value, /*sortedAndUnique*/ true);
+                        continue;
+                    }
+                    if (this.equalityComparer(value, last)) {
+                        continue;
+                    }
+                }
+                this.unsafeAdd(value, /*sortedAndUnique*/ false);
+            }
+        }
+
+        toArray(): ReadonlyArray<T> {
+            this.ensureSortedAndUnique();
+            this.copyOnWrite = true;
+            return this.unsafeArray;
+        }
+
+        private unsafeAdd(value: T, sortedAndUnique: boolean) {
+            if (this.copyOnWrite) {
+                this.unsafeArray = this.unsafeArray.slice();
+                this.copyOnWrite = false;
+            }
+
+            this.unsafeArray.push(value);
+            this.unsafeLast = sortedAndUnique ? value : undefined;
+            this.sortedAndUnique = sortedAndUnique;
+        }
+
+        private ensureSortedAndUnique() {
+            if (!this.sortedAndUnique) {
+                this.unsafeArray = deduplicateSorted(stableSort(this.unsafeArray, this.relationalComparer), this.equalityComparer);
+                this.unsafeLast = undefined;
+                this.sortedAndUnique = true;
+            }
         }
     }
 }

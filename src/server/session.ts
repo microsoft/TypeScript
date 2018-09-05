@@ -296,7 +296,7 @@ namespace ts.server {
         defaultProject: Project,
         projectService: ProjectService,
         action: (project: Project) => ReadonlyArray<T>,
-        getLocation: (t: T) => sourcemaps.SourceMappableLocation,
+        getLocation: (t: T) => DocumentPosition,
         resultsEqual: (a: T, b: T) => boolean,
     ): T[] {
         const outputs: T[] = [];
@@ -317,12 +317,12 @@ namespace ts.server {
     }
 
     function combineProjectOutputForRenameLocations(
-        projects: Projects, defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService, findInStrings: boolean, findInComments: boolean
+        projects: Projects, defaultProject: Project, initialLocation: DocumentPosition, projectService: ProjectService, findInStrings: boolean, findInComments: boolean
     ): ReadonlyArray<RenameLocation> {
         const outputs: RenameLocation[] = [];
 
-        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
-            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.position, findInStrings, findInComments) || emptyArray) {
+        combineProjectOutputWorker<DocumentPosition>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments) || emptyArray) {
                 if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                     outputs.push(output);
                 }
@@ -332,17 +332,17 @@ namespace ts.server {
         return outputs;
     }
 
-    function getDefinitionLocation(defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
-        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.position);
+    function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition): DocumentPosition | undefined {
+        const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos);
         const info = infos && firstOrUndefined(infos);
-        return info && { fileName: info.fileName, position: info.textSpan.start };
+        return info && { fileName: info.fileName, pos: info.textSpan.start };
     }
 
-    function combineProjectOutputForReferences(projects: Projects, defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
+    function combineProjectOutputForReferences(projects: Projects, defaultProject: Project, initialLocation: DocumentPosition, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
-            for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.position) || emptyArray) {
+        combineProjectOutputWorker<DocumentPosition>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+            for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.pos) || emptyArray) {
                 let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, outputReferencedSymbol.definition));
                 if (!symbolToAddTo) {
                     symbolToAddTo = { definition: outputReferencedSymbol.definition, references: [] };
@@ -360,7 +360,7 @@ namespace ts.server {
         return outputs.filter(o => o.references.length !== 0);
     }
 
-    interface ProjectAndLocation<TLocation extends sourcemaps.SourceMappableLocation | undefined> {
+    interface ProjectAndLocation<TLocation extends DocumentPosition | undefined> {
         readonly project: Project;
         readonly location: TLocation;
     }
@@ -378,19 +378,19 @@ namespace ts.server {
         }
     }
 
-    function combineProjectOutputWorker<TLocation extends sourcemaps.SourceMappableLocation | undefined>(
+    function combineProjectOutputWorker<TLocation extends DocumentPosition | undefined>(
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
         projectService: ProjectService,
-        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
-        getDefinition: (() => sourcemaps.SourceMappableLocation | undefined) | undefined,
+        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: DocumentPosition) => boolean) => void,
+        getDefinition: (() => DocumentPosition | undefined) | undefined,
     ): void {
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
         const seenProjects = createMap<true>();
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
-            // TLocation shoud be either `sourcemaps.SourceMappableLocation` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
-            const location = (initialLocation ? { fileName: path, position: initialLocation.position } : undefined) as TLocation;
+            // TLocation shoud be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
+            const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
             toDo = callbackProjectAndLocation({ project, location }, projectService, toDo, seenProjects, cb);
         });
 
@@ -411,18 +411,18 @@ namespace ts.server {
         }
     }
 
-    function getDefinitionInProject(definition: sourcemaps.SourceMappableLocation | undefined, definingProject: Project, project: Project): sourcemaps.SourceMappableLocation | undefined {
+    function getDefinitionInProject(definition: DocumentPosition | undefined, definingProject: Project, project: Project): DocumentPosition | undefined {
         if (!definition || project.containsFile(toNormalizedPath(definition.fileName))) return definition;
-        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedLocation(definition);
+        const mappedDefinition = definingProject.getLanguageService().getSourceMapper().tryGetGeneratedPosition(definition);
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
     }
 
-    function callbackProjectAndLocation<TLocation extends sourcemaps.SourceMappableLocation | undefined>(
+    function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(
         projectAndLocation: ProjectAndLocation<TLocation>,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
         seenProjects: Map<true>,
-        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: DocumentPosition) => boolean) => void,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
@@ -447,16 +447,16 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends sourcemaps.SourceMappableLocation | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
+    function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
         if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
     }
 
-    function documentSpanLocation({ fileName, textSpan }: DocumentSpan): sourcemaps.SourceMappableLocation {
-        return { fileName, position: textSpan.start };
+    function documentSpanLocation({ fileName, textSpan }: DocumentSpan): DocumentPosition {
+        return { fileName, pos: textSpan.start };
     }
 
-    function getMappedLocation(location: sourcemaps.SourceMappableLocation, projectService: ProjectService, project: Project): sourcemaps.SourceMappableLocation | undefined {
-        const mapsTo = project.getSourceMapper().tryGetOriginalLocation(location);
+    function getMappedLocation(location: DocumentPosition, projectService: ProjectService, project: Project): DocumentPosition | undefined {
+        const mapsTo = project.getSourceMapper().tryGetSourcePosition(location);
         return mapsTo && projectService.fileExists(toNormalizedPath(mapsTo.fileName)) ? mapsTo : undefined;
     }
 
@@ -864,7 +864,7 @@ namespace ts.server {
                     kind: info.kind,
                     name: info.name,
                     textSpan: {
-                        start: newLoc.position,
+                        start: newLoc.pos,
                         length: info.textSpan.length
                     },
                     originalFileName: info.fileName,
@@ -961,7 +961,7 @@ namespace ts.server {
                     kind: info.kind,
                     displayParts: info.displayParts,
                     textSpan: {
-                        start: newLoc.position,
+                        start: newLoc.pos,
                         length: info.textSpan.length
                     },
                     originalFileName: info.fileName,
@@ -1143,14 +1143,14 @@ namespace ts.server {
 
         private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | ReadonlyArray<RenameLocation> {
             const file = toNormalizedPath(args.file);
-            const position = this.getPositionInFile(args, file);
+            const pos = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
 
-            const locations = combineProjectOutputForRenameLocations(projects, this.getDefaultProject(args), { fileName: args.file, position }, this.projectService, !!args.findInStrings, !!args.findInComments);
+            const locations = combineProjectOutputForRenameLocations(projects, this.getDefaultProject(args), { fileName: args.file, pos }, this.projectService, !!args.findInStrings, !!args.findInComments);
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo = Session.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position));
+            const renameInfo = Session.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, pos));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1173,7 +1173,7 @@ namespace ts.server {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
             const position = this.getPositionInFile(args, file);
-            const references = combineProjectOutputForReferences(projects, this.getDefaultProject(args), { fileName: args.file, position }, this.projectService);
+            const references = combineProjectOutputForReferences(projects, this.getDefaultProject(args), { fileName: args.file, pos: position }, this.projectService);
 
             if (simplifiedResult) {
                 const defaultProject = this.getDefaultProject(args);

@@ -25,7 +25,7 @@ namespace ts {
     export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const originalPath = sourceMapper && sourceMapper.tryGetOriginalLocation({ fileName: path, position: 0 });
+            const originalPath = sourceMapper && sourceMapper.tryGetSourcePosition({ fileName: path, pos: 0 });
             const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
             return originalPath
                 ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)

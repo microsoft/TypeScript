@@ -1,6 +1,7 @@
 // @ts-check
 const path = require("path");
 const child_process = require("child_process");
+const fs = require("fs");
 const tsc = require("gulp-typescript");
 const Vinyl = require("vinyl");
 const { Duplex, Readable } = require("stream");
@@ -42,7 +43,10 @@ function createProject(tsConfigFileName, settings, options) {
             getVinyl(path) { return inputs.get(path); },
             getSourceFile(fileName) { return sourceFiles.get(fileName); },
             createSourceFile(fileName, text, languageVersion) {
-                if (text === undefined) throw new Error("File not cached.");
+                if (text === undefined) {
+                    text = fs.readFileSync(fileName, "utf8");
+                }
+
                 /** @type {protocol.SourceFile} */
                 let file;
                 if (options.parse) {

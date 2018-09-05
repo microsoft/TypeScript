@@ -1,6 +1,7 @@
 namespace ts {
     const infoExtension = ".tsbundleinfo";
     const brackets = createBracketsMap();
+    const syntheticParent: TextRange = { pos: -1, end: -1 };
 
     /*@internal*/
     /**
@@ -97,20 +98,11 @@ namespace ts {
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
-        const sourceMapDataList: SourceMapData[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
+        const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
         const writer = createTextWriter(newLine);
-        const sourceMap = createSourceMapWriter(host, writer);
-        const declarationSourceMap = createSourceMapWriter(host, writer, {
-            sourceMap: compilerOptions.declarationMap,
-            sourceRoot: compilerOptions.sourceRoot,
-            mapRoot: compilerOptions.mapRoot,
-            extendedDiagnostics: compilerOptions.extendedDiagnostics,
-            // Explicitly do not passthru either `inline` option
-        });
-
         let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let emitSkipped = false;
         let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
@@ -169,6 +161,7 @@ namespace ts {
                 target: compilerOptions.target,
                 sourceMap: compilerOptions.sourceMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
+                inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
             };
 
@@ -180,18 +173,10 @@ namespace ts {
                 // transform hooks
                 onEmitNode: transform.emitNodeWithNotification,
                 substituteNode: transform.substituteNode,
-
-                // sourcemap hooks
-                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
-                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
-                onEmitSourceMapOfPosition: sourceMap.emitPos,
-
-                // emitter hooks
-                onSetSourceFile: setSourceFile,
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, sourceMap);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -233,12 +218,6 @@ namespace ts {
                 // resolver hooks
                 hasGlobalName: resolver.hasGlobalName,
 
-                // sourcemap hooks
-                onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
-                onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
-                onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
-                onSetSourceFile: setSourceFileForDeclarationSourceMaps,
-
                 // transform hooks
                 onEmitNode: declarationTransform.emitNodeWithNotification,
                 substituteNode: declarationTransform.substituteNode,
@@ -247,7 +226,13 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
-                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, {
+                    sourceMap: compilerOptions.declarationMap,
+                    sourceRoot: compilerOptions.sourceRoot,
+                    mapRoot: compilerOptions.mapRoot,
+                    extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                    // Explicitly do not passthru either `inline` option
+                });
                 if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
                     const sourceFile = declarationTransform.transformed[0] as SourceFile;
                     exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
@@ -270,34 +255,56 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapOptions: SourceMapOptions) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
-            mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
+
+            let sourceMapGenerator: SourceMapGenerator | undefined;
+            if (shouldEmitSourceMaps(mapOptions, sourceFileOrBundle)) {
+                sourceMapGenerator = createSourceMapGenerator(
+                    host,
+                    getBaseFileName(normalizeSlashes(jsFilePath)),
+                    getSourceRoot(mapOptions),
+                    getSourceMapDirectory(mapOptions, jsFilePath, sourceFile),
+                    mapOptions);
+            }
 
             if (bundle) {
-                printer.writeBundle(bundle, writer, bundleInfo);
+                printer.writeBundle(bundle, bundleInfo, writer, sourceMapGenerator);
             }
             else {
-                printer.writeFile(sourceFile!, writer);
+                printer.writeFile(sourceFile!, writer, sourceMapGenerator);
             }
 
-            const sourceMappingURL = mapRecorder.getSourceMappingURL();
-            if (sourceMappingURL) {
-                if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
-                writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
+            if (sourceMapGenerator) {
+                if (sourceMapDataList) {
+                    sourceMapDataList.push({
+                        inputSourceFileNames: sourceMapGenerator.getSources(),
+                        sourceMap: sourceMapGenerator.toJSON()
+                    });
+                }
+
+                const sourceMappingURL = getSourceMappingURL(
+                    mapOptions,
+                    sourceMapGenerator,
+                    jsFilePath,
+                    sourceMapFilePath,
+                    sourceFile);
+
+                if (sourceMappingURL) {
+                    if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
+                    writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
+                }
+
+                // Write the source map
+                if (sourceMapFilePath) {
+                    const sourceMap = sourceMapGenerator.toString();
+                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                }
             }
             else {
                 writer.writeLine();
-            }
-
-            // Write the source map
-            if (sourceMapFilePath) {
-                const sourceMap = mapRecorder.getText();
-                if (sourceMap) {
-                    writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
-                }
             }
 
             // Write the output file
@@ -310,18 +317,81 @@ namespace ts {
             }
 
             // Reset state
-            mapRecorder.reset();
             writer.clear();
 
             bundleInfo = createDefaultBundleInfo();
         }
 
-        function setSourceFile(node: SourceFile) {
-            sourceMap.setSourceFile(node);
+        interface SourceMapOptions {
+            sourceMap?: boolean;
+            inlineSourceMap?: boolean;
+            inlineSources?: boolean;
+            sourceRoot?: string;
+            mapRoot?: string;
+            extendedDiagnostics?: boolean;
         }
 
-        function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
-            declarationSourceMap.setSourceFile(node);
+        function shouldEmitSourceMaps(mapOptions: SourceMapOptions, sourceFileOrBundle: SourceFile | Bundle) {
+            return (mapOptions.sourceMap || mapOptions.inlineSourceMap)
+                && (sourceFileOrBundle.kind !== SyntaxKind.SourceFile || !fileExtensionIs(sourceFileOrBundle.fileName, Extension.Json));
+        }
+
+        function getSourceRoot(mapOptions: SourceMapOptions) {
+            // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
+            // relative paths of the sources list in the sourcemap
+            const sourceRoot = normalizeSlashes(mapOptions.sourceRoot || "");
+            return sourceRoot ? ensureTrailingDirectorySeparator(sourceRoot) : sourceRoot;
+        }
+
+        function getSourceMapDirectory(mapOptions: SourceMapOptions, filePath: string, sourceFile: SourceFile | undefined) {
+            if (mapOptions.sourceRoot) return host.getCommonSourceDirectory();
+            if (mapOptions.mapRoot) {
+                let sourceMapDir = normalizeSlashes(mapOptions.mapRoot);
+                if (sourceFile) {
+                    // For modules or multiple emit files the mapRoot will have directory structure like the sources
+                    // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFile.fileName, host, sourceMapDir));
+                }
+                if (getRootLength(sourceMapDir) === 0) {
+                    // The relative paths are relative to the common directory
+                    sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
+                }
+                return sourceMapDir;
+            }
+            return getDirectoryPath(normalizePath(filePath));
+        }
+
+        function getSourceMappingURL(mapOptions: SourceMapOptions, sourceMapGenerator: SourceMapGenerator, filePath: string, sourceMapFilePath: string | undefined, sourceFile: SourceFile | undefined) {
+            if (mapOptions.inlineSourceMap) {
+                // Encode the sourceMap into the sourceMap url
+                const sourceMapText = sourceMapGenerator.toString();
+                const base64SourceMapText = base64encode(sys, sourceMapText);
+                return `data:application/json;base64,${base64SourceMapText}`;
+            }
+
+            const sourceMapFile = getBaseFileName(normalizeSlashes(Debug.assertDefined(sourceMapFilePath)));
+            if (mapOptions.mapRoot) {
+                let sourceMapDir = normalizeSlashes(mapOptions.mapRoot);
+                if (sourceFile) {
+                    // For modules or multiple emit files the mapRoot will have directory structure like the sources
+                    // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFile.fileName, host, sourceMapDir));
+                }
+                if (getRootLength(sourceMapDir) === 0) {
+                    // The relative paths are relative to the common directory
+                    sourceMapDir = combinePaths(host.getCommonSourceDirectory(), sourceMapDir);
+                    return getRelativePathToDirectoryOrUrl(
+                        getDirectoryPath(normalizePath(filePath)), // get the relative sourceMapDir path based on jsFilePath
+                        combinePaths(sourceMapDir, sourceMapFile), // this is where user expects to see sourceMap
+                        host.getCurrentDirectory(),
+                        host.getCanonicalFileName,
+                        /*isAbsolutePathAnUrl*/ true);
+                }
+                else {
+                    return combinePaths(sourceMapDir, sourceMapFile);
+                }
+            }
+            return sourceMapFile;
         }
     }
 
@@ -335,11 +405,11 @@ namespace ts {
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
         const {
             hasGlobalName,
-            onEmitSourceMapOfNode,
-            onEmitSourceMapOfToken,
-            onEmitSourceMapOfPosition,
+            // onEmitSourceMapOfNode,
+            // onEmitSourceMapOfToken,
+            // onEmitSourceMapOfPosition,
+            // onSetSourceFile,
             onEmitNode,
-            onSetSourceFile,
             substituteNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
@@ -347,14 +417,10 @@ namespace ts {
             onAfterEmitToken
         } = handlers;
 
+        const extendedDiagnostics = printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
-        const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
-        const {
-            emitNodeWithComments,
-            emitBodyWithDetachedComments,
-            emitTrailingCommentsOfPosition,
-            emitLeadingCommentsOfPosition,
-        } = comments;
+        const moduleKind = getEmitModuleKind(printerOptions);
+        const bundledHelpers = createMap<boolean>();
 
         let currentSourceFile!: SourceFile;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -366,12 +432,24 @@ namespace ts {
         let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
 
         let writer: EmitTextWriter;
-        let ownWriter: EmitTextWriter;
+        let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
         let write = writeBase;
-        const syntheticParent: TextRange = { pos: -1, end: -1 };
-        const moduleKind = getEmitModuleKind(printerOptions);
-        const bundledHelpers = createMap<boolean>();
         let isOwnFileEmit: boolean;
+
+        // Source Maps
+        let sourceMapsDisabled = true;
+        let sourceMapGenerator: SourceMapGenerator | undefined;
+        let sourceMapSource!: SourceMapSource;
+        let sourceMapSourceIndex = -1;
+
+        // Comments
+        let containerPos = -1;
+        let containerEnd = -1;
+        let declarationListContainerEnd = -1;
+        let currentLineMap: ReadonlyArray<number> | undefined;
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
+        let hasWrittenComment = false;
+        let commentsDisabled = !!printerOptions.removeComments;
 
         reset();
         return {
@@ -415,12 +493,12 @@ namespace ts {
         }
 
         function printBundle(bundle: Bundle): string {
-            writeBundle(bundle, beginPrint());
+            writeBundle(bundle, /*bundleInfo*/ undefined, beginPrint(), /*sourceMapEmitter*/ undefined);
             return endPrint();
         }
 
         function printFile(sourceFile: SourceFile): string {
-            writeFile(sourceFile, beginPrint());
+            writeFile(sourceFile, beginPrint(), /*sourceMapEmitter*/ undefined);
             return endPrint();
         }
 
@@ -436,7 +514,7 @@ namespace ts {
         function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, output: EmitTextWriter): void;
         function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
             const previousWriter = writer;
-            setWriter(output);
+            setWriter(output, /*_sourceMapGenerator*/ undefined);
             print(hint, node, sourceFile);
             reset();
             writer = previousWriter;
@@ -444,7 +522,7 @@ namespace ts {
 
         function writeList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
             const previousWriter = writer;
-            setWriter(output);
+            setWriter(output, /*_sourceMapGenerator*/ undefined);
             if (sourceFile) {
                 setSourceFile(sourceFile);
             }
@@ -453,10 +531,10 @@ namespace ts {
             writer = previousWriter;
         }
 
-        function writeBundle(bundle: Bundle, output: EmitTextWriter, bundleInfo?: BundleInfo) {
+        function writeBundle(bundle: Bundle, bundleInfo: BundleInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = false;
             const previousWriter = writer;
-            setWriter(output);
+            setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(bundle);
             emitPrologueDirectivesIfNeeded(bundle);
             emitHelpers(bundle);
@@ -480,16 +558,16 @@ namespace ts {
 
         function writeUnparsedSource(unparsed: UnparsedSource, output: EmitTextWriter) {
             const previousWriter = writer;
-            setWriter(output);
+            setWriter(output, /*_sourceMapGenerator*/ undefined);
             print(EmitHint.Unspecified, unparsed, /*sourceFile*/ undefined);
             reset();
             writer = previousWriter;
         }
 
-        function writeFile(sourceFile: SourceFile, output: EmitTextWriter) {
+        function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = true;
             const previousWriter = writer;
-            setWriter(output);
+            setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(sourceFile);
             emitPrologueDirectivesIfNeeded(sourceFile);
             print(EmitHint.SourceFile, sourceFile, sourceFile);
@@ -518,18 +596,19 @@ namespace ts {
 
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
-            comments.setSourceFile(sourceFile);
-            if (onSetSourceFile) {
-                onSetSourceFile(sourceFile);
-            }
+            currentLineMap = undefined;
+            detachedCommentsInfo = undefined;
+            setSourceMapSource(sourceFile);
         }
 
-        function setWriter(output: EmitTextWriter | undefined) {
-            if (output && printerOptions.omitTrailingSemicolon) {
-                output = getTrailingSemicolonOmittingWriter(output);
+        function setWriter(_writer: EmitTextWriter | undefined, _sourceMapGenerator: SourceMapGenerator | undefined) {
+            if (_writer && printerOptions.omitTrailingSemicolon) {
+                _writer = getTrailingSemicolonOmittingWriter(_writer);
             }
-            writer = output!; // TODO: GH#18217
-            comments.setWriter(output!);
+
+            writer = _writer!; // TODO: GH#18217
+            sourceMapGenerator = _sourceMapGenerator;
+            sourceMapsDisabled = !writer || !sourceMapGenerator;
         }
 
         function reset() {
@@ -539,8 +618,14 @@ namespace ts {
             tempFlagsStack = [];
             tempFlags = TempFlags.Auto;
             reservedNamesStack = [];
-            comments.reset();
-            setWriter(/*output*/ undefined);
+            currentSourceFile = undefined!;
+            currentLineMap = undefined!;
+            detachedCommentsInfo = undefined;
+            setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
+        }
+
+        function getCurrentLineMap() {
+            return currentLineMap || (currentLineMap = getLineStarts(currentSourceFile));
         }
 
         function emit(node: Node | undefined) {
@@ -576,7 +661,7 @@ namespace ts {
                     return pipelineEmitWithoutComments;
 
                 case PipelinePhase.SourceMaps:
-                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile) {
+                    if (!sourceMapsDisabled && hint !== EmitHint.SourceFile) {
                         return pipelineEmitWithSourceMap;
                     }
                     // falls through
@@ -610,7 +695,8 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             Debug.assert(hint !== EmitHint.SourceFile);
-            Debug.assertDefined(onEmitSourceMapOfNode)(hint, node, pipelineEmitWithHint);
+            Debug.assertDefined(sourceMapGenerator);
+            emitNodeWithSourceMap(hint, node, pipelineEmitWithHint);
         }
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
@@ -3066,6 +3152,8 @@ namespace ts {
             }
         }
 
+        // Writers
+
         function writeLiteral(s: string) {
             writer.writeLiteral(s);
         }
@@ -3127,8 +3215,8 @@ namespace ts {
         }
 
         function writeToken(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node) {
-            return onEmitSourceMapOfToken
-                ? onEmitSourceMapOfToken(contextNode, token, writer, pos, writeTokenText)
+            return !sourceMapsDisabled
+                ? emitTokenWithSourceMap(contextNode, token, writer, pos, writeTokenText)
                 : writeTokenText(token, writer, pos);
         }
 
@@ -3728,6 +3816,533 @@ namespace ts {
 
             // otherwise, return the original node for the source;
             return node;
+        }
+
+        // Comments
+
+        function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (commentsDisabled) {
+                emitCallback(hint, node);
+                return;
+            }
+
+            if (node) {
+                hasWrittenComment = false;
+
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags || 0;
+                const { pos, end } = emitNode && emitNode.commentRange || node;
+                if ((pos < 0 && end < 0) || (pos === end)) {
+                    // Both pos and end are synthesized, so just emit the node without comments.
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
+                }
+                else {
+                    if (extendedDiagnostics) {
+                        performance.mark("preEmitNodeWithComment");
+                    }
+
+                    const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
+                    // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
+                    // It is expensive to walk entire tree just to set one kind of node to have no comments.
+                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+
+                    // Emit leading comments if the position is not synthesized and the node
+                    // has not opted out from emitting leading comments.
+                    if (!skipLeadingComments) {
+                        emitLeadingComments(pos, isEmittedNode);
+                    }
+
+                    // Save current container state on the stack.
+                    const savedContainerPos = containerPos;
+                    const savedContainerEnd = containerEnd;
+                    const savedDeclarationListContainerEnd = declarationListContainerEnd;
+
+                    if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
+                        // Advance the container position of comments get emitted or if they've been disabled explicitly using NoLeadingComments.
+                        containerPos = pos;
+                    }
+
+                    if (!skipTrailingComments || (end >= 0 && (emitFlags & EmitFlags.NoTrailingComments) !== 0)) {
+                        // As above.
+                        containerEnd = end;
+
+                        // To avoid invalid comment emit in a down-level binding pattern, we
+                        // keep track of the last declaration list container's end
+                        if (node.kind === SyntaxKind.VariableDeclarationList) {
+                            declarationListContainerEnd = end;
+                        }
+                    }
+
+                    if (extendedDiagnostics) {
+                        performance.measure("commentTime", "preEmitNodeWithComment");
+                    }
+
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
+
+                    if (extendedDiagnostics) {
+                        performance.mark("postEmitNodeWithComment");
+                    }
+
+                    // Restore previous container state.
+                    containerPos = savedContainerPos;
+                    containerEnd = savedContainerEnd;
+                    declarationListContainerEnd = savedDeclarationListContainerEnd;
+
+                    // Emit trailing comments if the position is not synthesized and the node
+                    // has not opted out from emitting leading comments and is an emitted node.
+                    if (!skipTrailingComments && isEmittedNode) {
+                        emitTrailingComments(end);
+                    }
+
+                    if (extendedDiagnostics) {
+                        performance.measure("commentTime", "postEmitNodeWithComment");
+                    }
+                }
+            }
+        }
+
+        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode | undefined, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const leadingComments = emitNode && emitNode.leadingComments;
+            if (some(leadingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("preEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(leadingComments, emitLeadingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "preEmitNodeWithSynthesizedComments");
+                }
+            }
+
+            emitNodeWithNestedComments(hint, node, emitFlags, emitCallback);
+
+            const trailingComments = emitNode && emitNode.trailingComments;
+            if (some(trailingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("postEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(trailingComments, emitTrailingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "postEmitNodeWithSynthesizedComments");
+                }
+            }
+        }
+
+        function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
+            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            else {
+                writer.writeSpace(" ");
+            }
+        }
+
+        function emitTrailingSynthesizedComment(comment: SynthesizedComment) {
+            if (!writer.isAtStartOfLine()) {
+                writer.writeSpace(" ");
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+        }
+
+        function writeSynthesizedComment(comment: SynthesizedComment) {
+            const text = formatSynthesizedComment(comment);
+            const lineMap = comment.kind === SyntaxKind.MultiLineCommentTrivia ? computeLineStarts(text) : undefined;
+            writeCommentRange(text, lineMap!, writer, 0, text.length, newLine);
+        }
+
+        function formatSynthesizedComment(comment: SynthesizedComment) {
+            return comment.kind === SyntaxKind.MultiLineCommentTrivia
+                ? `/*${comment.text}*/`
+                : `//${comment.text}`;
+        }
+
+        function emitNodeWithNestedComments(hint: EmitHint, node: Node, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                commentsDisabled = true;
+                emitCallback(hint, node);
+                commentsDisabled = false;
+            }
+            else {
+                emitCallback(hint, node);
+            }
+        }
+
+        function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
+            if (extendedDiagnostics) {
+                performance.mark("preEmitBodyWithDetachedComments");
+            }
+
+            const { pos, end } = detachedRange;
+            const emitFlags = getEmitFlags(node);
+            const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+            const skipTrailingComments = commentsDisabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
+
+            if (!skipLeadingComments) {
+                emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
+            }
+
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", "preEmitBodyWithDetachedComments");
+            }
+
+            if (emitFlags & EmitFlags.NoNestedComments && !commentsDisabled) {
+                commentsDisabled = true;
+                emitCallback(node);
+                commentsDisabled = false;
+            }
+            else {
+                emitCallback(node);
+            }
+
+            if (extendedDiagnostics) {
+                performance.mark("beginEmitBodyWithDetachedCommetns");
+            }
+
+            if (!skipTrailingComments) {
+                emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
+                if (hasWrittenComment && !writer.isAtStartOfLine()) {
+                    writer.writeLine();
+                }
+            }
+
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
+            }
+        }
+
+        function emitLeadingComments(pos: number, isEmittedNode: boolean) {
+            hasWrittenComment = false;
+
+            if (isEmittedNode) {
+                forEachLeadingCommentToEmit(pos, emitLeadingComment);
+            }
+            else if (pos === 0) {
+                // If the node will not be emitted in JS, remove all the comments(normal, pinned and ///) associated with the node,
+                // unless it is a triple slash comment at the top of the file.
+                // For Example:
+                //      /// <reference-path ...>
+                //      declare var x;
+                //      /// <reference-path ...>
+                //      interface F {}
+                //  The first /// will NOT be removed while the second one will be removed even though both node will not be emitted
+                forEachLeadingCommentToEmit(pos, emitTripleSlashLeadingComment);
+            }
+        }
+
+        function emitTripleSlashLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (isTripleSlashComment(commentPos, commentEnd)) {
+                emitLeadingComment(commentPos, commentEnd, kind, hasTrailingNewLine, rangePos);
+            }
+        }
+
+        function shouldWriteComment(text: string, pos: number) {
+            if (printerOptions.onlyPrintJsDocStyle) {
+                return (isJSDocLikeText(text, pos) || isPinnedComment(text, pos));
+            }
+            return true;
+        }
+
+        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            if (!hasWrittenComment) {
+                emitNewLineBeforeLeadingCommentOfPosition(getCurrentLineMap(), writer, rangePos, commentPos);
+                hasWrittenComment = true;
+            }
+
+            // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                writer.writeSpace(" ");
+            }
+        }
+
+        function emitLeadingCommentsOfPosition(pos: number) {
+            if (commentsDisabled || pos === -1) {
+                return;
+            }
+
+            emitLeadingComments(pos, /*isEmittedNode*/ true);
+        }
+
+        function emitTrailingComments(pos: number) {
+            forEachTrailingCommentToEmit(pos, emitTrailingComment);
+        }
+
+        function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
+            if (!writer.isAtStartOfLine()) {
+                writer.writeSpace(" ");
+            }
+
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
+        }
+
+        function emitTrailingCommentsOfPosition(pos: number, prefixSpace?: boolean) {
+            if (commentsDisabled) {
+                return;
+            }
+
+            if (extendedDiagnostics) {
+                performance.mark("beforeEmitTrailingCommentsOfPosition");
+            }
+
+            forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
+
+            if (extendedDiagnostics) {
+                performance.measure("commentTime", "beforeEmitTrailingCommentsOfPosition");
+            }
+        }
+
+        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
+            // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
+
+            emitPos(commentPos);
+            writeCommentRange(currentSourceFile.text, getCurrentLineMap(), writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+
+            if (hasTrailingNewLine) {
+                writer.writeLine();
+            }
+            else {
+                writer.writeSpace(" ");
+            }
+        }
+
+        function forEachLeadingCommentToEmit(pos: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+            // Emit the leading comments only if the container's pos doesn't match because the container should take care of emitting these comments
+            if (containerPos === -1 || pos !== containerPos) {
+                if (hasDetachedComments(pos)) {
+                    forEachLeadingCommentWithoutDetachedComments(cb);
+                }
+                else {
+                    forEachLeadingCommentRange(currentSourceFile.text, pos, cb, /*state*/ pos);
+                }
+            }
+        }
+
+        function forEachTrailingCommentToEmit(end: number, cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) => void) {
+            // Emit the trailing comments only if the container's end doesn't match because the container should take care of emitting these comments
+            if (containerEnd === -1 || (end !== containerEnd && end !== declarationListContainerEnd)) {
+                forEachTrailingCommentRange(currentSourceFile.text, end, cb);
+            }
+        }
+
+        function hasDetachedComments(pos: number) {
+            return detachedCommentsInfo !== undefined && last(detachedCommentsInfo).nodePos === pos;
+        }
+
+        function forEachLeadingCommentWithoutDetachedComments(cb: (commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) => void) {
+            // get the leading comments from detachedPos
+            const pos = last(detachedCommentsInfo!).detachedCommentEndPos;
+            if (detachedCommentsInfo!.length - 1) {
+                detachedCommentsInfo!.pop();
+            }
+            else {
+                detachedCommentsInfo = undefined;
+            }
+
+            forEachLeadingCommentRange(currentSourceFile.text, pos, cb, /*state*/ pos);
+        }
+
+        function emitDetachedCommentsAndUpdateCommentsInfo(range: TextRange) {
+            const currentDetachedCommentInfo = emitDetachedComments(currentSourceFile.text, getCurrentLineMap(), writer, emitComment, range, newLine, commentsDisabled);
+            if (currentDetachedCommentInfo) {
+                if (detachedCommentsInfo) {
+                    detachedCommentsInfo.push(currentDetachedCommentInfo);
+                }
+                else {
+                    detachedCommentsInfo = [currentDetachedCommentInfo];
+                }
+            }
+        }
+
+        function emitComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
+            if (!shouldWriteComment(currentSourceFile.text, commentPos)) return;
+            emitPos(commentPos);
+            writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
+            emitPos(commentEnd);
+        }
+
+        /**
+         * Determine if the given comment is a triple-slash
+         *
+         * @return true if the comment is a triple-slash comment else false
+         */
+        function isTripleSlashComment(commentPos: number, commentEnd: number) {
+            return isRecognizedTripleSlashComment(currentSourceFile.text, commentPos, commentEnd);
+        }
+
+        // Source Maps
+
+        /**
+         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         */
+        function skipSourceTrivia(pos: number): number {
+            return sourceMapSource.skipTrivia ? sourceMapSource.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
+        }
+
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
+        function emitPos(pos: number) {
+            if (sourceMapsDisabled || positionIsSynthesized(pos) || isJsonSourceMapSource(sourceMapSource)) {
+                return;
+            }
+
+            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(currentSourceFile, pos);
+            sourceMapGenerator!.addMapping(
+                writer.getLine(),
+                writer.getColumn(),
+                sourceMapSourceIndex,
+                sourceLine,
+                sourceCharacter,
+                /*nameIndex*/ undefined);
+        }
+
+        /**
+         * Emits a node with possible leading and trailing source maps.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
+         */
+        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (sourceMapsDisabled || isInJsonFile(node)) {
+                return emitCallback(hint, node);
+            }
+
+            if (node) {
+                if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
+                    const parsed = tryParseRawSourceMap(node.sourceMapText);
+                    if (parsed) {
+                        sourceMapGenerator!.appendSourceMap(
+                            writer.getLine(),
+                            writer.getColumn(),
+                            parsed,
+                            node.sourceMapPath!);
+                    }
+                    return emitCallback(hint, node);
+                }
+
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
+                const range = emitNode && emitNode.sourceMapRange;
+                const { pos, end } = range || node;
+                let source = range && range.source;
+
+                const oldSource = sourceMapSource;
+                if (source === oldSource) source = undefined;
+                if (source) setSourceMapSource(source);
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+                    && pos >= 0) {
+                    emitPos(skipSourceTrivia(pos));
+                }
+
+                if (source) setSourceMapSource(oldSource);
+
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
+                    sourceMapsDisabled = true;
+                    emitCallback(hint, node);
+                    sourceMapsDisabled = false;
+                }
+                else {
+                    emitCallback(hint, node);
+                }
+
+                if (source) setSourceMapSource(source);
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                    && end >= 0) {
+                    emitPos(end);
+                }
+
+                if (source) setSourceMapSource(oldSource);
+            }
+        }
+
+        /**
+         * Emits a token of a node with possible leading and trailing source maps.
+         *
+         * @param node The node containing the token.
+         * @param token The token to emit.
+         * @param tokenStartPos The start pos of the token.
+         * @param emitCallback The callback used to emit the token.
+         */
+        function emitTokenWithSourceMap(node: Node | undefined, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
+            if (sourceMapsDisabled || node && isInJsonFile(node)) {
+                return emitCallback(token, writer, tokenPos);
+            }
+
+            const emitNode = node && node.emitNode;
+            const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
+            const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
+
+            tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
+            if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            tokenPos = emitCallback(token, writer, tokenPos);
+
+            if (range) tokenPos = range.end;
+            if ((emitFlags & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            return tokenPos;
+        }
+
+        function setSourceMapSource(source: SourceMapSource) {
+            if (sourceMapsDisabled) {
+                return;
+            }
+
+            sourceMapSource = source;
+
+            if (isJsonSourceMapSource(source)) {
+                return;
+            }
+
+            sourceMapSourceIndex = sourceMapGenerator!.addSource(source.fileName);
+            if (printerOptions.inlineSources) {
+                sourceMapGenerator!.setSourceContent(sourceMapSourceIndex, source.text);
+            }
+        }
+
+        function isJsonSourceMapSource(sourceFile: SourceMapSource) {
+            return fileExtensionIs(sourceFile.fileName, Extension.Json);
         }
     }
 

@@ -2131,8 +2131,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getOriginalLocationEnsuringConfiguredProject(project: Project, location: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
-            const originalLocation = project.getSourceMapper().tryGetOriginalLocation(location);
+        getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
+            const originalLocation = project.getSourceMapper().tryGetSourcePosition(location);
             if (!originalLocation) return undefined;
 
             const { fileName } = originalLocation;
