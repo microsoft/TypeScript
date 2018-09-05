@@ -38,7 +38,7 @@ class Foo {
     }
 }
 var f = new Foo(1)
->f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
+>f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3), Decl(templateTagOnClasses.js, 23, 22))
 >Foo : Symbol(Foo, Decl(templateTagOnClasses.js, 0, 0))
 
 var g = new Foo(false)
@@ -47,7 +47,7 @@ var g = new Foo(false)
 
 f.a = g.a
 >f.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
->f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3))
+>f : Symbol(f, Decl(templateTagOnClasses.js, 22, 3), Decl(templateTagOnClasses.js, 23, 22))
 >a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >g.a : Symbol(Foo.a, Decl(templateTagOnClasses.js, 8, 21))
 >g : Symbol(g, Decl(templateTagOnClasses.js, 23, 3))
