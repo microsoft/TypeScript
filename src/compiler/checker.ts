@@ -1703,6 +1703,9 @@ namespace ts {
                 }
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
+                    if (compilerOptions.preserveConstEnums) {
+                        diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                    }
                 }
 
                 if (diagnosticMessage) {
@@ -22981,6 +22984,12 @@ namespace ts {
             }
         }
 
+        const enum DeclarationSpaces {
+            None = 0,
+            ExportValue = 1 << 0,
+            ExportType = 1 << 1,
+            ExportNamespace = 1 << 2,
+        }
         function checkExportsOnMergedDeclarations(node: Node): void {
             if (!produceDiagnostics) {
                 return;
@@ -23045,12 +23054,6 @@ namespace ts {
                 }
             }
 
-            const enum DeclarationSpaces {
-                None = 0,
-                ExportValue = 1 << 0,
-                ExportType = 1 << 1,
-                ExportNamespace = 1 << 2,
-            }
             function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
                 let d = decl as Node;
                 switch (d.kind) {
