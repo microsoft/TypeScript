@@ -20,18 +20,18 @@ C.prototype.m = function() {
 >y : Symbol(C.y, Decl(a.js, 4, 28))
 }
 var c = new C(1)
->c : Symbol(c, Decl(a.js, 7, 3))
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16))
 >C : Symbol(C, Decl(a.js, 0, 0))
 
 c.x = undefined // should error
 >c.x : Symbol(C.x, Decl(a.js, 1, 15))
->c : Symbol(c, Decl(a.js, 7, 3))
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16))
 >x : Symbol(C.x, Decl(a.js, 1, 15))
 >undefined : Symbol(undefined)
 
 c.y = undefined // ok
 >c.y : Symbol(C.y, Decl(a.js, 4, 28))
->c : Symbol(c, Decl(a.js, 7, 3))
+>c : Symbol(c, Decl(a.js, 7, 3), Decl(a.js, 7, 16))
 >y : Symbol(C.y, Decl(a.js, 4, 28))
 >undefined : Symbol(undefined)
 

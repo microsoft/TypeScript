@@ -1731,10 +1731,6 @@ namespace ts {
             }
         }
 
-        function bindBlockScopedVariableDeclaration(node: Declaration) {
-            bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
-        }
-
         function delayedBindJSDocTypedefTag() {
             if (!delayedTypeAliases) {
                 return;
@@ -2080,8 +2076,8 @@ namespace ts {
                     if (isInJavaScriptFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
-                        !lookupSymbolForNameWorker(container, "module" as __String)) {
-                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        declareSymbol(file.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
                     break;
@@ -2512,11 +2508,10 @@ namespace ts {
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(name);
-            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
-                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
+            const isToplevel = isBinaryExpression(propertyAccess.parent)
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
+            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
@@ -2573,7 +2568,7 @@ namespace ts {
             return false;
         }
 
-        function getParentOfBinaryExpression(expr: BinaryExpression) {
+        function getParentOfBinaryExpression(expr: Node) {
             while (isBinaryExpression(expr.parent)) {
                 expr = expr.parent;
             }
@@ -2660,8 +2655,11 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
+                const isEnum = !!getJSDocEnumTag(node);
+                const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
+                const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
-                    bindBlockScopedVariableDeclaration(node);
+                    bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable | enumFlags, SymbolFlags.BlockScopedVariableExcludes | enumExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
                     // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
@@ -2676,7 +2674,7 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable | enumFlags, SymbolFlags.FunctionScopedVariableExcludes | enumExcludes);
                 }
             }
         }

@@ -490,12 +490,23 @@ namespace ts {
         return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
     }
 
+    function isJSDocTypeExpressionOrChild(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+    }
+
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
-        return sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+        let text = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+
+        if (isJSDocTypeExpressionOrChild(node)) {
+            // strip space + asterisk at line start
+            text = text.replace(/(^|\r?\n|\r)\s*\*\s*/g, "$1");
+        }
+
+        return text;
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -909,6 +920,10 @@ namespace ts {
 
     export function isEnumConst(node: EnumDeclaration): boolean {
         return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
+    }
+
+    export function isDeclarationReadonly(declaration: Declaration): boolean {
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
     }
 
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -4045,7 +4060,8 @@ namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    export function createRange(pos: number, end: number): TextRange {
+    export function createRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos || end === -1);
         return { pos, end };
     }
 
@@ -4507,12 +4523,6 @@ namespace ts {
         }
 
         return { start, length };
-    }
-
-    /* @internal */
-    export function createTextRange(pos: number, end: number = pos): TextRange {
-        Debug.assert(end >= pos);
-        return { pos, end };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
