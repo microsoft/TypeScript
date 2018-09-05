@@ -19246,14 +19246,17 @@ namespace ts {
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments!, /*reportErrors*/ true, fallbackError);
             }
-            else if (typeArguments && every(signatures, sig => typeArguments!.length < getMinTypeArgumentCount(sig.typeParameters) || typeArguments!.length > length(sig.typeParameters))) {
-                diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
-            }
-            else if (!isDecorator) {
-                diagnostics.add(getArgumentArityError(node, signatures, args));
-            }
-            else if (fallbackError) {
-                diagnostics.add(createDiagnosticForNode(node, fallbackError));
+            else {
+                const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
+                if (signaturesWithCorrectTypeArgumentArity.length === 0) {
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                }
+                else if (!isDecorator) {
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
+                }
+                else if (fallbackError) {
+                    diagnostics.add(createDiagnosticForNode(node, fallbackError));
+                }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
