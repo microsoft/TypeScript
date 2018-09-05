@@ -461,7 +461,7 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if (isJSDocTypeAlias(node)) Debug.assert(isInJavascriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
+                if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
@@ -2011,7 +2011,7 @@ namespace ts {
 
         function bindJSDoc(node: Node) {
             if (hasJSDocNodes(node)) {
-                if (isInJavascriptFile(node)) {
+                if (isInJSFile(node)) {
                     for (const j of node.jsDoc!) {
                         bind(j);
                     }
@@ -2077,7 +2077,7 @@ namespace ts {
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
-                    if (isInJavascriptFile(node) &&
+                    if (isInJSFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
                         !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
@@ -2186,7 +2186,7 @@ namespace ts {
                     return bindFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.CallExpression:
-                    if (isInJavascriptFile(node)) {
+                    if (isInJSFile(node)) {
                         bindCallExpression(<CallExpression>node);
                     }
                     break;
@@ -2396,7 +2396,7 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
-            Debug.assert(isInJavascriptFile(node));
+            Debug.assert(isInJSFile(node));
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -2484,7 +2484,7 @@ namespace ts {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Class declarations in Typescript do not allow property declarations
             const parentSymbol = lookupSymbolForPropertyAccess(lhs.expression);
-            if (!isInJavascriptFile(node) && !isFunctionSymbol(parentSymbol)) {
+            if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them

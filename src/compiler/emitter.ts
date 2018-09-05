@@ -52,7 +52,7 @@ namespace ts {
             const jsFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
             const sourceMapFilePath = isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
-            const isJs = isSourceFileJavascript(sourceFile);
+            const isJs = isSourceFileJS(sourceFile);
             const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
             const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath: undefined };
@@ -80,7 +80,7 @@ namespace ts {
         }
 
         if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJavascript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
                     return Extension.Jsx;
                 }
@@ -187,7 +187,7 @@ namespace ts {
         }
 
         function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
-            if (!(declarationFilePath && !isInJavascriptFile(sourceFileOrBundle))) {
+            if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;

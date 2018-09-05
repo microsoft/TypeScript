@@ -1446,7 +1446,7 @@ namespace ts {
                 }
             }
             if (!result) {
-                if (originalLocation && isInJavascriptFile(originalLocation) && originalLocation.parent) {
+                if (originalLocation && isInJSFile(originalLocation) && originalLocation.parent) {
                     if (isRequireCall(originalLocation.parent, /*checkArgumentIsStringLiteralLike*/ false)) {
                         return requireSymbol;
                     }
@@ -1622,7 +1622,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            const namespaceMeaning = SymbolFlags.Namespace | (isInJavascriptFile(errorLocation) ? SymbolFlags.Value : 0);
+            const namespaceMeaning = SymbolFlags.Namespace | (isInJSFile(errorLocation) ? SymbolFlags.Value : 0);
             if (meaning === namespaceMeaning) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~namespaceMeaning, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 const parent = errorLocation.parent;
@@ -1782,7 +1782,7 @@ namespace ts {
                 return true;
             }
             // TypeScript files never have a synthetic default (as they are always emitted with an __esModule marker) _unless_ they contain an export= statement
-            if (!isSourceFileJavascript(file)) {
+            if (!isSourceFileJS(file)) {
                 return hasExportAssignmentSymbol(moduleSymbol);
             }
             // JS files have a synthetic default if they do not contain ES2015+ module syntax (export = is not valid in js) _and_ do not have an __esModule marker
@@ -2075,11 +2075,11 @@ namespace ts {
                 return undefined;
             }
 
-            const namespaceMeaning = SymbolFlags.Namespace | (isInJavascriptFile(name) ? meaning & SymbolFlags.Value : 0);
+            const namespaceMeaning = SymbolFlags.Namespace | (isInJSFile(name) ? meaning & SymbolFlags.Value : 0);
             let symbol: Symbol | undefined;
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning ? Diagnostics.Cannot_find_namespace_0 : Diagnostics.Cannot_find_name_0;
-                const symbolFromJSPrototype = isInJavascriptFile(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
+                const symbolFromJSPrototype = isInJSFile(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
                 symbol = resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true);
                 if (!symbol) {
                     return symbolFromJSPrototype;
@@ -2095,7 +2095,7 @@ namespace ts {
                 else if (namespace === unknownSymbol) {
                     return namespace;
                 }
-                if (isInJavascriptFile(name)) {
+                if (isInJSFile(name)) {
                     if (namespace.valueDeclaration &&
                         isVariableDeclaration(namespace.valueDeclaration) &&
                         namespace.valueDeclaration.initializer &&
@@ -4712,7 +4712,7 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
-            if ((noImplicitAny || isInJavascriptFile(declaration)) &&
+            if ((noImplicitAny || isInJSFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
@@ -4744,7 +4744,7 @@ namespace ts {
                         return getReturnTypeOfSignature(getterSignature);
                     }
                 }
-                if (isInJavascriptFile(declaration)) {
+                if (isInJSFile(declaration)) {
                     const typeTag = getJSDocType(func);
                     if (typeTag && isFunctionTypeNode(typeTag)) {
                         return getTypeAtPosition(getSignatureFromDeclaration(typeTag), func.parameters.indexOf(declaration));
@@ -4756,7 +4756,7 @@ namespace ts {
                     return addOptionality(type, isOptional);
                 }
             }
-            else if (isInJavascriptFile(declaration)) {
+            else if (isInJSFile(declaration)) {
                 const containerObjectType = getJSContainerObjectType(declaration, getSymbolOfNode(declaration), getDeclaredExpandoInitializer(declaration));
                 if (containerObjectType) {
                     return containerObjectType;
@@ -4846,7 +4846,7 @@ namespace ts {
         }
 
         function getJSContainerObjectType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (!isInJavascriptFile(decl) || !init || !isObjectLiteralExpression(init) || init.properties.length) {
+            if (!isInJSFile(decl) || !init || !isObjectLiteralExpression(init) || init.properties.length) {
                 return undefined;
             }
             const exports = createSymbolTable();
@@ -5127,7 +5127,7 @@ namespace ts {
                 return errorType;
             }
             let type: Type | undefined;
-            if (isInJavascriptFile(declaration) &&
+            if (isInJSFile(declaration) &&
                 (isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
                 type = getWidenedTypeFromAssignmentDeclaration(symbol);
             }
@@ -5212,7 +5212,7 @@ namespace ts {
             const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
             const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
-            if (getter && isInJavascriptFile(getter)) {
+            if (getter && isInJSFile(getter)) {
                 const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
                 if (jsDocType) {
                     return jsDocType;
@@ -5542,7 +5542,7 @@ namespace ts {
 
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
             const typeArgCount = length(typeArgumentNodes);
-            const isJavascript = isInJavascriptFile(location);
+            const isJavascript = isInJSFile(location);
             if (isJavascriptConstructorType(type) && !typeArgCount) {
                 return getSignaturesOfType(type, SignatureKind.Call);
             }
@@ -5553,7 +5553,7 @@ namespace ts {
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
             const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-            return sameMap<Signature>(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJavascriptFile(location)) : sig);
+            return sameMap<Signature>(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments, isInJSFile(location)) : sig);
         }
 
         /**
@@ -6429,7 +6429,7 @@ namespace ts {
                 return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false)]; // TODO: GH#18217
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType)!;
-            const isJavaScript = isInJavascriptFile(baseTypeNode);
+            const isJavaScript = isInJSFile(baseTypeNode);
             const typeArguments = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             const typeArgCount = length(typeArguments);
             const result: Signature[] = [];
@@ -7432,7 +7432,7 @@ namespace ts {
         }
 
         function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            return isInJavascriptFile(node) && (
+            return isInJSFile(node) && (
                 // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
                 node.type && node.type.kind === SyntaxKind.JSDocOptionalType
                 || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
@@ -7551,7 +7551,7 @@ namespace ts {
                 const iife = getImmediatelyInvokedFunctionExpression(declaration);
                 const isJSConstructSignature = isJSDocConstructSignature(declaration);
                 const isUntypedSignatureInJSFile = !iife &&
-                    isInJavascriptFile(declaration) &&
+                    isInJSFile(declaration) &&
                     isValueSignatureDeclaration(declaration) &&
                     !hasJSDocParameterTags(declaration) &&
                     !getJSDocType(declaration);
@@ -7607,7 +7607,7 @@ namespace ts {
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
                 const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
-                const hasRestLikeParameter = hasRestParameter(declaration) || isInJavascriptFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
+                const hasRestLikeParameter = hasRestParameter(declaration) || isInJSFile(declaration) && maybeAddJsSyntheticRestParameter(declaration, parameters);
                 links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters,
                     /*resolvedReturnType*/ undefined, /*resolvedTypePredicate*/ undefined,
                     minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
@@ -7641,7 +7641,7 @@ namespace ts {
         }
 
         function getSignatureOfTypeTag(node: SignatureDeclaration | JSDocSignature) {
-            const typeTag = isInJavascriptFile(node) ? getJSDocTypeTag(node) : undefined;
+            const typeTag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
             const signature = typeTag && typeTag.typeExpression && getSingleCallSignature(getTypeFromTypeNode(typeTag.typeExpression));
             return signature && getErasedSignature(signature);
         }
@@ -7736,7 +7736,7 @@ namespace ts {
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
                     let jsdocPredicate: TypePredicate | undefined;
-                    if (!type && isInJavascriptFile(signature.declaration)) {
+                    if (!type && isInJSFile(signature.declaration)) {
                         const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
                         if (jsdocSignature && signature !== jsdocSignature) {
                             jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
@@ -7820,7 +7820,7 @@ namespace ts {
                 return getTypeFromTypeNode(typeNode);
             }
             if (declaration.kind === SyntaxKind.GetAccessor && !hasNonBindableDynamicName(declaration)) {
-                const jsDocType = isInJavascriptFile(declaration) && getTypeForDeclarationFromJSDocComment(declaration);
+                const jsDocType = isInJSFile(declaration) && getTypeForDeclarationFromJSDocComment(declaration);
                 if (jsDocType) {
                     return jsDocType;
                 }
@@ -7897,7 +7897,7 @@ namespace ts {
             return getSignatureInstantiation(
                 signature,
                 map(signature.typeParameters, tp => tp.target && !getConstraintOfTypeParameter(tp.target) ? tp.target : tp),
-                isInJavascriptFile(signature.declaration));
+                isInJSFile(signature.declaration));
         }
 
         function getBaseSignature(signature: Signature) {
@@ -8107,7 +8107,7 @@ namespace ts {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-                const isJs = isInJavascriptFile(node);
+                const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
@@ -8141,7 +8141,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations!.get(id);
             if (!instantiation) {
-                links.instantiations!.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJavascriptFile(symbol.valueDeclaration)))));
+                links.instantiations!.set(id, instantiation = instantiateType(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration)))));
             }
             return instantiation;
         }
@@ -10149,7 +10149,7 @@ namespace ts {
                 // aren't the right hand side of a generic type alias declaration we optimize by reducing the
                 // set of type parameters to those that are possibly referenced in the literal.
                 let declaration = symbol.declarations[0];
-                if (isInJavascriptFile(declaration)) {
+                if (isInJSFile(declaration)) {
                     const paramTag = findAncestor(declaration, isJSDocParameterTag);
                     if (paramTag) {
                         const paramSymbol = getParameterSymbolFromJSDoc(paramTag);
@@ -10470,7 +10470,7 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isInJavascriptFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+            return (isInJSFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
                 isContextSensitiveFunctionLikeDeclaration(func);
         }
 
@@ -15334,7 +15334,7 @@ namespace ts {
 
             if (assignmentKind) {
                 if (!(localOrExportSymbol.flags & SymbolFlags.Variable) &&
-                    !(isInJavascriptFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
+                    !(isInJSFile(node) && localOrExportSymbol.flags & SymbolFlags.ValueModule)) {
                     error(node, Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable, symbolToString(symbol));
                     return errorType;
                 }
@@ -15670,7 +15670,7 @@ namespace ts {
                 return getFlowTypeOfReference(node, type);
             }
 
-            if (isInJavascriptFile(node)) {
+            if (isInJSFile(node)) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
@@ -15927,7 +15927,7 @@ namespace ts {
                     }
                 }
             }
-            const inJs = isInJavascriptFile(func);
+            const inJs = isInJSFile(func);
             if (noImplicitThis || inJs) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
@@ -16198,7 +16198,7 @@ namespace ts {
                                 return false;
                             }
                         }
-                        return !isInJavascriptFile(decl);
+                        return !isInJSFile(decl);
                     }
                 case AssignmentDeclarationKind.ModuleExports:
                 case AssignmentDeclarationKind.ThisProperty:
@@ -16449,7 +16449,7 @@ namespace ts {
                     return getContextualTypeForSubstitutionExpression(<TemplateExpression>parent.parent, node);
                 case SyntaxKind.ParenthesizedExpression: {
                     // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
-                    const tag = isInJavascriptFile(parent) ? getJSDocTypeTag(parent) : undefined;
+                    const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                     return tag ? getTypeFromTypeNode(tag.typeExpression!.type) : getContextualType(<ParenthesizedExpression>parent);
                 }
                 case SyntaxKind.JsxExpression:
@@ -16479,7 +16479,7 @@ namespace ts {
                 return anyType;
             }
 
-            const isJs = isInJavascriptFile(node);
+            const isJs = isInJSFile(node);
             return mapType(valueType, t => getJsxSignaturesParameterTypes(t, isJs, node));
         }
 
@@ -16558,11 +16558,11 @@ namespace ts {
             if (managedSym) {
                 const declaredManagedType = getDeclaredTypeOfSymbol(managedSym);
                 if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
-                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJavascriptFile(context));
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
                     return createTypeReference((declaredManagedType as GenericType), args);
                 }
                 else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
-                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJavascriptFile(context));
+                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJSFile(context));
                     return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
                 }
             }
@@ -16895,9 +16895,9 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
-            const isInJSFile = isInJavascriptFile(node) && !isInJsonFile(node);
+            const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
             const enumTag = getJSDocEnumTag(node);
-            const isJSObjectLiteral = !contextualType && isInJSFile && !enumTag;
+            const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
             let typeFlags: TypeFlags = 0;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
@@ -16916,7 +16916,7 @@ namespace ts {
                     let type = memberDecl.kind === SyntaxKind.PropertyAssignment ? checkPropertyAssignment(memberDecl, checkMode) :
                         memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ? checkExpressionForMutableLocation(memberDecl.name, checkMode) :
                         checkObjectLiteralMethod(memberDecl, checkMode);
-                    if (isInJSFile) {
+                    if (isInJavascript) {
                         const jsDocType = getTypeForDeclarationFromJSDocComment(memberDecl);
                         if (jsDocType) {
                             checkTypeAssignableTo(type, jsDocType, memberDecl);
@@ -17323,7 +17323,7 @@ namespace ts {
             let hasTypeArgumentError: boolean = !!node.typeArguments;
             for (const signature of signatures) {
                 if (signature.typeParameters) {
-                    const isJavascript = isInJavascriptFile(node);
+                    const isJavascript = isInJSFile(node);
                     const typeArgumentInstantiated = getJsxSignatureTypeArgumentInstantiation(signature, node, isJavascript, /*reportErrors*/ false);
                     if (typeArgumentInstantiated) {
                         hasTypeArgumentError = false;
@@ -17667,7 +17667,7 @@ namespace ts {
                 checkTypeRelatedTo(elemInstanceType, elementClassType, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
 
-            const isJs = isInJavascriptFile(openingLikeElement);
+            const isJs = isInJSFile(openingLikeElement);
             return getUnionType(instantiatedSignatures!.map(sig => getJsxPropsTypeFromClassType(sig, isJs, openingLikeElement, /*reportErrors*/ true)));
         }
 
@@ -17925,7 +17925,7 @@ namespace ts {
             if (symbol.flags & SymbolFlags.Method || getCheckFlags(symbol) & CheckFlags.SyntheticMethod) {
                 return true;
             }
-            if (isInJavascriptFile(symbol.valueDeclaration)) {
+            if (isInJSFile(symbol.valueDeclaration)) {
                 const parent = symbol.valueDeclaration.parent;
                 return parent && isBinaryExpression(parent) &&
                     getAssignmentDeclarationKind(parent) === AssignmentDeclarationKind.PrototypeProperty;
@@ -18411,7 +18411,7 @@ namespace ts {
             const prop = getPropertyOfType(type, propertyName);
             return prop ? checkPropertyAccessibility(node, isSuper, type, prop)
                 // In js files properties of unions are allowed in completion
-                : isInJavascriptFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
+                : isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (<UnionType>type).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
         }
 
         /**
@@ -18719,7 +18719,7 @@ namespace ts {
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
             }
-            return getSignatureInstantiation(signature, getInferredTypes(context), isInJavascriptFile(contextualSignature.declaration));
+            return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
         }
 
         function inferJsxTypeArguments(signature: Signature, node: JsxOpeningLikeElement, context: InferenceContext): Type[] {
@@ -18840,7 +18840,7 @@ namespace ts {
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
-            const isJavascript = isInJavascriptFile(signature.declaration);
+            const isJavascript = isInJSFile(signature.declaration);
             const typeParameters = signature.typeParameters!;
             const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
             let mapper: TypeMapper | undefined;
@@ -19279,10 +19279,10 @@ namespace ts {
                             }
                         }
                         else {
-                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJavascriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
                             typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                         }
-                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavascriptFile(candidate.declaration));
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration));
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
                         if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -19304,7 +19304,7 @@ namespace ts {
                         excludeArgument = undefined;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavascriptFile(candidate.declaration));
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration));
                         }
                         if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = checkCandidate;
@@ -19414,7 +19414,7 @@ namespace ts {
 
             const typeArgumentNodes: ReadonlyArray<TypeNode> | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
             const instantiated = typeArgumentNodes
-                ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJavascriptFile(node)))
+                ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJSFile(node)))
                 : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args);
             candidates[bestIndex] = instantiated;
             return instantiated;
@@ -19432,7 +19432,7 @@ namespace ts {
         }
 
         function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: ReadonlyArray<TypeParameter>, candidate: Signature, args: ReadonlyArray<Expression>): Signature {
-            const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJavascriptFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+            const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
             const typeArgumentTypes = inferTypeArguments(node, candidate, args, getExcludeArgument(args), inferenceContext);
             return createSignatureInstantiation(candidate, typeArgumentTypes);
         }
@@ -19525,7 +19525,7 @@ namespace ts {
                 return resolveErrorCall(node);
             }
             // If the function is explicitly marked with `@class`, then it must be constructed.
-            if (callSignatures.some(sig => isInJavascriptFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
+            if (callSignatures.some(sig => isInJSFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
                 error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 return resolveErrorCall(node);
             }
@@ -19890,7 +19890,7 @@ namespace ts {
          * file.
          */
         function isJavascriptConstructor(node: Declaration | undefined): boolean {
-            if (node && isInJavascriptFile(node)) {
+            if (node && isInJSFile(node)) {
                 // If the node has a @class tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
 
@@ -20015,7 +20015,7 @@ namespace ts {
             }
 
             // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-            if (isInJavascriptFile(node) && isCommonJsRequire(node)) {
+            if (isInJSFile(node) && isCommonJsRequire(node)) {
                 return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
             }
 
@@ -20026,7 +20026,7 @@ namespace ts {
                 return getESSymbolLikeTypeForNode(walkUpParenthesizedExpressions(node.parent));
             }
             let jsAssignmentType: Type | undefined;
-            if (isInJavascriptFile(node)) {
+            if (isInJSFile(node)) {
                 const decl = getDeclarationOfExpando(node);
                 if (decl) {
                     const jsSymbol = getSymbolOfNode(decl);
@@ -21287,7 +21287,7 @@ namespace ts {
         }
 
         function checkBinaryExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            if (isInJavascriptFile(node) && getAssignedExpandoInitializer(node)) {
+            if (isInJSFile(node) && getAssignedExpandoInitializer(node)) {
                 return checkExpression(node.right, checkMode);
             }
             return checkBinaryLikeExpression(node.left, node.operatorToken, node.right, checkMode, node);
@@ -21708,7 +21708,7 @@ namespace ts {
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
-            if (isInJavascriptFile(declaration)) {
+            if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     if (noImplicitAny) {
                         reportImplicitAnyError(declaration, anyType);
@@ -21884,7 +21884,7 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            const tag = isInJavascriptFile(node) ? getJSDocTypeTag(node) : undefined;
+            const tag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
             if (tag) {
                 return checkAssertionWorker(tag, tag.typeExpression!.type, node.expression, checkMode);
             }
@@ -22561,7 +22561,7 @@ namespace ts {
 
         function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: ReadonlyArray<TypeParameter>): Type[] {
             return fillMissingTypeArguments(map(node.typeArguments!, getTypeFromTypeNode), typeParameters,
-                getMinTypeArgumentCount(typeParameters), isInJavascriptFile(node));
+                getMinTypeArgumentCount(typeParameters), isInJSFile(node));
         }
 
         function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: ReadonlyArray<TypeParameter>): boolean {
@@ -22599,7 +22599,7 @@ namespace ts {
 
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
-            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJavascriptFile(node) && !isInJSDoc(node)) {
+            if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
                 grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
             }
             const type = getTypeFromTypeReference(node);
@@ -23747,7 +23747,7 @@ namespace ts {
             }
 
             // A js function declaration can have a @type tag instead of a return type node, but that type must have a call signature
-            if (isInJavascriptFile(node)) {
+            if (isInJSFile(node)) {
                 const typeTag = getJSDocTypeTag(node);
                 if (typeTag && typeTag.typeExpression && !getContextualCallSignature(getTypeFromTypeNode(typeTag.typeExpression), node)) {
                     error(typeTag, Diagnostics.The_type_of_a_function_declaration_must_match_the_function_s_signature);
@@ -24404,7 +24404,7 @@ namespace ts {
                 // Don't validate for-in initializer as it is already an error
                 const initializer = getEffectiveInitializer(node);
                 if (initializer) {
-                    const isJSObjectLiteralInitializer = isInJavascriptFile(node) &&
+                    const isJSObjectLiteralInitializer = isInJSFile(node) &&
                         isObjectLiteralExpression(initializer) &&
                         (initializer.properties.length === 0 || isPrototypeAccess(node.name)) &&
                         hasEntries(symbol.exports);
@@ -26502,7 +26502,7 @@ namespace ts {
                 const exportEqualsSymbol = moduleSymbol.exports!.get("export=" as __String);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
-                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJavascriptFile(declaration)) {
+                    if (!isTopLevelInExternalModuleAugmentation(declaration) && !isInJSFile(declaration)) {
                         error(declaration, Diagnostics.An_export_assignment_cannot_be_used_in_a_module_with_other_exported_elements);
                     }
                 }
@@ -26552,7 +26552,7 @@ namespace ts {
                 return;
             }
 
-            if (isInJavascriptFile(node)) {
+            if (isInJSFile(node)) {
                 forEach((node as JSDocContainer).jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
             }
 
@@ -26719,7 +26719,7 @@ namespace ts {
         }
 
         function checkJSDocTypeIsInJsFile(node: Node): void {
-            if (!isInJavascriptFile(node)) {
+            if (!isInJSFile(node)) {
                 grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
             }
         }
@@ -27170,7 +27170,7 @@ namespace ts {
                 return getSymbolOfNode(entityName.parent);
             }
 
-            if (isInJavascriptFile(entityName) &&
+            if (isInJSFile(entityName) &&
                 entityName.parent.kind === SyntaxKind.PropertyAccessExpression &&
                 entityName.parent === (entityName.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
@@ -27235,7 +27235,7 @@ namespace ts {
             }
 
             if (entityName.parent.kind === SyntaxKind.TypeParameter && entityName.parent.parent.kind === SyntaxKind.JSDocTemplateTag) {
-                Debug.assert(!isInJavascriptFile(entityName)); // Otherwise `isDeclarationName` would have been true.
+                Debug.assert(!isInJSFile(entityName)); // Otherwise `isDeclarationName` would have been true.
                 const typeParameter = getTypeParameterFromJsDoc(entityName.parent as TypeParameterDeclaration & { parent: JSDocTemplateTag });
                 return typeParameter && typeParameter.symbol;
             }
@@ -27362,7 +27362,7 @@ namespace ts {
                     // 4). type A = import("./f/*gotToDefinitionHere*/oo")
                     if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                         ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
-                        ((isInJavascriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
+                        ((isInJSFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
                         (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                     ) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
@@ -29593,7 +29593,7 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            const jsdocTypeParameters = isInJavascriptFile(node) && getJSDocTypeParameterDeclarations(node);
+            const jsdocTypeParameters = isInJSFile(node) && getJSDocTypeParameterDeclarations(node);
             if (node.typeParameters || jsdocTypeParameters && jsdocTypeParameters.length) {
                 const { pos, end } = node.typeParameters || jsdocTypeParameters && jsdocTypeParameters[0] || node;
                 return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);

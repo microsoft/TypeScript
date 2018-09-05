@@ -131,7 +131,7 @@ namespace ts.codefix {
         if (classOrInterface) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             const declSourceFile = classOrInterface.getSourceFile();
-            const inJs = isSourceFileJavascript(declSourceFile);
+            const inJs = isSourceFileJS(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }

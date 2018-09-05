@@ -41,7 +41,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const fieldInfo = getConvertibleFieldAtPosition(context);
         if (!fieldInfo) return undefined;
 
-        const isJS = isSourceFileJavascript(file);
+        const isJS = isSourceFileJS(file);
         const changeTracker = textChanges.ChangeTracker.fromContext(context);
         const { isStatic, isReadonly, fieldName, accessorName, originalName, type, container, declaration, renameAccessor } = fieldInfo;
 

@@ -50,7 +50,7 @@ namespace ts.SignatureHelp {
         if (!candidateInfo) {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS
             // file, then see if we can figure out anything better.
-            return isSourceFileJavascript(sourceFile) ? createJavascriptSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
+            return isSourceFileJS(sourceFile) ? createJSSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
         }
 
         return typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
@@ -115,7 +115,7 @@ namespace ts.SignatureHelp {
         }
     }
 
-    function createJavascriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+    function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         if (argumentInfo.invocation.kind === InvocationKind.Contextual) return undefined;
         // See if we can find some symbol with the call expression name that has call signatures.
         const expression = getExpressionFromInvocation(argumentInfo.invocation);

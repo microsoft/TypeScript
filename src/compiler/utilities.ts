@@ -1675,15 +1675,15 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
-    export function isSourceFileJavascript(file: SourceFile): boolean {
-        return isInJavascriptFile(file);
+    export function isSourceFileJS(file: SourceFile): boolean {
+        return isInJSFile(file);
     }
 
     export function isSourceFileNotJavascript(file: SourceFile): boolean {
-        return !isInJavascriptFile(file);
+        return !isInJSFile(file);
     }
 
-    export function isInJavascriptFile(node: Node | undefined): boolean {
+    export function isInJSFile(node: Node | undefined): boolean {
         return !!node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
@@ -1742,7 +1742,7 @@ namespace ts {
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJavascriptFile(node) && !isVarConst(node.parent)) {
+            if (!isInJSFile(node) && !isVarConst(node.parent)) {
                 return undefined;
             }
             name = node.parent.name;
@@ -1779,7 +1779,7 @@ namespace ts {
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
-        if (isInJavascriptFile(node) && node.initializer &&
+        if (isInJSFile(node) && node.initializer &&
             isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
             node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
             return node.initializer.right;
@@ -1911,7 +1911,7 @@ namespace ts {
     /// assignments we treat as special in the binder
     export function getAssignmentDeclarationKind(expr: BinaryExpression): AssignmentDeclarationKind {
         const special = getAssignmentDeclarationKindWorker(expr);
-        return special === AssignmentDeclarationKind.Property || isInJavascriptFile(expr) ? special : AssignmentDeclarationKind.None;
+        return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression): AssignmentDeclarationKind {
@@ -1971,7 +1971,7 @@ namespace ts {
     }
 
     export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
-        return isInJavascriptFile(expr) &&
+        return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
     }
@@ -2473,7 +2473,7 @@ namespace ts {
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
-        if (isInJavascriptFile(node)) {
+        if (isInJSFile(node)) {
             // Prefer an @augments tag because it may have type parameters.
             const tag = getJSDocAugmentsTag(node);
             if (tag) {
@@ -3279,7 +3279,7 @@ namespace ts {
 
     /** Don't call this for `--outFile`, just for `--outDir` or plain emit. `--outFile` needs additional checks. */
     export function sourceFileMayBeEmitted(sourceFile: SourceFile, options: CompilerOptions, isSourceFileFromExternalLibrary: (file: SourceFile) => boolean) {
-        return !(options.noEmitForJsFiles && isSourceFileJavascript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
+        return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
@@ -3403,7 +3403,7 @@ namespace ts {
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
         const type = (node as HasType).type;
-        if (type || !isInJavascriptFile(node)) return type;
+        if (type || !isInJSFile(node)) return type;
         return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
     }
 
@@ -3418,7 +3418,7 @@ namespace ts {
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
         return isJSDocSignature(node) ?
             node.type && node.type.typeExpression && node.type.typeExpression.type :
-            node.type || (isInJavascriptFile(node) ? getJSDocReturnType(node) : undefined);
+            node.type || (isInJSFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
@@ -5184,7 +5184,7 @@ namespace ts {
         if (node.typeParameters) {
             return node.typeParameters;
         }
-        if (isInJavascriptFile(node)) {
+        if (isInJSFile(node)) {
             const decls = getJSDocTypeParameterDeclarations(node);
             if (decls.length) {
                 return decls;
@@ -6590,7 +6590,7 @@ namespace ts {
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
         if (node.kind === SyntaxKind.TypeParameter) {
-            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJavascriptFile(node);
+            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJSFile(node);
         }
 
         return isDeclarationKind(node.kind);
