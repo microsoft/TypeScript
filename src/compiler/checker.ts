@@ -14965,6 +14965,9 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
+                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
+                        return getUnionType([nonPrimitiveType, nullType]);
+                    }
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
