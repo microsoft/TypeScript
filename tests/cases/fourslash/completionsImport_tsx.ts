@@ -1,7 +1,6 @@
 /// <reference path="fourslash.ts" />
 
 // @noLib: true
-// @nolib: true
 // @jsx: preserve
 
 // @Filename: /a.tsx
@@ -13,7 +12,7 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "Foo", source: "/a.tsx", hasAction: true },
+    includes: { name: "Foo", source: "/a", hasAction: true },
     excludes: "Bar",
     preferences: {
         includeCompletionsForModuleExports: true,

@@ -34,8 +34,6 @@ class C3 {
 }
 
 interface I {
->I : I
-
     new (public x);
 >x : any
 
@@ -44,8 +42,6 @@ interface I {
 }
 
 interface I2 {
->I2 : I2
-
     new (private x);
 >x : any
 

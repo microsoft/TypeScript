@@ -50,7 +50,7 @@ var A = /** @class */ (function () {
     });
     __decorate([
         dec,
-        __metadata("design:type", Object),
+        __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], A.prototype, "x", null);
     return A;
@@ -98,7 +98,7 @@ var D = /** @class */ (function () {
     });
     __decorate([
         dec,
-        __metadata("design:type", Object),
+        __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], D.prototype, "x", null);
     return D;

@@ -36,6 +36,7 @@ namespace ts.NavigationBar {
      */
     interface NavigationBarNode {
         node: Node;
+        name: DeclarationName | undefined;
         additionalNodes: Node[] | undefined;
         parent: NavigationBarNode | undefined; // Present for all but root node
         children: NavigationBarNode[] | undefined;
@@ -65,10 +66,10 @@ namespace ts.NavigationBar {
     }
 
     function reset() {
-        curSourceFile = undefined;
-        curCancellationToken = undefined;
+        curSourceFile = undefined!;
+        curCancellationToken = undefined!;
         parentsStack = [];
-        parent = undefined;
+        parent = undefined!;
         emptyChildItemArray = [];
     }
 
@@ -91,7 +92,7 @@ namespace ts.NavigationBar {
 
     function rootNavigationBarNode(sourceFile: SourceFile): NavigationBarNode {
         Debug.assert(!parentsStack.length);
-        const root: NavigationBarNode = { node: sourceFile, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
+        const root: NavigationBarNode = { node: sourceFile, name: undefined, additionalNodes: undefined, parent: undefined, children: undefined, indent: 0 };
         parent = root;
         for (const statement of sourceFile.statements) {
             addChildrenRecursively(statement);
@@ -108,6 +109,7 @@ namespace ts.NavigationBar {
     function emptyNavigationBarNode(node: Node): NavigationBarNode {
         return {
             node,
+            name: isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined,
             additionalNodes: undefined,
             parent,
             children: undefined,
@@ -131,20 +133,20 @@ namespace ts.NavigationBar {
     /** Call after calling `startNode` and adding children to it. */
     function endNode(): void {
         if (parent.children) {
-            mergeChildren(parent.children);
+            mergeChildren(parent.children, parent);
             sortChildren(parent.children);
         }
-        parent = parentsStack.pop();
+        parent = parentsStack.pop()!;
     }
 
-    function addNodeWithRecursiveChild(node: Node, child: Node): void {
+    function addNodeWithRecursiveChild(node: Node, child: Node | undefined): void {
         startNode(node);
         addChildrenRecursively(child);
         endNode();
     }
 
     /** Look for navigation bar items in node's subtree, adding them to the current `parent`. */
-    function addChildrenRecursively(node: Node): void {
+    function addChildrenRecursively(node: Node | undefined): void {
         curCancellationToken.throwIfCancellationRequested();
 
         if (!node || isToken(node)) {
@@ -186,7 +188,7 @@ namespace ts.NavigationBar {
                 // Handle default import case e.g.:
                 //    import d from "mod";
                 if (importClause.name) {
-                    addLeafNode(importClause);
+                    addLeafNode(importClause.name);
                 }
 
                 // Handle named bindings in imports e.g.:
@@ -275,7 +277,7 @@ namespace ts.NavigationBar {
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
                     case SpecialPropertyAssignmentKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
-                        break;
+                        return;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                     case SpecialPropertyAssignmentKind.Property:
                     case SpecialPropertyAssignmentKind.None:
@@ -302,7 +304,7 @@ namespace ts.NavigationBar {
     }
 
     /** Merge declarations of the same kind. */
-    function mergeChildren(children: NavigationBarNode[]): void {
+    function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
         const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
             const declName = getNameOfDeclaration(<Declaration>child.node);
@@ -320,7 +322,7 @@ namespace ts.NavigationBar {
 
             if (itemsWithSameName instanceof Array) {
                 for (const itemWithSameName of itemsWithSameName) {
-                    if (tryMerge(itemWithSameName, child)) {
+                    if (tryMerge(itemWithSameName, child, node)) {
                         return false;
                     }
                 }
@@ -329,7 +331,7 @@ namespace ts.NavigationBar {
             }
             else {
                 const itemWithSameName = itemsWithSameName;
-                if (tryMerge(itemWithSameName, child)) {
+                if (tryMerge(itemWithSameName, child, node)) {
                     return false;
                 }
                 nameToItems.set(name, [itemWithSameName, child]);
@@ -338,8 +340,8 @@ namespace ts.NavigationBar {
         });
     }
 
-    function tryMerge(a: NavigationBarNode, b: NavigationBarNode): boolean {
-        if (shouldReallyMerge(a.node, b.node)) {
+    function tryMerge(a: NavigationBarNode, b: NavigationBarNode, parent: NavigationBarNode): boolean {
+        if (shouldReallyMerge(a.node, b.node, parent)) {
             merge(a, b);
             return true;
         }
@@ -347,8 +349,8 @@ namespace ts.NavigationBar {
     }
 
     /** a and b have the same name, but they may not be mergeable. */
-    function shouldReallyMerge(a: Node, b: Node): boolean {
-        if (a.kind !== b.kind) {
+    function shouldReallyMerge(a: Node, b: Node, parent: NavigationBarNode): boolean {
+        if (a.kind !== b.kind || a.parent !== b.parent && !(isOwnChild(a, parent) && isOwnChild(b, parent))) {
             return false;
         }
         switch (a.kind) {
@@ -364,10 +366,18 @@ namespace ts.NavigationBar {
         }
     }
 
+    // We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
+    // We don't want to merge unrelated children like `m` in `const o = { a: { m() {} }, b: { m() {} } };`
+    function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
+        const par = isModuleBlock(n.parent) ? n.parent.parent : n.parent;
+        return par === parent.node || contains(parent.additionalNodes, par);
+    }
+
     // We use 1 NavNode to represent 'A.B.C', but there are multiple source nodes.
     // Only merge module nodes that have the same chain. Don't merge 'A.B.C' with 'A'!
     function areSameModule(a: ModuleDeclaration, b: ModuleDeclaration): boolean {
-        return a.body.kind === b.body.kind && (a.body.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
+        // TODO: GH#18217
+        return a.body!.kind === b.body!.kind && (a.body!.kind !== SyntaxKind.ModuleDeclaration || areSameModule(<ModuleDeclaration>a.body, <ModuleDeclaration>b.body));
     }
 
     /** Merge source into target. Source should be thrown away after this is called. */
@@ -380,7 +390,7 @@ namespace ts.NavigationBar {
 
         target.children = concatenate(target.children, source.children);
         if (target.children) {
-            mergeChildren(target.children);
+            mergeChildren(target.children, target);
             sortChildren(target.children);
         }
     }
@@ -391,7 +401,7 @@ namespace ts.NavigationBar {
     }
 
     function compareChildren(child1: NavigationBarNode, child2: NavigationBarNode) {
-        return compareStringsCaseSensitiveUI(tryGetName(child1.node), tryGetName(child2.node))
+        return compareStringsCaseSensitiveUI(tryGetName(child1.node)!, tryGetName(child2.node)!) // TODO: GH#18217
             || compareValues(navigationBarNodeKind(child1), navigationBarNodeKind(child2));
     }
 
@@ -406,8 +416,8 @@ namespace ts.NavigationBar {
         }
 
         const declName = getNameOfDeclaration(<Declaration>node);
-        if (declName) {
-            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
+        if (declName && isPropertyName(declName)) {
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName)!); // TODO: GH#18217
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -419,12 +429,11 @@ namespace ts.NavigationBar {
         }
     }
 
-    function getItemName(node: Node): string {
+    function getItemName(node: Node, name: Node | undefined): string {
         if (node.kind === SyntaxKind.ModuleDeclaration) {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const name = getNameOfDeclaration(<Declaration>node);
         if (name) {
             const text = nodeText(name);
             if (text.length > 0) {
@@ -512,7 +521,7 @@ namespace ts.NavigationBar {
                     return false;
                 }
 
-                switch (navigationBarNodeKind(item.parent)) {
+                switch (navigationBarNodeKind(item.parent!)) {
                     case SyntaxKind.ModuleBlock:
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.MethodDeclaration:
@@ -522,8 +531,8 @@ namespace ts.NavigationBar {
                         return hasSomeImportantChild(item);
                 }
             }
-            function hasSomeImportantChild(item: NavigationBarNode) {
-                return forEach(item.children, child => {
+            function hasSomeImportantChild(item: NavigationBarNode): boolean {
+                return some(item.children, child => {
                     const childKind = navigationBarNodeKind(child);
                     return childKind !== SyntaxKind.VariableDeclaration && childKind !== SyntaxKind.BindingElement;
                 });
@@ -533,17 +542,18 @@ namespace ts.NavigationBar {
 
     function convertToTree(n: NavigationBarNode): NavigationTree {
         return {
-            text: getItemName(n.node),
+            text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
+            nameSpan: n.name && getNodeSpan(n.name),
             childItems: map(n.children, convertToTree)
         };
     }
 
     function convertToTopLevelItem(n: NavigationBarNode): NavigationBarItem {
         return {
-            text: getItemName(n.node),
+            text: getItemName(n.node, n.name),
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
@@ -555,7 +565,7 @@ namespace ts.NavigationBar {
 
         function convertToChildItem(n: NavigationBarNode): NavigationBarItem {
             return {
-                text: getItemName(n.node),
+                text: getItemName(n.node, n.name),
                 kind: getNodeKind(n.node),
                 kindModifiers: getNodeModifiers(n.node),
                 spans: getSpans(n),
@@ -602,7 +612,7 @@ namespace ts.NavigationBar {
      * We store 'A' as associated with a NavNode, and use getModuleName to traverse down again.
      */
     function getInteriorModule(decl: ModuleDeclaration): ModuleDeclaration {
-        return decl.body.kind === SyntaxKind.ModuleDeclaration ? getInteriorModule(<ModuleDeclaration>decl.body) : decl;
+        return decl.body && isModuleDeclaration(decl.body) ? getInteriorModule(decl.body) : decl;
     }
 
     function isComputedProperty(member: EnumMember): boolean {

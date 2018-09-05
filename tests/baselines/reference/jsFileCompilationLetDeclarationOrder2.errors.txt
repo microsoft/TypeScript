@@ -8,6 +8,7 @@ tests/cases/compiler/a.ts(2,1): error TS2448: Block-scoped variable 'a' used bef
     a = 10;
     ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/compiler/b.js:1:5: 'a' is declared here.
 ==== tests/cases/compiler/b.js (0 errors) ====
     let a = 10;
     b = 30;

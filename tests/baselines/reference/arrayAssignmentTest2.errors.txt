@@ -8,9 +8,9 @@ tests/cases/compiler/arrayAssignmentTest2.ts(49,1): error TS2322: Type 'I1[]' is
   Type 'I1' is not assignable to type 'C3'.
     Property 'CM3M1' is missing in type 'I1'.
 tests/cases/compiler/arrayAssignmentTest2.ts(51,1): error TS2322: Type '() => C1' is not assignable to type 'any[]'.
-  Property 'push' is missing in type '() => C1'.
+  Property 'pop' is missing in type '() => C1'.
 tests/cases/compiler/arrayAssignmentTest2.ts(52,1): error TS2322: Type '() => any' is not assignable to type 'any[]'.
-  Property 'push' is missing in type '() => any'.
+  Property 'pop' is missing in type '() => any'.
 tests/cases/compiler/arrayAssignmentTest2.ts(53,1): error TS2322: Type '{ one: number; }' is not assignable to type 'any[]'.
   Property 'length' is missing in type '{ one: number; }'.
 tests/cases/compiler/arrayAssignmentTest2.ts(55,1): error TS2322: Type 'C1' is not assignable to type 'any[]'.
@@ -89,11 +89,11 @@ tests/cases/compiler/arrayAssignmentTest2.ts(58,1): error TS2322: Type 'I1' is n
     arr_any = f1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type '() => C1' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'push' is missing in type '() => C1'.
+!!! error TS2322:   Property 'pop' is missing in type '() => C1'.
     arr_any = function () { return null;} // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type '() => any' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'push' is missing in type '() => any'.
+!!! error TS2322:   Property 'pop' is missing in type '() => any'.
     arr_any = o1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type '{ one: number; }' is not assignable to type 'any[]'.

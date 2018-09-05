@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty17.ts ===
 interface I {
->I : I
-
     [Symbol.iterator]: number;
 >[Symbol.iterator] : number
 >Symbol.iterator : symbol
@@ -17,7 +15,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 var it = i[Symbol.iterator];
 >it : number

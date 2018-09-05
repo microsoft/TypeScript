@@ -4,9 +4,7 @@ class C { }
 
 type baz = C;
 >baz : C
->C : C
 
 let baz: baz;
->baz : C
 >baz : C
 

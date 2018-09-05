@@ -83,17 +83,17 @@ var a = baz(1, 1, g);      // Should be number
 var b: number | string;
 >b : Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
 
-var b = foo(g);            // Should be number | string
+var b = foo(g);            // Error, number and string are disjoint types
 >b : Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
 >foo : Symbol(foo, Decl(contextualSignatureInstantiation.ts, 0, 0))
 >g : Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
 
-var b = bar(1, "one", g);  // Should be number | string
+var b = bar(1, "one", g);  // Error, number and string are disjoint types
 >b : Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
 >bar : Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
 >g : Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))
 
-var b = bar("one", 1, g);  // Should be number | string
+var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >b : Symbol(b, Decl(contextualSignatureInstantiation.ts, 17, 3), Decl(contextualSignatureInstantiation.ts, 18, 3), Decl(contextualSignatureInstantiation.ts, 19, 3), Decl(contextualSignatureInstantiation.ts, 20, 3), Decl(contextualSignatureInstantiation.ts, 21, 3))
 >bar : Symbol(bar, Decl(contextualSignatureInstantiation.ts, 6, 60))
 >g : Symbol(g, Decl(contextualSignatureInstantiation.ts, 8, 65))

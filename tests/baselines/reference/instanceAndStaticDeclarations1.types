@@ -11,7 +11,6 @@ class Point {
     public distance(p: Point) {
 >distance : (p: Point) => number
 >p : Point
->Point : Point
 
         var dx = this.x - p.x;
 >dx : number
@@ -56,9 +55,7 @@ class Point {
     static distance(p1: Point, p2: Point) { return p1.distance(p2); }
 >distance : (p1: Point, p2: Point) => number
 >p1 : Point
->Point : Point
 >p2 : Point
->Point : Point
 >p1.distance(p2) : number
 >p1.distance : (p: Point) => number
 >p1 : Point

@@ -3,20 +3,15 @@ module M {
 >M : typeof M
 
    interface I { (i: I): I; }
->I : I
 >i : I
->I : I
->I : I
 
    function f(p: I) { return f };
 >f : (p: I) => typeof f
 >p : I
->I : I
 >f : (p: I) => typeof f
 
    var i: I;
 >i : I
->I : I
 
    f(i);
 >f(i) : (p: I) => typeof f

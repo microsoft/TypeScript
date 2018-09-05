@@ -8,8 +8,7 @@ tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(31,8): e
   Type 'undefined' is not assignable to type 'number'.
 tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(45,10): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
   Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(53,11): error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'number | undefined'.
-  Type 'null' is not assignable to type 'number | undefined'.
+tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(52,24): error TS2322: Type 'null' is not assignable to type 'number'.
 
 
 ==== tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts (6 errors) ====
@@ -80,10 +79,9 @@ tests/cases/compiler/optionalParameterInDestructuringWithInitializer.ts(53,11): 
     performFoo();
     
     function performFoo2({ bar = null }: Foo = {}) {
+                           ~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
       useBar2(bar);
-              ~~~
-!!! error TS2345: Argument of type 'number | null' is not assignable to parameter of type 'number | undefined'.
-!!! error TS2345:   Type 'null' is not assignable to type 'number | undefined'.
     }
     
     declare function useBar2(bar: number | undefined): void;

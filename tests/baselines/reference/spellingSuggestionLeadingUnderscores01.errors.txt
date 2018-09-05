@@ -12,6 +12,7 @@ tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts(14,5): error TS23
     a.___foo
       ~~~~~~
 !!! error TS2551: Property '___foo' does not exist on type '{ __foo: 10; }'. Did you mean '__foo'?
+!!! related TS2728 tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts:3:5: '__foo' is declared here.
     
     // @filename def.ts
     export let b: {

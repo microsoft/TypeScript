@@ -95,7 +95,6 @@ async function fn3() {
 
 async function fn4(): Promise<number> {
 >fn4 : () => Promise<number>
->Promise : Promise<T>
 
     let ar = [];
 >ar : any[]

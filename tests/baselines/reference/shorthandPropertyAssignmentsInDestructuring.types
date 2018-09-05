@@ -9,6 +9,7 @@
 	for ({ s0 = 5 } of [{ s0: 1 }]) {
 >{ s0 = 5 } : { s0?: any; }
 >s0 : any
+>5 : 5
 >[{ s0: 1 }] : { s0: number; }[]
 >{ s0: 1 } : { s0: number; }
 >s0 : number
@@ -45,6 +46,7 @@
 	for ({ s1 = 5 } of [{}]) {
 >{ s1 = 5 } : { s1?: any; }
 >s1 : any
+>5 : 5
 >[{}] : {}[]
 >{} : {}
 	}
@@ -78,6 +80,7 @@
 	for ({ s2 = 5 } of [{ s2: "" }]) {
 >{ s2 = 5 } : { s2?: any; }
 >s2 : any
+>5 : 5
 >[{ s2: "" }] : { s2: string; }[]
 >{ s2: "" } : { s2: string; }
 >s2 : string
@@ -115,6 +118,7 @@
 	for ({ s3 = 5 } of [{ s3: "" }]) {
 >{ s3 = 5 } : { s3?: string; }
 >s3 : string
+>5 : 5
 >[{ s3: "" }] : { s3: string; }[]
 >{ s3: "" } : { s3: string; }
 >s3 : string
@@ -154,6 +158,7 @@
 >{ y = 5 } = { y: 1 } : { y?: number; }
 >{ y = 5 } : { y?: any; }
 >y : any
+>5 : 5
 >{ y: 1 } : { y?: number; }
 >y : number
 >1 : 1
@@ -193,6 +198,7 @@
 >{ y0 = 5 } = { y0: 1 } : { y0?: number; }
 >{ y0 = 5 } : { y0?: number; }
 >y0 : number
+>5 : 5
 >{ y0: 1 } : { y0?: number; }
 >y0 : number
 >1 : 1
@@ -232,6 +238,7 @@
 >{ y1 = 5 } = {} : { y1?: string; }
 >{ y1 = 5 } : { y1?: string; }
 >y1 : string
+>5 : 5
 >{} : { y1?: string; }
 
 });
@@ -269,6 +276,7 @@
 >{ y2 = 5, y3 = { x: 1 } } = {} : { y2?: string; y3?: { x: string; }; }
 >{ y2 = 5, y3 = { x: 1 } } : { y2?: string; y3?: { x: string; }; }
 >y2 : string
+>5 : 5
 >y3 : { x: string; }
 >{ x: 1 } : { x: number; }
 >x : number
@@ -318,6 +326,7 @@
 >{ y4 = 5, y5 = { x: 1 } } = {} : { y4?: number; y5?: { x: number; }; }
 >{ y4 = 5, y5 = { x: 1 } } : { y4?: number; y5?: { x: number; }; }
 >y4 : number
+>5 : 5
 >y5 : { x: number; }
 >{ x: 1 } : { x: number; }
 >x : number
@@ -411,6 +420,7 @@
 >a : { s: any; }
 >{ s = 5 } : { s: any; }
 >s : any
+>5 : 5
 
 });
 

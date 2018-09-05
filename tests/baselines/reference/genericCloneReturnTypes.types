@@ -1,14 +1,12 @@
 === tests/cases/compiler/genericCloneReturnTypes.ts ===
 class Bar<T> {
 >Bar : Bar<T>
->T : T
 
     public size: number;
 >size : number
 
     public t: T;
 >t : T
->T : T
 
     constructor(x: number) {
 >x : number
@@ -28,7 +26,6 @@ class Bar<T> {
         return new Bar<T>(this.size);
 >new Bar<T>(this.size) : Bar<T>
 >Bar : typeof Bar
->T : T
 >this.size : number
 >this : this
 >size : number
@@ -39,7 +36,6 @@ class Bar<T> {
 
 var b: Bar<number>;
 >b : Bar<number>
->Bar : Bar<T>
 
 var b2 = b.clone();
 >b2 : Bar<number>
@@ -50,7 +46,6 @@ var b2 = b.clone();
 
 var b3: Bar<string>;
 >b3 : Bar<string>
->Bar : Bar<T>
 
 b = b2;
 >b = b2 : Bar<number>

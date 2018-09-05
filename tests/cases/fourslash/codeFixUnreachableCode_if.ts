@@ -22,6 +22,20 @@
 ////for (let x = 0; false; ++x) {
 ////    a;
 ////}
+////
+////while (true) {
+////    1;
+////    break;
+////    2;
+////}
+////
+////function f() {
+////    if (true) {
+////        1;
+////        return;
+////        2;
+////    }
+////}
 
 verify.codeFixAll({
     fixId: "fixUnreachableCode",
@@ -36,5 +50,16 @@ if (false) {
 }
 
 
-`,
+
+while (true) {
+    1;
+    break;
+}
+
+function f() {
+    if (true) {
+        1;
+        return;
+    }
+}`,
 });

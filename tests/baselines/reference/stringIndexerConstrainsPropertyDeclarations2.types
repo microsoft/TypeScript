@@ -23,15 +23,12 @@ class Foo {
 
     [x: string]: A;
 >x : string
->A : A
 
     a: A; // ok
 >a : A
->A : A
 
     b: B; // ok
 >b : B
->B : B
 
     c: number; // error
 >c : number
@@ -41,19 +38,14 @@ class Foo {
 }
 
 interface Foo2 {
->Foo2 : Foo2
-
     [x: string]: A;
 >x : string
->A : A
 
     a: A; // ok
 >a : A
->A : A
 
     b: B; // ok
 >b : B
->B : B
 
     c: number; // error
 >c : number
@@ -67,15 +59,12 @@ var a: {
 
     [x: string]: A;
 >x : string
->A : A
 
     a: A; // ok
 >a : A
->A : A
 
     b: B; // ok
 >b : B
->B : B
 
     c: number; // error
 >c : number
@@ -89,7 +78,6 @@ var a: {
 var b: { [x: string]: A } = {
 >b : { [x: string]: A; }
 >x : string
->A : A
 >{    a: A,    b: B} : { a: typeof A; b: typeof B; }
 
     a: A,

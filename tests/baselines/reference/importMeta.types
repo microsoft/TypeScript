@@ -9,11 +9,11 @@
 >response : Response
 >await fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Response
 >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
->fetch : (input?: string | Request, init?: RequestInit) => Promise<Response>
+>fetch : { (input: RequestInfo, init?: RequestInit): Promise<Response>; (input: RequestInfo, init?: RequestInit): Promise<Response>; }
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any, options?: ObjectURLOptions): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
 >import.meta.url : any
 >import.meta : ImportMeta
@@ -53,9 +53,9 @@
 >image : HTMLImageElement
 >src : string
 >URL.createObjectURL(blob) : string
->URL.createObjectURL : (object: any, options?: ObjectURLOptions) => string
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any, options?: ObjectURLOptions): string; revokeObjectURL(url: string): void; }
->createObjectURL : (object: any, options?: ObjectURLOptions) => string
+>URL.createObjectURL : (object: any) => string
+>URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
+>createObjectURL : (object: any) => string
 >blob : Blob
 
   image.width = image.height = size;
@@ -123,7 +123,6 @@ let globalC = import.import.import.malkovich;
 === tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
 export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
 >foo : ImportMeta
->ImportMeta : ImportMeta
 >import.meta.blah = import.meta.blue = import.meta : ImportMeta
 >import.meta.blah : any
 >import.meta : ImportMeta
@@ -148,8 +147,6 @@ declare global {
 >global : any
 
   interface ImportMeta {
->ImportMeta : ImportMeta
-
     wellKnownProperty: { a: number, b: string, c: boolean };
 >wellKnownProperty : { a: number; b: string; c: boolean; }
 >a : number

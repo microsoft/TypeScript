@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface ComponentProps {
->ComponentProps : ComponentProps
-
     property1: string;
 >property1 : string
 
@@ -15,7 +13,6 @@ interface ComponentProps {
 export default function Component(props: ComponentProps) {
 >Component : (props: ComponentProps) => JSX.Element
 >props : ComponentProps
->ComponentProps : ComponentProps
 
     return (
 >(        // Error extra property        <AnotherComponent {...props} Property1/>    ) : JSX.Element
@@ -31,8 +28,6 @@ export default function Component(props: ComponentProps) {
 }
 
 interface AnotherComponentProps {
->AnotherComponentProps : AnotherComponentProps
-
     property1: string;
 >property1 : string
 }
@@ -40,7 +35,6 @@ interface AnotherComponentProps {
 function AnotherComponent({ property1 }: AnotherComponentProps) {
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >property1 : string
->AnotherComponentProps : AnotherComponentProps
 
     return (
 >(        <span>{property1}</span>    ) : JSX.Element

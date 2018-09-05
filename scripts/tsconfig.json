@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "removeComments": false,
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "sourceMap": true,
+        "lib": [
+            "es6",
+            "scripthost"
+        ],
+        "strictNullChecks": true,
+        "newLine": "lf",
+        "types": ["node"]
+    },
+    "files": [
+        "produceLKG.ts",
+        "buildProtocol.ts",
+        "processDiagnosticMessages.ts",
+        "generateLocalizedDiagnosticMessages.ts",
+        "configurePrerelease.ts",
+        "word2md.ts"
+    ]
+}

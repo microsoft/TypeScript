@@ -1260,3 +1260,54 @@ function md5(string:string): void {
 export default md5;
 >md5 : (string: string) => void
 
+// Repro from #26655
+
+interface DataShape {
+  message: { id: string }
+>message : { id: string; }
+>id : string
+}
+
+function getObject(id: string | number) {
+>getObject : (id: string | number) => any
+>id : string | number
+
+  return {} as any
+>{} as any : any
+>{} : {}
+}
+
+;(() => {
+>(() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }})() : void
+>(() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }}) : () => void
+>() => {  let id: string | number = 'a'  while (1) {    const data = getObject(id) as DataShape    const message = data.message    id = message.id  }} : () => void
+
+  let id: string | number = 'a'
+>id : string | number
+>'a' : "a"
+
+  while (1) {
+>1 : 1
+
+    const data = getObject(id) as DataShape
+>data : DataShape
+>getObject(id) as DataShape : DataShape
+>getObject(id) : any
+>getObject : (id: string | number) => any
+>id : string
+
+    const message = data.message
+>message : { id: string; }
+>data.message : { id: string; }
+>data : DataShape
+>message : { id: string; }
+
+    id = message.id
+>id = message.id : string
+>id : string | number
+>message.id : string
+>message : { id: string; }
+>id : string
+  }
+})()
+

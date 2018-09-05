@@ -10,8 +10,6 @@ function greeter(person: string) {
 
 class Dummy<usedtypeparameter, unusedtypeparameter> {
 >Dummy : Dummy<usedtypeparameter, unusedtypeparameter>
->usedtypeparameter : usedtypeparameter
->unusedtypeparameter : unusedtypeparameter
 
     private unusedprivatevariable: string;
 >unusedprivatevariable : string
@@ -24,7 +22,6 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
 
     public typedvariable: usedtypeparameter;
 >typedvariable : usedtypeparameter
->usedtypeparameter : usedtypeparameter
 
     constructor(message: string) {
 >message : string
@@ -77,8 +74,6 @@ namespace Validation {
 >Validation : typeof Validation
 
     export interface StringValidator {
->StringValidator : StringValidator
-
         isAcceptable(s: string): boolean;
 >isAcceptable : (s: string) => boolean
 >s : string
@@ -94,7 +89,6 @@ namespace Validation {
 
     export class LettersOnlyValidator implements StringValidator {
 >LettersOnlyValidator : LettersOnlyValidator
->StringValidator : StringValidator
 
         isAcceptable(s2: string) {
 >isAcceptable : (s2: string) => boolean
@@ -115,7 +109,6 @@ namespace Validation {
 
     export class ZipCodeValidator implements StringValidator {
 >ZipCodeValidator : ZipCodeValidator
->StringValidator : StringValidator
 
         isAcceptable(s3: string) {
 >isAcceptable : (s3: string) => boolean
@@ -131,28 +124,22 @@ namespace Validation {
     }
 
     interface usedLocallyInterface {
->usedLocallyInterface : usedLocallyInterface
     }
 
     interface usedLocallyInterface2 {
->usedLocallyInterface2 : usedLocallyInterface2
-
         someFunction(s1: string): void;
 >someFunction : (s1: string) => void
 >s1 : string
     }
 
     export interface exportedInterface {
->exportedInterface : exportedInterface
     }
 
     class dummy implements usedLocallyInterface {
 >dummy : dummy
->usedLocallyInterface : usedLocallyInterface
     }
 
     interface unusedInterface {
->unusedInterface : unusedInterface
     }
 }
 
@@ -178,27 +165,20 @@ namespace Greeter {
     }
 
     interface interface1 {
->interface1 : interface1
     }
 
     export interface interface2 extends interface1 {
->interface2 : interface2
->interface1 : interface1
     }
 
     interface interface3 {
->interface3 : interface3
     }
 
     export interface interface4 {
->interface4 : interface4
     }
 
     export let a: interface3;
 >a : interface3
->interface3 : interface3
 
     interface interface5 {
->interface5 : interface5
     }
 }

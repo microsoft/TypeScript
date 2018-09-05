@@ -1,4 +1,7 @@
-=== tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts ===
+=== /a.ts ===
+import * as _ from "./a";
+>_ : typeof _
+
 for (const _ of []) { }
 >_ : any
 >[] : undefined[]
@@ -7,8 +10,8 @@ for (const _ in []) { }
 >_ : string
 >[] : undefined[]
 
-namespace M {
->M : typeof M
+namespace _ns {
+>_ns : typeof _ns
 
     let _;
 >_ : any
@@ -21,4 +24,4 @@ namespace M {
 >_ : string
 >[] : undefined[]
 }
-    
+

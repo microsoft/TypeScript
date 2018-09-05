@@ -45,16 +45,19 @@ interface I extends B {
     a11: new <T extends Base>(x: T, y: T) => T; // ok
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
-    a14: new <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
+    a14: new <T, U>(x: { a: T; b: U }) => T; // ok
 }
 
 //// [subtypingWithConstructSignatures5.js]
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // same as subtypingWithConstructSignatures2 just with an extra level of indirection in the inheritance chain
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }

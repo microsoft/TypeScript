@@ -1,12 +1,8 @@
 === tests/cases/compiler/typeInferenceWithTypeAnnotation.ts ===
 declare function f<T>(p: (t: T) => T): T;
 >f : <T>(p: (t: T) => T) => T
->T : T
 >p : (t: T) => T
 >t : T
->T : T
->T : T
->T : T
 
 f((n: number) => n); 
 >f((n: number) => n) : number

@@ -3,8 +3,8 @@
  */
 namespace utils {
     const testPathPrefixRegExp = /(?:(file:\/{3})|\/)\.(ts|lib|src)\//g;
-    export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean) {
-        return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined;
+    export function removeTestPathPrefixes(text: string, retainTrailingDirectorySeparator?: boolean): string {
+        return text !== undefined ? text.replace(testPathPrefixRegExp, (_, scheme) => scheme || (retainTrailingDirectorySeparator ? "/" : "")) : undefined!; // TODO: GH#18217
     }
 
     /**
@@ -49,7 +49,7 @@ namespace utils {
     }
 
     function guessIndentation(lines: string[]) {
-        let indentation: number;
+        let indentation: number | undefined;
         for (const line of lines) {
             for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
                 if (!ts.isWhiteSpaceLike(line.charCodeAt(i))) {
@@ -61,10 +61,6 @@ namespace utils {
             }
         }
         return indentation;
-    }
-
-    export function toUtf8(text: string): string {
-        return new Buffer(text).toString("utf8");
     }
 
     export function getByteOrderMarkLength(text: string): number {

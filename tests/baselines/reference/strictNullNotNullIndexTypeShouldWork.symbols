@@ -14,7 +14,7 @@ class Test<T extends A> {
 
     attrs: Readonly<T>;
 >attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 25))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 11))
 
     m() {
@@ -46,7 +46,7 @@ class FooClass<P extends Foo = Foo> {
 
     properties: Readonly<P>;
 >properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 37))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 15))
 
     foo(): number {
@@ -70,7 +70,7 @@ class Test2<T extends A> {
 
     attrs: Readonly<T>;
 >attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 26))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 12))
 
     m() {

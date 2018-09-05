@@ -14,15 +14,15 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const nodes = getNodes(diag.file, diag.start!);
+            const nodes = getNodes(diag.file, diag.start);
             if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
         }),
     });
 
     function getNodes(sourceFile: SourceFile, pos: number) {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        const heritageClauses = getContainingClass(token)!.heritageClauses;
-        const extendsToken = heritageClauses[0].getFirstToken();
+        const token = getTokenAtPosition(sourceFile, pos);
+        const heritageClauses = getContainingClass(token)!.heritageClauses!;
+        const extendsToken = heritageClauses[0].getFirstToken()!;
         return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
     }
 

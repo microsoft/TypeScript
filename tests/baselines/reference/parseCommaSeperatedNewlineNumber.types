@@ -1,9 +1,0 @@
-=== tests/cases/compiler/parseCommaSeperatedNewlineNumber.ts ===
-(a,
->(a,1) : 1
->a,1 : 1
->a : any
-
-1)
->1 : 1
-

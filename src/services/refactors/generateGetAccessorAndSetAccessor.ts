@@ -9,20 +9,19 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
     interface Info {
-        container: ContainerDeclaration;
-        isStatic: boolean;
-        isReadonly: boolean;
-        type: TypeNode | undefined;
-        declaration: AcceptedDeclaration;
-        fieldName: AcceptedNameType;
-        accessorName: AcceptedNameType;
-        originalName: AcceptedNameType;
-        renameAccessor: boolean;
+        readonly container: ContainerDeclaration;
+        readonly isStatic: boolean;
+        readonly isReadonly: boolean;
+        readonly type: TypeNode | undefined;
+        readonly declaration: AcceptedDeclaration;
+        readonly fieldName: AcceptedNameType;
+        readonly accessorName: AcceptedNameType;
+        readonly originalName: AcceptedNameType;
+        readonly renameAccessor: boolean;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        const { file } = context;
-        if (!getConvertibleFieldAtPosition(context, file)) return undefined;
+        if (!getConvertibleFieldAtPosition(context)) return undefined;
 
         return [{
             name: actionName,
@@ -39,7 +38,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     function getEditsForAction(context: RefactorContext, _actionName: string): RefactorEditInfo | undefined {
         const { file } = context;
 
-        const fieldInfo = getConvertibleFieldAtPosition(context, file);
+        const fieldInfo = getConvertibleFieldAtPosition(context);
         if (!fieldInfo) return undefined;
 
         const isJS = isSourceFileJavaScript(file);
@@ -88,7 +87,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return { renameFilename, renameLocation, edits };
     }
 
-    function isConvertableName (name: DeclarationName): name is AcceptedNameType {
+    function isConvertibleName (name: DeclarationName): name is AcceptedNameType {
         return isIdentifier(name) || isStringLiteral(name);
     }
 
@@ -101,11 +100,11 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
     }
 
     function createAccessorAccessExpression (fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
-        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name : createThis();
+        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : createThis(); // TODO: GH#18217
         return isIdentifier(fieldName) ? createPropertyAccess(leftHead, fieldName) : createElementAccess(leftHead, createLiteral(fieldName));
     }
 
-    function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> {
+    function getModifiers(isJS: boolean, isStatic: boolean, accessModifier: SyntaxKind.PublicKeyword | SyntaxKind.PrivateKeyword): NodeArray<Modifier> | undefined {
         const modifiers = append<Modifier>(
             !isJS ? [createToken(accessModifier) as Token<SyntaxKind.PublicKeyword> | Token<SyntaxKind.PrivateKeyword>] : undefined,
             isStatic ? createToken(SyntaxKind.StaticKeyword) : undefined
@@ -117,20 +116,20 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         return name.charCodeAt(0) === CharacterCodes._;
     }
 
-    function getConvertibleFieldAtPosition(context: RefactorContext, file: SourceFile): Info | undefined {
-        const { startPosition, endPosition } = context;
+    function getConvertibleFieldAtPosition(context: RefactorContext): Info | undefined {
+        const { file, startPosition, endPosition } = context;
 
-        const node = getTokenAtPosition(file, startPosition, /*includeJsDocComment*/ false);
+        const node = getTokenAtPosition(file, startPosition);
         const declaration = findAncestor(node.parent, isAcceptedDeclaration);
         // make sure declaration have AccessibilityModifier or Static Modifier or Readonly Modifier
         const meaning = ModifierFlags.AccessibilityModifier | ModifierFlags.Static | ModifierFlags.Readonly;
-        if (!declaration || !rangeOverlapsWithStartEnd(declaration.name, startPosition, endPosition)
-            || !isConvertableName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
+        if (!declaration || !nodeOverlapsWithStartEnd(declaration.name, file, startPosition, endPosition!) // TODO: GH#18217
+            || !isConvertibleName(declaration.name) || (getModifierFlags(declaration) | meaning) !== meaning) return undefined;
 
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
-        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file.text), declaration.name);
-        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file.text) : name, declaration.name);
+        const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
+        const accessorName = createPropertyName(startWithUnderscore ? getUniqueName(name.substring(1), file) : name, declaration.name);
         return {
             isStatic: hasStaticModifier(declaration),
             isReadonly: hasReadonlyModifier(declaration),
@@ -144,12 +143,12 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         };
     }
 
-    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return createGetAccessor(
             /*decorators*/ undefined,
             modifiers,
             accessorName,
-            /*parameters*/ undefined,
+            /*parameters*/ undefined!, // TODO: GH#18217
             type,
             createBlock([
                 createReturn(
@@ -159,7 +158,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         );
     }
 
-    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return createSetAccessor(
             /*decorators*/ undefined,
             modifiers,
@@ -226,9 +225,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         if (!constructor.body) return;
         const { file, program, cancellationToken } = context;
 
-        const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(originalName.parent.pos, originalName, program, [file], cancellationToken), entry => (
-            (entry.type === "node" && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined
-        ));
+        const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(originalName.parent.pos, originalName, program, [file], cancellationToken!), entry => // TODO: GH#18217
+            (entry.type === "node" && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined);
 
         forEach(referenceEntries, entry => {
             const parent = entry.parent;

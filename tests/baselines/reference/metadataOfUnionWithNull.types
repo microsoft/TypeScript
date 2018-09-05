@@ -2,7 +2,6 @@
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
 >target : Object
->Object : Object
 >propKey : string | symbol
 
 class A {
@@ -70,14 +69,12 @@ class B {
 
     f: symbol | A;
 >f : symbol | A
->A : A
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     g: A | null;
 >g : A
->A : A
 >null : null
 
     @PropDeco
@@ -86,7 +83,6 @@ class B {
     h: null | B;
 >h : B
 >null : null
->B : B
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void

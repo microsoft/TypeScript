@@ -9,11 +9,7 @@ module M {
 >E : E
 
     export interface I1 {}
->I1 : I1
-
     interface I2 {}
->I2 : I2
-
     export class D {
 >D : D
 
@@ -25,25 +21,20 @@ module M {
 
         public m23: E;
 >m23 : E
->E : E
 
         public m24: I1;
 >m24 : I1
->I1 : I1
 
         public m232(): E { return null;}
 >m232 : () => E
->E : E
 >null : null
 
         public m242(): I1 { return null; }
 >m242 : () => I1
->I1 : I1
 >null : null
 
         public m26(i:I1) {}
 >m26 : (i: I1) => void
 >i : I1
->I1 : I1
     }
 }

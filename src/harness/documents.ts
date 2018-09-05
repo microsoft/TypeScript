@@ -148,12 +148,12 @@ namespace documents {
 
         public static fromUrl(url: string) {
             const match = SourceMap._dataURLRegExp.exec(url);
-            return match ? new SourceMap(/*mapFile*/ undefined, new Buffer(match[1], "base64").toString("utf8")) : undefined;
+            return match ? new SourceMap(/*mapFile*/ undefined, ts.sys.base64decode!(match[1])) : undefined;
         }
 
-        public static fromSource(text: string) {
+        public static fromSource(text: string): SourceMap | undefined {
             const url = this.getUrl(text);
-            return url && this.fromUrl(url);
+            return url === undefined ? undefined : this.fromUrl(url);
         }
 
         public getMappingsForEmittedLine(emittedLine: number): ReadonlyArray<Mapping> | undefined {

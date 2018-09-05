@@ -38,8 +38,6 @@ function g() {
 >3 : 3
 }
 interface I {
->I : I
-
     x:any;
 >x : any
 
@@ -48,7 +46,6 @@ interface I {
 }
 var w:I={x:null,y:3};
 >w : I
->I : I
 >{x:null,y:3} : { x: null; y: number; }
 >x : null
 >null : null

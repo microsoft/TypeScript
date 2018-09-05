@@ -63,6 +63,8 @@ namespace ts {
                     return visitAwaitExpression(node as AwaitExpression);
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(node as YieldExpression);
+                case SyntaxKind.ReturnStatement:
+                    return visitReturnStatement(node as ReturnStatement);
                 case SyntaxKind.LabeledStatement:
                     return visitLabeledStatement(node as LabeledStatement);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -156,6 +158,16 @@ namespace ts {
                     ),
                     node
                 );
+            }
+
+            return visitEachChild(node, visitor, context);
+        }
+
+        function visitReturnStatement(node: ReturnStatement) {
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+                return updateReturn(node, createDownlevelAwait(
+                    node.expression ? visitNode(node.expression, visitor, isExpression) : createVoidZero()
+                ));
             }
 
             return visitEachChild(node, visitor, context);
@@ -294,7 +306,7 @@ namespace ts {
          *
          * @param node A ForOfStatement.
          */
-        function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement): VisitResult<Statement> {
+        function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
             if (node.initializer.transformFlags & TransformFlags.ContainsObjectRest) {
                 node = transformForOfStatementWithObjectRest(node);
             }
@@ -309,8 +321,8 @@ namespace ts {
         function transformForOfStatementWithObjectRest(node: ForOfStatement) {
             const initializerWithoutParens = skipParentheses(node.initializer) as ForInitializer;
             if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
-                let bodyLocation: TextRange;
-                let statementsLocation: TextRange;
+                let bodyLocation: TextRange | undefined;
+                let statementsLocation: TextRange | undefined;
                 const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const statements: Statement[] = [createForOfBindingStatement(initializerWithoutParens, temp)];
                 if (isBlock(node.statement)) {
@@ -351,8 +363,8 @@ namespace ts {
         function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression) {
             const binding = createForOfBindingStatement(node.initializer, boundValue);
 
-            let bodyLocation: TextRange;
-            let statementsLocation: TextRange;
+            let bodyLocation: TextRange | undefined;
+            let statementsLocation: TextRange | undefined;
             const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
             const statement = visitNode(node.statement, visitor, isStatement);
             if (isBlock(statement)) {
@@ -382,7 +394,7 @@ namespace ts {
                 : createAwait(expression);
         }
 
-        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
+        function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined) {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
             const result = isIdentifier(expression) ? getGeneratedNameForNode(iterator) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -416,7 +428,7 @@ namespace ts {
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
+                        /*statement*/ convertForOfStatementHead(node, getValue)
                     ),
                     /*location*/ node
                 ),
@@ -434,7 +446,7 @@ namespace ts {
                     createVariableDeclaration(catchVariable),
                     setEmitFlags(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
@@ -461,7 +473,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(createDownlevelAwait(callReturn))
+                                    createExpressionStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
@@ -562,7 +574,7 @@ namespace ts {
                     ? undefined
                     : node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
-                visitNode(/*questionToken*/ undefined, visitor, isToken),
+                visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -640,7 +652,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologue(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, node.body!.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             statements.push(
@@ -655,16 +667,16 @@ namespace ts {
                             /*parameters*/ [],
                             /*type*/ undefined,
                             updateBlock(
-                                node.body,
-                                visitLexicalEnvironment(node.body.statements, visitor, context, statementOffset)
+                                node.body!,
+                                visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                             )
                         )
                     )
                 )
             );
 
-            prependRange(statements, endLexicalEnvironment());
-            const block = updateBlock(node.body, statements);
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            const block = updateBlock(node.body!, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
@@ -695,14 +707,14 @@ namespace ts {
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                prependRange(statements, leadingStatements);
+                addStatementsAfterPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
         }
 
-        function appendObjectRestAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): Statement[] {
+        function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
             for (const parameter of node.parameters) {
                 if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
                     const temp = getGeneratedNameForNode(parameter);
@@ -878,18 +890,21 @@ namespace ts {
         scoped: false,
         priority: 1,
         text: `
-            var __assign = (this && this.__assign) || Object.assign || function(t) {
-                for (var s, i = 1, n = arguments.length; i < n; i++) {
-                    s = arguments[i];
-                    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                        t[p] = s[p];
-                }
-                return t;
+            var __assign = (this && this.__assign) || function () {
+                __assign = Object.assign || function(t) {
+                    for (var s, i = 1, n = arguments.length; i < n; i++) {
+                        s = arguments[i];
+                        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                            t[p] = s[p];
+                    }
+                    return t;
+                };
+                return __assign.apply(this, arguments);
             };`
     };
 
     export function createAssignHelper(context: TransformationContext, attributesSegments: Expression[]) {
-        if (context.getCompilerOptions().target >= ScriptTarget.ES2015) {
+        if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
             return createCall(createPropertyAccess(createIdentifier("Object"), "assign"),
                               /*typeArguments*/ undefined,
                               attributesSegments);
@@ -936,7 +951,7 @@ namespace ts {
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
-        (generatorFunc.emitNode || (generatorFunc.emitNode = {})).flags |= EmitFlags.AsyncFunctionBody;
+        (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody;
 
         return createCall(
             getHelperName("__asyncGenerator"),

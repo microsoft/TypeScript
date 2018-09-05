@@ -1,0 +1,33 @@
+=== tests/cases/compiler/context.ts ===
+export const Key = Symbol();
+>Key : Symbol(Key, Decl(context.ts, 0, 12))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export interface Context {
+>Context : Symbol(Context, Decl(context.ts, 0, 28))
+
+  [Key]: string;
+>[Key] : Symbol(Context[Key], Decl(context.ts, 1, 26))
+>Key : Symbol(Key, Decl(context.ts, 0, 12))
+}
+=== tests/cases/compiler/index.ts ===
+import { Key, Context } from "./context";
+>Key : Symbol(Key, Decl(index.ts, 0, 8))
+>Context : Symbol(Context, Decl(index.ts, 0, 13))
+
+export const context: Context = {
+>context : Symbol(context, Decl(index.ts, 2, 12))
+>Context : Symbol(Context, Decl(index.ts, 0, 13))
+
+  [Key]: 'bar',
+>[Key] : Symbol([Key], Decl(index.ts, 2, 33))
+>Key : Symbol(Key, Decl(index.ts, 0, 8))
+}
+
+export const withContext = ({ [Key]: value }: Context) => value;
+>withContext : Symbol(withContext, Decl(index.ts, 6, 12))
+>Key : Symbol(Key, Decl(index.ts, 0, 8))
+>value : Symbol(value, Decl(index.ts, 6, 29))
+>Context : Symbol(Context, Decl(index.ts, 0, 13))
+>value : Symbol(value, Decl(index.ts, 6, 29))
+

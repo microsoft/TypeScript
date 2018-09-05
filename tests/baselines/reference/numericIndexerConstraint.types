@@ -7,5 +7,4 @@ class C {
 
     [x: number]: RegExp;
 >x : number
->RegExp : RegExp
 }

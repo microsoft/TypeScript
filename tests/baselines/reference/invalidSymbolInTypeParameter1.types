@@ -6,6 +6,5 @@ function test() {
 >cats : any[]
 >new Array<WAWA>() : any[]
 >Array : ArrayConstructor
->WAWA : No type information available!
 }
 

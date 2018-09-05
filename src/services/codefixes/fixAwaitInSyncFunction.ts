@@ -34,7 +34,7 @@ namespace ts.codefix {
     }
 
     function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, start);
         const containingFunction = getContainingFunction(token);
         if (!containingFunction) {
             return;
@@ -56,7 +56,7 @@ namespace ts.codefix {
                 return;
         }
 
-        return {
+        return insertBefore && {
             insertBefore,
             returnType: getReturnType(containingFunction)
         };
@@ -65,7 +65,7 @@ namespace ts.codefix {
     function doChange(
         changes: textChanges.ChangeTracker,
         sourceFile: SourceFile,
-        { insertBefore, returnType }: { insertBefore: Node | undefined, returnType: TypeNode | undefined }): void {
+        { insertBefore, returnType }: { insertBefore: Node, returnType: TypeNode | undefined }): void {
 
         if (returnType) {
             const entityName = getEntityNameFromTypeNode(returnType);

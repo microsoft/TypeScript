@@ -15,8 +15,8 @@ foo();
 
 //// [0.js]
 System.register([], function (exports_1, context_1) {
-    var B;
     "use strict";
+    var B;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],

@@ -21,7 +21,7 @@
 
 goTo.marker("1");
 verify.completionListCount(1);
-verify.completionListContains("foo", "(JSX attribute) foo: string", "Doc ", "JSX attribute");
+verify.completionListContains("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute");
 goTo.marker("2");
 verify.completionListCount(1);
-verify.completionListContains("foo", "(JSX attribute) foo: string", "Doc ", "JSX attribute");
+verify.completionListContains("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute");

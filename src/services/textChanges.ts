@@ -190,8 +190,8 @@ namespace ts.textChanges {
     /**
      * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
      */
-    function isSeparator(node: Node, candidate: Node): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
-        return candidate && node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+    function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
+        return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
     }
 
     function spaces(count: number) {
@@ -212,8 +212,8 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
-        private readonly deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
         private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
             return new ChangeTracker(getNewLineOrDefaultFromHost(context.host, context.formatContext.options), context.formatContext);
@@ -233,12 +233,12 @@ namespace ts.textChanges {
             return this;
         }
 
-        /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
-        public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}) {
-            const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
-            const endPosition = getAdjustedEndPosition(sourceFile, node, options);
-            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
-            return this;
+        delete(sourceFile: SourceFile, node: Node | NodeArray<TypeParameterDeclaration>): void {
+            this.deletedNodes.push({ sourceFile, node });
+        }
+
+        public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
+            this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
 
         public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
@@ -248,30 +248,10 @@ namespace ts.textChanges {
             return this;
         }
 
-        public deleteNodeInList(sourceFile: SourceFile, node: Node) {
-            const containingList = formatting.SmartIndenter.getContainingList(node, sourceFile);
-            if (!containingList) {
-                Debug.fail("node is not a list element");
-                return this;
-            }
-            const index = indexOfNode(containingList, node);
-            if (index < 0) {
-                return this;
-            }
-            if (containingList.length === 1) {
-                this.deleteNode(sourceFile, node);
-                return this;
-            }
-
-            // Note: We will only delete a comma *after* a node. This will leave a trailing comma if we delete the last node.
-            // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
-            Debug.assert(!this.deletedNodesInLists.has(node), "Deleting a node twice");
-            this.deletedNodesInLists.add(node);
-            this.deleteRange(sourceFile, {
-                pos: startPositionToDeleteNodeInList(sourceFile, node),
-                end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
-            });
-            return this;
+        public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = {}): void {
+            const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
+            const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options, Position.FullStart);
+            this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
         }
 
         public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
@@ -310,8 +290,8 @@ namespace ts.textChanges {
             return this.replaceNode(sourceFile, oldNode, newNode, { suffix });
         }
 
-        private insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
-            this.replaceRange(sourceFile, createTextRange(pos), newNode, options);
+        public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
+            this.replaceRange(sourceFile, createRange(pos), newNode, options);
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
@@ -343,7 +323,7 @@ namespace ts.textChanges {
             // If so, we do not want to separate the node from its comment if we can.
             // Otherwise, add an extra new line immediately before the error span.
             const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
-            const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position, /*includeJsDocComment*/ false);
+            const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position);
             const indent = sourceFile.text.slice(lineStartPosition, startPosition);
             const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
@@ -353,13 +333,13 @@ namespace ts.textChanges {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
 
-        private insertText(sourceFile: SourceFile, pos: number, text: string): void {
-            this.replaceRangeWithText(sourceFile, createTextRange(pos), text);
+        public insertText(sourceFile: SourceFile, pos: number, text: string): void {
+            this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
-            let endNode: Node;
+            let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
                 if (!endNode) {
@@ -391,13 +371,16 @@ namespace ts.textChanges {
             else if (isParameter(before)) {
                 return {};
             }
+            else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
+                return { suffix: ", " };
+            }
             return Debug.failBadSyntaxKind(before); // We haven't handled this kind of node yet -- add it
         }
 
         public insertNodeAtConstructorStart(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
-            const firstStatement = firstOrUndefined(ctr.body.statements);
-            if (!firstStatement || !ctr.body.multiLine) {
-                this.replaceConstructorBody(sourceFile, ctr, [newStatement, ...ctr.body.statements]);
+            const firstStatement = firstOrUndefined(ctr.body!.statements);
+            if (!firstStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [newStatement, ...ctr.body!.statements]);
             }
             else {
                 this.insertNodeBefore(sourceFile, firstStatement, newStatement);
@@ -405,9 +388,9 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtConstructorEnd(sourceFile: SourceFile, ctr: ConstructorDeclaration, newStatement: Statement): void {
-            const lastStatement = lastOrUndefined(ctr.body.statements);
-            if (!lastStatement || !ctr.body.multiLine) {
-                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body.statements, newStatement]);
+            const lastStatement = lastOrUndefined(ctr.body!.statements);
+            if (!lastStatement || !ctr.body!.multiLine) {
+                this.replaceConstructorBody(sourceFile, ctr, [...ctr.body!.statements, newStatement]);
             }
             else {
                 this.insertNodeAfter(sourceFile, lastStatement, newStatement);
@@ -415,25 +398,25 @@ namespace ts.textChanges {
         }
 
         private replaceConstructorBody(sourceFile: SourceFile, ctr: ConstructorDeclaration, statements: ReadonlyArray<Statement>): void {
-            this.replaceNode(sourceFile, ctr.body, createBlock(statements, /*multiLine*/ true));
+            this.replaceNode(sourceFile, ctr.body!, createBlock(statements, /*multiLine*/ true));
         }
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
-            const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken(), {}, Position.Start);
+            const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
             this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
-                prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken().pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
+                prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });
         }
 
-        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration, newElement: ClassElement): void {
+        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
             const clsStart = cls.getStart(sourceFile);
             const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
-                + this.formatContext.options.indentSize;
+                + this.formatContext.options.indentSize!;
             this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, ...this.getInsertNodeAtClassStartPrefixSuffix(sourceFile, cls) });
         }
 
-        private getInsertNodeAtClassStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration): { prefix: string, suffix: string } {
+        private getInsertNodeAtClassStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration): { prefix: string, suffix: string } {
             if (cls.members.length === 0) {
                 if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
                     // For `class C {\n}`, don't add the trailing "\n"
@@ -459,6 +442,10 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 
+        public insertNodeAtEndOfList(sourceFile: SourceFile, list: NodeArray<Node>, newNode: Node): void {
+            this.insertNodeAt(sourceFile, list.end, newNode, { prefix: ", " });
+        }
+
         public insertNodesAfter(sourceFile: SourceFile, after: Node, newNodes: ReadonlyArray<Node>): void {
             const endPosition = this.insertNodeAfterWorker(sourceFile, after, first(newNodes));
             this.insertNodesAt(sourceFile, endPosition, newNodes, this.getInsertNodeAfterOptions(sourceFile, after));
@@ -469,7 +456,7 @@ namespace ts.textChanges {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
-                    this.replaceRange(sourceFile, createTextRange(after.end), createToken(SyntaxKind.SemicolonToken));
+                    this.replaceRange(sourceFile, createRange(after.end), createToken(SyntaxKind.SemicolonToken));
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
@@ -484,22 +471,29 @@ namespace ts.textChanges {
             };
         }
         private getInsertNodeAfterOptionsWorker(node: Node): InsertNodeOptions {
-            if (isClassDeclaration(node) || isModuleDeclaration(node)) {
-                return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ModuleDeclaration:
+                    return { prefix: this.newLineCharacter, suffix: this.newLineCharacter };
+
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.Identifier:
+                    return { prefix: ", " };
+
+                case SyntaxKind.PropertyAssignment:
+                    return { suffix: "," + this.newLineCharacter };
+
+                case SyntaxKind.ExportKeyword:
+                    return { prefix: " " };
+
+                case SyntaxKind.Parameter:
+                    return {};
+
+                default:
+                    Debug.assert(isStatement(node) || isClassOrTypeElement(node)); // Else we haven't handled this kind of node yet -- add it
+                    return { suffix: this.newLineCharacter };
             }
-            else if (isStatement(node) || isClassOrTypeElement(node)) {
-                return { suffix: this.newLineCharacter };
-            }
-            else if (isVariableDeclaration(node)) {
-                return { prefix: ", " };
-            }
-            else if (isPropertyAssignment(node)) {
-                return { suffix: "," + this.newLineCharacter };
-            }
-            else if (isParameter(node)) {
-                return {};
-            }
-            return Debug.failBadSyntaxKind(node); // We haven't handled this kind of node yet -- add it
         }
 
         public insertName(sourceFile: SourceFile, node: FunctionExpression | ClassExpression | ArrowFunction, name: string): void {
@@ -510,7 +504,7 @@ namespace ts.textChanges {
                 if (lparen) {
                     // `() => {}` --> `function f() {}`
                     this.insertNodesAt(sourceFile, lparen.getStart(sourceFile), [createToken(SyntaxKind.FunctionKeyword), createIdentifier(name)], { joiner: " " });
-                    this.deleteNode(sourceFile, arrow);
+                    deleteNode(this, sourceFile, arrow);
                 }
                 else {
                     // `x => {}` -> `function f(x) {}`
@@ -553,7 +547,7 @@ namespace ts.textChanges {
             if (index !== containingList.length - 1) {
                 // any element except the last one
                 // use next sibling as an anchor
-                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
+                const nextToken = getTokenAtPosition(sourceFile, after.end);
                 if (nextToken && isSeparator(after, nextToken)) {
                     // for list
                     // a, b, c
@@ -575,7 +569,7 @@ namespace ts.textChanges {
                     const lineAndCharOfNextElement = getLineAndCharacterOfPosition(sourceFile, skipWhitespacesAndLineBreaks(sourceFile.text, containingList[index + 1].getFullStart()));
                     // find line and character of the token that precedes next element (usually it is separator)
                     const lineAndCharOfNextToken = getLineAndCharacterOfPosition(sourceFile, nextToken.end);
-                    let prefix: string;
+                    let prefix: string | undefined;
                     let startPos: number;
                     if (lineAndCharOfNextToken.line === lineAndCharOfNextElement.line) {
                         // next element is located on the same line with separator:
@@ -601,14 +595,14 @@ namespace ts.textChanges {
 
                     // write separator and leading trivia of the next element as suffix
                     const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`;
-                    this.replaceRange(sourceFile, createTextRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
+                    this.replaceRange(sourceFile, createRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
                 }
             }
             else {
                 const afterStart = after.getStart(sourceFile);
                 const afterStartLinePosition = getLineStartPositionForPosition(afterStart, sourceFile);
 
-                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken;
+                let separator: SyntaxKind.CommaToken | SyntaxKind.SemicolonToken | undefined;
                 let multilineList = false;
 
                 // insert element after the last element in the list that has more than one item
@@ -635,7 +629,7 @@ namespace ts.textChanges {
                 }
                 if (multilineList) {
                     // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.replaceRange(sourceFile, createTextRange(end), createToken(separator));
+                    this.replaceRange(sourceFile, createRange(end), createToken(separator));
                     // use the same indentation as 'after' item
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
@@ -643,10 +637,10 @@ namespace ts.textChanges {
                     if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
-                    this.replaceRange(sourceFile, createTextRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
+                    this.replaceRange(sourceFile, createRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
                 }
                 else {
-                    this.replaceRange(sourceFile, createTextRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
+                    this.replaceRange(sourceFile, createRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
                 }
             }
             return this;
@@ -658,18 +652,30 @@ namespace ts.textChanges {
                 const [openBraceEnd, closeBraceEnd] = getClassBraceEnds(cls, sourceFile);
                 // For `class C { }` remove the whitespace inside the braces.
                 if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
-                    this.deleteRange(sourceFile, createTextRange(openBraceEnd, closeBraceEnd - 1));
+                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
                 }
             });
         }
 
-        private finishTrailingCommaAfterDeletingNodesInList() {
-            this.deletedNodesInLists.forEach(node => {
+        private finishDeleteDeclarations(): void {
+            const deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            for (const { sourceFile, node } of this.deletedNodes) {
+                if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
+                    if (isArray(node)) {
+                        this.deleteRange(sourceFile, rangeOfTypeParameters(node));
+                    }
+                    else {
+                        deleteDeclaration.deleteDeclaration(this, deletedNodesInLists, sourceFile, node);
+                    }
+                }
+            }
+
+            deletedNodesInLists.forEach(node => {
                 const sourceFile = node.getSourceFile();
-                const list = formatting.SmartIndenter.getContainingList(node, sourceFile);
+                const list = formatting.SmartIndenter.getContainingList(node, sourceFile)!;
                 if (node !== last(list)) return;
 
-                const lastNonDeletedIndex = findLastIndex(list, n => !this.deletedNodesInLists.has(n), list.length - 2);
+                const lastNonDeletedIndex = findLastIndex(list, n => !deletedNodesInLists.has(n), list.length - 2);
                 if (lastNonDeletedIndex !== -1) {
                     this.deleteRange(sourceFile, { pos: list[lastNonDeletedIndex].end, end: startPositionToDeleteNodeInList(sourceFile, list[lastNonDeletedIndex + 1]) });
                 }
@@ -683,11 +689,11 @@ namespace ts.textChanges {
          *    so we can only call this once and can't get the non-formatted text separately.
          */
         public getChanges(validate?: ValidateNonFormattedText): FileTextChanges[] {
+            this.finishDeleteDeclarations();
             this.finishClassesWithNodesInsertedAtStart();
-            this.finishTrailingCommaAfterDeletingNodesInList();
             const changes = changesToText.getTextChangesFromChanges(this.changes, this.newLineCharacter, this.formatContext, validate);
             for (const { oldFile, fileName, statements } of this.newFiles) {
-                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter));
+                changes.push(changesToText.newFileChanges(oldFile, fileName, statements, this.newLineCharacter, this.formatContext));
             }
             return changes;
         }
@@ -702,14 +708,14 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function getClassBraceEnds(cls: ClassLikeDeclaration, sourceFile: SourceFile): [number, number] {
-        return [findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile).end, findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile).end];
+    function getClassBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration, sourceFile: SourceFile): [number, number] {
+        return [findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile)!.end, findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)!.end];
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
     namespace changesToText {
-        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): FileTextChanges[] {
+        export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
             return group(changes, c => c.sourceFile.path).map(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 // order changes by start position
@@ -726,12 +732,16 @@ namespace ts.textChanges {
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string): FileTextChanges {
-            const text = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+            // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
+            const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
+            const sourceFile = createSourceFile(fileName, nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true);
+            const changes = formatting.formatDocument(sourceFile, formatContext);
+            const text = applyChanges(nonFormattedText, changes);
             return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
         }
 
-        function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             if (change.kind === ChangeKind.Remove) {
                 return "";
             }
@@ -742,7 +752,7 @@ namespace ts.textChanges {
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
-                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options.joiner || newLineCharacter)
+                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
@@ -750,7 +760,7 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
             if (validate) validate(node, text);
             const { options: formatOptions } = formatContext;
@@ -776,10 +786,10 @@ namespace ts.textChanges {
         }
     }
 
-    export function applyChanges(text: string, changes: TextChange[]): string {
+    export function applyChanges(text: string, changes: ReadonlyArray<TextChange>): string {
         for (let i = changes.length - 1; i >= 0; i--) {
-            const change = changes[i];
-            text = `${text.substring(0, change.span.start)}${change.newText}${text.substring(textSpanEnd(change.span))}`;
+            const { span, newText } = changes[i];
+            text = `${text.substring(0, span.start)}${newText}${text.substring(textSpanEnd(span))}`;
         }
         return text;
     }
@@ -789,7 +799,7 @@ namespace ts.textChanges {
     }
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         newNode.pos = getPos(node);
@@ -991,7 +1001,189 @@ namespace ts.textChanges {
     }
 
     function needSemicolonBetween(a: Node, b: Node): boolean {
-        return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) && b.name.kind === SyntaxKind.ComputedPropertyName
+        return (isPropertySignature(a) || isPropertyDeclaration(a)) && isClassOrTypeElement(b) && b.name!.kind === SyntaxKind.ComputedPropertyName
             || isStatementButNotDeclaration(a) && isStatementButNotDeclaration(b); // TODO: only if b would start with a `(` or `[`
+    }
+
+    namespace deleteDeclaration {
+        export function deleteDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
+            switch (node.kind) {
+                case SyntaxKind.Parameter: {
+                    const oldFunction = node.parent;
+                    if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                        // Lambdas with exactly one parameter are special because, after removal, there
+                        // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
+                        // case if the parameter is simply removed (e.g. in `x => 1`).
+                        const newFunction = updateArrowFunction(
+                            oldFunction,
+                            oldFunction.modifiers,
+                            oldFunction.typeParameters,
+                            /*parameters*/ undefined!, // TODO: GH#18217
+                            oldFunction.type,
+                            oldFunction.equalsGreaterThanToken,
+                            oldFunction.body);
+
+                        // Drop leading and trailing trivia of the new function because we're only going
+                        // to replace the span (vs the full span) of the old function - the old leading
+                        // and trailing trivia will remain.
+                        suppressLeadingAndTrailingTrivia(newFunction);
+
+                        changes.replaceNode(sourceFile, oldFunction, newFunction);
+                    }
+                    else {
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                    }
+                    break;
+                }
+
+                case SyntaxKind.ImportDeclaration:
+                    deleteNode(changes, sourceFile, node,
+                        // For first import, leave header comment in place
+                        node === sourceFile.imports[0].parent ? { useNonAdjustedStartPosition: true, useNonAdjustedEndPosition: false } : undefined);
+                    break;
+
+                case SyntaxKind.BindingElement:
+                    const pattern = (node as BindingElement).parent;
+                    const preserveComma = pattern.kind === SyntaxKind.ArrayBindingPattern && node !== last(pattern.elements);
+                    if (preserveComma) {
+                        deleteNode(changes, sourceFile, node);
+                    }
+                    else {
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                    }
+                    break;
+
+                case SyntaxKind.VariableDeclaration:
+                    deleteVariableDeclaration(changes, deletedNodesInLists, sourceFile, node as VariableDeclaration);
+                    break;
+
+                case SyntaxKind.TypeParameter:
+                    deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                    break;
+
+                case SyntaxKind.ImportSpecifier:
+                    const namedImports = (node as ImportSpecifier).parent;
+                    if (namedImports.elements.length === 1) {
+                        deleteImportBinding(changes, sourceFile, namedImports);
+                    }
+                    else {
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                    }
+                    break;
+
+                case SyntaxKind.NamespaceImport:
+                    deleteImportBinding(changes, sourceFile, node as NamespaceImport);
+                    break;
+
+                default:
+                    if (isImportClause(node.parent) && node.parent.name === node) {
+                        deleteDefaultImport(changes, sourceFile, node.parent);
+                    }
+                    else if (isCallLikeExpression(node.parent)) {
+                        deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                    }
+                    else {
+                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { useNonAdjustedEndPosition: true } : undefined);
+                    }
+            }
+        }
+
+        function deleteDefaultImport(changes: ChangeTracker, sourceFile: SourceFile, importClause: ImportClause): void {
+            if (!importClause.namedBindings) {
+                // Delete the whole import
+                deleteNode(changes, sourceFile, importClause.parent);
+            }
+            else {
+                // import |d,| * as ns from './file'
+                const start = importClause.name!.getStart(sourceFile);
+                const nextToken = getTokenAtPosition(sourceFile, importClause.name!.end);
+                if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
+                    // shift first non-whitespace position after comma to the start position of the node
+                    const end = skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true);
+                    changes.deleteRange(sourceFile, { pos: start, end });
+                }
+                else {
+                    deleteNode(changes, sourceFile, importClause.name!);
+                }
+            }
+        }
+
+        function deleteImportBinding(changes: ChangeTracker, sourceFile: SourceFile, node: NamedImportBindings): void {
+            if (node.parent.name) {
+                // Delete named imports while preserving the default import
+                // import d|, * as ns| from './file'
+                // import d|, { a }| from './file'
+                const previousToken = Debug.assertDefined(getTokenAtPosition(sourceFile, node.pos - 1));
+                changes.deleteRange(sourceFile, { pos: previousToken.getStart(sourceFile), end: node.end });
+            }
+            else {
+                // Delete the entire import declaration
+                // |import * as ns from './file'|
+                // |import { a } from './file'|
+                const importDecl = getAncestor(node, SyntaxKind.ImportDeclaration)!;
+                deleteNode(changes, sourceFile, importDecl);
+            }
+        }
+
+        function deleteVariableDeclaration(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: VariableDeclaration): void {
+            const { parent } = node;
+
+            if (parent.kind === SyntaxKind.CatchClause) {
+                // TODO: There's currently no unused diagnostic for this, could be a suggestion
+                changes.deleteNodeRange(sourceFile, findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!, findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!);
+                return;
+            }
+
+            if (parent.declarations.length !== 1) {
+                deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
+                return;
+            }
+
+            const gp = parent.parent;
+            switch (gp.kind) {
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForInStatement:
+                    changes.replaceNode(sourceFile, node, createObjectLiteral());
+                    break;
+
+                case SyntaxKind.ForStatement:
+                    deleteNode(changes, sourceFile, parent);
+                    break;
+
+                case SyntaxKind.VariableStatement:
+                    deleteNode(changes, sourceFile, gp);
+                    break;
+
+                default:
+                    Debug.assertNever(gp);
+            }
+        }
+    }
+
+    /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
+    // Exported for tests only! (TODO: improve tests to not need this)
+    export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = {}): void {
+        const startPosition = getAdjustedStartPosition(sourceFile, node, options, Position.FullStart);
+        const endPosition = getAdjustedEndPosition(sourceFile, node, options);
+        changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
+    }
+
+    function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: NodeSet<Node>, sourceFile: SourceFile, node: Node): void {
+        const containingList = Debug.assertDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
+        const index = indexOfNode(containingList, node);
+        Debug.assert(index !== -1);
+        if (containingList.length === 1) {
+            deleteNode(changes, sourceFile, node);
+            return;
+        }
+
+        // Note: We will only delete a comma *after* a node. This will leave a trailing comma if we delete the last node.
+        // That's handled in the end by `finishTrailingCommaAfterDeletingNodesInList`.
+        Debug.assert(!deletedNodesInLists.has(node), "Deleting a node twice");
+        deletedNodesInLists.add(node);
+        changes.deleteRange(sourceFile, {
+            pos: startPositionToDeleteNodeInList(sourceFile, node),
+            end: index === containingList.length - 1 ? getAdjustedEndPosition(sourceFile, node, {}) : startPositionToDeleteNodeInList(sourceFile, containingList[index + 1]),
+        });
     }
 }

@@ -7,15 +7,15 @@ var mod = require('./mod');
 >'./mod' : "./mod"
 
 var a = new mod.A()
->a : A & { [x: string]: any; m(n: number): number; }
->new mod.A() : A & { [x: string]: any; m(n: number): number; }
+>a : A & { m(n: number): number; }
+>new mod.A() : A & { m(n: number): number; }
 >mod.A : typeof A
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >A : typeof A
 
 var b = new mod.B()
->b : B & { [x: string]: any; m(n: number): number; }
->new mod.B() : B & { [x: string]: any; m(n: number): number; }
+>b : B & { m(n: number): number; }
+>new mod.B() : B & { m(n: number): number; }
 >mod.B : typeof B
 >mod : typeof import("tests/cases/conformance/salsa/mod")
 >B : typeof B
@@ -23,14 +23,14 @@ var b = new mod.B()
 a.m('nope')
 >a.m('nope') : number
 >a.m : (n: number) => number
->a : A & { [x: string]: any; m(n: number): number; }
+>a : A & { m(n: number): number; }
 >m : (n: number) => number
 >'nope' : "nope"
 
 b.m('not really')
 >b.m('not really') : number
 >b.m : (n: number) => number
->b : B & { [x: string]: any; m(n: number): number; }
+>b : B & { m(n: number): number; }
 >m : (n: number) => number
 >'not really' : "not really"
 
@@ -81,15 +81,15 @@ exports.B = B
 >B : typeof B
 
 A.prototype = B.prototype = {
->A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->A.prototype : any
+>A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
+>A.prototype : { m(n: number): number; }
 >A : typeof A
->prototype : any
->B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
->B.prototype : any
+>prototype : { m(n: number): number; }
+>B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
+>B.prototype : { m(n: number): number; }
 >B : typeof B
->prototype : any
->{    /** @param {number} n */    m(n) {        return n + 1    }} : { [x: string]: any; m(n: number): number; }
+>prototype : { m(n: number): number; }
+>{    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
 
     /** @param {number} n */
     m(n) {

@@ -12,7 +12,6 @@ import { SomeClass } from './auxiliry';
 
 function annotation(): PropertyDecorator {
 >annotation : () => PropertyDecorator
->PropertyDecorator : PropertyDecorator
 
     return (target: any): void => { };
 >(target: any): void => { } : (target: any) => void
@@ -25,6 +24,5 @@ export class ClassA {
 >annotation() : PropertyDecorator
 >annotation : () => PropertyDecorator
 >array : SomeClass
->SomeClass : SomeClass
 >null : null
 }

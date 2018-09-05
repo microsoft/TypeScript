@@ -636,12 +636,43 @@ interface I7 {
 type Foo7<T extends number> = T;
 declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
 
+// Repro from #21770
+
+type Dict<T extends string> = { [key in T]: number };
+type DictDict<V extends string, T extends string> = { [key in V]: Dict<T> };
+
+function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    return dd[k1][k2];
+}
+
+function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    const d: Dict<T> = dd[k1];
+    return d[k2];
+}
+
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -1054,6 +1085,22 @@ var Unbounded = /** @class */ (function () {
     };
     return Unbounded;
 }());
+function ff1(dd, k1, k2) {
+    return dd[k1][k2];
+}
+function ff2(dd, k1, k2) {
+    var d = dd[k1];
+    return d[k2];
+}
+// Repro from #26409
+var cf1 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
+var cf2 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1381,3 +1428,15 @@ interface I7 {
 }
 declare type Foo7<T extends number> = T;
 declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+declare type Dict<T extends string> = {
+    [key in T]: number;
+};
+declare type DictDict<V extends string, T extends string> = {
+    [key in V]: Dict<T>;
+};
+declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare const cf1: <T extends { [P in K]: string; } & {
+    cool: string;
+}, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;

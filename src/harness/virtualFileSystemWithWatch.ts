@@ -1,5 +1,3 @@
-/// <reference path="harness.ts" />
-
 namespace ts.TestFSWithWatch {
     export const libFile: File = {
         path: "/a/lib/lib.d.ts",
@@ -80,7 +78,9 @@ interface Array<T> {}`
     }
 
     export interface SymLink {
+        /** Location of the symlink. */
         path: string;
+        /** Relative path to the real file. */
         symLink: string;
     }
 
@@ -175,16 +175,15 @@ interface Array<T> {}`
         }
     }
 
-    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: Map<number>) {
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyMap<number>): void;
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyArray<string>, eachKeyCount: number): void;
+    export function checkMultiMapKeyCount(caption: string, actual: MultiMap<any>, expectedKeysMapOrArray: ReadonlyMap<number> | ReadonlyArray<string>, eachKeyCount?: number) {
+        const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCount!) : expectedKeysMapOrArray;
         verifyMapSize(caption, actual, arrayFrom(expectedKeys.keys()));
         expectedKeys.forEach((count, name) => {
             assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
-            assert.equal(actual.get(name).length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
+            assert.equal(actual.get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
         });
-    }
-
-    export function checkMultiMapEachKeyWithCount(caption: string, actual: MultiMap<any>, expectedKeys: ReadonlyArray<string>, count: number) {
-        return checkMultiMapKeyCount(caption, actual, arrayToMap(expectedKeys, s => s, () => count));
     }
 
     export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
@@ -198,16 +197,31 @@ interface Array<T> {}`
         checkMapKeys("watchedFiles", host.watchedFiles, expectedFiles);
     }
 
-    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: Map<number>) {
-        checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles);
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number>): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyArray<string>, eachFileWatchCount: number): void;
+    export function checkWatchedFilesDetailed(host: TestServerHost, expectedFiles: ReadonlyMap<number> | ReadonlyArray<string>, eachFileWatchCount?: number) {
+        if (isArray(expectedFiles)) {
+            checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles, eachFileWatchCount!);
+        }
+        else {
+            checkMultiMapKeyCount("watchedFiles", host.watchedFiles, expectedFiles);
+        }
     }
 
     export function checkWatchedDirectories(host: TestServerHost, expectedDirectories: string[], recursive: boolean) {
         checkMapKeys(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
     }
 
-    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: Map<number>, recursive: boolean) {
-        checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number>, recursive: boolean): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyArray<string>, eachDirectoryWatchCount: number, recursive: boolean): void;
+    export function checkWatchedDirectoriesDetailed(host: TestServerHost, expectedDirectories: ReadonlyMap<number> | ReadonlyArray<string>, recursiveOrEachDirectoryWatchCount: boolean | number, recursive?: boolean) {
+        if (isArray(expectedDirectories)) {
+            checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories, recursiveOrEachDirectoryWatchCount as number);
+        }
+        else {
+            recursive = recursiveOrEachDirectoryWatchCount as boolean;
+            checkMultiMapKeyCount(`watchedDirectories${recursive ? " recursive" : ""}`, recursive ? host.watchedDirectoriesRecursive : host.watchedDirectories, expectedDirectories);
+        }
     }
 
     export function checkOutputContains(host: TestServerHost, expected: ReadonlyArray<string>) {
@@ -322,7 +336,7 @@ interface Array<T> {}`
         readonly watchedFiles = createMultiMap<TestFileWatcher>();
         private readonly executingFilePath: string;
         private readonly currentDirectory: string;
-        private readonly dynamicPriorityWatchFile: HostWatchFile;
+        private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
@@ -338,9 +352,9 @@ interface Array<T> {}`
             if (tscWatchDirectory === Tsc_WatchDirectory.WatchFile) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });
@@ -348,9 +362,9 @@ interface Array<T> {}`
             else if (tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory) {
                 const watchDirectory: HostWatchDirectory = (directory, cb) => this.watchDirectory(directory, fileName => cb(fileName), /*recursive*/ false);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });
@@ -359,9 +373,9 @@ interface Array<T> {}`
                 const watchFile = createDynamicPriorityPollingWatchFile(this);
                 const watchDirectory: HostWatchDirectory = (directory, cb) => watchFile(directory, () => cb(directory), PollingInterval.Medium);
                 this.customRecursiveWatchDirectory = createRecursiveDirectoryWatcher({
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames,
                     directoryExists: path => this.directoryExists(path),
                     getAccessibleSortedChildDirectories: path => this.getDirectories(path),
-                    filePathComparer: this.useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive,
                     watchDirectory,
                     realpath: s => this.realpath(s)
                 });
@@ -465,7 +479,7 @@ interface Array<T> {}`
             else {
                 currentEntry.content = content;
                 currentEntry.modifiedTime = this.now();
-                this.fs.get(getDirectoryPath(currentEntry.path)).modifiedTime = this.now();
+                this.fs.get(getDirectoryPath(currentEntry.path))!.modifiedTime = this.now();
                 if (options && options.invokeDirectoryWatcherInsteadOfFileChanged) {
                     this.invokeDirectoryWatcher(getDirectoryPath(currentEntry.fullPath), currentEntry.fullPath);
                 }
@@ -559,7 +573,9 @@ interface Array<T> {}`
         }
 
         private addFileOrFolderInFolder(folder: FsFolder, fileOrDirectory: FsFile | FsFolder | FsSymLink, ignoreWatch?: boolean) {
-            insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            if (!this.fs.has(fileOrDirectory.path)) {
+                insertSorted(folder.entries, fileOrDirectory, (a, b) => compareStringsCaseSensitive(getBaseFileName(a.path), getBaseFileName(b.path)));
+            }
             folder.modifiedTime = this.now();
             this.fs.set(fileOrDirectory.path, fileOrDirectory);
 
@@ -567,10 +583,14 @@ interface Array<T> {}`
                 return;
             }
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
+            if (isFsFolder(fileOrDirectory)) {
+                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, "");
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
+            }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
 
-        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming?: boolean) {
+        private removeFileOrFolder(fileOrDirectory: FsFile | FsFolder | FsSymLink, isRemovableLeafFolder: (folder: FsFolder) => boolean, isRenaming = false) {
             const basePath = getDirectoryPath(fileOrDirectory.path);
             const baseFolder = this.fs.get(basePath) as FsFolder;
             if (basePath !== fileOrDirectory.path) {
@@ -583,12 +603,11 @@ interface Array<T> {}`
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Deleted);
             if (isFsFolder(fileOrDirectory)) {
                 Debug.assert(fileOrDirectory.entries.length === 0 || isRenaming);
-                const relativePath = this.getRelativePathToDirectory(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
                 // Invoke directory and recursive directory watcher for the folder
                 // Here we arent invoking recursive directory watchers for the base folders
                 // since that is something we would want to do for both file as well as folder we are deleting
-                this.invokeWatchedDirectoriesCallback(fileOrDirectory.fullPath, relativePath);
-                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, relativePath);
+                this.invokeWatchedDirectoriesCallback(fileOrDirectory.fullPath, "");
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
             }
 
             if (basePath !== fileOrDirectory.path) {
@@ -601,7 +620,14 @@ interface Array<T> {}`
             }
         }
 
-        removeFolder(folderPath: string, recursive?: boolean) {
+        deleteFile(filePath: string) {
+            const path = this.toFullPath(filePath);
+            const currentEntry = this.fs.get(path) as FsFile;
+            Debug.assert(isFsFile(currentEntry));
+            this.removeFileOrFolder(currentEntry, returnFalse);
+        }
+
+        deleteFolder(folderPath: string, recursive?: boolean) {
             const path = this.toFullPath(folderPath);
             const currentEntry = this.fs.get(path) as FsFolder;
             Debug.assert(isFsFolder(currentEntry));
@@ -609,7 +635,7 @@ interface Array<T> {}`
                 const subEntries = currentEntry.entries.slice();
                 subEntries.forEach(fsEntry => {
                     if (isFsFolder(fsEntry)) {
-                        this.removeFolder(fsEntry.fullPath, recursive);
+                        this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
                         this.removeFileOrFolder(fsEntry, returnFalse);
@@ -621,15 +647,15 @@ interface Array<T> {}`
 
         // For overriding the methods
         invokeWatchedDirectoriesCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
         }
 
         invokeWatchedDirectoriesRecursiveCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
         }
 
         invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
-            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
+            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath))!, ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -687,11 +713,11 @@ interface Array<T> {}`
 
         private toFsFolder(path: string): FsFolder {
             const fsFolder = this.toFsEntry(path) as FsFolder;
-            fsFolder.entries = [] as SortedArray<FSEntry>;
+            fsFolder.entries = [] as FSEntry[] as SortedArray<FSEntry>; // https://github.com/Microsoft/TypeScript/issues/19873
             return fsFolder;
         }
 
-        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)): T | undefined {
+        private getRealFsEntry<T extends FSEntry>(isFsEntry: (fsEntry: FSEntry) => fsEntry is T, path: Path, fsEntry = this.fs.get(path)!): T | undefined {
             if (isFsEntry(fsEntry)) {
                 return fsEntry;
             }
@@ -737,21 +763,29 @@ interface Array<T> {}`
         getModifiedTime(s: string) {
             const path = this.toFullPath(s);
             const fsEntry = this.fs.get(path);
-            return fsEntry && fsEntry.modifiedTime;
+            return (fsEntry && fsEntry.modifiedTime)!; // TODO: GH#18217
         }
 
-        readFile(s: string): string {
+        setModifiedTime(s: string, date: Date) {
+            const path = this.toFullPath(s);
+            const fsEntry = this.fs.get(path);
+            if (fsEntry) {
+                fsEntry.modifiedTime = date;
+            }
+        }
+
+        readFile(s: string): string | undefined {
             const fsEntry = this.getRealFile(this.toFullPath(s));
             return fsEntry ? fsEntry.content : undefined;
         }
 
         getFileSize(s: string) {
             const path = this.toFullPath(s);
-            const entry = this.fs.get(path);
+            const entry = this.fs.get(path)!;
             if (isFsFile(entry)) {
                 return entry.fileSize ? entry.fileSize : entry.content.length;
             }
-            return undefined;
+            return undefined!; // TODO: GH#18217
         }
 
         directoryExists(s: string) {
@@ -812,7 +846,7 @@ interface Array<T> {}`
         }
 
         createSHA256Hash(s: string): string {
-            return sys.createSHA256Hash(s);
+            return sys.createSHA256Hash!(s);
         }
 
         watchFile(fileName: string, cb: FileWatcherCallback, pollingInterval: number) {
@@ -925,7 +959,7 @@ interface Array<T> {}`
             }
             const dirFullPath = this.realpath(getDirectoryPath(fullPath));
             const realFullPath = combinePaths(dirFullPath, getBaseFileName(fullPath));
-            const fsEntry = this.fs.get(this.toPath(realFullPath));
+            const fsEntry = this.fs.get(this.toPath(realFullPath))!;
             if (isFsSymLink(fsEntry)) {
                 return this.realpath(fsEntry.symLink);
             }
@@ -934,7 +968,7 @@ interface Array<T> {}`
         }
 
         readonly exitMessage = "System Exit";
-        exitCode: number;
+        exitCode: number | undefined;
         readonly resolvePath = (s: string) => s;
         readonly getExecutingFilePath = () => this.executingFilePath;
         readonly getCurrentDirectory = () => this.currentDirectory;
@@ -943,7 +977,7 @@ interface Array<T> {}`
             throw new Error(this.exitMessage);
         }
         getEnvironmentVariable(name: string) {
-            return this.environmentVariables && this.environmentVariables.get(name);
+            return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }
 }

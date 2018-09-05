@@ -90,8 +90,6 @@ var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 
 // Instantiated module
 module T { }
->T : any
-
 module U {
 >U : typeof U
 

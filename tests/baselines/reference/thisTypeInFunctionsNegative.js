@@ -174,66 +174,60 @@ function initializer(this: C = new C()): number { return this.n; }
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;
+const f2 = <T>(this: {n: number}, m: number) => m + this.n;
+const f3 = async (this: {n: number}, m: number) => m + this.n;
+const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 
 
 //// [thisTypeInFunctionsNegative.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var _this = this;
-var C = /** @class */ (function () {
-    function C() {
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+class C {
+    explicitThis(m) {
+        return this.n + m;
     }
-    C.prototype.explicitThis = function (m) {
+    implicitThis(m) {
         return this.n + m;
-    };
-    C.prototype.implicitThis = function (m) {
+    }
+    explicitC(m) {
         return this.n + m;
-    };
-    C.prototype.explicitC = function (m) {
+    }
+    explicitProperty(m) {
         return this.n + m;
-    };
-    C.prototype.explicitProperty = function (m) {
-        return this.n + m;
-    };
-    C.prototype.explicitVoid = function (m) {
+    }
+    explicitVoid(m) {
         return this.n + m; // 'n' doesn't exist on type 'void'.
-    };
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
     }
-    D.prototype.explicitThis = function (m) {
+}
+class D {
+    explicitThis(m) {
         return this.x + m;
-    };
-    D.prototype.explicitD = function (m) {
+    }
+    explicitD(m) {
         return this.x + m;
-    };
-    return D;
-}());
-var impl = {
+    }
+}
+let impl = {
     a: 12,
-    explicitVoid1: function () {
+    explicitVoid1() {
         return this.a; // error, no 'a' in 'void'
     },
-    explicitVoid2: function () { return _this.a; },
-    explicitStructural: function () { return 12; },
-    explicitInterface: function () { return 12; },
-    explicitThis: function () {
+    explicitVoid2: () => this.a,
+    explicitStructural: () => 12,
+    explicitInterface: () => 12,
+    explicitThis() {
         return this.a;
-    }
+    },
 };
-var implExplicitStructural = impl.explicitStructural;
+let implExplicitStructural = impl.explicitStructural;
 implExplicitStructural(); // error, no 'a' in 'void'
-var implExplicitInterface = impl.explicitInterface;
+let implExplicitInterface = impl.explicitInterface;
 implExplicitInterface(); // error, no 'a' in 'void' 
 function explicitStructural(x) {
     return x + this.y;
@@ -244,15 +238,15 @@ function propertyName(x) {
 function voidThisSpecified(x) {
     return x + this.notSpecified;
 }
-var ok = { y: 12, explicitStructural: explicitStructural };
-var wrongPropertyType = { y: 'foo', explicitStructural: explicitStructural };
-var wrongPropertyName = { wrongName: 12, explicitStructural: explicitStructural };
+let ok = { y: 12, explicitStructural };
+let wrongPropertyType = { y: 'foo', explicitStructural };
+let wrongPropertyName = { wrongName: 12, explicitStructural };
 ok.f(); // not enough arguments
 ok.f('wrong type');
 ok.f(13, 'too many arguments');
 wrongPropertyType.f(13);
 wrongPropertyName.f(13);
-var c = new C();
+let c = new C();
 c.explicitC(); // not enough arguments
 c.explicitC('wrong type');
 c.explicitC(13, 'too many arguments');
@@ -266,8 +260,8 @@ c.explicitProperty(); // not enough arguments
 c.explicitProperty('wrong type 3');
 c.explicitProperty(15, 'too many arguments 3');
 // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
-var specifiedToVoid = explicitStructural;
-var reconstructed = {
+let specifiedToVoid = explicitStructural;
+let reconstructed = {
     n: 12,
     explicitThis: c.explicitThis,
     explicitC: c.explicitC,
@@ -276,8 +270,8 @@ var reconstructed = {
 };
 ;
 // lambdas have this: void for assignability purposes (and this unbound (free) for body checking)
-var d = new D();
-var explicitXProperty;
+let d = new D();
+let explicitXProperty;
 // from differing object types
 c.explicitC = function (m) { return this.x + m; };
 c.explicitProperty = explicitXProperty;
@@ -290,64 +284,41 @@ c.explicitThis = d.explicitThis;
 c.explicitVoid = d.explicitD;
 c.explicitVoid = d.explicitThis;
 /// class-based polymorphic assignability (with inheritance!) ///
-var Base1 = /** @class */ (function () {
-    function Base1() {
-    }
-    Base1.prototype.polymorphic = function () { return this.x; };
-    Base1.prototype.explicit = function () { return this.x; };
-    Base1.explicitStatic = function () { return this.x; };
-    return Base1;
-}());
-var Derived1 = /** @class */ (function (_super) {
-    __extends(Derived1, _super);
-    function Derived1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Derived1;
-}(Base1));
-var Base2 = /** @class */ (function () {
-    function Base2() {
-    }
-    Base2.prototype.polymorphic = function () { return this.y; };
-    Base2.prototype.explicit = function () { return this.x; };
-    return Base2;
-}());
-var Derived2 = /** @class */ (function (_super) {
-    __extends(Derived2, _super);
-    function Derived2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Derived2;
-}(Base2));
-var b1 = new Base1();
-var d1 = new Derived1();
-var b2 = new Base2();
-var d2 = new Derived2();
+class Base1 {
+    polymorphic() { return this.x; }
+    explicit() { return this.x; }
+    static explicitStatic() { return this.x; }
+}
+class Derived1 extends Base1 {
+}
+class Base2 {
+    polymorphic() { return this.y; }
+    explicit() { return this.x; }
+}
+class Derived2 extends Base2 {
+}
+let b1 = new Base1();
+let d1 = new Derived1();
+let b2 = new Base2();
+let d2 = new Derived2();
 b1.polymorphic = b2.polymorphic; // error, 'this.y' not in Base1: { x }
 b1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
 d1.explicit = b2.polymorphic; // error, 'y' not in Base1: { x }
 ////// use this-type for construction with new ////
 function VoidThis() {
 }
-var voidThis = new VoidThis();
+let voidThis = new VoidThis();
 ///// syntax-ish errors /////
-var ThisConstructor = /** @class */ (function () {
-    function ThisConstructor(n) {
+class ThisConstructor {
+    constructor(n) {
         this.n = n;
     }
-    return ThisConstructor;
-}());
+}
 var thisConstructorType;
 function notFirst(a) { return this.n; }
 ///// parse errors /////
 function modifiers() { return this.n; }
-function restParam() {
-    var  = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        [_i] = arguments[_i];
-    }
-    return this.n;
-}
+function restParam(...) { return this.n; }
 function optional() { return this.n; }
 function decorated() { return this.n; }
 function initializer(, C) { }
@@ -357,5 +328,7 @@ number;
     return this.n;
 }
 // can't name parameters 'this' in a lambda.
-c.explicitProperty = (this, m);
-m + this.n;
+c.explicitProperty = (m) => m + this.n;
+const f2 = (m) => m + this.n;
+const f3 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });
+const f4 = (m) => __awaiter(this, void 0, void 0, function* () { return m + this.n; });

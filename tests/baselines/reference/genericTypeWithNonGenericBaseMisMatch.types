@@ -1,7 +1,5 @@
 === tests/cases/compiler/genericTypeWithNonGenericBaseMisMatch.ts ===
 interface I {
->I : I
-
 	f: (a: { a: number }) => void
 >f : (a: { a: number; }) => void
 >a : { a: number; }
@@ -9,14 +7,11 @@ interface I {
 }
 class X<T extends { a: string }> implements I {
 >X : X<T>
->T : T
 >a : string
->I : I
 
 	f(a: T): void { }
 >f : (a: T) => void
 >a : T
->T : T
 }
 var x = new X<{ a: string }>();
 >x : X<{ a: string; }>
@@ -26,6 +21,5 @@ var x = new X<{ a: string }>();
 
 var i: I = x; // Should not be allowed -- type of 'f' is incompatible with 'I'
 >i : I
->I : I
 >x : X<{ a: string; }>
 

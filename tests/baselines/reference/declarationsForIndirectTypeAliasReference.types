@@ -1,0 +1,62 @@
+=== tests/cases/compiler/b.ts ===
+export {
+    Hash,
+>Hash : any
+
+    StringHash, StringHash2
+>StringHash : any
+>StringHash2 : any
+
+};
+
+interface Hash<T> {
+    [key: string]: T;
+>key : string
+}
+
+type StringHash = Hash<string>;
+>StringHash : Hash<string>
+
+interface StringHash2 extends Hash<string> {}
+=== tests/cases/compiler/a.ts ===
+import {StringHash, StringHash2} from "./b";
+>StringHash : any
+>StringHash2 : any
+
+export {
+    doSome
+>doSome : (arg1: string, arg2?: import("tests/cases/compiler/b").Hash<string>, arg3?: StringHash2) => void
+}
+
+const MAP: StringHash = {
+>MAP : import("tests/cases/compiler/b").Hash<string>
+>{    a: "a"} : { a: string; }
+
+    a: "a"
+>a : string
+>"a" : "a"
+
+};
+
+const MAP2: StringHash2 = {
+>MAP2 : StringHash2
+>{    a: "a"} : { a: string; }
+
+    a: "a"
+>a : string
+>"a" : "a"
+
+};
+
+function doSome(arg1: string,
+>doSome : (arg1: string, arg2?: import("tests/cases/compiler/b").Hash<string>, arg3?: StringHash2) => void
+>arg1 : string
+
+                arg2 = MAP,
+>arg2 : import("tests/cases/compiler/b").Hash<string>
+>MAP : import("tests/cases/compiler/b").Hash<string>
+
+                arg3 = MAP2) {
+>arg3 : StringHash2
+>MAP2 : StringHash2
+}

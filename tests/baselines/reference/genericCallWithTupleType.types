@@ -1,22 +1,14 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts ===
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     tuple1: [T, U];
 >tuple1 : [T, U]
->T : T
->U : U
 } 
 
 var i1: I<string, number>;
 >i1 : I<string, number>
->I : I<T, U>
 
 var i2: I<{}, {}>;
 >i2 : I<{}, {}>
->I : I<T, U>
 
 // no error
 i1.tuple1 = ["foo", 5];

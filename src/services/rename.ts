@@ -1,59 +1,40 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
-        const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(normalizePath(defaultLibFileName)));
-        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo {
+        const node = getTouchingPropertyName(sourceFile, position);
         const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, typeChecker, sourceFile, isDefinedInLibraryFile)
+            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()))
             : undefined;
         return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
-
-        function isDefinedInLibraryFile(declaration: Node) {
-            if (!defaultLibFileName) {
-                return false;
-            }
-
-            const sourceFile = declaration.getSourceFile();
-            const canonicalName = getCanonicalFileName(normalizePath(sourceFile.fileName));
-            return canonicalName === getCanonicalDefaultLibName();
-        }
     }
 
     function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
-
+        if (!symbol) return;
         // Only allow a symbol to be renamed if it actually has at least one declaration.
-        if (symbol) {
-            const { declarations } = symbol;
-            if (declarations && declarations.length > 0) {
-                // Disallow rename for elements that are defined in the standard TypeScript library.
-                if (declarations.some(isDefinedInLibraryFile)) {
-                    return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
-                }
+        const { declarations } = symbol;
+        if (!declarations || declarations.length === 0) return;
 
-                // Cannot rename `default` as in `import { default as foo } from "./someModule";
-                if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent.flags & SymbolFlags.Module) {
-                    return undefined;
-                }
-
-                // Can't rename a module name.
-                if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
-
-                const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-                const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
-                    ? stripQuotes(getTextOfIdentifierOrLiteral(node))
-                    : undefined;
-                const displayName = specifierName || typeChecker.symbolToString(symbol);
-                const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-                return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
-            }
+        // Disallow rename for elements that are defined in the standard TypeScript library.
+        if (declarations.some(isDefinedInLibraryFile)) {
+            return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
         }
-        else if (isStringLiteral(node)) {
-            if (isDefinedInLibraryFile(node)) {
-                return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
-            }
-            return getRenameInfoSuccess(node.text, node.text, ScriptElementKind.variableElement, ScriptElementKindModifier.none, node, sourceFile);
+
+        // Cannot rename `default` as in `import { default as foo } from "./someModule";
+        if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent!.flags & SymbolFlags.Module) {
+            return undefined;
         }
+
+        // Can't rename a module name.
+        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
+
+        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
+        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+            ? stripQuotes(getTextOfIdentifierOrLiteral(node))
+            : undefined;
+        const displayName = specifierName || typeChecker.symbolToString(symbol);
+        const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
+        return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
     }
 
     function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
@@ -69,14 +50,15 @@ namespace ts.Rename {
     }
 
     function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
+        // TODO: GH#18217
         return {
             canRename: false,
             localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined,
-            fullDisplayName: undefined,
-            kind: undefined,
-            kindModifiers: undefined,
-            triggerSpan: undefined
+            displayName: undefined!,
+            fullDisplayName: undefined!,
+            kind: undefined!,
+            kindModifiers: undefined!,
+            triggerSpan: undefined!
         };
     }
 

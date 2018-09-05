@@ -7,7 +7,6 @@ type TreeNode = {
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 type TreeNodeMiddleman = {
@@ -18,12 +17,10 @@ type TreeNodeMiddleman = {
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 var nodes: TreeNodeMiddleman[];
 >nodes : TreeNodeMiddleman[]
->TreeNodeMiddleman : TreeNodeMiddleman
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]

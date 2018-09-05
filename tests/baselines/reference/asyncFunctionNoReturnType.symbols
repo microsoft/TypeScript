@@ -1,7 +1,7 @@
 === tests/cases/compiler/asyncFunctionNoReturnType.ts ===
 async () => {
     if (window)
->window : Symbol(window, Decl(lib.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 
         return;
 }

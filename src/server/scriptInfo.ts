@@ -1,25 +1,30 @@
 namespace ts.server {
+    export interface ScriptInfoVersion {
+        svc: number;
+        text: number;
+    }
 
     /* @internal */
     export class TextStorage {
+        /*@internal*/
+        version: ScriptInfoVersion;
+
         /**
          * Generated only on demand (based on edits, or information requested)
          * The property text is set to undefined when edits happen on the cache
          */
         private svc: ScriptVersionCache | undefined;
-        private svcVersion = 0;
 
         /**
          * Stores the text when there are no changes to the script version cache
          * The script version cache is generated on demand and text is still retained.
          * Only on edits to the script version cache, the text will be set to undefined
          */
-        private text: string;
+        private text: string | undefined;
         /**
          * Line map for the text when there is no script version cache present
          */
-        private lineMap: number[];
-        private textVersion = 0;
+        private lineMap: number[] | undefined;
 
         /**
          * True if the text is for the file thats open in the editor
@@ -34,13 +39,14 @@ namespace ts.server {
          */
         private pendingReloadFromDisk: boolean;
 
-        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath) {
+        constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
+            this.version = initialVersion || { svc: 0, text: 0 };
         }
 
         public getVersion() {
             return this.svc
-                ? `SVC-${this.svcVersion}-${this.svc.getSnapshotVersion()}`
-                : `Text-${this.textVersion}`;
+                ? `SVC-${this.version.svc}-${this.svc.getSnapshotVersion()}`
+                : `Text-${this.version.text}`;
         }
 
         public hasScriptVersionCache_TestOnly() {
@@ -55,7 +61,7 @@ namespace ts.server {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
-            this.textVersion++;
+            this.version.text++;
         }
 
         public edit(start: number, end: number, newText: string) {
@@ -115,7 +121,7 @@ namespace ts.server {
 
         public getSnapshot(): IScriptSnapshot {
             return this.useScriptVersionCacheIfValidOrOpen()
-                ? this.svc.getSnapshot()
+                ? this.svc!.getSnapshot()
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
@@ -129,10 +135,10 @@ namespace ts.server {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
                 const lineMap = this.getLineMap();
                 const start = lineMap[line]; // -1 since line is 1-based
-                const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text.length;
+                const end = line + 1 < lineMap.length ? lineMap[line + 1] : this.text!.length;
                 return createTextSpanFromBounds(start, end);
             }
-            return this.svc.lineToTextSpan(line);
+            return this.svc!.lineToTextSpan(line);
         }
 
         /**
@@ -145,7 +151,7 @@ namespace ts.server {
             }
 
             // TODO: assert this offset is actually on the line
-            return this.svc.lineOffsetToPosition(line, offset);
+            return this.svc!.lineOffsetToPosition(line, offset);
         }
 
         positionToLineOffset(position: number): protocol.Location {
@@ -153,17 +159,31 @@ namespace ts.server {
                 const { line, character } = computeLineAndCharacterOfPosition(this.getLineMap(), position);
                 return { line: line + 1, offset: character + 1 };
             }
-            return this.svc.positionToLineOffset(position);
+            return this.svc!.positionToLineOffset(position);
         }
 
         private getFileText(tempFileName?: string) {
-            return this.host.readFile(tempFileName || this.fileName) || "";
+            let text: string;
+            const fileName = tempFileName || this.fileName;
+            const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
+            // Only non typescript files have size limitation
+            if (!hasTypeScriptFileExtension(this.fileName)) {
+                const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
+                if (fileSize > maxFileSize) {
+                    Debug.assert(!!this.info.containingProjects.length);
+                    const service = this.info.containingProjects[0].projectService;
+                    service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                    this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
+                    return "";
+                }
+            }
+            return getText();
         }
 
         private switchToScriptVersionCache(): ScriptVersionCache {
             if (!this.svc || this.pendingReloadFromDisk) {
                 this.svc = ScriptVersionCache.fromString(this.getOrLoadText());
-                this.svcVersion++;
+                this.version.svc++;
             }
             return this.svc;
         }
@@ -188,7 +208,7 @@ namespace ts.server {
                 Debug.assert(!this.svc || this.pendingReloadFromDisk, "ScriptVersionCache should not be set when reloading from disk");
                 this.reloadWithFileText();
             }
-            return this.text;
+            return this.text!;
         }
 
         private getLineMap() {
@@ -202,16 +222,22 @@ namespace ts.server {
         return fileName[0] === "^" || getBaseFileName(fileName)[0] === "^";
     }
 
+    /*@internal*/
+    export interface DocumentRegistrySourceFileCache {
+        key: DocumentRegistryBucketKey;
+        sourceFile: SourceFile;
+    }
+
     export class ScriptInfo {
         /**
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private preferences: UserPreferences | undefined;
+        private preferences: protocol.UserPreferences | undefined;
 
         /* @internal */
-        fileWatcher: FileWatcher;
+        fileWatcher: FileWatcher | undefined;
         private textStorage: TextStorage;
 
         /*@internal*/
@@ -221,15 +247,19 @@ namespace ts.server {
         /** Set to real path if path is different from info.path */
         private realpath: Path | undefined;
 
+        /*@internal*/
+        cacheSourceFile: DocumentRegistrySourceFileCache;
+
         constructor(
             private readonly host: ServerHost,
             readonly fileName: NormalizedPath,
             readonly scriptKind: ScriptKind,
             public readonly hasMixedContent: boolean,
-            readonly path: Path) {
+            readonly path: Path,
+            initialVersion?: ScriptInfoVersion) {
             this.isDynamic = isDynamicFileName(fileName);
 
-            this.textStorage = new TextStorage(host, fileName);
+            this.textStorage = new TextStorage(host, fileName, initialVersion, this);
             if (hasMixedContent || this.isDynamic) {
                 this.textStorage.reload("");
                 this.realpath = this.path;
@@ -237,6 +267,11 @@ namespace ts.server {
             this.scriptKind = scriptKind
                 ? scriptKind
                 : getScriptKindFromFileName(fileName);
+        }
+
+        /*@internal*/
+        getVersion() {
+            return this.textStorage.version;
         }
 
         /*@internal*/
@@ -285,7 +320,7 @@ namespace ts.server {
                         this.realpath = project.toPath(realpath);
                         // If it is different from this.path, add to the map
                         if (this.realpath !== this.path) {
-                            project.projectService.realpathToScriptInfos.add(this.realpath, this);
+                            project.projectService.realpathToScriptInfos!.add(this.realpath, this); // TODO: GH#18217
                         }
                     }
                 }
@@ -297,8 +332,8 @@ namespace ts.server {
             return this.realpath && this.realpath !== this.path ? this.realpath : undefined;
         }
 
-        getFormatCodeSettings(): FormatCodeSettings { return this.formatSettings; }
-        getPreferences(): UserPreferences { return this.preferences; }
+        getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
+        getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -336,7 +371,7 @@ namespace ts.server {
                 case 2:
                     if (this.containingProjects[0] === project) {
                         project.onFileAddedOrRemoved();
-                        this.containingProjects[0] = this.containingProjects.pop();
+                        this.containingProjects[0] = this.containingProjects.pop()!;
                     }
                     else if (this.containingProjects[1] === project) {
                         project.onFileAddedOrRemoved();
@@ -397,7 +432,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);
@@ -410,7 +445,7 @@ namespace ts.server {
 
             if (preferences) {
                 if (!this.preferences) {
-                    this.preferences = defaultPreferences;
+                    this.preferences = emptyOptions;
                 }
                 this.preferences = { ...this.preferences, ...preferences };
             }
@@ -435,12 +470,15 @@ namespace ts.server {
             if (this.isDynamicOrHasMixedContent()) {
                 this.textStorage.reload("");
                 this.markContainingProjectsAsDirty();
+                return true;
             }
             else {
                 if (this.textStorage.reloadWithFileText(tempFileName)) {
                     this.markContainingProjectsAsDirty();
+                    return true;
                 }
             }
+            return false;
         }
 
         /*@internal*/

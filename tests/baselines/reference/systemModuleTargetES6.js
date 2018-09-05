@@ -15,8 +15,8 @@ export function myFunction2() {
 
 //// [systemModuleTargetES6.js]
 System.register([], function (exports_1, context_1) {
-    var MyClass, MyClass2;
     "use strict";
+    var MyClass, MyClass2;
     var __moduleName = context_1 && context_1.id;
     function myFunction() {
         return new MyClass();

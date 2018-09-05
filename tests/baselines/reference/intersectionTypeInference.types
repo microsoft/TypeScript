@@ -1,19 +1,11 @@
 === tests/cases/conformance/types/intersection/intersectionTypeInference.ts ===
 function extend<T, U>(obj1: T, obj2: U): T & U {
 >extend : <T, U>(obj1: T, obj2: U) => T & U
->T : T
->U : U
 >obj1 : T
->T : T
 >obj2 : U
->U : U
->T : T
->U : U
 
     var result: T & U;
 >result : T & U
->T : T
->U : U
 
     obj1 = result;
 >obj1 = result : T & U
@@ -63,34 +55,18 @@ var n = x.b;
 >b : number
 
 interface A<T> {
->A : A<T>
->T : T
-
     a: T;
 >a : T
->T : T
 }
 
 interface B<U> {
->B : B<U>
->U : U
-
     b: U;
 >b : U
->U : U
 }
 
 function foo<T, U>(obj: A<T> & B<U>): T | U {
 >foo : <T, U>(obj: A<T> & B<U>) => T | U
->T : T
->U : U
 >obj : A<T> & B<U>
->A : A<T>
->T : T
->B : B<U>
->U : U
->T : T
->U : U
 
     return undefined;
 >undefined : undefined

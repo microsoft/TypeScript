@@ -2,7 +2,7 @@
     "extends": "tslint:latest",
     "rulesDirectory": "built/local/tslint/rules",
     "rules": {
-        "no-unnecessary-type-assertion-2": true,
+        "no-unnecessary-type-assertion": true,
 
         "array-type": [true, "array"],
         "ban-types": {

@@ -18,76 +18,70 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference path="lib.dom.d.ts" />
+/////////////////////////////
+/// DOM Iterable APIs
+/////////////////////////////
 
-interface DOMTokenList {
+interface AudioParamMap extends ReadonlyMap<string, AudioParam> {
+}
+
+interface AudioTrackList {
+    [Symbol.iterator](): IterableIterator<AudioTrack>;
+}
+
+interface CSSRuleList {
+    [Symbol.iterator](): IterableIterator<CSSRule>;
+}
+
+interface CSSStyleDeclaration {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
-interface Headers {
-    [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all key/value pairs contained in this object.
-     */
-    entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
-     */
-    keys(): IterableIterator<string>;
-    /**
-     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
-     */
+interface ClientRectList {
+    [Symbol.iterator](): IterableIterator<ClientRect>;
+}
+
+interface DOMRectList {
+    [Symbol.iterator](): IterableIterator<DOMRect>;
+}
+
+interface DOMStringList {
+    [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface DOMTokenList {
+    [Symbol.iterator](): IterableIterator<string>;
+    entries(): IterableIterator<[number, string]>;
+    keys(): IterableIterator<number>;
     values(): IterableIterator<string>;
 }
 
-interface NodeList {
-    /**
-     * Returns an array of key, value pairs for every entry in the list
-     */
-    entries(): IterableIterator<[number, Node]>;
-    /**
-     * Performs the specified action for each node in an list.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-     */
-    forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
-    /**
-     * Returns an list of keys in the list
-     */
-    keys(): IterableIterator<number>;
-
-    /**
-     * Returns an list of values in the list
-     */
-    values(): IterableIterator<Node>;
-
-
-    [Symbol.iterator](): IterableIterator<Node>;
+interface DataTransferItemList {
+    [Symbol.iterator](): IterableIterator<DataTransferItem>;
 }
 
-interface NodeListOf<TNode extends Node> {
+interface FileList {
+    [Symbol.iterator](): IterableIterator<File>;
+}
 
+interface FormData {
+    [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]>;
     /**
-     * Returns an array of key, value pairs for every entry in the list
+     * Returns an array of key, value pairs for every entry in the list.
      */
-    entries(): IterableIterator<[number, TNode]>;
+    entries(): IterableIterator<[string, FormDataEntryValue]>;
+    /**
+     * Returns a list of keys in the list.
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the list.
+     */
+    values(): IterableIterator<FormDataEntryValue>;
+}
 
-    /**
-     * Performs the specified action for each node in an list.
-     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
-     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-     */
-    forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
-    /**
-     * Returns an list of keys in the list
-     */
-    keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list
-     */
-    values(): IterableIterator<TNode>;
-
-    [Symbol.iterator](): IterableIterator<TNode>;
+interface HTMLAllCollection {
+    [Symbol.iterator](): IterableIterator<Element>;
 }
 
 interface HTMLCollectionBase {
@@ -98,38 +92,145 @@ interface HTMLCollectionOf<T extends Element> {
     [Symbol.iterator](): IterableIterator<T>;
 }
 
-interface FormData {
-    /**
-     * Returns an array of key, value pairs for every entry in the list
-     */
-    entries(): IterableIterator<[string, string | File]>;
-    /**
-     * Returns a list of keys in the list
-     */
-    keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the list
-     */
-    values(): IterableIterator<string | File>;
-
-    [Symbol.iterator](): IterableIterator<string | File>;
+interface HTMLFormElement {
+    [Symbol.iterator](): IterableIterator<Element>;
 }
 
-interface URLSearchParams {
+interface HTMLSelectElement {
+    [Symbol.iterator](): IterableIterator<Element>;
+}
+
+interface Headers {
+    [Symbol.iterator](): IterableIterator<[string, string]>;
     /**
-     * Returns an array of key, value pairs for every entry in the search params
+     * Returns an iterator allowing to go through all key/value pairs contained in this object.
      */
     entries(): IterableIterator<[string, string]>;
     /**
-     * Returns a list of keys in the search params
+     * Returns an iterator allowing to go through all keys of the key/value pairs contained in this object.
      */
     keys(): IterableIterator<string>;
     /**
-     * Returns a list of values in the search params
+     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
      */
     values(): IterableIterator<string>;
+}
+
+interface MediaList {
+    [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface MimeTypeArray {
+    [Symbol.iterator](): IterableIterator<Plugin>;
+}
+
+interface NamedNodeMap {
+    [Symbol.iterator](): IterableIterator<Attr>;
+}
+
+interface NodeList {
+    [Symbol.iterator](): IterableIterator<Node>;
     /**
-     * iterate over key/value pairs
+     * Returns an array of key, value pairs for every entry in the list.
      */
+    entries(): IterableIterator<[number, Node]>;
+    /**
+     * Returns an list of keys in the list.
+     */
+    keys(): IterableIterator<number>;
+    /**
+     * Returns an list of values in the list.
+     */
+    values(): IterableIterator<Node>;
+}
+
+interface NodeListOf<TNode extends Node> {
+    [Symbol.iterator](): IterableIterator<TNode>;
+    /**
+     * Returns an array of key, value pairs for every entry in the list.
+     */
+    entries(): IterableIterator<[number, TNode]>;
+    /**
+     * Returns an list of keys in the list.
+     */
+    keys(): IterableIterator<number>;
+    /**
+     * Returns an list of values in the list.
+     */
+    values(): IterableIterator<TNode>;
+}
+
+interface Plugin {
+    [Symbol.iterator](): IterableIterator<MimeType>;
+}
+
+interface PluginArray {
+    [Symbol.iterator](): IterableIterator<Plugin>;
+}
+
+interface RTCStatsReport extends ReadonlyMap<string, any> {
+}
+
+interface SVGLengthList {
+    [Symbol.iterator](): IterableIterator<SVGLength>;
+}
+
+interface SVGNumberList {
+    [Symbol.iterator](): IterableIterator<SVGNumber>;
+}
+
+interface SVGStringList {
+    [Symbol.iterator](): IterableIterator<string>;
+}
+
+interface SourceBufferList {
+    [Symbol.iterator](): IterableIterator<SourceBuffer>;
+}
+
+interface SpeechGrammarList {
+    [Symbol.iterator](): IterableIterator<SpeechGrammar>;
+}
+
+interface SpeechRecognitionResult {
+    [Symbol.iterator](): IterableIterator<SpeechRecognitionAlternative>;
+}
+
+interface SpeechRecognitionResultList {
+    [Symbol.iterator](): IterableIterator<SpeechRecognitionResult>;
+}
+
+interface StyleSheetList {
+    [Symbol.iterator](): IterableIterator<StyleSheet>;
+}
+
+interface TextTrackCueList {
+    [Symbol.iterator](): IterableIterator<TextTrackCue>;
+}
+
+interface TextTrackList {
+    [Symbol.iterator](): IterableIterator<TextTrack>;
+}
+
+interface TouchList {
+    [Symbol.iterator](): IterableIterator<Touch>;
+}
+
+interface URLSearchParams {
     [Symbol.iterator](): IterableIterator<[string, string]>;
+    /**
+     * Returns an array of key, value pairs for every entry in the search params.
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns a list of keys in the search params.
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the search params.
+     */
+    values(): IterableIterator<string>;
+}
+
+interface VideoTrackList {
+    [Symbol.iterator](): IterableIterator<VideoTrack>;
 }

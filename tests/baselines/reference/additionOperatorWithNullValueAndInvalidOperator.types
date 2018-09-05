@@ -10,14 +10,12 @@ var a: boolean;
 
 var b: Object;
 >b : Object
->Object : Object
 
 var c: void;
 >c : void
 
 var d: Number;
 >d : Number
->Number : Number
 
 // null + boolean/Object
 var r1 = null + a;

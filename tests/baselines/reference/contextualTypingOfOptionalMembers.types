@@ -1,46 +1,26 @@
 === tests/cases/compiler/index.tsx ===
 interface ActionsObject<State> {
->ActionsObject : ActionsObject<State>
->State : State
-
     [prop: string]: (state: State) => State;
 >prop : string
 >state : State
->State : State
->State : State
 }
 
 interface Options<State, Actions> {
->Options : Options<State, Actions>
->State : State
->Actions : Actions
-
     state?: State;
 >state : State | undefined
->State : State
 
     view?: (state: State, actions: Actions) => any;
 >view : ((state: State, actions: Actions) => any) | undefined
 >state : State
->State : State
 >actions : Actions
->Actions : Actions
 
     actions: string | Actions;
 >actions : string | Actions
->Actions : Actions
 }
 
 declare function app<State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>): void;
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->State : State
->Actions : Actions
->ActionsObject : ActionsObject<State>
->State : State
 >obj : Options<State, Actions>
->Options : Options<State, Actions>
->State : State
->Actions : Actions
 
 app({
 >app({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
@@ -74,8 +54,6 @@ app({
 
 
 interface Bar {
->Bar : Bar
-
     bar: (a: number) => void;
 >bar : (a: number) => void
 >a : number
@@ -83,11 +61,7 @@ interface Bar {
 
 declare function foo<T extends Bar>(x: string | T): T;
 >foo : <T extends Bar>(x: string | T) => T
->T : T
->Bar : Bar
 >x : string | T
->T : T
->T : T
 
 const y = foo({
 >y : { bar(x: number): void; }
@@ -102,36 +76,21 @@ const y = foo({
 });
 
 interface Options2<State, Actions> {
->Options2 : Options2<State, Actions>
->State : State
->Actions : Actions
-
     state?: State;
 >state : State | undefined
->State : State
 
     view?: (state: State, actions: Actions) => any;
 >view : ((state: State, actions: Actions) => any) | undefined
 >state : State
->State : State
 >actions : Actions
->Actions : Actions
 
     actions?: Actions;
 >actions : Actions | undefined
->Actions : Actions
 }
 
 declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>): void;
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->State : State
->Actions : Actions
->ActionsObject : ActionsObject<State>
->State : State
 >obj : Options2<State, Actions>
->Options2 : Options2<State, Actions>
->State : State
->Actions : Actions
 
 app2({
 >app2({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
@@ -166,21 +125,11 @@ app2({
 
 type ActionsArray<State> = ((state: State) => State)[];
 >ActionsArray : ((state: State) => State)[]
->State : State
 >state : State
->State : State
->State : State
 
 declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>): void;
 >app3 : <State, Actions extends ((state: State) => State)[]>(obj: Options<State, Actions>) => void
->State : State
->Actions : Actions
->ActionsArray : ((state: State) => State)[]
->State : State
 >obj : Options<State, Actions>
->Options : Options<State, Actions>
->State : State
->Actions : Actions
 
 app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
@@ -212,41 +161,21 @@ app3({
 });
 
 namespace JSX {
->JSX : any
-
     export interface Element {}
->Element : Element
-
     export interface IntrinsicElements {}
->IntrinsicElements : IntrinsicElements
 }
 
 interface ActionsObjectOr<State> {
->ActionsObjectOr : ActionsObjectOr<State>
->State : State
-
     [prop: string]: ((state: State) => State) | State;
 >prop : string
 >state : State
->State : State
->State : State
->State : State
 }
 
 declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: (string & { state: State; }) | (Actions & { state: State; })) => JSX.Element
->State : State
->Actions : Actions
->ActionsObjectOr : ActionsObjectOr<State>
->State : State
 >props : (string & { state: State; }) | (Actions & { state: State; })
->Options : Options<State, Actions>
->State : State
->Actions : Actions
 >state : State
->State : State
 >JSX : any
->Element : JSX.Element
 
 const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number, but JSX resolution is missing an inferential pass
 >a : JSX.Element

@@ -4,7 +4,7 @@
 // @Filename: templateTagOnClasses.js
 
 /**
- * @template {T}
+ * @template T
  * @typedef {(t: T) => T} Id
  */
 /** @template T */

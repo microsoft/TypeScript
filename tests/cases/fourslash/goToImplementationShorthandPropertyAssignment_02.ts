@@ -11,7 +11,7 @@
 ////          hello
 ////     };
 ////
-////     [|function hello() {}|]
+////     function [|hello|]() {}
 //// }
 ////
 //// function whatever(x: Foo) {

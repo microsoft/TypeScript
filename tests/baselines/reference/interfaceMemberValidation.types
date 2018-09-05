@@ -1,17 +1,12 @@
 === tests/cases/compiler/interfaceMemberValidation.ts ===
 interface i1 { name: string; }
->i1 : i1
 >name : string
 
 interface i2 extends i1 { name: number; yo: string; }
->i2 : i2
->i1 : i1
 >name : number
 >yo : string
 
 interface foo {
->foo : foo
-
  bar():any;
 >bar : { (): any; (): any; }
 

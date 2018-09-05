@@ -41,10 +41,7 @@ var b5 = [[], [,]];
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var c1 = f(null);
 >c1 : null

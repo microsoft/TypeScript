@@ -53,6 +53,7 @@ namespace compiler {
         public readonly js: ReadonlyMap<string, documents.TextDocument>;
         public readonly dts: ReadonlyMap<string, documents.TextDocument>;
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
+        public symlinks?: vfs.FileSet; // Location to store original symlinks so they may be used in both original and declaration file compilations
 
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
@@ -182,8 +183,8 @@ namespace compiler {
         }
 
         public getSourceMapRecord(): string | undefined {
-            if (this.result.sourceMaps && this.result.sourceMaps.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(this.result.sourceMaps, this.program, Array.from(this.js.values()), Array.from(this.dts.values()));
+            if (this.result!.sourceMaps && this.result!.sourceMaps!.length > 0) {
+                return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
             }
         }
 
@@ -215,6 +216,16 @@ namespace compiler {
                 }
             }
             return vpath.changeExtension(path, ext);
+        }
+
+        public getNumberOfJsFiles() {
+            let count = this.js.size;
+            this.js.forEach(document => {
+                if (ts.fileExtensionIs(document.file, ts.Extension.Json)) {
+                    count--;
+                }
+            });
+            return count;
         }
     }
 

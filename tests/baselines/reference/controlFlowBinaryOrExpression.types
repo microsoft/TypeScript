@@ -36,15 +36,11 @@ x; // string | number
 >x : string | number
 
 export interface NodeList {
->NodeList : NodeList
-
     length: number;
 >length : number
 }
 
 export interface HTMLCollection {
->HTMLCollection : HTMLCollection
-
     length: number;
 >length : number
 }
@@ -52,24 +48,17 @@ export interface HTMLCollection {
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
 >sourceObj : any
->sourceObj : any
->NodeList : NodeList
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
 >sourceObj : any
->sourceObj : any
->HTMLCollection : HTMLCollection
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
 >EventTargetLike : EventTargetLike
 >a : string
->HTMLCollection : HTMLCollection
->NodeList : NodeList
 
 var sourceObj: EventTargetLike = <any>undefined;
 >sourceObj : EventTargetLike
->EventTargetLike : EventTargetLike
 ><any>undefined : any
 >undefined : undefined
 

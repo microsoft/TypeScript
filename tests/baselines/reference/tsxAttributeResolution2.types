@@ -1,21 +1,12 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: Attribs1;
 >test1 : Attribs1
->Attribs1 : Attribs1
 	}
 }
 interface Attribs1 {
->Attribs1 : Attribs1
-
 	c1?: (x: string) => void;
 >c1 : (x: string) => void
 >x : string

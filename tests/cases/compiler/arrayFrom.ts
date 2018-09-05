@@ -15,6 +15,7 @@ const inputA: A[] = [];
 const inputB: B[] = [];
 const inputALike: ArrayLike<A> = { length: 0 };
 const inputARand = getEither(inputA, inputALike);
+const inputASet = new Set<A>();
 
 const result1: A[] = Array.from(inputA);
 const result2: A[] = Array.from(inputA.values());
@@ -25,6 +26,8 @@ const result6: B[] = Array.from(inputALike); // expect error
 const result7: B[] = Array.from(inputALike, ({ a }): B => ({ b: a }));
 const result8: A[] = Array.from(inputARand);
 const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
+const result10: A[] = Array.from(new Set<A>());
+const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 
 // if this is written inline, the compiler seems to infer
 // the ?: as always taking the false branch, narrowing to ArrayLike<T>,
