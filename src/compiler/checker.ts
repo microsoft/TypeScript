@@ -28896,8 +28896,7 @@ namespace ts {
         }
 
         function checkGrammarTypeArguments(node: Node, typeArguments: NodeArray<TypeNode> | undefined): boolean {
-            return checkGrammarForDisallowedTrailingComma(typeArguments) ||
-                checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
+            return checkGrammarForAtLeastOneTypeArgument(node, typeArguments);
         }
 
         function checkGrammarForOmittedArgument(args: NodeArray<Expression> | undefined): boolean {

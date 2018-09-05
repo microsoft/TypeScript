@@ -1,0 +1,24 @@
+=== tests/cases/compiler/allowTrailingCommasInTypeArguments.ts ===
+class FooClass<A, B, C,> {
+>FooClass : Symbol(FooClass, Decl(allowTrailingCommasInTypeArguments.ts, 0, 0))
+>A : Symbol(A, Decl(allowTrailingCommasInTypeArguments.ts, 0, 15))
+>B : Symbol(B, Decl(allowTrailingCommasInTypeArguments.ts, 0, 17))
+>C : Symbol(C, Decl(allowTrailingCommasInTypeArguments.ts, 0, 20))
+
+	a: A;
+>a : Symbol(FooClass.a, Decl(allowTrailingCommasInTypeArguments.ts, 0, 26))
+>A : Symbol(A, Decl(allowTrailingCommasInTypeArguments.ts, 0, 15))
+
+	b: B;
+>b : Symbol(FooClass.b, Decl(allowTrailingCommasInTypeArguments.ts, 1, 6))
+>B : Symbol(B, Decl(allowTrailingCommasInTypeArguments.ts, 0, 17))
+
+	c: C;
+>c : Symbol(FooClass.c, Decl(allowTrailingCommasInTypeArguments.ts, 2, 6))
+>C : Symbol(C, Decl(allowTrailingCommasInTypeArguments.ts, 0, 20))
+}
+
+var a = new FooClass<number, number, number,>();
+>a : Symbol(a, Decl(allowTrailingCommasInTypeArguments.ts, 6, 3))
+>FooClass : Symbol(FooClass, Decl(allowTrailingCommasInTypeArguments.ts, 0, 0))
+

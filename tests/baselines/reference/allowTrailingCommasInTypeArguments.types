@@ -1,0 +1,25 @@
+=== tests/cases/compiler/allowTrailingCommasInTypeArguments.ts ===
+class FooClass<A, B, C,> {
+>FooClass : FooClass<A, B, C>
+>A : A
+>B : B
+>C : C
+
+	a: A;
+>a : A
+>A : A
+
+	b: B;
+>b : B
+>B : B
+
+	c: C;
+>c : C
+>C : C
+}
+
+var a = new FooClass<number, number, number,>();
+>a : FooClass<number, number, number>
+>new FooClass<number, number, number,>() : FooClass<number, number, number>
+>FooClass : typeof FooClass
+
