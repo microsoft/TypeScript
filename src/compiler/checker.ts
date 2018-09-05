@@ -1703,6 +1703,9 @@ namespace ts {
                 }
                 else {
                     Debug.assert(!!(result.flags & SymbolFlags.ConstEnum));
+                    if (compilerOptions.preserveConstEnums) {
+                        diagnosticMessage = error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationName);
+                    }
                 }
 
                 if (diagnosticMessage) {
@@ -8717,10 +8720,7 @@ namespace ts {
                     const len = typeSet.length;
                     const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
                     if (index < 0) {
-                        if (!(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                            type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && containsIdenticalType(typeSet, type))) {
-                            typeSet.splice(~index, 0, type);
-                        }
+                        typeSet.splice(~index, 0, type);
                     }
                 }
             }
@@ -8734,15 +8734,6 @@ namespace ts {
                 includes = addTypeToUnion(typeSet, includes, type);
             }
             return includes;
-        }
-
-        function containsIdenticalType(types: ReadonlyArray<Type>, type: Type) {
-            for (const t of types) {
-                if (isTypeIdenticalTo(t, type)) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         function isSubtypeOfAny(source: Type, targets: ReadonlyArray<Type>): boolean {
@@ -8925,10 +8916,7 @@ namespace ts {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.Wildcard;
                 }
-                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type) &&
-                    !(flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous &&
-                    type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method) &&
-                    containsIdenticalType(typeSet, type))) {
+                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
                     typeSet.push(type);
                 }
             }
@@ -14962,6 +14950,9 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue && !(type.flags & TypeFlags.Union)) {
+                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
+                        return getUnionType([nonPrimitiveType, nullType]);
+                    }
                     // We narrow a non-union type to an exact primitive type if the non-union type
                     // is a supertype of that primitive type. For example, type 'any' can be narrowed
                     // to one of the primitive types.
@@ -18495,6 +18486,13 @@ namespace ts {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
             }
+            if (isTupleType(objectType) && !objectType.target.hasRestElement && isNumericLiteral(indexExpression)) {
+                const index = +indexExpression.text;
+                const maximumIndex = length(objectType.target.typeParameters);
+                if (index >= maximumIndex) {
+                    error(indexExpression, Diagnostics.Index_0_is_out_of_bounds_in_tuple_of_length_1, index, maximumIndex);
+                }
+            }
 
             return checkIndexedAccessIndexType(getIndexedAccessType(objectType, isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType, node), node);
         }
@@ -19233,14 +19231,17 @@ namespace ts {
             else if (candidateForTypeArgumentError) {
                 checkTypeArguments(candidateForTypeArgumentError, (node as CallExpression | TaggedTemplateExpression).typeArguments!, /*reportErrors*/ true, fallbackError);
             }
-            else if (typeArguments && every(signatures, sig => typeArguments!.length < getMinTypeArgumentCount(sig.typeParameters) || typeArguments!.length > length(sig.typeParameters))) {
-                diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments));
-            }
-            else if (!isDecorator) {
-                diagnostics.add(getArgumentArityError(node, signatures, args));
-            }
-            else if (fallbackError) {
-                diagnostics.add(createDiagnosticForNode(node, fallbackError));
+            else {
+                const signaturesWithCorrectTypeArgumentArity = filter(signatures, s => hasCorrectTypeArgumentArity(s, typeArguments));
+                if (signaturesWithCorrectTypeArgumentArity.length === 0) {
+                    diagnostics.add(getTypeArgumentArityError(node, signatures, typeArguments!));
+                }
+                else if (!isDecorator) {
+                    diagnostics.add(getArgumentArityError(node, signaturesWithCorrectTypeArgumentArity, args));
+                }
+                else if (fallbackError) {
+                    diagnostics.add(createDiagnosticForNode(node, fallbackError));
+                }
             }
 
             return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
@@ -22981,6 +22982,12 @@ namespace ts {
             }
         }
 
+        const enum DeclarationSpaces {
+            None = 0,
+            ExportValue = 1 << 0,
+            ExportType = 1 << 1,
+            ExportNamespace = 1 << 2,
+        }
         function checkExportsOnMergedDeclarations(node: Node): void {
             if (!produceDiagnostics) {
                 return;
@@ -23045,12 +23052,6 @@ namespace ts {
                 }
             }
 
-            const enum DeclarationSpaces {
-                None = 0,
-                ExportValue = 1 << 0,
-                ExportType = 1 << 1,
-                ExportNamespace = 1 << 2,
-            }
             function getDeclarationSpaces(decl: Declaration): DeclarationSpaces {
                 let d = decl as Node;
                 switch (d.kind) {
@@ -29022,8 +29023,12 @@ namespace ts {
             }
         }
 
-        function checkGrammarForInvalidQuestionMark(questionToken: Node | undefined, message: DiagnosticMessage): boolean {
+        function checkGrammarForInvalidQuestionMark(questionToken: QuestionToken | undefined, message: DiagnosticMessage): boolean {
             return !!questionToken && grammarErrorOnNode(questionToken, message);
+        }
+
+        function checkGrammarForInvalidExclamationToken(exclamationToken: ExclamationToken | undefined, message: DiagnosticMessage): boolean {
+            return !!exclamationToken && grammarErrorOnNode(exclamationToken, message);
         }
 
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
@@ -29070,8 +29075,10 @@ namespace ts {
                 // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
                 let currentKind: Flags;
                 switch (prop.kind) {
-                    case SyntaxKind.PropertyAssignment:
                     case SyntaxKind.ShorthandPropertyAssignment:
+                        checkGrammarForInvalidExclamationToken(prop.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
+                    /* tslint:disable:no-switch-case-fall-through */
+                    case SyntaxKind.PropertyAssignment:
                         // Grammar checking for computedPropertyName and shorthandPropertyAssignment
                         checkGrammarForInvalidQuestionMark(prop.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional);
                         if (name.kind === SyntaxKind.NumericLiteral) {
@@ -29310,6 +29317,9 @@ namespace ts {
                         return grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here);
                     }
                     else if (checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_object_member_cannot_be_declared_optional)) {
+                        return true;
+                    }
+                    else if (checkGrammarForInvalidExclamationToken(node.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context)) {
                         return true;
                     }
                     else if (node.body === undefined) {

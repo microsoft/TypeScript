@@ -953,8 +953,11 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
+                if (!oldProgramState.program) {
+                    return false;
+                }
                 const resolutionToFile = getResolvedModule(oldProgramState.oldSourceFile!, moduleName); // TODO: GH#18217
-                const resolvedFile = resolutionToFile && oldProgramState.program && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
+                const resolvedFile = resolutionToFile && oldProgramState.program.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
                     // In the old program, we resolved to an ambient module that was in the same
                     //   place as we expected to find an actual module file.
@@ -962,16 +965,11 @@ namespace ts {
                     //   because the normal module resolution algorithm will find this anyway.
                     return false;
                 }
-                const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
-                if (!(ambientModule && ambientModule.declarations)) {
-                    return false;
-                }
 
                 // at least one of declarations should come from non-modified source file
-                const firstUnmodifiedFile = forEach(ambientModule.declarations, d => {
-                    const f = getSourceFileOfNode(d);
-                    return !contains(oldProgramState.modifiedFilePaths, f.path) && f;
-                });
+                const firstUnmodifiedFile = oldProgramState.program.getSourceFiles().find(
+                    f => !contains(oldProgramState.modifiedFilePaths, f.path) && contains(f.ambientModuleNames, moduleName)
+                );
 
                 if (!firstUnmodifiedFile) {
                     return false;
@@ -2432,12 +2430,14 @@ namespace ts {
             }
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
-            if (options.composite && rootNames.length < files.length) {
-                const normalizedRootNames = rootNames.map(r => normalizePath(r).toLowerCase());
-                const sourceFiles = files.filter(f => !f.isDeclarationFile).map(f => normalizePath(f.path).toLowerCase());
-                for (const file of sourceFiles) {
-                    if (normalizedRootNames.every(r => r !== file)) {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
+            if (options.composite) {
+                const sourceFiles = files.filter(f => !f.isDeclarationFile);
+                if (rootNames.length < sourceFiles.length) {
+                    const normalizedRootNames = rootNames.map(r => normalizePath(r).toLowerCase());
+                    for (const file of sourceFiles.map(f => normalizePath(f.path).toLowerCase())) {
+                        if (normalizedRootNames.indexOf(file) === -1) {
+                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
+                        }
                     }
                 }
             }
