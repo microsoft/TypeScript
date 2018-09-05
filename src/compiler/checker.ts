@@ -2871,7 +2871,18 @@ namespace ts {
                 // we are going to see if c can be accessed in scope directly.
                 // But it can't, hence the accessible is going to be undefined, but that doesn't mean m.c is inaccessible
                 // It is accessible if the parent m is accessible because then m.c can be accessed through qualification
-                const parentResult = isAnySymbolAccessible(getContainersOfSymbol(symbol, enclosingDeclaration), enclosingDeclaration, initialSymbol, initialSymbol === symbol ? getQualifiedLeftMeaning(meaning) : meaning, shouldComputeAliasesToMakeVisible);
+
+                let containers = getContainersOfSymbol(symbol, enclosingDeclaration);
+                // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
+                // from the symbol of the declaration it is being assigned to. Since we can use the declaration to refer to the literal, however,
+                // we'd like to make that connection here - potentially causing us to paint the declararation's visibiility, and therefore the literal.
+                const firstDecl: Node = first(symbol.declarations);
+                if (!length(containers) && meaning & SymbolFlags.Value && firstDecl && isObjectLiteralExpression(firstDecl)) {
+                    if (firstDecl.parent && isVariableDeclaration(firstDecl.parent) && firstDecl === firstDecl.parent.initializer) {
+                        containers = [getSymbolOfNode(firstDecl.parent)];
+                    }
+                }
+                const parentResult = isAnySymbolAccessible(containers, enclosingDeclaration, initialSymbol, initialSymbol === symbol ? getQualifiedLeftMeaning(meaning) : meaning, shouldComputeAliasesToMakeVisible);
                 if (parentResult) {
                     return parentResult;
                 }
