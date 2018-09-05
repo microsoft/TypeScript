@@ -1731,10 +1731,6 @@ namespace ts {
             }
         }
 
-        function bindBlockScopedVariableDeclaration(node: Declaration) {
-            bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
-        }
-
         function delayedBindJSDocTypedefTag() {
             if (!delayedTypeAliases) {
                 return;
@@ -2659,8 +2655,11 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
+                const isEnum = !!getJSDocEnumTag(node);
+                const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
+                const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
-                    bindBlockScopedVariableDeclaration(node);
+                    bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable | enumFlags, SymbolFlags.BlockScopedVariableExcludes | enumExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
                     // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
@@ -2675,7 +2674,7 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable | enumFlags, SymbolFlags.FunctionScopedVariableExcludes | enumExcludes);
                 }
             }
         }
