@@ -8208,6 +8208,12 @@ namespace ts {
                 return type;
             }
 
+            // JS are 'string' or 'number', not an enum type.
+            const enumTag = symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
+            if (enumTag) {
+                return enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
+            }
+
             // Get type from reference to named type that cannot be generic (enum or type parameter)
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
@@ -8242,10 +8248,6 @@ namespace ts {
             if (referenceType || assignedType) {
                 // TODO: GH#18217 (should the `|| assignedType` be at a lower precedence?)
                 return (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
-            }
-            const enumTag = getJSDocEnumTag(symbol.valueDeclaration);
-            if (enumTag && enumTag.typeExpression) {
-                return getTypeFromTypeNode(enumTag.typeExpression);
             }
         }
 
