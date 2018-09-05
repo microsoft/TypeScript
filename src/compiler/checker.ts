@@ -29419,19 +29419,20 @@ namespace ts {
         }
 
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
-            const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
             if (node.initializer) {
+                const isInvalidInitializer = !isStringOrNumberLiteralExpression(node.initializer);
+                const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
                 if (isConstOrReadonly && !node.type) {
-                    if (!isStringOrNumberLiteralExpression(node.initializer)) {
-                        return grammarErrorOnNode(node.initializer, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
+                    if (isInvalidInitializer) {
+                        return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
                     }
                 }
                 else {
-                    return grammarErrorOnNode(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                    return grammarErrorOnNode(node.initializer!, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
-            }
-            if (node.initializer && !(isConstOrReadonly && isStringOrNumberLiteralExpression(node.initializer))) {
-                return grammarErrorOnNode(node.initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                if (!isConstOrReadonly || isInvalidInitializer) {
+                    return grammarErrorOnNode(node.initializer!, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
+                }
             }
         }
 
