@@ -28,7 +28,7 @@ namespace ts.DocumentHighlights {
         const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
         return arrayFrom(map.entries(), ([fileName, highlightSpans]) => {
             if (!sourceFilesSet.has(fileName)) {
-                Debug.assert(program.redirectTargetsSet.has(fileName));
+                Debug.assert(program.redirectTargetsMap.has(fileName));
                 const redirectTarget = program.getSourceFile(fileName);
                 const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
                 fileName = redirect.fileName;
@@ -187,15 +187,8 @@ namespace ts.DocumentHighlights {
         });
     }
 
-    function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        const modifierFlag = modifierToFlag(modifier);
-        return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
-            if (getModifierFlags(node) & modifierFlag) {
-                const mod = find(node.modifiers!, m => m.kind === modifier);
-                Debug.assert(!!mod);
-                return mod;
-            }
-        });
+    function getModifierOccurrences(modifier: Modifier["kind"], declaration: Node): Node[] {
+        return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
     }
 
     function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {

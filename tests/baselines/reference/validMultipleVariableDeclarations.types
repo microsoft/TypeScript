@@ -34,13 +34,11 @@ function declSpace() {
 }
 
 interface Point { x: number; y: number; }
->Point : Point
 >x : number
 >y : number
 
 var p: Point;
 >p : Point
->Point : Point
 
 var p = { x: 1, y: 2 };
 >p : Point
@@ -52,7 +50,6 @@ var p = { x: 1, y: 2 };
 
 var p: Point = { x: 0, y: undefined };
 >p : Point
->Point : Point
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0

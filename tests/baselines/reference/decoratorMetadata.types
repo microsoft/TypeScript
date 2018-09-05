@@ -17,7 +17,6 @@ class MyComponent {
 
     constructor(public Service: Service) {
 >Service : Service
->Service : Service
     }
 
     @decorator

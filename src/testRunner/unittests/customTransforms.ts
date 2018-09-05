@@ -20,15 +20,13 @@ namespace ts {
 
                 const program = createProgram(arrayFrom(fileMap.keys()), options, host);
                 program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
-                Harness.Baseline.runBaseline(`customTransforms/${name}.js`, () => {
-                    let content = "";
-                    for (const [file, text] of arrayFrom(outputs.entries())) {
-                        if (content) content += "\n\n";
-                        content += `// [${file}]\n`;
-                        content += text;
-                    }
-                    return content;
-                });
+                let content = "";
+                for (const [file, text] of arrayFrom(outputs.entries())) {
+                    if (content) content += "\n\n";
+                    content += `// [${file}]\n`;
+                    content += text;
+                }
+                Harness.Baseline.runBaseline(`customTransforms/${name}.js`, content);
             });
         }
 

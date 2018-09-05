@@ -12,7 +12,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r1 = c['y']; 
 >r1 : string
@@ -33,8 +32,6 @@ var r3 = c[1];
 >1 : 1
 
 interface I {
->I : I
-
     [x: string]: string;
 >x : string
 
@@ -44,7 +41,6 @@ interface I {
 
 var i: I
 >i : I
->I : I
 
 var r4 = i['y'];
 >r4 : string

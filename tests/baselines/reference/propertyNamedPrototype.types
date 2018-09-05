@@ -7,5 +7,4 @@ class C {
 
     static prototype: C; // error
 >prototype : C
->C : C
 }

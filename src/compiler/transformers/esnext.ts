@@ -446,7 +446,7 @@ namespace ts {
                     createVariableDeclaration(catchVariable),
                     setEmitFlags(
                         createBlock([
-                            createStatement(
+                            createExpressionStatement(
                                 createAssignment(
                                     errorRecord,
                                     createObjectLiteral([
@@ -473,7 +473,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(createDownlevelAwait(callReturn))
+                                    createExpressionStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
@@ -675,7 +675,7 @@ namespace ts {
                 )
             );
 
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
             const block = updateBlock(node.body!, statements);
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
@@ -707,7 +707,7 @@ namespace ts {
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                prependStatements(statements, leadingStatements);
+                addStatementsAfterPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
@@ -890,13 +890,16 @@ namespace ts {
         scoped: false,
         priority: 1,
         text: `
-            var __assign = (this && this.__assign) || Object.assign || function(t) {
-                for (var s, i = 1, n = arguments.length; i < n; i++) {
-                    s = arguments[i];
-                    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                        t[p] = s[p];
-                }
-                return t;
+            var __assign = (this && this.__assign) || function () {
+                __assign = Object.assign || function(t) {
+                    for (var s, i = 1, n = arguments.length; i < n; i++) {
+                        s = arguments[i];
+                        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                            t[p] = s[p];
+                    }
+                    return t;
+                };
+                return __assign.apply(this, arguments);
             };`
     };
 

@@ -96,7 +96,7 @@ verify.quickInfos({
 verify.signatureHelp({ marker: "12", docComment: "", parameterDocComment: "param help" });
 
 verify.quickInfos({
-    "12q": "(property) i2.foo: (b: number) => string",
+    "12q": ["(property) i2.foo: (b: number) => string", "this is foo"],
 
     13: "var i2_i_i2_si: number",
     "13q": "var i2_i: i2",
@@ -186,7 +186,7 @@ verify.completionListContains("i3_i", "var i3_i: i3", "");
 goTo.marker('41');
 verify.quickInfoIs("(method) i3.f(a: number): string", "Function i3 f");
 verify.completionListContains("f", "(method) i3.f(a: number): string", "Function i3 f");
-verify.completionListContains("l", "(property) i3.l: (b: number) => string", "");
+verify.completionListContains("l", "(property) i3.l: (b: number) => string", "i3 l");
 verify.completionListContains("x", "(property) i3.x: number", "Comment i3 x");
 verify.completionListContains("nc_f", "(method) i3.nc_f(a: number): string", "");
 verify.completionListContains("nc_l", "(property) i3.nc_l: (b: number) => string", "");
@@ -195,7 +195,7 @@ verify.completionListContains("nc_x", "(property) i3.nc_x: number", "");
 verify.signatureHelp({ marker: "42", docComment: "Function i3 f", parameterDocComment: "number parameter" });
 
 verify.signatureHelp({ marker: "43", docComment: "", parameterDocComment: "comment i3 l b" });
-verify.quickInfoAt("43q", "(property) i3.l: (b: number) => string");
+verify.quickInfoAt("43q", "(property) i3.l: (b: number) => string", "i3 l");
 
 verify.signatureHelp({ marker: "44", docComment: "" });
 verify.quickInfoAt("44q", "(method) i3.nc_f(a: number): string");

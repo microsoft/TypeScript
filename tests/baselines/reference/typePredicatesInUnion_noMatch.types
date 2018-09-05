@@ -1,32 +1,23 @@
 === tests/cases/compiler/typePredicatesInUnion_noMatch.ts ===
 interface A {
->A : A
-
     pred(x: {}, y: {}): x is boolean;
 >pred : (x: {}, y: {}) => x is boolean
 >x : {}
 >y : {}
->x : any
 }
 interface B {
->B : B
-
     pred(x: {}, y: {}): y is string;
 >pred : (x: {}, y: {}) => y is string
 >x : {}
 >y : {}
->y : any
 }
 
 type Or = A | B;
 >Or : Or
->A : A
->B : B
 
 function f(o: Or, x: {}, y: {}) {
 >f : (o: Or, x: {}, y: {}) => void
 >o : Or
->Or : Or
 >x : {}
 >y : {}
 

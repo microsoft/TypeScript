@@ -3,7 +3,6 @@ module _modes {
 >_modes : typeof _modes
 
  export interface IMode {
->IMode : IMode
   
  }
  
@@ -25,7 +24,6 @@ module editor {
  var i : modes.IMode;
 >i : modes.IMode
 >modes : any
->IMode : modes.IMode
   
  // If you just use p1:modes, the compiler accepts it - should be an error
  class Bug { 
@@ -34,16 +32,13 @@ module editor {
   constructor(p1: modes.IMode, p2: modes.Mode) { }// should be an error on p2 - it's not exported
 >p1 : modes.IMode
 >modes : any
->IMode : modes.IMode
 >p2 : modes.Mode
 >modes : any
->Mode : modes.Mode
 
   public foo(p1:modes.IMode) {
 >foo : (p1: modes.IMode) => void
 >p1 : modes.IMode
 >modes : any
->IMode : modes.IMode
    
   } 
  }
@@ -59,7 +54,6 @@ module editor2 {
  var i : modesOuter.IMode;
 >i : modesOuter.IMode
 >modesOuter : any
->IMode : modesOuter.IMode
  
  class Bug {
 >Bug : Bug
@@ -67,10 +61,8 @@ module editor2 {
      constructor(p1: modesOuter.IMode, p2: modesOuter.Mode) { }// no error here, since modesOuter is declared externally
 >p1 : modesOuter.IMode
 >modesOuter : any
->IMode : modesOuter.IMode
 >p2 : modesOuter.Mode
 >modesOuter : any
->Mode : modesOuter.Mode
   
  }
  
@@ -84,10 +76,8 @@ module editor2 {
       constructor(p1: Foo.Bar, p2: modesOuter.Mode) { }
 >p1 : Foo.Bar
 >Foo : any
->Bar : Foo.Bar
 >p2 : modesOuter.Mode
 >modesOuter : any
->Mode : modesOuter.Mode
   }
 }
 
@@ -95,8 +85,6 @@ module A1 {
 >A1 : typeof A1
 
     export interface A1I1 {}
->A1I1 : A1I1
-
     export class A1C1 {}
 >A1C1 : A1C1
 }
@@ -111,11 +99,9 @@ module B1 {
     var i : A1Alias1.A1I1;   
 >i : A1Alias1.A1I1
 >A1Alias1 : any
->A1I1 : A1Alias1.A1I1
 
     var c : A1Alias1.A1C1;
 >c : A1Alias1.A1C1
 >A1Alias1 : any
->A1C1 : A1Alias1.A1C1
 }
 

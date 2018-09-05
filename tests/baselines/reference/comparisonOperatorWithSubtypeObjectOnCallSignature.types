@@ -59,29 +59,23 @@ var a5: { fn(a: Base): void };
 >a5 : { fn(a: Base): void; }
 >fn : (a: Base) => void
 >a : Base
->Base : Base
 
 var b5: { fn(a: Derived): void };
 >b5 : { fn(a: Derived): void; }
 >fn : (a: Derived) => void
 >a : Derived
->Derived : Derived
 
 var a6: { fn(a: Derived, b: Base): void };
 >a6 : { fn(a: Derived, b: Base): void; }
 >fn : (a: Derived, b: Base) => void
 >a : Derived
->Derived : Derived
 >b : Base
->Base : Base
 
 var b6: { fn(a: Base, b: Derived): void };
 >b6 : { fn(a: Base, b: Derived): void; }
 >fn : (a: Base, b: Derived) => void
 >a : Base
->Base : Base
 >b : Derived
->Derived : Derived
 
 var a7: { fn(): void };
 >a7 : { fn(): void; }
@@ -90,51 +84,42 @@ var a7: { fn(): void };
 var b7: { fn(): Base };
 >b7 : { fn(): Base; }
 >fn : () => Base
->Base : Base
 
 var a8: { fn(): Base };
 >a8 : { fn(): Base; }
 >fn : () => Base
->Base : Base
 
 var b8: { fn(): Base };
 >b8 : { fn(): Base; }
 >fn : () => Base
->Base : Base
 
 var a9: { fn(): Base };
 >a9 : { fn(): Base; }
 >fn : () => Base
->Base : Base
 
 var b9: { fn(): Derived };
 >b9 : { fn(): Derived; }
 >fn : () => Derived
->Derived : Derived
 
 var a10: { fn(a?: Base): void };
 >a10 : { fn(a?: Base): void; }
 >fn : (a?: Base) => void
 >a : Base
->Base : Base
 
 var b10: { fn(a?: Derived): void };
 >b10 : { fn(a?: Derived): void; }
 >fn : (a?: Derived) => void
 >a : Derived
->Derived : Derived
 
 var a11: { fn(...a: Base[]): void };
 >a11 : { fn(...a: Base[]): void; }
 >fn : (...a: Base[]) => void
 >a : Base[]
->Base : Base
 
 var b11: { fn(...a: Derived[]): void };
 >b11 : { fn(...a: Derived[]): void; }
 >fn : (...a: Derived[]) => void
 >a : Derived[]
->Derived : Derived
 
 //var a12: { fn<T, U extends T>(t: T, u: U): T[] };
 //var b12: { fn<A, B extends A>(a: A, b: B): A[] };

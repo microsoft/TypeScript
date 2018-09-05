@@ -6,10 +6,7 @@ class Foo {
 
   myFunc<T extends Foo>(arg: T) {}
 >myFunc : <T extends Foo>(arg: T) => void
->T : T
->Foo : Foo
 >arg : T
->T : T
 }
 
 class Bar {
@@ -17,15 +14,11 @@ class Bar {
 
   myFunc<T extends Bar>(arg: T) {}
 >myFunc : <T extends Bar>(arg: T) => void
->T : T
->Bar : Bar
 >arg : T
->T : T
 }
 
 const myVar: Foo = new Bar();
 >myVar : Foo
->Foo : Foo
 >new Bar() : Bar
 >Bar : typeof Bar
 

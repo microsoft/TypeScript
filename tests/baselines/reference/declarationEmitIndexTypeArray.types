@@ -1,9 +1,7 @@
 === tests/cases/compiler/declarationEmitIndexTypeArray.ts ===
 function doSomethingWithKeys<T>(...keys: (keyof T)[]) { }
 >doSomethingWithKeys : <T>(...keys: (keyof T)[]) => void
->T : T
 >keys : (keyof T)[]
->T : T
 
 const utilityFunctions = {
 >utilityFunctions : { doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void; }

@@ -10,9 +10,6 @@ import {N} from "./f1";
 
 // partial revert of https://github.com/Microsoft/TypeScript/pull/7583 to prevent breaking changes
 export namespace N {
->N : any
-
     export interface I {x: any}
->I : I
 >x : any
 }

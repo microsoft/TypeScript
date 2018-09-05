@@ -1,14 +1,10 @@
 === tests/cases/compiler/extension.ts ===
 interface I {
->I : I
-
     x;
 >x : any
 }
 
 interface I {
->I : I
-
     y;
 >y : any
 }
@@ -55,7 +51,6 @@ c.p;
 
 var i:I;
 >i : I
->I : I
 
 i.x;
 >i.x : any

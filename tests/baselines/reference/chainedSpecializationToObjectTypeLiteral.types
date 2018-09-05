@@ -1,49 +1,30 @@
 === tests/cases/compiler/chainedSpecializationToObjectTypeLiteral.ts ===
 interface Sequence<T> {
->Sequence : Sequence<T>
->T : T
-
     each(iterator: (value: T) => void): void;
 >each : (iterator: (value: T) => void) => void
 >iterator : (value: T) => void
 >value : T
->T : T
 
     map<U>(iterator: (value: T) => U): Sequence<U>;
 >map : <U>(iterator: (value: T) => U) => Sequence<U>
->U : U
 >iterator : (value: T) => U
 >value : T
->T : T
->U : U
->Sequence : Sequence<T>
->U : U
 
     filter(iterator: (value: T) => boolean): Sequence<T>;
 >filter : (iterator: (value: T) => boolean) => Sequence<T>
 >iterator : (value: T) => boolean
 >value : T
->T : T
->Sequence : Sequence<T>
->T : T
 
     groupBy<K>(keySelector: (value: T) => K): Sequence<{ key: K; items: T[]; }>;
 >groupBy : <K>(keySelector: (value: T) => K) => Sequence<{ key: K; items: T[]; }>
->K : K
 >keySelector : (value: T) => K
 >value : T
->T : T
->K : K
->Sequence : Sequence<T>
 >key : K
->K : K
 >items : T[]
->T : T
 }
 
 var s: Sequence<string>;
 >s : Sequence<string>
->Sequence : Sequence<T>
 
 var s2 = s.groupBy(s => s.length);
 >s2 : Sequence<{ key: number; items: string[]; }>

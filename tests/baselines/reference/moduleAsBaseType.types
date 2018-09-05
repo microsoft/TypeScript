@@ -1,16 +1,10 @@
 === tests/cases/compiler/moduleAsBaseType.ts ===
 module M {}
->M : any
-
 class C extends M {}
 >C : C
 >M : any
 
 interface I extends M { }
->I : I
->M : No type information available!
-
 class C2 implements M { }
 >C2 : C2
->M : No type information available!
 

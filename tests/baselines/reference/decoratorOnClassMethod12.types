@@ -8,7 +8,6 @@ module M {
         decorator(target: Object, key: string): void { }
 >decorator : (target: Object, key: string) => void
 >target : Object
->Object : Object
 >key : string
     }
     class C extends S {

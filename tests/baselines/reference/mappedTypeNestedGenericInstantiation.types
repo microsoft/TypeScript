@@ -2,34 +2,18 @@
 // Repro from #13346
 
 interface Chainable<T> {
->Chainable : Chainable<T>
->T : T
-
   value(): T;
 >value : () => T
->T : T
 
   mapValues<U>(func: (v: T[keyof T]) => U): Chainable<{[k in keyof T]: U}>;
 >mapValues : <U>(func: (v: T[keyof T]) => U) => Chainable<{ [k in keyof T]: U; }>
->U : U
 >func : (v: T[keyof T]) => U
 >v : T[keyof T]
->T : T
->T : T
->U : U
->Chainable : Chainable<T>
->k : k
->T : T
->U : U
 }
 
 declare function chain<T>(t: T): Chainable<T>;
 >chain : <T>(t: T) => Chainable<T>
->T : T
 >t : T
->T : T
->Chainable : Chainable<T>
->T : T
 
 const square = (x: number) => x * x;
 >square : (x: number) => number

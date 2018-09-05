@@ -1,7 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 let cond: boolean;
 >cond : boolean
@@ -92,10 +91,7 @@ function b() {
 }
 function c<T>(data: string | T): T {
 >c : <T>(data: string | T) => T
->T : T
 >data : string | T
->T : T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
@@ -117,9 +113,7 @@ function c<T>(data: string | T): T {
 }
 function d<T extends string>(data: string | T): never {
 >d : <T extends string>(data: string | T) => never
->T : T
 >data : string | T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean

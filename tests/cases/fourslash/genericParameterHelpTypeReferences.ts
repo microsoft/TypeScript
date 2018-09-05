@@ -11,21 +11,37 @@
 ////var x : testClass</*type2*/
 ////class Bar<T> extends testClass</*type3*/
 ////var x : testClass<,, /*type4*/any>;
+////
+////interface I<T> {}
+////let i: I</*interface*/>;
+////
+////type Ty<T> = T;
+////let t: Ty</*typeAlias*/>;
 
-// TODO: GH#23631
-
-if (false) {
-    verify.signatureHelp(
-        {
-            marker: ["type1", "type2", "type3"],
-            text: "testClass<T extends IFoo, U, M extends IFoo>",
-            parameterName: "T",
-            parameterSpan: "T extends IFoo",
-        },
-        {
-            marker: "type4",
-            parameterName: "M",
-            parameterSpan: "M extends IFoo",
-        }
-    );
-}
+verify.signatureHelp(
+    {
+        marker: ["type1", "type2", "type3"],
+        text: "testClass<T extends IFoo, U, M extends IFoo>",
+        parameterName: "T",
+        parameterSpan: "T extends IFoo",
+        triggerReason: { kind: "characterTyped", triggerCharacter: "<" },
+    },
+    {
+        marker: "type4",
+        parameterName: "M",
+        parameterSpan: "M extends IFoo",
+        triggerReason: { kind: "characterTyped", triggerCharacter: "," },
+    },
+    {
+        marker: "interface",
+        text: "I<T>",
+        parameterName: "T",
+        parameterSpan: "T",
+    },
+    {
+        marker: "typeAlias",
+        text: "Ty<T>",
+        parameterName: "T",
+        parameterSpan: "T",
+    },
+);

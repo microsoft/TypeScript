@@ -5,7 +5,6 @@ import ITest = require('ITest');
 
 var testData: ITest[];
 >testData : ITest[]
->ITest : ITest
 
 var p = testData[0].name;
 >p : string
@@ -20,8 +19,6 @@ declare module "ITest" {
 >"ITest" : typeof import("ITest")
 
     interface Name {
->Name : Name
-
         name: string;
 >name : string
     }

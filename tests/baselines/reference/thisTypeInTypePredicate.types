@@ -1,20 +1,15 @@
 === tests/cases/conformance/types/thisType/thisTypeInTypePredicate.ts ===
 declare function filter<S>(f: (this: void, x: any) => x is S): S[];
 >filter : <S>(f: (this: void, x: any) => x is S) => S[]
->S : S
 >f : (this: void, x: any) => x is S
 >this : void
 >x : any
->x : any
->S : S
->S : S
 
 const numbers = filter<number>((x): x is number => 'number' == typeof x)
 >numbers : number[]
 >filter<number>((x): x is number => 'number' == typeof x) : number[]
 >filter : <S>(f: (this: void, x: any) => x is S) => S[]
 >(x): x is number => 'number' == typeof x : (this: void, x: any) => x is number
->x : any
 >x : any
 >'number' == typeof x : boolean
 >'number' : "number"

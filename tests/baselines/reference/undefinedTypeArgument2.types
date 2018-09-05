@@ -1,32 +1,16 @@
 === tests/cases/compiler/undefinedTypeArgument2.ts ===
 // once caused stack overflow
 interface Query<T> {
->Query : Query<T>
->T : T
-
     selectMany<U>(selector: (item: T) => U[]): Query<U>;
 >selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => any): Query<any>; }
->U : U
 >selector : (item: T) => U[]
 >item : T
->T : T
->U : U
->Query : Query<T>
->U : U
 
     selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
 >selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => any): Query<any>; }
->U : U
 >arraySelector : (item: T) => U[]
 >item : T
->T : T
->U : U
 >resultSelector : (outer: T, inner: U) => any
 >outer : T
->T : T
 >inner : U
->U : U
->R : No type information available!
->Query : Query<T>
->R : No type information available!
 }

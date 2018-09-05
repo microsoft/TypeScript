@@ -1,25 +1,16 @@
 === tests/cases/compiler/errorMessagesIntersectionTypes04.ts ===
 interface A {
->A : A
-
     a;
 >a : any
 }
 
 interface B {
->B : B
-
     b;
 >b : any
 }
 
 function f<T, U extends A, V extends U>(): void {
 >f : <T, U extends A, V extends U>() => void
->T : T
->U : U
->A : A
->V : V
->U : U
 
     let num: number;
 >num : number
@@ -32,8 +23,6 @@ function f<T, U extends A, V extends U>(): void {
 
     let a_and_b: A & B;
 >a_and_b : A & B
->A : A
->B : B
 
     let num_and_bool: number & boolean;
 >num_and_bool : never

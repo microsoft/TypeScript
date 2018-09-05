@@ -1,6 +1,5 @@
 === tests/cases/compiler/event.ts ===
 export interface Event { title: string };
->Event : Event
 >title : string
 
 === tests/cases/compiler/test.ts ===
@@ -18,5 +17,4 @@ export class SomeClass {
     @Input event: Event;
 >Input : (target: any, key: string) => void
 >event : Event
->Event : Event
 }

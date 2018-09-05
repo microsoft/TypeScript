@@ -13,7 +13,7 @@ var n = "hello";
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 >x1 : (arg0: number) => any
->(a) => a + 1 : (a: number) => number
+>(a) => a + 1 : (a: number) => any
 >a : number
 >a + 1 : number
 >a : number
@@ -47,7 +47,7 @@ a = x2(0);
 /** @type {function (number): number} */
 const x3 = (a) => a.concat("hi");
 >x3 : (arg0: number) => number
->(a) => a.concat("hi") : (a: number) => any
+>(a) => a.concat("hi") : (a: number) => number
 >a : number
 >a.concat("hi") : any
 >a.concat : any
@@ -63,7 +63,7 @@ x3(0);
 /** @type {function (number): string} */
 const x4 = (a) => a + 1;
 >x4 : (arg0: number) => string
->(a) => a + 1 : (a: number) => number
+>(a) => a + 1 : (a: number) => string
 >a : number
 >a + 1 : number
 >a : number
