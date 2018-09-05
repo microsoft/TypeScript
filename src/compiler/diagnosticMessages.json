@@ -3150,7 +3150,7 @@
         "category": "Message",
         "code": 6073
     },
-    "Controls showing errors for unused labels. 'true': Always; 'false': Never; unspecified: Not on command line, but in editor.": {
+    "Controls showing errors for unused labels. 'true': Never show errors; 'false': Always show errors; unspecified: Show errors in editor, but not command line.": {
         "category": "Message",
         "code": 6074
     },
@@ -3162,7 +3162,7 @@
         "category": "Message",
         "code": 6076
     },
-    "Controls showing errors for unreachable code.  'true': Always; 'false': Never; unspecified: Not on command line, but in editor.": {
+    "Controls showing errors for unreachable code. 'true': Never show errors; 'false': Always show errors; unspecified: Show errors in editor, but not command line.": {
         "category": "Message",
         "code": 6077
     },

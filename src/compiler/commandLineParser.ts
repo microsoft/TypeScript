@@ -697,14 +697,14 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Controls_showing_errors_for_unused_labels_true_Colon_Always_false_Colon_Never_unspecified_Colon_Not_on_command_line_but_in_editor,
+            description: Diagnostics.Controls_showing_errors_for_unused_labels_true_Colon_Never_show_errors_false_Colon_Always_show_errors_unspecified_Colon_Show_errors_in_editor_but_not_command_line,
         },
         {
             name: "allowUnreachableCode",
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Controls_showing_errors_for_unreachable_code_true_Colon_Always_false_Colon_Never_unspecified_Colon_Not_on_command_line_but_in_editor,
+            description: Diagnostics.Controls_showing_errors_for_unreachable_code_true_Colon_Never_show_errors_false_Colon_Always_show_errors_unspecified_Colon_Show_errors_in_editor_but_not_command_line,
         },
         {
             name: "suppressExcessPropertyErrors",
