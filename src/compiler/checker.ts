@@ -29593,10 +29593,11 @@ namespace ts {
         }
 
         function checkGrammarConstructorTypeParameters(node: ConstructorDeclaration) {
-            const jsdocTypeParameters = isInJavaScriptFile(node) && getJSDocTypeParameterDeclarations(node);
-            if (node.typeParameters || jsdocTypeParameters && jsdocTypeParameters.length) {
-                const { pos, end } = node.typeParameters || jsdocTypeParameters && jsdocTypeParameters[0] || node;
-                return grammarErrorAtPos(node, pos, end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
+            const jsdocTypeParameters = isInJavaScriptFile(node) ? getJSDocTypeParameterDeclarations(node) : undefined;
+            const range = node.typeParameters || jsdocTypeParameters && firstOrUndefined(jsdocTypeParameters);
+            if (range) {
+                const pos = range.pos === range.end ? range.pos : skipTrivia(getSourceFileOfNode(node).text, range.pos);
+                return grammarErrorAtPos(node, pos, range.end - pos, Diagnostics.Type_parameters_cannot_appear_on_a_constructor_declaration);
             }
         }
 

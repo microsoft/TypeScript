@@ -6513,7 +6513,7 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): void {
+                function skipWhitespaceOrAsterisk(next: () => void = nextJSDocToken): void {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
                             return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
@@ -6528,7 +6528,7 @@ namespace ts {
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
                         }
-                        nextJSDocToken();
+                        next();
                     }
                 }
 
@@ -6538,8 +6538,9 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    const tagName = parseJSDocIdentifierName();
-                    skipWhitespaceOrAsterisk();
+                    // Use 'nextToken' instead of 'nextJsDocToken' so we can parse a type like 'number' in `@enum number`
+                    const tagName = parseJSDocIdentifierName(/*message*/ undefined, nextToken);
+                    skipWhitespaceOrAsterisk(nextToken);
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -7113,7 +7114,7 @@ namespace ts {
                     return entity;
                 }
 
-                function parseJSDocIdentifierName(message?: DiagnosticMessage): Identifier {
+                function parseJSDocIdentifierName(message?: DiagnosticMessage, next: () => void = nextJSDocToken): Identifier {
                     if (!tokenIsIdentifierOrKeyword(token())) {
                         return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message || Diagnostics.Identifier_expected);
                     }
@@ -7124,7 +7125,7 @@ namespace ts {
                     result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
-                    nextJSDocToken();
+                    next();
                     return result;
                 }
             }
