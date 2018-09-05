@@ -1,0 +1,32 @@
+tests/cases/compiler/reversedWordsWithBindingElement.ts(6,15): error TS4103: Keyword 'enum' cannot be used in binding element.
+tests/cases/compiler/reversedWordsWithBindingElement.ts(6,21): error TS4103: Keyword 'case' cannot be used in binding element.
+tests/cases/compiler/reversedWordsWithBindingElement.ts(7,9): error TS1109: Expression expected.
+tests/cases/compiler/reversedWordsWithBindingElement.ts(7,14): error TS1003: Identifier expected.
+tests/cases/compiler/reversedWordsWithBindingElement.ts(7,17): error TS1109: Expression expected.
+tests/cases/compiler/reversedWordsWithBindingElement.ts(7,21): error TS1128: Declaration or statement expected.
+
+
+==== tests/cases/compiler/reversedWordsWithBindingElement.ts (6 errors) ====
+    interface Foo {
+        enum: string;
+        case: number;
+    }
+    
+    function bar({ enum, case }: Foo) {
+                  ~~~~~
+!!! error TS4103: Keyword 'enum' cannot be used in binding element.
+                        ~~~~~
+!!! error TS4103: Keyword 'case' cannot be used in binding element.
+        if (enum && case) {
+            ~~~~
+!!! error TS1109: Expression expected.
+                 ~~
+!!! error TS1003: Identifier expected.
+                    ~~~~
+!!! error TS1109: Expression expected.
+                        ~
+!!! error TS1128: Declaration or statement expected.
+            //
+        }
+    }
+    

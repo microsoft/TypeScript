@@ -1,0 +1,24 @@
+=== tests/cases/compiler/reversedWordsWithBindingElement.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(reversedWordsWithBindingElement.ts, 0, 0))
+
+    enum: string;
+>enum : Symbol(Foo.enum, Decl(reversedWordsWithBindingElement.ts, 0, 15))
+
+    case: number;
+>case : Symbol(Foo.case, Decl(reversedWordsWithBindingElement.ts, 1, 17))
+}
+
+function bar({ enum, case }: Foo) {
+>bar : Symbol(bar, Decl(reversedWordsWithBindingElement.ts, 3, 1))
+>enum : Symbol(enum, Decl(reversedWordsWithBindingElement.ts, 5, 14))
+>case : Symbol(case, Decl(reversedWordsWithBindingElement.ts, 5, 20))
+>Foo : Symbol(Foo, Decl(reversedWordsWithBindingElement.ts, 0, 0))
+
+    if (enum && case) {
+> : Symbol((Missing), Decl(reversedWordsWithBindingElement.ts, 6, 8))
+
+        //
+    }
+}
+
