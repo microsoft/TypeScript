@@ -2912,7 +2912,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },

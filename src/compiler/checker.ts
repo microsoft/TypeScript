@@ -2275,7 +2275,7 @@ namespace ts {
                     else if (!compilerOptions.resolveJsonModule &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
                         getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs &&
-                        getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) {
+                        hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                     }
                     else {
