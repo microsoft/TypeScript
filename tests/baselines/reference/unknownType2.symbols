@@ -1,0 +1,124 @@
+=== tests/cases/conformance/types/unknown/unknownType2.ts ===
+type isUnknown<T> = unknown extends T ? true : false;
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>T : Symbol(T, Decl(unknownType2.ts, 0, 15))
+>T : Symbol(T, Decl(unknownType2.ts, 0, 15))
+
+type isTrue<T extends true> = T;
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>T : Symbol(T, Decl(unknownType2.ts, 1, 12))
+>T : Symbol(T, Decl(unknownType2.ts, 1, 12))
+
+type SomeResponse = 'yes' | 'no' | 'idk';
+>SomeResponse : Symbol(SomeResponse, Decl(unknownType2.ts, 1, 32))
+
+let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
+>validate : Symbol(validate, Decl(unknownType2.ts, 4, 3))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 15))
+>SomeResponse : Symbol(SomeResponse, Decl(unknownType2.ts, 1, 32))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+
+const u: unknown = undefined;
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>undefined : Symbol(undefined)
+
+declare const symb: unique symbol;
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+
+if (u === 5) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const y = u.toString(10);
+>y : Symbol(y, Decl(unknownType2.ts, 11, 9))
+>u.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+if (u === true || u === false) {    
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const someBool: boolean = u;
+>someBool : Symbol(someBool, Decl(unknownType2.ts, 15, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === undefined) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>undefined : Symbol(undefined)
+
+    const undef: undefined = u;
+>undef : Symbol(undef, Decl(unknownType2.ts, 19, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === null) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const someNull: null = u;
+>someNull : Symbol(someNull, Decl(unknownType2.ts, 23, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if(u === symb) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+
+    const symbolAlias: typeof symb = u;
+>symbolAlias : Symbol(symbolAlias, Decl(unknownType2.ts, 27, 9))
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (!(u === 42)) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    u // u should still be `unknown` here
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u !== 42) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type A = isTrue<isUnknown<typeof u>>
+>A : Symbol(A, Decl(unknownType2.ts, 34, 15))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == 42) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type B = isTrue<isUnknown<typeof u>>
+>B : Symbol(B, Decl(unknownType2.ts, 38, 14))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == true) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type C = isTrue<isUnknown<typeof u>>
+>C : Symbol(C, Decl(unknownType2.ts, 42, 16))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == Object) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    type D = isTrue<isUnknown<typeof u>>
+>D : Symbol(D, Decl(unknownType2.ts, 46, 18))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
