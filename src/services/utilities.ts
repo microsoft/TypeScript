@@ -1671,7 +1671,7 @@ namespace ts {
         }
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        if (callback && node) callback(node!, clone);
+        if (callback && node && clone) callback(node!, clone);
 
         return clone as T;
     }

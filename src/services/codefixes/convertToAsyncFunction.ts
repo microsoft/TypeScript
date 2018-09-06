@@ -81,19 +81,14 @@ namespace ts.codefix {
         }
 
         for (const statement of returnStatements) {
-            if (isCallExpression(statement)) {
-                startTransformation(statement, statement);
-            }
-            else {
-                forEachChild(statement, function visit(node: Node) {
-                    if (isCallExpression(node)) {
-                        startTransformation(node, statement);
-                    }
-                    else if (!isFunctionLike(node)) {
-                        forEachChild(node, visit);
-                    }
-                });
-            }
+            forEachChild(statement, function visit(node: Node) {
+                if (isCallExpression(node)) {
+                    startTransformation(node, statement);
+                }
+                else if (!isFunctionLike(node)) {
+                    forEachChild(node, visit);
+                }
+            });
         }
     }
 
@@ -344,11 +339,8 @@ namespace ts.codefix {
 
             return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined) as Statement];
         }
-        else {
-            return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
-        }
 
-        return [];
+        return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
     }
 
     function getFlagOfIdentifier(node: Identifier, constIdentifiers: Identifier[]): NodeFlags {
@@ -513,6 +505,7 @@ namespace ts.codefix {
                 name = getMapEntryIfExists(param);
             }
         }
+        // currently not relevant, since we don't produce a valid transformation if the argument to a promise operation is a CallExpression
         else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
             name = { identifier: funcNode.arguments[0] as Identifier, types, numberOfAssignmentsOriginal };
         }
