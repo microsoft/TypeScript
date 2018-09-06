@@ -1846,7 +1846,7 @@ namespace ts {
                     const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
                     const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
                     if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
-                        createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
+                        errors.push(createCompilerDiagnostic(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
                     }
                 }
                 else {
@@ -2078,12 +2078,6 @@ namespace ts {
             }
         };
         const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
-        const hasZeroFiles = json && json.files && json.files.length === 0;
-        const hasZeroOrNoReferences = !(json && json.references) || json.references.length === 0;
-
-        if (hasZeroFiles && hasZeroOrNoReferences) {
-            errors.push(createCompilerDiagnostic(Diagnostics.The_files_list_in_config_file_0_is_empty, sourceFile.fileName));
-        }
 
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
