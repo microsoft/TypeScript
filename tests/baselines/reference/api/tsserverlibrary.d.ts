@@ -2584,7 +2584,6 @@ declare namespace ts {
     }
     interface ExpandResult {
         fileNames: string[];
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
     interface CreateProgramOptions {
