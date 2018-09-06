@@ -1,0 +1,46 @@
+=== tests/cases/compiler/destructureComputedProperty.ts ===
+declare const ab: { n: number } | { n: string };
+>ab : { n: number; } | { n: string; }
+>n : number
+>n : string
+
+const nameN = "n";
+>nameN : "n"
+>"n" : "n"
+
+const { [nameN]: n } = ab;
+>nameN : "n"
+>n : string | number
+>ab : { n: number; } | { n: string; }
+
+class C { private p: number; }
+>C : C
+>p : number
+
+const nameP = "p";
+>nameP : "p"
+>"p" : "p"
+
+const { "p": p0 } = new C();
+>p0 : number
+>new C() : C
+>C : typeof C
+
+const { ["p"]: p1 } = new C();
+>"p" : "p"
+>p1 : number
+>new C() : C
+>C : typeof C
+
+const { [nameP]: p2 } = new C();
+>nameP : "p"
+>p2 : number
+>new C() : C
+>C : typeof C
+
+const { p: p3 } = new C();
+>p : any
+>p3 : number
+>new C() : C
+>C : typeof C
+

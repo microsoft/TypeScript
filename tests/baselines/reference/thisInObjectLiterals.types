@@ -25,7 +25,6 @@ class MyClass {
         var t: { x: ContainingThis; y: number };
 >t : { x: this; y: number; }
 >x : this
->ContainingThis : this
 >y : number
     }
 }

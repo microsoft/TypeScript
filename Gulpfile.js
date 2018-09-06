@@ -24,6 +24,9 @@ const baselineAccept = require("./scripts/build/baselineAccept");
 const cmdLineOptions = require("./scripts/build/options");
 const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
+const prepend = require("./scripts/build/prepend");
+const { removeSourceMaps } = require("./scripts/build/sourcemaps");
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -44,17 +47,9 @@ const generateLocalizedDiagnosticMessagesJs = "scripts/generateLocalizedDiagnost
 const buildProtocolJs = "scripts/buildProtocol.js";
 const produceLKGJs = "scripts/produceLKG.js";
 const word2mdJs = "scripts/word2md.js";
-gulp.task("scripts", /*help*/ false, () => project.compile(scriptsProject), {
-    aliases: [
-        configurePrereleaseJs, 
-        processDiagnosticMessagesJs,
-        generateLocalizedDiagnosticMessagesJs,
-        produceLKGJs,
-        buildProtocolJs,
-        word2mdJs
-    ]
-});
-gulp.task("clean-scripts", /*help*/ false, () => project.clean(scriptsProject));
+const scriptsTaskAliases = [configurePrereleaseJs, processDiagnosticMessagesJs, generateLocalizedDiagnosticMessagesJs, produceLKGJs, buildProtocolJs, word2mdJs];
+gulp.task("scripts", /*help*/ false, () => project.compile(scriptsProject), { aliases: scriptsTaskAliases });
+gulp.task("clean:scripts", /*help*/ false, () => project.clean(scriptsProject), { aliases: scriptsTaskAliases.map(alias => `clean:${alias}`)});
 
 // Nightly management tasks
 gulp.task(
@@ -73,7 +68,7 @@ gulp.task(
 const importDefinitelyTypedTestsProject = "scripts/importDefinitelyTypedTests/tsconfig.json";
 const importDefinitelyTypedTestsJs = "scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js";
 gulp.task(importDefinitelyTypedTestsJs, /*help*/ false, () => project.compile(importDefinitelyTypedTestsProject));
-gulp.task("clean:" + importDefinitelyTypedTestsJs, /*help*/ false, () => project.clean(importDefinitelyTypedTestsProject));
+gulp.task(`clean:${importDefinitelyTypedTestsJs}`, /*help*/ false, () => project.clean(importDefinitelyTypedTestsProject));
 
 gulp.task(
     "importDefinitelyTypedTests",
@@ -95,7 +90,7 @@ gulp.task(diagnosticInformationMapTs, /*help*/ false, [processDiagnosticMessages
         return exec(host, [processDiagnosticMessagesJs, diagnosticMessagesJson]);
     }
 });
-gulp.task("clean:" + diagnosticInformationMapTs, /*help*/ false, () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]));
+gulp.task(`clean:${diagnosticInformationMapTs}`, /*help*/ false, () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]));
 
 const builtGeneratedDiagnosticMessagesJson = "built/local/diagnosticMessages.generated.json";
 gulp.task(builtGeneratedDiagnosticMessagesJson, /*help*/ false, [diagnosticInformationMapTs], () =>
@@ -134,22 +129,33 @@ gulp.task(generatedLCGFile, /*help*/ false, [generateLocalizedDiagnosticMessages
 
 gulp.task("localize", /*help*/ false, [generatedLCGFile]);
 
+const servicesProject = "src/services/tsconfig.json";
 const typescriptServicesProject = "built/local/typescriptServices.tsconfig.json";
 gulp.task(typescriptServicesProject, /*help*/ false, () => {
     // NOTE: flatten services so that we can properly strip @internal
-    project.flatten("src/services/tsconfig.json", typescriptServicesProject, {
+    project.flatten(servicesProject, typescriptServicesProject, {
         compilerOptions: {
-            "removeComments": true,
+            "removeComments": false,
             "stripInternal": true,
-            "outFile": "typescriptServices.js"
+            "declarationMap": false,
+            "outFile": "typescriptServices.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
 });
 
 const typescriptServicesJs = "built/local/typescriptServices.js";
 const typescriptServicesDts = "built/local/typescriptServices.d.ts";
-gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () => 
-    project.compile(typescriptServicesProject, { dts: files => files.pipe(convertConstEnums()) }),
+gulp.task(typescriptServicesJs, /*help*/ false, ["lib", "generate-diagnostics", typescriptServicesProject], () =>
+    project.compile(typescriptServicesProject, {
+        js: files => files
+            .pipe(prepend.file(copyright))
+            .pipe(rename("typescriptServices.js")),
+        dts: files => files
+            .pipe(removeSourceMaps())
+            .pipe(prepend.file(copyright))
+            .pipe(convertConstEnums())
+            .pipe(rename("typescriptServices.d.ts"))
+    }),
     { aliases: [typescriptServicesDts] });
 
 const typescriptJs = "built/local/typescript.js";
@@ -178,29 +184,39 @@ gulp.task(typescriptStandaloneDts, /*help*/ false, [typescriptServicesDts], () =
 // build all 'typescriptServices'-related outputs
 gulp.task("services", /*help*/ false, [typescriptServicesJs, typescriptServicesDts, typescriptJs, typescriptDts, typescriptStandaloneDts]);
 
+const useCompiler = cmdLineOptions.lkg ? "lkg" : "built";
+const useCompilerDeps = cmdLineOptions.lkg ? ["lib", "generate-diagnostics"] : [typescriptServicesJs];
+
 const tscProject = "src/tsc/tsconfig.json";
 const tscJs = "built/local/tsc.js";
-gulp.task(tscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(tscProject, { typescript: "built" }));
+gulp.task(tscJs, /*help*/ false, useCompilerDeps, () =>
+    project.compile(tscProject, {
+        typescript: useCompiler,
+        js: files => files.pipe(prepend.file(copyright))
+    }));
 
 const tscReleaseProject = "src/tsc/tsconfig.release.json";
 const tscReleaseJs = "built/local/tsc.release.js";
-gulp.task(tscReleaseJs, /*help*/ false, () => project.compile(tscReleaseProject));
+gulp.task(tscReleaseJs, /*help*/ false, () =>
+    project.compile(tscReleaseProject, {
+        js: files => files.pipe(prepend.file(copyright))
+    }));
 
 const cancellationTokenProject = "src/cancellationToken/tsconfig.json";
 const cancellationTokenJs = "built/local/cancellationToken.js";
-gulp.task(cancellationTokenJs, /*help*/ false, [typescriptServicesJs], () => project.compile(cancellationTokenProject, { typescript: "built" }));
+gulp.task(cancellationTokenJs, /*help*/ false, useCompilerDeps, () => project.compile(cancellationTokenProject, { typescript: useCompiler }));
 
 const typingsInstallerProject = "src/typingsInstaller/tsconfig.json";
 const typingsInstallerJs = "built/local/typingsInstaller.js";
-gulp.task(typingsInstallerJs, /*help*/ false, [typescriptServicesJs], () => project.compile(typingsInstallerProject, { typescript: "built" }));
+gulp.task(typingsInstallerJs, /*help*/ false, useCompilerDeps, () => project.compile(typingsInstallerProject, { typescript: useCompiler }));
 
 const tsserverProject = "src/tsserver/tsconfig.json";
 const tsserverJs = "built/local/tsserver.js";
-gulp.task(tsserverJs, /*help*/ false, [typescriptServicesJs], () => project.compile(tsserverProject, { typescript: "built" }));
+gulp.task(tsserverJs, /*help*/ false, useCompilerDeps, () => project.compile(tsserverProject, { typescript: useCompiler }));
 
 const watchGuardProject = "src/watchGuard/tsconfig.json";
 const watchGuardJs = "built/local/watchGuard.js";
-gulp.task(watchGuardJs, /*help*/ false, [typescriptServicesJs], () => project.compile(watchGuardProject, { typescript: "built" }));
+gulp.task(watchGuardJs, /*help*/ false, useCompilerDeps, () => project.compile(watchGuardProject, { typescript: useCompiler }));
 
 const typesMapJson = "built/local/typesMap.json";
 gulp.task(typesMapJson, /*help*/ false, [], () =>
@@ -215,21 +231,28 @@ gulp.task(tsserverlibraryProject, /*help*/ false, () => {
     project.flatten("src/tsserver/tsconfig.json", tsserverlibraryProject, {
         exclude: ["src/tsserver/server.ts"],
         compilerOptions: {
-            "removeComments": true,
+            "removeComments": false,
             "stripInternal": true,
-            "outFile": "tsserverlibrary.js"
+            "declarationMap": false,
+            "outFile": "tsserverlibrary.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
 });
 
 const tsserverlibraryJs = "built/local/tsserverlibrary.js";
 const tsserverlibraryDts = "built/local/tsserverlibrary.d.ts";
-gulp.task(tsserverlibraryJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryProject], () =>
-    project.compile(tsserverlibraryProject, { 
+gulp.task(tsserverlibraryJs, /*help*/ false, useCompilerDeps.concat([tsserverlibraryProject]), () =>
+    project.compile(tsserverlibraryProject, {
+        js: files => files
+            .pipe(prepend.file(copyright))
+            .pipe(rename("tsserverlibrary.js")),
         dts: files => files
+            .pipe(removeSourceMaps())
+            .pipe(prepend.file(copyright))
             .pipe(convertConstEnums())
-            .pipe(append("\nexport = ts;\nexport as namespace ts;")),
-        typescript: "built"
+            .pipe(append("\nexport = ts;\nexport as namespace ts;"))
+            .pipe(rename("tsserverlibrary.d.ts")),
+        typescript: useCompiler
     }), { aliases: [tsserverlibraryDts] });
 
 gulp.task(
@@ -253,21 +276,21 @@ gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
     exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
 
 gulp.task(
-    "generate-spec", 
-    "Generates a Markdown version of the Language Specification", 
+    "generate-spec",
+    "Generates a Markdown version of the Language Specification",
     [specMd]);
 
 gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJs, typingsInstallerJs, watchGuardJs, tscReleaseJs], () => {
     const expectedFiles = [
-        tscReleaseJs, 
-        typescriptServicesJs, 
-        tsserverJs, 
-        typescriptJs, 
-        typescriptDts, 
-        typescriptServicesDts, 
-        tsserverlibraryDts, 
-        tsserverlibraryDts, 
-        typingsInstallerJs, 
+        tscReleaseJs,
+        typescriptServicesJs,
+        tsserverJs,
+        typescriptJs,
+        typescriptDts,
+        typescriptServicesDts,
+        tsserverlibraryDts,
+        tsserverlibraryDts,
+        typingsInstallerJs,
         cancellationTokenJs
     ].concat(libraryTargets);
     const missingFiles = expectedFiles
@@ -286,36 +309,36 @@ gulp.task("produce-LKG", /*help*/ false, ["scripts", "local", cancellationTokenJ
 });
 
 gulp.task(
-    "LKG", 
-    "Makes a new LKG out of the built js files", 
+    "LKG",
+    "Makes a new LKG out of the built js files",
     () => runSequence("clean-built", "produce-LKG"));
 
 // Task to build the tests infrastructure using the built compiler
 const testRunnerProject = "src/testRunner/tsconfig.json";
 const runJs = "built/local/run.js";
-gulp.task(runJs, /*help*/ false, [typescriptServicesJs, tsserverlibraryDts], () => project.compile(testRunnerProject, { typescript: "built" }));
+gulp.task(runJs, /*help*/ false, useCompilerDeps, () => project.compile(testRunnerProject, { typescript: useCompiler }));
 
 gulp.task(
     "tests",
     "Builds the test infrastructure using the built compiler",
-    [runJs]);
+    [runJs, tsserverlibraryDts]);
 
 gulp.task(
     "runtests-parallel",
     "Runs all the tests in parallel using the built run.js file. Optional arguments are: --t[ests]=category1|category2|... --d[ebug]=true.",
-    ["build-rules", "tests"],
-    () => runConsoleTests(runJs, "min", /*runInParallel*/ true));
+    ["build-rules", "tests", "services", tsserverlibraryDts],
+    () => runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ false));
 
 gulp.task(
     "runtests",
     "Runs the tests using the built run.js file. Optional arguments are: --t[ests]=regex --r[eporter]=[list|spec|json|<more>] --d[ebug]=true --color[s]=false --lint=true.",
-    ["build-rules", "tests"],
-    () => runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false));
+    ["build-rules", "tests", "services", tsserverlibraryDts],
+    () => runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false));
 
 const webTestServerProject = "tests/webTestServer.tsconfig.json";
 const webTestServerJs = "tests/webTestServer.js";
-gulp.task(webTestServerJs, /*help*/ false, [typescriptServicesJs], () => project.compile(webTestServerProject, { typescript: "built" }));
-gulp.task("clean:" + webTestServerJs, /*help*/ false, () => project.clean(webTestServerProject));
+gulp.task(webTestServerJs, /*help*/ false, useCompilerDeps, () => project.compile(webTestServerProject, { typescript: useCompiler }));
+gulp.task(`clean:${webTestServerJs}`, /*help*/ false, () => project.clean(webTestServerProject));
 
 const bundlePath = path.resolve("built/local/bundle.js");
 
@@ -391,8 +414,8 @@ gulp.task(
 // Webhost
 const webtscProject = "tests/webhost/webtsc.tsconfig.json";
 const webtscJs = "tests/webhost/webtsc.js";
-gulp.task(webtscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(webtscProject, { typescript: "built" }));
-gulp.task("clean:" + webtscJs, /*help*/ false, () => project.clean(webtscProject));
+gulp.task(webtscJs, /*help*/ false, useCompilerDeps, () => project.compile(webtscProject, { typescript: useCompiler }));
+gulp.task(`clean:${webtscJs}`, /*help*/ false, () => project.clean(webtscProject));
 
 gulp.task("webhost", "Builds the tsc web host", [webtscJs], () =>
     gulp.src("built/local/lib.d.ts")
@@ -401,8 +424,8 @@ gulp.task("webhost", "Builds the tsc web host", [webtscJs], () =>
 // Perf compiler
 const perftscProject = "tests/perftsc.tsconfig.json";
 const perftscJs = "built/local/perftsc.js";
-gulp.task(perftscJs, /*help*/ false, [typescriptServicesJs], () => project.compile(perftscProject, { typescript: "built" }));
-gulp.task("clean:" + perftscJs, /*help*/ false, () => project.clean(perftscProject));
+gulp.task(perftscJs, /*help*/ false, useCompilerDeps, () => project.compile(perftscProject, { typescript: useCompiler }));
+gulp.task(`clean:${perftscJs}`, /*help*/ false, () => project.clean(perftscProject));
 
 gulp.task(
     "perftsc",
@@ -422,7 +445,7 @@ gulp.task(loggedIOJs, /*help*/ false, [], (done) => {
 const instrumenterProject = "src/instrumenter/tsconfig.json";
 const instrumenterJs = "built/local/instrumenter.js";
 gulp.task(instrumenterJs, /*help*/ false, () => project.compile(instrumenterProject));
-gulp.task("clean:" + instrumenterJs, /*help*/ false, () => project.clean(instrumenterProject));
+gulp.task(`clean:${instrumenterJs}`, /*help*/ false, () => project.clean(instrumenterProject));
 
 gulp.task(
     "tsc-instrumented",
@@ -465,28 +488,138 @@ gulp.task(
     ["local"]);
 
 gulp.task(
+    "watch-diagnostics",
+    /*help*/ false,
+    [processDiagnosticMessagesJs],
+    () => gulp.watch([diagnosticMessagesJson], [diagnosticInformationMapTs, builtGeneratedDiagnosticMessagesJson]));
+
+gulp.task(
+    "watch-lib",
+    /*help*/ false,
+    () => gulp.watch(["src/lib/**/*"], ["lib"]));
+
+gulp.task(
     "watch-tsc",
-    "Watches for changes to the build inputs for built/local/tsc.js",
-    [typescriptServicesJs],
-    () => project.watch(tscProject, { typescript: "built" }));
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib"].concat(useCompilerDeps),
+    () => project.watch(tscProject, { typescript: useCompiler }));
+
+const watchServicesPatterns = [
+    "src/compiler/**/*",
+    "src/jsTypings/**/*",
+    "src/services/**/*"
+];
+
+gulp.task(
+    "watch-services",
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib"],
+    () => gulp.watch(watchServicesPatterns, ["services"]));
+
+const watchLsslPatterns = [
+    ...watchServicesPatterns,
+    "src/server/**/*",
+    "src/tsserver/tsconfig.json"
+];
+
+gulp.task(
+    "watch-lssl",
+    /*help*/ false,
+    () => gulp.watch(watchLsslPatterns, ["lssl"]));
+
+gulp.task(
+    "watch-server",
+    /*help*/ false,
+    ["watch-diagnostics", "watch-lib"].concat(useCompilerDeps),
+    () => project.watch(tsserverProject, { typescript: useCompiler }));
+
+gulp.task(
+    "watch-runner",
+    /*help*/ false,
+    useCompilerDeps,
+    () => project.watch(testRunnerProject, { typescript: useCompiler }));
+
+gulp.task(
+    "watch-local",
+    "Watches for changes to projects in src/ (but does not execute tests).",
+    ["watch-lib", "watch-tsc", "watch-services", "watch-server", "watch-runner", "watch-lssl"]);
 
 gulp.task(
     "watch",
-    "Watches for changes to the build inputs for built/local/run.js executes runtests-parallel.",
-    [typescriptServicesJs],
-    () => project.watch(testRunnerProject, { typescript: "built" }, ["runtests-parallel"]));
+    "Watches for changes to the build inputs for built/local/run.js, then runs tests.",
+    ["build-rules", "watch-runner", "watch-services", "watch-lssl"],
+    () => {
+        const sem = new Semaphore(1);
 
-gulp.task("clean-built", /*help*/ false, ["clean:" + diagnosticInformationMapTs], () => del(["built"]));
+        gulp.watch([runJs, typescriptDts, tsserverlibraryDts], () => {
+            runTests();
+        });
+
+        // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
+        const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
+        fs.watch("tests/cases", { recursive: true }, (_, file) => {
+            if (testFilePattern.test(file)) runTests();
+        });
+
+        async function runTests() {
+            try {
+                // Ensure only one instance of the test runner is running at any given time.
+                if (sem.count > 0) {
+                    await sem.wait();
+                    try {
+                        // Wait for any concurrent recompilations to complete...
+                        try {
+                            await delay(100);
+                            while (project.hasRemainingWork()) {
+                                await project.waitForWorkToComplete();
+                                await delay(500);
+                            }
+                        }
+                        catch (e) {
+                            if (e instanceof CancelError) return;
+                            throw e;
+                        }
+
+                        // cancel any pending or active test run if a new recompilation is triggered
+                        const source = new CancellationTokenSource();
+                        project.waitForWorkToStart().then(() => {
+                            source.cancel();
+                        });
+                    
+                        if (cmdLineOptions.tests || cmdLineOptions.failed) {
+                            await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
+                        }
+                        else {
+                            await runConsoleTests(runJs, "min", /*runInParallel*/ true, /*watchMode*/ true, source.token);
+                        }
+                    }
+                    finally {
+                        sem.release();
+                    }
+                }
+            }
+            catch (e) {
+                if (e instanceof CancelError) {
+                    log.warn("Operation was canceled");
+                }
+                else {
+                    log.error(e);
+                }
+            }
+        };
+    });
+
+gulp.task("clean-built", /*help*/ false, [`clean:${diagnosticInformationMapTs}`], () => del(["built"]));
 gulp.task(
     "clean",
     "Cleans the compiler output, declare files, and tests",
     [
-        "clean:" + importDefinitelyTypedTestsJs,
-        "clean:" + webtscJs,
-        "clean:" + perftscJs,
-        "clean:" + instrumenterJs,
-        "clean:" + webTestServerJs,
-        "clean-scripts",
+        `clean:${importDefinitelyTypedTestsJs}`,
+        `clean:${webtscJs}`,
+        `clean:${perftscJs}`,
+        `clean:${instrumenterJs}`,
+        `clean:${webTestServerJs}`,
+        "clean:scripts",
         "clean-rules",
         "clean-built"
     ]);

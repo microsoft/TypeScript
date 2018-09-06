@@ -25,7 +25,6 @@ let names2: { a: string, b: string };
 
 let map: StringMap;
 >map : StringMap
->StringMap : StringMap
 
 map = { x: "xxx", y: "yyy" };
 >map = { x: "xxx", y: "yyy" } : { x: string; y: string; }
@@ -58,19 +57,13 @@ map = names2;
 
 declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->T : T
 >map : { [x: string]: T; }
 >x : string
->T : T
->T : T
 
 declare function getNumberIndexValue<T>(map: { [x: number]: T }): T;
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->T : T
 >map : { [x: number]: T; }
 >x : number
->T : T
->T : T
 
 function f1() {
 >f1 : () => void

@@ -7,11 +7,11 @@ declare namespace C {
 }
 === tests/cases/conformance/salsa/b.js ===
 C.prototype = {};
->C.prototype = {} : { [x: string]: any; }
->C.prototype : { [x: string]: any; }
+>C.prototype = {} : {}
+>C.prototype : {}
 >C : typeof C
->prototype : { [x: string]: any; }
->{} : { [x: string]: any; }
+>prototype : {}
+>{} : {}
 
 C.bar = 2;
 >C.bar = 2 : 2

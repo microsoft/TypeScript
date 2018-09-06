@@ -2,7 +2,4 @@
 Foo<a,,b>();
 >Foo<a,,b>() : any
 >Foo : any
->a : No type information available!
-> : No type information available!
->b : No type information available!
 

@@ -971,7 +971,7 @@
         "category": "Error",
         "code": 1339
     },
-    "Module '{0}' does not refer to a type, but is used as a type here.": {
+    "Module '{0}' does not refer to a type, but is used as a type here. Did you mean 'typeof import('{0}')'?": {
         "category": "Error",
         "code": 1340
     },
@@ -982,6 +982,30 @@
     "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
         "category": "Error",
         "code": 1343
+    },
+    "'A label is not allowed here.": {
+        "category": "Error",
+        "code": 1344
+    },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1192,7 +1216,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -1251,6 +1275,10 @@
     "Function lacks ending return statement and return type does not include 'undefined'.": {
         "category": "Error",
         "code": 2366
+    },
+    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+        "category": "Error",
+        "code": 2367
     },
     "Type parameter name cannot be '{0}'.": {
         "category": "Error",
@@ -1447,6 +1475,10 @@
     "Class static side '{0}' incorrectly extends base class static side '{1}'.": {
         "category": "Error",
         "code": 2417
+    },
+    "Type of computed property's value is '{0}', which is not assignable to type '{1}'.": {
+        "category": "Error",
+        "code": 2418
     },
     "Class '{0}' incorrectly implements interface '{1}'.": {
         "category": "Error",
@@ -1948,10 +1980,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2047,6 +2075,18 @@
     "A rest element type must be an array type.": {
         "category": "Error",
         "code": 2574
+    },
+    "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
+        "category": "Error",
+        "code": 2575
+    },
+    "Property '{0}' is a static member of type '{1}'": {
+        "category": "Error",
+        "code": 2576
+    },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2392,6 +2432,30 @@
     "Cannot find lib definition for '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2727
+    },
+    "'{0}' is declared here.": {
+        "category": "Message",
+        "code": 2728
+    },
+    "Property '{0}' is used before its initialization.": {
+        "category": "Error",
+        "code": 2729
+    },
+    "An arrow function cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2730
+    },
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
+        "category": "Error",
+        "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
+    },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2848,6 +2912,15 @@
         "category": "Error",
         "code": 5070
     },
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+        "category": "Error",
+        "code": 5071
+    },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3599,6 +3672,26 @@
         "code": 6199,
         "reportsUnnecessary": true
     },
+    "Definitions of the following identifiers conflict with those in another file: {0}": {
+        "category": "Error",
+        "code": 6200
+    },
+    "Conflicts are in this file.": {
+        "category": "Message",
+        "code": 6201
+    },
+    "'{0}' was also declared here.": {
+        "category": "Message",
+        "code": 6203
+    },
+    "and here.": {
+        "category": "Message",
+        "code": 6204
+    },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3726,6 +3819,15 @@
         "code": 6371
     },
 
+    "The expected type comes from property '{0}' which is declared here on type '{1}'": {
+        "category": "Message",
+        "code": 6500
+    },
+    "The expected type comes from this index signature.": {
+        "category": "Message",
+        "code": 6501
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3832,7 +3934,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -3845,16 +3947,24 @@
         "code": 7037
     },
     "Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.": {
-        "category": "Error",
+        "category": "Message",
         "code": 7038
     },
     "Mapped object type implicitly has an 'any' template type.": {
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
         "category": "Error",
         "code": 7040
+    },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
+    },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -3971,6 +4081,10 @@
     "JSDoc '@param' tag has name '{0}', but there is no parameter with that name. It would match 'arguments' if it had an array type.": {
         "category": "Error",
         "code": 8029
+    },
+    "The type of a function declaration must match the function's signature.": {
+        "category": "Error",
+        "code": 8030
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4094,7 +4208,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4134,6 +4251,14 @@
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
+    },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
@@ -4202,6 +4327,22 @@
     "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
+    },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
+    },
+    "Import default '{0}' from module \"{1}\"": {
+        "category": "Message",
+        "code": 90032
+    },
+    "Add default import '{0}' to existing import declaration from \"{1}\"": {
+        "category": "Message",
+        "code": 90033
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -4442,5 +4583,22 @@
     "Convert named export to default export": {
         "category": "Message",
         "code": 95062
+    },
+    
+    "Add missing enum member '{0}'": {
+        "category": "Message",
+        "code": 95063
+    },
+    "Add all missing imports": {
+        "category": "Message",
+        "code": 95064
+    },
+    "Convert to async function":{
+        "category": "Message",
+         "code": 95065
+    },
+    "Convert all to async functions": {
+     "category": "Message",
+         "code": 95066
     }
 }

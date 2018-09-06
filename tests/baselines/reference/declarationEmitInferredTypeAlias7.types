@@ -4,7 +4,6 @@ export type Data = string | boolean;
 
 let obj: Data = true;
 >obj : Data
->Data : Data
 >true : true
 
 === tests/cases/compiler/1.ts ===

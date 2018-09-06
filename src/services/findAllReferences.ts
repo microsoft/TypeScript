@@ -83,8 +83,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number, options?: Options): ReferenceEntry[] | undefined {
-        const node = getTouchingPropertyName(sourceFile, position);
+    export function findReferencedEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number, options: Options | undefined): ReferenceEntry[] | undefined {
         return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), toReferenceEntry);
     }
 
@@ -235,7 +234,8 @@ namespace ts.FindAllReferences.Core {
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): SymbolAndEntries[] | undefined {
         if (isSourceFile(node)) {
             const reference = GoToDefinition.getReferenceAtPosition(node, position, program);
-            return reference && getReferencedSymbolsForModule(program, program.getTypeChecker().getMergedSymbol(reference.file.symbol), /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+            const moduleSymbol = reference && program.getTypeChecker().getMergedSymbol(reference.file.symbol);
+            return moduleSymbol && getReferencedSymbolsForModule(program, moduleSymbol, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
         }
 
         if (!options.implementations) {
@@ -499,7 +499,7 @@ namespace ts.FindAllReferences.Core {
             return this.importTracker(exportSymbol, exportInfo, !!this.options.isForRename);
         }
 
-        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
+        /** @param allSearchSymbols set of additional symbols for use by `includes`. */
         createSearch(location: Node | undefined, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             // Note: getLocalSymbolForExportDefault handles `export default class C {}`, but not `export default C` or `export { C as default }`.
@@ -704,7 +704,7 @@ namespace ts.FindAllReferences.Core {
           - But if the parent has `export as namespace`, the symbol is globally visible through that namespace.
         */
         const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
-        if (exposedByParent && !((parent!.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent!) && !parent!.globalExports)) {
+        if (exposedByParent && !(isExternalModuleSymbol(parent!) && !parent!.globalExports)) {
             return undefined;
         }
 
@@ -750,6 +750,25 @@ namespace ts.FindAllReferences.Core {
                 || isExportSpecifier(token.parent) && getLocalSymbolForExportSpecifier(token, referenceSymbol, token.parent, checker) === symbol) {
                 const res = cb(token);
                 if (res) return res;
+            }
+        }
+    }
+
+    export function eachSignatureCall(signature: SignatureDeclaration, sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cb: (call: CallExpression) => void): void {
+        if (!signature.name || !isIdentifier(signature.name)) return;
+
+        const symbol = Debug.assertDefined(checker.getSymbolAtLocation(signature.name));
+
+        for (const sourceFile of sourceFiles) {
+            for (const name of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
+                if (!isIdentifier(name) || name === signature.name || name.escapedText !== signature.name.escapedText) continue;
+                const called = climbPastPropertyAccess(name);
+                const call = called.parent;
+                if (!isCallExpression(call) || call.expression !== called) continue;
+                const referenceSymbol = checker.getSymbolAtLocation(name);
+                if (referenceSymbol && checker.getRootSymbols(referenceSymbol).some(s => s === symbol)) {
+                    cb(call);
+                }
             }
         }
     }
@@ -1005,7 +1024,7 @@ namespace ts.FindAllReferences.Core {
 
     function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
         const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration)!;
-        const name = getNameOfDeclaration(valueDeclaration);
+        const name = valueDeclaration && getNameOfDeclaration(valueDeclaration);
         /*
          * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
          * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
@@ -1375,7 +1394,8 @@ namespace ts.FindAllReferences.Core {
             // If the location is in a context sensitive location (i.e. in an object literal) try
             // to get a contextual type for it, and add the property symbol from the contextual
             // type to the search set
-            const res = firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker), fromRoot);
+            const contextualType = checker.getContextualType(containingObjectLiteralElement.parent);
+            const res = contextualType && firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker, contextualType, /*unionSymbolOk*/ true), fromRoot);
             if (res) return res;
 
             // If the location is name of property symbol from object literal destructuring pattern
@@ -1441,15 +1461,6 @@ namespace ts.FindAllReferences.Core {
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
                 !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
-    }
-
-    /** Gets all symbols for one property. Does not get symbols for every property. */
-    function getPropertySymbolsFromContextualType(node: ObjectLiteralElement, checker: TypeChecker): ReadonlyArray<Symbol> {
-        const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        const name = getNameFromPropertyName(node.name!);
-        const symbol = contextualType && name && contextualType.getProperty(name);
-        return symbol ? [symbol] :
-            contextualType && contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name!)) : emptyArray; // TODO: GH#18217
     }
 
     /**

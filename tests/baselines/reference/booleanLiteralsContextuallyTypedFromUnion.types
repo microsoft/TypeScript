@@ -1,20 +1,16 @@
 === tests/cases/compiler/booleanLiteralsContextuallyTypedFromUnion.tsx ===
 interface A { isIt: true; text: string; }
->A : A
 >isIt : true
 >true : true
 >text : string
 
 interface B { isIt: false; value: number; }
->B : B
 >isIt : false
 >false : false
 >value : number
 
 type C = A | B;
 >C : C
->A : A
->B : B
 
 const isIt = Math.random() > 0.5;
 >isIt : boolean
@@ -27,7 +23,6 @@ const isIt = Math.random() > 0.5;
 
 const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 >c : C
->C : C
 >isIt ? { isIt, text: 'hey' } : { isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
 >isIt : boolean
 >{ isIt, text: 'hey' } : { isIt: true; text: string; }
@@ -41,7 +36,6 @@ const c: C = isIt ? { isIt, text: 'hey' } : { isIt, value: 123 };
 
 const cc: C = isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 };
 >cc : C
->C : C
 >isIt ? { isIt: isIt, text: 'hey' } : { isIt: isIt, value: 123 } : { isIt: true; text: string; } | { isIt: false; value: number; }
 >isIt : boolean
 >{ isIt: isIt, text: 'hey' } : { isIt: true; text: string; }
@@ -77,7 +71,6 @@ let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >Funk : (_props: ComponentProps) => JSX.Element
 >(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
 >_props : ComponentProps
->ComponentProps : ComponentProps
 ><div>Hello</div> : JSX.Element
 >div : any
 >div : any

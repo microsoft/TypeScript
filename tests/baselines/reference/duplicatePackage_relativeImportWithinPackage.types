@@ -24,7 +24,6 @@ import { C } from "foo";
 
 export const o: C;
 >o : C
->C : C
 
 === /node_modules/foo/use.d.ts ===
 import { C } from "./index";
@@ -33,7 +32,6 @@ import { C } from "./index";
 export function use(o: C): void;
 >use : (o: C) => void
 >o : C
->C : C
 
 === /node_modules/foo/index.d.ts ===
 export class C {

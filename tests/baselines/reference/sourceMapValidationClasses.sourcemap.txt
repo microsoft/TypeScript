@@ -282,18 +282,24 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>        function foo(greeting) {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^
-3 >                     ^^^^^^^^
-4 >                             ^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^
+3 >                 ^^^
+4 >                    ^
+5 >                     ^^^^^^^^
+6 >                             ^^^^^^^^^^^^^->
 1->
   >
   >
   >    
-2 >        function foo(
-3 >                     greeting: string
+2 >        function 
+3 >                 foo
+4 >                    (
+5 >                     greeting: string
 1->Emitted(15, 9) Source(14, 5) + SourceIndex(0)
-2 >Emitted(15, 22) Source(14, 18) + SourceIndex(0)
-3 >Emitted(15, 30) Source(14, 34) + SourceIndex(0)
+2 >Emitted(15, 18) Source(14, 14) + SourceIndex(0)
+3 >Emitted(15, 21) Source(14, 17) + SourceIndex(0)
+4 >Emitted(15, 22) Source(14, 18) + SourceIndex(0)
+5 >Emitted(15, 30) Source(14, 34) + SourceIndex(0)
 ---
 >>>            return new Greeter(greeting);
 1->^^^^^^^^^^^^
@@ -398,17 +404,23 @@ sourceFile:sourceMapValidationClasses.ts
 ---
 >>>        function foo2(greeting) {
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^^^^^^^^
-4 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^^^^
+3 >                 ^^^^
+4 >                     ^
+5 >                      ^^^^^^^^
+6 >                              ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >    
-2 >        function foo2(
-3 >                      greeting: string
+2 >        function 
+3 >                 foo2
+4 >                     (
+5 >                      greeting: string
 1 >Emitted(20, 9) Source(21, 5) + SourceIndex(0)
-2 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
-3 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
+2 >Emitted(20, 18) Source(21, 14) + SourceIndex(0)
+3 >Emitted(20, 22) Source(21, 18) + SourceIndex(0)
+4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
+5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
 ---
 >>>            var restGreetings /* more greeting */ = [];
 1->^^^^^^^^^^^^

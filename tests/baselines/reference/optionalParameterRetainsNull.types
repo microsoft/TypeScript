@@ -1,6 +1,5 @@
 === tests/cases/compiler/optionalParameterRetainsNull.ts ===
 interface Bar {  bar: number; foo: object | null;  }
->Bar : Bar
 >bar : number
 >foo : object | null
 >null : null
@@ -11,13 +10,8 @@ let a = {
 
   test<K extends keyof Bar> (a: K,  b?: Bar[K]  |  null)  { }
 >test : <K extends "bar" | "foo">(a: K, b?: Bar[K] | null | undefined) => void
->K : K
->Bar : Bar
 >a : K
->K : K
 >b : Bar[K] | null | undefined
->Bar : Bar
->K : K
 >null : null
 
 };

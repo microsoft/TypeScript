@@ -71,8 +71,6 @@ module Generic {
 
     class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
         fn() { return this; }
 >fn : () => this
@@ -88,13 +86,10 @@ module Generic {
 
         constructor(public a: T, private b: U) { }
 >a : T
->T : T
 >b : U
->U : U
 
         static foo: T; // not reflected in class type
 >foo : any
->T : No type information available!
     }
 
     module C {

@@ -1,7 +1,6 @@
 === tests/cases/compiler/recursiveInheritance3.ts ===
 class C implements I {
 >C : C
->I : I
 
     public foo(x: any) { return x; }
 >foo : (x: any) => any
@@ -14,9 +13,6 @@ class C implements I {
 }
 
 interface I extends C {
->I : I
->C : C
-
     other(x: any): any;
 >other : (x: any) => any
 >x : any

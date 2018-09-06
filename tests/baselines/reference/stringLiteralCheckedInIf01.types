@@ -4,13 +4,10 @@ type S = "a" | "b";
 
 type T = S[] | S;
 >T : T
->S : S
->S : S
 
 function f(foo: T) {
 >f : (foo: T) => S
 >foo : T
->T : T
 
     if (foo === "a") {
 >foo === "a" : boolean
@@ -34,7 +31,6 @@ function f(foo: T) {
 >(foo as S[]) : S[]
 >foo as S[] : S[]
 >foo : S[]
->S : S
 >0 : 0
     }
 }

@@ -3,20 +3,17 @@
 
 function foo<T extends { a: string, b: string }>() {
 >foo : <T extends { a: string; b: string; }>() => void
->T : T
 >a : string
 >b : string
 
     let a: (keyof T)[] = ["a", "b"];
 >a : (keyof T)[]
->T : T
 >["a", "b"] : ("a" | "b")[]
 >"a" : "a"
 >"b" : "b"
 
     let b: (keyof T)[] = ["a", "b", "c"];
 >b : (keyof T)[]
->T : T
 >["a", "b", "c"] : ("a" | "b" | "c")[]
 >"a" : "a"
 >"b" : "b"
@@ -27,16 +24,8 @@ function foo<T extends { a: string, b: string }>() {
 
 declare function pick<T, K extends keyof T>(obj: T, propNames: K[]): Pick<T, K>;
 >pick : <T, K extends keyof T>(obj: T, propNames: K[]) => Pick<T, K>
->T : T
->K : K
->T : T
 >obj : T
->T : T
 >propNames : K[]
->K : K
->Pick : Pick<T, K>
->T : T
->K : K
 
 let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
 >x : Pick<{ a: number; b: number; c: number; }, "a" | "c">

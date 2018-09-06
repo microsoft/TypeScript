@@ -85,8 +85,6 @@ module D {
 >D : typeof D
 
     export interface D {
->D : D
-
         id: number;
 >id : number
     }

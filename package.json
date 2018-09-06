@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "3.0.0",
+    "version": "3.1.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -81,6 +81,7 @@
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "plugin-error": "latest",
+        "prex": "^0.4.3",
         "q": "latest",
         "remove-internal": "^2.9.2",
         "run-sequence": "latest",

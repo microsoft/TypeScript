@@ -1,20 +1,20 @@
 === tests/cases/conformance/salsa/module.js ===
 var Outer = Outer || {};
 >Outer : typeof Outer
->Outer || {} : typeof Outer | { [x: string]: any; }
+>Outer || {} : typeof Outer | {}
 >Outer : typeof Outer
->{} : { [x: string]: any; }
+>{} : {}
 
 Outer.app = Outer.app || {};
 >Outer.app = Outer.app || {} : typeof Outer.app
 >Outer.app : typeof Outer.app
 >Outer : typeof Outer
 >app : typeof Outer.app
->Outer.app || {} : { [x: string]: any; }
+>Outer.app || {} : {}
 >Outer.app : typeof Outer.app
 >Outer : typeof Outer
 >app : typeof Outer.app
->{} : { [x: string]: any; }
+>{} : {}
 
 === tests/cases/conformance/salsa/someview.js ===
 Outer.app.SomeView = (function () {

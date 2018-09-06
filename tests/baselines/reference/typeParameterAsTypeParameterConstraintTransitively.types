@@ -3,43 +3,28 @@
 // no errors expected
 
 interface A { foo: number }
->A : A
 >foo : number
 
 interface B extends A { bar: string; }
->B : B
->A : A
 >bar : string
 
 interface C extends B { baz: boolean; }
->C : C
->B : B
 >baz : boolean
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: C;
 >c : C
->C : C
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->T : T
->U : U
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
->V : V
 >z : V
 
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
@@ -102,17 +87,9 @@ foo((x: number, y) => { }, (x) => { }, () => { });
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 >foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
->T : T
->A : A
->U : U
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
->V : V
 >z : V
 
 //function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }

@@ -2,21 +2,15 @@
 // https://github.com/Microsoft/TypeScript/issues/16861
 class BaseType<T> {
 >BaseType : BaseType<T>
->T : T
 
     bar: T
 >bar : T
->T : T
 }
 
 class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<T> {
 >NextType : NextType<C, T>
->C : C
 >someProp : any
->T : T
->C : C
 >BaseType : BaseType<T>
->T : T
 
     baz: string;
 >baz : string
@@ -25,7 +19,6 @@ class NextType<C extends { someProp: any }, T = C['someProp']> extends BaseType<
 class Foo extends NextType<Foo> {
 >Foo : Foo
 >NextType : NextType<Foo, { test: true; }>
->Foo : Foo
 
     someProp: {
 >someProp : { test: true; }

@@ -93,12 +93,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,39): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,40): error TS1128: Declaration or statement expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS2693: 'number' only refers to a type, but is being used as a value here.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,49): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,29): error TS2304: Cannot find name 'm'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,32): error TS1005: ';' expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): error TS2304: Cannot find name 'm'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,23): error TS2730: An arrow function cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(176,16): error TS2730: An arrow function cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(177,19): error TS2730: An arrow function cannot have a 'this' parameter.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot have a 'this' parameter.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (64 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts (65 errors) ====
     class C {
         n: number;
         explicitThis(this: this, m: number): number {
@@ -430,10 +431,15 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
     
     // can't name parameters 'this' in a lambda.
     c.explicitProperty = (this, m) => m + this.n;
-                                ~
-!!! error TS2304: Cannot find name 'm'.
-                                   ~~
-!!! error TS1005: ';' expected.
-                                      ~
-!!! error TS2304: Cannot find name 'm'.
+                          ~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
+    const f2 = <T>(this: {n: number}, m: number) => m + this.n;
+                   ~~~~~~~~~~~~~~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
+    const f3 = async (this: {n: number}, m: number) => m + this.n;
+                      ~~~~~~~~~~~~~~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
+    const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
+                         ~~~~~~~~~~~~~~~~~
+!!! error TS2730: An arrow function cannot have a 'this' parameter.
     

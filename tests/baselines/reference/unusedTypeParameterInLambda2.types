@@ -7,12 +7,9 @@ class A {
 
         return <T, X>() => {
 ><T, X>() => {            var a: X;            a;        } : <T, X>() => void
->T : T
->X : X
 
             var a: X;
 >a : X
->X : X
 
             a;
 >a : X

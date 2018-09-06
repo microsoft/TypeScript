@@ -197,7 +197,7 @@ namespace ts.codefix {
         if (isExportsOrModuleExportsOrAlias(sourceFile, left)) {
             if (isExportsOrModuleExportsOrAlias(sourceFile, right)) {
                 // `const alias = module.exports;` or `module.exports = alias;` can be removed.
-                changes.deleteNode(sourceFile, assignment.parent);
+                changes.delete(sourceFile, assignment.parent);
             }
             else {
                 const replacement = isObjectLiteralExpression(right) ? tryChangeModuleExportsObject(right)
@@ -208,7 +208,7 @@ namespace ts.codefix {
                     return replacement[1];
                 }
                 else {
-                    changes.replaceRangeWithText(sourceFile, createTextRange(left.getStart(sourceFile), right.pos), "export default");
+                    changes.replaceRangeWithText(sourceFile, createRange(left.getStart(sourceFile), right.pos), "export default");
                     return true;
                 }
             }
@@ -297,7 +297,7 @@ namespace ts.codefix {
             if (!right.name) changes.insertName(sourceFile, right, name);
 
             const semi = findChildOfKind(parent, SyntaxKind.SemicolonToken, sourceFile);
-            if (semi) changes.deleteNode(sourceFile, semi, { useNonAdjustedEndPosition: true });
+            if (semi) changes.delete(sourceFile, semi);
         }
         else {
             // `exports.f = function g() {}` -> `export const f = function g() {}` -- just replace `exports.` with `export const `

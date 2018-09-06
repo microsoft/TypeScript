@@ -1,13 +1,7 @@
 === tests/cases/compiler/collectionPatternNoError.ts ===
 interface MsgConstructor<T extends Message> {
->MsgConstructor : MsgConstructor<T>
->T : T
->Message : Message
-
   new(data: Array<{}>): T;
 >data : {}[]
->Array : T[]
->T : T
 }
 class Message {
 >Message : Message
@@ -20,24 +14,13 @@ class Message {
   }
 }
 interface MessageList<T extends Message> extends Message {
->MessageList : MessageList<T>
->T : T
->Message : Message
->Message : Message
-
   methodOnMessageList(): T[];
 >methodOnMessageList : () => T[]
->T : T
 }
 
 function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
 >fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
->V : V
->Message : Message
 >protoCtor : MsgConstructor<V>
->MsgConstructor : MsgConstructor<T>
->V : V
->V : V
 
   return null!;
 >null! : null
@@ -46,22 +29,13 @@ function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
 
 class DataProvider<T extends Message, U extends MessageList<T>> {
 >DataProvider : DataProvider<T, U>
->T : T
->Message : Message
->U : U
->MessageList : MessageList<T>
->T : T
 
   constructor(
     private readonly message: MsgConstructor<T>,
 >message : MsgConstructor<T>
->MsgConstructor : MsgConstructor<T>
->T : T
 
     private readonly messageList: MsgConstructor<U>,
 >messageList : MsgConstructor<U>
->MsgConstructor : MsgConstructor<T>
->U : U
 
   ) { }
 
@@ -90,22 +64,12 @@ function f<
 >f : <U extends { TType: MessageList<T>; }, T extends Message>(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) => void
 
   U extends {TType: MessageList<T>},
->U : U
 >TType : MessageList<T>
->MessageList : MessageList<T>
->T : T
 
   T extends Message
->T : T
->Message : Message
-
 >(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) {
 >message : MsgConstructor<T>
->MsgConstructor : MsgConstructor<T>
->T : T
 >messageList : MsgConstructor<U["TType"]>
->MsgConstructor : MsgConstructor<T>
->U : U
 
   fetchMsg(messageList).methodOnMessageList();
 >fetchMsg(messageList).methodOnMessageList() : T[]

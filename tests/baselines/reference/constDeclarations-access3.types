@@ -135,9 +135,9 @@ M["x"] = 0;
 var a = M.x + 1;
 >a : number
 >M.x + 1 : number
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 >1 : 1
 
 function f(v: number) { }
@@ -147,43 +147,43 @@ function f(v: number) { }
 f(M.x);
 >f(M.x) : void
 >f : (v: number) => void
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 if (M.x) { }
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 M.x;
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 (M.x);
->(M.x) : number
->M.x : number
+>(M.x) : 0
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 -M.x;
 >-M.x : number
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 +M.x;
 >+M.x : number
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 
 M.x.toString();
 >M.x.toString() : string
 >M.x.toString : (radix?: number) => string
->M.x : number
+>M.x : 0
 >M : typeof M
->x : number
+>x : 0
 >toString : (radix?: number) => string
 

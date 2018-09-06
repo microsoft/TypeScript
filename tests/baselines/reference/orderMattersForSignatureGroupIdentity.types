@@ -1,7 +1,5 @@
 === tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts ===
 interface A {
->A : A
-
     (x: { s: string }): string
 >x : { s: string; }
 >s : string
@@ -12,8 +10,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     (x: { s: string }): string
 >x : { s: string; }
 >s : string
@@ -24,8 +20,6 @@ interface B {
 }
 
 interface C {
->C : C
-
     (x: { n: number }): number
 >x : { n: number; }
 >n : number
@@ -37,11 +31,9 @@ interface C {
 
 var v: A;
 >v : A
->A : A
 
 var v: B;
 >v : A
->B : B
 
 v({ s: "", n: 0 }).toLowerCase();
 >v({ s: "", n: 0 }).toLowerCase() : any
@@ -57,11 +49,9 @@ v({ s: "", n: 0 }).toLowerCase();
 
 var w: A;
 >w : A
->A : A
 
 var w: C;
 >w : A
->C : C
 
 w({ s: "", n: 0 }).toLowerCase();
 >w({ s: "", n: 0 }).toLowerCase() : any

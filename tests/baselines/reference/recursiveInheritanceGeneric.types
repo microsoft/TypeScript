@@ -1,10 +1,5 @@
 === tests/cases/compiler/recursiveInheritanceGeneric.ts ===
 interface I5<T> extends I5<T> { 
->I5 : I5<T>
->T : T
->I5 : I5<T>
->T : T
-
     foo():void;
 >foo : () => void
 }  

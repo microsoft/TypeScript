@@ -29,7 +29,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false)));
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)));
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
@@ -51,7 +51,7 @@ namespace ts.codefix {
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
-        const classType = checker.getTypeAtLocation(classDeclaration)!;
+        const classType = checker.getTypeAtLocation(classDeclaration);
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);

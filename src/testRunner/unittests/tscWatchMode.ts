@@ -1,17 +1,16 @@
 namespace ts.tscWatch {
-    import WatchedSystem = TestFSWithWatch.TestServerHost;
-    type File = TestFSWithWatch.File;
-    type SymLink = TestFSWithWatch.SymLink;
-    import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
-    import checkArray = TestFSWithWatch.checkArray;
-    import libFile = TestFSWithWatch.libFile;
-    import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
-    import checkOutputContains = TestFSWithWatch.checkOutputContains;
-    import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
+    export import WatchedSystem = TestFSWithWatch.TestServerHost;
+    export type File = TestFSWithWatch.File;
+    export type SymLink = TestFSWithWatch.SymLink;
+    export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
+    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
+    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
+    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
+    export import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
+    export import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
@@ -111,7 +110,7 @@ namespace ts.tscWatch {
 
         function assertWatchDiagnostic(diagnostic: Diagnostic) {
             const expected = getWatchDiagnosticWithoutDate(diagnostic);
-            if (!disableConsoleClears && !contains(nonClearingMessageCodes, diagnostic.code)) {
+            if (!disableConsoleClears && contains(screenStartingMessageCodes, diagnostic.code)) {
                 assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
                 screenClears++;
             }
@@ -137,7 +136,7 @@ namespace ts.tscWatch {
             : createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errors.length);
     }
 
-    function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsInitial(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             /*logsBeforeWatchDiagnostic*/ undefined,
@@ -148,7 +147,7 @@ namespace ts.tscWatch {
             createErrorsFoundCompilerDiagnostic(errors));
     }
 
-    function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
+    export function checkOutputErrorsIncremental(host: WatchedSystem, errors: ReadonlyArray<Diagnostic>, disableConsoleClears?: boolean, logsBeforeWatchDiagnostic?: string[], logsBeforeErrors?: string[]) {
         checkOutputErrors(
             host,
             logsBeforeWatchDiagnostic,
@@ -1141,7 +1140,6 @@ namespace ts.tscWatch {
             }
 
             it("without outDir or outFile is specified", () => {
-                debugger;
                 verifyWithOptions({ module: ModuleKind.AMD }, ["file1.js", "src/file2.js"]);
             });
 
@@ -1269,6 +1267,92 @@ export default test;`;
                 host.runQueuedTimeoutCallbacks();
                 checkOutputErrorsIncremental(host, expectedErrors);
             }
+        });
+
+        it("updates errors when deep import file changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import {B} from './b';
+declare var console: any;
+let b = new B();
+console.log(b.c.d);`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.ts`,
+                content: `import {C} from './c';
+export class B
+{
+    c = new C();
+}`
+            };
+            const cFile: File = {
+                path: `${currentDirectory}/c.ts`,
+                content: `export class C
+{
+    d = 1;
+}`
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: `{}`
+            };
+            const files = [aFile, bFile, cFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
+            host.writeFile(cFile.path, cFile.content.replace("d", "d2"));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
+            ]);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+        });
+
+        it("updates errors when strictNullChecks changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `declare function foo(): null | { hello: any };
+foo().hello`
+            };
+            const compilerOptions: CompilerOptions = {
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions })
+            };
+            const files = [aFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
+            compilerOptions.strictNullChecks = true;
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            const expectedStrictNullErrors = [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("foo()"), 5, Diagnostics.Object_is_possibly_null)
+            ];
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            compilerOptions.strict = true;
+            delete (compilerOptions.strictNullChecks);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, expectedStrictNullErrors);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+            delete (compilerOptions.strict);
+            host.writeFile(config.path, JSON.stringify({ compilerOptions }));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, emptyArray);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });
     });
 
@@ -2262,8 +2346,11 @@ declare module "fs" {
             const files = [file, module, libFile];
             const host = createWatchedSystem(files, { currentDirectory });
             const watch = createWatchOfFilesAndCompilerOptions([file.path], host);
+
             checkProgramActualFiles(watch(), [file.path, libFile.path]);
             checkOutputErrorsInitial(host, [getDiagnosticModuleNotFoundOfFile(watch(), file, "qqq")]);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [`${currentDirectory}/node_modules`, `${currentDirectory}/node_modules/@types`], /*recursive*/ true);
 
             host.renameFolder(`${currentDirectory}/node_modules2`, `${currentDirectory}/node_modules`);
             host.runQueuedTimeoutCallbacks();
@@ -2313,56 +2400,97 @@ declare module "fs" {
     });
 
     describe("tsc-watch console clearing", () => {
-        function checkConsoleClearing(options: CompilerOptions = {}) {
-            const file = {
-                path: "f.ts",
-                content: ""
-            };
+        const currentDirectoryLog = "Current directory: / CaseSensitiveFileNames: false\n";
+        const fileWatcherAddedLog = [
+            "FileWatcher:: Added:: WatchInfo: /f.ts 250 Source file\n",
+            "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
+        ];
+
+        const file: File = {
+            path: "/f.ts",
+            content: ""
+        };
+
+        function getProgramSynchronizingLog(options: CompilerOptions) {
+            return [
+                "Synchronizing program\n",
+                "CreatingProgramWith::\n",
+                "  roots: [\"/f.ts\"]\n",
+                `  options: ${JSON.stringify(options)}\n`
+            ];
+        }
+
+        function isConsoleClearDisabled(options: CompilerOptions) {
+            return options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
+        }
+
+        function verifyCompilation(host: WatchedSystem, options: CompilerOptions, initialDisableOptions?: CompilerOptions) {
+            const disableConsoleClear = isConsoleClearDisabled(options);
+            const hasLog = options.extendedDiagnostics || options.diagnostics;
+            checkOutputErrorsInitial(host, emptyArray, initialDisableOptions ? isConsoleClearDisabled(initialDisableOptions) : disableConsoleClear, hasLog ? [
+                currentDirectoryLog,
+                ...getProgramSynchronizingLog(options),
+                ...(options.extendedDiagnostics ? fileWatcherAddedLog : emptyArray)
+            ] : undefined);
+            host.modifyFile(file.path, "//");
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, hasLog ? [
+                "FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n",
+                "Scheduling update\n",
+                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts 1:: WatchInfo: /f.ts 250 Source file\n"
+            ] : undefined, hasLog ? getProgramSynchronizingLog(options) : undefined);
+        }
+
+        function checkConsoleClearingUsingCommandLineOptions(options: CompilerOptions = {}) {
             const files = [file, libFile];
-            const disableConsoleClear = options.diagnostics || options.extendedDiagnostics || options.preserveWatchOutput;
             const host = createWatchedSystem(files);
             createWatchOfFilesAndCompilerOptions([file.path], host, options);
-            checkOutputErrorsInitial(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
-                "Current directory: / CaseSensitiveFileNames: false\n",
-                "Synchronizing program\n",
-                "CreatingProgramWith::\n",
-                "  roots: [\"f.ts\"]\n",
-                "  options: {\"extendedDiagnostics\":true}\n",
-                "FileWatcher:: Added:: WatchInfo: f.ts 250 Source file\n",
-                "FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 Source file\n"
-            ] : undefined);
-
-            file.content = "//";
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, emptyArray, disableConsoleClear, options.extendedDiagnostics ? [
-                "FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n",
-                "Scheduling update\n",
-                "Elapsed:: 0ms FileWatcher:: Triggered with /f.ts1:: WatchInfo: f.ts 250 Source file\n"
-            ] : undefined, options.extendedDiagnostics ? [
-                "Synchronizing program\n",
-                "CreatingProgramWith::\n",
-                "  roots: [\"f.ts\"]\n",
-                "  options: {\"extendedDiagnostics\":true}\n"
-            ] : undefined);
+            verifyCompilation(host, options);
         }
 
         it("without --diagnostics or --extendedDiagnostics", () => {
-            checkConsoleClearing();
+            checkConsoleClearingUsingCommandLineOptions();
         });
         it("with --diagnostics", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 diagnostics: true,
             });
         });
         it("with --extendedDiagnostics", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 extendedDiagnostics: true,
             });
         });
         it("with --preserveWatchOutput", () => {
-            checkConsoleClearing({
+            checkConsoleClearingUsingCommandLineOptions({
                 preserveWatchOutput: true,
+            });
+        });
+
+        describe("when preserveWatchOutput is true in config file", () => {
+            const compilerOptions: CompilerOptions = {
+                preserveWatchOutput: true
+            };
+            const configFile: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify({ compilerOptions })
+            };
+            const files = [file, configFile, libFile];
+            it("using createWatchOfConfigFile ", () => {
+                const host = createWatchedSystem(files);
+                createWatchOfConfigFile(configFile.path, host);
+                // Initially console is cleared if --preserveOutput is not provided since the config file is yet to be parsed
+                verifyCompilation(host, compilerOptions, {});
+            });
+            it("when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile", () => {
+                const host = createWatchedSystem(files);
+                const reportDiagnostic = createDiagnosticReporter(host);
+                const optionsToExtend: CompilerOptions = {};
+                const configParseResult = parseConfigFileWithSystem(configFile.path, optionsToExtend, host, reportDiagnostic)!;
+                const watchCompilerHost = createWatchCompilerHostOfConfigFile(configParseResult.options.configFilePath!, optionsToExtend, host, /*createProgram*/ undefined, reportDiagnostic, createWatchStatusReporter(host));
+                watchCompilerHost.configFileParsingResult = configParseResult;
+                createWatchProgram(watchCompilerHost);
+                verifyCompilation(host, compilerOptions);
             });
         });
     });
@@ -2581,7 +2709,7 @@ declare module "fs" {
             createWatchOfConfigFile("tsconfig.json", host);
             checkWatchedFilesDetailed(host, [libFile.path, mainFile.path, config.path, linkedPackageIndex.path, linkedPackageOther.path], 1);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, [mainPackageRoot, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, [`${mainPackageRoot}/@scoped`, `${mainPackageRoot}/node_modules`, linkedPackageRoot, `${mainPackageRoot}/node_modules/@types`, `${projectRoot}/node_modules/@types`], 1, /*recursive*/ true);
         });
     });
 

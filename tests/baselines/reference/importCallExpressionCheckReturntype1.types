@@ -15,7 +15,6 @@ import * as anotherModule from "./anotherModule";
 
 let p1: Promise<typeof anotherModule> = import("./defaultPath");
 >p1 : Promise<typeof anotherModule>
->Promise : Promise<T>
 >anotherModule : typeof anotherModule
 >import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
@@ -25,12 +24,10 @@ let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
 >import("./defaultPath") as Promise<typeof anotherModule> : Promise<typeof anotherModule>
 >import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
->Promise : Promise<T>
 >anotherModule : typeof anotherModule
 
 let p3: Promise<any> = import("./defaultPath");
 >p3 : Promise<any>
->Promise : Promise<T>
 >import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
 

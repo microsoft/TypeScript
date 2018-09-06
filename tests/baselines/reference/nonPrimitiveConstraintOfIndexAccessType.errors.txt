@@ -3,6 +3,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessTy
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(9,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(12,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(15,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
+  Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(18,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(21,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts(24,5): error TS2322: Type 'string' is not assignable to type 'T[P]'.
@@ -37,6 +38,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessTy
         tp = s;
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'T[P]'.
+!!! error TS2322:   Type 'string' is not assignable to type 'never'.
     }
     function k<T extends number, P extends keyof T>(s: string, tp: T[P]): void {
         tp = s;

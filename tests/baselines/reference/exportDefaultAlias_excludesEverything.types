@@ -1,10 +1,6 @@
 === tests/cases/compiler/exportDefaultAlias_excludesEverything.ts ===
 export default interface A {}
->A : A
-
 interface B {}
->B : B
-
 export default B;
 >B : B
 

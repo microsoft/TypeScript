@@ -10,23 +10,18 @@ class Base {
 
         var b: Base;
 >b : Base
->Base : Base
 
         var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
         var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
         var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
         var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
         b.x;            // OK, accessed within their declaring class
 >b.x : string
@@ -64,23 +59,18 @@ class Derived1 extends Base {
 
         var b: Base;
 >b : Base
->Base : Base
 
         var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
         var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
         var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
         var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -118,23 +108,18 @@ class Derived2 extends Base {
 
         var b: Base;
 >b : Base
->Base : Base
 
         var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
         var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
         var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
         var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -175,23 +160,18 @@ class Derived3 extends Derived1 {
 
         var b: Base;
 >b : Base
->Base : Base
 
         var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
         var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
         var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
         var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -229,23 +209,18 @@ class Derived4 extends Derived2 {
 
         var b: Base;
 >b : Base
->Base : Base
 
         var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
         var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
         var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
         var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
         b.x;            // Error, isn't accessed through an instance of the enclosing class
 >b.x : string
@@ -277,23 +252,18 @@ class Derived4 extends Derived2 {
 
 var b: Base;
 >b : Base
->Base : Base
 
 var d1: Derived1;
 >d1 : Derived1
->Derived1 : Derived1
 
 var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
 var d3: Derived3;
 >d3 : Derived3
->Derived3 : Derived3
 
 var d4: Derived4;
 >d4 : Derived4
->Derived4 : Derived4
 
 b.x;                    // Error, neither within their declaring class nor classes derived from their declaring class
 >b.x : string

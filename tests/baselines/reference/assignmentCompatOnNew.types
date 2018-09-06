@@ -5,7 +5,6 @@ class Foo{};
 function bar(x: {new(): Foo;}){}
 >bar : (x: new () => Foo) => void
 >x : new () => Foo
->Foo : Foo
 
 bar(Foo); // Error, but should be allowed
 >bar(Foo) : void

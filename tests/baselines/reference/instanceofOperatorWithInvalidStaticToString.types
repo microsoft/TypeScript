@@ -9,7 +9,6 @@ declare class StaticToString {
 function foo(staticToString: StaticToString) {
 >foo : (staticToString: StaticToString) => boolean
 >staticToString : StaticToString
->StaticToString : StaticToString
 
     return staticToString instanceof StaticToString;
 >staticToString instanceof StaticToString : boolean
@@ -26,7 +25,6 @@ declare class StaticToNumber {
 function bar(staticToNumber: StaticToNumber) {
 >bar : (staticToNumber: StaticToNumber) => boolean
 >staticToNumber : StaticToNumber
->StaticToNumber : StaticToNumber
 
     return staticToNumber instanceof StaticToNumber;
 >staticToNumber instanceof StaticToNumber : boolean
@@ -43,7 +41,6 @@ declare class NormalToString {
 function baz(normal: NormalToString) {
 >baz : (normal: NormalToString) => boolean
 >normal : NormalToString
->NormalToString : NormalToString
 
     return normal instanceof NormalToString;
 >normal instanceof NormalToString : boolean

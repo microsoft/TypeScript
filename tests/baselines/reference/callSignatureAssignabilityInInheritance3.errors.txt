@@ -14,8 +14,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(76,19): error TS2430: Interface 'I6' incorrectly extends interface 'A'.
   Types of property 'a15' are incompatible.
     Type '<T>(x: { a: T; b: T; }) => T' is not assignable to type '(x: { a: string; b: number; }) => number'.
-      Type 'string | number' is not assignable to type 'number'.
-        Type 'string' is not assignable to type 'number'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
+          Types of property 'b' are incompatible.
+            Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance3.ts(80,19): error TS2430: Interface 'I7' incorrectly extends interface 'A'.
   Types of property 'a15' are incompatible.
     Type '<T extends Base>(x: { a: T; b: T; }) => number' is not assignable to type '(x: { a: string; b: number; }) => number'.
@@ -131,8 +133,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
 !!! error TS2430: Interface 'I6' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a15' are incompatible.
 !!! error TS2430:     Type '<T>(x: { a: T; b: T; }) => T' is not assignable to type '(x: { a: string; b: number; }) => number'.
-!!! error TS2430:       Type 'string | number' is not assignable to type 'number'.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2430:         Type '{ a: string; b: number; }' is not assignable to type '{ a: string; b: string; }'.
+!!! error TS2430:           Types of property 'b' are incompatible.
+!!! error TS2430:             Type 'number' is not assignable to type 'string'.
                 a15: <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
             }
     
