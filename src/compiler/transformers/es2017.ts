@@ -413,7 +413,7 @@ namespace ts {
                     )
                 );
 
-                prependStatements(statements, endLexicalEnvironment());
+                addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);

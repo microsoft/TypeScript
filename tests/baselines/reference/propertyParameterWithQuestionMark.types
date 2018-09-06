@@ -9,7 +9,6 @@ class C {
 // x should be an optional property
 var v: C = {}; // Should succeed
 >v : C
->C : C
 >{} : {}
 
 var v2: { x? }

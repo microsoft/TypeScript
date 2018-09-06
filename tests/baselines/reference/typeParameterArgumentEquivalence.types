@@ -1,7 +1,6 @@
 === tests/cases/compiler/typeParameterArgumentEquivalence.ts ===
 function foo<T>() {
 >foo : <T>() => void
->T : T
 
     var x: (item: number) => boolean;
 >x : (item: number) => boolean
@@ -10,7 +9,6 @@ function foo<T>() {
     var y: (item: T) => boolean;
 >y : (item: T) => boolean
 >item : T
->T : T
 
     x = y;  // Should be an error
 >x = y : (item: T) => boolean

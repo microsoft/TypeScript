@@ -19,4 +19,7 @@ verify.importFixAtPosition([
 `import { foo } from "link";
 
 foo;`,
+`import { foo } from "real";
+
+foo;`,
 ]);

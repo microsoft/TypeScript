@@ -24,73 +24,45 @@ class C extends A {
 declare function isB(p1): p1 is B;
 >isB : (p1: any) => p1 is B
 >p1 : any
->p1 : any
->B : B
 
 declare function isC(p1): p1 is C;
 >isC : (p1: any) => p1 is C
 >p1 : any
->p1 : any
->C : C
 
 declare function retC(x): C; 
 >retC : (x: any) => C
 >x : any
->C : C
 
 declare function funA<T>(p1: (p1) => T): T;
 >funA : <T>(p1: (p1: any) => T) => T
->T : T
 >p1 : (p1: any) => T
 >p1 : any
->T : T
->T : T
 
 declare function funB<T>(p1: (p1) => T, p2: any): p2 is T;
 >funB : <T>(p1: (p1: any) => T, p2: any) => p2 is T
->T : T
 >p1 : (p1: any) => T
 >p1 : any
->T : T
 >p2 : any
->p2 : any
->T : T
 
 declare function funC<T>(p1: (p1) => p1 is T): T;
 >funC : <T>(p1: (p1: any) => p1 is T) => T
->T : T
 >p1 : (p1: any) => p1 is T
 >p1 : any
->p1 : any
->T : T
->T : T
 
 declare function funD<T>(p1: (p1) => p1 is T, p2: any): p2 is T;
 >funD : <T>(p1: (p1: any) => p1 is T, p2: any) => p2 is T
->T : T
 >p1 : (p1: any) => p1 is T
 >p1 : any
->p1 : any
->T : T
 >p2 : any
->p2 : any
->T : T
 
 declare function funE<T, U>(p1: (p1) => p1 is T, p2: U): T;
 >funE : <T, U>(p1: (p1: any) => p1 is T, p2: U) => T
->T : T
->U : U
 >p1 : (p1: any) => p1 is T
 >p1 : any
->p1 : any
->T : T
 >p2 : U
->U : U
->T : T
 
 let a: A;
 >a : A
->A : A
 
 let test1: boolean = funA(isB);
 >test1 : boolean
@@ -111,7 +83,6 @@ if (funB(retC, a)) {
 }
 let test2: B = funC(isB);
 >test2 : B
->B : B
 >funC(isB) : B
 >funC : <T>(p1: (p1: any) => p1 is T) => T
 >isB : (p1: any) => p1 is B
@@ -129,7 +100,6 @@ if (funD(isC, a)) {
 }
 let test3: B = funE(isB, 1);
 >test3 : B
->B : B
 >funE(isB, 1) : B
 >funE : <T, U>(p1: (p1: any) => p1 is T, p2: U) => T
 >isB : (p1: any) => p1 is B

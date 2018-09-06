@@ -1,5 +1,6 @@
 === tests/cases/compiler/foo.js ===
 module.exports = function () {
+>module.exports : Symbol("tests/cases/compiler/foo", Decl(foo.js, 0, 0))
 >module : Symbol(export=, Decl(foo.js, 0, 0))
 >exports : Symbol(export=, Decl(foo.js, 0, 0))
 

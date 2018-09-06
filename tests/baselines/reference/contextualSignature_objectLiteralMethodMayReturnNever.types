@@ -1,11 +1,9 @@
 === tests/cases/compiler/contextualSignature_objectLiteralMethodMayReturnNever.ts ===
 interface I { m(): number; }
->I : I
 >m : () => number
 
 const o: I = { m() { throw new Error("not implemented"); } };
 >o : I
->I : I
 >{ m() { throw new Error("not implemented"); } } : { m(): never; }
 >m : () => never
 >new Error("not implemented") : Error

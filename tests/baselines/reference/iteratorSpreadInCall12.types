@@ -1,11 +1,9 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall12.ts ===
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     constructor(...s: T[]) { }
 >s : T[]
->T : T
 }
 
 class SymbolIterator {

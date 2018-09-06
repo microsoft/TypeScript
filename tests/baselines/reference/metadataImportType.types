@@ -7,5 +7,4 @@ export class A {
 
     b: import('./b').B
 >b : any
->B : No type information available!
 }

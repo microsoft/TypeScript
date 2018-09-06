@@ -14,14 +14,11 @@
 ////[|f1/*0*/();|]
 
 goTo.file("/a/b/y.ts");
-// Order the local import first because it's simpler.
+// Use the local import because it's simpler.
 verify.importFixAtPosition([
 `import { f1 } from "./x";
 
 f1();`,
-`import { f1 } from "b/x";
-
-f1();`
 ]);
 
 verify.importFixAtPosition([

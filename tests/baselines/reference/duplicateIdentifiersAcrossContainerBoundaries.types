@@ -1,9 +1,6 @@
 === tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts ===
 module M {
->M : typeof M
-
     export interface I { }
->I : I
 }
 module M {
 >M : typeof M

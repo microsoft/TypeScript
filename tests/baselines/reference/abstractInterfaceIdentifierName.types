@@ -1,7 +1,5 @@
 === tests/cases/compiler/abstractInterfaceIdentifierName.ts ===
 interface abstract {
->abstract : abstract
-
     abstract(): void;
 >abstract : () => void
 }

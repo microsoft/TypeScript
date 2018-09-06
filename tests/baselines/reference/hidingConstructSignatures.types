@@ -1,37 +1,26 @@
 === tests/cases/compiler/hidingConstructSignatures.ts ===
 interface C {
->C : C
-
     (a: string): string;
 >a : string
 }
 
 interface D extends C {
->D : D
->C : C
-
     new (a: string): number; // Should be ok
 >a : string
 }
 
 interface E {
->E : E
-
     new (a: string): {};
 >a : string
 }
 
 interface F extends E {
->F : F
->E : E
-
     new (a: string): string;
 >a : string
 }
 
 var d: D;
 >d : D
->D : D
 
 d(""); // string
 >d("") : string
@@ -45,7 +34,6 @@ new d(""); // should be number
 
 var f: F;
 >f : F
->F : F
 
 new f(""); // string
 >new f("") : string
@@ -54,7 +42,6 @@ new f(""); // string
 
 var e: E;
 >e : E
->E : E
 
 new e(""); // {}
 >new e("") : {}

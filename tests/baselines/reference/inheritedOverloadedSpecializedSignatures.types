@@ -1,22 +1,16 @@
 === tests/cases/compiler/inheritedOverloadedSpecializedSignatures.ts ===
 interface A {
->A : A
-
   (key:string):void;
 >key : string
 }
 
 interface B extends A {
->B : B
->A : A
-
   (key:'foo'):string;
 >key : "foo"
 }
 
 var b:B;
 >b : B
->B : B
 
 // Should not error
 b('foo').charAt(0);
@@ -29,8 +23,6 @@ b('foo').charAt(0);
 >0 : 0
 
 interface A {
->A : A
-
     (x: 'A1'): string;
 >x : "A1"
 
@@ -39,55 +31,37 @@ interface A {
 }
 
 interface B extends A {
->B : B
->A : A
-
     (x: 'B1'): number;
 >x : "B1"
 }
 
 interface A {
->A : A
-
     (x: 'A2'): boolean;
 >x : "A2"
 }
 
 interface B  {
->B : B
-
     (x: 'B2'): string[];
 >x : "B2"
 }
 
 interface C1 extends B {
->C1 : C1
->B : B
-
 	(x: 'C1'): number[];
 >x : "C1"
 }
 
 interface C2 extends B {
->C2 : C2
->B : B
-
 	(x: 'C2'): boolean[];
 >x : "C2"
 }
 
 interface C extends C1, C2 {
->C : C
->C1 : C1
->C2 : C2
-
 	(x: 'C'): string;
 >x : "C"
 }
 
 var c: C;
 >c : C
->C : C
 
 // none of these lines should error
 var x1: string[] = c('B2');

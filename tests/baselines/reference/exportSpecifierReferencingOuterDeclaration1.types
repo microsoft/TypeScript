@@ -1,8 +1,5 @@
 === tests/cases/compiler/exportSpecifierReferencingOuterDeclaration1.ts ===
 declare module X { export interface bar { } }
->X : any
->bar : bar
-
 declare module "m" {
 >"m" : typeof import("m")
 
@@ -12,5 +9,4 @@ declare module "m" {
     export function foo(): X.bar;
 >foo : () => X.bar
 >X : any
->bar : X.bar
 }

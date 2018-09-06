@@ -426,3 +426,35 @@ for (const y = 0; y < 1;) {
 >x : 1
 >y : 0
 }
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+>sobj : { [x: string]: any; }
+>x : string
+
+for (let sx in sobj) {
+>sx : string
+>sobj : { [x: string]: any; }
+
+    (() => sobj[sx]);
+>(() => sobj[sx]) : () => any
+>() => sobj[sx] : () => any
+>sobj[sx] : any
+>sobj : { [x: string]: any; }
+>sx : string
+}
+declare const iobj: { [x: number]: any };
+>iobj : { [x: number]: any; }
+>x : number
+
+for (let ix in iobj) {
+>ix : string
+>iobj : { [x: number]: any; }
+
+    (() => iobj[ix]);
+>(() => iobj[ix]) : () => any
+>() => iobj[ix] : () => any
+>iobj[ix] : any
+>iobj : { [x: number]: any; }
+>ix : string
+}

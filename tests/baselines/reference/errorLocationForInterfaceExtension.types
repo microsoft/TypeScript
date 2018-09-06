@@ -4,6 +4,4 @@ var n = '';
 >'' : ""
 
 interface x extends string { }
->x : x
->string : No type information available!
 

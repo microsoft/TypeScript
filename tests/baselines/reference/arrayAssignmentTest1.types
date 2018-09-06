@@ -1,14 +1,11 @@
 === tests/cases/compiler/arrayAssignmentTest1.ts ===
 interface I1 {
->I1 : I1
-
 	IM1():void[];
 >IM1 : () => void[]
 }
 
 class C1 implements I1 { 
 >C1 : C1
->I1 : I1
 
 	IM1():void[] {return null;}
 >IM1 : () => void[]
@@ -16,7 +13,6 @@ class C1 implements I1 {
 
 	C1M1():C1[] {return null;}
 >C1M1 : () => C1[]
->C1 : C1
 >null : null
  }
 class C2 extends C1 {
@@ -25,7 +21,6 @@ class C2 extends C1 {
 
     C2M1():C2[] { return null;}
 >C2M1 : () => C2[]
->C2 : C2
 >null : null
 }
 
@@ -55,24 +50,20 @@ var a1 : any = null;
 
 var c1 : C1 = new C1();
 >c1 : C1
->C1 : C1
 >new C1() : C1
 >C1 : typeof C1
 
 var i1 : I1 = c1;
 >i1 : I1
->I1 : I1
 >c1 : C1
 
 var c2 : C2 = new C2();
 >c2 : C2
->C2 : C2
 >new C2() : C2
 >C2 : typeof C2
 
 var c3 : C3 = new C3();
 >c3 : C3
->C3 : C3
 >new C3() : C3
 >C3 : typeof C3
 
@@ -94,57 +85,46 @@ var arr_any: any[] = [];
 
 var arr_i1: I1[] = [];
 >arr_i1 : I1[]
->I1 : I1
 >[] : undefined[]
 
 var arr_c1: C1[] = [];
 >arr_c1 : C1[]
->C1 : C1
 >[] : undefined[]
 
 var arr_c2: C2[] = [];
 >arr_c2 : C2[]
->C2 : C2
 >[] : undefined[]
 
 var arr_i1_2: I1[] = [];
 >arr_i1_2 : I1[]
->I1 : I1
 >[] : undefined[]
 
 var arr_c1_2: C1[] = [];
 >arr_c1_2 : C1[]
->C1 : C1
 >[] : undefined[]
 
 var arr_c2_2: C2[] = [];
 >arr_c2_2 : C2[]
->C2 : C2
 >[] : undefined[]
 
 var arr_c3: C3[] = [];
 >arr_c3 : C3[]
->C3 : C3
 >[] : undefined[]
 
 var i1_error: I1 = []; // should be an error - is
 >i1_error : I1
->I1 : I1
 >[] : undefined[]
 
 var c1_error: C1 = []; // should be an error - is
 >c1_error : C1
->C1 : C1
 >[] : undefined[]
 
 var c2_error: C2 = []; // should be an error - is
 >c2_error : C2
->C2 : C2
 >[] : undefined[]
 
 var c3_error: C3 = []; // should be an error - is
 >c3_error : C3
->C3 : C3
 >[] : undefined[]
 
 

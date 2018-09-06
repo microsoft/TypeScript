@@ -27,5 +27,4 @@ module Bbb {
 var a: Bbb.SomeType;
 >a : Bbb.SomeType
 >Bbb : any
->SomeType : Bbb.SomeType
 

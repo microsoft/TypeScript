@@ -1,13 +1,7 @@
 === tests/cases/compiler/internalAliasUninitializedModuleInsideTopLevelModuleWithoutExport.ts ===
 export module a {
->a : any
-
     export module b {
->b : any
-
         export interface I {
->I : I
-
             foo();
 >foo : () => any
         }
@@ -22,7 +16,6 @@ import b = a.b;
 export var x: b.I;
 >x : b.I
 >b : any
->I : b.I
 
 x.foo();
 >x.foo() : any

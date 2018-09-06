@@ -5,7 +5,6 @@ abstract class AbstractClass {
     constructor(str: string, other: AbstractClass) {
 >str : string
 >other : AbstractClass
->AbstractClass : AbstractClass
 
         this.method(parseInt(str));
 >this.method(parseInt(str)) : void
@@ -76,6 +75,19 @@ abstract class AbstractClass {
 >method : (num: number) => void
 >num : number
 
+    other = this.prop;
+>other : string
+>this.prop : string
+>this : this
+>prop : string
+
+    fn = () => this.prop;
+>fn : () => string
+>() => this.prop : () => string
+>this.prop : string
+>this : this
+>prop : string
+
     method2() {
 >method2 : () => void
 
@@ -97,7 +109,6 @@ class User {
 
     constructor(a: AbstractClass) {
 >a : AbstractClass
->AbstractClass : AbstractClass
 
         a.prop;
 >a.prop : string

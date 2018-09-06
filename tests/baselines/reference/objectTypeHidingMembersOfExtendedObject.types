@@ -15,15 +15,11 @@ class B extends A {
 }
 
 interface Object {
->Object : Object
-
     data: A;
 >data : A
->A : A
 
     [x: string]: Object;
 >x : string
->Object : Object
 }
 
 class C {
@@ -34,7 +30,6 @@ class C {
 
     data: B;
 >data : B
->B : B
 
     [x: string]: any;
 >x : string
@@ -42,7 +37,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r1: void = c.valueOf();
 >r1 : void
@@ -53,7 +47,6 @@ var r1: void = c.valueOf();
 
 var r1b: B = c.data;
 >r1b : B
->B : B
 >c.data : B
 >c : C
 >data : B
@@ -71,14 +64,11 @@ var r1d = c['hm']; // should be 'any'
 >'hm' : "hm"
 
 interface I {
->I : I
-
     valueOf(): void;
 >valueOf : () => void
 
     data: B;
 >data : B
->B : B
 
     [x: string]: any;
 >x : string
@@ -86,7 +76,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 var r2: void = i.valueOf();
 >r2 : void
@@ -97,7 +86,6 @@ var r2: void = i.valueOf();
 
 var r2b: B = i.data;
 >r2b : B
->B : B
 >i.data : B
 >i : I
 >data : B
@@ -137,7 +125,6 @@ var r3: void = a.valueOf();
 
 var r3b: B = a.data;
 >r3b : B
->B : B
 >a.data : B
 >a : { valueOf: () => void; data: B; }
 >data : B
@@ -162,7 +149,6 @@ var b: {
 
     data: B;
 >data : B
->B : B
 
     [x: string]: any;
 >x : string

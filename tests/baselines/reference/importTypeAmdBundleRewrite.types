@@ -1,14 +1,11 @@
 === tests/cases/conformance/types/import/a/b/c.ts ===
 export interface Foo {
->Foo : Foo
-
     x: 12;
 >x : 12
 }
 === tests/cases/conformance/types/import/a/inner.ts ===
 const c: import("./b/c").Foo = {x: 12};
 >c : import("tests/cases/conformance/types/import/a/b/c").Foo
->Foo : import("tests/cases/conformance/types/import/a/b/c").Foo
 >{x: 12} : { x: 12; }
 >x : 12
 >12 : 12

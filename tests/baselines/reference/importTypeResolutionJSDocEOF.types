@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaces.d.ts ===
 export interface Bar {
->Bar : Bar
-
     prop: string
 >prop : string
 }

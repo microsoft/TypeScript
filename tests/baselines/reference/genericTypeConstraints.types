@@ -11,13 +11,10 @@ class FooExtended { }
 
 class Bar<T extends Foo> { }
 >Bar : Bar<T>
->T : T
->Foo : Foo
 
 class BarExtended extends Bar<FooExtended> {
 >BarExtended : BarExtended
 >Bar : Bar<FooExtended>
->FooExtended : FooExtended
 
     constructor() {
         super();

@@ -2,31 +2,17 @@
 // https://github.com/Microsoft/TypeScript/issues/19632
 declare function direct<A extends string>(a: A | A[]): Record<A, string>
 >direct : <A extends string>(a: A | A[]) => Record<A, string>
->A : A
 >a : A | A[]
->A : A
->A : A
->Record : Record<K, T>
->A : A
 
 declare function nested<A extends string>(a: { fields: A }): Record<A, string>
 >nested : <A extends string>(a: { fields: A; }) => Record<A, string>
->A : A
 >a : { fields: A; }
 >fields : A
->A : A
->Record : Record<K, T>
->A : A
 
 declare function nestedUnion<A extends string>(a: { fields: A | A[] }): Record<A, string>
 >nestedUnion : <A extends string>(a: { fields: A | A[]; }) => Record<A, string>
->A : A
 >a : { fields: A | A[]; }
 >fields : A | A[]
->A : A
->A : A
->Record : Record<K, T>
->A : A
 
 const directUnionSingle = direct("z")
 >directUnionSingle : Record<"z", string>

@@ -198,8 +198,9 @@ namespace RWC {
                             inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined!, compilerOptions, currentDirectory // TODO: GH#18217
                         );
                         // Reset compilerResult before calling into `compileDeclarationFiles` so the memory from the original compilation can be freed
+                        const links = compilerResult.symlinks;
                         compilerResult = undefined!;
-                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext)!;
+                        const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(declContext, links)!;
 
                         return Harness.Compiler.iterateErrorBaseline(tsconfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.diagnostics, { caseSensitive, currentDirectory });
                     }, baselineOpts);

@@ -51,7 +51,7 @@ namespace ts.codefix {
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
-        const classType = checker.getTypeAtLocation(classDeclaration)!;
+        const classType = checker.getTypeAtLocation(classDeclaration);
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);

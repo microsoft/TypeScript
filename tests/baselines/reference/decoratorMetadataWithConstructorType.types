@@ -22,7 +22,6 @@ class A {
 function decorator(target: Object, propertyKey: string) {
 >decorator : (target: Object, propertyKey: string) => void
 >target : Object
->Object : Object
 >propertyKey : string
 }
 
@@ -34,7 +33,6 @@ export class B {
 
     x: A = new A();
 >x : A
->A : A
 >new A() : A
 >A : typeof A
 }

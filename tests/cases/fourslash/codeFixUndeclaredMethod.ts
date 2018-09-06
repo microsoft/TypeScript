@@ -26,6 +26,7 @@ verify.codeFix({
         this.foo3<1,2,3,4,5,6,7,8>();
     }
 }`,
+    applyChanges: true,
 });
 
 verify.codeFix({
@@ -46,7 +47,8 @@ verify.codeFix({
         // 8 type args
         this.foo3<1,2,3,4,5,6,7,8>();
     }
-}`
+}`,
+    applyChanges: true,
 });
 
 verify.codeFix({

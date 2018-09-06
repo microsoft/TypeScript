@@ -16,22 +16,18 @@ class C extends A {
 function foo(name: 'hi'): B;
 >foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
 >name : "hi"
->B : B
 
 function foo(name: 'bye'): C;
 >foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
 >name : "bye"
->C : C
 
 function foo(name: string): A;
 >foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
 >name : string
->A : A
 
 function foo(name: any): A {
 >foo : { (name: "hi"): B; (name: "bye"): C; (name: string): A; }
 >name : any
->A : A
 
     return null;
 >null : null

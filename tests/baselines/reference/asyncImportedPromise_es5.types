@@ -1,9 +1,7 @@
 === tests/cases/conformance/async/es5/task.ts ===
 export class Task<T> extends Promise<T> { }
 >Task : Task<T>
->T : T
 >Promise : Promise<T>
->T : T
 
 === tests/cases/conformance/async/es5/test.ts ===
 import { Task } from "./task";
@@ -14,7 +12,4 @@ class Test {
 
     async example<T>(): Task<T> { return; }
 >example : <T>() => Task<T>
->T : T
->Task : Task<T>
->T : T
 }

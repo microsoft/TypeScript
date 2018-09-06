@@ -1394,7 +1394,8 @@ namespace ts.FindAllReferences.Core {
             // If the location is in a context sensitive location (i.e. in an object literal) try
             // to get a contextual type for it, and add the property symbol from the contextual
             // type to the search set
-            const res = firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker), fromRoot);
+            const contextualType = checker.getContextualType(containingObjectLiteralElement.parent);
+            const res = contextualType && firstDefined(getPropertySymbolsFromContextualType(containingObjectLiteralElement, checker, contextualType, /*unionSymbolOk*/ true), fromRoot);
             if (res) return res;
 
             // If the location is name of property symbol from object literal destructuring pattern
@@ -1460,17 +1461,6 @@ namespace ts.FindAllReferences.Core {
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
                 !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
-    }
-
-    /** Gets all symbols for one property. Does not get symbols for every property. */
-    function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker): ReadonlyArray<Symbol> {
-        const contextualType = checker.getContextualType(<ObjectLiteralExpression>node.parent);
-        if (!contextualType) return emptyArray;
-        const name = getNameFromPropertyName(node.name);
-        if (!name) return emptyArray;
-        const symbol = contextualType.getProperty(name);
-        return symbol ? [symbol] :
-            contextualType.isUnion() ? mapDefined(contextualType.types, t => t.getProperty(name)) : emptyArray;
     }
 
     /**

@@ -4,7 +4,6 @@ enum E { }
 
 var x: symbol | E;
 >x : symbol | E
->E : E
 
 x;
 >x : symbol | E

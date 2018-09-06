@@ -40,15 +40,15 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern5
 4 >               
 5 >                 y
 6 >                          , 
-7 >                            z
-8 >                                     ] = [1, 2];
+7 >                            z] = [1, 2]
+8 >                                     ;
 1->Emitted(2, 1) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 3 >Emitted(2, 16) Source(2, 20) + SourceIndex(0)
 4 >Emitted(2, 18) Source(2, 6) + SourceIndex(0)
 5 >Emitted(2, 27) Source(2, 7) + SourceIndex(0)
 6 >Emitted(2, 29) Source(2, 9) + SourceIndex(0)
-7 >Emitted(2, 38) Source(2, 10) + SourceIndex(0)
+7 >Emitted(2, 38) Source(2, 20) + SourceIndex(0)
 8 >Emitted(2, 39) Source(2, 21) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.js.map
