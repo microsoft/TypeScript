@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////interface IFoo { [|{| "isWriteAccess": true, "isDefinition": true |}xy|]: number; }
+////interface IFoo { [|{| "isDefinition": true |}xy|]: number; }
 ////
 ////// Assignment
 ////var a1: IFoo = { [|{| "isWriteAccess": true, "isDefinition": true |}xy|]: 0 };

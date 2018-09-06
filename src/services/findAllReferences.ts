@@ -154,7 +154,7 @@ namespace ts.FindAllReferences {
             textSpan: getTextSpan(node, sourceFile),
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: node.kind === SyntaxKind.DefaultKeyword
-                || isAnyDeclarationName(node)
+                || !!getDeclarationFromName(node)
                 || isLiteralComputedPropertyDeclarationName(node),
             isInString,
         };
@@ -223,7 +223,65 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccessForReference(node: Node): boolean {
-        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
+        const decl = getDeclarationFromName(node);
+        return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
+    }
+
+    /**
+     * True if 'decl' provides a value, as in `function f() {}`;
+     * false if 'decl' is just a location for a future write, as in 'let x;'
+     */
+    function declarationIsWriteAccess(decl: Declaration): boolean {
+        // Consider anything in an ambient declaration to be a write access since it may be coming from JS.
+        if (!!(decl.flags & NodeFlags.Ambient)) return true;
+
+        switch (decl.kind) {
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.ImportClause: // default import
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.NamespaceExportDeclaration:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+                return true;
+
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration).body;
+
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.PropertyDeclaration:
+                return !!(decl as VariableDeclaration | PropertyDeclaration).initializer || isCatchClause(decl.parent);
+
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag:
+                return false;
+
+            default:
+                return Debug.failBadSyntaxKind(decl);
+        }
     }
 }
 

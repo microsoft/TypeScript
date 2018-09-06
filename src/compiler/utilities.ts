@@ -2384,29 +2384,33 @@ namespace ts {
     }
 
     // See GH#16030
-    export function isAnyDeclarationName(name: Node): boolean {
+    export function getDeclarationFromName(name: Node): Declaration | undefined {
+        const parent = name.parent;
         switch (name.kind) {
-            case SyntaxKind.Identifier:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral: {
-                const parent = name.parent;
+            case SyntaxKind.NumericLiteral:
+                if (isComputedPropertyName(parent)) return parent.parent;
+                // falls through
+
+            case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
-                    return parent.name === name;
+                    return parent.name === name ? parent : undefined;
                 }
-                else if (isQualifiedName(name.parent)) {
-                    const tag = name.parent.parent;
-                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                else if (isQualifiedName(parent)) {
+                    const tag = parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === parent ? tag : undefined;
                 }
                 else {
-                    const binExp = name.parent.parent;
+                    const binExp = parent.parent;
                     return isBinaryExpression(binExp) &&
                         getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
                         (binExp.left.symbol || binExp.symbol) &&
-                        getNameOfDeclaration(binExp) === name;
+                        getNameOfDeclaration(binExp) === name
+                        ? binExp
+                        : undefined;
                 }
-            }
             default:
-                return false;
+                return undefined;
         }
     }
 
