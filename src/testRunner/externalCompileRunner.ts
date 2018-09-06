@@ -80,9 +80,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (install.status !== 0) throw new Error(`NPM Install types for ${directoryName} failed: ${install.stderr.toString()}`);
                 }
                 args.push("--noEmit");
-                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, () => {
-                    return cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd);
-                });
+                Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
             });
         });
     }
@@ -138,7 +136,8 @@ function compareErrorStrings(a: string[], b: string[]) {
     return ts.comparePathsCaseSensitive(errorFileA, errorFileB) ||
         ts.compareValues(parseInt(lineNumberStringA), parseInt(lineNumberStringB)) ||
         ts.compareValues(parseInt(columnNumberStringA), parseInt(columnNumberStringB)) ||
-        ts.compareStringsCaseSensitive(remainderA, remainderB);
+        ts.compareStringsCaseSensitive(remainderA, remainderB) ||
+        ts.compareStringsCaseSensitive(a.slice(1).join("\n"), b.slice(1).join("\n"));
 }
 
 class DefinitelyTypedRunner extends ExternalCompileRunnerBase {

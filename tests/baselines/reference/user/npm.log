@@ -326,6 +326,8 @@ node_modules/npm/lib/help.js(196,26): error TS2339: Property 'commands' does not
 node_modules/npm/lib/help.js(197,22): error TS2339: Property 'deref' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/help.js(199,14): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/help.js(199,22): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/help.js(206,33): error TS2339: Property 'length' does not exist on type 'never'.
+node_modules/npm/lib/help.js(207,14): error TS2339: Property 'split' does not exist on type 'never'.
 node_modules/npm/lib/init.js(38,22): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/init.js(39,25): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/init.js(53,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -341,8 +343,8 @@ node_modules/npm/lib/install/action/refresh-package-json.js(31,43): error TS2339
 node_modules/npm/lib/install/action/remove.js(25,37): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/remove.js(25,51): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/actions.js(126,24): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/actions.js(168,16): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/lib/install/actions.js(171,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/lib/install/actions.js(168,16): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install/actions.js(171,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/install/and-add-parent-to-errors.js(9,10): error TS2339: Property 'parent' does not exist on type 'Error'.
 node_modules/npm/lib/install/audit.js(32,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/audit.js(89,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -430,8 +432,8 @@ node_modules/npm/lib/install.js(273,7): error TS2532: Object is possibly 'undefi
 node_modules/npm/lib/install.js(273,7): error TS2684: The 'this' context of type '((err: any, ...args: any[]) => any) | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
 node_modules/npm/lib/install.js(340,25): error TS2339: Property 'failing' does not exist on type 'Installer'.
-node_modules/npm/lib/install.js(369,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/lib/install.js(376,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/lib/install.js(369,18): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/lib/install.js(376,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/install.js(519,40): error TS2339: Property 'globalPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(597,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(614,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
@@ -497,6 +499,8 @@ node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not e
 node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
   Property 'problems' does not exist on type 'string'.
 node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; }' cannot be used as an index type.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; missing: boolean; }' cannot be used as an index type.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; peerMissing: boolean; }' cannot be used as an index type.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'typeof EventEmitter'.
@@ -752,11 +756,7 @@ node_modules/npm/lib/uninstall.js(27,24): error TS2339: Property 'config' does n
 node_modules/npm/lib/uninstall.js(31,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(32,32): error TS2339: Property 'globalDir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/uninstall.js(33,19): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(40,42): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/uninstall.js(43,31): error TS2339: Property 'localPrefix' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/uninstall.js(46,50): error TS2339: Property 'run' does not exist on type 'Uninstaller'.
-node_modules/npm/lib/uninstall.js(51,27): error TS2507: Type 'typeof Installer' is not a constructor function type.
-node_modules/npm/lib/uninstall.js(70,36): error TS2339: Property 'idealTree' does not exist on type 'Uninstaller'.
 node_modules/npm/lib/unpublish.js(17,7): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(23,31): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/unpublish.js(26,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -785,7 +785,7 @@ node_modules/npm/lib/utils/error-handler.js(12,21): error TS2339: Property 'roll
 node_modules/npm/lib/utils/error-handler.js(23,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(29,16): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(33,12): error TS2345: Argument of type '"timing"' is not assignable to parameter of type 'Signals'.
-node_modules/npm/lib/utils/error-handler.js(38,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/lib/utils/error-handler.js(38,16): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/error-handler.js(40,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(40,32): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(43,39): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1487,9 +1487,9 @@ node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find mo
 node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(7,24): error TS2554: Expected 1-3 arguments, but got 4.
-node_modules/npm/test/tap/process-logger.js(8,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type '"warning"'.
-node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type '"warning"'.
+node_modules/npm/test/tap/process-logger.js(8,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
+node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/progress-config.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/progress-config.js(12,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/progress-config.js(18,9): error TS2339: Property 'stderr' does not exist on type 'typeof process'.

@@ -15,17 +15,17 @@ export enum E {
 >E : Symbol(E, Decl(t1.ts, 5, 1))
 
     A, B, C
->A : Symbol(E1.A, Decl(t1.ts, 6, 15))
->B : Symbol(E1.B, Decl(t1.ts, 7, 6))
->C : Symbol(E1.C, Decl(t1.ts, 7, 9))
+>A : Symbol(E.A, Decl(t1.ts, 6, 15))
+>B : Symbol(E.B, Decl(t1.ts, 7, 6))
+>C : Symbol(E.C, Decl(t1.ts, 7, 9))
 }
 export const enum D {
 >D : Symbol(D, Decl(t1.ts, 8, 1))
 
     A, B, C
->A : Symbol(D1.A, Decl(t1.ts, 9, 21))
->B : Symbol(D1.B, Decl(t1.ts, 10, 6))
->C : Symbol(D1.C, Decl(t1.ts, 10, 9))
+>A : Symbol(D.A, Decl(t1.ts, 9, 21))
+>B : Symbol(D.B, Decl(t1.ts, 10, 6))
+>C : Symbol(D.C, Decl(t1.ts, 10, 9))
 }
 export module M {
 >M : Symbol(M, Decl(t1.ts, 11, 1))

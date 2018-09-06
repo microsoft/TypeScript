@@ -1,10 +1,10 @@
 === tests/cases/conformance/salsa/a.js ===
 var variable = {};
->variable : Symbol(variable, Decl(a.js, 0, 3))
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
 
 variable.a = 0;
 >variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
->variable : Symbol(variable, Decl(a.js, 0, 3))
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
 >a : Symbol(variable.a, Decl(a.js, 0, 18))
 
 class C {
@@ -27,7 +27,7 @@ class C {
 }
 
 var obj = {
->obj : Symbol(obj, Decl(a.js, 11, 3))
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
 
     property: {}
 >property : Symbol(property, Decl(a.js, 11, 11))
@@ -36,7 +36,7 @@ var obj = {
 
 obj.property.a = 0;
 >obj.property : Symbol(property, Decl(a.js, 11, 11))
->obj : Symbol(obj, Decl(a.js, 11, 3))
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
 >property : Symbol(property, Decl(a.js, 11, 11))
 
 var arr = [{}];
@@ -52,7 +52,7 @@ function getObj() {
 === tests/cases/conformance/salsa/b.ts ===
 variable.a = 1;
 >variable.a : Symbol(variable.a, Decl(a.js, 0, 18))
->variable : Symbol(variable, Decl(a.js, 0, 3))
+>variable : Symbol(variable, Decl(a.js, 0, 3), Decl(a.js, 0, 18))
 >a : Symbol(variable.a, Decl(a.js, 0, 18))
 
 (new C()).member.a = 1;
@@ -67,7 +67,7 @@ variable.a = 1;
 
 obj.property.a = 1;
 >obj.property : Symbol(property, Decl(a.js, 11, 11))
->obj : Symbol(obj, Decl(a.js, 11, 3))
+>obj : Symbol(obj, Decl(a.js, 11, 3), Decl(a.js, 13, 2))
 >property : Symbol(property, Decl(a.js, 11, 11))
 
 arr[0].a = 1;

@@ -1,5 +1,4 @@
 /// <reference path='fourslash.ts' />
-
 // @allowJs: true
 // @checkJs: true
 
@@ -15,7 +14,6 @@
 // @Filename: f1.ts
 //// export class C {[|
 ////     |]x: number;
-////     static y: string;
 //// }
 
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);

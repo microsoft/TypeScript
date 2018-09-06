@@ -15,7 +15,7 @@
 // @emitThisFile: true
 ////export class Foo {
 ////    member: string;
-////    /*2*/methodName(propName: SomeType): void {}
+////    /*2*/methodName(propName: SomeType): SomeType { return propName; }
 ////    otherMethod() {
 ////        if (Math.random() > 0.5) {
 ////            return {x: 42};
@@ -24,7 +24,7 @@
 ////    }
 ////}
 ////
-////export interface SomeType {
+////export interface /*SomeType*/SomeType {
 ////    member: number;
 ////}
 
@@ -39,7 +39,7 @@
 ////var Foo = /** @class */ (function () {
 ////    function Foo() {
 ////    }
-////    Foo.prototype.methodName = function (propName) { };
+////    Foo.prototype.methodName = function (propName) { return propName; };
 ////    Foo.prototype.otherMethod = function () {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
@@ -52,12 +52,12 @@
 ////
 
 // @Filename: /dist/index.d.ts.map
-////{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,IAAI;IACpC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
+////{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
 
 // @Filename: /dist/index.d.ts
 ////export declare class Foo {
 ////    member: string;
-////    methodName(propName: SomeType): void;
+////    methodName(propName: SomeType): SomeType;
 ////    otherMethod(): {
 ////        x: number;
 ////        y?: undefined;
@@ -75,7 +75,7 @@ goTo.file("/index.ts");
 verify.getEmitOutput(["/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
 
 verify.goToDefinition("1", "2"); // getDefinitionAndBoundSpan
-verify.goToType("1", "2"); // getTypeDefinitionAtPosition
+verify.goToType("1", "SomeType"); // getTypeDefinitionAtPosition
 goTo.marker("1");
 verify.goToDefinitionIs("2"); // getDefinitionAtPosition
 goTo.implementation(); // getImplementationAtPosition

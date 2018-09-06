@@ -62,9 +62,7 @@ namespace ts {
     /* @internal */
     export const libMap = createMapFromEntries(libEntries);
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
-        // CommandLine only options
+    const commonOptionsWithBuild: CommandLineOption[] = [
         {
             name: "help",
             shortName: "h",
@@ -78,6 +76,27 @@ namespace ts {
             shortName: "?",
             type: "boolean"
         },
+        {
+            name: "preserveWatchOutput",
+            type: "boolean",
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
+        },
+        {
+            name: "watch",
+            shortName: "w",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Watch_input_files,
+        },
+    ];
+
+    /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        // CommandLine only options
+        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -124,21 +143,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
-        },
-        {
-            name: "preserveWatchOutput",
-            type: "boolean",
-            showInSimplifiedHelpView: false,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
-        },
-        {
-            name: "watch",
-            shortName: "w",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Watch_input_files,
         },
 
         // Basic
@@ -319,13 +323,15 @@ namespace ts {
         {
             name: "noImplicitAny",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
-            description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
+            description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type
         },
         {
             name: "strictNullChecks",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_null_checks
@@ -333,6 +339,7 @@ namespace ts {
         {
             name: "strictFunctionTypes",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_checking_of_function_types
@@ -340,6 +347,7 @@ namespace ts {
         {
             name: "strictPropertyInitialization",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
@@ -347,6 +355,7 @@ namespace ts {
         {
             name: "noImplicitThis",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
@@ -354,6 +363,7 @@ namespace ts {
         {
             name: "alwaysStrict",
             type: "boolean",
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file
@@ -363,6 +373,7 @@ namespace ts {
         {
             name: "noUnusedLocals",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_locals,
@@ -370,6 +381,7 @@ namespace ts {
         {
             name: "noUnusedParameters",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_parameters,
@@ -377,6 +389,7 @@ namespace ts {
         {
             name: "noImplicitReturns",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value
@@ -384,6 +397,7 @@ namespace ts {
         {
             name: "noFallthroughCasesInSwitch",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
@@ -455,12 +469,14 @@ namespace ts {
         {
             name: "allowSyntheticDefaultImports",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Allow_default_imports_from_modules_with_no_default_export_This_does_not_affect_code_emit_just_typechecking
         },
         {
             name: "esModuleInterop",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports
@@ -640,6 +656,7 @@ namespace ts {
         {
             name: "noImplicitUseStrict",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_emit_use_strict_directives_in_module_output
         },
@@ -678,24 +695,28 @@ namespace ts {
         {
             name: "allowUnusedLabels",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_report_errors_on_unused_labels
         },
         {
             name: "allowUnreachableCode",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_report_errors_on_unreachable_code
         },
         {
             name: "suppressExcessPropertyErrors",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Suppress_excess_property_checks_for_object_literals,
         },
         {
             name: "suppressImplicitAnyIndexErrors",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Suppress_noImplicitAny_errors_for_indexing_objects_lacking_index_signatures,
         },
@@ -714,6 +735,7 @@ namespace ts {
         {
             name: "noStrictGenericChecks",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
         },
@@ -733,6 +755,38 @@ namespace ts {
                 type: "object"
             },
             description: Diagnostics.List_of_language_service_plugins
+        }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        {
+            name: "verbose",
+            shortName: "v",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Enable_verbose_logging,
+            type: "boolean"
+        },
+        {
+            name: "dry",
+            shortName: "d",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
+            type: "boolean"
+        },
+        {
+            name: "force",
+            shortName: "f",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
+            type: "boolean"
+        },
+        {
+            name: "clean",
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Delete_the_outputs_of_all_projects,
+            type: "boolean"
         }
     ];
 
@@ -797,10 +851,11 @@ namespace ts {
     }
 
     function getOptionNameMap(): OptionNameMap {
-        if (optionNameMapCache) {
-            return optionNameMapCache;
-        }
+        return optionNameMapCache || (optionNameMapCache = createOptionNameMap(optionDeclarations));
+    }
 
+    /*@internal*/
+    export function createOptionNameMap(optionDeclarations: ReadonlyArray<CommandLineOption>): OptionNameMap {
         const optionNameMap = createMap<CommandLineOption>();
         const shortOptionNames = createMap<string>();
         forEach(optionDeclarations, option => {
@@ -810,8 +865,7 @@ namespace ts {
             }
         });
 
-        optionNameMapCache = { optionNameMap, shortOptionNames };
-        return optionNameMapCache;
+        return { optionNameMap, shortOptionNames };
     }
 
     /* @internal */
@@ -961,7 +1015,12 @@ namespace ts {
     }
 
     /** @internal */
-    export function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+    export function getOptionFromName(optionName: string, allowShort?: boolean): CommandLineOption | undefined {
+        return getOptionDeclarationFromName(getOptionNameMap, optionName, allowShort);
+    }
+
+    /*@internal*/
+    export function getOptionDeclarationFromName(getOptionNameMap: () => OptionNameMap, optionName: string, allowShort = false): CommandLineOption | undefined {
         optionName = optionName.toLowerCase();
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
         // Try to translate short option names to their full equivalents.
@@ -974,6 +1033,58 @@ namespace ts {
         return optionNameMap.get(optionName);
     }
 
+    /*@internal*/
+    export interface ParsedBuildCommand {
+        buildOptions: BuildOptions;
+        projects: string[];
+        errors: ReadonlyArray<Diagnostic>;
+    }
+
+    /*@internal*/
+    export function parseBuildCommand(args: string[]): ParsedBuildCommand {
+        let buildOptionNameMap: OptionNameMap | undefined;
+        const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
+
+        const buildOptions: BuildOptions = {};
+        const projects: string[] = [];
+        let errors: Diagnostic[] | undefined;
+        for (const arg of args) {
+            if (arg.charCodeAt(0) === CharacterCodes.minus) {
+                const opt = getOptionDeclarationFromName(returnBuildOptionNameMap, arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1), /*allowShort*/ true);
+                if (opt) {
+                    buildOptions[opt.name as keyof BuildOptions] = true;
+                }
+                else {
+                    (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.Unknown_build_option_0, arg));
+                }
+            }
+            else {
+                // Not a flag, parse as filename
+                projects.push(arg);
+            }
+        }
+
+        if (projects.length === 0) {
+            // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
+            projects.push(".");
+        }
+
+        // Nonsensical combinations
+        if (buildOptions.clean && buildOptions.force) {
+            (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
+        }
+        if (buildOptions.clean && buildOptions.verbose) {
+            (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose"));
+        }
+        if (buildOptions.clean && buildOptions.watch) {
+            (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch"));
+        }
+        if (buildOptions.watch && buildOptions.dry) {
+            (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
+        }
+
+        return { buildOptions, projects, errors: errors || emptyArray };
+    }
 
     function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
         const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);

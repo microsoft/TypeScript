@@ -59,23 +59,23 @@ var a = baz(1, 1, g);      // Should be number
 var b: number | string;
 >b : string | number
 
-var b = foo(g);            // Should be number | string
+var b = foo(g);            // Error, number and string are disjoint types
 >b : string | number
->foo(g) : string | number
+>foo(g) : any
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >g : <T>(x: T, y: T) => T
 
-var b = bar(1, "one", g);  // Should be number | string
+var b = bar(1, "one", g);  // Error, number and string are disjoint types
 >b : string | number
->bar(1, "one", g) : string | number
+>bar(1, "one", g) : any
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : 1
 >"one" : "one"
 >g : <T>(x: T, y: T) => T
 
-var b = bar("one", 1, g);  // Should be number | string
+var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >b : string | number
->bar("one", 1, g) : string | number
+>bar("one", 1, g) : any
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : "one"
 >1 : 1

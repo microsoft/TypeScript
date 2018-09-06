@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="de-DE" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -8677,7 +8677,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Type parameter '{0}' has a circular default.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Der Typparameter "{0}" weist einen zirkulären Standard auf.]]></Val>
+            <Val><![CDATA[Der Typparameter "{0}" besitzt einen zirkulären Standardwert.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -366,4 +366,120 @@ namespace ts {
                 });
         });
     });
+
+    describe("parseBuildOptions", () => {
+        function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ParsedBuildCommand) {
+            const parsed = parseBuildCommand(commandLine);
+            const parsedBuildOptions = JSON.stringify(parsed.buildOptions);
+            const expectedBuildOptions = JSON.stringify(expectedParsedBuildCommand.buildOptions);
+            assert.equal(parsedBuildOptions, expectedBuildOptions);
+
+            const parsedErrors = parsed.errors;
+            const expectedErrors = expectedParsedBuildCommand.errors;
+            assert.isTrue(parsedErrors.length === expectedErrors.length, `Expected error: ${JSON.stringify(expectedErrors)}. Actual error: ${JSON.stringify(parsedErrors)}.`);
+            for (let i = 0; i < parsedErrors.length; i++) {
+                const parsedError = parsedErrors[i];
+                const expectedError = expectedErrors[i];
+                assert.equal(parsedError.code, expectedError.code);
+                assert.equal(parsedError.category, expectedError.category);
+                assert.equal(parsedError.messageText, expectedError.messageText);
+            }
+
+            const parsedProjects = parsed.projects;
+            const expectedProjects = expectedParsedBuildCommand.projects;
+            assert.deepEqual(parsedProjects, expectedProjects, `Expected projects: [${JSON.stringify(expectedProjects)}]. Actual projects: [${JSON.stringify(parsedProjects)}].`);
+        }
+        it("parse build without any options ", () => {
+            // --lib es6 0.ts
+            assertParseResult([],
+                {
+                    errors: [],
+                    projects: ["."],
+                    buildOptions: {}
+                });
+        });
+
+        it("Parse multiple options", () => {
+            // --lib es5,es2015.symbol.wellknown 0.ts
+            assertParseResult(["--verbose", "--force", "tests"],
+                {
+                    errors: [],
+                    projects: ["tests"],
+                    buildOptions: { verbose: true, force: true }
+                });
+        });
+
+        it("Parse option with invalid option ", () => {
+            // --lib es5,invalidOption 0.ts
+            assertParseResult(["--verbose", "--invalidOption"],
+                {
+                    errors: [{
+                        messageText: "Unknown build option '--invalidOption'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    projects: ["."],
+                    buildOptions: { verbose: true }
+                });
+        });
+
+        it("Parse multiple flags with input projects at the end", () => {
+            // --lib es5,es2015.symbol.wellknown --target es5 0.ts
+            assertParseResult(["--force", "--verbose", "src", "tests"],
+                {
+                    errors: [],
+                    projects: ["src", "tests"],
+                    buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        it("Parse multiple flags with input projects in the middle", () => {
+            // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
+            assertParseResult(["--force", "src", "tests", "--verbose"],
+                {
+                    errors: [],
+                    projects: ["src", "tests"],
+                    buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        it("Parse multiple flags with input projects in the beginning", () => {
+            // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
+            assertParseResult(["src", "tests", "--force", "--verbose"],
+                {
+                    errors: [],
+                    projects: ["src", "tests"],
+                    buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        describe("Combining options that make no sense together", () => {
+            function verifyInvalidCombination(flag1: keyof BuildOptions, flag2: keyof BuildOptions) {
+                it(`--${flag1} and --${flag2} together is invalid`, () => {
+                    // --module commonjs --target es5 0.ts --lib es5,es2015.symbol.wellknown
+                    assertParseResult([`--${flag1}`, `--${flag2}`],
+                        {
+                            errors: [{
+                                messageText: `Options '${flag1}' and '${flag2}' cannot be combined.`,
+                                category: Diagnostics.Options_0_and_1_cannot_be_combined.category,
+                                code: Diagnostics.Options_0_and_1_cannot_be_combined.code,
+                                file: undefined,
+                                start: undefined,
+                                length: undefined,
+                            }],
+                            projects: ["."],
+                            buildOptions: { [flag1]: true, [flag2]: true }
+                        });
+                });
+            }
+
+            verifyInvalidCombination("clean", "force");
+            verifyInvalidCombination("clean", "verbose");
+            verifyInvalidCombination("clean", "watch");
+            verifyInvalidCombination("watch", "dry");
+        });
+    });
 }

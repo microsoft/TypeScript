@@ -134,9 +134,9 @@ m["x"] = 0;
 var a = m.x + 1;
 >a : number
 >m.x + 1 : number
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 >1 : 1
 
 function f(v: number) { }
@@ -146,44 +146,44 @@ function f(v: number) { }
 f(m.x);
 >f(m.x) : void
 >f : (v: number) => void
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 if (m.x) { }
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 m.x;
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 (m.x);
->(m.x) : number
->m.x : number
+>(m.x) : 0
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 -m.x;
 >-m.x : number
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 +m.x;
 >+m.x : number
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 
 m.x.toString();
 >m.x.toString() : string
 >m.x.toString : (radix?: number) => string
->m.x : number
+>m.x : 0
 >m : typeof m
->x : number
+>x : 0
 >toString : (radix?: number) => string
 
 === tests/cases/compiler/constDeclarations_access_1.ts ===

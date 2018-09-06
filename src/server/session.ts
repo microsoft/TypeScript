@@ -266,8 +266,6 @@ namespace ts.server {
         getValue: (path: Path) => T,
         projects: Projects,
         action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
-        comparer?: (a: U, b: U) => number,
-        areEqual?: (a: U, b: U) => boolean,
     ): U[] {
         const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
@@ -276,10 +274,7 @@ namespace ts.server {
                 outputs.push(...flatMap(projects, project => action(project, value)));
             });
         }
-
-        return comparer
-            ? sortAndDeduplicate(outputs, comparer, areEqual)
-            : deduplicate(outputs, areEqual);
+        return deduplicate(outputs, equateValues);
     }
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
@@ -559,6 +554,10 @@ namespace ts.server {
                     const { openFiles } = event.data;
                     this.projectsUpdatedInBackgroundEvent(openFiles);
                     break;
+                case LargeFileReferencedEvent:
+                    const { file, fileSize, maxFileSize } = event.data;
+                    this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, "largeFileReferenced");
+                    break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
                     const bakedDiags = map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
@@ -567,6 +566,10 @@ namespace ts.server {
                         configFile,
                         diagnostics: bakedDiags
                     }, "configFileDiag");
+                    break;
+                case SurveyReady:
+                    const { surveyId } = event.data;
+                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, "surveyReady");
                     break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
@@ -1419,7 +1422,7 @@ namespace ts.server {
             const position = this.getPosition(args, scriptInfo);
 
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
-                ...this.getPreferences(file),
+                ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
@@ -2348,7 +2351,7 @@ namespace ts.server {
             return this.projectService.getFormatCodeOptions(file);
         }
 
-        private getPreferences(file: NormalizedPath): UserPreferences {
+        private getPreferences(file: NormalizedPath): protocol.UserPreferences {
             return this.projectService.getPreferences(file);
         }
 
@@ -2356,7 +2359,7 @@ namespace ts.server {
             return this.projectService.getHostFormatCodeOptions();
         }
 
-        private getHostPreferences(): UserPreferences {
+        private getHostPreferences(): protocol.UserPreferences {
             return this.projectService.getHostPreferences();
         }
     }

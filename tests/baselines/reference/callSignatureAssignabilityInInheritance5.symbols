@@ -302,13 +302,14 @@ interface I extends B {
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 10))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 10))
 
-    a14: <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
+    a14: <T, U>(x: { a: T; b: U }) => T; // ok
 >a14 : Symbol(I.a14, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 63))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
->x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 13))
->a : Symbol(a, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 17))
+>U : Symbol(U, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 12))
+>x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 16))
+>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 20))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
->b : Symbol(b, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 23))
->T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
+>b : Symbol(b, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 26))
+>U : Symbol(U, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 12))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
 }
