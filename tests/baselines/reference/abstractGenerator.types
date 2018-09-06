@@ -1,0 +1,8 @@
+=== tests/cases/compiler/abstractGenerator.ts ===
+abstract class Passes {
+>Passes : Passes
+
+  abstract *foo();
+>foo : () => any
+}
+

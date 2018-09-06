@@ -22937,8 +22937,15 @@ namespace ts {
                             duplicateFunctionDeclaration = true;
                         }
                     }
-                    else if (previousDeclaration && previousDeclaration.parent === node.parent && previousDeclaration.end !== node.pos) {
-                        reportImplementationExpectedError(previousDeclaration);
+                    else if (previousDeclaration && previousDeclaration.parent === node.parent) {
+                        if (previousDeclaration.end !== node.pos) {
+                            reportImplementationExpectedError(previousDeclaration);
+                        }
+                        else {
+                            if (hasModifier(node, ModifierFlags.Abstract) && (node as FunctionLikeDeclaration).asteriskToken) {
+                                error(current, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
+                            }
+                        }
                     }
 
                     if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
@@ -29056,7 +29063,7 @@ namespace ts {
                 if (node.flags & NodeFlags.Ambient) {
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.Generators_are_not_allowed_in_an_ambient_context);
                 }
-                if (!node.body) {
+                if (!node.body && !hasModifier(node, ModifierFlags.Abstract)) {
                     return grammarErrorOnNode(node.asteriskToken!, Diagnostics.An_overload_signature_cannot_be_declared_as_a_generator);
                 }
             }
