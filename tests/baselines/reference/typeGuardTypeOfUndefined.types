@@ -134,7 +134,7 @@ function test5(a: boolean | void) {
     }
     else {
         a;
->a : boolean | void
+>a : undefined
     }
 }
 
@@ -151,15 +151,15 @@ function test6(a: boolean | void) {
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : boolean | void
+>a : undefined
 >"boolean" : "boolean"
 
             a;
->a : boolean
+>a : never
         }
         else {
             a;
->a : void
+>a : undefined
         }
     }
     else {
@@ -184,7 +184,7 @@ function test7(a: boolean | void) {
 >"boolean" : "boolean"
 
 		a;
->a : boolean | void
+>a : boolean
     }
     else {
         a;
@@ -212,7 +212,7 @@ function test8(a: boolean | void) {
     }
     else {
         a;
->a : boolean | void
+>a : undefined
     }
 }
 
@@ -242,7 +242,7 @@ function test9(a: boolean | number) {
     }
     else {
         a;
->a : number | boolean
+>a : undefined
     }
 }
 
@@ -259,15 +259,15 @@ function test10(a: boolean | number) {
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : number | boolean
+>a : undefined
 >"boolean" : "boolean"
 
             a;
->a : boolean
+>a : never
         }
         else {
             a;
->a : number
+>a : undefined
         }
     }
     else {
@@ -292,7 +292,7 @@ function test11(a: boolean | number) {
 >"boolean" : "boolean"
 
 		a;
->a : number | boolean
+>a : boolean
     }
     else {
         a;
@@ -320,7 +320,7 @@ function test12(a: boolean | number) {
     }
     else {
         a;
->a : number | boolean
+>a : number
     }
 }
 
@@ -350,7 +350,7 @@ function test13(a: boolean | number | void) {
     }
     else {
         a;
->a : number | boolean | void
+>a : undefined
     }
 }
 
@@ -367,15 +367,15 @@ function test14(a: boolean | number | void) {
         if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
 >typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->a : number | boolean | void
+>a : undefined
 >"boolean" : "boolean"
 
             a;
->a : boolean
+>a : never
         }
         else {
             a;
->a : number | void
+>a : undefined
         }
     }
     else {
@@ -400,7 +400,7 @@ function test15(a: boolean | number | void) {
 >"boolean" : "boolean"
 
 		a;
->a : number | boolean | void
+>a : boolean
     }
     else {
         a;
@@ -428,7 +428,7 @@ function test16(a: boolean | number | void) {
     }
     else {
         a;
->a : number | boolean | void
+>a : number
     }
 }
 

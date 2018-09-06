@@ -14963,30 +14963,34 @@ namespace ts {
                 if (type.flags & TypeFlags.Any && literal.text === "function") {
                     return type;
                 }
-                if (assumeTrue && !(type.flags & TypeFlags.Union)) {
-                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
-                        return getUnionType([nonPrimitiveType, nullType]);
-                    }
-                    // We narrow a non-union type to an exact primitive type if the non-union type
-                    // is a supertype of that primitive type. For example, type 'any' can be narrowed
-                    // to one of the primitive types.
-                    const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
-                    if (targetType) {
-                        if (isTypeSubtypeOf(targetType, type)) {
-                            return targetType;
-                        }
-                        if (type.flags & TypeFlags.Instantiable) {
-                            const constraint = getBaseConstraintOfType(type) || anyType;
-                            if (isTypeSubtypeOf(targetType, constraint)) {
-                                return getIntersectionType([type, targetType]);
-                            }
-                        }
-                    }
-                }
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
                     typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject;
-                return getTypeWithFacts(type, facts);
+                return getTypeWithFacts(assumeTrue ? mapType(type, narrowTypeForTypeof) : type, facts);
+
+                function narrowTypeForTypeof(type: Type) {
+                    if (assumeTrue && !(type.flags & TypeFlags.Union)) {
+                        if (type.flags & TypeFlags.Unknown && literal.text === "object") {
+                            return getUnionType([nonPrimitiveType, nullType]);
+                        }
+                        // We narrow a non-union type to an exact primitive type if the non-union type
+                        // is a supertype of that primitive type. For example, type 'any' can be narrowed
+                        // to one of the primitive types.
+                        const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
+                        if (targetType) {
+                            if (isTypeSubtypeOf(targetType, type)) {
+                                return isTypeAny(type) ? targetType : getIntersectionType([type, targetType]); // Intersection to handle `string` being a subtype of `keyof T`
+                            }
+                            if (type.flags & TypeFlags.Instantiable) {
+                                const constraint = getBaseConstraintOfType(type) || anyType;
+                                if (isTypeSubtypeOf(targetType, constraint)) {
+                                    return getIntersectionType([type, targetType]);
+                                }
+                            }
+                        }
+                    }
+                    return type;
+                }
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
