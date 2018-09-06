@@ -255,11 +255,14 @@ namespace ts.FindAllReferences {
             case SyntaxKind.NamespaceExportDeclaration:
             case SyntaxKind.NamespaceImport:
             case SyntaxKind.Parameter:
-            case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.TypeParameter:
                 return true;
+
+            case SyntaxKind.PropertyAssignment:
+                // In `({ x: y } = 0);`, `x` is not a write access. (Won't call this function for `y`.)
+                return !isArrayLiteralOrObjectLiteralDestructuringPattern((decl as PropertyAssignment).parent);
 
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
