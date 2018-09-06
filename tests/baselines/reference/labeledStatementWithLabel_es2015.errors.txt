@@ -1,0 +1,23 @@
+tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts(11,8): error TS1235: A namespace declaration is only allowed in a namespace or module.
+tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts(12,8): error TS1235: A namespace declaration is only allowed in a namespace or module.
+
+
+==== tests/cases/conformance/statements/labeledStatements/labeledStatementWithLabel_es2015.ts (2 errors) ====
+    label: function fn() { }
+    label: function* gen() { }
+    label: async function gen1() { }
+    label: enum E {}
+    label: interface I {}
+    label: class C { }
+    label: var a = 1;
+    label: let b = 1;
+    label: const c = 1;
+    
+    label: module M { }
+           ~~~~~~
+!!! error TS1235: A namespace declaration is only allowed in a namespace or module.
+    label: namespace N {}
+           ~~~~~~~~~
+!!! error TS1235: A namespace declaration is only allowed in a namespace or module.
+    label: type T = {}
+    

@@ -7,7 +7,6 @@ import ClassB = require("recursiveExportAssignmentAndFindAliasedType5_moduleB");
 
 export var b: ClassB; // This should result in type ClassB
 >b : ClassB
->ClassB : ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType5_moduleC.ts ===
 import self = require("recursiveExportAssignmentAndFindAliasedType5_moduleD");

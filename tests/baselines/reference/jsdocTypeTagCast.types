@@ -197,7 +197,7 @@ var str;
 >str : string
 
 if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
->(numOrStr === undefined) : string | number
+>(numOrStr === undefined) : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number
 >undefined : undefined

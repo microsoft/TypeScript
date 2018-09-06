@@ -1,0 +1,25 @@
+=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts ===
+function fnNumber(this: void): number { return 90; }
+>fnNumber : (this: void) => number
+>this : void
+>90 : 90
+
+new fnNumber(); // Error
+>new fnNumber() : any
+>fnNumber : (this: void) => number
+
+function fnVoid(this: void): void {}
+>fnVoid : (this: void) => void
+>this : void
+
+new fnVoid(); // Error
+>new fnVoid() : any
+>fnVoid : (this: void) => void
+
+function functionVoidNoThis(): void {}
+>functionVoidNoThis : () => void
+
+new functionVoidNoThis(); // Error
+>new functionVoidNoThis() : any
+>functionVoidNoThis : () => void
+

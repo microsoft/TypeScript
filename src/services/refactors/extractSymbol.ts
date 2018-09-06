@@ -194,7 +194,7 @@ namespace ts.refactor.extractSymbol {
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
+        const start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start), sourceFile, span);
         // Do the same for the ending position
         const end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
 
@@ -866,7 +866,7 @@ namespace ts.refactor.extractSymbol {
 
                     // Being returned through an object literal will have widened the type.
                     const variableType: TypeNode | undefined = checker.typeToTypeNode(
-                        checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)!), // TODO: GH#18217
+                        checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
                         scope,
                         NodeBuilderFlags.NoTruncation);
 
@@ -1090,7 +1090,7 @@ namespace ts.refactor.extractSymbol {
                 // Consume
                 if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteNode(context.file, node.parent, textChanges.useNonAdjustedPositions);
+                    changeTracker.delete(context.file, node.parent);
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
@@ -1240,7 +1240,7 @@ namespace ts.refactor.extractSymbol {
             return scope.members;
         }
         else {
-            assertTypeIsNever(scope);
+            assertType<never>(scope);
         }
 
         return emptyArray;
@@ -1406,7 +1406,7 @@ namespace ts.refactor.extractSymbol {
             const end = last(statements).end;
             expressionDiagnostic = createFileDiagnostic(sourceFile, start, end - start, Messages.expressionExpected);
         }
-        else if (checker.getTypeAtLocation(expression)!.flags & (TypeFlags.Void | TypeFlags.Never)) { // TODO: GH#18217
+        else if (checker.getTypeAtLocation(expression).flags & (TypeFlags.Void | TypeFlags.Never)) {
             expressionDiagnostic = createDiagnosticForNode(expression, Messages.uselessConstantType);
         }
 
@@ -1555,7 +1555,7 @@ namespace ts.refactor.extractSymbol {
 
         function collectUsages(node: Node, valueUsage = Usage.Read) {
             if (inGenericContext) {
-                const type = checker.getTypeAtLocation(node)!; // TODO: GH#18217
+                const type = checker.getTypeAtLocation(node);
                 recordTypeParameterUsages(type);
             }
 

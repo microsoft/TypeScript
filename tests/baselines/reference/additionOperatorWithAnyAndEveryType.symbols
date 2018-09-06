@@ -35,7 +35,7 @@ var d: string;
 
 var e: Object;
 >e : Symbol(e, Decl(additionOperatorWithAnyAndEveryType.ts, 12, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 // any as left operand, result is type Any except plusing string
 var r1 = a + a;

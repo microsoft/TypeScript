@@ -1,21 +1,22 @@
-tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(13,23): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property '2' is missing in type '[number, string]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Type '[number, string, boolean]' cannot be converted to type '[number, string]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Types of property 'length' are incompatible.
     Type '3' is not comparable to type '2'.
-tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Type '[C, D]' cannot be converted to type '[C, D, A]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property '2' is missing in type '[C, D]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(20,33): error TS2733: Index '5' is out-of-bounds in tuple of length 3.
+tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'string' is not comparable to type 'number'.
-tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'C' is not comparable to type 'A'.
     Property 'a' is missing in type 'C'.
 tests/cases/conformance/types/tuple/castingTuple.ts(32,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.
 tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot find name 't4'.
 
 
-==== tests/cases/conformance/types/tuple/castingTuple.ts (8 errors) ====
+==== tests/cases/conformance/types/tuple/castingTuple.ts (9 errors) ====
     interface I { }
     class A { a = 10; }
     class C implements I { c };
@@ -30,24 +31,26 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var emptyObjTuple = <[{}, {}]>numStrTuple;
     var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+!!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property '2' is missing in type '[number, string]'.
     var shorter = numStrBoolTuple as [number, string]
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[number, string, boolean]' cannot be converted to type '[number, string]'.
+!!! error TS2352: Conversion of type '[number, string, boolean]' to type '[number, string]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Types of property 'length' are incompatible.
 !!! error TS2352:     Type '3' is not comparable to type '2'.
     var longer = numStrTuple as [number, string, boolean]
                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[number, string]' cannot be converted to type '[number, string, boolean]'.
+!!! error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     var classCDTuple: [C, D] = [new C(), new D()];
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;
                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[C, D]' cannot be converted to type '[C, D, A]'.
+!!! error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property '2' is missing in type '[C, D]'.
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
+                                    ~
+!!! error TS2733: Index '5' is out-of-bounds in tuple of length 3.
     var t10: [E1, E2] = [E1.one, E2.one];
     var t11 = <[number, number]>t10;
     var array1 = <{}[]>emptyObjTuple;
@@ -59,11 +62,11 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     // error
     var t3 = <[number, number]>numStrTuple;
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[number, string]' cannot be converted to type '[number, number]'.
+!!! error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'string' is not comparable to type 'number'.
     var t9 = <[A, I]>classCDTuple;
              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '[C, D]' cannot be converted to type '[A, I]'.
+!!! error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'C' is not comparable to type 'A'.
 !!! error TS2352:     Property 'a' is missing in type 'C'.
     var array1 = <number[]>numStrTuple;

@@ -23,10 +23,7 @@ class OtherDerived extends Base { bing: string; }
 declare function foo1(a: new <T>(x: T) => T[]);
 >foo1 : { (a: new <T>(x: T) => T[]): any; (a: any): any; }
 >a : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 declare function foo1(a: any): any;
 >foo1 : { (a: new <T>(x: T) => T[]): any; (a: any): any; }
@@ -35,9 +32,7 @@ declare function foo1(a: any): any;
 declare function foo2(a2: new <T>(x: T) => string[]);
 >foo2 : { (a2: new <T>(x: T) => string[]): any; (a: any): any; }
 >a2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
 declare function foo2(a: any): any;
 >foo2 : { (a2: new <T>(x: T) => string[]): any; (a: any): any; }
@@ -46,9 +41,7 @@ declare function foo2(a: any): any;
 declare function foo3(a3: new <T>(x: T) => void);
 >foo3 : { (a3: new <T>(x: T) => void): any; (a: any): any; }
 >a3 : new <T>(x: T) => void
->T : T
 >x : T
->T : T
 
 declare function foo3(a: any): any;
 >foo3 : { (a3: new <T>(x: T) => void): any; (a: any): any; }
@@ -57,12 +50,8 @@ declare function foo3(a: any): any;
 declare function foo4(a4: new <T, U>(x: T, y: U) => string);
 >foo4 : { (a4: new <T, U>(x: T, y: U) => string): any; (a: any): any; }
 >a4 : new <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
 declare function foo4(a: any): any;
 >foo4 : { (a4: new <T, U>(x: T, y: U) => string): any; (a: any): any; }
@@ -71,13 +60,8 @@ declare function foo4(a: any): any;
 declare function foo5(a5: new <T, U>(x: new (arg: T) => U) => T);
 >foo5 : { (a5: new <T, U>(x: new (arg: T) => U) => T): any; (a: any): any; }
 >a5 : new <T, U>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
 declare function foo5(a: any): any;
 >foo5 : { (a5: new <T, U>(x: new (arg: T) => U) => T): any; (a: any): any; }
@@ -86,13 +70,8 @@ declare function foo5(a: any): any;
 declare function foo6(a6: new <T extends Base>(x: new (arg: T) => Derived) => T);
 >foo6 : { (a6: new <T extends Base>(x: new (arg: T) => Derived) => T): any; (a: any): any; }
 >a6 : new <T extends Base>(x: new (arg: T) => Derived) => T
->T : T
->Base : Base
 >x : new (arg: T) => Derived
 >arg : T
->T : T
->Derived : Derived
->T : T
 
 declare function foo6(a: any): any;
 >foo6 : { (a6: new <T extends Base>(x: new (arg: T) => Derived) => T): any; (a: any): any; }
@@ -101,16 +80,11 @@ declare function foo6(a: any): any;
 declare function foo11(a11: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base);
 >foo11 : { (a11: new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base): any; (a: any): any; }
 >a11 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->T : T
 >x : { foo: T; }
 >foo : T
->T : T
 >y : { foo: T; bar: T; }
 >foo : T
->T : T
 >bar : T
->T : T
->Base : Base
 
 declare function foo11(a: any): any;
 >foo11 : { (a11: new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base): any; (a: any): any; }
@@ -119,13 +93,9 @@ declare function foo11(a: any): any;
 declare function foo15(a15: new <T>(x: { a: T; b: T }) => T[]);
 >foo15 : { (a15: new <T>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
 >a15 : new <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 declare function foo15(a: any): any;
 >foo15 : { (a15: new <T>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
@@ -134,14 +104,9 @@ declare function foo15(a: any): any;
 declare function foo16(a16: new <T extends Base>(x: { a: T; b: T }) => T[]);
 >foo16 : { (a16: new <T extends Base>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
 >a16 : new <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 declare function foo16(a: any): any;
 >foo16 : { (a16: new <T extends Base>(x: { a: T; b: T; }) => T[]): any; (a: any): any; }
@@ -152,22 +117,12 @@ declare function foo17(a17: {
 >a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
 
     new <T extends Derived>(x: new (a: T) => T): T[];
->T : T
->Derived : Derived
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
->T : T
 
     new <T extends Base>(x: new (a: T) => T): T[];        
->T : T
->Base : Base
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
->T : T
 
 });
 declare function foo17(a: any): any;
@@ -182,36 +137,20 @@ declare function foo18(a18: {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
 
         new <T extends Derived>(a: T): T;
->T : T
->Derived : Derived
 >a : T
->T : T
->T : T
 
         new <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
     }): any[];
     new (x: {
 >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
 
         new <T extends Derived2>(a: T): T;
->T : T
->Derived2 : Derived2
 >a : T
->T : T
->T : T
 
         new <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
     }): any[];
 });
@@ -221,17 +160,11 @@ declare function foo18(a: any): any;
 
 var r1arg: new <T>(x: T) => T[];
 >r1arg : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 var r1arg2: new <T>(x: T) => T[];
 >r1arg2 : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 var r1 = foo1(r1arg);
 >r1 : any
@@ -253,15 +186,11 @@ var r1b = [r1arg2, r1arg];
 
 var r2arg: new <T>(x: T) => string[];
 >r2arg : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
 var r2arg2: new <T>(x: T) => string[];
 >r2arg2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
 var r2 = foo2(r2arg);
 >r2 : any
@@ -283,16 +212,11 @@ var r2b = [r2arg2, r2arg];
 
 var r3arg: new <T>(x: T) => T;
 >r3arg : new <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var r3arg2: new <T>(x: T) => void;
 >r3arg2 : new <T>(x: T) => void
->T : T
 >x : T
->T : T
 
 var r3 = foo3(r3arg);
 >r3 : any
@@ -314,21 +238,13 @@ var r3b = [r3arg2, r3arg];
 
 var r4arg: new <T, U>(x: T, y: U) => string;
 >r4arg : new <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
 var r4arg2: new <T, U>(x: T, y: U) => string;
 >r4arg2 : new <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
 var r4 = foo4(r4arg);
 >r4 : any
@@ -350,23 +266,13 @@ var r4b = [r4arg2, r4arg];
 
 var r5arg: new <T, U>(x: new (arg: T) => U) => T;
 >r5arg : new <T, U>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
 var r5arg2: new <T, U>(x: new (arg: T) => U) => T;
 >r5arg2 : new <T, U>(x: new (arg: T) => U) => T
->T : T
->U : U
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
 var r5 = foo5(r5arg);
 >r5 : any
@@ -388,25 +294,13 @@ var r5b = [r5arg2, r5arg];
 
 var r6arg: new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T;
 >r6arg : new <T extends Base, U extends Derived>(x: new (arg: T) => U) => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
 var r6arg2: new <T extends Base>(x: new (arg: T) => Derived) => T;
 >r6arg2 : new <T extends Base>(x: new (arg: T) => Derived) => T
->T : T
->Base : Base
 >x : new (arg: T) => Derived
 >arg : T
->T : T
->Derived : Derived
->T : T
 
 var r6 = foo6(r6arg);
 >r6 : any
@@ -428,30 +322,19 @@ var r6b = [r6arg2, r6arg];
 
 var r11arg: new <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base;
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
->T : T
->U : U
 >x : { foo: T; }
 >foo : T
->T : T
 >y : { foo: U; bar: U; }
 >foo : U
->U : U
 >bar : U
->U : U
->Base : Base
 
 var r11arg2: new <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->T : T
 >x : { foo: T; }
 >foo : T
->T : T
 >y : { foo: T; bar: T; }
 >foo : T
->T : T
 >bar : T
->T : T
->Base : Base
 
 var r11 = foo11(r11arg);
 >r11 : any
@@ -460,37 +343,28 @@ var r11 = foo11(r11arg);
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
 var r11a = [r11arg, r11arg2];
->r11a : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg, r11arg2] : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11a : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg, r11arg2] : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
 var r11b = [r11arg2, r11arg];
->r11b : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg2, r11arg] : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11b : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg2, r11arg] : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
 var r15arg: new <U, V>(x: { a: U; b: V; }) => U[];
 >r15arg : new <U, V>(x: { a: U; b: V; }) => U[]
->U : U
->V : V
 >x : { a: U; b: V; }
 >a : U
->U : U
 >b : V
->V : V
->U : U
 
 var r15arg2: new <T>(x: { a: T; b: T }) => T[];
 >r15arg2 : new <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 var r15 = foo15(r15arg);
 >r15 : any
@@ -512,25 +386,15 @@ var r15b = [r15arg2, r15arg];
 
 var r16arg: new <T extends Base>(x: { a: T; b: T }) => T[];
 >r16arg : new <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 var r16arg2: new <T extends Base>(x: { a: T; b: T }) => T[];
 >r16arg2 : new <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 var r16 = foo16(r16arg);
 >r16 : any
@@ -552,12 +416,8 @@ var r16b = [r16arg2, r16arg];
 
 var r17arg: new <T>(x: new (a: T) => T) => T[];
 >r17arg : new <T>(x: new (a: T) => T) => T[]
->T : T
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
->T : T
 
 var r17 = foo17(r17arg);
 >r17 : any
@@ -568,10 +428,7 @@ var r17 = foo17(r17arg);
 var r18arg: new (x: new <T>(a: T) => T) => any[];
 >r18arg : new (x: new <T>(a: T) => T) => any[]
 >x : new <T>(a: T) => T
->T : T
 >a : T
->T : T
->T : T
 
 var r18 = foo18(r18arg);
 >r18 : any

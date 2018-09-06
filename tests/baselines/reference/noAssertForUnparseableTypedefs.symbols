@@ -1,0 +1,5 @@
+=== tests/cases/conformance/jsdoc/bug26693.js ===
+/** @typedef {module:locale} hi */
+import { nope } from 'nope';
+>nope : Symbol(nope, Decl(bug26693.js, 1, 8))
+

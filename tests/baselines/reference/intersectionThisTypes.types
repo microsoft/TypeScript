@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/intersection/intersectionThisTypes.ts ===
 interface Thing1 {
->Thing1 : Thing1
-
     a: number;
 >a : number
 
@@ -10,8 +8,6 @@ interface Thing1 {
 }
 
 interface Thing2 {
->Thing2 : Thing2
-
     b: number;
 >b : number
 
@@ -21,17 +17,13 @@ interface Thing2 {
 
 type Thing3 = Thing1 & Thing2;
 >Thing3 : Thing3
->Thing1 : Thing1
->Thing2 : Thing2
 
 type Thing4 = Thing3 & string[];
 >Thing4 : Thing4
->Thing3 : Thing3
 
 function f1(t: Thing3) {
 >f1 : (t: Thing3) => void
 >t : Thing3
->Thing3 : Thing3
 
     t = t.self();
 >t = t.self() : Thing3
@@ -57,9 +49,6 @@ function f1(t: Thing3) {
 }
 
 interface Thing5 extends Thing4 {
->Thing5 : Thing5
->Thing4 : Thing4
-
     c: string;
 >c : string
 }
@@ -67,7 +56,6 @@ interface Thing5 extends Thing4 {
 function f2(t: Thing5) {
 >f2 : (t: Thing5) => void
 >t : Thing5
->Thing5 : Thing5
 
     t = t.self();
 >t = t.self() : Thing5
@@ -93,20 +81,12 @@ function f2(t: Thing5) {
 }
 
 interface Component {
->Component : Component
-
     extend<T>(props: T): this & T;
 >extend : <T>(props: T) => this & T
->T : T
 >props : T
->T : T
->T : T
 }
 
 interface Label extends Component {
->Label : Label
->Component : Component
-
     title: string;
 >title : string
 }
@@ -114,7 +94,6 @@ interface Label extends Component {
 function test(label: Label) {
 >test : (label: Label) => void
 >label : Label
->Label : Label
 
     const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
 >extended : Label & { id: number; } & { tag: string; }

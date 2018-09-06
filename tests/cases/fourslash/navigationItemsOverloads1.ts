@@ -4,12 +4,12 @@
 ////function overload(b: boolean): boolean;
 ////function overload(b: number): boolean;
 ////function overload(f: typeof overload): boolean;
-////function overload(x: any, b = (function overload() { return false })): boolean {
+////[|function overload(x: any, b = (function overload() { return false })): boolean {
 ////    throw overload;
-////}
+////}|]
 ////
 ////interface I {
-////    interfaceMethodSignature(a: string): boolean;
+////    [|interfaceMethodSignature(a: string): boolean;|]
 ////    interfaceMethodSignature(b: boolean): boolean;
 ////    interfaceMethodSignature(b: number): boolean;
 ////    interfaceMethodSignature(f: I): boolean;
@@ -20,11 +20,30 @@
 ////    methodOverload(b: boolean): boolean;
 ////    methodOverload(b: number): boolean;
 ////    methodOverload(f: I): boolean;
-////    methodOverload(x: any, b = (function overload() { return false })): boolean {
+////    [|methodOverload(x: any, b = (function overload() { return false })): boolean {
 ////        throw C;
-////    }
+////    }|]
 ////}
 
-verify.navigationItemsListCount(1, "overload", "exact");
-verify.navigationItemsListCount(1, "interfaceMethodSignature", "exact");
-verify.navigationItemsListCount(1, "methodOverload", "exact");
+const [r0, r1, r2] = test.ranges();
+const methodOverload: FourSlashInterface.ExpectedNavigateToItem =
+    { name: "methodOverload", kind: "method", range: r2, containerName: "C", containerKind: "class" };
+verify.navigateTo(
+    {
+        pattern: "overload",
+        expected: [
+            { name: "overload", kind: "function", range: r0 },
+            { ...methodOverload, matchKind: "substring", isCaseSensitive: false },
+        ]
+    },
+    {
+        pattern: "interfaceMethodSignature",
+        expected: [
+            { name: "interfaceMethodSignature", kind: "method", range: r1, containerName: "I", containerKind: "interface" },
+        ],
+    },
+    {
+        pattern: "methodOverload",
+        expected: [methodOverload],
+    },
+);

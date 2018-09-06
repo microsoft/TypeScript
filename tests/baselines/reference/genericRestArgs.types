@@ -1,10 +1,7 @@
 === tests/cases/compiler/genericRestArgs.ts ===
 function makeArrayG<T>(...items: T[]): T[] { return items; }
 >makeArrayG : <T>(...items: T[]) => T[]
->T : T
 >items : T[]
->T : T
->T : T
 >items : T[]
 
 var a1Ga = makeArrayG(1, ""); // no error
@@ -25,7 +22,6 @@ var a1Gc = makeArrayG<Object>(1, "");
 >a1Gc : Object[]
 >makeArrayG<Object>(1, "") : Object[]
 >makeArrayG : <T>(...items: T[]) => T[]
->Object : Object
 >1 : 1
 >"" : ""
 
@@ -38,13 +34,9 @@ var a1Gd = makeArrayG<number>(1, ""); // error
 
 function makeArrayGOpt<T>(item1?: T, item2?: T, item3?: T) {
 >makeArrayGOpt : <T>(item1?: T, item2?: T, item3?: T) => T[]
->T : T
 >item1 : T
->T : T
 >item2 : T
->T : T
 >item3 : T
->T : T
 
     return [item1, item2, item3];
 >[item1, item2, item3] : T[]

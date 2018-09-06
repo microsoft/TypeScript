@@ -1,16 +1,11 @@
 === tests/cases/compiler/bestCommonTypeReturnStatement.ts ===
 interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
-
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 >then : (successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any) => IPromise<any>
 >successCallback : (promiseValue: T) => any
 >promiseValue : T
->T : T
 >errorCallback : (reason: any) => any
 >reason : any
->IPromise : IPromise<T>
 }
 
 function f() {
@@ -29,11 +24,9 @@ function f() {
 
 function b(): IPromise<void> { return null; }
 >b : () => IPromise<void>
->IPromise : IPromise<T>
 >null : null
 
 function d(): IPromise<any> { return null; }
 >d : () => IPromise<any>
->IPromise : IPromise<T>
 >null : null
 

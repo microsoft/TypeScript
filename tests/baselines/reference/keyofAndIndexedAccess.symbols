@@ -100,7 +100,7 @@ type K13 = keyof {};  // never
 
 type K14 = keyof Object;  // "constructor" | "toString" | ...
 >K14 : Symbol(K14, Decl(keyofAndIndexedAccess.ts, 37, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : Symbol(K15, Decl(keyofAndIndexedAccess.ts, 38, 24))
@@ -453,9 +453,9 @@ function pluck<T, K extends keyof T>(array: T[], key: K) {
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 131, 17))
 
     return array.map(x => x[key]);
->array.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>array.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >array : Symbol(array, Decl(keyofAndIndexedAccess.ts, 131, 37))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 131, 48))
@@ -657,7 +657,7 @@ function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: s
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 189, 16))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 189, 24))
 >k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 189, 46))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 189, 13))
 >s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 189, 75))
 >n : Symbol(n, Decl(keyofAndIndexedAccess.ts, 189, 86))
@@ -682,7 +682,7 @@ function f53<T, K extends Exclude<keyof T, symbol>>(obj: { [x: string]: boolean 
 >f53 : Symbol(f53, Decl(keyofAndIndexedAccess.ts, 193, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 195, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 195, 15))
->Exclude : Symbol(Exclude, Decl(lib.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 195, 13))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 195, 52))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 195, 60))
@@ -810,7 +810,7 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 225, 20))
 >y : Symbol(y, Decl(keyofAndIndexedAccess.ts, 225, 31))
 >U : Symbol(U, Decl(keyofAndIndexedAccess.ts, 225, 22))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 225, 20))
 >U : Symbol(U, Decl(keyofAndIndexedAccess.ts, 225, 22))
 
@@ -1219,24 +1219,24 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 301, 81))
 
     x1.length;
->x1.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x1.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x1 : Symbol(x1, Decl(keyofAndIndexedAccess.ts, 301, 47))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     x2.length;
->x2.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x2.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x2 : Symbol(x2, Decl(keyofAndIndexedAccess.ts, 301, 64))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     x3.length;
->x3.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x3 : Symbol(x3, Decl(keyofAndIndexedAccess.ts, 301, 81))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     x4.length;
->x4.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x4.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x4 : Symbol(x4, Decl(keyofAndIndexedAccess.ts, 301, 92))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -1754,10 +1754,10 @@ function addToMyThingy<S extends KeyTypes>(key: S) {
 >S : Symbol(S, Decl(keyofAndIndexedAccess.ts, 474, 23))
 
     MyThingy[key].push("a");
->MyThingy[key].push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>MyThingy[key].push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >MyThingy : Symbol(MyThingy, Decl(keyofAndIndexedAccess.ts, 472, 3))
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 474, 43))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
 // Repro from #13102
@@ -1792,7 +1792,7 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 function updateIds<T extends Record<K, string>, K extends string>(
 >updateIds : Symbol(updateIds, Decl(keyofAndIndexedAccess.ts, 486, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 490, 19))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 490, 47))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 490, 47))
 
@@ -1809,7 +1809,7 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 493, 18))
 
 ): Record<K, string> {
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 490, 47))
 
     for (const idField of idFields) {
@@ -1872,7 +1872,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 declare function head<T extends Array<any>>(list: T): T[0];
 >head : Symbol(head, Decl(keyofAndIndexedAccess.ts, 513, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 517, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >list : Symbol(list, Decl(keyofAndIndexedAccess.ts, 517, 44))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 517, 22))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 517, 22))
@@ -1949,7 +1949,7 @@ class SampleClass<P> {
 
     public props: Readonly<P>;
 >props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 543, 22))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 543, 18))
 
     constructor(props: P) {
@@ -1960,9 +1960,9 @@ class SampleClass<P> {
 >this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 543, 22))
 >this : Symbol(SampleClass, Decl(keyofAndIndexedAccess.ts, 539, 1))
 >props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 543, 22))
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >props : Symbol(props, Decl(keyofAndIndexedAccess.ts, 545, 16))
     }
 }
@@ -2012,13 +2012,13 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 >brokenMethod : Symbol(AnotherSampleClass.brokenMethod, Decl(keyofAndIndexedAccess.ts, 560, 5))
 
         this.props.foo.concat;
->this.props.foo.concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
+>this.props.foo.concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
 >this.props.foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 550, 15))
 >this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 543, 22))
 >this : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 554, 54))
 >props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 543, 22))
 >foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 550, 15))
->concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
+>concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
     }
 }
 new AnotherSampleClass({});
@@ -2029,7 +2029,7 @@ function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
 >f3 : Symbol(f3, Decl(keyofAndIndexedAccess.ts, 566, 27))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 569, 12))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 569, 14))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 569, 12))
 >t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 569, 51))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 569, 12))
@@ -2096,7 +2096,7 @@ type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 586, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 586, 21))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 586, 13))
->Extract : Symbol(Extract, Decl(lib.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 586, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 586, 21))
 >prop : Symbol(prop, Decl(keyofAndIndexedAccess.ts, 586, 51))
@@ -2318,4 +2318,55 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
 >d : Symbol(d, Decl(keyofAndIndexedAccess.ts, 647, 9))
 >k2 : Symbol(k2, Decl(keyofAndIndexedAccess.ts, 646, 75))
 }
+
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+>cf1 : Symbol(cf1, Decl(keyofAndIndexedAccess.ts, 653, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 653, 26))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+>cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 653, 13))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 653, 90))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 653, 65))
+{
+    const s: string = t[k];
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 655, 9))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 653, 90))
+
+    t.cool;
+>t.cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 653, 85))
+>cool : Symbol(cool, Decl(keyofAndIndexedAccess.ts, 653, 48))
+
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+>cf2 : Symbol(cf2, Decl(keyofAndIndexedAccess.ts, 659, 5))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>P : Symbol(P, Decl(keyofAndIndexedAccess.ts, 659, 26))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 659, 13))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 659, 79))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 659, 54))
+{
+    const s: string = t[k];
+>s : Symbol(s, Decl(keyofAndIndexedAccess.ts, 661, 9))
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>k : Symbol(k, Decl(keyofAndIndexedAccess.ts, 659, 79))
+
+    t.cool;
+>t.cool : Symbol(cool)
+>t : Symbol(t, Decl(keyofAndIndexedAccess.ts, 659, 74))
+>cool : Symbol(cool)
+
+};
 

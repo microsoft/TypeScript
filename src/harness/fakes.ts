@@ -51,6 +51,10 @@ namespace fakes {
             this.vfs.writeFileSync(path, writeByteOrderMark ? utils.addUTF8ByteOrderMark(data) : data);
         }
 
+        public deleteFile(path: string) {
+            this.vfs.unlinkSync(path);
+        }
+
         public fileExists(path: string) {
             const stats = this._getStats(path);
             return stats ? stats.isFile() : false;
@@ -129,6 +133,10 @@ namespace fakes {
         public getModifiedTime(path: string) {
             const stats = this._getStats(path);
             return stats ? stats.mtime : undefined!; // TODO: GH#18217
+        }
+
+        public setModifiedTime(path: string, time: Date) {
+            this.vfs.utimesSync(path, time, time);
         }
 
         public createHash(data: string): string {
@@ -244,12 +252,24 @@ namespace fakes {
             return this.sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
+        public deleteFile(fileName: string) {
+            this.sys.deleteFile(fileName);
+        }
+
         public fileExists(fileName: string): boolean {
             return this.sys.fileExists(fileName);
         }
 
         public directoryExists(directoryName: string): boolean {
             return this.sys.directoryExists(directoryName);
+        }
+
+        public getModifiedTime(fileName: string) {
+            return this.sys.getModifiedTime(fileName);
+        }
+
+        public setModifiedTime(fileName: string, time: Date) {
+            return this.sys.setModifiedTime(fileName, time);
         }
 
         public getDirectories(path: string): string[] {
@@ -312,7 +332,7 @@ namespace fakes {
             if (cacheKey) {
                 const meta = this.vfs.filemeta(canonicalFileName);
                 const sourceFileFromMetadata = meta.get(cacheKey) as ts.SourceFile | undefined;
-                if (sourceFileFromMetadata) {
+                if (sourceFileFromMetadata && sourceFileFromMetadata.getFullText() === content) {
                     this._sourceFiles.set(canonicalFileName, sourceFileFromMetadata);
                     return sourceFileFromMetadata;
                 }
@@ -352,6 +372,42 @@ namespace fakes {
             }
 
             return parsed;
+        }
+    }
+
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost {
+        diagnostics: ts.Diagnostic[] = [];
+
+        reportDiagnostic(diagnostic: ts.Diagnostic) {
+            this.diagnostics.push(diagnostic);
+        }
+
+        reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
+            this.diagnostics.push(diagnostic);
+        }
+
+        clearDiagnostics() {
+            this.diagnostics.length = 0;
+        }
+
+        assertDiagnosticMessages(...expected: ts.DiagnosticMessage[]) {
+            const actual = this.diagnostics.slice();
+            if (actual.length !== expected.length) {
+                assert.fail<any>(actual, expected, `Diagnostic arrays did not match - got\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\nexpected\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
+            }
+            for (let i = 0; i < actual.length; i++) {
+                if (actual[i].code !== expected[i].code) {
+                    assert.fail(actual[i].messageText, expected[i].message, `Mismatched error code - expected diagnostic ${i} "${actual[i].messageText}" to match ${expected[i].message}`);
+                }
+            }
+        }
+
+        printDiagnostics(header = "== Diagnostics ==") {
+            const out = ts.createDiagnosticReporter(ts.sys);
+            ts.sys.write(header + "\r\n");
+            for (const d of this.diagnostics) {
+                out(d);
+            }
         }
     }
 }

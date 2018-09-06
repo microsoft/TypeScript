@@ -59,8 +59,6 @@ declare const b: number | undefined;
 >b : number | undefined
 
 declare namespace b {}
->b : number | undefined
-
 export = b;
 >b : number | undefined
 

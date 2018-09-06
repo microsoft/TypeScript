@@ -1,28 +1,21 @@
 === tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractClinterfaceAssignability.ts ===
 interface I {
->I : I
-
     x: number;
 >x : number
 }
 
 interface IConstructor {
->IConstructor : IConstructor
-
     new (): I;
->I : I
     
     y: number;
 >y : number
 
     prototype: I;
 >prototype : I
->I : I
 }
 
 var I: IConstructor;
 >I : IConstructor
->IConstructor : IConstructor
 
 abstract class A {
 >A : A

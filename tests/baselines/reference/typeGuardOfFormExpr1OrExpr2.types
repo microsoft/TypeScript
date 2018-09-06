@@ -23,15 +23,12 @@ class C { private p; }
 
 var c: C;
 >c : C
->C : C
 
 var cOrBool: C| boolean;
 >cOrBool : boolean | C
->C : C
 
 var strOrNumOrBoolOrC: string | number | boolean | C;
 >strOrNumOrBoolOrC : string | number | boolean | C
->C : C
 
 // A type guard of the form expr1 || expr2
 //  - when true, narrows the type of x to T1 | T2, where T1 is the type of x narrowed by expr1 when true, 
@@ -108,7 +105,6 @@ if (typeof strOrNumOrBoolOrC === "string" || typeof strOrNumOrBoolOrC === "numbe
 
     var r1: string | number | boolean | C = strOrNumOrBoolOrC; // string | number | boolean | C
 >r1 : string | number | boolean | C
->C : C
 >strOrNumOrBoolOrC : string | number | boolean | C
 
     var r2: string | number | boolean = strOrNumOrBool;

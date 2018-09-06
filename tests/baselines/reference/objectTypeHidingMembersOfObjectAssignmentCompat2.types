@@ -1,18 +1,14 @@
 === tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts ===
 interface I {
->I : I
-
     toString(): number;
 >toString : () => number
 }
 
 var i: I;
 >i : I
->I : I
 
 var o: Object;
 >o : Object
->Object : Object
 
 o = i; // error
 >o = i : I
@@ -33,7 +29,6 @@ class C {
 }
 var c: C;
 >c : C
->C : C
 
 o = c; // error
 >o = c : C

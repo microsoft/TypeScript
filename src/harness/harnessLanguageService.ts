@@ -1,8 +1,3 @@
-/// <reference path="..\services\services.ts" />
-/// <reference path="..\services\shims.ts" />
-/// <reference path="..\server\client.ts" />
-/// <reference path="harness.ts" />
-
 namespace Harness.LanguageService {
     export class ScriptInfo {
         public version = 1;
@@ -156,6 +151,21 @@ namespace Harness.LanguageService {
             this.scriptInfos.set(vpath.resolve(this.vfs.cwd(), fileName), new ScriptInfo(fileName, content, isRootFile));
         }
 
+        public renameFileOrDirectory(oldPath: string, newPath: string): void {
+            this.vfs.mkdirpSync(ts.getDirectoryPath(newPath));
+            this.vfs.renameSync(oldPath, newPath);
+
+            const updater = ts.getPathUpdater(oldPath, newPath, ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames()), /*sourceMapper*/ undefined);
+            this.scriptInfos.forEach((scriptInfo, key) => {
+                const newFileName = updater(key);
+                if (newFileName !== undefined) {
+                    this.scriptInfos.delete(key);
+                    this.scriptInfos.set(newFileName, scriptInfo);
+                    scriptInfo.fileName = newFileName;
+                }
+            });
+        }
+
         public editScript(fileName: string, start: number, end: number, newText: string) {
             const script = this.getScriptInfo(fileName);
             if (script) {
@@ -178,6 +188,10 @@ namespace Harness.LanguageService {
             const script: ScriptInfo = this.getScriptInfo(fileName)!;
             assert.isOk(script);
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
+        }
+
+        useCaseSensitiveFileNames() {
+            return !this.vfs.ignoreCase;
         }
     }
 
@@ -240,7 +254,6 @@ namespace Harness.LanguageService {
         getTypeRootsVersion() {
             return 0;
         }
-
 
         log = ts.noop;
         trace = ts.noop;
@@ -439,8 +452,8 @@ namespace Harness.LanguageService {
         getBreakpointStatementAtPosition(fileName: string, position: number): ts.TextSpan {
             return unwrapJSONCallResult(this.shim.getBreakpointStatementAtPosition(fileName, position));
         }
-        getSignatureHelpItems(fileName: string, position: number): ts.SignatureHelpItems {
-            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position));
+        getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
+            return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
         getRenameInfo(fileName: string, position: number): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
@@ -547,6 +560,9 @@ namespace Harness.LanguageService {
         getSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
         }
+        getSourceMapper(): never {
+            return ts.notImplemented();
+        }
         dispose(): void { this.shim.dispose({}); }
     }
 
@@ -576,7 +592,8 @@ namespace Harness.LanguageService {
                 importedFiles: [],
                 ambientExternalModules: [],
                 isLibFile: shimResult.isLibFile,
-                typeReferenceDirectives: []
+                typeReferenceDirectives: [],
+                libReferenceDirectives: []
             };
 
             ts.forEach(shimResult.referencedFiles, refFile => {
@@ -693,7 +710,9 @@ namespace Harness.LanguageService {
             return ts.sys.getEnvironmentVariable(name);
         }
 
-        readDirectory() { return ts.notImplemented(); }
+        readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include, depth);
+        }
 
         watchFile(): ts.FileWatcher {
             return { close: ts.noop };

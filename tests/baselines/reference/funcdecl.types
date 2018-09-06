@@ -42,7 +42,6 @@ function withMultiParams(a : number, b, c: Object) {
 >a : number
 >b : any
 >c : Object
->Object : Object
 
     return a;
 >a : number

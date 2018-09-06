@@ -12,7 +12,7 @@ exports.n.K = function () {
 >K : Symbol(n.K, Decl(mod.js, 0, 15))
 
     this.x = 10;
->this : Symbol(__object, Decl(mod.js, 0, 11))
+>this : Symbol(n, Decl(mod.js, 0, 0), Decl(mod.js, 1, 8))
 >x : Symbol(K.x, Decl(mod.js, 1, 27))
 }
 exports.Classic = class {

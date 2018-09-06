@@ -1,23 +1,17 @@
 === tests/cases/compiler/indexWithUndefinedAndNullStrictNullChecks.ts ===
 interface N {
->N : N
-
     [n: number]: string;
 >n : number
 }
 interface S {
->S : S
-
     [s: string]: number;
 >s : string
 }
 let n: N;
 >n : N
->N : N
 
 let s: S;
 >s : S
->S : S
 
 let str: string = n[undefined];
 >str : string

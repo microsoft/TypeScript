@@ -1,16 +1,11 @@
 === tests/cases/conformance/types/primitives/string/extendStringInterface.ts ===
 interface String {
->String : String
-
     doStuff(): string;
 >doStuff : () => string
 
     doOtherStuff<T>(x:T): T;
 >doOtherStuff : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 var x = '';

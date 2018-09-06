@@ -2,36 +2,24 @@
 // some complex cases of assignment compat of generic signatures. No contextual signature instantiation
 
 interface A {
->A : A
-
     <T>(x: T, ...y: T[][]): void
->T : T
 >x : T
->T : T
 >y : T[][]
->T : T
 }
 
 interface B {
->B : B
-
     <S>(x: S, ...y: S[]): void
->S : S
 >x : S
->S : S
 >y : S[]
->S : S
 }
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
-// Both ok
+// Both errors
 a = b;
 >a = b : B
 >a : A

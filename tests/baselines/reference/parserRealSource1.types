@@ -15,8 +15,6 @@ module TypeScript {
 >false : false
 
         export interface IDiagnosticWriter {
->IDiagnosticWriter : IDiagnosticWriter
-
             Alert(output: string): void;
 >Alert : (output: string) => void
 >output : string
@@ -24,7 +22,6 @@ module TypeScript {
 
         export var diagnosticWriter: IDiagnosticWriter = null;
 >diagnosticWriter : IDiagnosticWriter
->IDiagnosticWriter : IDiagnosticWriter
 >null : null
 
         export var analysisPass: number = 0;
@@ -84,8 +81,6 @@ module TypeScript {
     }
 
     export interface ILogger {
->ILogger : ILogger
-
         information(): boolean;
 >information : () => boolean
 
@@ -108,7 +103,6 @@ module TypeScript {
 
     export class NullLogger implements ILogger {
 >NullLogger : NullLogger
->ILogger : ILogger
 
         public information(): boolean { return false; }
 >information : () => boolean
@@ -138,7 +132,6 @@ module TypeScript {
 
     export class LoggerAdapter implements ILogger {
 >LoggerAdapter : LoggerAdapter
->ILogger : ILogger
 
         private _information: boolean;
 >_information : boolean
@@ -157,7 +150,6 @@ module TypeScript {
 
         constructor (public logger: ILogger) { 
 >logger : ILogger
->ILogger : ILogger
 
             this._information = this.logger.information();
 >this._information = this.logger.information() : boolean
@@ -268,7 +260,6 @@ module TypeScript {
 
     export class BufferedLogger implements ILogger {
 >BufferedLogger : BufferedLogger
->ILogger : ILogger
 
         public logContents = [];
 >logContents : any[]
@@ -312,7 +303,6 @@ module TypeScript {
     export function timeFunction(logger: ILogger, funcDescription: string, func: () =>any): any {
 >timeFunction : (logger: ILogger, funcDescription: string, func: () => any) => any
 >logger : ILogger
->ILogger : ILogger
 >funcDescription : string
 >func : () => any
 

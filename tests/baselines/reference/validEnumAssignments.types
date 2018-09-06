@@ -17,7 +17,6 @@ var a: any;
 
 var e: E;
 >e : E
->E : E
 
 n = e;
 >n = e : E

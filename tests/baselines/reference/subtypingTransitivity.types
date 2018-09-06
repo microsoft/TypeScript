@@ -4,7 +4,6 @@ class B {
 
     x: Object;
 >x : Object
->Object : Object
 }
 
 class D extends B {
@@ -24,15 +23,12 @@ class D2 extends B {
 
 var b: B;
 >b : B
->B : B
 
 var d: D;
 >d : D
->D : D
 
 var d2: D2;
 >d2 : D2
->D2 : D2
 
 d.x = '';
 >d.x = '' : ""

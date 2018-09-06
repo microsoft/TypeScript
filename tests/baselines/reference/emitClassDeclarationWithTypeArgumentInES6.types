@@ -1,19 +1,15 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentInES6.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     B: T;
 >B : T
->T : T
 
     constructor(a: T) { this.B = a;}
 >a : T
->T : T
 >this.B = a : T
 >this.B : T
 >this : this
@@ -22,7 +18,6 @@ class B<T> {
 
     foo(): T {
 >foo : () => T
->T : T
 
         return this.x;
 >this.x : T
@@ -31,7 +26,6 @@ class B<T> {
     }
     get BB(): T {
 >BB : T
->T : T
 
         return this.B;
 >this.B : T
@@ -41,7 +35,6 @@ class B<T> {
     set BBWith(c: T) {
 >BBWith : T
 >c : T
->T : T
 
         this.B = c;
 >this.B = c : T

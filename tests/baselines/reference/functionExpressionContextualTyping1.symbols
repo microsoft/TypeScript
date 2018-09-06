@@ -18,9 +18,9 @@ var a0: (n: number, s: string) => number = (num, str) => {
 >str : Symbol(str, Decl(functionExpressionContextualTyping1.ts, 8, 48))
 
     num.toExponential();
->num.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>num.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >num : Symbol(num, Decl(functionExpressionContextualTyping1.ts, 8, 44))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
     return 0;
 }
@@ -37,7 +37,7 @@ var a1: (c: Class<Number>) => number = (a1) => {
 >a1 : Symbol(a1, Decl(functionExpressionContextualTyping1.ts, 17, 3))
 >c : Symbol(c, Decl(functionExpressionContextualTyping1.ts, 17, 9))
 >Class : Symbol(Class, Decl(functionExpressionContextualTyping1.ts, 11, 1))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a1 : Symbol(a1, Decl(functionExpressionContextualTyping1.ts, 17, 40))
 
     a1.foo();

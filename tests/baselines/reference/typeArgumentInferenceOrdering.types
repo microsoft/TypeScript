@@ -4,31 +4,22 @@ class C {
 
     y: I;
 >y : I
->I : I
 }
 
 interface I {
->I : I
-
     x(): Goo;
 >x : () => Goo
->Goo : Goo
 }
 
 interface Goo {
->Goo : Goo
-
     p: string;
 >p : string
 }
 
 function foo<T>(f: { y: T }): T { return null }
 >foo : <T>(f: { y: T; }) => T
->T : T
 >f : { y: T; }
 >y : T
->T : T
->T : T
 >null : null
 
 var x = foo(new C()).x; // was Error that property x does not exist on type {}

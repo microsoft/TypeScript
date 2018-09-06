@@ -23,15 +23,11 @@ function noReturn(): {
 }
 
 interface A1 {
->A1 : A1
-
     x: { y: number; };
 >x : { y: number; }
 >y : number
 }
 interface A2 {
->A2 : A2
-
     x: { y: string; };
 >x : { y: string; }
 >y : string
@@ -39,11 +35,9 @@ interface A2 {
 
 var t1: A1;
 >t1 : A1
->A1 : A1
 
 var t2: A2;
 >t2 : A2
->A2 : A2
 
 t1 = t2;
 >t1 = t2 : A2

@@ -4,5 +4,4 @@ async function foo(a = await): Promise<void> {
 >a : any
 >await : any
 > : any
->Promise : Promise<T>
 }

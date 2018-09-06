@@ -365,7 +365,7 @@ type ObjectDescriptor<D, M> = {
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
 >methods : Symbol(methods, Decl(thisTypeInObjectLiterals2.ts, 115, 13))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 114, 24))
->ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 114, 22))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 114, 24))
 }
@@ -418,7 +418,7 @@ type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 >ObjectDescriptor2 : Symbol(ObjectDescriptor2, Decl(thisTypeInObjectLiterals2.ts, 129, 3))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 134, 23))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 134, 25))
->ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 134, 23))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 134, 25))
 
@@ -516,10 +516,10 @@ declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropD
 >desc : Symbol(desc, Decl(thisTypeInObjectLiterals2.ts, 163, 68))
 >PropDesc : Symbol(PropDesc, Decl(thisTypeInObjectLiterals2.ts, 149, 3))
 >U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 163, 48))
->ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 163, 28))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 163, 28))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(thisTypeInObjectLiterals2.ts, 163, 30))
 >U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 163, 48))
 
@@ -532,7 +532,7 @@ declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>):
 >descs : Symbol(descs, Decl(thisTypeInObjectLiterals2.ts, 165, 42))
 >PropDescMap : Symbol(PropDescMap, Decl(thisTypeInObjectLiterals2.ts, 157, 1))
 >U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 165, 31))
->ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 165, 29))
 >T : Symbol(T, Decl(thisTypeInObjectLiterals2.ts, 165, 29))
 >U : Symbol(U, Decl(thisTypeInObjectLiterals2.ts, 165, 31))
@@ -674,7 +674,7 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 207, 18))
 >P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 207, 21))
->ThisType : Symbol(ThisType, Decl(lib.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
 >D : Symbol(D, Decl(thisTypeInObjectLiterals2.ts, 207, 16))
 >M : Symbol(M, Decl(thisTypeInObjectLiterals2.ts, 207, 18))
 >P : Symbol(P, Decl(thisTypeInObjectLiterals2.ts, 207, 21))

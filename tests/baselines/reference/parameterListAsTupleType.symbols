@@ -1,0 +1,63 @@
+=== tests/cases/compiler/parameterListAsTupleType.ts ===
+function foo(a: number, b: string) {
+>foo : Symbol(foo, Decl(parameterListAsTupleType.ts, 0, 0))
+>a : Symbol(a, Decl(parameterListAsTupleType.ts, 0, 13))
+>b : Symbol(b, Decl(parameterListAsTupleType.ts, 0, 23))
+
+  return true;
+}
+type Foops = Parameters<typeof foo>;
+>Foops : Symbol(Foops, Decl(parameterListAsTupleType.ts, 2, 1))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(parameterListAsTupleType.ts, 0, 0))
+
+const x = (a: number) => 5;
+>x : Symbol(x, Decl(parameterListAsTupleType.ts, 5, 5))
+>a : Symbol(a, Decl(parameterListAsTupleType.ts, 5, 11))
+
+type Xps = Parameters<typeof x>;
+>Xps : Symbol(Xps, Decl(parameterListAsTupleType.ts, 5, 27))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(parameterListAsTupleType.ts, 5, 5))
+
+const a: Xps = ['should-not-work']; // works, but shouldn't
+>a : Symbol(a, Decl(parameterListAsTupleType.ts, 7, 5))
+>Xps : Symbol(Xps, Decl(parameterListAsTupleType.ts, 5, 27))
+
+function t(...args: Xps) {} // should work
+>t : Symbol(t, Decl(parameterListAsTupleType.ts, 7, 35))
+>args : Symbol(args, Decl(parameterListAsTupleType.ts, 8, 11))
+>Xps : Symbol(Xps, Decl(parameterListAsTupleType.ts, 5, 27))
+
+class C {
+>C : Symbol(C, Decl(parameterListAsTupleType.ts, 8, 27))
+
+    constructor(a: number, b: string) {
+>a : Symbol(a, Decl(parameterListAsTupleType.ts, 11, 16))
+>b : Symbol(b, Decl(parameterListAsTupleType.ts, 11, 26))
+    }
+}
+
+type Cps = Parameters<typeof C>; // should not work
+>Cps : Symbol(Cps, Decl(parameterListAsTupleType.ts, 13, 1))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(parameterListAsTupleType.ts, 8, 27))
+
+type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
+>Ccps : Symbol(Ccps, Decl(parameterListAsTupleType.ts, 15, 32))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(parameterListAsTupleType.ts, 8, 27))
+
+class D {
+>D : Symbol(D, Decl(parameterListAsTupleType.ts, 16, 44))
+
+    constructor(a: number, ...rest: string[]) {
+>a : Symbol(a, Decl(parameterListAsTupleType.ts, 19, 16))
+>rest : Symbol(rest, Decl(parameterListAsTupleType.ts, 19, 26))
+    }
+}
+type Dcps = ConstructorParameters<typeof D>; // should be [number, ...string[]]
+>Dcps : Symbol(Dcps, Decl(parameterListAsTupleType.ts, 21, 1))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(parameterListAsTupleType.ts, 16, 44))
+

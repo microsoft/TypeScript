@@ -1,8 +1,6 @@
 === tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts ===
 // this should be an error
 interface IFace {
->IFace : IFace
-
     member1;  // error at "member1"
 >member1 : any
 

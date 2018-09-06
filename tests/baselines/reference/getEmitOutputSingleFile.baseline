@@ -1,4 +1,5 @@
 EmitSkipped: false
+
 FileName : outputDir/singleFile.js
 var x;
 var Bar = /** @class */ (function () {

@@ -2,7 +2,7 @@
 interface Foo2<T> extends Array<T> { }
 >Foo2 : Symbol(Foo2, Decl(indexIntoArraySubclass.ts, 0, 0))
 >T : Symbol(T, Decl(indexIntoArraySubclass.ts, 0, 15))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(indexIntoArraySubclass.ts, 0, 15))
 
 var x2: Foo2<string>;

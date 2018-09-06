@@ -14,12 +14,12 @@ function saySize(message: Message | Message[]) {
 
     if (message instanceof Array) {
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         return message.length;  // Should have type Message[] here
->message.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>message.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 

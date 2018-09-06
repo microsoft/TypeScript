@@ -91,9 +91,9 @@ namespace Validation {
 >s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
 
             return lettersRegexp.test(s2);
->lettersRegexp.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>lettersRegexp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >lettersRegexp : Symbol(lettersRegexp, Decl(unusedIdentifiersConsolidated1.ts, 35, 9))
->test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
         }
 
@@ -111,9 +111,9 @@ namespace Validation {
 >s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
 
             return s3.length === 5;
->s3.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>s3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
         }
     }
 

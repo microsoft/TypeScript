@@ -66,7 +66,7 @@ async function tryCatch2() {
 
 async function tryCatch3(): Promise<Function> {
 >tryCatch3 : Symbol(tryCatch3, Decl(es5-asyncFunctionTryStatements.ts, 30, 1))
->Promise : Symbol(Promise, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     var x: any, y: any;

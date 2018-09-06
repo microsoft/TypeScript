@@ -8,7 +8,7 @@ function verifyLibTypes<T, K extends keyof T, U>() {
 
     var x1: Partial<T>;
 >x1 : Symbol(x1, Decl(mappedTypes2.ts, 1, 7), Decl(mappedTypes2.ts, 2, 7))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 0, 24))
 
     var x1: { [P in keyof T]?: T[P] };
@@ -20,7 +20,7 @@ function verifyLibTypes<T, K extends keyof T, U>() {
 
     var x2: Readonly<T>;
 >x2 : Symbol(x2, Decl(mappedTypes2.ts, 3, 7), Decl(mappedTypes2.ts, 4, 7))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 0, 24))
 
     var x2: { readonly [P in keyof T]: T[P] };
@@ -32,7 +32,7 @@ function verifyLibTypes<T, K extends keyof T, U>() {
 
     var x3: Pick<T, K>;
 >x3 : Symbol(x3, Decl(mappedTypes2.ts, 5, 7), Decl(mappedTypes2.ts, 6, 7))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 0, 24))
 >K : Symbol(K, Decl(mappedTypes2.ts, 0, 26))
 
@@ -45,7 +45,7 @@ function verifyLibTypes<T, K extends keyof T, U>() {
 
     var x4: Record<K, U>;
 >x4 : Symbol(x4, Decl(mappedTypes2.ts, 7, 7), Decl(mappedTypes2.ts, 8, 7))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypes2.ts, 0, 26))
 >U : Symbol(U, Decl(mappedTypes2.ts, 0, 45))
 
@@ -101,7 +101,7 @@ declare function assign<T>(obj: T, props: Partial<T>): void;
 >obj : Symbol(obj, Decl(mappedTypes2.ts, 24, 27))
 >T : Symbol(T, Decl(mappedTypes2.ts, 24, 24))
 >props : Symbol(props, Decl(mappedTypes2.ts, 24, 34))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 24, 24))
 
 declare function freeze<T>(obj: T): Readonly<T>;
@@ -109,7 +109,7 @@ declare function freeze<T>(obj: T): Readonly<T>;
 >T : Symbol(T, Decl(mappedTypes2.ts, 25, 24))
 >obj : Symbol(obj, Decl(mappedTypes2.ts, 25, 27))
 >T : Symbol(T, Decl(mappedTypes2.ts, 25, 24))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 25, 24))
 
 declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
@@ -121,7 +121,7 @@ declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
 >T : Symbol(T, Decl(mappedTypes2.ts, 26, 22))
 >keys : Symbol(keys, Decl(mappedTypes2.ts, 26, 51))
 >K : Symbol(K, Decl(mappedTypes2.ts, 26, 24))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes2.ts, 26, 22))
 >K : Symbol(K, Decl(mappedTypes2.ts, 26, 24))
 
@@ -131,14 +131,14 @@ declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) 
 >T : Symbol(T, Decl(mappedTypes2.ts, 27, 44))
 >U : Symbol(U, Decl(mappedTypes2.ts, 27, 47))
 >obj : Symbol(obj, Decl(mappedTypes2.ts, 27, 51))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypes2.ts, 27, 27))
 >T : Symbol(T, Decl(mappedTypes2.ts, 27, 44))
 >f : Symbol(f, Decl(mappedTypes2.ts, 27, 69))
 >x : Symbol(x, Decl(mappedTypes2.ts, 27, 74))
 >T : Symbol(T, Decl(mappedTypes2.ts, 27, 44))
 >U : Symbol(U, Decl(mappedTypes2.ts, 27, 47))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypes2.ts, 27, 27))
 >U : Symbol(U, Decl(mappedTypes2.ts, 27, 47))
 
@@ -241,7 +241,7 @@ function f1(shape: Shape) {
 
     var frozen: Readonly<Shape>;
 >frozen : Symbol(frozen, Decl(mappedTypes2.ts, 62, 7), Decl(mappedTypes2.ts, 63, 7), Decl(mappedTypes2.ts, 64, 7))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypes2.ts, 33, 1))
 
     var frozen = freeze(shape);
@@ -261,12 +261,12 @@ function f2(shape: Shape) {
 
     var partial: Partial<Shape>;
 >partial : Symbol(partial, Decl(mappedTypes2.ts, 68, 7), Decl(mappedTypes2.ts, 69, 7), Decl(mappedTypes2.ts, 70, 7))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypes2.ts, 33, 1))
 
     var partial: Partial<Shape> = {};
 >partial : Symbol(partial, Decl(mappedTypes2.ts, 68, 7), Decl(mappedTypes2.ts, 69, 7), Decl(mappedTypes2.ts, 70, 7))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Shape : Symbol(Shape, Decl(mappedTypes2.ts, 33, 1))
 }
 
@@ -295,9 +295,9 @@ function f4() {
 >mapObject : Symbol(mapObject, Decl(mappedTypes2.ts, 26, 78))
 >rec : Symbol(rec, Decl(mappedTypes2.ts, 78, 9))
 >s : Symbol(s, Decl(mappedTypes2.ts, 79, 34))
->s.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(mappedTypes2.ts, 79, 34))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 function f5(shape: Shape) {

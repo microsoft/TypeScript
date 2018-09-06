@@ -3,7 +3,6 @@ module M {
 >M : typeof M
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 
@@ -47,7 +46,6 @@ module M2 {
 
         export function Origin(): Point {
 >Origin : () => Point
->Point : Point
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -59,8 +57,6 @@ module M2 {
     }
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -77,7 +73,6 @@ var p: { x: number; y: number; };
 var p: M2.Point;
 >p : { x: number; y: number; }
 >M2 : any
->Point : M2.Point
 
 var p2: { Origin() : { x: number; y: number; } };
 >p2 : { Origin(): { x: number; y: number; }; }
@@ -95,11 +90,7 @@ module M3 {
 >M3 : typeof M3
 
     export module Utils {
->Utils : typeof Utils
-
         export interface Point {
->Point : Point
-
             x: number; y: number;
 >x : number
 >y : number

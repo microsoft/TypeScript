@@ -1,48 +1,38 @@
 === tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts ===
 interface A { x }
->A : A
 >x : any
 
 interface B { x; y }
->B : B
 >x : any
 >y : any
 
 interface C { z }
->C : C
 >z : any
 
 interface D { q }
->D : D
 >q : any
 
 class G<T extends A> {
 >G : G<T>
->T : T
->A : A
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 declare function foo(arg: (x: D) => number): string;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
 >arg : (x: D) => number
 >x : D
->D : D
 
 declare function foo(arg: (x: C) => any): string;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
 >arg : (x: C) => any
 >x : C
->C : C
 
 declare function foo(arg: (x: B) => any): number;
 >foo : { (arg: (x: D) => number): string; (arg: (x: C) => any): string; (arg: (x: B) => any): number; }
 >arg : (x: B) => any
 >x : B
->B : B
 
 var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so first overload is picked.
 >result : number
@@ -74,7 +64,6 @@ var result3: string = foo(x => { // x has type D
 
     var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
 >y : G<D>
->G : G<T>
 >x : D
 
     return y;

@@ -1,18 +1,14 @@
 === tests/cases/compiler/superWithTypeArgument2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 class D<T> extends C<T> {
 >D : D<T>
->T : T
 >C : C<T>
->T : T
 
     constructor(x) {
 >x : any
@@ -22,7 +18,6 @@ class D<T> extends C<T> {
 >super : any
 >super : C<T>
 > : any
->T : T
 >x : any
     }
 }

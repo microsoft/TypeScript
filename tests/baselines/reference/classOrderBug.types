@@ -4,7 +4,6 @@ class bar {
 
     public baz: foo;
 >baz : foo
->foo : foo
 
     constructor() {
 

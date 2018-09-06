@@ -1,14 +1,11 @@
 === tests/cases/compiler/interfaceImplementation6.ts ===
 interface I1 {
->I1 : I1
-
     item:number;
 >item : number
 }
 
 class C1 implements I1 {
 >C1 : C1
->I1 : I1
 
     public item:number;
 >item : number
@@ -16,7 +13,6 @@ class C1 implements I1 {
 
 class C2 implements I1 {
 >C2 : C2
->I1 : I1
 
     private item:number;
 >item : number
@@ -24,7 +20,6 @@ class C2 implements I1 {
 
 class C3 implements I1 {
 >C3 : C3
->I1 : I1
 
     constructor() {
        var item: number;
@@ -37,7 +32,6 @@ export class Test {
 
     private pt: I1 = { item: 1 };
 >pt : I1
->I1 : I1
 >{ item: 1 } : { item: number; }
 >item : number
 >1 : 1

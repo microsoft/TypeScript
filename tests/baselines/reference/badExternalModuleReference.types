@@ -8,11 +8,9 @@ export declare var a: {
     test1: a1.connectModule;
 >test1 : any
 >a1 : any
->connectModule : any
 
     (): a1.connectExport;
 >a1 : any
->connectExport : any
 
 };
 

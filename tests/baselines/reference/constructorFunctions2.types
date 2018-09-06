@@ -70,8 +70,8 @@ function A() { this.id = 1; }
 
 module.exports = A;
 >module.exports = A : typeof A
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof A
+>module : { "tests/cases/conformance/salsa/other": typeof A; }
+>exports : typeof A
 >A : typeof A
 

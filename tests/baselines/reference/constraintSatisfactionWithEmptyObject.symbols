@@ -5,7 +5,7 @@
 function foo<T extends Object>(x: T) { }
 >foo : Symbol(foo, Decl(constraintSatisfactionWithEmptyObject.ts, 0, 0))
 >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 3, 13))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(constraintSatisfactionWithEmptyObject.ts, 3, 31))
 >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 3, 13))
 
@@ -23,7 +23,7 @@ var r = foo({});
 class C<T extends Object> {
 >C : Symbol(C, Decl(constraintSatisfactionWithEmptyObject.ts, 6, 16))
 >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 8, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     constructor(public x: T) { }
 >x : Symbol(C.x, Decl(constraintSatisfactionWithEmptyObject.ts, 9, 16))
@@ -37,7 +37,7 @@ var r2 = new C({});
 interface I<T extends Object> {
 >I : Symbol(I, Decl(constraintSatisfactionWithEmptyObject.ts, 12, 19))
 >T : Symbol(T, Decl(constraintSatisfactionWithEmptyObject.ts, 14, 12))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x: T;
 >x : Symbol(I.x, Decl(constraintSatisfactionWithEmptyObject.ts, 14, 31))

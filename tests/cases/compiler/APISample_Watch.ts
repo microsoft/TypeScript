@@ -1,12 +1,18 @@
 ﻿// @module: commonjs
 // @skipLibCheck: true
-// @includebuiltfile: typescript_standalone.d.ts
+// @includebuiltfile: typescriptServices.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
 
+// @filename: node_modules/typescript/index.d.ts
+declare module "typescript" {
+    export = ts;
+}
+
+// @filename: APISample_Watch.ts
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
+ *       at: https://github.com/Microsoft/TypeScript-wiki/blob/master/Using-the-Compiler-API.md#writing-an-incremental-program-watcher
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 

@@ -1,7 +1,5 @@
 === tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
 interface Robot {
->Robot : Robot
-
     name?: string;
 >name : string
 
@@ -21,7 +19,6 @@ var hello = "hello";
 
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
 >"mower" : "mower"
@@ -33,7 +30,6 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >name : any
 >nameA : string
 >"<NoName>" : "<NoName>"
->Robot : Robot
 >{ } : {}
 
     console.log(nameA);
@@ -51,7 +47,6 @@ function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {
 >skill : any
 >skillB : string
 >"noSkill" : "noSkill"
->Robot : Robot
 >{} : {}
 
     console.log(nameB);
@@ -65,7 +60,6 @@ function foo3({ name = "<NoName>" }: Robot = {}) {
 >foo3 : ({ name }?: Robot) => void
 >name : string
 >"<NoName>" : "<NoName>"
->Robot : Robot
 >{} : {}
 
     console.log(name);

@@ -7,12 +7,13 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(7
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(7,51): error TS2339: Property 'x3' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(7,62): error TS2339: Property 'y' does not exist on type 'C1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(7,72): error TS2339: Property 'z' does not exist on type 'C1'.
-tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,19): error TS2345: Argument of type '[{ x1: number; x2: string; x3: boolean; }, string, boolean]' is not assignable to parameter of type '[ObjType1, number, string]'.
-  Type '{ x1: number; x2: string; x3: boolean; }' is not assignable to type 'ObjType1'.
-    Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,19): error TS2322: Type '{ x1: number; x2: string; x3: boolean; }' is not assignable to type 'ObjType1'.
+  Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,47): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,51): error TS2322: Type 'false' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts (10 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts (12 errors) ====
     type ObjType1 = { x: number; y: string; z: boolean }
     type TupleType1 = [ObjType1, number, string]
     
@@ -43,7 +44,10 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(1
     
     var a = new C1([{ x1: 10, x2: "", x3: true }, "", false]);
                       ~~~~~~
-!!! error TS2345: Argument of type '[{ x1: number; x2: string; x3: boolean; }, string, boolean]' is not assignable to parameter of type '[ObjType1, number, string]'.
-!!! error TS2345:   Type '{ x1: number; x2: string; x3: boolean; }' is not assignable to type 'ObjType1'.
-!!! error TS2345:     Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
+!!! error TS2322: Type '{ x1: number; x2: string; x3: boolean; }' is not assignable to type 'ObjType1'.
+!!! error TS2322:   Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
+                                                  ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+                                                      ~~~~~
+!!! error TS2322: Type 'false' is not assignable to type 'string'.
     var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];

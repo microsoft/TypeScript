@@ -5,7 +5,6 @@ class A extends B<string> { }
 
 class B<U> extends C { }
 >B : B<U>
->U : U
 >C : C
 
 class C {

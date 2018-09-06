@@ -1,12 +1,9 @@
 === tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression3.ts ===
 function foo<T>(x = class { prop: T }): T {
 >foo : <T>(x?: typeof (Anonymous class)) => T
->T : T
 >x : typeof (Anonymous class)
 >class { prop: T } : typeof (Anonymous class)
 >prop : T
->T : T
->T : T
 
     return undefined;
 >undefined : undefined

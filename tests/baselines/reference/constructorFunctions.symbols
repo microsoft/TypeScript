@@ -43,6 +43,7 @@ function C3() {
 >C3 : Symbol(C3, Decl(index.js, 14, 23))
 
     if (!(this instanceof C3)) return new C3();
+>this : Symbol(C3, Decl(index.js, 14, 23))
 >C3 : Symbol(C3, Decl(index.js, 14, 23))
 >C3 : Symbol(C3, Decl(index.js, 14, 23))
 
@@ -61,6 +62,7 @@ var C4 = function () {
 >C4 : Symbol(C4, Decl(index.js, 25, 3))
 
     if (!(this instanceof C4)) return new C4();
+>this : Symbol(C4, Decl(index.js, 25, 8))
 >C4 : Symbol(C4, Decl(index.js, 25, 3))
 >C4 : Symbol(C4, Decl(index.js, 25, 3))
 
@@ -93,4 +95,37 @@ c5_v2 = class { };
 new c5_v2();
 >c5_v2 : Symbol(c5_v2, Decl(index.js, 36, 3))
 
+/** @class */
+function C6() {
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+  this.functions = [x => x, x => x + 1, x => x - 1]
+>this.functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>this : Symbol(C6, Decl(index.js, 38, 12))
+>functions : Symbol(C6.functions, Decl(index.js, 41, 15))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 20))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 27))
+>x : Symbol(x, Decl(index.js, 42, 39))
+>x : Symbol(x, Decl(index.js, 42, 39))
+
+};
+
+var c6_v1 = new C6();
+>c6_v1 : Symbol(c6_v1, Decl(index.js, 45, 3))
+>C6 : Symbol(C6, Decl(index.js, 38, 12))
+
+
+/**
+ * @constructor
+ * @param {number} num
+ */
+function C7(num) {}
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
+>num : Symbol(num, Decl(index.js, 52, 12))
+
+var c7_v1 = new C7();
+>c7_v1 : Symbol(c7_v1, Decl(index.js, 54, 3))
+>C7 : Symbol(C7, Decl(index.js, 45, 21))
 

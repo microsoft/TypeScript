@@ -59,7 +59,7 @@ function md5(string:string): void {
 
     var x=Array();
 >x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     var k,AA,BB,CC,DD,a,b,c,d;
 >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
@@ -108,9 +108,9 @@ function md5(string:string): void {
     for (k=0;k<x.length;k+=16) {
 >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
 >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
->x.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowSelfReferentialLoop.ts, 20, 7))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >k : Symbol(k, Decl(controlFlowSelfReferentialLoop.ts, 21, 7))
 
         AA=a; BB=b; CC=c; DD=d;
@@ -830,4 +830,46 @@ function md5(string:string): void {
 }
 export default md5;
 >md5 : Symbol(md5, Decl(controlFlowSelfReferentialLoop.ts, 0, 0))
+
+// Repro from #26655
+
+interface DataShape {
+>DataShape : Symbol(DataShape, Decl(controlFlowSelfReferentialLoop.ts, 99, 19))
+
+  message: { id: string }
+>message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+}
+
+function getObject(id: string | number) {
+>getObject : Symbol(getObject, Decl(controlFlowSelfReferentialLoop.ts, 105, 1))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 107, 19))
+
+  return {} as any
+}
+
+;(() => {
+  let id: string | number = 'a'
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+
+  while (1) {
+    const data = getObject(id) as DataShape
+>data : Symbol(data, Decl(controlFlowSelfReferentialLoop.ts, 114, 9))
+>getObject : Symbol(getObject, Decl(controlFlowSelfReferentialLoop.ts, 105, 1))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+>DataShape : Symbol(DataShape, Decl(controlFlowSelfReferentialLoop.ts, 99, 19))
+
+    const message = data.message
+>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 115, 9))
+>data.message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+>data : Symbol(data, Decl(controlFlowSelfReferentialLoop.ts, 114, 9))
+>message : Symbol(DataShape.message, Decl(controlFlowSelfReferentialLoop.ts, 103, 21))
+
+    id = message.id
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 112, 5))
+>message.id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+>message : Symbol(message, Decl(controlFlowSelfReferentialLoop.ts, 115, 9))
+>id : Symbol(id, Decl(controlFlowSelfReferentialLoop.ts, 104, 12))
+  }
+})()
 

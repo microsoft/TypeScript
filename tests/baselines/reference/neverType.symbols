@@ -4,7 +4,7 @@ function error(message: string): never {
 >message : Symbol(message, Decl(neverType.ts, 0, 15))
 
     throw new Error(message);
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >message : Symbol(message, Decl(neverType.ts, 0, 15))
 }
 
@@ -13,7 +13,7 @@ function errorVoid(message: string) {
 >message : Symbol(message, Decl(neverType.ts, 4, 19))
 
     throw new Error(message);
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >message : Symbol(message, Decl(neverType.ts, 4, 19))
 }
 
@@ -35,7 +35,7 @@ function failOrThrow(shouldFail: boolean) {
 >fail : Symbol(fail, Decl(neverType.ts, 6, 1))
     }
     throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function infiniteLoop1() {
@@ -100,7 +100,7 @@ class C {
 >void1 : Symbol(C.void1, Decl(neverType.ts, 49, 9))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     void2() {
 >void2 : Symbol(C.void2, Decl(neverType.ts, 52, 5))
@@ -111,7 +111,7 @@ class C {
 >never1 : Symbol(C.never1, Decl(neverType.ts, 55, 5))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     never2(): never {
 >never2 : Symbol(C.never2, Decl(neverType.ts, 58, 5))
@@ -171,7 +171,7 @@ test(() => fail());
 
 test(() => { throw new Error(); })
 >test : Symbol(test, Decl(neverType.ts, 76, 1))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 test(errorCallback);
 >test : Symbol(test, Decl(neverType.ts, 76, 1))
