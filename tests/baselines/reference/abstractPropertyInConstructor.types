@@ -75,6 +75,19 @@ abstract class AbstractClass {
 >method : (num: number) => void
 >num : number
 
+    other = this.prop;
+>other : string
+>this.prop : string
+>this : this
+>prop : string
+
+    fn = () => this.prop;
+>fn : () => string
+>() => this.prop : () => string
+>this.prop : string
+>this : this
+>prop : string
+
     method2() {
 >method2 : () => void
 
