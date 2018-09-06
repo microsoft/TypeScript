@@ -42,7 +42,6 @@ function assertSymbol(x: symbol) {
 function assertFunction(x: Function) {
 >assertFunction : (x: Function) => Function
 >x : Function
->Function : Function
 
     return x;
 >x : Function
@@ -67,7 +66,6 @@ function assertUndefined(x: undefined) {
 function assertAll(x: Basic) {
 >assertAll : (x: Basic) => Basic
 >x : Basic
->Basic : Basic
 
     return x;
 >x : Basic
@@ -91,12 +89,10 @@ function assertBooleanOrObject(x: boolean | object)  {
 
 type Basic = number | boolean | string | symbol | object | Function | undefined;
 >Basic : Basic
->Function : Function
 
 function testUnion(x: Basic) {
 >testUnion : (x: Basic) => void
 >x : Basic
->Basic : Basic
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -152,10 +148,7 @@ function testUnion(x: Basic) {
 
 function testExtendsUnion<T extends Basic>(x: T) {
 >testExtendsUnion : <T extends Basic>(x: T) => void
->T : T
->Basic : Basic
 >x : T
->T : T
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -276,7 +269,6 @@ function a1(x: string | object | undefined) {
 function testUnionExplicitDefault(x: Basic) {
 >testUnionExplicitDefault : (x: Basic) => void
 >x : Basic
->Basic : Basic
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -316,7 +308,6 @@ function testUnionExplicitDefault(x: Basic) {
 function testUnionImplicitDefault(x: Basic) {
 >testUnionImplicitDefault : (x: Basic) => string | object | undefined
 >x : Basic
->Basic : Basic
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -354,10 +345,7 @@ function testUnionImplicitDefault(x: Basic) {
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
->T : T
->Basic : Basic
 >x : T
->T : T
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -397,10 +385,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >testExtendsImplicitDefault : <T extends Basic>(x: T) => string | number | boolean | symbol | object | undefined
->T : T
->Basic : Basic
 >x : T
->T : T
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -448,8 +433,6 @@ type R = { x: string, y: number }
 function exhaustiveChecks(x: number | string | L | R): string {
 >exhaustiveChecks : (x: string | number | R | L) => string
 >x : string | number | R | L
->L : L
->R : R
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -483,11 +466,7 @@ function exhaustiveChecks(x: number | string | L | R): string {
 
 function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
 >exhaustiveChecksGenerics : <T extends string | number | R | L>(x: T) => string
->T : T
->L : L
->R : R
 >x : T
->T : T
 
     switch (typeof x) {
 >typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -511,7 +490,6 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >(x as L) : L
 >x as L : L
 >x : T
->L : L
 >42 : 42
 
         case 'object': return (x as R).x;            // Can't narrow generic
@@ -520,22 +498,13 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >(x as R) : R
 >x as R : R
 >x : T
->R : R
 >x : string
     }
 }
 
 function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->X : X
->L : L
->Y : Y
->R : R
 >xy : X | Y
->X : X
->Y : Y
->X : X
->Y : Y
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -566,17 +535,7 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 >multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [X | Y]
->X : X
->L : L
->Y : Y
->R : R
 >xy : X | Y
->X : X
->Y : Y
->X : X
->Y : Y
->X : X
->Y : Y
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -603,15 +562,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
 function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->X : X
->L : L
->Y : Y
->R : R
 >xy : X | Y
->X : X
->Y : Y
->X : X
->Y : Y
 
     switch (typeof xy) {
 >typeof xy : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
