@@ -356,10 +356,19 @@ namespace ts {
     }
 
     function createConfigFileCache(host: CompilerHost) {
-        const cache = createFileMap<ParsedCommandLine>();
+        const cache = createFileMap<ParsedCommandLine | "error">();
         const configParseHost = parseConfigHostFromCompilerHost(host);
 
+        function isParsedCommandLine(value: ParsedCommandLine | "error"): value is ParsedCommandLine {
+            return !(value as "error").length;
+        }
+
         function parseConfigFile(configFilePath: ResolvedConfigFileName) {
+            const value = cache.getValueOrUndefined(configFilePath);
+            if (value) {
+                return isParsedCommandLine(value) ? value : undefined;
+            }
+
             const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
             if (sourceFile === undefined) {
                 return undefined;
