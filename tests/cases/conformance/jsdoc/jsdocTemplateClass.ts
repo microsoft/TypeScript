@@ -4,9 +4,10 @@
 // @Filename: templateTagOnClasses.js
 
 /**
- * @template {T}
+ * @template T
  * @typedef {(t: T) => T} Id
  */
+/** @template T */
 class Foo {
     /** @typedef {(t: T) => T} Id2 */
     /** @param {T} x */
@@ -16,7 +17,7 @@ class Foo {
     /**
      * 
      * @param {T} x 
-     * @param {Id} y
+     * @param {Id<T>} y
      * @param {Id2} alpha
      * @return {T}
      */

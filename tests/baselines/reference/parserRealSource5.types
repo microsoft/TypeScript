@@ -28,10 +28,8 @@ module TypeScript {
 >0 : 0
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
->outfile : any
->ITextWriter : No type information available!
+>outfile : ITextWriter
 >parser : any
->Parser : No type information available!
         }
 
         public increaseIndent() {
@@ -156,12 +154,12 @@ module TypeScript {
 >s : any
 
             this.outfile.WriteLine(this.builder);
->this.outfile.WriteLine(this.builder) : any
->this.outfile.WriteLine : any
->this.outfile : any
+>this.outfile.WriteLine(this.builder) : void
+>this.outfile.WriteLine : (s: string) => void
+>this.outfile : ITextWriter
 >this : this
->outfile : any
->WriteLine : any
+>outfile : ITextWriter
+>WriteLine : (s: string) => void
 >this.builder : string
 >this : this
 >builder : string
@@ -179,17 +177,12 @@ module TypeScript {
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >prePrintAST : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
->PrintContext : PrintContext
 ><PrintContext>walker.state : PrintContext
->PrintContext : PrintContext
 >walker.state : any
 >walker : any
 >state : any
@@ -215,17 +208,12 @@ module TypeScript {
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >postPrintAST : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var pc: PrintContext = <PrintContext>walker.state;
 >pc : PrintContext
->PrintContext : PrintContext
 ><PrintContext>walker.state : PrintContext
->PrintContext : PrintContext
 >walker.state : any
 >walker : any
 >state : any

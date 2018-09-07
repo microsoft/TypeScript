@@ -97,11 +97,9 @@ class Test4 {
 
 class Test5<T> {
 >Test5 : Test5<T>
->T : T
 
     private p: T;
 >p : T
->T : T
 
     public test() {
 >test : () => void

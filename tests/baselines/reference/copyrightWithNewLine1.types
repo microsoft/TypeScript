@@ -7,11 +7,11 @@ import model = require("./greeter")
 >model : any
 
 var el = document.getElementById('content');
->el : any
->document.getElementById('content') : any
->document.getElementById : any
->document : any
->getElementById : any
+>el : HTMLElement
+>document.getElementById('content') : HTMLElement
+>document.getElementById : (elementId: string) => HTMLElement
+>document : Document
+>getElementById : (elementId: string) => HTMLElement
 >'content' : "content"
 
 var greeter = new model.Greeter(el);
@@ -20,7 +20,7 @@ var greeter = new model.Greeter(el);
 >model.Greeter : any
 >model : any
 >Greeter : any
->el : any
+>el : HTMLElement
 
 /** things */
 greeter.start();

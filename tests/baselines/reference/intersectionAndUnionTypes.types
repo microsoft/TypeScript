@@ -1,69 +1,45 @@
 === tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts ===
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: string }
->B : B
 >b : string
 
 interface C { c: string }
->C : C
 >c : string
 
 interface D { d: string }
->D : D
 >d : string
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: C;
 >c : C
->C : C
 
 var d: D;
 >d : D
->D : D
 
 var anb: A & B;
 >anb : A & B
->A : A
->B : B
 
 var aob: A | B;
 >aob : A | B
->A : A
->B : B
 
 var cnd: C & D;
 >cnd : C & D
->C : C
->D : D
 
 var cod: C | D;
 >cod : C | D
->C : C
->D : D
 
 var x: A & B | C & D;
 >x : (A & B) | (C & D)
->A : A
->B : B
->C : C
->D : D
 
 var y: (A | B) & (C | D);
 >y : (A & C) | (A & D) | (B & C) | (B & D)
->A : A
->B : B
->C : C
->D : D
 
 a = anb;  // Ok
 >a = anb : A & B

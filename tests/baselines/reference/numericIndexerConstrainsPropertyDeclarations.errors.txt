@@ -5,8 +5,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(36,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(50,5): error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(68,5): error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
-tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(79,5): error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: any; X: string; foo(): string; }' is not assignable to type '{ [x: number]: string; }'.
-  Object literal may only specify known properties, and 'a' does not exist in type '{ [x: number]: string; }'.
+tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(85,5): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(88,9): error TS2304: Cannot find name 'Myn'.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(90,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts(93,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -31,12 +30,12 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         "3.0": string; // ok
         "4.0": number; // error
         3.0: MyNumber // error
-        ~~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '3.0' of type 'MyNumber' is not assignable to numeric index type 'string'.
     
         get X() { // ok
@@ -73,7 +72,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -93,7 +92,7 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
         "e": number; // ok
         1.0: string; // ok
         2.0: number; // error
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2412: Property '2.0' of type 'number' is not assignable to numeric index type 'string'.
         (): string; // ok
         (x): number // ok
@@ -106,15 +105,15 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerCo
     // error
     var b: { [x: number]: string; } = {
         a: '',
-        ~~~~~
-!!! error TS2322: Type '{ a: string; b: number; c: () => void; "d": string; "e": number; 1.0: string; 2.0: number; "3.0": string; "4.0": number; f: any; X: string; foo(): string; }' is not assignable to type '{ [x: number]: string; }'.
-!!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ [x: number]: string; }'.
         b: 1, 
         c: () => { }, 
         "d": '', 
         "e": 1, 
         1.0: '',
         2.0: 1, 
+        ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/numericIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         "3.0": '', 
         "4.0": 1, 
         f: <Myn>null, 

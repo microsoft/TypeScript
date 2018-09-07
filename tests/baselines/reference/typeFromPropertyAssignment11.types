@@ -4,11 +4,11 @@ var Inner = function() {}
 >function() {} : typeof Inner
 
 Inner.prototype = {
->Inner.prototype = {    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
->Inner.prototype : any
+>Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
+>Inner.prototype : { m(): void; i: number; }
 >Inner : typeof Inner
->prototype : any
->{    m() { },    i: 1} : { [x: string]: any; m(): void; i: number; }
+>prototype : { m(): void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
 
     m() { },
 >m : () => void
@@ -21,43 +21,43 @@ Inner.prototype = {
 Inner.prototype.j = 2
 >Inner.prototype.j = 2 : 2
 >Inner.prototype.j : any
->Inner.prototype : any
+>Inner.prototype : { m(): void; i: number; }
 >Inner : typeof Inner
->prototype : any
+>prototype : { m(): void; i: number; }
 >j : any
 >2 : 2
 
 /** @type {string} */
 Inner.prototype.k;
 >Inner.prototype.k : any
->Inner.prototype : any
+>Inner.prototype : { m(): void; i: number; }
 >Inner : typeof Inner
->prototype : any
+>prototype : { m(): void; i: number; }
 >k : any
 
 var inner = new Inner()
->inner : Inner & { [x: string]: any; m(): void; i: number; }
->new Inner() : Inner & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { m(): void; i: number; }
+>new Inner() : Inner & { m(): void; i: number; }
 >Inner : typeof Inner
 
 inner.m()
 >inner.m() : void
 >inner.m : () => void
->inner : Inner & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { m(): void; i: number; }
 >m : () => void
 
 inner.i
 >inner.i : number
->inner : Inner & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { m(): void; i: number; }
 >i : number
 
 inner.j
 >inner.j : number
->inner : Inner & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { m(): void; i: number; }
 >j : number
 
 inner.k
 >inner.k : string
->inner : Inner & { [x: string]: any; m(): void; i: number; }
+>inner : Inner & { m(): void; i: number; }
 >k : string
 

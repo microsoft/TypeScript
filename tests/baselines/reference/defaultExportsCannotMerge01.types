@@ -7,8 +7,6 @@ export default function Decl() {
 }
 
 export interface Decl {
->Decl : Decl
-
     p1: number;
 >p1 : number
 
@@ -28,7 +26,6 @@ export namespace Decl {
 >20 : 20
 
     interface I {
->I : I
     }
 }
 
@@ -42,12 +39,10 @@ Entity();
 
 var x: Entity;
 >x : any
->Entity : any
 
 var y: Entity.I;
 >y : any
 >Entity : any
->I : any
 
 Entity.x;
 >Entity.x : any

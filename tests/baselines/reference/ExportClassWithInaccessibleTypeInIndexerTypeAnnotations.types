@@ -17,11 +17,9 @@ module A {
 
         [idx: number]: Point;
 >idx : number
->Point : Point
 
         [idx: string]: Point;
 >idx : string
->Point : Point
     }
 }
 

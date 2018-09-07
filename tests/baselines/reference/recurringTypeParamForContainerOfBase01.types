@@ -1,36 +1,15 @@
 === tests/cases/conformance/types/typeParameters/recurringTypeParamForContainerOfBase01.ts ===
 interface BoxOfFoo<T extends Foo<T>> {
->BoxOfFoo : BoxOfFoo<T>
->T : T
->Foo : Foo<T>
->T : T
-
     item: T
 >item : T
->T : T
 }
 
 interface Foo<T extends Foo<T>> {
->Foo : Foo<T>
->T : T
->Foo : Foo<T>
->T : T
-
     self: T;
 >self : T
->T : T
 }
 
 interface Bar<T extends Bar<T>> extends Foo<T> {
->Bar : Bar<T>
->T : T
->Bar : Bar<T>
->T : T
->Foo : Foo<T>
->T : T
-
     other: BoxOfFoo<T>;
 >other : BoxOfFoo<T>
->BoxOfFoo : BoxOfFoo<T>
->T : T
 }

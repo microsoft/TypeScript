@@ -1,14 +1,14 @@
 === /index.ts ===
 import { use } from "@foo/bar/use";
->use : (o: C) => void
+>use : (o: import("/node_modules/@foo/bar/index").C) => void
 
 import { o } from "a";
->o : C
+>o : import("/node_modules/@foo/bar/index").C
 
 use(o);
 >use(o) : void
->use : (o: C) => void
->o : C
+>use : (o: import("/node_modules/@foo/bar/index").C) => void
+>o : import("/node_modules/@foo/bar/index").C
 
 === /node_modules/a/node_modules/@foo/bar/index.d.ts ===
 export class C {
@@ -24,7 +24,6 @@ import { C } from "@foo/bar";
 
 export const o: C;
 >o : C
->C : C
 
 === /node_modules/@foo/bar/use.d.ts ===
 import { C } from "./index";
@@ -33,7 +32,6 @@ import { C } from "./index";
 export function use(o: C): void;
 >use : (o: C) => void
 >o : C
->C : C
 
 === /node_modules/@foo/bar/index.d.ts ===
 export class C {

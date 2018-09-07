@@ -5,7 +5,7 @@
         "main/consume.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "decl.d.ts",
         "main/consume.ts"
     ],

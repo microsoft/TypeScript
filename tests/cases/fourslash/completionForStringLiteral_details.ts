@@ -21,8 +21,8 @@ goTo.marker("path");
 verify.completionListContains("other", "other", "", "script");
 
 goTo.marker("type");
-verify.completionListContains("a", "a", "", "type");
+verify.completionListContains("a", "a", "", "string");
 
 goTo.marker("prop");
-verify.completionListContains("x", "(property) I.x: number", "Prop doc ", "property");
-verify.completionListContains("m", "(method) I.m(): void", "Method doc ", "method");
+verify.completionListContains("x", "(property) I.x: number", "Prop doc", "property");
+verify.completionListContains("m", "(method) I.m(): void", "Method doc", "method");

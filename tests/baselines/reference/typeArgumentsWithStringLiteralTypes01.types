@@ -16,11 +16,8 @@ declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World"
 
 function fun1<T>(x: T, y: T) {
 >fun1 : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
 
     return randBool() ? x : y;
 >randBool() ? x : y : T
@@ -32,12 +29,8 @@ function fun1<T>(x: T, y: T) {
 
 function fun2<T, U>(x: T, y: U) {
 >fun2 : <T, U>(x: T, y: U) => T | U
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
     return randBool() ? x : y;
 >randBool() ? x : y : T | U
@@ -49,10 +42,7 @@ function fun2<T, U>(x: T, y: U) {
 
 function fun3<T>(...args: T[]): T {
 >fun3 : <T>(...args: T[]) => T
->T : T
 >args : T[]
->T : T
->T : T
 
     return args[+randBool()];
 >args[+randBool()] : T

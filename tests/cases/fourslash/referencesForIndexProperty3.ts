@@ -3,7 +3,7 @@
 // References to a property of the apparent type using string indexer
 
 ////interface Object {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}toMyString|]();
+////    [|{| "isDefinition": true |}toMyString|]();
 ////}
 ////
 ////var y: Object;

@@ -1,9 +1,12 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Types of property 'length' are incompatible.
     Type '5' is not assignable to type '3'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts(30,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
+  Property '2' is missing in type '[number, number]'.
 
 
-==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts (1 errors) ====
+==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.ts (3 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     
@@ -37,7 +40,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES6.
     
     a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
     a10([1, 2, 3, false, true]);              // Parameter type is any[]
+               ~
+!!! error TS2322: Type 'number' is not assignable to type '[[any]]'.
     a10([1, 2]);                              // Parameter type is any[]
+        ~~~~~~
+!!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
+!!! error TS2345:   Property '2' is missing in type '[number, number]'.
     a11([1, 2]);                              // Parameter type is number[]
     
     // Rest parameter with generic

@@ -21,15 +21,10 @@
 ////l./*7*/prototype = Object.prototype;
 
 verify.noErrors();
-for (var i = 1; i <= 7; i++) {
-    goTo.marker('' + i);
-    verify.completionListCount(8);
-    verify.completionListContains('apply');
-    verify.completionListContains('arguments');
-    verify.completionListContains('bind');
-    verify.completionListContains('call');
-    verify.completionListContains('length');
-    verify.completionListContains('caller');
-    verify.completionListContains('prototype');
-    verify.completionListContains('toString');
-}
+verify.completionsAt('1', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('2', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('3', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('4', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('5', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('6', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('7', ["prototype", "apply", "call", "bind", "toString", "length", "arguments", "caller" ]);

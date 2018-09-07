@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Prop {
->Prop : Prop
-
     x: false;
 >x : false
 >false : false
@@ -14,7 +12,6 @@ class Poisoned extends React.Component<Prop, {}> {
 >React.Component : React.Component<Prop, {}>
 >React : typeof React
 >Component : typeof React.Component
->Prop : Prop
 
     render() {
 >render : () => JSX.Element

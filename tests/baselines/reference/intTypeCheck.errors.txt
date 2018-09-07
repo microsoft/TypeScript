@@ -76,7 +76,7 @@ tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assi
 tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Type 'Base' cannot be converted to type 'i7'.
+tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Base' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'.
@@ -408,7 +408,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj69: i7 = new obj66;
     var obj70: i7 = <i7>new Base;
                     ~~~~~~~~~~~~
-!!! error TS2352: Type 'Base' cannot be converted to type 'i7'.
+!!! error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'Base' provides no match for the signature 'new (): any'.
     var obj71: i7 = null;
     var obj72: i7 = function () { };

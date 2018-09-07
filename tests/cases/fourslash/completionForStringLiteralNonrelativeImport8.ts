@@ -40,5 +40,8 @@
 // @Filename: modules/2test/suffix-only.ts
 //// export var z = 5;
 
-const markers = ts.flatMap(["import_as", "import_equals", "require"], a => [`${a}0`, `${a}1`, `${a}2`]);
-verify.completionsAt(markers, ["prefix", "prefix-only", "2test", "0test", "1test"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: test.markerNames(),
+    exact: ["2test", "prefix", "prefix-only", "0test", "1test"],
+    isNewIdentifierLocation: true,
+});

@@ -12,7 +12,6 @@ module m {
 >doSomething : (v: variable) => void
 >v : variable
 >m : any
->variable : variable
     
   }
 }
@@ -27,7 +26,6 @@ class variable {
 
 var v: variable = new variable();
 >v : variable
->variable : variable
 >new variable() : variable
 >variable : typeof variable
 

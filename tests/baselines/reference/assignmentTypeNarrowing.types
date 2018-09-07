@@ -1,7 +1,6 @@
 === tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 x = "";
 >x = "" : ""
@@ -63,6 +62,7 @@ x; // number
 >{x = ""} = {x: true} : { x?: true; }
 >{x = ""} : { x?: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
+>"" : ""
 >{x: true} : { x?: true; }
 >x : true
 >true : true
@@ -95,4 +95,26 @@ for (x of a) {
     x; // string
 >x : string
 }
+
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+>AOrArrA : AOrArrA<T>
+
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+>arr : AOrArrA<{ x?: "ok"; }>
+>x : "ok"
+>[{ x: "ok" }] : { x: "ok"; }[]
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
+
+arr.push({ x: "ok" });
+>arr.push({ x: "ok" }) : number
+>arr.push : (...items: { x?: "ok"; }[]) => number
+>arr : { x?: "ok"; }[]
+>push : (...items: { x?: "ok"; }[]) => number
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
 

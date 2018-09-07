@@ -1,4 +1,4 @@
-/src/a.ts(5,3): error TS2345: Argument of type 'X' is not assignable to parameter of type 'X'.
+/src/a.ts(5,3): error TS2345: Argument of type 'import("/node_modules/c/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
   Types have separate declarations of a private property 'x'.
 
 
@@ -9,7 +9,7 @@
     a(b); // Works
     a(c); // Error, these are from different versions of the library.
       ~
-!!! error TS2345: Argument of type 'X' is not assignable to parameter of type 'X'.
+!!! error TS2345: Argument of type 'import("/node_modules/c/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
 !!! error TS2345:   Types have separate declarations of a private property 'x'.
     
 ==== /node_modules/a/index.d.ts (0 errors) ====

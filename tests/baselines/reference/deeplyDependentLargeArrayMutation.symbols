@@ -1,0 +1,158 @@
+=== tests/cases/compiler/foo.js ===
+// repro from #26031
+function build() {
+>build : Symbol(build, Decl(foo.js, 0, 0))
+
+    var arr = [];
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value';
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    arr[arr.length] = 'value'; 
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(foo.js, 2, 7))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+}

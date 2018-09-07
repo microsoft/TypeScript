@@ -1,15 +1,10 @@
 === tests/cases/compiler/addMoreOverloadsToBaseSignature.ts ===
 interface Foo {
->Foo : Foo
-
     f(): string;
 >f : () => string
 }
 
 interface Bar extends Foo {
->Bar : Bar
->Foo : Foo
-
     f(key: string): string;
 >f : (key: string) => string
 >key : string

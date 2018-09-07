@@ -14,44 +14,44 @@ foo(function(x) { x });
 >x : Symbol(x, Decl(targetTypeArgs.ts, 4, 13))
 
 [1].forEach(function(v,i,a) { v });
->[1].forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>[1].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 6, 21))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 6, 23))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 6, 25))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 6, 21))
 
 ["hello"].every(function(v,i,a) {return true;});
->["hello"].every : Symbol(Array.every, Decl(lib.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>["hello"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 7, 25))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 7, 27))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 7, 29))
 
 [1].every(function(v,i,a) {return true;});
->[1].every : Symbol(Array.every, Decl(lib.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 8, 19))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 8, 21))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 8, 23))
 
 [1].every(function(v,i,a) {return true;});
->[1].every : Symbol(Array.every, Decl(lib.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>[1].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 9, 19))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 9, 21))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 9, 23))
 
 ["s"].every(function(v,i,a) {return true;});
->["s"].every : Symbol(Array.every, Decl(lib.d.ts, --, --))
->every : Symbol(Array.every, Decl(lib.d.ts, --, --))
+>["s"].every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 10, 21))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 10, 23))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 10, 25))
 
 ["s"].forEach(function(v,i,a) { v });
->["s"].forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>["s"].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >v : Symbol(v, Decl(targetTypeArgs.ts, 11, 23))
 >i : Symbol(i, Decl(targetTypeArgs.ts, 11, 25))
 >a : Symbol(a, Decl(targetTypeArgs.ts, 11, 27))

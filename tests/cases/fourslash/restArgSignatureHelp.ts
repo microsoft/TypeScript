@@ -3,5 +3,4 @@
 ////function f(...x: any[]) { }
 ////f(/**/);
 
-goTo.marker();
-verify.currentParameterHelpArgumentNameIs('x');
+verify.signatureHelp({ marker: "", parameterName: "x", isVariadic: true });

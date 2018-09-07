@@ -9,10 +9,10 @@ export class ThingB { }
 
 === tests/cases/compiler/Things.ts ===
 export {ThingA} from "./ThingA";
->ThingA : typeof ThingA
+>ThingA : typeof import("tests/cases/compiler/ThingA").ThingA
 
 export {ThingB} from "./ThingB";
->ThingB : typeof ThingB
+>ThingB : typeof import("tests/cases/compiler/ThingB").ThingB
 
 === tests/cases/compiler/Test.ts ===
 import * as things from "./Things";
@@ -26,5 +26,4 @@ export class Test {
 >(input: things.ThingA)  => { } : (input: things.ThingA) => void
 >input : things.ThingA
 >things : any
->ThingA : things.ThingA
 }

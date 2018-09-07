@@ -6,10 +6,7 @@ declare module "react" {
 
 === tests/cases/conformance/jsx/file1.tsx ===
 declare module JSX {
->JSX : any
-
     interface Element { }
->Element : Element
 }
 export class MyClass { }
 >MyClass : MyClass
@@ -23,6 +20,6 @@ import {MyClass} from './file1';
 >MyClass : typeof MyClass
 
 <MyClass />;
-><MyClass /> : any
+><MyClass /> : error
 >MyClass : typeof MyClass
 

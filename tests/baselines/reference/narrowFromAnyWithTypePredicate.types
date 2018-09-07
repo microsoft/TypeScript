@@ -5,31 +5,22 @@ declare var x: any;
 declare function isFunction(x): x is Function;
 >isFunction : (x: any) => x is Function
 >x : any
->x : any
->Function : Function
 
 declare function isObject(x): x is Object;
 >isObject : (x: any) => x is Object
 >x : any
->x : any
->Object : Object
 
 declare function isAnything(x): x is {};
 >isAnything : (x: any) => x is {}
->x : any
 >x : any
 
 declare function isError(x): x is Error;
 >isError : (x: any) => x is Error
 >x : any
->x : any
->Error : Error
 
 declare function isDate(x): x is Date;
 >isDate : (x: any) => x is Date
 >x : any
->x : any
->Date : Date
 
 
 if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'

@@ -15,11 +15,9 @@
 verify.codeFix({
     description: "Convert to ES6 module",
     newFileContent:
-`export default function() { }
-export default function f() { }
-export default class {
-}
-export default class C {
-}
+`export default function() {}
+export default function f() {}
+export default class {}
+export default class C {}
 export default 0;`,
 });

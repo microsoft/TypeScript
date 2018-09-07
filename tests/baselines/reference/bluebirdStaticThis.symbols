@@ -79,8 +79,8 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 12, 18))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >fn : Symbol(fn, Decl(bluebirdStaticThis.ts, 12, 38))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static resolve(dit: typeof Promise): Promise<void>;
 >resolve : Symbol(Promise.resolve, Decl(bluebirdStaticThis.ts, 12, 63), Decl(bluebirdStaticThis.ts, 14, 55), Decl(bluebirdStaticThis.ts, 15, 83))
@@ -210,17 +210,17 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 36, 21))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >nodeFunction : Symbol(nodeFunction, Decl(bluebirdStaticThis.ts, 36, 41))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >receiver : Symbol(receiver, Decl(bluebirdStaticThis.ts, 36, 65))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static promisifyAll(dit: typeof Promise, target: Object): Object;
 >promisifyAll : Symbol(Promise.promisifyAll, Decl(bluebirdStaticThis.ts, 36, 92))
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 38, 24))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >target : Symbol(target, Decl(bluebirdStaticThis.ts, 38, 44))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static coroutine<R>(dit: typeof Promise, generatorFunction: Function): Function;
 >coroutine : Symbol(Promise.coroutine, Decl(bluebirdStaticThis.ts, 38, 69))
@@ -228,8 +228,8 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 40, 24))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >generatorFunction : Symbol(generatorFunction, Decl(bluebirdStaticThis.ts, 40, 44))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static spawn<R>(dit: typeof Promise, generatorFunction: Function): Promise<R>;
 >spawn : Symbol(Promise.spawn, Decl(bluebirdStaticThis.ts, 40, 84))
@@ -237,7 +237,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 42, 20))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >generatorFunction : Symbol(generatorFunction, Decl(bluebirdStaticThis.ts, 42, 40))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >R : Symbol(R, Decl(bluebirdStaticThis.ts, 42, 17))
 
@@ -308,18 +308,18 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >object : Symbol(object, Decl(bluebirdStaticThis.ts, 53, 37))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static props(dit: typeof Promise, object: Object): Promise<Object>;
 >props : Symbol(Promise.props, Decl(bluebirdStaticThis.ts, 51, 66), Decl(bluebirdStaticThis.ts, 53, 80))
 >dit : Symbol(dit, Decl(bluebirdStaticThis.ts, 54, 17))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
 >object : Symbol(object, Decl(bluebirdStaticThis.ts, 54, 37))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(bluebirdStaticThis.ts, 0, 0), Decl(bluebirdStaticThis.ts, 108, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>;
 >settle : Symbol(Promise.settle, Decl(bluebirdStaticThis.ts, 54, 71), Decl(bluebirdStaticThis.ts, 56, 125), Decl(bluebirdStaticThis.ts, 57, 107), Decl(bluebirdStaticThis.ts, 58, 107))

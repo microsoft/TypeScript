@@ -16,9 +16,6 @@ class C3 { item: string }
 function foo1(x: C1 | C2 | C3): string {
 >foo1 : (x: C1 | C2 | C3) => string
 >x : C1 | C2 | C3
->C1 : C1
->C2 : C2
->C3 : C3
 
     if (x instanceof C1) {
 >x instanceof C1 : boolean
@@ -59,11 +56,6 @@ function foo1(x: C1 | C2 | C3): string {
 function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
 >isC1 : (c: C1 | C2 | C3) => c is C1
 >c : C1 | C2 | C3
->C1 : C1
->C2 : C2
->C3 : C3
->c : any
->C1 : C1
 >c instanceof C1 : boolean
 >c : C1 | C2 | C3
 >C1 : typeof C1
@@ -71,11 +63,6 @@ function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
 function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
 >isC2 : (c: C1 | C2 | C3) => c is C2
 >c : C1 | C2 | C3
->C1 : C1
->C2 : C2
->C3 : C3
->c : any
->C2 : C2
 >c instanceof C2 : boolean
 >c : C1 | C2 | C3
 >C2 : typeof C2
@@ -83,11 +70,6 @@ function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
 function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
 >isC3 : (c: C1 | C2 | C3) => c is C3
 >c : C1 | C2 | C3
->C1 : C1
->C2 : C2
->C3 : C3
->c : any
->C3 : C3
 >c instanceof C3 : boolean
 >c : C1 | C2 | C3
 >C3 : typeof C3
@@ -95,9 +77,6 @@ function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
 function foo2(x: C1 | C2 | C3): string {
 >foo2 : (x: C1 | C2 | C3) => string
 >x : C1 | C2 | C3
->C1 : C1
->C2 : C2
->C3 : C3
 
     if (isC1(x)) {
 >isC1(x) : boolean
@@ -157,7 +136,6 @@ class B extends A { b: string }
 function goo(x: A) {
 >goo : (x: A) => void
 >x : A
->A : A
 
     if (x instanceof A) {
 >x instanceof A : boolean

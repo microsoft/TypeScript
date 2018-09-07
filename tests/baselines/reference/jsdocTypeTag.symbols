@@ -132,11 +132,11 @@ var a: any[];
 
 var P: Promise<any>;
 >P : Symbol(P, Decl(a.js, 43, 3), Decl(b.ts, 14, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 var p: Promise<any>;
 >p : Symbol(p, Decl(a.js, 46, 3), Decl(b.ts, 15, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 var nullable: number | null;
 >nullable : Symbol(nullable, Decl(a.js, 49, 3), Decl(b.ts, 16, 3))
@@ -149,7 +149,7 @@ var obj: any;
 
 var Func: Function;
 >Func : Symbol(Func, Decl(a.js, 58, 3), Decl(b.ts, 19, 3))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var f: (s: string) => number;
 >f : Symbol(f, Decl(a.js, 61, 3), Decl(b.ts, 20, 3))

@@ -16,10 +16,7 @@
 // the undefined[] type.
 declare function foo<T>(arr: T[]): T;
 >foo : <T>(arr: T[]) => T
->T : T
 >arr : T[]
->T : T
->T : T
 
 foo([]).bar;
 >foo([]).bar : any

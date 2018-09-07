@@ -1,6 +1,8 @@
 === tests/cases/conformance/expressions/functions/arrowFunctionContexts.ts ===
 // Arrow function used in with statement
 with (window) {
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
     var p = () => this;
 }
 
@@ -25,6 +27,9 @@ class Derived extends Base {
 
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
+>window.setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
 
 // Arrow function as value in array literal
 
@@ -53,8 +58,8 @@ enum E {
 
     y = (() => this).length // error, can't use this in enum
 >y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 29, 16))
->(() => this).length : Symbol(Function.length, Decl(lib.d.ts, --, --))
->length : Symbol(Function.length, Decl(lib.d.ts, --, --))
+>(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Arrow function as module variable initializer
@@ -77,6 +82,8 @@ module M2 {
 
     // Arrow function used in with statement
     with (window) {
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
         var p = () => this;
     }
 
@@ -101,6 +108,9 @@ module M2 {
 
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
+>window.setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>setTimeout : Symbol(WindowOrWorkerGlobalScope.setTimeout, Decl(lib.dom.d.ts, --, --))
 
     // Arrow function as value in array literal
 
@@ -129,8 +139,8 @@ module M2 {
 
         y = (() => this).length
 >y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 70, 20))
->(() => this).length : Symbol(Function.length, Decl(lib.d.ts, --, --))
->length : Symbol(Function.length, Decl(lib.d.ts, --, --))
+>(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
     }
 
     // Arrow function as module variable initializer

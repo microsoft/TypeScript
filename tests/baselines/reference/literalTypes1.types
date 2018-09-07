@@ -61,19 +61,19 @@ function f2(x: 0 | 1 | 2) {
 >zero : 0
 
             x;
->x : 0 | 1 | 2
+>x : 0
 
             break;
         case oneOrTwo:
 >oneOrTwo : 1 | 2
 
             x;
->x : 0 | 1 | 2
+>x : 1 | 2
 
             break;
         default:
             x;
->x : 0 | 1 | 2
+>x : 1 | 2
     }
 }
 
@@ -85,7 +85,6 @@ type Falsy = false | 0 | "" | null | undefined;
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
 >x : Falsy
->Falsy : Falsy
 
     if (x) {
 >x : Falsy

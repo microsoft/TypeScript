@@ -40,15 +40,15 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 4 >                         
 5 >                           a
 6 >                                   , 
-7 >                                     b
-8 >                                              } = { a: 30, b: 40 };
+7 >                                     b } = { a: 30, b: 40 }
+8 >                                             ;
 1->Emitted(2, 1) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
 3 >Emitted(2, 26) Source(2, 32) + SourceIndex(0)
 4 >Emitted(2, 28) Source(2, 7) + SourceIndex(0)
 5 >Emitted(2, 36) Source(2, 8) + SourceIndex(0)
 6 >Emitted(2, 38) Source(2, 10) + SourceIndex(0)
-7 >Emitted(2, 46) Source(2, 11) + SourceIndex(0)
+7 >Emitted(2, 46) Source(2, 32) + SourceIndex(0)
 8 >Emitted(2, 47) Source(2, 33) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js.map

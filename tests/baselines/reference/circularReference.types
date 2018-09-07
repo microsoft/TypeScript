@@ -12,7 +12,6 @@ export module M1 {
 >m1 : foo1.M1.C1
 >foo1 : any
 >M1 : any
->C1 : foo1.M1.C1
 
 		y: number
 >y : number
@@ -86,7 +85,6 @@ export module M1 {
 >m1 : foo2.M1.C1
 >foo2 : any
 >M1 : any
->C1 : foo2.M1.C1
 
 		x: number;
 >x : number

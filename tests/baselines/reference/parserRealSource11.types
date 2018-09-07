@@ -27,7 +27,6 @@ module TypeScript {
 
         public type: Type = null;
 >type : any
->Type : No type information available!
 >null : null
 
         public flags = ASTFlags.Writeable;
@@ -45,12 +44,10 @@ module TypeScript {
 
         public preComments: Comment[] = null;
 >preComments : Comment[]
->Comment : Comment
 >null : null
 
         public postComments: Comment[] = null;
 >postComments : Comment[]
->Comment : Comment
 >null : null
 
         public isParenthesized = false;
@@ -59,7 +56,6 @@ module TypeScript {
 
         constructor (public nodeType: NodeType) {
 >nodeType : any
->NodeType : No type information available!
 
             super();
 >super() : void
@@ -95,7 +91,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             switch (this.nodeType) {
 >this.nodeType : any
@@ -219,9 +214,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -486,7 +479,6 @@ module TypeScript {
         public print(context: PrintContext) {
 >print : (context: any) => void
 >context : any
->PrintContext : No type information available!
 
             context.startLine();
 >context.startLine() : any
@@ -646,7 +638,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             // by default, AST adds itself to current basic block and does not check its children
             context.walker.options.goChildren = false;
@@ -669,11 +660,9 @@ module TypeScript {
         }
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
->netFreeUses : (container: any, freeUses: any) => void
->container : any
->Symbol : No type information available!
+>netFreeUses : (container: Symbol, freeUses: any) => void
+>container : Symbol
 >freeUses : any
->StringHashTable : No type information available!
         }
 
         public treeViewLabel() {
@@ -844,15 +833,14 @@ module TypeScript {
 
         public enclosingScope: SymbolScope = null;
 >enclosingScope : any
->SymbolScope : No type information available!
 >null : null
 
         public members: AST[] = new AST[];
 >members : AST[]
->AST : AST
 >new AST[] : any
 >AST[] : any
 >AST : typeof AST
+> : any
 
         constructor () {
             super(NodeType.List);
@@ -866,7 +854,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var len = this.members.length;
 >len : number
@@ -938,7 +925,6 @@ module TypeScript {
         public append(ast: AST) {
 >append : (ast: AST) => this
 >ast : AST
->AST : AST
 
             this.members[this.members.length] = ast;
 >this.members[this.members.length] = ast : AST
@@ -960,7 +946,6 @@ module TypeScript {
         public appendAll(ast: AST) {
 >appendAll : (ast: AST) => this
 >ast : AST
->AST : AST
 
             if (ast.nodeType == NodeType.List) {
 >ast.nodeType == NodeType.List : boolean
@@ -974,7 +959,6 @@ module TypeScript {
                 var list = <ASTList>ast;
 >list : ASTList
 ><ASTList>ast : ASTList
->ASTList : ASTList
 >ast : AST
 
                 for (var i = 0, len = list.members.length; i < len; i++) {
@@ -1019,9 +1003,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.recordSourceMappingStart(this);
@@ -1056,7 +1038,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             var len = this.members.length;
 >len : number
@@ -1122,8 +1103,7 @@ module TypeScript {
 >AST : AST
 
         public sym: Symbol = null;
->sym : any
->Symbol : No type information available!
+>sym : Symbol
 >null : null
 
         public cloId = -1;
@@ -1245,7 +1225,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckName(this);
 >typeFlow.typeCheckName(this) : any
@@ -1258,9 +1237,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitJavascriptName(this, true);
@@ -1275,8 +1252,6 @@ module TypeScript {
         public static fromToken(token: Token): Identifier {
 >fromToken : (token: any) => Identifier
 >token : any
->Token : No type information available!
->Identifier : Identifier
 
             return new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence);
 >new Identifier(token.getText(), (<IdentifierToken>token).hasEscapeSequence) : Identifier
@@ -1288,7 +1263,6 @@ module TypeScript {
 >(<IdentifierToken>token).hasEscapeSequence : any
 >(<IdentifierToken>token) : any
 ><IdentifierToken>token : any
->IdentifierToken : No type information available!
 >token : any
 >hasEscapeSequence : any
         }
@@ -1315,9 +1289,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             // Emit nothing for a missing ID
@@ -1330,7 +1302,6 @@ module TypeScript {
 
         constructor (public id: Identifier) {
 >id : Identifier
->Identifier : Identifier
 
             super(NodeType.Label);
 >super(NodeType.Label) : void
@@ -1353,7 +1324,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
@@ -1371,9 +1341,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -1450,7 +1418,6 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : any
->NodeType : No type information available!
 
             super(nodeType);
 >super(nodeType) : void
@@ -1473,19 +1440,15 @@ module TypeScript {
 
         public targetType: Type = null; // Target type for an object literal (null if no target type)
 >targetType : any
->Type : No type information available!
 >null : null
 
         public castTerm: AST = null;
 >castTerm : AST
->AST : AST
 >null : null
 
         constructor (nodeType: NodeType, public operand: AST) {
 >nodeType : any
->NodeType : No type information available!
 >operand : AST
->AST : AST
 
             super(nodeType);
 >super(nodeType) : void
@@ -1496,7 +1459,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             super.addToControlFlow(context);
 >super.addToControlFlow(context) : void
@@ -1526,7 +1488,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             switch (this.nodeType) {
 >this.nodeType : any
@@ -1854,9 +1815,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -1968,7 +1927,6 @@ module TypeScript {
 >emitter : any
 >emitObjectLiteral : any
 ><ASTList>this.operand : ASTList
->ASTList : ASTList
 >this.operand : AST
 >this : this
 >operand : AST
@@ -1985,7 +1943,6 @@ module TypeScript {
 >emitter : any
 >emitArrayLiteral : any
 ><ASTList>this.operand : ASTList
->ASTList : ASTList
 >this.operand : AST
 >this : this
 >operand : AST
@@ -2320,15 +2277,12 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : any
->NodeType : No type information available!
 
                      public target: AST,
 >target : AST
->AST : AST
 
                      public arguments: ASTList) {
 >arguments : ASTList
->ASTList : ASTList
 
             super(nodeType);
 >super(nodeType) : void
@@ -2349,13 +2303,11 @@ module TypeScript {
 
         public signature: Signature = null;
 >signature : any
->Signature : No type information available!
 >null : null
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             if (this.nodeType == NodeType.New) {
 >this.nodeType == NodeType.New : boolean
@@ -2386,9 +2338,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -2465,11 +2415,8 @@ module TypeScript {
 
         constructor (nodeType: NodeType, public operand1: AST, public operand2: AST) {
 >nodeType : any
->NodeType : No type information available!
 >operand1 : AST
->AST : AST
 >operand2 : AST
->AST : AST
 
             super(nodeType);
 >super(nodeType) : void
@@ -2480,7 +2427,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             switch (this.nodeType) {
 >this.nodeType : any
@@ -2925,9 +2871,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             var binTokenId = nodeTypeToTokTable[this.nodeType];
@@ -3074,7 +3018,6 @@ module TypeScript {
 >emitter : any
 >emitJavascriptName : any
 ><Identifier>this.operand2 : Identifier
->Identifier : Identifier
 >this.operand2 : AST
 >this : this
 >operand2 : AST
@@ -3120,7 +3063,6 @@ module TypeScript {
 >(<FuncDecl>this.operand2).isAccessor : () => any
 >(<FuncDecl>this.operand2) : FuncDecl
 ><FuncDecl>this.operand2 : FuncDecl
->FuncDecl : FuncDecl
 >this.operand2 : AST
 >this : this
 >operand2 : AST
@@ -3129,7 +3071,6 @@ module TypeScript {
                             var funcDecl = <FuncDecl>this.operand2;
 >funcDecl : FuncDecl
 ><FuncDecl>this.operand2 : FuncDecl
->FuncDecl : FuncDecl
 >this.operand2 : AST
 >this : this
 >operand2 : AST
@@ -3301,15 +3242,12 @@ module TypeScript {
 
         constructor (public operand1: AST,
 >operand1 : AST
->AST : AST
 
                      public operand2: AST,
 >operand2 : AST
->AST : AST
 
                      public operand3: AST) {
 >operand3 : AST
->AST : AST
 
             super(NodeType.ConditionalExpression);
 >super(NodeType.ConditionalExpression) : void
@@ -3322,7 +3260,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckQMark(this);
 >typeFlow.typeCheckQMark(this) : any
@@ -3335,9 +3272,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3448,7 +3383,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.type = typeFlow.doubleType;
 >this.type = typeFlow.doubleType : any
@@ -3478,9 +3412,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3624,7 +3556,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.type = typeFlow.regexType;
 >this.type = typeFlow.regexType : any
@@ -3642,9 +3573,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3709,9 +3638,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -3757,7 +3684,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.type = typeFlow.stringType;
 >this.type = typeFlow.stringType : any
@@ -3799,7 +3725,6 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : any
->NodeType : No type information available!
 
             super(nodeType);
 >super(nodeType) : void
@@ -3828,9 +3753,7 @@ module TypeScript {
 
         constructor (public id: Identifier, public alias: AST) {
 >id : Identifier
->Identifier : Identifier
 >alias : AST
->AST : AST
 
             super(NodeType.ImportDeclaration);
 >super(NodeType.ImportDeclaration) : void
@@ -3843,15 +3766,12 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             var mod = <ModuleType>this.alias.type;
 >mod : any
 ><ModuleType>this.alias.type : any
->ModuleType : No type information available!
 >this.alias.type : any
 >this.alias : AST
 >this : this
@@ -3868,21 +3788,20 @@ module TypeScript {
 >isDynamicImport : boolean
 >(this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef) : boolean
 >this.id.sym && !(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
->this.id.sym : any
+>this.id.sym : Symbol
 >this.id : Identifier
 >this : this
 >id : Identifier
->sym : any
+>sym : Symbol
 >!(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : boolean
 >(<TypeSymbol>this.id.sym).onlyReferencedAsTypeRef : any
 >(<TypeSymbol>this.id.sym) : any
 ><TypeSymbol>this.id.sym : any
->TypeSymbol : No type information available!
->this.id.sym : any
+>this.id.sym : Symbol
 >this.id : Identifier
 >this : this
 >id : Identifier
->sym : any
+>sym : Symbol
 >onlyReferencedAsTypeRef : any
 
                 var prevModAliasId = emitter.modAliasId;
@@ -4009,7 +3928,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckImportDecl(this);
 >typeFlow.typeCheckImportDecl(this) : any
@@ -4022,7 +3940,6 @@ module TypeScript {
         public getAliasName(aliasAST?: AST = this.alias) : string {
 >getAliasName : (aliasAST?: AST) => string
 >aliasAST : AST
->AST : AST
 >this.alias : AST
 >this : this
 >alias : AST
@@ -4040,7 +3957,6 @@ module TypeScript {
 >(<Identifier>aliasAST).actualText : string
 >(<Identifier>aliasAST) : Identifier
 ><Identifier>aliasAST : Identifier
->Identifier : Identifier
 >aliasAST : AST
 >actualText : string
 
@@ -4048,7 +3964,6 @@ module TypeScript {
                 var dotExpr = <BinaryExpression>aliasAST;
 >dotExpr : BinaryExpression
 ><BinaryExpression>aliasAST : BinaryExpression
->BinaryExpression : BinaryExpression
 >aliasAST : AST
 
                 return this.getAliasName(dotExpr.operand1) + "." + this.getAliasName(dotExpr.operand2);
@@ -4090,7 +4005,6 @@ module TypeScript {
 >(<Identifier>this.alias).actualText : string
 >(<Identifier>this.alias) : Identifier
 ><Identifier>this.alias : Identifier
->Identifier : Identifier
 >this.alias : AST
 >this : this
 >alias : AST
@@ -4100,7 +4014,6 @@ module TypeScript {
                 var dotExpr = <BinaryExpression>this.alias;
 >dotExpr : BinaryExpression
 ><BinaryExpression>this.alias : BinaryExpression
->BinaryExpression : BinaryExpression
 >this.alias : AST
 >this : this
 >alias : AST
@@ -4108,7 +4021,6 @@ module TypeScript {
                 var firstMod = <Identifier>dotExpr.operand1;
 >firstMod : Identifier
 ><Identifier>dotExpr.operand1 : Identifier
->Identifier : Identifier
 >dotExpr.operand1 : AST
 >dotExpr : BinaryExpression
 >operand1 : AST
@@ -4127,12 +4039,10 @@ module TypeScript {
 
         public init: AST = null;
 >init : AST
->AST : AST
 >null : null
 
         public typeExpr: AST = null;
 >typeExpr : AST
->AST : AST
 >null : null
 
         public varFlags = VarFlags.None;
@@ -4142,15 +4052,12 @@ module TypeScript {
 >None : any
 
         public sym: Symbol = null;
->sym : any
->Symbol : No type information available!
+>sym : Symbol
 >null : null
 
         constructor (public id: Identifier, nodeType: NodeType, public nestingLevel: number) {
 >id : Identifier
->Identifier : Identifier
 >nodeType : any
->NodeType : No type information available!
 >nestingLevel : number
 
             super(nodeType);
@@ -4199,7 +4106,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckBoundDecl(this);
 >typeFlow.typeCheckBoundDecl(this) : any
@@ -4226,7 +4132,6 @@ module TypeScript {
 
         constructor (id: Identifier, nest: number) {
 >id : Identifier
->Identifier : Identifier
 >nest : number
 
             super(id, NodeType.VarDecl, nest);
@@ -4275,9 +4180,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitJavascriptVarDecl(this, tokenId);
@@ -4309,7 +4212,6 @@ module TypeScript {
 
         constructor (id: Identifier) {
 >id : Identifier
->Identifier : Identifier
 
             super(id, NodeType.ArgDecl, 0);
 >super(id, NodeType.ArgDecl, 0) : void
@@ -4350,15 +4252,12 @@ module TypeScript {
 
         public parameterPropertySym: FieldSymbol = null;
 >parameterPropertySym : any
->FieldSymbol : No type information available!
 >null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -4424,12 +4323,10 @@ module TypeScript {
 
         public returnTypeAnnotation: AST = null;
 >returnTypeAnnotation : AST
->AST : AST
 >null : null
 
         public symbols: IHashTable;
 >symbols : any
->IHashTable : No type information available!
 
         public variableArgList = false;
 >variableArgList : boolean
@@ -4437,15 +4334,12 @@ module TypeScript {
 
         public signature: Signature;
 >signature : any
->Signature : No type information available!
 
         public envids: Identifier[];
 >envids : Identifier[]
->Identifier : Identifier
 
         public jumpRefs: Identifier[] = null;
 >jumpRefs : Identifier[]
->Identifier : Identifier
 >null : null
 
         public internalNameCache: string = null;
@@ -4458,12 +4352,10 @@ module TypeScript {
 
         public enclosingFnc: FuncDecl = null;
 >enclosingFnc : FuncDecl
->FuncDecl : FuncDecl
 >null : null
 
         public freeVariables: Symbol[] = [];
->freeVariables : any[]
->Symbol : No type information available!
+>freeVariables : Symbol[]
 >[] : undefined[]
 
         public unitIndex = -1;
@@ -4473,12 +4365,10 @@ module TypeScript {
 
         public classDecl: NamedDeclaration = null;
 >classDecl : NamedDeclaration
->NamedDeclaration : NamedDeclaration
 >null : null
 
         public boundToProperty: VarDecl = null;
 >boundToProperty : VarDecl
->VarDecl : VarDecl
 >null : null
 
         public isOverload = false;
@@ -4487,7 +4377,6 @@ module TypeScript {
 
         public innerStaticFuncs: FuncDecl[] = [];
 >innerStaticFuncs : FuncDecl[]
->FuncDecl : FuncDecl
 >[] : undefined[]
 
         public isTargetTypedAsMethod = false;
@@ -4499,8 +4388,7 @@ module TypeScript {
 >false : false
 
         public accessorSymbol: Symbol = null;
->accessorSymbol : any
->Symbol : No type information available!
+>accessorSymbol : Symbol
 >null : null
 
         public leftCurlyCount = 0;
@@ -4513,35 +4401,26 @@ module TypeScript {
 
         public returnStatementsWithExpressions: ReturnStatement[] = [];
 >returnStatementsWithExpressions : ReturnStatement[]
->ReturnStatement : ReturnStatement
 >[] : undefined[]
 
         public scopeType: Type = null; // Type of the FuncDecl, before target typing
 >scopeType : any
->Type : No type information available!
 >null : null
 
         public endingToken: ASTSpan = null;
 >endingToken : ASTSpan
->ASTSpan : ASTSpan
 >null : null
 
         constructor (public name: Identifier, public bod: ASTList, public isConstructor: boolean,
 >name : Identifier
->Identifier : Identifier
 >bod : ASTList
->ASTList : ASTList
 >isConstructor : boolean
 
                      public arguments: ASTList, public vars: ASTList, public scopes: ASTList, public statics: ASTList,
 >arguments : ASTList
->ASTList : ASTList
 >vars : ASTList
->ASTList : ASTList
 >scopes : ASTList
->ASTList : ASTList
 >statics : ASTList
->ASTList : ASTList
 
             nodeType: number) {
 >nodeType : number
@@ -4621,11 +4500,9 @@ module TypeScript {
 >HasSelfReference : any
 
         public addCloRef(id: Identifier, sym: Symbol): number {
->addCloRef : (id: Identifier, sym: any) => number
+>addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
->Identifier : Identifier
->sym : any
->Symbol : No type information available!
+>sym : Symbol
 
             if (this.envids == null) {
 >this.envids == null : boolean
@@ -4642,6 +4519,7 @@ module TypeScript {
 >new Identifier[] : any
 >Identifier[] : any
 >Identifier : typeof Identifier
+> : any
             }
             this.envids[this.envids.length] = id;
 >this.envids[this.envids.length] = id : Identifier
@@ -4663,7 +4541,7 @@ module TypeScript {
 >enclosingFnc : FuncDecl
 
             if (sym) {
->sym : any
+>sym : Symbol
 
                 while (outerFnc && (outerFnc.type.symbol != sym.container)) {
 >outerFnc && (outerFnc.type.symbol != sym.container) : boolean
@@ -4676,15 +4554,15 @@ module TypeScript {
 >type : any
 >symbol : any
 >sym.container : any
->sym : any
+>sym : Symbol
 >container : any
 
                     outerFnc.addJumpRef(sym);
 >outerFnc.addJumpRef(sym) : void
->outerFnc.addJumpRef : (sym: any) => void
+>outerFnc.addJumpRef : (sym: Symbol) => void
 >outerFnc : FuncDecl
->addJumpRef : (sym: any) => void
->sym : any
+>addJumpRef : (sym: Symbol) => void
+>sym : Symbol
 
                     outerFnc = outerFnc.enclosingFnc;
 >outerFnc = outerFnc.enclosingFnc : FuncDecl
@@ -4705,9 +4583,8 @@ module TypeScript {
         }
 
         public addJumpRef(sym: Symbol): void {
->addJumpRef : (sym: any) => void
->sym : any
->Symbol : No type information available!
+>addJumpRef : (sym: Symbol) => void
+>sym : Symbol
 
             if (this.jumpRefs == null) {
 >this.jumpRefs == null : boolean
@@ -4724,13 +4601,14 @@ module TypeScript {
 >new Identifier[] : any
 >Identifier[] : any
 >Identifier : typeof Identifier
+> : any
             }
             var id = new Identifier(sym.name);
 >id : Identifier
 >new Identifier(sym.name) : Identifier
 >Identifier : typeof Identifier
 >sym.name : any
->sym : any
+>sym : Symbol
 >name : any
 
             this.jumpRefs[this.jumpRefs.length] = id;
@@ -4747,11 +4625,11 @@ module TypeScript {
 >id : Identifier
 
             id.sym = sym;
->id.sym = sym : any
->id.sym : any
+>id.sym = sym : Symbol
+>id.sym : Symbol
 >id : Identifier
->sym : any
->sym : any
+>sym : Symbol
+>sym : Symbol
 
             id.cloId = this.addCloRef(id, null);
 >id.cloId = this.addCloRef(id, null) : number
@@ -4759,16 +4637,15 @@ module TypeScript {
 >id : Identifier
 >cloId : number
 >this.addCloRef(id, null) : number
->this.addCloRef : (id: Identifier, sym: any) => number
+>this.addCloRef : (id: Identifier, sym: Symbol) => number
 >this : this
->addCloRef : (id: Identifier, sym: any) => number
+>addCloRef : (id: Identifier, sym: Symbol) => number
 >id : Identifier
 >null : null
         }
 
         public buildControlFlow(): ControlFlowContext {
 >buildControlFlow : () => any
->ControlFlowContext : No type information available!
 
             var entry = new BasicBlock();
 >entry : any
@@ -4791,11 +4668,8 @@ module TypeScript {
 >controlFlowPrefix : (ast: AST, parent: AST, walker: any) => AST
 >(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: any) => AST
 >ast : AST
->AST : AST
 >parent : AST
->AST : AST
 >walker : any
->IAstWalker : No type information available!
 
                 ast.addToControlFlow(walker.state);
 >ast.addToControlFlow(walker.state) : void
@@ -4846,7 +4720,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckFunction(this);
 >typeFlow.typeCheckFunction(this) : any
@@ -4859,9 +4732,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitJavascriptFunction(this);
@@ -5173,12 +5044,10 @@ module TypeScript {
 
         public locationInfo: LocationInfo = null;
 >locationInfo : LocationInfo
->LocationInfo : LocationInfo
 >null : null
 
         public referencedFiles: IFileReference[] = [];
 >referencedFiles : any[]
->IFileReference : No type information available!
 >[] : undefined[]
 
         public requiresGlobal = false;
@@ -5203,7 +5072,6 @@ module TypeScript {
 
         public topLevelMod: ModuleDeclaration = null;
 >topLevelMod : ModuleDeclaration
->ModuleDeclaration : ModuleDeclaration
 >null : null
 
         public leftCurlyCount = 0;
@@ -5216,11 +5084,9 @@ module TypeScript {
 
         public vars: ASTList;
 >vars : ASTList
->ASTList : ASTList
 
         public scopes: ASTList;
 >scopes : ASTList
->ASTList : ASTList
 
         // Remember if the script contains Unicode chars, that is needed when generating code for this script object to decide the output file correct encoding.
         public containsUnicodeChar = false;
@@ -5233,9 +5099,7 @@ module TypeScript {
 
         constructor (vars: ASTList, scopes: ASTList) {
 >vars : ASTList
->ASTList : ASTList
 >scopes : ASTList
->ASTList : ASTList
 
             super(new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script);
 >super(new Identifier("script"), null, false, null, vars, scopes, null, NodeType.Script) : void
@@ -5271,7 +5135,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckScript(this);
 >typeFlow.typeCheckScript(this) : any
@@ -5349,7 +5212,6 @@ module TypeScript {
 >(<ModuleDeclaration>stmt).modFlags : any
 >(<ModuleDeclaration>stmt) : ModuleDeclaration
 ><ModuleDeclaration>stmt : ModuleDeclaration
->ModuleDeclaration : ModuleDeclaration
 >stmt : AST
 >modFlags : any
 >ModuleFlags.ShouldEmitModuleDecl | ModuleFlags.Ambient : number
@@ -5380,7 +5242,6 @@ module TypeScript {
 >(<InterfaceDeclaration>stmt).varFlags : any
 >(<InterfaceDeclaration>stmt) : InterfaceDeclaration
 ><InterfaceDeclaration>stmt : InterfaceDeclaration
->InterfaceDeclaration : InterfaceDeclaration
 >stmt : AST
 >varFlags : any
 >VarFlags.Ambient : any
@@ -5407,7 +5268,6 @@ module TypeScript {
 >(<VarDecl>stmt).varFlags : any
 >(<VarDecl>stmt) : VarDecl
 ><VarDecl>stmt : VarDecl
->VarDecl : VarDecl
 >stmt : AST
 >varFlags : any
 >VarFlags.Ambient : any
@@ -5433,7 +5293,6 @@ module TypeScript {
 >(<FuncDecl>stmt).isSignature : () => boolean
 >(<FuncDecl>stmt) : FuncDecl
 ><FuncDecl>stmt : FuncDecl
->FuncDecl : FuncDecl
 >stmt : AST
 >isSignature : () => boolean
 
@@ -5470,9 +5329,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             if (this.emitRequired()) {
@@ -5548,15 +5405,12 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : any
->NodeType : No type information available!
 
                      public name: Identifier,
 >name : Identifier
->Identifier : Identifier
 
                      public members: ASTList) {
 >members : ASTList
->ASTList : ASTList
 
             super(nodeType);
 >super(nodeType) : void
@@ -5577,7 +5431,6 @@ module TypeScript {
 
         public mod: ModuleType;
 >mod : any
->ModuleType : No type information available!
 
         public prettyName: string;
 >prettyName : string
@@ -5588,11 +5441,9 @@ module TypeScript {
 
         public vars: ASTList;
 >vars : ASTList
->ASTList : ASTList
 
         public scopes: ASTList;
 >scopes : ASTList
->ASTList : ASTList
 
         // Remember if the module contains Unicode chars, that is needed for dynamic module as we will generate a file for each.
         public containsUnicodeChar = false;
@@ -5605,15 +5456,10 @@ module TypeScript {
 
         constructor (name: Identifier, members: ASTList, vars: ASTList, scopes: ASTList, public endingToken: ASTSpan) {
 >name : Identifier
->Identifier : Identifier
 >members : ASTList
->ASTList : ASTList
 >vars : ASTList
->ASTList : ASTList
 >scopes : ASTList
->ASTList : ASTList
 >endingToken : ASTSpan
->ASTSpan : ASTSpan
 
             super(NodeType.ModuleDeclaration, name, members);
 >super(NodeType.ModuleDeclaration, name, members) : void
@@ -5700,7 +5546,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckModule(this);
 >typeFlow.typeCheckModule(this) : any
@@ -5713,9 +5558,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             if (!hasFlag(this.modFlags, ModuleFlags.ShouldEmitModuleDecl)) {
@@ -5781,23 +5624,18 @@ module TypeScript {
 
         constructor (nodeType: NodeType,
 >nodeType : any
->NodeType : No type information available!
 
                      name: Identifier,
 >name : Identifier
->Identifier : Identifier
 
                      public extendsList: ASTList,
 >extendsList : ASTList
->ASTList : ASTList
 
                      public implementsList: ASTList,
 >implementsList : ASTList
->ASTList : ASTList
 
                      members: ASTList) {
 >members : ASTList
->ASTList : ASTList
 
             super(nodeType, name, members);
 >super(nodeType, name, members) : void
@@ -5846,7 +5684,6 @@ module TypeScript {
 
         public constructorDecl: FuncDecl = null;
 >constructorDecl : FuncDecl
->FuncDecl : FuncDecl
 >null : null
 
         public constructorNestingLevel = 0;
@@ -5855,24 +5692,19 @@ module TypeScript {
 
         public endingToken: ASTSpan = null;
 >endingToken : ASTSpan
->ASTSpan : ASTSpan
 >null : null
 
         constructor (name: Identifier,
 >name : Identifier
->Identifier : Identifier
 
                      members: ASTList,
 >members : ASTList
->ASTList : ASTList
 
                      extendsList: ASTList,
 >extendsList : ASTList
->ASTList : ASTList
 
                      implementsList: ASTList) {
 >implementsList : ASTList
->ASTList : ASTList
 
             super(NodeType.ClassDeclaration, name, extendsList, implementsList, members);
 >super(NodeType.ClassDeclaration, name, extendsList, implementsList, members) : void
@@ -5889,7 +5721,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckClass(this);
 >typeFlow.typeCheckClass(this) : any
@@ -5902,9 +5733,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitJavascriptClass(this);
@@ -5922,19 +5751,15 @@ module TypeScript {
 
         constructor (name: Identifier,
 >name : Identifier
->Identifier : Identifier
 
                      members: ASTList,
 >members : ASTList
->ASTList : ASTList
 
                      extendsList: ASTList,
 >extendsList : ASTList
->ASTList : ASTList
 
                      implementsList: ASTList) {
 >implementsList : ASTList
->ASTList : ASTList
 
             super(NodeType.InterfaceDeclaration, name, extendsList, implementsList, members);
 >super(NodeType.InterfaceDeclaration, name, extendsList, implementsList, members) : void
@@ -5951,7 +5776,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckInterface(this);
 >typeFlow.typeCheckInterface(this) : any
@@ -5964,9 +5788,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
         }
     }
@@ -5977,7 +5799,6 @@ module TypeScript {
 
         constructor (nodeType: NodeType) {
 >nodeType : any
->NodeType : No type information available!
 
             super(nodeType);
 >super(nodeType) : void
@@ -6012,7 +5833,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.type = typeFlow.voidType;
 >this.type = typeFlow.voidType : any
@@ -6034,9 +5854,7 @@ module TypeScript {
 
         constructor (public labels: ASTList, public stmt: AST) {
 >labels : ASTList
->ASTList : ASTList
 >stmt : AST
->AST : AST
 
             super(NodeType.LabeledStatement);
 >super(NodeType.LabeledStatement) : void
@@ -6049,9 +5867,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6139,7 +5955,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             typeFlow.typeCheck(this.labels);
 >typeFlow.typeCheck(this.labels) : any
@@ -6170,7 +5985,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var beforeBB = context.current;
 >beforeBB : any
@@ -6205,7 +6019,6 @@ module TypeScript {
 
         constructor (public statements: ASTList,
 >statements : ASTList
->ASTList : ASTList
 
                      public isStatementBlock: boolean) {
 >isStatementBlock : boolean
@@ -6221,9 +6034,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6356,7 +6167,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var afterIfNeeded = new BasicBlock();
 >afterIfNeeded : any
@@ -6436,7 +6246,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             if (!typeFlow.checker.styleSettings.emptyBlocks) {
 >!typeFlow.checker.styleSettings.emptyBlocks : boolean
@@ -6512,12 +6321,10 @@ module TypeScript {
 
         public resolvedTarget: Statement = null;
 >resolvedTarget : Statement
->Statement : Statement
 >null : null
 
         constructor (nodeType: NodeType) {
 >nodeType : any
->NodeType : No type information available!
 
             super(nodeType);
 >super(nodeType) : void
@@ -6528,9 +6335,7 @@ module TypeScript {
         public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
 >setResolvedTarget : (parser: any, stmt: Statement) => boolean
 >parser : any
->Parser : No type information available!
 >stmt : Statement
->Statement : Statement
 
             if (stmt.isLoop()) {
 >stmt.isLoop() : boolean
@@ -6610,7 +6415,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             super.addToControlFlow(context);
 >super.addToControlFlow(context) : void
@@ -6640,9 +6444,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6731,12 +6533,10 @@ module TypeScript {
 
         public body: AST = null;
 >body : AST
->AST : AST
 >null : null
 
         constructor (public cond: AST) {
 >cond : AST
->AST : AST
 
             super(NodeType.While);
 >super(NodeType.While) : void
@@ -6753,9 +6553,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -6845,7 +6643,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckWhile(this);
 >typeFlow.typeCheckWhile(this) : any
@@ -6858,7 +6655,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var loopHeader = context.current;
 >loopHeader : any
@@ -6907,7 +6703,6 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : any
->ITargetInfo : No type information available!
 >null : null
 
             if (this.body) {
@@ -7020,17 +6815,14 @@ module TypeScript {
 
         public body: AST = null;
 >body : AST
->AST : AST
 >null : null
 
         public whileAST: AST = null;
 >whileAST : AST
->AST : AST
 >null : null
 
         public cond: AST = null;
 >cond : AST
->AST : AST
 >null : null
 
         public isLoop() { return true; }
@@ -7049,9 +6841,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -7173,7 +6963,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckDoWhile(this);
 >typeFlow.typeCheckDoWhile(this) : any
@@ -7186,7 +6975,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var loopHeader = context.current;
 >loopHeader : any
@@ -7220,7 +7008,6 @@ module TypeScript {
 
             var targetInfo: ITargetInfo = null;
 >targetInfo : any
->ITargetInfo : No type information available!
 >null : null
 
             if (this.body) {
@@ -7328,22 +7115,18 @@ module TypeScript {
 
         public thenBod: AST;
 >thenBod : AST
->AST : AST
 
         public elseBod: AST = null;
 >elseBod : AST
->AST : AST
 >null : null
 
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
->ASTSpan : ASTSpan
 >new ASTSpan() : ASTSpan
 >ASTSpan : typeof ASTSpan
 
         constructor (public cond: AST) {
 >cond : AST
->AST : AST
 
             super(NodeType.If);
 >super(NodeType.If) : void
@@ -7360,9 +7143,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -7493,7 +7274,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckIf(this);
 >typeFlow.typeCheckIf(this) : any
@@ -7506,7 +7286,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             this.cond.addToControlFlow(context);
 >this.cond.addToControlFlow(context) : void
@@ -7739,7 +7518,6 @@ module TypeScript {
 
         public returnExpression: AST = null;
 >returnExpression : AST
->AST : AST
 >null : null
 
         constructor () {
@@ -7754,9 +7532,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -7841,7 +7617,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             super.addToControlFlow(context);
 >super.addToControlFlow(context) : void
@@ -7860,7 +7635,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckReturn(this);
 >typeFlow.typeCheckReturn(this) : any
@@ -7891,9 +7665,7 @@ module TypeScript {
 
         constructor (public lval: AST, public obj: AST) {
 >lval : AST
->AST : AST
 >obj : AST
->AST : AST
 
             super(NodeType.ForIn);
 >super(NodeType.ForIn) : void
@@ -7923,7 +7695,6 @@ module TypeScript {
 >(<BoundDecl>this.lval).varFlags : any
 >(<BoundDecl>this.lval) : BoundDecl
 ><BoundDecl>this.lval : BoundDecl
->BoundDecl : BoundDecl
 >this.lval : AST
 >this : this
 >lval : AST
@@ -7935,13 +7706,11 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
->ASTSpan : ASTSpan
 >new ASTSpan() : ASTSpan
 >ASTSpan : typeof ASTSpan
 
         public body: AST;
 >body : AST
->AST : AST
 
         public isLoop() { return true; }
 >isLoop : () => boolean
@@ -7957,7 +7726,6 @@ module TypeScript {
 
                 var singleItem: AST = null;
 >singleItem : AST
->AST : AST
 >null : null
 
                 if (this.body.nodeType == NodeType.List) {
@@ -7974,7 +7742,6 @@ module TypeScript {
                     var stmts = <ASTList>this.body;
 >stmts : ASTList
 ><ASTList>this.body : ASTList
->ASTList : ASTList
 >this.body : AST
 >this : this
 >body : AST
@@ -8024,7 +7791,6 @@ module TypeScript {
                         var block = <Block>singleItem;
 >block : Block
 ><Block>singleItem : Block
->Block : Block
 >singleItem : AST
 
                         if ((block.statements !== null) && (block.statements.members.length == 1)) {
@@ -8072,7 +7838,6 @@ module TypeScript {
 >(<IfStatement>singleItem).cond : AST
 >(<IfStatement>singleItem) : IfStatement
 ><IfStatement>singleItem : IfStatement
->IfStatement : IfStatement
 >singleItem : AST
 >cond : AST
 
@@ -8090,7 +7855,6 @@ module TypeScript {
 >(<CallExpression>cond).target : AST
 >(<CallExpression>cond) : CallExpression
 ><CallExpression>cond : CallExpression
->CallExpression : CallExpression
 >cond : AST
 >target : AST
 
@@ -8106,7 +7870,6 @@ module TypeScript {
                                 var binex = <BinaryExpression>target;
 >binex : BinaryExpression
 ><BinaryExpression>target : BinaryExpression
->BinaryExpression : BinaryExpression
 >target : AST
 
                                 if ((binex.operand1.nodeType == NodeType.Name) &&
@@ -8141,7 +7904,6 @@ module TypeScript {
 >(<Identifier>binex.operand1).actualText : string
 >(<Identifier>binex.operand1) : Identifier
 ><Identifier>binex.operand1 : Identifier
->Identifier : Identifier
 >binex.operand1 : AST
 >binex : BinaryExpression
 >operand1 : AST
@@ -8149,7 +7911,6 @@ module TypeScript {
 >(<Identifier>this.obj).actualText : string
 >(<Identifier>this.obj) : Identifier
 ><Identifier>this.obj : Identifier
->Identifier : Identifier
 >this.obj : AST
 >this : this
 >obj : AST
@@ -8158,7 +7919,6 @@ module TypeScript {
                                     var prop = <Identifier>binex.operand2;
 >prop : Identifier
 ><Identifier>binex.operand2 : Identifier
->Identifier : Identifier
 >binex.operand2 : AST
 >binex : BinaryExpression
 >operand2 : AST
@@ -8175,7 +7935,6 @@ module TypeScript {
 >(<CallExpression>cond).arguments : ASTList
 >(<CallExpression>cond) : CallExpression
 ><CallExpression>cond : CallExpression
->CallExpression : CallExpression
 >cond : AST
 >arguments : ASTList
 
@@ -8231,7 +7990,6 @@ module TypeScript {
 >(<Identifier>this.lval).actualText : string
 >(<Identifier>this.lval) : Identifier
 ><Identifier>this.lval : Identifier
->Identifier : Identifier
 >this.lval : AST
 >this : this
 >lval : AST
@@ -8239,7 +7997,6 @@ module TypeScript {
 >(<Identifier>arg).actualText : string
 >(<Identifier>arg) : Identifier
 ><Identifier>arg : Identifier
->Identifier : Identifier
 >arg : AST
 >actualText : string
 
@@ -8262,9 +8019,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -8392,7 +8147,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             if (typeFlow.checker.styleSettings.forin) {
 >typeFlow.checker.styleSettings.forin : any
@@ -8434,7 +8188,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             if (this.lval) {
 >this.lval : AST
@@ -8585,19 +8338,15 @@ module TypeScript {
 
         public cond: AST;
 >cond : AST
->AST : AST
 
         public body: AST;
 >body : AST
->AST : AST
 
         public incr: AST;
 >incr : AST
->AST : AST
 
         constructor (public init: AST) {
 >init : AST
->AST : AST
 
             super(NodeType.For);
 >super(NodeType.For) : void
@@ -8614,9 +8363,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -8688,7 +8435,6 @@ module TypeScript {
 >(<ASTList>this.init).members : AST[]
 >(<ASTList>this.init) : ASTList
 ><ASTList>this.init : ASTList
->ASTList : ASTList
 >this.init : AST
 >this : this
 >init : AST
@@ -8796,7 +8542,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckFor(this);
 >typeFlow.typeCheckFor(this) : any
@@ -8809,7 +8554,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             if (this.init) {
 >this.init : AST
@@ -8857,7 +8601,6 @@ module TypeScript {
 
             var condBlock: BasicBlock = null;
 >condBlock : any
->BasicBlock : No type information available!
 >null : null
 
             var continueTarget = loopStart;
@@ -8866,7 +8609,6 @@ module TypeScript {
 
             var incrBB: BasicBlock = null;
 >incrBB : any
->BasicBlock : No type information available!
 >null : null
 
             if (this.incr) {
@@ -8925,7 +8667,6 @@ module TypeScript {
             }
             var targetInfo: ITargetInfo = null;
 >targetInfo : any
->ITargetInfo : No type information available!
 >null : null
 
             if (this.body) {
@@ -9096,7 +8837,6 @@ module TypeScript {
 
         public body: AST;
 >body : AST
->AST : AST
 
         public isCompoundStatement() { return true; }
 >isCompoundStatement : () => boolean
@@ -9104,12 +8844,10 @@ module TypeScript {
 
         public withSym: WithSymbol = null;
 >withSym : any
->WithSymbol : No type information available!
 >null : null
 
         constructor (public expr: AST) {
 >expr : AST
->AST : AST
 
             super(NodeType.With);
 >super(NodeType.With) : void
@@ -9122,9 +8860,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -9205,7 +8941,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => any
 >typeFlow : any
->TypeFlow : No type information available!
 
             return typeFlow.typeCheckWith(this);
 >typeFlow.typeCheckWith(this) : any
@@ -9222,22 +8957,18 @@ module TypeScript {
 
         public caseList: ASTList;
 >caseList : ASTList
->ASTList : ASTList
 
         public defaultCase: CaseStatement = null;
 >defaultCase : CaseStatement
->CaseStatement : CaseStatement
 >null : null
 
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
->ASTSpan : ASTSpan
 >new ASTSpan() : ASTSpan
 >ASTSpan : typeof ASTSpan
 
         constructor (public val: AST) {
 >val : AST
->AST : AST
 
             super(NodeType.Switch);
 >super(NodeType.Switch) : void
@@ -9254,9 +8985,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -9436,7 +9165,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             var len = this.caseList.members.length;
 >len : number
@@ -9497,7 +9225,6 @@ module TypeScript {
 >this : this
 >defaultCase : CaseStatement
 ><CaseStatement>typeFlow.typeCheck(this.defaultCase) : CaseStatement
->CaseStatement : CaseStatement
 >typeFlow.typeCheck(this.defaultCase) : any
 >typeFlow.typeCheck : any
 >typeFlow : any
@@ -9523,7 +9250,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var condBlock = context.current;
 >condBlock : any
@@ -9676,12 +9402,10 @@ module TypeScript {
 
         public expr: AST = null;
 >expr : AST
->AST : AST
 >null : null
 
         public body: ASTList;
 >body : ASTList
->ASTList : ASTList
 
         constructor () {
             super(NodeType.Case);
@@ -9695,9 +9419,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -9785,7 +9507,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.expr = typeFlow.typeCheck(this.expr);
 >this.expr = typeFlow.typeCheck(this.expr) : any
@@ -9827,7 +9548,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var execBlock = new BasicBlock();
 >execBlock : any
@@ -9945,7 +9665,6 @@ module TypeScript {
 
         constructor (public term: AST, public arrayCount: number) {
 >term : AST
->AST : AST
 >arrayCount : number
 
             super(NodeType.TypeRef);
@@ -9959,9 +9678,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             throw new Error("should not emit a type ref");
@@ -9973,7 +9690,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             var prevInTCTR = typeFlow.inTypeRefTypeCheck;
 >prevInTCTR : any
@@ -10081,9 +9797,7 @@ module TypeScript {
 
         constructor (public tryNode: AST, public finallyNode: Finally) {
 >tryNode : AST
->AST : AST
 >finallyNode : Finally
->Finally : Finally
 
             super(NodeType.TryFinally);
 >super(NodeType.TryFinally) : void
@@ -10100,9 +9814,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.recordSourceMappingStart(this);
@@ -10149,7 +9861,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.tryNode = typeFlow.typeCheck(this.tryNode);
 >this.tryNode = typeFlow.typeCheck(this.tryNode) : any
@@ -10170,7 +9881,6 @@ module TypeScript {
 >this : this
 >finallyNode : Finally
 ><Finally>typeFlow.typeCheck(this.finallyNode) : Finally
->Finally : Finally
 >typeFlow.typeCheck(this.finallyNode) : any
 >typeFlow.typeCheck : any
 >typeFlow : any
@@ -10195,7 +9905,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var afterFinally = new BasicBlock();
 >afterFinally : any
@@ -10325,9 +10034,7 @@ module TypeScript {
 
         constructor (public tryNode: Try, public catchNode: Catch) {
 >tryNode : Try
->Try : Try
 >catchNode : Catch
->Catch : Catch
 
             super(NodeType.TryCatch);
 >super(NodeType.TryCatch) : void
@@ -10344,9 +10051,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -10409,7 +10114,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             var beforeTry = context.current;
 >beforeTry : any
@@ -10557,7 +10261,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.tryNode = <Try>typeFlow.typeCheck(this.tryNode);
 >this.tryNode = <Try>typeFlow.typeCheck(this.tryNode) : Try
@@ -10565,7 +10268,6 @@ module TypeScript {
 >this : this
 >tryNode : Try
 ><Try>typeFlow.typeCheck(this.tryNode) : Try
->Try : Try
 >typeFlow.typeCheck(this.tryNode) : any
 >typeFlow.typeCheck : any
 >typeFlow : any
@@ -10580,7 +10282,6 @@ module TypeScript {
 >this : this
 >catchNode : Catch
 ><Catch>typeFlow.typeCheck(this.catchNode) : Catch
->Catch : Catch
 >typeFlow.typeCheck(this.catchNode) : any
 >typeFlow.typeCheck : any
 >typeFlow : any
@@ -10609,7 +10310,6 @@ module TypeScript {
 
         constructor (public body: AST) {
 >body : AST
->AST : AST
 
             super(NodeType.Try);
 >super(NodeType.Try) : void
@@ -10622,9 +10322,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -10681,7 +10379,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body = typeFlow.typeCheck(this.body) : any
@@ -10703,7 +10400,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             if (this.body) {
 >this.body : AST
@@ -10746,9 +10442,7 @@ module TypeScript {
 
         constructor (public param: VarDecl, public body: AST) {
 >param : VarDecl
->VarDecl : VarDecl
 >body : AST
->AST : AST
 
             super(NodeType.Catch);
 >super(NodeType.Catch) : void
@@ -10776,21 +10470,17 @@ module TypeScript {
         }
         public statement: ASTSpan = new ASTSpan();
 >statement : ASTSpan
->ASTSpan : ASTSpan
 >new ASTSpan() : ASTSpan
 >ASTSpan : typeof ASTSpan
 
         public containedScope: SymbolScope = null;
 >containedScope : any
->SymbolScope : No type information available!
 >null : null
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -10892,7 +10582,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             if (this.param) {
 >this.param : VarDecl
@@ -10966,7 +10655,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             var prevScope = typeFlow.scope;
 >prevScope : any
@@ -10989,7 +10677,6 @@ module TypeScript {
 >this : this
 >param : VarDecl
 ><VarDecl>typeFlow.typeCheck(this.param) : VarDecl
->VarDecl : VarDecl
 >typeFlow.typeCheck(this.param) : any
 >typeFlow.typeCheck : any
 >typeFlow : any
@@ -11011,7 +10698,6 @@ module TypeScript {
 >(<VarDecl>this.param).id : Identifier
 >(<VarDecl>this.param) : VarDecl
 ><VarDecl>this.param : VarDecl
->VarDecl : VarDecl
 >this.param : VarDecl
 >this : this
 >param : VarDecl
@@ -11102,11 +10788,11 @@ module TypeScript {
             }
             this.param.sym = exceptVar.symbol;
 >this.param.sym = exceptVar.symbol : any
->this.param.sym : any
+>this.param.sym : Symbol
 >this.param : VarDecl
 >this : this
 >param : VarDecl
->sym : any
+>sym : Symbol
 >exceptVar.symbol : any
 >exceptVar : any
 >symbol : any
@@ -11218,7 +10904,6 @@ module TypeScript {
 
         constructor (public body: AST) {
 >body : AST
->AST : AST
 
             super(NodeType.Finally);
 >super(NodeType.Finally) : void
@@ -11231,9 +10916,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);
@@ -11290,7 +10973,6 @@ module TypeScript {
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: any) => void
 >context : any
->ControlFlowContext : No type information available!
 
             if (this.body) {
 >this.body : AST
@@ -11329,7 +11011,6 @@ module TypeScript {
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: any) => this
 >typeFlow : any
->TypeFlow : No type information available!
 
             this.body = typeFlow.typeCheck(this.body);
 >this.body = typeFlow.typeCheck(this.body) : any
@@ -11472,9 +11153,7 @@ module TypeScript {
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: any, tokenId: any, startLine: boolean) => void
 >emitter : any
->Emitter : No type information available!
 >tokenId : any
->TokenID : No type information available!
 >startLine : boolean
 
             emitter.emitParensAndCommentsInPlace(this, true);

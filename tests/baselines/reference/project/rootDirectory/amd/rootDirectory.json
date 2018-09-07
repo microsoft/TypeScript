@@ -10,7 +10,7 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "FolderA/FolderB/FolderC/fileC.ts",
         "FolderA/FolderB/fileB.ts"
     ],

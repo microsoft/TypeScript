@@ -6,7 +6,7 @@
         "0": {
             "kind": "JSDocTypedefTag",
             "pos": 8,
-            "end": 98,
+            "end": 100,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -32,8 +32,8 @@
             },
             "typeExpression": {
                 "kind": "JSDocTypeLiteral",
-                "pos": 26,
-                "end": 98,
+                "pos": 8,
+                "end": 100,
                 "jsDocPropertyTags": [
                     {
                         "kind": "JSDocPropertyTag",
@@ -72,7 +72,7 @@
                     {
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
-                        "end": 98,
+                        "end": 97,
                         "atToken": {
                             "kind": "AtToken",
                             "pos": 74,
@@ -108,6 +108,6 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 98
+        "end": 100
     }
 }

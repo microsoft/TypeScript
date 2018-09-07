@@ -25,12 +25,8 @@ module Errors {
 >bing : string
 
     module WithNonGenericSignaturesInBaseType {
->WithNonGenericSignaturesInBaseType : any
-
         // base type with non-generic call signatures
         interface A {
->A : A
-
             a2: new (x: number) => string[];
 >a2 : new (x: number) => string[]
 >x : number
@@ -39,31 +35,19 @@ module Errors {
 >a7 : new (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >x : (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived2 : Derived2
 
             a8: new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived;
 >a8 : new (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >y : (arg2: Base) => Derived
 >arg2 : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived : Derived
 
             a10: new (...x: Base[]) => Base;
 >a10 : new (...x: Base[]) => Base
 >x : Base[]
->Base : Base
->Base : Base
 
             a11: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -72,18 +56,11 @@ module Errors {
 >y : { foo: string; bar: string; }
 >foo : string
 >bar : string
->Base : Base
 
             a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Derived2[]
->Array : T[]
->Derived2 : Derived2
->Array : T[]
->Derived : Derived
 
             a14: {
 >a14 : { new (x: number): number[]; new (x: string): string[]; }
@@ -129,249 +106,127 @@ module Errors {
         }
 
         interface I extends A {
->I : I
->A : A
-
             a2: new <T, U>(x: T) => U[]; // error, contextual signature instantiation doesn't relate return types so U is {}, not a subtype of string[]
 >a2 : new <T, U>(x: T) => U[]
->T : T
->U : U
 >x : T
->T : T
->U : U
         }
 
         interface I2<T, U> extends A {
->I2 : I2<T, U>
->T : T
->U : U
->A : A
-
             a2: new (x: T) => U[]; // error, no contextual signature instantiation since I2.a2 is not generic
 >a2 : new (x: T) => U[]
 >x : T
->T : T
->U : U
         }
 
         interface I3 extends A {
->I3 : I3
->A : A
-
             // valid, no inferences for V so it defaults to Derived2
             a7: new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V;
 >a7 : new <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->T : T
->Base : Base
->U : U
->Derived : Derived
->V : V
->Derived2 : Derived2
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
 >r : T
->T : T
->V : V
         }
 
         interface I4 extends A {
->I4 : I4
->A : A
-
             a8: new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U; // error, type mismatch
 >a8 : new <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->T : T
->Base : Base
->U : U
->Derived : Derived
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
 >y : (arg2: { foo: number; }) => U
 >arg2 : { foo: number; }
 >foo : number
->U : U
 >r : T
->T : T
->U : U
         }
 
         interface I4B extends A {
->I4B : I4B
->A : A
-
             a10: new <T extends Derived>(...x: T[]) => T; // valid, parameter covariance works even after contextual signature instantiation
 >a10 : new <T extends Derived>(...x: T[]) => T
->T : T
->Derived : Derived
 >x : T[]
->T : T
->T : T
         }
 
         interface I4C extends A {
->I4C : I4C
->A : A
-
             a11: new <T extends Derived>(x: T, y: T) => T; // valid, even though x is a Base, parameter covariance works even after contextual signature instantiation
 >a11 : new <T extends Derived>(x: T, y: T) => T
->T : T
->Derived : Derived
 >x : T
->T : T
 >y : T
->T : T
->T : T
         }
 
         interface I4E extends A {
->I4E : I4E
->A : A
-
             a12: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; // valid, no inferences for T, defaults to Array<Derived2>
 >a12 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->T : T
->Array : T[]
->Derived2 : Derived2
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Base[]
->Array : T[]
->Base : Base
->T : T
         }
 
         interface I6 extends A {
->I6 : I6
->A : A
-
             a15: new <T>(x: { a: T; b: T }) => T; // error, T is {} which isn't an acceptable return type
 >a15 : new <T>(x: { a: T; b: T; }) => T
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
         }
 
         interface I7 extends A {
->I7 : I7
->A : A
-
             a15: new <T extends Base>(x: { a: T; b: T }) => number; // error, T defaults to Base, which is not compatible with number or string
 >a15 : new <T extends Base>(x: { a: T; b: T; }) => number
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
         }
 
         interface I8 extends A {
->I8 : I8
->A : A
-
             // ok, we relate each signature of a16 to b16, and within that, we make inferences from two different signatures in the respective A.a16 signature
             a16: new <T>(x: new (a: T) => T) => T[];
 >a16 : new <T>(x: new (a: T) => T) => T[]
->T : T
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
->T : T
         }
     }
 
     module WithGenericSignaturesInBaseType {
->WithGenericSignaturesInBaseType : any
-
         // base type has generic call signature
         interface B {
->B : B
-
             a2: new <T>(x: T) => T[];
 >a2 : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
         }
 
         interface I6 extends B {
->I6 : I6
->B : B
-
             a2: new <T>(x: T) => string[]; // error
 >a2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
         }
 
         // base type has generic call signature
         interface C {
->C : C
-
             a2: new <T>(x: T) => string[];
 >a2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
         }
 
         interface I7 extends C {
->I7 : I7
->C : C
-
             a2: new <T>(x: T) => T[]; // error
 >a2 : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
         }
 
         // base type has a generic call signature with overloads
         interface D {
->D : D
-
             a14: {
 >a14 : { new <T extends Derived>(x: T): number[]; new <U extends Base>(x: U): number[]; }
 
                 new <T extends Derived>(x: T): number[];
->T : T
->Derived : Derived
 >x : T
->T : T
 
                 new <U extends Base>(x: U): number[];
->U : U
->Base : Base
 >x : U
->U : U
 
             };
         }
 
         interface I8 extends D {
->I8 : I8
->D : D
-
             a14: new <T extends Base>(x: T) => number[];
 >a14 : new <T extends Base>(x: T) => number[]
->T : T
->Base : Base
 >x : T
->T : T
         }
     }
 }

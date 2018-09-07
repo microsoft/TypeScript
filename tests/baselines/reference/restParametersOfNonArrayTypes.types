@@ -15,7 +15,6 @@ var f2 = (...x: Date, ...y: boolean) => { }
 >f2 : (...x: Date, ...y: boolean) => void
 >(...x: Date, ...y: boolean) => { } : (...x: Date, ...y: boolean) => void
 >x : Date
->Date : Date
 >y : boolean
 
 class C {
@@ -24,12 +23,9 @@ class C {
     foo(...x: C) { }
 >foo : (...x: C) => void
 >x : C
->C : C
 }
 
 interface I {
->I : I
-
     (...x: string);
 >x : string
 
@@ -64,7 +60,6 @@ var b = {
 >foo : (...x: number, ...y: Date) => void
 >x : number
 >y : Date
->Date : Date
 
     b: (...x: string) => { }
 >b : (...x: string) => void

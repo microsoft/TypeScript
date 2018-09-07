@@ -7,7 +7,7 @@ foobar;
 >foobar : any
 
 declare module 'barfoo' { export const x: number; }
->'barfoo' : typeof 'barfoo'
+>'barfoo' : typeof import("barfoo")
 >x : number
 
 barfoo;

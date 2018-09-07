@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-lib/adapters/http.js(12,19): error TS2307: Cannot find module './../../package.json'.
+lib/adapters/http.js(12,19): error TS2732: Cannot find module './../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 lib/adapters/http.js(83,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
 lib/adapters/http.js(189,23): error TS2345: Argument of type 'null' is not assignable to parameter of type 'string | undefined'.
@@ -26,6 +26,9 @@ lib/axios.js(41,7): error TS2339: Property 'CancelToken' does not exist on type 
 lib/axios.js(42,7): error TS2339: Property 'isCancel' does not exist on type 'Axios'.
 lib/axios.js(45,7): error TS2339: Property 'all' does not exist on type 'Axios'.
 lib/axios.js(48,7): error TS2339: Property 'spread' does not exist on type 'Axios'.
+lib/cancel/CancelToken.js(23,15): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
+lib/cancel/CancelToken.js(28,11): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
+lib/cancel/CancelToken.js(29,26): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(37,12): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/cancel/CancelToken.js(38,16): error TS2339: Property 'reason' does not exist on type 'CancelToken'.
 lib/core/enhanceError.js(14,9): error TS2339: Property 'config' does not exist on type 'Error'.

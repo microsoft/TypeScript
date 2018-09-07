@@ -74,6 +74,14 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
 declare type PropertyKey = string | number | symbol;
 
 interface PropertyDescriptor {
@@ -505,6 +513,15 @@ declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
+}
+
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
+interface ImportMeta {
 }
 
 interface Math {
@@ -1109,14 +1126,14 @@ interface Array<T> {
       */
     toLocaleString(): string;
     /**
+      * Removes the last element from an array and returns it.
+      */
+    pop(): T | undefined;
+    /**
       * Appends new elements to an array, and returns the new length of the array.
       * @param items New elements of the Array.
       */
     push(...items: T[]): number;
-    /**
-      * Removes the last element from an array and returns it.
-      */
-    pop(): T | undefined;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1360,6 +1377,16 @@ type Extract<T, U> = T extends U ? T : never;
  * Exclude null and undefined from T
  */
 type NonNullable<T> = T extends null | undefined ? never : T;
+
+/**
+ * Obtain the parameters of a function type in a tuple
+ */
+type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
+
+/**
+ * Obtain the parameters of a constructor function type in a tuple
+ */
+type ConstructorParameters<T extends new (...args: any[]) => any> = T extends new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type

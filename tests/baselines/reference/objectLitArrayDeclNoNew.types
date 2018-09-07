@@ -9,23 +9,17 @@ module Test {
 >Test : typeof Test
 
     export interface IState {
->IState : IState
     }
 
     export interface IToken {
->IToken : IToken
     }
 
     export interface ILineTokens {
->ILineTokens : ILineTokens
-
         tokens: IToken[];
 >tokens : IToken[]
->IToken : IToken
 
         endState: IState;
 >endState : IState
->IState : IState
     }
 
     export class Gar {
@@ -38,11 +32,9 @@ module Test {
 
     export function bug(): ILineTokens {
 >bug : () => ILineTokens
->ILineTokens : ILineTokens
 
       var state:IState= null;
 >state : IState
->IState : IState
 >null : null
 
       return {
@@ -52,6 +44,7 @@ module Test {
 >tokens : any
 >Gar[] : any
 >Gar : typeof Gar
+> : any
 
        endState: state
 >endState : IState

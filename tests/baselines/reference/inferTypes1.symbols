@@ -16,7 +16,7 @@ type Unpacked<T> =
 
     T extends Promise<infer U> ? U :
 >T : Symbol(T, Decl(inferTypes1.ts, 0, 14))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(inferTypes1.ts, 3, 27))
 >U : Symbol(U, Decl(inferTypes1.ts, 3, 27))
 
@@ -38,13 +38,13 @@ type T02 = Unpacked<() => string>;  // string
 type T03 = Unpacked<Promise<string>>;  // string
 >T03 : Symbol(T03, Decl(inferTypes1.ts, 8, 34))
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 type T04 = Unpacked<Unpacked<Promise<string>[]>>;  // string
 >T04 : Symbol(T04, Decl(inferTypes1.ts, 9, 37))
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
 >Unpacked : Symbol(Unpacked, Decl(inferTypes1.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
 
 type T05 = Unpacked<any>;  // any
 >T05 : Symbol(T05, Decl(inferTypes1.ts, 10, 49))
@@ -76,22 +76,22 @@ class C {
 
 type T10 = ReturnType<() => string>;  // string
 >T10 : Symbol(T10, Decl(inferTypes1.ts, 21, 1))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 
 type T11 = ReturnType<(s: string) => void>;  // void
 >T11 : Symbol(T11, Decl(inferTypes1.ts, 23, 36))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(inferTypes1.ts, 24, 23))
 
 type T12 = ReturnType<(<T>() => T)>;  // {}
 >T12 : Symbol(T12, Decl(inferTypes1.ts, 24, 43))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(inferTypes1.ts, 25, 24))
 >T : Symbol(T, Decl(inferTypes1.ts, 25, 24))
 
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 >T13 : Symbol(T13, Decl(inferTypes1.ts, 25, 36))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(inferTypes1.ts, 26, 24))
 >U : Symbol(U, Decl(inferTypes1.ts, 26, 36))
 >U : Symbol(U, Decl(inferTypes1.ts, 26, 36))
@@ -99,47 +99,47 @@ type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 
 type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 >T14 : Symbol(T14, Decl(inferTypes1.ts, 26, 66))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 >f1 : Symbol(f1, Decl(inferTypes1.ts, 12, 27))
 
 type T15 = ReturnType<any>;  // any
 >T15 : Symbol(T15, Decl(inferTypes1.ts, 27, 33))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 
 type T16 = ReturnType<never>;  // never
 >T16 : Symbol(T16, Decl(inferTypes1.ts, 28, 27))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 
 type T17 = ReturnType<string>;  // Error
 >T17 : Symbol(T17, Decl(inferTypes1.ts, 29, 29))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
 
 type T18 = ReturnType<Function>;  // Error
 >T18 : Symbol(T18, Decl(inferTypes1.ts, 30, 30))
->ReturnType : Symbol(ReturnType, Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type U10 = InstanceType<typeof C>;  // C
 >U10 : Symbol(U10, Decl(inferTypes1.ts, 31, 32))
->InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(inferTypes1.ts, 16, 1))
 
 type U11 = InstanceType<any>;  // any
 >U11 : Symbol(U11, Decl(inferTypes1.ts, 33, 34))
->InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
 
 type U12 = InstanceType<never>;  // never
 >U12 : Symbol(U12, Decl(inferTypes1.ts, 34, 29))
->InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
 
 type U13 = InstanceType<string>;  // Error
 >U13 : Symbol(U13, Decl(inferTypes1.ts, 35, 31))
->InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
 
 type U14 = InstanceType<Function>;  // Error
 >U14 : Symbol(U14, Decl(inferTypes1.ts, 36, 32))
->InstanceType : Symbol(InstanceType, Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 >ArgumentType : Symbol(ArgumentType, Decl(inferTypes1.ts, 37, 34))
@@ -178,7 +178,7 @@ type T24 = ArgumentType<(x: string, y: string) => number>;  // Error
 type T25 = ArgumentType<Function>;  // Error
 >T25 : Symbol(T25, Decl(inferTypes1.ts, 45, 58))
 >ArgumentType : Symbol(ArgumentType, Decl(inferTypes1.ts, 37, 34))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T26 = ArgumentType<any>;  // any
 >T26 : Symbol(T26, Decl(inferTypes1.ts, 46, 34))
@@ -476,7 +476,7 @@ type Jsonified<T> =
 
     : T extends undefined | Function ? never // undefined and functions are removed
 >T : Symbol(T, Decl(inferTypes1.ts, 103, 15))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
 >T : Symbol(T, Decl(inferTypes1.ts, 103, 15))
@@ -502,7 +502,7 @@ type Example = {
 
     date: Date,
 >date : Symbol(date, Decl(inferTypes1.ts, 112, 19))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     customClass: MyClass,
 >customClass : Symbol(customClass, Decl(inferTypes1.ts, 113, 15))
@@ -521,7 +521,7 @@ type Example = {
         nested: { attr: Date }
 >nested : Symbol(nested, Decl(inferTypes1.ts, 117, 21))
 >attr : Symbol(attr, Decl(inferTypes1.ts, 118, 17))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     },
 }

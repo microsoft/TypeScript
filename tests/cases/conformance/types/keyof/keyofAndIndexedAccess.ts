@@ -321,6 +321,20 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x4.length;
 }
 
+function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {};
+    a = x;
+    a = y;
+    a = z;
+}
+
+function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
+    let a: {} | null | undefined;
+    a = x;
+    a = y;
+    a = z;
+}
+
 // Repros from #12011
 
 class Base {
@@ -568,6 +582,15 @@ type Predicates<TaggedRecord> = {
   [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T]
 }
 
+// Repros from #23592
+
+type Example<T extends { [K in keyof T]: { prop: any } }> = { [K in keyof T]: T[K]["prop"] };
+type Result = Example<{ a: { prop: string }; b: { prop: number } }>;
+
+type Helper2<T> = { [K in keyof T]: Extract<T[K], { prop: any }> };
+type Example2<T> = { [K in keyof Helper2<T>]: Helper2<T>[K]["prop"] };
+type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
+
 // Repro from #23618
 
 type DBBoolTable<K extends string> = { [k in K]: 0 | 1 } 
@@ -585,3 +608,60 @@ type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynami
 function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
     return record[flags[0]];
 }
+
+// Repro from #21368
+
+interface I {
+    foo: string;
+}
+
+declare function take<T>(p: T): void;
+
+function fn<T extends I, K extends keyof T>(o: T, k: K) {
+    take<{} | null | undefined>(o[k]);
+    take<any>(o[k]);
+}
+
+// Repro from #23133
+
+class Unbounded<T> {
+    foo(x: T[keyof T]) {
+        let y: {} | undefined | null = x;
+    }
+}
+
+// Repro from #23940
+
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+
+// Repro from #21770
+
+type Dict<T extends string> = { [key in T]: number };
+type DictDict<V extends string, T extends string> = { [key in V]: Dict<T> };
+
+function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    return dd[k1][k2];
+}
+
+function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number {
+    const d: Dict<T> = dd[k1];
+    return d[k2];
+}
+
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};

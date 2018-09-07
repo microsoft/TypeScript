@@ -3,7 +3,7 @@
 // References a class property using string index access
 
 ////class Foo {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}property|]: number;
+////    [|{| "isDefinition": true |}property|]: number;
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////}
 ////

@@ -49,10 +49,10 @@ m1.health = 0;
 >0 : 0
 
 console.log((<any>m5.isAlive).toString());
->console.log((<any>m5.isAlive).toString()) : any
->console.log : any
->console : any
->log : any
+>console.log((<any>m5.isAlive).toString()) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
@@ -332,8 +332,6 @@ var stat = new Statics();
 >Statics : typeof Statics
 
 interface IFoo {
->IFoo : IFoo
-
     x: number;
 >x : number
 
@@ -343,7 +341,6 @@ interface IFoo {
 
 class ImplementsInterface implements IFoo {
 >ImplementsInterface : ImplementsInterface
->IFoo : IFoo
 
     public x: number;
 >x : number

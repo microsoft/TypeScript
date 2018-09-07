@@ -7,8 +7,6 @@ declare var console: {
 >msg : any
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -17,8 +15,6 @@ interface Robot {
 }
 
 interface MultiRobot {
->MultiRobot : MultiRobot
-
     name: string;
 >name : string
 
@@ -36,7 +32,6 @@ interface MultiRobot {
 
 let robot: Robot = { name: "mower", skill: "mowing" };
 >robot : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
 >"mower" : "mower"
@@ -45,7 +40,6 @@ let robot: Robot = { name: "mower", skill: "mowing" };
 
 let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >multiRobot : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"mower" : "mower"
@@ -142,7 +136,6 @@ for ({name: nameA = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, 
 >nameA : string
 >"noName" : "noName"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -290,7 +283,6 @@ for ({
 
 } = <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -324,6 +316,7 @@ for ({ name = "noName" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName" } = robot : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 >robot : Robot
 >i = 0 : 0
 >i : number
@@ -346,6 +339,7 @@ for ({ name = "noName" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName" } = getRobot() : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 >getRobot() : Robot
 >getRobot : () => Robot
 >i = 0 : 0
@@ -369,8 +363,8 @@ for ({ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" }, i = 0;
 >{ name = "noName" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName" } : { name?: string; }
 >name : string
+>"noName" : "noName"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -404,9 +398,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -445,9 +441,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -487,9 +485,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -500,7 +500,6 @@ for ({
 
 } = <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -602,7 +601,6 @@ for ({name: nameA = "noName", skill: skillA = "skill" } = <Robot>{ name: "trimme
 >skillA : string
 >"skill" : "skill"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -768,7 +766,6 @@ for ({
 
 } = <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"
@@ -802,7 +799,9 @@ for ({ name = "noName", skill = "skill" } = robot, i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = robot : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 >robot : Robot
 >i = 0 : 0
 >i : number
@@ -825,7 +824,9 @@ for ({ name = "noName", skill = "skill" } = getRobot(), i = 0; i < 1; i++) {
 >{ name = "noName", skill = "skill" } = getRobot() : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 >getRobot() : Robot
 >getRobot : () => Robot
 >i = 0 : 0
@@ -849,9 +850,10 @@ for ({ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "tr
 >{ name = "noName", skill = "skill" } = <Robot>{ name: "trimmer", skill: "trimming" } : Robot
 >{ name = "noName", skill = "skill" } : { name?: string; skill?: string; }
 >name : string
+>"noName" : "noName"
 >skill : string
+>"skill" : "skill"
 ><Robot>{ name: "trimmer", skill: "trimming" } : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
 >"trimmer" : "trimmer"
@@ -880,6 +882,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -888,9 +891,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -924,6 +929,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -932,9 +938,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -969,6 +977,7 @@ for ({
 
     name = "noName",
 >name : string
+>"noName" : "noName"
 
     skills: {
 >skills : { primary?: string; secondary?: string; }
@@ -977,9 +986,11 @@ for ({
 
         primary = "primary",
 >primary : string
+>"primary" : "primary"
 
         secondary = "secondary"
 >secondary : string
+>"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
 >{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
@@ -990,7 +1001,6 @@ for ({
 
 } = <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
 ><MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : MultiRobot
->MultiRobot : MultiRobot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"trimmer" : "trimmer"

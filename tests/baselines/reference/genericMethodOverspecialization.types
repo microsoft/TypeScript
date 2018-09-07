@@ -9,8 +9,6 @@ var names = ["list", "table1", "table2", "table3", "summary"];
 >"summary" : "summary"
 
 interface HTMLElement {
->HTMLElement : HTMLElement
-
     clientWidth: number;
 >clientWidth : number
 
@@ -20,15 +18,11 @@ interface HTMLElement {
 
 declare var document: Document;
 >document : Document
->Document : Document
 
 interface Document {
->Document : Document
-
     getElementById(elementId: string): HTMLElement;
->getElementById : (elementId: string) => HTMLElement
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >elementId : string
->HTMLElement : HTMLElement
 }
 
 var elements = names.map(function (name) {
@@ -42,9 +36,9 @@ var elements = names.map(function (name) {
 
     return document.getElementById(name);
 >document.getElementById(name) : HTMLElement
->document.getElementById : (elementId: string) => HTMLElement
+>document.getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >document : Document
->getElementById : (elementId: string) => HTMLElement
+>getElementById : { (elementId: string): HTMLElement; (elementId: string): HTMLElement; }
 >name : string
 
 });
