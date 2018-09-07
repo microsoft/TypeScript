@@ -5907,9 +5907,9 @@ namespace ts {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
-                            const memberType = getLiteralType(getEnumMemberValue(member)!, enumCount, getSymbolOfNode(member)); // TODO: GH#18217
+                            const memberType = getFreshTypeOfLiteralType(getLiteralType(getEnumMemberValue(member)!, enumCount, getSymbolOfNode(member))); // TODO: GH#18217
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(memberType);
+                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
                     }
                 }
@@ -8242,7 +8242,7 @@ namespace ts {
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
                 return checkNoTypeArguments(node, symbol) ?
-                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : res :
+                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : getRegularTypeOfLiteralType(res) :
                     errorType;
             }
 
@@ -12736,7 +12736,7 @@ namespace ts {
         }
 
         function getWidenedLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+            return type.flags & TypeFlags.EnumLiteral && type.flags & TypeFlags.FreshLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
@@ -28274,13 +28274,14 @@ namespace ts {
             return false;
         }
 
-        function literalTypeToNode(type: LiteralType): Expression {
-            return createLiteral(type.value);
+        function literalTypeToNode(type: LiteralType, enclosing: Node): Expression {
+            const enumResult = type.flags & TypeFlags.EnumLiteral && nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing);
+            return enumResult || createLiteral(type.value);
         }
 
         function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
-            return literalTypeToNode(<LiteralType>type);
+            return literalTypeToNode(<LiteralType>type, node);
         }
 
         function createResolver(): EmitResolver {
@@ -29643,13 +29644,20 @@ namespace ts {
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }
 
+        function isSimpleLiteralEnumReference(expr: Expression) {
+            if (
+                (isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
+                isEntityNameExpression(expr.expression)
+            ) return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+        }
+
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
             if (node.initializer) {
-                const isInvalidInitializer = !isStringOrNumberLiteralExpression(node.initializer);
+                const isInvalidInitializer = !(isStringOrNumberLiteralExpression(node.initializer) || isSimpleLiteralEnumReference(node.initializer));
                 const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
                 if (isConstOrReadonly && !node.type) {
                     if (isInvalidInitializer) {
-                        return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
+                        return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_reference);
                     }
                 }
                 else {

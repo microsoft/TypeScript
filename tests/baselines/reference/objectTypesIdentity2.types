@@ -33,7 +33,7 @@ var a: { foo: RegExp; }
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var b = { foo: E.A };
 >b : { foo: E; }

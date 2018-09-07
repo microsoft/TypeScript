@@ -6,7 +6,7 @@ declare function extractIndexer<T>(p: { [n: number]: T }): T;
 
 enum E { x }
 >E : E
->x : E
+>x : E.x
 
 var a: any;
 >a : any

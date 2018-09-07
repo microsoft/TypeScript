@@ -9,7 +9,7 @@ function foo1() {
 
     enum E { A }
 >E : E
->A : E
+>A : E.A
 }
 
 function foo2() {
@@ -22,5 +22,5 @@ function foo2() {
 
     const enum E { A }
 >E : E
->A : E
+>A : E.A
 }

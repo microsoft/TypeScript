@@ -3,6 +3,6 @@ enum E {
 >E : E
 
    A = 1
->A : E
+>A : E.A
 >1 : 1
 }
