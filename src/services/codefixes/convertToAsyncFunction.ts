@@ -240,7 +240,7 @@ namespace ts.codefix {
     }
 
     function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
-        const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
+        const numVarsSameName = allVarNames.filter(elem => elem.symbol.name === name.text).length;
         const numberOfAssignmentsOriginal = 0;
         const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
         return { identifier, types: [], numberOfAssignmentsOriginal };
@@ -426,7 +426,7 @@ namespace ts.codefix {
 
                     if (hasPrevArgName && !shouldReturn) {
                         const type = transformer.checker.getTypeAtLocation(func);
-                        const returnType = getLastCallSignature(type, transformer.checker).getReturnType();
+                        const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
                         const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
                         prevArgName!.types.push(returnType);
                         return varDeclOrAssignment;
@@ -440,7 +440,7 @@ namespace ts.codefix {
         return createNodeArray([]);
     }
 
-    function getLastCallSignature(type: Type, checker: TypeChecker): Signature {
+    function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
         const callSignatures = type && checker.getSignaturesOfType(type, SignatureKind.Call);
         return callSignatures && callSignatures[callSignatures.length - 1];
     }
