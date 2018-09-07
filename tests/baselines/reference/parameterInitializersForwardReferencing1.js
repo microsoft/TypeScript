@@ -35,6 +35,8 @@ class Foo {
     constructor(public x = 12, public y = x) {}
 }
 
+function f8(foo1: string, bar = foo1) { }
+
 
 //// [parameterInitializersForwardReferencing1.js]
 var foo = "";
@@ -81,3 +83,6 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+function f8(foo1, bar) {
+    if (bar === void 0) { bar = foo1; }
+}

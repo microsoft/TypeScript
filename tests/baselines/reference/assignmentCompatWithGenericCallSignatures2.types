@@ -19,7 +19,7 @@ var a: A;
 var b: B;
 >b : B
 
-// Both ok
+// Both errors
 a = b;
 >a = b : B
 >a : A

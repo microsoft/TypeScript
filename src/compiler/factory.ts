@@ -3894,6 +3894,20 @@ namespace ts {
         return statementOffset;
     }
 
+    export function findUseStrictPrologue(statements: ReadonlyArray<Statement>): Statement | undefined {
+        for (const statement of statements) {
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement)) {
+                    return statement;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return undefined;
+    }
+
     export function startsWithUseStrict(statements: ReadonlyArray<Statement>) {
         const firstStatement = firstOrUndefined(statements);
         return firstStatement !== undefined
@@ -3907,18 +3921,7 @@ namespace ts {
      * @param statements An array of statements
      */
     export function ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement> {
-        let foundUseStrict = false;
-        for (const statement of statements) {
-            if (isPrologueDirective(statement)) {
-                if (isUseStrictPrologue(statement as ExpressionStatement)) {
-                    foundUseStrict = true;
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
+        const foundUseStrict = findUseStrictPrologue(statements);
 
         if (!foundUseStrict) {
             return setTextRange(

@@ -98,34 +98,55 @@ namespace ts.tscWatch {
             for (const stamp of outputFileStamps) {
                 assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
             }
-            return { host, outputFileStamps };
+            return host;
         }
         it("creates solution in watch mode", () => {
             createSolutionInWatchMode();
         });
 
         it("change builds changes and reports found errors message", () => {
-            const { host, outputFileStamps } = createSolutionInWatchMode();
-            host.writeFile(core[1].path, `${core[1].content}
+            const host = createSolutionInWatchMode();
+            verifyChange(`${core[1].content}
 export class someClass { }`);
-            host.checkTimeoutQueueLengthAndRun(1); // Builds core
-            const changedCore = getOutputFileStamps(host);
-            verifyChangedFiles(changedCore, outputFileStamps, [
-                ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
-                ...getOutputFileNames(SubProject.core, "index")
-            ]);
-            host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-            const changedTests = getOutputFileStamps(host);
-            verifyChangedFiles(changedTests, changedCore, [
-                ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
-            ]);
-            host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-            const changedLogic = getOutputFileStamps(host);
-            verifyChangedFiles(changedLogic, changedTests, [
-                ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
-            ]);
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, emptyArray);
+
+            // Another change requeues and builds it
+            verifyChange(core[1].content);
+
+            // Two changes together report only single time message: File change detected. Starting incremental compilation...
+            const outputFileStamps = getOutputFileStamps(host);
+            const change1 = `${core[1].content}
+export class someClass { }`;
+            host.writeFile(core[1].path, change1);
+            host.writeFile(core[1].path, `${change1}
+export class someClass2 { }`);
+            verifyChangeAfterTimeout(outputFileStamps);
+
+            function verifyChange(coreContent: string) {
+                const outputFileStamps = getOutputFileStamps(host);
+                host.writeFile(core[1].path, coreContent);
+                verifyChangeAfterTimeout(outputFileStamps);
+            }
+
+            function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
+                host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                const changedCore = getOutputFileStamps(host);
+                verifyChangedFiles(changedCore, outputFileStamps, [
+                    ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
+                    ...getOutputFileNames(SubProject.core, "index")
+                ]);
+                host.checkTimeoutQueueLengthAndRun(1); // Builds tests
+                const changedTests = getOutputFileStamps(host);
+                verifyChangedFiles(changedTests, changedCore, [
+                    ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
+                ]);
+                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                const changedLogic = getOutputFileStamps(host);
+                verifyChangedFiles(changedLogic, changedTests, [
+                    ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
+                ]);
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, emptyArray);
+            }
         });
 
         // TODO: write tests reporting errors but that will have more involved work since file

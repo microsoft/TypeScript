@@ -1331,12 +1331,13 @@ namespace ts {
     }
 
     type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
-    function canHaveLiteralInitializer(node: Node): node is CanHaveLiteralInitializer {
+    function canHaveLiteralInitializer(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.VariableDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+                return !hasModifier(node, ModifierFlags.Private);
             case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
                 return true;
         }
         return false;

@@ -5,12 +5,13 @@ namespace ts.FindAllReferences {
         references: Entry[];
     }
 
+    export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
     export type Definition =
-        | { type: "symbol"; symbol: Symbol }
-        | { type: "label"; node: Identifier }
-        | { type: "keyword"; node: Node }
-        | { type: "this"; node: Node }
-        | { type: "string"; node: StringLiteral };
+        | { readonly type: DefinitionKind.Symbol; readonly symbol: Symbol }
+        | { readonly type: DefinitionKind.Label; readonly node: Identifier }
+        | { readonly type: DefinitionKind.Keyword; readonly node: Node }
+        | { readonly type: DefinitionKind.This; readonly node: Node }
+        | { readonly type: DefinitionKind.String; readonly node: StringLiteral };
 
     export type Entry = NodeEntry | SpanEntry;
     export interface NodeEntry {
@@ -98,29 +99,29 @@ namespace ts.FindAllReferences {
     function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: TypeChecker, originalNode: Node): ReferencedSymbolDefinitionInfo {
         const info = (() => {
             switch (def.type) {
-                case "symbol": {
+                case DefinitionKind.Symbol: {
                     const { symbol } = def;
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
                     return { node: symbol.declarations ? getNameOfDeclaration(first(symbol.declarations)) || first(symbol.declarations) : originalNode, name, kind, displayParts };
                 }
-                case "label": {
+                case DefinitionKind.Label: {
                     const { node } = def;
                     return { node, name: node.text, kind: ScriptElementKind.label, displayParts: [displayPart(node.text, SymbolDisplayPartKind.text)] };
                 }
-                case "keyword": {
+                case DefinitionKind.Keyword: {
                     const { node } = def;
                     const name = tokenToString(node.kind)!;
                     return { node, name, kind: ScriptElementKind.keyword, displayParts: [{ text: name, kind: ScriptElementKind.keyword }] };
                 }
-                case "this": {
+                case DefinitionKind.This: {
                     const { node } = def;
                     const symbol = checker.getSymbolAtLocation(node);
                     const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
                         checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                     return { node, name: "this", kind: ScriptElementKind.variableElement, displayParts };
                 }
-                case "string": {
+                case DefinitionKind.String: {
                     const { node } = def;
                     return { node, name: node.text, kind: ScriptElementKind.variableElement, displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)] };
                 }
@@ -154,7 +155,7 @@ namespace ts.FindAllReferences {
             textSpan: getTextSpan(node, sourceFile),
             isWriteAccess: isWriteAccessForReference(node),
             isDefinition: node.kind === SyntaxKind.DefaultKeyword
-                || isAnyDeclarationName(node)
+                || !!getDeclarationFromName(node)
                 || isLiteralComputedPropertyDeclarationName(node),
             isInString,
         };
@@ -223,7 +224,68 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccessForReference(node: Node): boolean {
-        return node.kind === SyntaxKind.DefaultKeyword || isAnyDeclarationName(node) || isWriteAccess(node);
+        const decl = getDeclarationFromName(node);
+        return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
+    }
+
+    /**
+     * True if 'decl' provides a value, as in `function f() {}`;
+     * false if 'decl' is just a location for a future write, as in 'let x;'
+     */
+    function declarationIsWriteAccess(decl: Declaration): boolean {
+        // Consider anything in an ambient declaration to be a write access since it may be coming from JS.
+        if (!!(decl.flags & NodeFlags.Ambient)) return true;
+
+        switch (decl.kind) {
+            case SyntaxKind.BinaryExpression:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.DefaultKeyword:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.EnumMember:
+            case SyntaxKind.ExportSpecifier:
+            case SyntaxKind.ImportClause: // default import
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JsxAttribute:
+            case SyntaxKind.ModuleDeclaration:
+            case SyntaxKind.NamespaceExportDeclaration:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.Parameter:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.TypeParameter:
+                return true;
+
+            case SyntaxKind.PropertyAssignment:
+                // In `({ x: y } = 0);`, `x` is not a write access. (Won't call this function for `y`.)
+                return !isArrayLiteralOrObjectLiteralDestructuringPattern((decl as PropertyAssignment).parent);
+
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.Constructor:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return !!(decl as FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration).body;
+
+            case SyntaxKind.VariableDeclaration:
+            case SyntaxKind.PropertyDeclaration:
+                return !!(decl as VariableDeclaration | PropertyDeclaration).initializer || isCatchClause(decl.parent);
+
+            case SyntaxKind.MethodSignature:
+            case SyntaxKind.PropertySignature:
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag:
+                return false;
+
+            default:
+                return Debug.failBadSyntaxKind(decl);
+        }
     }
 }
 
@@ -313,7 +375,7 @@ namespace ts.FindAllReferences.Core {
             }
         }
 
-        return references.length ? [{ definition: { type: "symbol", symbol }, references }] : emptyArray;
+        return references.length ? [{ definition: { type: DefinitionKind.Symbol, symbol }, references }] : emptyArray;
     }
 
     /** getReferencedSymbols for special node kinds. */
@@ -524,7 +586,7 @@ namespace ts.FindAllReferences.Core {
             let references = this.symbolIdToReferences[symbolId];
             if (!references) {
                 references = this.symbolIdToReferences[symbolId] = [];
-                this.result.push({ definition: { type: "symbol", symbol: searchSymbol }, references });
+                this.result.push({ definition: { type: DefinitionKind.Symbol, symbol: searchSymbol }, references });
             }
             return node => references.push(nodeEntry(node));
         }
@@ -818,7 +880,7 @@ namespace ts.FindAllReferences.Core {
         const references = mapDefined(getPossibleSymbolReferenceNodes(sourceFile, labelName, container), node =>
             // Only pick labels that are either the target label, or have a target that is the target label
             node === targetLabel || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel) ? nodeEntry(node) : undefined);
-        return [{ definition: { type: "label", node: targetLabel }, references }];
+        return [{ definition: { type: DefinitionKind.Label, node: targetLabel }, references }];
     }
 
     function isValidReferencePosition(node: Node, searchSymbolName: string): boolean {
@@ -850,7 +912,7 @@ namespace ts.FindAllReferences.Core {
             return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, tokenToString(keywordKind)!, sourceFile), referenceLocation =>
                 referenceLocation.kind === keywordKind ? nodeEntry(referenceLocation) : undefined);
         });
-        return references.length ? [{ definition: { type: "keyword", node: references[0].node }, references }] : undefined;
+        return references.length ? [{ definition: { type: DefinitionKind.Keyword, node: references[0].node }, references }] : undefined;
     }
 
     function getReferencesInSourceFile(sourceFile: SourceFile, search: Search, state: State, addReferencesHere = true): void {
@@ -1292,7 +1354,7 @@ namespace ts.FindAllReferences.Core {
             return container && (ModifierFlags.Static & getModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
         });
 
-        return [{ definition: { type: "symbol", symbol: searchSpaceNode.symbol }, references }];
+        return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
@@ -1355,8 +1417,9 @@ namespace ts.FindAllReferences.Core {
             });
         }).map(n => nodeEntry(n));
 
+        const thisParameter = firstDefined(references, r => isParameter(r.node.parent) ? r.node : undefined);
         return [{
-            definition: { type: "this", node: thisOrSuperKeyword },
+            definition: { type: DefinitionKind.This, node: thisParameter || thisOrSuperKeyword },
             references
         }];
     }
@@ -1369,7 +1432,7 @@ namespace ts.FindAllReferences.Core {
         });
 
         return [{
-            definition: { type: "string", node },
+            definition: { type: DefinitionKind.String, node },
             references
         }];
     }

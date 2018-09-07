@@ -2060,19 +2060,27 @@ namespace ts {
                 setTextRange(declarationList, node);
                 setCommentRange(declarationList, node);
 
+                // If the first or last declaration is a binding pattern, we need to modify
+                // the source map range for the declaration list.
                 if (node.transformFlags & TransformFlags.ContainsBindingPattern
                     && (isBindingPattern(node.declarations[0].name) || isBindingPattern(last(node.declarations).name))) {
-                    // If the first or last declaration is a binding pattern, we need to modify
-                    // the source map range for the declaration list.
-                    const firstDeclaration = firstOrUndefined(declarations);
-                    if (firstDeclaration) {
-                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, last(declarations).end));
-                    }
+                    setSourceMapRange(declarationList, getRangeUnion(declarations));
                 }
 
                 return declarationList;
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function getRangeUnion(declarations: ReadonlyArray<Node>): TextRange {
+            // declarations may not be sorted by position.
+            // pos should be the minimum* position over all nodes (that's not -1), end should be the maximum end over all nodes.
+            let pos = -1, end = -1;
+            for (const node of declarations) {
+                pos = pos === -1 ? node.pos : node.pos === -1 ? pos : Math.min(pos, node.pos);
+                end = Math.max(end, node.end);
+            }
+            return createRange(pos, end);
         }
 
         /**

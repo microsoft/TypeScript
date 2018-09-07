@@ -3,7 +3,7 @@ namespace ts {
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
-        const checker = program.getDiagnosticsProducingTypeChecker();
+        const checker = program.getTypeChecker();
 
         if (sourceFile.commonJsModuleIndicator &&
             (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
@@ -115,10 +115,11 @@ namespace ts {
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
 
-        const functionType = node.type ? checker.getTypeFromTypeNode(node.type) : undefined;
-        if (isAsyncFunction(node) || !node.body || !functionType) {
+        if (isAsyncFunction(node) || !node.body) {
             return;
         }
+
+        const functionType = checker.getTypeAtLocation(node);
 
         const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
         const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;

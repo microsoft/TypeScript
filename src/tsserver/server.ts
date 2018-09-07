@@ -924,7 +924,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {

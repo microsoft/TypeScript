@@ -429,6 +429,7 @@ namespace ts {
                 projectPendingBuild.removeKey(proj);
                 if (!projectPendingBuild.getSize()) {
                     invalidatedProjectQueue.length = 0;
+                    nextIndex = 0;
                 }
                 return proj;
             }
@@ -506,6 +507,7 @@ namespace ts {
         const configFileCache = createConfigFileCache(host);
         let context = createBuildContext(defaultOptions);
         let timerToBuildInvalidatedProject: any;
+        let reportFileChangeDetected = false;
 
         const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
         return {
@@ -583,7 +585,7 @@ namespace ts {
         }
 
         function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
-            reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            reportFileChangeDetected = true;
             invalidateProject(resolved);
             scheduleBuildInvalidatedProject();
         }
@@ -816,6 +818,10 @@ namespace ts {
 
         function buildInvalidatedProject() {
             timerToBuildInvalidatedProject = undefined;
+            if (reportFileChangeDetected) {
+                reportFileChangeDetected = false;
+                reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            }
             const buildProject = context.getNextInvalidatedProject();
             buildSomeProjects(p => p === buildProject);
             if (context.hasPendingInvalidatedProjects()) {

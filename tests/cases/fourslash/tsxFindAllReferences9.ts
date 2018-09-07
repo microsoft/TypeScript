@@ -18,7 +18,7 @@
 ////     onClick(event?: React.MouseEvent<HTMLButtonElement>): void;
 //// }
 //// interface LinkProps extends ClickableProps {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}goTo|]: string;
+////     [|{| "isDefinition": true |}goTo|]: string;
 //// }
 //// declare function MainButton(buttonProps: ButtonProps): JSX.Element;
 //// declare function MainButton(linkProps: LinkProps): JSX.Element;

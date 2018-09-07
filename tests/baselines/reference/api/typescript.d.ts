@@ -536,6 +536,7 @@ declare namespace ts {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -632,6 +633,7 @@ declare namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
     }
@@ -668,6 +670,7 @@ declare namespace ts {
         _functionLikeDeclarationBrand: any;
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
@@ -2060,28 +2063,28 @@ declare namespace ts {
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
-        Value = 67216319,
-        Type = 67901928,
+        Value = 67220415,
+        Type = 67897832,
         Namespace = 1920,
         Module = 1536,
         Accessor = 98304,
-        FunctionScopedVariableExcludes = 67216318,
-        BlockScopedVariableExcludes = 67216319,
-        ParameterExcludes = 67216319,
+        FunctionScopedVariableExcludes = 67220414,
+        BlockScopedVariableExcludes = 67220415,
+        ParameterExcludes = 67220415,
         PropertyExcludes = 0,
         EnumMemberExcludes = 68008959,
-        FunctionExcludes = 67215791,
+        FunctionExcludes = 67219887,
         ClassExcludes = 68008383,
-        InterfaceExcludes = 67901832,
+        InterfaceExcludes = 67897736,
         RegularEnumExcludes = 68008191,
         ConstEnumExcludes = 68008831,
-        ValueModuleExcludes = 67215503,
+        ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
-        MethodExcludes = 67208127,
-        GetAccessorExcludes = 67150783,
-        SetAccessorExcludes = 67183551,
-        TypeParameterExcludes = 67639784,
-        TypeAliasExcludes = 67901928,
+        MethodExcludes = 67212223,
+        GetAccessorExcludes = 67154879,
+        SetAccessorExcludes = 67187647,
+        TypeParameterExcludes = 67635688,
+        TypeAliasExcludes = 67897832,
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
@@ -3208,17 +3211,27 @@ declare namespace ts {
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
-     * @remarks Returns any JSDoc param tag that matches the provided
+     * @remarks Returns any JSDoc param tag whose name matches the provided
      * parameter, whether a param tag on a containing function
      * expression, or a param tag on a variable declaration whose
      * initializer is the containing function. The tags closest to the
      * node are returned first, so in the previous example, the param
      * tag on the containing function expression would be first.
      *
-     * Does not return tags for binding patterns, because JSDoc matches
-     * parameters by name and binding patterns do not have a name.
+     * For binding patterns, parameter tags are matched by position.
      */
     function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag>;
+    /**
+     * Gets the JSDoc type parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc template tag whose names match the provided
+     * parameter, whether a template tag on a containing function
+     * expression, or a template tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the template
+     * tag on the containing function expression would be first.
+     */
+    function getJSDocTypeParameterTags(param: TypeParameterDeclaration): ReadonlyArray<JSDocTemplateTag>;
     /**
      * Return true if the node has JSDoc parameter tags.
      *

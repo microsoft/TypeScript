@@ -165,79 +165,10 @@ namespace ts {
     }
 
     function performBuild(args: string[]): number | undefined {
-        const buildOpts: CommandLineOption[] = [
-            {
-                name: "help",
-                shortName: "h",
-                type: "boolean",
-                showInSimplifiedHelpView: true,
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Print_this_message,
-            },
-            {
-                name: "help",
-                shortName: "?",
-                type: "boolean"
-            },
-            {
-                name: "verbose",
-                shortName: "v",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Enable_verbose_logging,
-                type: "boolean"
-            },
-            {
-                name: "dry",
-                shortName: "d",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
-                type: "boolean"
-            },
-            {
-                name: "force",
-                shortName: "f",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
-                type: "boolean"
-            },
-            {
-                name: "clean",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Delete_the_outputs_of_all_projects,
-                type: "boolean"
-            },
-            {
-                name: "watch",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Watch_input_files,
-                type: "boolean"
-            },
-            {
-                name: "preserveWatchOutput",
-                type: "boolean",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
-            },
-        ];
-        let buildOptionNameMap: OptionNameMap | undefined;
-        const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
-
-        const buildOptions: BuildOptions = {};
-        const projects: string[] = [];
-        for (const arg of args) {
-            if (arg.charCodeAt(0) === CharacterCodes.minus) {
-                const opt = getOptionDeclarationFromName(returnBuildOptionNameMap, arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1), /*allowShort*/ true);
-                if (opt) {
-                    buildOptions[opt.name as keyof BuildOptions] = true;
-                }
-                else {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unknown_build_option_0, arg));
-                }
-            }
-            else {
-                // Not a flag, parse as filename
-                addProject(arg);
-            }
+        const { buildOptions, projects: buildProjects, errors } = parseBuildCommand(args);
+        if (errors.length > 0) {
+            errors.forEach(reportDiagnostic);
+            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
 
         if (buildOptions.help) {
@@ -248,6 +179,21 @@ namespace ts {
 
         // Update to pretty if host supports it
         updateReportDiagnostic();
+        const projects = mapDefined(buildProjects, project => {
+            const fileName = resolvePath(sys.getCurrentDirectory(), project);
+            const refPath = resolveProjectReferencePath(sys, { path: fileName });
+            if (!sys.fileExists(refPath)) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
+                return undefined;
+            }
+            return refPath;
+        });
+
+        if (projects.length === 0) {
+            printVersion();
+            printHelp(buildOpts, "--build ");
+            return ExitStatus.Success;
+        }
 
         if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
@@ -255,29 +201,6 @@ namespace ts {
         }
         if (buildOptions.watch) {
             reportWatchModeWithoutSysSupport();
-        }
-
-        // Nonsensical combinations
-        if (buildOptions.clean && buildOptions.force) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.clean && buildOptions.verbose) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.clean && buildOptions.watch) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.watch && buildOptions.dry) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-
-        if (projects.length === 0) {
-            // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
-            addProject(".");
         }
 
         // TODO: change this to host if watch => watchHost otherwiue without wathc
@@ -293,15 +216,6 @@ namespace ts {
         }
 
         return builder.buildAllProjects();
-
-        function addProject(projectSpecification: string) {
-            const fileName = resolvePath(sys.getCurrentDirectory(), projectSpecification);
-            const refPath = resolveProjectReferencePath(sys, { path: fileName });
-            if (!sys.fileExists(refPath)) {
-                return reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
-            }
-            projects.push(refPath);
-        }
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {

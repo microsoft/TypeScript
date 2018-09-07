@@ -489,12 +489,23 @@ namespace ts {
         return getTextOfNodeFromSourceText(sourceFile.text, node, includeTrivia);
     }
 
+    function isJSDocTypeExpressionOrChild(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocTypeExpression || (node.parent && isJSDocTypeExpressionOrChild(node.parent));
+    }
+
     export function getTextOfNodeFromSourceText(sourceText: string, node: Node, includeTrivia = false): string {
         if (nodeIsMissing(node)) {
             return "";
         }
 
-        return sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+        let text = sourceText.substring(includeTrivia ? node.pos : skipTrivia(sourceText, node.pos), node.end);
+
+        if (isJSDocTypeExpressionOrChild(node)) {
+            // strip space + asterisk at line start
+            text = text.replace(/(^|\r?\n|\r)\s*\*\s*/g, "$1");
+        }
+
+        return text;
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -908,6 +919,10 @@ namespace ts {
 
     export function isEnumConst(node: EnumDeclaration): boolean {
         return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
+    }
+
+    export function isDeclarationReadonly(declaration: Declaration): boolean {
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
     }
 
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -1761,6 +1776,10 @@ namespace ts {
         return decl;
     }
 
+    export function isAssignmentDeclaration(decl: Declaration) {
+        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
+    }
+
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
         if (isInJavaScriptFile(node) && node.initializer &&
@@ -2111,6 +2130,10 @@ namespace ts {
                 result = addRange(result, getJSDocParameterTags(node as ParameterDeclaration));
                 break;
             }
+            if (node.kind === SyntaxKind.TypeParameter) {
+                result = addRange(result, getJSDocTypeParameterTags(node as TypeParameterDeclaration));
+                break;
+            }
             node = getNextJSDocCommentLocation(node);
         }
         return result || emptyArray;
@@ -2360,29 +2383,33 @@ namespace ts {
     }
 
     // See GH#16030
-    export function isAnyDeclarationName(name: Node): boolean {
+    export function getDeclarationFromName(name: Node): Declaration | undefined {
+        const parent = name.parent;
         switch (name.kind) {
-            case SyntaxKind.Identifier:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral: {
-                const parent = name.parent;
+            case SyntaxKind.NumericLiteral:
+                if (isComputedPropertyName(parent)) return parent.parent;
+                // falls through
+
+            case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
-                    return parent.name === name;
+                    return parent.name === name ? parent : undefined;
                 }
-                else if (isQualifiedName(name.parent)) {
-                    const tag = name.parent.parent;
-                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                else if (isQualifiedName(parent)) {
+                    const tag = parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === parent ? tag : undefined;
                 }
                 else {
-                    const binExp = name.parent.parent;
+                    const binExp = parent.parent;
                     return isBinaryExpression(binExp) &&
                         getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
                         (binExp.left.symbol || binExp.symbol) &&
-                        getNameOfDeclaration(binExp) === name;
+                        getNameOfDeclaration(binExp) === name
+                        ? binExp
+                        : undefined;
                 }
-            }
             default:
-                return false;
+                return undefined;
         }
     }
 
@@ -3742,7 +3769,7 @@ namespace ts {
         return false;
     }
 
-    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): boolean {
+    export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): node is ExpressionWithTypeArguments {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
     }
 
@@ -4057,7 +4084,8 @@ namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    export function createRange(pos: number, end: number): TextRange {
+    export function createRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos || end === -1);
         return { pos, end };
     }
 
@@ -4519,12 +4547,6 @@ namespace ts {
         }
 
         return { start, length };
-    }
-
-    /* @internal */
-    export function createTextRange(pos: number, end: number = pos): TextRange {
-        Debug.assert(end >= pos);
-        return { pos, end };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
@@ -5010,15 +5032,14 @@ namespace ts {
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
-     * @remarks Returns any JSDoc param tag that matches the provided
+     * @remarks Returns any JSDoc param tag whose name matches the provided
      * parameter, whether a param tag on a containing function
      * expression, or a param tag on a variable declaration whose
      * initializer is the containing function. The tags closest to the
      * node are returned first, so in the previous example, the param
      * tag on the containing function expression would be first.
      *
-     * Does not return tags for binding patterns, because JSDoc matches
-     * parameters by name and binding patterns do not have a name.
+     * For binding patterns, parameter tags are matched by position.
      */
     export function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag> {
         if (param.name) {
@@ -5037,6 +5058,22 @@ namespace ts {
         }
         // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
         return emptyArray;
+    }
+
+    /**
+     * Gets the JSDoc type parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc template tag whose names match the provided
+     * parameter, whether a template tag on a containing function
+     * expression, or a template tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the template
+     * tag on the containing function expression would be first.
+     */
+    export function getJSDocTypeParameterTags(param: TypeParameterDeclaration): ReadonlyArray<JSDocTemplateTag> {
+        const name = param.name.escapedText;
+        return getJSDocTags(param.parent).filter((tag): tag is JSDocTemplateTag =>
+            isJSDocTemplateTag(tag) && tag.typeParameters.some(tp => tp.name.escapedText === name));
     }
 
     /**
@@ -7018,6 +7055,18 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
+        switch (getEmitModuleKind(options)) {
+            case ModuleKind.CommonJS:
+            case ModuleKind.AMD:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+                return true;
+            default:
+                return false;
+        }
     }
 
     export function unreachableCodeIsError(options: CompilerOptions): boolean {

@@ -35,6 +35,8 @@ class Foo {
     constructor(public x = 12, public y = x) {}
 }
 
+function f8(foo1: string, bar = foo1) { }
+
 
 //// [parameterInitializersForwardReferencing1_es6.js]
 let foo = "";
@@ -67,3 +69,4 @@ class Foo {
         this.y = y;
     }
 }
+function f8(foo1, bar = foo1) { }

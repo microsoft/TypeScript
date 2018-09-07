@@ -1,9 +1,10 @@
 tests/cases/compiler/abstractPropertyInConstructor.ts(4,24): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(7,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstract property 'cb' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 
 
-==== tests/cases/compiler/abstractPropertyInConstructor.ts (3 errors) ====
+==== tests/cases/compiler/abstractPropertyInConstructor.ts (4 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -33,6 +34,11 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
         abstract cb: (s: string) => void;
     
         abstract method(num: number): void;
+    
+        other = this.prop;
+                     ~~~~
+!!! error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+        fn = () => this.prop;
     
         method2() {
             this.prop = this.prop + "!";

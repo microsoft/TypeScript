@@ -739,6 +739,7 @@ namespace ts {
     }
 
     export interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -883,6 +884,7 @@ namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
@@ -941,6 +943,7 @@ namespace ts {
 
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
 
@@ -3441,8 +3444,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | JSContainer,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias | JSContainer,
+        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | JSContainer,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | JSContainer,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3463,7 +3466,7 @@ namespace ts {
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule | JSContainer),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
@@ -4175,9 +4178,8 @@ namespace ts {
     /* @internal */
     export const enum InferenceFlags {
         None            =      0,  // No special inference behaviors
-        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
-        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
-        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
     /**

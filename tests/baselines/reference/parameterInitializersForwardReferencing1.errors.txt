@@ -56,3 +56,5 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts(29
         constructor(public x = 12, public y = x) {}
     }
     
+    function f8(foo1: string, bar = foo1) { }
+    
