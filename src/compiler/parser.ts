@@ -1099,8 +1099,8 @@ namespace ts {
             return currentToken = scanner.reScanTemplateToken();
         }
 
-        function reScanLesserToken(): SyntaxKind {
-            return currentToken = scanner.reScanLesserToken();
+        function reScanLessThanToken(): SyntaxKind {
+            return currentToken = scanner.reScanLessThanToken();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -2273,7 +2273,7 @@ namespace ts {
         function parseTypeReference(): TypeReferenceNode {
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
-            if (!scanner.hasPrecedingLineBreak() && reScanLesserToken() === SyntaxKind.LessThanToken) {
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
             return finishNode(node);
@@ -4557,7 +4557,7 @@ namespace ts {
         }
 
         function parseTypeArgumentsInExpression() {
-            if (reScanLesserToken() !== SyntaxKind.LessThanToken) {
+            if (reScanLessThanToken() !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
             nextToken();
