@@ -425,7 +425,7 @@ interface EventInit {
 }
 
 interface EventListenerOptions {
-    capture?: boolean;
+    capture?: CameraCaptureEnum | boolean;
 }
 
 interface EventModifierInit extends UIEventInit {
@@ -17768,6 +17768,7 @@ type TouchType = "direct" | "stylus";
 type Transport = "usb" | "nfc" | "ble";
 type VRDisplayEventReason = "mounted" | "navigation" | "requested" | "unmounted";
 type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
+type CameraCaptureEnum = "user" | "environment";
 type VisibilityState = "hidden" | "visible" | "prerender";
 type WebGLPowerPreference = "default" | "low-power" | "high-performance";
 type WorkerType = "classic" | "module";
