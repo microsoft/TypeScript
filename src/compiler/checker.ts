@@ -11441,7 +11441,8 @@ namespace ts {
                     const bestMatchingType =
                         findMatchingDiscriminantType(source, target) ||
                         findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
-                        findBestTypeForObjectLiteral(source, target);
+                        findBestTypeForObjectLiteral(source, target) ||
+                        findBestTypeForInvokable(source, target);
 
                     isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
@@ -11469,6 +11470,15 @@ namespace ts {
             function findBestTypeForObjectLiteral(source: Type, unionTarget: UnionOrIntersectionType) {
                 if (getObjectFlags(source) & ObjectFlags.ObjectLiteral && forEachType(unionTarget, isArrayLikeType)) {
                     return find(unionTarget.types, t => !isArrayLikeType(t));
+                }
+            }
+
+            function findBestTypeForInvokable(source: Type, unionTarget: UnionOrIntersectionType) {
+                let signatureKind = SignatureKind.Call;
+                const hasSignatures = getSignaturesOfType(source, signatureKind).length > 0 ||
+                    (signatureKind = SignatureKind.Construct, getSignaturesOfType(source, signatureKind).length > 0);
+                if (hasSignatures) {
+                    return find(unionTarget.types, t => getSignaturesOfType(t, signatureKind).length > 0);
                 }
             }
 
