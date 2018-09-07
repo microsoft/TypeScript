@@ -24,6 +24,10 @@ namespace ts.performance {
         exit(): void;
     }
 
+    export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
+        return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
+    }
+
     export function createTimer(measureName: string, startMarkName: string, endMarkName: string): Timer {
         let enterCount = 0;
         return {

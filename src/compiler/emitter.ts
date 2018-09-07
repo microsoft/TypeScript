@@ -103,14 +103,15 @@ namespace ts {
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
         const writer = createTextWriter(newLine);
+        const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
         let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let emitSkipped = false;
         let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
         // Emit each output file
-        performance.mark("beforePrint");
+        enter();
         forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles);
-        performance.measure("printTime", "beforePrint");
+        exit();
 
 
         return {
@@ -397,6 +398,7 @@ namespace ts {
 
     const enum PipelinePhase {
         Notification,
+        Substitution,
         Comments,
         SourceMaps,
         Emit
@@ -405,19 +407,15 @@ namespace ts {
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
         const {
             hasGlobalName,
-            // onEmitSourceMapOfNode,
-            // onEmitSourceMapOfToken,
-            // onEmitSourceMapOfPosition,
-            // onSetSourceFile,
-            onEmitNode,
-            substituteNode,
+            onEmitNode = noEmitNotification,
+            substituteNode = noEmitSubstitution,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,
             onAfterEmitToken
         } = handlers;
 
-        const extendedDiagnostics = printerOptions.extendedDiagnostics;
+        const extendedDiagnostics = !!printerOptions.extendedDiagnostics;
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = createMap<boolean>();
@@ -439,7 +437,7 @@ namespace ts {
         // Source Maps
         let sourceMapsDisabled = true;
         let sourceMapGenerator: SourceMapGenerator | undefined;
-        let sourceMapSource!: SourceMapSource;
+        let sourceMapSource: SourceMapSource;
         let sourceMapSourceIndex = -1;
 
         // Comments
@@ -450,6 +448,7 @@ namespace ts {
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
+        const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
 
         reset();
         return {
@@ -590,7 +589,7 @@ namespace ts {
                 setSourceFile(sourceFile);
             }
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, hint);
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(hint, node);
         }
 
@@ -629,39 +628,45 @@ namespace ts {
         }
 
         function emit(node: Node | undefined) {
-            if (!node) return;
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Unspecified);
+            if (node === undefined) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.Unspecified, node);
         }
 
         function emitIdentifierName(node: Identifier | undefined) {
-            if (!node) return;
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.IdentifierName);
+            if (node === undefined) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.IdentifierName, node);
         }
 
         function emitExpression(node: Expression | undefined) {
-            if (!node) return;
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression);
+            if (node === undefined) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.Expression, node);
         }
 
-        function getPipelinePhase(phase: PipelinePhase, hint: EmitHint) {
+        function getPipelinePhase(phase: PipelinePhase, node: Node) {
             switch (phase) {
                 case PipelinePhase.Notification:
-                    if (onEmitNode) {
+                    if (onEmitNode !== noEmitNotification) {
                         return pipelineEmitWithNotification;
                     }
                     // falls through
 
+                case PipelinePhase.Substitution:
+                    if (substituteNode !== noEmitSubstitution) {
+                        return pipelineEmitWithSubstitution;
+                    }
+                    // falls through
+
                 case PipelinePhase.Comments:
-                    if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
+                    if (!commentsDisabled && node.kind !== SyntaxKind.SourceFile) {
                         return pipelineEmitWithComments;
                     }
-                    return pipelineEmitWithoutComments;
+                    // falls through
 
                 case PipelinePhase.SourceMaps:
-                    if (!sourceMapsDisabled && hint !== EmitHint.SourceFile) {
+                    if (!sourceMapsDisabled && node.kind !== SyntaxKind.SourceFile && !isInJsonFile(node)) {
                         return pipelineEmitWithSourceMap;
                     }
                     // falls through
@@ -670,33 +675,17 @@ namespace ts {
                     return pipelineEmitWithHint;
 
                 default:
-                    return Debug.assertNever(phase, `Unexpected value for PipelinePhase: ${phase}`);
+                    return Debug.assertNever(phase);
             }
         }
 
-        function getNextPipelinePhase(currentPhase: PipelinePhase, hint: EmitHint) {
-            return getPipelinePhase(currentPhase + 1, hint);
+        function getNextPipelinePhase(currentPhase: PipelinePhase, node: Node) {
+            return getPipelinePhase(currentPhase + 1, node);
         }
 
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
-            Debug.assertDefined(onEmitNode)(hint, node, getNextPipelinePhase(PipelinePhase.Notification, hint));
-        }
-
-        function pipelineEmitWithComments(hint: EmitHint, node: Node) {
-            Debug.assertDefined(emitNodeWithComments);
-            Debug.assert(hint !== EmitHint.SourceFile);
-            emitNodeWithComments(hint, trySubstituteNode(hint, node), getNextPipelinePhase(PipelinePhase.Comments, hint));
-        }
-
-        function pipelineEmitWithoutComments(hint: EmitHint, node: Node) {
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint);
-            pipelinePhase(hint, trySubstituteNode(hint, node));
-        }
-
-        function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            Debug.assert(hint !== EmitHint.SourceFile);
-            Debug.assertDefined(sourceMapGenerator);
-            emitNodeWithSourceMap(hint, node, pipelineEmitWithHint);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, node);
+            onEmitNode!(hint, node, pipelinePhase);
         }
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
@@ -972,7 +961,9 @@ namespace ts {
 
                 if (isExpression(node)) {
                     hint = EmitHint.Expression;
-                    node = trySubstituteNode(EmitHint.Expression, node);
+                    if (substituteNode !== noEmitSubstitution) {
+                        node = substituteNode(hint, node);
+                    }
                 }
                 else if (isToken(node)) {
                     return writeTokenNode(node, writePunctuation);
@@ -1085,8 +1076,9 @@ namespace ts {
             emit(node.constraint);
         }
 
-        function trySubstituteNode(hint: EmitHint, node: Node) {
-            return node && substituteNode && substituteNode(hint, node) || node;
+        function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, node);
+            pipelinePhase(hint, substituteNode(hint, node));
         }
 
         function emitHelpers(node: Node) {
@@ -1516,7 +1508,7 @@ namespace ts {
             }
             writePunctuation("[");
 
-            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.MappedTypeParameter);
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node.typeParameter);
             pipelinePhase(EmitHint.MappedTypeParameter, node.typeParameter);
 
             writePunctuation("]");
@@ -2911,7 +2903,7 @@ namespace ts {
                 writeLine();
                 increaseIndent();
                 if (isEmptyStatement(node)) {
-                    const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.EmbeddedStatement);
+                    const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
                     pipelinePhase(EmitHint.EmbeddedStatement, node);
                 }
                 else {
@@ -3820,116 +3812,73 @@ namespace ts {
 
         // Comments
 
-        function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (commentsDisabled) {
-                emitCallback(hint, node);
-                return;
-            }
+        function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            enterComment();
+            hasWrittenComment = false;
+            const emitFlags = getEmitFlags(node);
+            const { pos, end } = getCommentRange(node);
+            const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
 
-            if (node) {
-                hasWrittenComment = false;
+            // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
+            // It is expensive to walk entire tree just to set one kind of node to have no comments.
+            const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+            const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
 
-                const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags || 0;
-                const { pos, end } = emitNode && emitNode.commentRange || node;
-                if ((pos < 0 && end < 0) || (pos === end)) {
-                    // Both pos and end are synthesized, so just emit the node without comments.
-                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
+            // Save current container state on the stack.
+            const savedContainerPos = containerPos;
+            const savedContainerEnd = containerEnd;
+            const savedDeclarationListContainerEnd = declarationListContainerEnd;
+            if ((pos > 0 || end > 0) && pos !== end) {
+                // Emit leading comments if the position is not synthesized and the node
+                // has not opted out from emitting leading comments.
+                if (!skipLeadingComments) {
+                    emitLeadingComments(pos, isEmittedNode);
                 }
-                else {
-                    if (extendedDiagnostics) {
-                        performance.mark("preEmitNodeWithComment");
-                    }
 
-                    const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
-                    // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
-                    // It is expensive to walk entire tree just to set one kind of node to have no comments.
-                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
-                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+                if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
+                    // Advance the container position of comments get emitted or if they've been disabled explicitly using NoLeadingComments.
+                    containerPos = pos;
+                }
 
-                    // Emit leading comments if the position is not synthesized and the node
-                    // has not opted out from emitting leading comments.
-                    if (!skipLeadingComments) {
-                        emitLeadingComments(pos, isEmittedNode);
-                    }
+                if (!skipTrailingComments || (end >= 0 && (emitFlags & EmitFlags.NoTrailingComments) !== 0)) {
+                    // As above.
+                    containerEnd = end;
 
-                    // Save current container state on the stack.
-                    const savedContainerPos = containerPos;
-                    const savedContainerEnd = containerEnd;
-                    const savedDeclarationListContainerEnd = declarationListContainerEnd;
-
-                    if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
-                        // Advance the container position of comments get emitted or if they've been disabled explicitly using NoLeadingComments.
-                        containerPos = pos;
-                    }
-
-                    if (!skipTrailingComments || (end >= 0 && (emitFlags & EmitFlags.NoTrailingComments) !== 0)) {
-                        // As above.
-                        containerEnd = end;
-
-                        // To avoid invalid comment emit in a down-level binding pattern, we
-                        // keep track of the last declaration list container's end
-                        if (node.kind === SyntaxKind.VariableDeclarationList) {
-                            declarationListContainerEnd = end;
-                        }
-                    }
-
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", "preEmitNodeWithComment");
-                    }
-
-                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
-
-                    if (extendedDiagnostics) {
-                        performance.mark("postEmitNodeWithComment");
-                    }
-
-                    // Restore previous container state.
-                    containerPos = savedContainerPos;
-                    containerEnd = savedContainerEnd;
-                    declarationListContainerEnd = savedDeclarationListContainerEnd;
-
-                    // Emit trailing comments if the position is not synthesized and the node
-                    // has not opted out from emitting leading comments and is an emitted node.
-                    if (!skipTrailingComments && isEmittedNode) {
-                        emitTrailingComments(end);
-                    }
-
-                    if (extendedDiagnostics) {
-                        performance.measure("commentTime", "postEmitNodeWithComment");
+                    // To avoid invalid comment emit in a down-level binding pattern, we
+                    // keep track of the last declaration list container's end
+                    if (node.kind === SyntaxKind.VariableDeclarationList) {
+                        declarationListContainerEnd = end;
                     }
                 }
             }
-        }
+            forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
+            exitComment();
 
-        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode | undefined, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
-            const leadingComments = emitNode && emitNode.leadingComments;
-            if (some(leadingComments)) {
-                if (extendedDiagnostics) {
-                    performance.mark("preEmitNodeWithSynthesizedComments");
-                }
-
-                forEach(leadingComments, emitLeadingSynthesizedComment);
-
-                if (extendedDiagnostics) {
-                    performance.measure("commentTime", "preEmitNodeWithSynthesizedComments");
-                }
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, node);
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                commentsDisabled = true;
+                pipelinePhase(hint, node);
+                commentsDisabled = false;
+            }
+            else {
+                pipelinePhase(hint, node);
             }
 
-            emitNodeWithNestedComments(hint, node, emitFlags, emitCallback);
+            enterComment();
+            forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);
+            if ((pos > 0 || end > 0) && pos !== end) {
+                // Restore previous container state.
+                containerPos = savedContainerPos;
+                containerEnd = savedContainerEnd;
+                declarationListContainerEnd = savedDeclarationListContainerEnd;
 
-            const trailingComments = emitNode && emitNode.trailingComments;
-            if (some(trailingComments)) {
-                if (extendedDiagnostics) {
-                    performance.mark("postEmitNodeWithSynthesizedComments");
-                }
-
-                forEach(trailingComments, emitTrailingSynthesizedComment);
-
-                if (extendedDiagnostics) {
-                    performance.measure("commentTime", "postEmitNodeWithSynthesizedComments");
+                // Emit trailing comments if the position is not synthesized and the node
+                // has not opted out from emitting leading comments and is an emitted node.
+                if (!skipTrailingComments && isEmittedNode) {
+                    emitTrailingComments(end);
                 }
             }
+            exitComment();
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
@@ -3967,35 +3916,17 @@ namespace ts {
                 : `//${comment.text}`;
         }
 
-        function emitNodeWithNestedComments(hint: EmitHint, node: Node, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (emitFlags & EmitFlags.NoNestedComments) {
-                commentsDisabled = true;
-                emitCallback(hint, node);
-                commentsDisabled = false;
-            }
-            else {
-                emitCallback(hint, node);
-            }
-        }
-
         function emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void) {
-            if (extendedDiagnostics) {
-                performance.mark("preEmitBodyWithDetachedComments");
-            }
-
+            enterComment();
             const { pos, end } = detachedRange;
             const emitFlags = getEmitFlags(node);
             const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
             const skipTrailingComments = commentsDisabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
-
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
             }
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", "preEmitBodyWithDetachedComments");
-            }
-
+            exitComment();
             if (emitFlags & EmitFlags.NoNestedComments && !commentsDisabled) {
                 commentsDisabled = true;
                 emitCallback(node);
@@ -4005,20 +3936,15 @@ namespace ts {
                 emitCallback(node);
             }
 
-            if (extendedDiagnostics) {
-                performance.mark("beginEmitBodyWithDetachedCommetns");
-            }
-
+            enterComment();
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
                 if (hasWrittenComment && !writer.isAtStartOfLine()) {
                     writer.writeLine();
                 }
             }
+            exitComment();
 
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
-            }
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
@@ -4105,16 +4031,9 @@ namespace ts {
             if (commentsDisabled) {
                 return;
             }
-
-            if (extendedDiagnostics) {
-                performance.mark("beforeEmitTrailingCommentsOfPosition");
-            }
-
+            enterComment();
             forEachTrailingCommentToEmit(pos, prefixSpace ? emitTrailingComment : emitTrailingCommentOfPosition);
-
-            if (extendedDiagnostics) {
-                performance.measure("commentTime", "beforeEmitTrailingCommentsOfPosition");
-            }
+            exitComment();
         }
 
         function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
@@ -4198,11 +4117,50 @@ namespace ts {
 
         // Source Maps
 
+        function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
+            if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
+                const parsed = tryParseRawSourceMap(node.sourceMapText);
+                if (parsed) {
+                    sourceMapGenerator!.appendSourceMap(
+                        writer.getLine(),
+                        writer.getColumn(),
+                        parsed,
+                        node.sourceMapPath!);
+                }
+                pipelinePhase(hint, node);
+            }
+            else {
+                const { pos, end, source = sourceMapSource } = getSourceMapRange(node);
+                const emitFlags = getEmitFlags(node);
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+                    && pos >= 0) {
+                    emitSourcePos(source, skipSourceTrivia(source, pos));
+                }
+
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
+                    sourceMapsDisabled = true;
+                    pipelinePhase(hint, node);
+                    sourceMapsDisabled = false;
+                }
+                else {
+                    pipelinePhase(hint, node);
+                }
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                    && end >= 0) {
+                    emitSourcePos(source, end);
+                }
+            }
+        }
+
         /**
          * Skips trivia such as comments and white-space that can optionally overriden by the source map source
          */
-        function skipSourceTrivia(pos: number): number {
-            return sourceMapSource.skipTrivia ? sourceMapSource.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
+        function skipSourceTrivia(source: SourceMapSource, pos: number): number {
+            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
         }
 
         /**
@@ -4228,67 +4186,15 @@ namespace ts {
                 /*nameIndex*/ undefined);
         }
 
-        /**
-         * Emits a node with possible leading and trailing source maps.
-         *
-         * @param hint A hint as to the intended usage of the node.
-         * @param node The node to emit.
-         * @param emitCallback The callback used to emit the node.
-         */
-        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
-            if (sourceMapsDisabled || isInJsonFile(node)) {
-                return emitCallback(hint, node);
+        function emitSourcePos(source: SourceMapSource, pos: number) {
+            if (source !== sourceMapSource) {
+                const savedSourceMapSource = sourceMapSource;
+                setSourceMapSource(source);
+                emitPos(pos);
+                setSourceMapSource(savedSourceMapSource);
             }
-
-            if (node) {
-                if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
-                    const parsed = tryParseRawSourceMap(node.sourceMapText);
-                    if (parsed) {
-                        sourceMapGenerator!.appendSourceMap(
-                            writer.getLine(),
-                            writer.getColumn(),
-                            parsed,
-                            node.sourceMapPath!);
-                    }
-                    return emitCallback(hint, node);
-                }
-
-                const emitNode = node.emitNode;
-                const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
-                const range = emitNode && emitNode.sourceMapRange;
-                const { pos, end } = range || node;
-                let source = range && range.source;
-
-                const oldSource = sourceMapSource;
-                if (source === oldSource) source = undefined;
-                if (source) setSourceMapSource(source);
-
-                if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
-                    && pos >= 0) {
-                    emitPos(skipSourceTrivia(pos));
-                }
-
-                if (source) setSourceMapSource(oldSource);
-
-                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
-                    sourceMapsDisabled = true;
-                    emitCallback(hint, node);
-                    sourceMapsDisabled = false;
-                }
-                else {
-                    emitCallback(hint, node);
-                }
-
-                if (source) setSourceMapSource(source);
-
-                if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
-                    && end >= 0) {
-                    emitPos(end);
-                }
-
-                if (source) setSourceMapSource(oldSource);
+            else {
+                emitPos(pos);
             }
         }
 
@@ -4308,17 +4214,18 @@ namespace ts {
             const emitNode = node && node.emitNode;
             const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
             const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
+            const source = range && range.source || sourceMapSource;
 
-            tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
+            tokenPos = skipSourceTrivia(source, range ? range.pos : tokenPos);
             if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
-                emitPos(tokenPos);
+                emitSourcePos(source, tokenPos);
             }
 
             tokenPos = emitCallback(token, writer, tokenPos);
 
             if (range) tokenPos = range.end;
             if ((emitFlags & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
-                emitPos(tokenPos);
+                emitSourcePos(source, tokenPos);
             }
 
             return tokenPos;
