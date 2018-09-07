@@ -3294,7 +3294,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -3691,6 +3691,22 @@
     "All type parameters are unused": {
         "category": "Error",
         "code": 6205
+    },
+    "'package.json' has a 'typesVersions' field with version-specific path mappings.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.": {
+        "category": "Message",
+        "code": 6208
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
     },
 
     "Projects to reference": {
