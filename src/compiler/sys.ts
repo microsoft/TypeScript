@@ -582,6 +582,7 @@ namespace ts {
             const Buffer: {
                 new (input: string, encoding?: string): any;
                 from?(input: string, encoding?: string): any;
+                alloc(length: number): any;
             } = require("buffer").Buffer;
 
             const nodeVersion = getNodeMajorVersion();
@@ -984,6 +985,30 @@ namespace ts {
                 if (!fileExists(fileName)) {
                     return undefined;
                 }
+
+                {
+                    // GH#21136: check if this is an MPEG-TS file
+                    const buffer = Buffer.alloc(50 * 188);
+                    const fd = _fs.openSync(fileName);
+                    try {
+                        const bytesRead = _fs.readSync(fd, buffer, 0, 50 * 188);
+                        // check if we have a multiple of 188 bytes (frames)
+                        if (bytesRead % 188 === 0) {
+                            let allHex47 = true;
+                            for (let i = 0, n = i * 188; i < n; i = i + 188) {
+                                if (i < bytesRead && buffer[i] !== 0x47) {
+                                    allHex47 = false;
+                                }
+                            }
+                            if (allHex47) {
+                                return undefined;
+                            }
+                        }
+                    } finally {
+                        _fs.closeSync(fd);
+                    }
+                }
+
                 const buffer = _fs.readFileSync(fileName);
                 let len = buffer.length;
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
