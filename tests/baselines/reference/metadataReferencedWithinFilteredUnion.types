@@ -20,7 +20,6 @@ export class Class2 {
 
     get prop(): Class1 | undefined {
 >prop : Class1
->Class1 : Class1
 
         return undefined;
 >undefined : undefined

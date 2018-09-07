@@ -6,19 +6,15 @@ function M() {
 >m : typeof C
 >class C<X> {        f<T>() {            var t: T;            var x: X;            return { t, x };        }    } : typeof C
 >C : typeof C
->X : X
 
         f<T>() {
 >f : <T>() => { t: T; x: X; }
->T : T
 
             var t: T;
 >t : T
->T : T
 
             var x: X;
 >x : X
->X : X
 
             return { t, x };
 >{ t, x } : { t: T; x: X; }

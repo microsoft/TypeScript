@@ -1,10 +1,7 @@
 === tests/cases/conformance/decorators/invalid/decoratorOnArrowFunction.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
->T : T
->T : T
 
 var F = @dec () => {
 >F : any

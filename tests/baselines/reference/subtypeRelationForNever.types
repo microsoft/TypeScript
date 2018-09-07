@@ -8,18 +8,11 @@ function fail(message: string) : never { throw new Error(message); }
 
 function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r): r {
 >withFew : <a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reason: string) => r) => r
->a : a
->r : r
 >values : a[]
->a : a
 >haveFew : (values: a[]) => r
 >values : a[]
->a : a
->r : r
 >haveNone : (reason: string) => r
 >reason : string
->r : r
->r : r
 
     return values.length > 0 ? haveFew(values) : haveNone('No values.');
 >values.length > 0 ? haveFew(values) : haveNone('No values.') : r
@@ -37,10 +30,7 @@ function withFew<a, r>(values: a[], haveFew: (values: a[]) => r, haveNone: (reas
 }
 function id<a>(value: a) : a { return value; }
 >id : <a>(value: a) => a
->a : a
 >value : a
->a : a
->a : a
 >value : a
 
 const result = withFew([1, 2, 3], id, fail); // expected result is number[]

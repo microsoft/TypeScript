@@ -2,5 +2,4 @@
 function A(): (public B) => C {
 >A : () => (B: any) => any
 >B : any
->C : No type information available!
 }

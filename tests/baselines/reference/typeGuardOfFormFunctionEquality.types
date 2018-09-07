@@ -3,14 +3,10 @@ declare function isString1(a: number, b: Object): b is string;
 >isString1 : (a: number, b: Object) => b is string
 >a : number
 >b : Object
->Object : Object
->b : any
 
 declare function isString2(a: Object): a is string;
 >isString2 : (a: Object) => a is string
 >a : Object
->Object : Object
->a : any
 
 switch (isString1(0, "")) {
 >isString1(0, "") : boolean
@@ -42,8 +38,6 @@ function isString3(a: number, b: number, c: Object): c is string {
 >a : number
 >b : number
 >c : Object
->Object : Object
->c : any
 
     return isString1(0, c);
 >isString1(0, c) : boolean

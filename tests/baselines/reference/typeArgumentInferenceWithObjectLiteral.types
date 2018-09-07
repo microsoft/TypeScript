@@ -1,24 +1,16 @@
 === tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts ===
 interface Computed<T> {
->Computed : Computed<T>
->T : T
-
     read(): T;
 >read : () => T
->T : T
 
     write(value: T);
 >write : (value: T) => any
 >value : T
->T : T
 }
 
 function foo<T>(x: Computed<T>) { }
 >foo : <T>(x: Computed<T>) => void
->T : T
 >x : Computed<T>
->Computed : Computed<T>
->T : T
 
 var s: string;
 >s : string
@@ -65,28 +57,21 @@ foo({
 
 enum E1 { X }
 >E1 : E1
->X : E1
+>X : E1.X
 
 enum E2 { X }
 >E2 : E2
->X : E2
+>X : E2.X
 
 // Check that we infer from both a.r and b before fixing T in a.w
 
 declare function f1<T, U>(a: { w: (x: T) => U; r: () => T; }, b: T): U;
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->T : T
->U : U
 >a : { w: (x: T) => U; r: () => T; }
 >w : (x: T) => U
 >x : T
->T : T
->U : U
 >r : () => T
->T : T
 >b : T
->T : T
->U : U
 
 var v1: number;
 >v1 : number
@@ -139,16 +124,15 @@ var v1 = f1({ w: x => x, r: () => E1.X }, 0);
 
 var v2: E1;
 >v2 : E1
->E1 : E1
 
 var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
 >v2 : E1
 >f1({ w: x => x, r: () => E1.X }, E1.X) : E1
 >f1 : <T, U>(a: { w: (x: T) => U; r: () => T; }, b: T) => U
->{ w: x => x, r: () => E1.X } : { w: (x: E1) => E1; r: () => E1; }
->w : (x: E1) => E1
->x => x : (x: E1) => E1
->x : E1
+>{ w: x => x, r: () => E1.X } : { w: (x: E1.X) => E1; r: () => E1; }
+>w : (x: E1.X) => E1
+>x => x : (x: E1.X) => E1
+>x : E1.X
 >x : E1
 >r : () => E1
 >() => E1.X : () => E1

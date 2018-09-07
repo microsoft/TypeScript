@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/bug24703.js ===
 var Common = {};
 >Common : typeof Common
->{} : { [x: string]: any; }
+>{} : {}
 
 Common.I = class {
 >Common.I = class {    constructor() {        this.i = 1    }} : typeof I

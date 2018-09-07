@@ -183,8 +183,10 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
             preferences?: UserPreferences,
+            applyChanges?: boolean,
+            commands?: {}[],
         });
-        codeFixAvailable(options?: Array<{ description: string, actions?: Array<{ type: string, data: {} }>, commands?: {}[] }>): void;
+        codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
@@ -200,7 +202,7 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completions(...options: {
-            readonly marker?: ArrayOrSingle<string>,
+            readonly marker?: ArrayOrSingle<string | Marker>,
             readonly isNewIdentifierLocation?: boolean;
             readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
             readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
@@ -228,6 +230,7 @@ declare namespace FourSlashInterface {
         eval(expr: string, value: any): void;
         currentLineContentIs(text: string): void;
         currentFileContentIs(text: string): void;
+        formatDocumentChangesNothing(): void;
         /** Verifies that goToDefinition at the current position would take you to `endMarker`. */
         goToDefinitionIs(endMarkers: ArrayOrSingle<string>): void;
         goToDefinitionName(name: string, containerName: string): void;
@@ -335,9 +338,10 @@ declare namespace FourSlashInterface {
         ProjectInfo(expected: string[]): void;
         allRangesAppearInImplementationList(markerName: string): void;
         getEditsForFileRename(options: {
-            oldPath: string;
-            newPath: string;
-            newFileContents: { [fileName: string]: string };
+            readonly oldPath: string;
+            readonly newPath: string;
+            readonly newFileContents: { readonly [fileName: string]: string };
+            readonly preferences?: UserPreferences;
         }): void;
         moveToNewFile(options: {
             readonly newFileContents: { readonly [fileName: string]: string };
@@ -524,10 +528,11 @@ declare namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        quotePreference?: "double" | "single";
-        includeCompletionsForModuleExports?: boolean;
-        includeInsertTextCompletions?: boolean;
-        importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeInsertTextCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsAtOptions extends UserPreferences {
         triggerCharacter?: string;
@@ -602,6 +607,12 @@ declare namespace FourSlashInterface {
          * Character that was responsible for triggering signature help.
          */
         triggerCharacter?: string,
+    }
+
+    export interface VerifyCodeFixAvailableOptions {
+        readonly description: string;
+        readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
+        readonly commands?: ReadonlyArray<{}>;
     }
 
     interface VerifyNavigateToOptions {

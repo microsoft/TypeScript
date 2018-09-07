@@ -4,4 +4,4 @@
 ////type /**/T = number
 
 goTo.marker();
-verify.quickInfoIs("type T = number", "DOC ");
+verify.quickInfoIs("type T = number", "DOC");

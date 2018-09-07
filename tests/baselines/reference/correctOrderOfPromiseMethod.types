@@ -1,14 +1,10 @@
 === tests/cases/compiler/correctOrderOfPromiseMethod.ts ===
 interface A {
->A : A
-
     id: string
 >id : string
 }
 
 interface B {
->B : B
-
     id: string
 >id : string
 
@@ -18,20 +14,15 @@ interface B {
 
 async function countEverything(): Promise<number> {
 >countEverything : () => Promise<number>
->Promise : Promise<T>
 
     const providerA = async (): Promise<A[]> => { return [] }
 >providerA : () => Promise<A[]>
 >async (): Promise<A[]> => { return [] } : () => Promise<A[]>
->Promise : Promise<T>
->A : A
 >[] : undefined[]
 
     const providerB = async (): Promise<B[]> => { return [] }
 >providerB : () => Promise<B[]>
 >async (): Promise<B[]> => { return [] } : () => Promise<B[]>
->Promise : Promise<T>
->B : B
 >[] : undefined[]
 
     const [resultA, resultB] = await Promise.all([
@@ -56,12 +47,10 @@ async function countEverything(): Promise<number> {
 
     const dataA: A[] = resultA;
 >dataA : A[]
->A : A
 >resultA : A[]
 
     const dataB: B[] = resultB;
 >dataB : B[]
->B : B
 >resultB : B[]
 
     if (dataA && dataB) {

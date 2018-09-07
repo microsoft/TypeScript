@@ -36,3 +36,37 @@ z.length;
 
 /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
 var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+function D(n) {
+  this.length = n;
+}
+
+var y2 = id2(D);
+var z2 = new y2(33);
+z2.length;
+
+
+/** 
+ * @param {function(new: D, number)} dref
+ * @return {D}
+ */
+var construct = function(dref) { return new dref(33); }
+var z3 = construct(D);
+z3.length;
+
+
+/** 
+ * @constructor
+ * @param {number} n
+ */
+var E = function(n) {
+  this.not_length_on_purpose = n;
+};
+
+
+var y3 = id2(E);

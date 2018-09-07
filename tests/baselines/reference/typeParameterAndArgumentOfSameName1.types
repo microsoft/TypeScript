@@ -2,10 +2,6 @@
 function f<A extends Number>(A: A): A {
 >f : <A extends Number>(A: A) => A
 >A : A
->Number : Number
->A : A
->A : A
->A : A
 
     var r = A.toExponential(123);
 >r : string

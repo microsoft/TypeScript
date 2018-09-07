@@ -8,11 +8,9 @@ module Outer {
 }
 
 module Outer {
->Outer : typeof Outer
-
     export const enum A { X }
 >A : A
->X : A
+>X : A.X
 }
 
 module B {

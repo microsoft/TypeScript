@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////interface I { [|{| "isWriteAccess": true, "isDefinition": true |}boom|](): void; }
+////interface I { [|{| "isDefinition": true |}boom|](): void; }
 ////new class C implements I {
 ////   [|{| "isWriteAccess": true, "isDefinition": true |}boom|](){}
 ////}

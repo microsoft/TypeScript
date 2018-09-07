@@ -7,8 +7,6 @@ import { Position } from './utilities/positioning';
 >Position : typeof Position
 
 export interface ISpinButton {}
->ISpinButton : ISpinButton
-
 === tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning.d.ts ===
 export * from './positioning/index';
 No type information for this code.=== tests/cases/compiler/node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===

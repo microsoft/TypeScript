@@ -1,15 +1,12 @@
 === tests/cases/compiler/superCallArgsMustMatch.ts ===
 class T5<T>{
 >T5 : T5<T>
->T : T
 
     public foo: T;
 >foo : T
->T : T
 
     constructor(public bar: T) { }
 >bar : T
->T : T
 
 }
 

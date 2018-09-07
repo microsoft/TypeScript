@@ -3,7 +3,6 @@ class c {
 >c : c
 }
 interface i {
->i : i
 }
 module m {
 >m : typeof m
@@ -17,7 +16,6 @@ var x = 10;
 >10 : 10
 
 module uninstantiated {
->uninstantiated : any
 }
 export { c };
 >c : typeof c

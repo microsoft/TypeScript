@@ -1,7 +1,5 @@
 === tests/cases/conformance/declarationEmit/typePredicates/declarationEmitIdentifierPredicatesWithPrivateName01.ts ===
 interface I {
->I : I
-
     a: number;
 >a : number
 }
@@ -9,8 +7,6 @@ interface I {
 export function f(x: any): x is I {
 >f : (x: any) => x is I
 >x : any
->x : any
->I : I
 
     return typeof x.a === "number";
 >typeof x.a === "number" : boolean

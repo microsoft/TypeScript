@@ -98,7 +98,6 @@ function e() {
 
     let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
 >x = "" || 0 : 0

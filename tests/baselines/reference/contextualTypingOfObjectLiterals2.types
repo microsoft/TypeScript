@@ -1,7 +1,5 @@
 === tests/cases/compiler/contextualTypingOfObjectLiterals2.ts ===
 interface Foo {
->Foo : Foo
-
     foo: (t: string) => string;
 >foo : (t: string) => string
 >t : string
@@ -9,7 +7,6 @@ interface Foo {
 function f2(args: Foo) { }
 >f2 : (args: Foo) => void
 >args : Foo
->Foo : Foo
 
 f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
 >f2({ foo: s => s.hmm }) : void

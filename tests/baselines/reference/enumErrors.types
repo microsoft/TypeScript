@@ -27,10 +27,10 @@ enum E9 {
 >E9 : E9
 
     A,
->A : E9
+>A : E9.A
 
     B = A
->B : E9
+>B : E9.A
 >A : E9
 }
 

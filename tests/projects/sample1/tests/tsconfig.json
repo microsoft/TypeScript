@@ -3,5 +3,10 @@
         { "path": "../core" },
         { "path": "../logic" }
     ],
-    "files": ["index.ts"]
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true
+    }
 }

@@ -46,9 +46,7 @@ function f3(x: {}) {
 
 function f4<T>(x: T) {
 >f4 : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
@@ -156,13 +154,8 @@ function f12(x: { s: string } | { n: number }) {
 
 function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
->T : T
->K : K
->T : T
 >obj : T
->T : T
 >keys : K[]
->K : K
 
     for (const k of keys) {
 >k : K

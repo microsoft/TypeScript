@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="ko-KR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -661,7 +661,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[rest 매개 변수 또는 바인딩 패턴에 후행 쉼표를 사용할 수 없습니다.]]></Val>
+            <Val><![CDATA[rest 매개 변수 또는 바인딩 패턴에 후행 쉼표가 없을 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2155,7 +2155,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot prepend project '{0}' because it does not have 'outFile' set]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['outFile' 집합이 없기 때문에 '{0}' 프로젝트를 추가할 수 없습니다.]]></Val>
+            <Val><![CDATA['{0}' 프로젝트는 'outFile'이 설정되어 있지 않기 때문에 앞에 추가할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2551,7 +2551,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Composite projects may not disable declaration emit.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[복합 프로젝트는 선언 내보내기를 사용하지 않도록 설정할 수 없습니다.]]></Val>
+            <Val><![CDATA[복합 프로젝트는 선언 내보내기를 비활성화할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4123,7 +4123,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Generates a sourcemap for each corresponding '.d.ts' file.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[해당하는 각 '.d.ts' 파일의 sourcemap을 생성합니다.]]></Val>
+            <Val><![CDATA[해당하는 각 '.d.ts' 파일에 sourcemap을 생성합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6286,7 +6286,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' can't be built because its dependency '{1}' has errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' 종속성에 오류가 있기 때문에 '{0}' 프로젝트를 빌드할 수 없습니다.]]></Val>
+            <Val><![CDATA['{0}' 프로젝트는 '{1}' 종속성에 오류가 있기 때문에 빌드할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6340,7 +6340,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date with .d.ts files from its dependencies]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[종속성의 .d.ts 파일이 있기 때문에 '{0}' 프로젝트가 최신 상태입니다.]]></Val>
+            <Val><![CDATA['{0}' 프로젝트는 종속성에 .d.ts 파일이 있는 최신 상태입니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7438,7 +7438,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Skipping build of project '{0}' because its dependency '{1}' has errors]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{1}' 종속성에 오류가 있기 때문에 '{0}' 프로젝트 빌드를 건너뜁니다.]]></Val>
+            <Val><![CDATA['{0}' 프로젝트의 빌드는 '{1}' 종속성에 오류가 있기 때문에 건너뜁니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9601,7 +9601,7 @@
         <Str Cat="Text">
           <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['const' 열거형은 속성 또는 인덱스 액세스 식 또는 내보내기 할당 또는 가져오기 선언의 오른쪽 또는 형식 쿼리에서만 사용할 수 있습니다.]]></Val>
+            <Val><![CDATA['const' 열거형은 속성이나 인덱스 액세스 식, 또는 내보내기 할당이나 가져오기 선언의 오른쪽, 또는 형식 쿼리에서만 사용할 수 있습니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA['const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.]]></Val>

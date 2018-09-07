@@ -62,7 +62,6 @@ export function fooWithSingleOverload(a: any) {
 export function fooWithTypePredicate(a: any): a is number {
 >fooWithTypePredicate : (a: any) => a is number
 >a : any
->a : any
 
     return true;
 >true : true
@@ -72,17 +71,13 @@ export function fooWithTypePredicateAndMulitpleParams(a: any, b: any, c: any): a
 >a : any
 >b : any
 >c : any
->a : any
 
     return true;
 >true : true
 }
 export function fooWithTypeTypePredicateAndGeneric<T>(a: any): a is T {
 >fooWithTypeTypePredicateAndGeneric : <T>(a: any) => a is T
->T : T
 >a : any
->a : any
->T : T
 
     return true;
 >true : true
@@ -91,7 +86,6 @@ export function fooWithTypeTypePredicateAndRestParam(a: any, ...rest): a is numb
 >fooWithTypeTypePredicateAndRestParam : (a: any, ...rest: any[]) => a is number
 >a : any
 >rest : any[]
->a : any
 
     return true;
 >true : true

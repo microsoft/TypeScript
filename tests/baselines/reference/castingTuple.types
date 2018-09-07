@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/tuple/castingTuple.ts ===
 interface I { }
->I : I
-
 class A { a = 10; }
 >A : A
 >a : number
@@ -9,12 +7,10 @@ class A { a = 10; }
 
 class C implements I { c };
 >C : C
->I : I
 >c : any
 
 class D implements I { d };
 >D : D
->I : I
 >d : any
 
 class E extends A { e };
@@ -29,11 +25,11 @@ class F extends A { f };
 
 enum E1 { one }
 >E1 : E1
->one : E1
+>one : E1.one
 
 enum E2 { one }
 >E2 : E2
->one : E2
+>one : E2.one
 
 // no error
 var numStrTuple: [number, string] = [5, "foo"];
@@ -64,8 +60,6 @@ var longer = numStrTuple as [number, string, boolean]
 
 var classCDTuple: [C, D] = [new C(), new D()];
 >classCDTuple : [C, D]
->C : C
->D : D
 >[new C(), new D()] : [C, D]
 >new C() : C
 >C : typeof C
@@ -75,16 +69,11 @@ var classCDTuple: [C, D] = [new C(), new D()];
 var interfaceIITuple = <[I, I]>classCDTuple;
 >interfaceIITuple : [I, I]
 ><[I, I]>classCDTuple : [I, I]
->I : I
->I : I
 >classCDTuple : [C, D]
 
 var classCDATuple = <[C, D, A]>classCDTuple;
 >classCDATuple : [C, D, A]
 ><[C, D, A]>classCDTuple : [C, D, A]
->C : C
->D : D
->A : A
 >classCDTuple : [C, D]
 
 var eleFromCDA1 = classCDATuple[2]; // A
@@ -101,9 +90,7 @@ var eleFromCDA2 = classCDATuple[5]; // C | D | A
 
 var t10: [E1, E2] = [E1.one, E2.one];
 >t10 : [E1, E2]
->E1 : E1
->E2 : E2
->[E1.one, E2.one] : [E1, E2]
+>[E1.one, E2.one] : [E1.one, E2.one]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1
@@ -123,7 +110,6 @@ var array1 = <{}[]>emptyObjTuple;
 
 var unionTuple: [C, string | number] = [new C(), "foo"];
 >unionTuple : [C, string | number]
->C : C
 >[new C(), "foo"] : [C, string]
 >new C() : C
 >C : typeof C
@@ -131,8 +117,6 @@ var unionTuple: [C, string | number] = [new C(), "foo"];
 
 var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
->C : C
->D : D
 >[new C(), "foo", new D()] : [C, string, D]
 >new C() : C
 >C : typeof C
@@ -160,8 +144,6 @@ var t3 = <[number, number]>numStrTuple;
 var t9 = <[A, I]>classCDTuple;
 >t9 : [A, I]
 ><[A, I]>classCDTuple : [A, I]
->A : A
->I : I
 >classCDTuple : [C, D]
 
 var array1 = <number[]>numStrTuple;

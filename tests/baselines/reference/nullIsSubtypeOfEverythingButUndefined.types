@@ -142,9 +142,7 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 >true ? <T>(x: T) => { return x } : null : <T>(x: T) => T
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 >null : null
 
@@ -154,18 +152,14 @@ var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identi
 >true : true
 >null : null
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 interface I1 { foo: number; }
->I1 : I1
 >foo : number
 
 var i1: I1;
 >i1 : I1
->I1 : I1
 
 var r9 = true ? i1 : null;
 >r9 : I1
@@ -187,7 +181,6 @@ class C1 { foo: number; }
 
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 var r10 = true ? c1 : null;
 >r10 : C1
@@ -205,13 +198,10 @@ var r10 = true ? null : c1;
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
->T : T
 >foo : T
->T : T
 
 var c2: C2<number>;
 >c2 : C2<number>
->C2 : C2<T>
 
 var r12 = true ? c2 : null;
 >r12 : C2<number>
@@ -229,7 +219,7 @@ var r12 = true ? null : c2;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var r13 = true ? E : null;
 >r13 : typeof E
@@ -322,9 +312,7 @@ var r16 = true ? null : ac;
 
 function f17<T>(x: T) {
 >f17 : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
     var r17 = true ? x : null;
 >r17 : T
@@ -343,10 +331,7 @@ function f17<T>(x: T) {
 
 function f18<T, U>(x: U) {
 >f18 : <T, U>(x: U) => void
->T : T
->U : U
 >x : U
->U : U
 
     var r18 = true ? x : null;
 >r18 : U

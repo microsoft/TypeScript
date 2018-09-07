@@ -5,7 +5,6 @@
 
     let obj: Data = true;
 >obj : string | boolean
->Data : string | boolean
 >true : true
 }
 export { }

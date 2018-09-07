@@ -1,6 +1,5 @@
 === tests/cases/compiler/declarationEmitClassPrivateConstructor.ts ===
 interface PrivateInterface {
->PrivateInterface : PrivateInterface
 }
 
 export class ExportedClass1 {
@@ -8,7 +7,6 @@ export class ExportedClass1 {
 
     private constructor(data: PrivateInterface) { }
 >data : PrivateInterface
->PrivateInterface : PrivateInterface
 }
 
 export class ExportedClass2 {
@@ -16,7 +14,6 @@ export class ExportedClass2 {
 
     private constructor(private data: PrivateInterface) { }
 >data : PrivateInterface
->PrivateInterface : PrivateInterface
 }
 
 export class ExportedClass3 {
@@ -24,7 +21,6 @@ export class ExportedClass3 {
 
     private constructor(private data: PrivateInterface, private n: number) { }
 >data : PrivateInterface
->PrivateInterface : PrivateInterface
 >n : number
 }
 
@@ -33,6 +29,5 @@ export class ExportedClass4 {
 
     private constructor(private data: PrivateInterface, public n:number) { }
 >data : PrivateInterface
->PrivateInterface : PrivateInterface
 >n : number
 }

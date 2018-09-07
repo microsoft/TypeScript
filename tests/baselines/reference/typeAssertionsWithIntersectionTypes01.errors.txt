@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Type 'I2' cannot be converted to type 'I1 & I3'.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(17,9): error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'I2' is not comparable to type 'I3'.
     Property 'p3' is missing in type 'I2'.
-tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Type 'I2' cannot be converted to type 'I3'.
+tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts(18,9): error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts (2 errors) ====
@@ -23,12 +23,12 @@ tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithInt
     
     var a = <I1 & I3>z;
             ~~~~~~~~~~
-!!! error TS2352: Type 'I2' cannot be converted to type 'I1 & I3'.
+!!! error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'I2' is not comparable to type 'I3'.
 !!! error TS2352:     Property 'p3' is missing in type 'I2'.
     var b = <I3>z;
             ~~~~~
-!!! error TS2352: Type 'I2' cannot be converted to type 'I3'.
+!!! error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     var c = <I2>z;
     var d = <I1>y;
     

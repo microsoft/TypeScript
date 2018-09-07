@@ -17,8 +17,6 @@ class E extends C { foo2() { } }
 
 var unionDE: D | E;
 >unionDE : D | E
->D : D
->E : E
 
 var num: number;
 >num : number
@@ -28,15 +26,12 @@ var str: string;
 
 var c: C;
 >c : C
->C : C
 
 var d: D;
 >d : D
->D : D
 
 var e: E;
 >e : E
->E : E
 
 // A union type U is assignable to a type T if each type in U is assignable to T
 c = d;
@@ -239,12 +234,8 @@ unionNumberString = undefined;
 // type parameters
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     t = u; // error
 >t = u : U
@@ -258,8 +249,6 @@ function foo<T, U>(t: T, u: U) {
 
     var x : T | U;
 >x : T | U
->T : T
->U : U
 
     x = t; // ok
 >x = t : T

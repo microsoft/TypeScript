@@ -24,7 +24,7 @@ verify.completions({
     marker: "",
     exact: [
         "n",
-        { name: "publicSym", insertText: "[publicSym]", replacementSpan: test.ranges()[0], hasAction: true },
+        { name: "publicSym", source: "/a", insertText: "[publicSym]", replacementSpan: test.ranges()[0], hasAction: true },
     ],
     preferences: {
         includeInsertTextCompletions: true,

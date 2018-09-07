@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.0";
+    export const versionMajorMinor = "3.1";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -789,11 +789,8 @@ namespace ts {
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[];
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined;
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined {
-        return !array ? undefined :
-            array.length === 0 ? [] :
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return array.length === 0 ? [] :
             array.length === 1 ? array.slice() :
             comparer ? deduplicateRelational(array, equalityComparer, comparer) :
             deduplicateEquality(array, equalityComparer);
@@ -802,10 +799,7 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[];
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined;
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined {
-        if (!array) return undefined;
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
         if (array.length === 0) return [];
 
         let last = array[0];
@@ -1272,7 +1266,7 @@ namespace ts {
         if (!left || !right) return false;
         for (const key in left) {
             if (hasOwnProperty.call(left, key)) {
-                if (!hasOwnProperty.call(right, key) === undefined) return false;
+                if (!hasOwnProperty.call(right, key)) return false;
                 if (!equalityComparer(left[key], right[key])) return false;
             }
         }
@@ -1866,6 +1860,9 @@ namespace ts {
             if (candidateName !== undefined && Math.abs(candidateName.length - nameLowerCase.length) <= maximumLengthDifference) {
                 const candidateNameLowerCase = candidateName.toLowerCase();
                 if (candidateNameLowerCase === nameLowerCase) {
+                    if (candidateName === name) {
+                        continue;
+                    }
                     return candidate;
                 }
                 if (justCheckExactMatches) {
@@ -2090,7 +2087,7 @@ namespace ts {
         return arg => f(arg) || g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
+    export function assertType<T>(_: T): void { } // tslint:disable-line no-empty
 
     export function singleElementArray<T>(t: T | undefined): T[] | undefined {
         return t === undefined ? undefined : [t];

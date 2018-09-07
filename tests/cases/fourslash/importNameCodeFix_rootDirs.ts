@@ -18,6 +18,6 @@ const nonRelative = 'import { a } from "a";\n\na;';
 const relative = nonRelative.replace('"a"', '"./a"');
 
 goTo.file("/b.ts");
-verify.importFixAtPosition([nonRelative, relative]);
+verify.importFixAtPosition([nonRelative]);
 verify.importFixAtPosition([nonRelative], undefined, { importModuleSpecifierPreference: "non-relative" });
 verify.importFixAtPosition([relative], undefined, { importModuleSpecifierPreference: "relative" });

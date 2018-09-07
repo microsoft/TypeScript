@@ -53,7 +53,10 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile ||
+                !(isEffectiveExternalModule(node, compilerOptions) ||
+                    node.transformFlags & TransformFlags.ContainsDynamicImport ||
+                    (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && (compilerOptions.out || compilerOptions.outFile)))) {
                 return node;
             }
 
@@ -97,7 +100,7 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -117,6 +120,7 @@ namespace ts {
         function transformAMDModule(node: SourceFile) {
             const define = createIdentifier("define");
             const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
+            const jsonSourceFile = isJsonSourceFile(node) && node;
 
             // An AMD define function has the following shape:
             //
@@ -158,7 +162,7 @@ namespace ts {
                                     // Add the dependency array argument:
                                     //
                                     //     ["require", "exports", module1", "module2", ...]
-                                    createArrayLiteral([
+                                    createArrayLiteral(jsonSourceFile ? emptyArray : [
                                         createLiteral("require"),
                                         createLiteral("exports"),
                                         ...aliasedModuleNames,
@@ -168,7 +172,9 @@ namespace ts {
                                     // Add the module body function argument:
                                     //
                                     //     function (require, exports, module1, module2) ...
-                                    createFunctionExpression(
+                                    jsonSourceFile ?
+                                        jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : createObjectLiteral() :
+                                        createFunctionExpression(
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
                                         /*name*/ undefined,
@@ -426,7 +432,7 @@ namespace ts {
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -767,7 +773,7 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (!node.importClause) {
                     // import "mod";
-                    return setTextRange(createExpressionStatement(createRequireCall(node)), node);
+                    return setOriginalNode(setTextRange(createExpressionStatement(createRequireCall(node)), node), node);
                 }
                 else {
                     const variables: VariableDeclaration[] = [];
@@ -806,15 +812,17 @@ namespace ts {
                     }
 
                     statements = append(statements,
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList(
-                                    variables,
-                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
-                            /*location*/ node
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList(
+                                        variables,
+                                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    )
+                                ),
+                                /*location*/ node),
+                            /*original*/ node
                         )
                     );
                 }
@@ -826,13 +834,15 @@ namespace ts {
                         /*modifiers*/ undefined,
                         createVariableDeclarationList(
                             [
-                                setTextRange(
-                                    createVariableDeclaration(
-                                        getSynthesizedClone(namespaceDeclaration.name),
-                                        /*type*/ undefined,
-                                        getGeneratedNameForNode(node)
-                                    ),
-                                    /*location*/ node
+                                setOriginalNode(
+                                    setTextRange(
+                                        createVariableDeclaration(
+                                            getSynthesizedClone(namespaceDeclaration.name),
+                                            /*type*/ undefined,
+                                            getGeneratedNameForNode(node)
+                                        ),
+                                        /*location*/ node),
+                                    /*original*/ node
                                 )
                             ],
                             languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
@@ -880,33 +890,37 @@ namespace ts {
             if (moduleKind !== ModuleKind.AMD) {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(
-                                    node.name,
-                                    createRequireCall(node)
-                                )
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(
+                                        node.name,
+                                        createRequireCall(node)
+                                    )
+                                ),
+                                node),
                             node
                         )
                     );
                 }
                 else {
                     statements = append(statements,
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList(
-                                    [
-                                        createVariableDeclaration(
-                                            getSynthesizedClone(node.name),
-                                            /*type*/ undefined,
-                                            createRequireCall(node)
-                                        )
-                                    ],
-                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList(
+                                        [
+                                            createVariableDeclaration(
+                                                getSynthesizedClone(node.name),
+                                                /*type*/ undefined,
+                                                createRequireCall(node)
+                                            )
+                                        ],
+                                        /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    )
+                                ),
+                                node),
                             node
                         )
                     );
@@ -915,10 +929,12 @@ namespace ts {
             else {
                 if (hasModifier(node, ModifierFlags.Export)) {
                     statements = append(statements,
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(getExportName(node), getLocalName(node))
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(getExportName(node), getLocalName(node))
+                                ),
+                                node),
                             node
                         )
                     );
@@ -956,18 +972,20 @@ namespace ts {
                 // export { x, y } from "mod";
                 if (moduleKind !== ModuleKind.AMD) {
                     statements.push(
-                        setTextRange(
-                            createVariableStatement(
-                                /*modifiers*/ undefined,
-                                createVariableDeclarationList([
-                                    createVariableDeclaration(
-                                        generatedName,
-                                        /*type*/ undefined,
-                                        createRequireCall(node)
-                                    )
-                                ])
-                            ),
-                            /*location*/ node
+                        setOriginalNode(
+                            setTextRange(
+                                createVariableStatement(
+                                    /*modifiers*/ undefined,
+                                    createVariableDeclarationList([
+                                        createVariableDeclaration(
+                                            generatedName,
+                                            /*type*/ undefined,
+                                            createRequireCall(node)
+                                        )
+                                    ])
+                                ),
+                                /*location*/ node),
+                            /* original */ node
                         )
                     );
                 }
@@ -977,10 +995,12 @@ namespace ts {
                         specifier.propertyName || specifier.name
                     );
                     statements.push(
-                        setTextRange(
-                            createExpressionStatement(
-                                createExportExpression(getExportName(specifier), exportedValue)
-                            ),
+                        setOriginalNode(
+                            setTextRange(
+                                createExpressionStatement(
+                                    createExportExpression(getExportName(specifier), exportedValue)
+                                ),
+                                specifier),
                             specifier
                         )
                     );
@@ -990,10 +1010,12 @@ namespace ts {
             }
             else {
                 // export * from "mod";
-                return setTextRange(
-                    createExpressionStatement(
-                        createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
-                    ),
+                return setOriginalNode(
+                    setTextRange(
+                        createExpressionStatement(
+                            createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                        ),
+                        node),
                     node
                 );
             }
@@ -1140,7 +1162,7 @@ namespace ts {
                 }
 
                 if (expressions) {
-                    statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
+                    statements = append(statements, setOriginalNode(setTextRange(createExpressionStatement(inlineExpressions(expressions)), node), node));
                 }
             }
             else {

@@ -1,8 +1,6 @@
 === tests/cases/compiler/augmentedTypesModules2.ts ===
 // module then function
 module m2 { }
->m2 : () => void
-
 function m2() { }; // ok since the module is not instantiated
 >m2 : () => void
 
@@ -39,8 +37,6 @@ function m2cc() { }; // error to have module first
 >m2cc : typeof m2cc
 
 module m2d { }
->m2d : () => void
-
 declare function m2d(): void; 
 >m2d : () => void
 
@@ -48,14 +44,11 @@ declare function m2e(): void;
 >m2e : () => void
 
 module m2e { }
->m2e : () => void
 
 function m2f() { };
 >m2f : () => void
 
 module m2f { export interface I { foo(): void } } 
->m2f : () => void
->I : I
 >foo : () => void
 
 function m2g() { };

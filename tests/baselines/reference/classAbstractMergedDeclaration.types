@@ -3,11 +3,8 @@ abstract class CM {}
 >CM : CM
 
 module CM {}
->CM : typeof CM
 
 module MC {}
->MC : typeof MC
-
 abstract class MC {}
 >MC : MC
 
@@ -15,11 +12,8 @@ abstract class CI {}
 >CI : CI
 
 interface CI {}
->CI : CI
 
 interface IC {}
->IC : IC
-
 abstract class IC {}
 >IC : IC
 
@@ -39,11 +33,8 @@ declare abstract class DCI {}
 >DCI : DCI
 
 interface DCI {}
->DCI : DCI
 
 interface DIC {}
->DIC : DIC
-
 declare abstract class DIC {}
 >DIC : DIC
 

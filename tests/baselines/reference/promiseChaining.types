@@ -1,21 +1,14 @@
 === tests/cases/compiler/promiseChaining.ts ===
 class Chain<T> {
 >Chain : Chain<T>
->T : T
 
     constructor(public value: T) { }
 >value : T
->T : T
 
     then<S>(cb: (x: T) => S): Chain<S> {
 >then : <S>(cb: (x: T) => S) => Chain<S>
->S : S
 >cb : (x: T) => S
 >x : T
->T : T
->S : S
->Chain : Chain<T>
->S : S
 
         var result = cb(this.value);
 >result : S

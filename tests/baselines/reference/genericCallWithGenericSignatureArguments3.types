@@ -4,23 +4,15 @@
 
 function foo<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >x : T
->T : T
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: T) => T
 >x : T
->T : T
->T : T
 
     var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
     return r;
 >r : (x: T) => T
@@ -36,7 +28,6 @@ var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 >'' : ""
 >(x: Object) => null : (x: Object) => any
 >x : Object
->Object : Object
 >null : null
 
 var r1ii = foo('', (x) => '', (x) => null); // string => string
@@ -61,7 +52,6 @@ var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 >'' : ""
 >(x: Object) => '' : (x: Object) => string
 >x : Object
->Object : Object
 >'' : ""
 
 var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
@@ -71,7 +61,6 @@ var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >null : null
 >(x: Object) => '' : (x: Object) => string
 >x : Object
->Object : Object
 >'' : ""
 >(x: string) => '' : (x: string) => string
 >x : string
@@ -104,11 +93,11 @@ var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 enum F { A }
 >F : F
->A : F
+>A : F.A
 
 var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
 >r6 : (x: number) => number
@@ -124,7 +113,6 @@ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number
 >A : E
 >(x: F) => F.A : (x: F) => F
 >x : F
->F : F
 >F.A : F
 >F : typeof F
 >A : F
@@ -132,24 +120,15 @@ var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number
 
 function foo2<T, U>(x: T, a: (x: T) => U, b: (x: T) => U) {
 >foo2 : <T, U>(x: T, a: (x: T) => U, b: (x: T) => U) => (x: T) => U
->T : T
->U : U
 >x : T
->T : T
 >a : (x: T) => U
 >x : T
->T : T
->U : U
 >b : (x: T) => U
 >x : T
->T : T
->U : U
 
     var r: (x: T) => U;
 >r : (x: T) => U
 >x : T
->T : T
->U : U
 
     return r;
 >r : (x: T) => U
@@ -186,7 +165,6 @@ var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >null : null
 >(x: Object) => '' : (x: Object) => string
 >x : Object
->Object : Object
 >'' : ""
 >(x: string) => '' : (x: string) => string
 >x : string
@@ -206,7 +184,6 @@ var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: stri
 >y : string
 >(n: Object) => 1 : (n: Object) => number
 >n : Object
->Object : Object
 >1 : 1
 >(a2: (z: string) => string) => 2 : (a2: (z: string) => string) => number
 >a2 : (z: string) => string
@@ -223,7 +200,6 @@ var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: str
 >y : string
 >(n: Object) => 1 : (n: Object) => number
 >n : Object
->Object : Object
 >1 : 1
 >(a2: (z: string) => boolean) => 2 : (a2: (z: string) => boolean) => number
 >a2 : (z: string) => boolean

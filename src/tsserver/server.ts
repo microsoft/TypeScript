@@ -199,7 +199,7 @@ namespace ts.server {
 
         private write(s: string) {
             if (this.fd >= 0) {
-                const buf = Buffer.from ? Buffer.from(s) : new Buffer(s);
+                const buf = sys.bufferFrom!(s);
                 // tslint:disable-next-line no-null-keyword
                 fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null!); // TODO: GH#18217
             }
@@ -455,7 +455,7 @@ namespace ts.server {
                         break;
                     }
                 default:
-                    assertTypeIsNever(response);
+                    assertType<never>(response);
             }
         }
 
@@ -644,14 +644,18 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
-        const logFileName = cmdLineLogFileName
+        const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
+        const substitutedLogFileName = unsubstitutedLogFileName
+            ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
+            : undefined;
+
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+        return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -869,7 +873,7 @@ namespace ts.server {
     }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
-    sys.write = (s: string) => writeMessage(Buffer.from ? Buffer.from(s, "utf8") : new Buffer(s, "utf8"));
+    sys.write = (s: string) => writeMessage(sys.bufferFrom!(s, "utf8"));
     sys.watchFile = (fileName, callback) => {
         const watchedFile = pollingWatchedFileSet.addFile(fileName, callback);
         return {
@@ -920,7 +924,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {

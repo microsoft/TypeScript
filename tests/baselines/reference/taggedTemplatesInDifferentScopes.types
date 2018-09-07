@@ -2,7 +2,6 @@
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
 >parts : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >values : any[]
 
     return parts[0];

@@ -73,7 +73,6 @@ var classTypeArray = [C, C, C];
 
 var classTypeArray: Array<typeof C>; // Should OK, not be a parse error
 >classTypeArray : (typeof C)[]
->Array : T[]
 >C : typeof C
 
 // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
@@ -133,7 +132,6 @@ class Derived2 extends Base { private n };
 
 var context3: Base[] = [new Derived1(), new Derived2()];
 >context3 : Base[]
->Base : Base
 >[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
 >new Derived1() : Derived1
 >Derived1 : typeof Derived1
@@ -143,7 +141,6 @@ var context3: Base[] = [new Derived1(), new Derived2()];
 // Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]
 var context4: Base[] = [new Derived1(), new Derived1()];
 >context4 : Base[]
->Base : Base
 >[new Derived1(), new Derived1()] : Derived1[]
 >new Derived1() : Derived1
 >Derived1 : typeof Derived1

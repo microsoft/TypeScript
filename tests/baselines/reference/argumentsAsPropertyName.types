@@ -5,7 +5,6 @@ type MyType = {
 
     arguments: Array<string>
 >arguments : string[]
->Array : T[]
 }
 
 declare function use(s: any);
@@ -15,7 +14,6 @@ declare function use(s: any);
 function myFunction(myType: MyType) {
 >myFunction : (myType: MyType) => void
 >myType : MyType
->MyType : MyType
 
     for (let i = 0; i < 10; i++) {
 >i : number

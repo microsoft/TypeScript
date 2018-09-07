@@ -1,24 +1,15 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
 	}
 	interface ElementAttributesProperty {
->ElementAttributesProperty : ElementAttributesProperty
-
 		props;
 >props : any
 	}
 }
 
 interface Props {  
->Props : Props
-
   foo: string;
 >foo : string
 }

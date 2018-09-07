@@ -6,38 +6,24 @@
 //  - when false, has no effect on the type of x.
 
 interface C1 {
->C1 : C1
-
     (): C1;
->C1 : C1
-
     prototype: C1;
 >prototype : C1
->C1 : C1
 
     p1: string;
 >p1 : string
 }
 interface C2 {
->C2 : C2
-
     (): C2;
->C2 : C2
-
     prototype: C2;
 >prototype : C2
->C2 : C2
 
     p2: number;
 >p2 : number
 }
 interface D1 extends C1 {
->D1 : D1
->C1 : C1
-
     prototype: D1;
 >prototype : D1
->D1 : D1
 
     p3: number;
 >p3 : number
@@ -53,20 +39,15 @@ var strOrNum: string | number;
 
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 var c2: C2;
 >c2 : C2
->C2 : C2
 
 var d1: D1;
 >d1 : D1
->D1 : D1
 
 var c1Orc2: C1 | C2;
 >c1Orc2 : C1 | C2
->C1 : C1
->C2 : C2
 
 str = c1Orc2 instanceof c1 && c1Orc2.p1; // C1
 >str = c1Orc2 instanceof c1 && c1Orc2.p1 : string
@@ -114,8 +95,6 @@ num = c1Orc2 instanceof d1 && c1Orc2.p3; // D1
 
 var c2Ord1: C2 | D1;
 >c2Ord1 : C2 | D1
->C2 : C2
->D1 : D1
 
 num = c2Ord1 instanceof c2 && c2Ord1.p2; // C2
 >num = c2Ord1 instanceof c2 && c2Ord1.p2 : number
@@ -152,8 +131,6 @@ str = c2Ord1 instanceof d1 && c2Ord1.p1; // D1
 
 var r2: D1 | C2 = c2Ord1 instanceof c1 && c2Ord1; // C2 | D1
 >r2 : C2 | D1
->D1 : D1
->C2 : C2
 >c2Ord1 instanceof c1 && c2Ord1 : D1
 >c2Ord1 instanceof c1 : boolean
 >c2Ord1 : C2 | D1

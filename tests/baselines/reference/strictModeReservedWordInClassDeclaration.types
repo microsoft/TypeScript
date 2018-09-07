@@ -1,6 +1,5 @@
 === tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts ===
 interface public { }
->public : public
 
 class Foo {
 >Foo : Foo
@@ -20,7 +19,6 @@ class Foo {
     public banana(x: public) { }
 >banana : (x: public) => void
 >x : public
->public : public
 }
 
 class C {
@@ -51,28 +49,21 @@ class C {
 
 class D<public, private>{ }
 >D : D<public, private>
->public : public
->private : private
 
 class E implements public { }
 >E : E
->public : public
 
 class F implements public.private.B { }
 >F : F
->public.private.B : any
 >public.private : any
 >public : any
 >private : any
->B : No type information available!
 
 class F1 implements public.private.implements { }
 >F1 : F1
->public.private.implements : any
 >public.private : any
 >public : any
 >private : any
->implements : No type information available!
 
 class G extends package { }
 >G : G
