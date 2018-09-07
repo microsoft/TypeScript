@@ -43,6 +43,8 @@ namespace ts {
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
+        /* @internal */
+        setInJSDocType(inType: boolean): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
@@ -825,6 +827,8 @@ namespace ts {
         let tokenValue!: string;
         let tokenFlags: TokenFlags;
 
+        let inJSDocType = 0;
+
         setText(text, start, length);
 
         return {
@@ -856,6 +860,7 @@ namespace ts {
             setLanguageVariant,
             setOnError,
             setTextPos,
+            setInJSDocType,
             tryScan,
             lookAhead,
             scanRange,
@@ -1352,6 +1357,7 @@ namespace ts {
         function scan(): SyntaxKind {
             startPos = pos;
             tokenFlags = 0;
+            let asteriskSeen = false;
             while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
@@ -1392,6 +1398,24 @@ namespace ts {
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
+                    case CharacterCodes.nonBreakingSpace:
+                    case CharacterCodes.ogham:
+                    case CharacterCodes.enQuad:
+                    case CharacterCodes.emQuad:
+                    case CharacterCodes.enSpace:
+                    case CharacterCodes.emSpace:
+                    case CharacterCodes.threePerEmSpace:
+                    case CharacterCodes.fourPerEmSpace:
+                    case CharacterCodes.sixPerEmSpace:
+                    case CharacterCodes.figureSpace:
+                    case CharacterCodes.punctuationSpace:
+                    case CharacterCodes.thinSpace:
+                    case CharacterCodes.hairSpace:
+                    case CharacterCodes.zeroWidthSpace:
+                    case CharacterCodes.narrowNoBreakSpace:
+                    case CharacterCodes.mathematicalSpace:
+                    case CharacterCodes.ideographicSpace:
+                    case CharacterCodes.byteOrderMark:
                         if (skipTrivia) {
                             pos++;
                             continue;
@@ -1449,6 +1473,11 @@ namespace ts {
                             return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                         }
                         pos++;
+                        if (inJSDocType && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                            // decoration at the start of a JSDoc comment line
+                            asteriskSeen = true;
+                            continue;
+                        }
                         return token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.plus) {
@@ -2087,6 +2116,10 @@ namespace ts {
             token = SyntaxKind.Unknown;
             tokenValue = undefined!;
             tokenFlags = 0;
+        }
+
+        function setInJSDocType(inType: boolean) {
+            inJSDocType += inType ? 1 : -1;
         }
     }
 }

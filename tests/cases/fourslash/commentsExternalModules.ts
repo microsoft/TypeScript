@@ -55,7 +55,7 @@ verify.quickInfoAt("6q", "function m1.fooExport(): number", "exported function")
 verify.quickInfoAt("7", "var myvar: m1.m2.c");
 
 goTo.marker('8');
-verify.completionListContains("c", "constructor m1.m2.c(): m1.m2.c", "");
+verify.completionListContains("c", "constructor m1.m2.c(): m1.m2.c", "class comment;");
 verify.completionListContains("i", "var m1.m2.i: m1.m2.c", "i");
 
 goTo.file("commentsExternalModules_file1.ts");
@@ -78,5 +78,5 @@ verify.quickInfoAt("13q", "function extMod.m1.fooExport(): number", "exported fu
 verify.quickInfoAt("14", "var newVar: extMod.m1.m2.c");
 
 goTo.marker('15');
-verify.completionListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
+verify.completionListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "class comment;");
 verify.completionListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");

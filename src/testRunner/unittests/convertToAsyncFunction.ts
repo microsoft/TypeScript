@@ -319,7 +319,7 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
+    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, diagnosticDescription: DiagnosticMessage, codeFixDescription: DiagnosticMessage, includeLib?: boolean) {
         const t = getTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -361,12 +361,14 @@ interface Array<T> {}`
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
-            assert.isNotNull(diagnostic);
+            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === diagnosticDescription.message);
+            assert.exists(diagnostic);
+            assert.equal(diagnostic!.start, context.span.start);
+            assert.equal(diagnostic!.length, context.span.length);
 
             const actions = codefix.getFixes(context);
-            const action = find(actions, action => action.description === description.message)!;
-            assert.isNotNull(action);
+            const action = find(actions, action => action.description === codeFixDescription.message)!;
+            assert.exists(action);
 
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
@@ -424,6 +426,10 @@ interface Array<T> {}`
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+}`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicWithComments", `
 function [#|f|](): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
@@ -435,6 +441,10 @@ function [#|f|](): Promise<void>{
 
         _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
 [#|():Promise<void> => {|]
+    return fetch('https://typescriptlang.org').then(result => console.log(result));
+}`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunctionNoAnnotation", `
+[#|() => {|]
     return fetch('https://typescriptlang.org').then(result => console.log(result));
 }`);
         _testConvertToAsyncFunction("convertToAsyncFunction_Catch", `
@@ -1178,11 +1188,17 @@ function [#|f|]() {
     }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpression", `
+const [#|foo|] = function () {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
+`);
+
 
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, /*includeLib*/ true);
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.This_may_be_converted_to_an_async_function, Diagnostics.Convert_to_async_function, /*includeLib*/ true);
     }
 
     function _testConvertToAsyncFunctionFailed(caption: string, text: string) {

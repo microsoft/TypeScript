@@ -1839,7 +1839,7 @@ namespace ts.server.protocol {
      * begin with prefix.
      */
     export interface CompletionsRequest extends FileLocationRequest {
-        command: CommandTypes.Completions;
+        command: CommandTypes.Completions | CommandTypes.CompletionInfo;
         arguments: CompletionsRequestArgs;
     }
 
@@ -2436,6 +2436,18 @@ namespace ts.server.protocol {
         openFiles: string[];
     }
 
+    export type SurveyReadyEventName = "surveyReady";
+
+    export interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+
+    export interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+    }
+
     export type LargeFileReferencedEventName = "largeFileReferenced";
     export interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -2823,6 +2835,7 @@ namespace ts.server.protocol {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
     }
 
     export interface CompilerOptions {

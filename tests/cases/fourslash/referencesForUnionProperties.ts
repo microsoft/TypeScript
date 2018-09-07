@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface One {
-////    common: { [|{| "isWriteAccess": true, "isDefinition": true |}a|]: number; };
+////    common: { [|{| "isDefinition": true |}a|]: number; };
 ////}
 ////
 ////interface Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////    b: string;
 ////}
 ////
 ////interface HasAOrB extends Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////    b: string;
 ////}
 ////

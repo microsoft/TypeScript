@@ -991,6 +991,22 @@
         "category": "Error",
         "code": 1345
     },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2437,6 +2453,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2892,10 +2912,15 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

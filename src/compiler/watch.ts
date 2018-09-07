@@ -27,12 +27,6 @@ namespace ts {
         };
     }
 
-    /** @internal */
-    export const nonClearingMessageCodes: number[] = [
-        Diagnostics.Found_1_error_Watching_for_file_changes.code,
-        Diagnostics.Found_0_errors_Watching_for_file_changes.code
-    ];
-
     /**
      * @returns Whether the screen was cleared.
      */
@@ -41,7 +35,7 @@ namespace ts {
             !options.preserveWatchOutput &&
             !options.extendedDiagnostics &&
             !options.diagnostics &&
-            !contains(nonClearingMessageCodes, diagnostic.code)) {
+            contains(screenStartingMessageCodes, diagnostic.code)) {
             system.clearScreen();
             return true;
         }
@@ -174,6 +168,17 @@ namespace ts {
 
     const noopFileWatcher: FileWatcher = { close: noop };
 
+    export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
+        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
+        return {
+            onWatchStatusChange,
+            watchFile: system.watchFile ? ((path, callback, pollingInterval) => system.watchFile!(path, callback, pollingInterval)) : () => noopFileWatcher,
+            watchDirectory: system.watchDirectory ? ((path, callback, recursive) => system.watchDirectory!(path, callback, recursive)) : () => noopFileWatcher,
+            setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout!.call(system, callback, ms, ...args)) : noop,
+            clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout!(timeoutId)) : noop
+        };
+    }
+
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
@@ -186,7 +191,7 @@ namespace ts {
         host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
         const useCaseSensitiveFileNames = () => system.useCaseSensitiveFileNames;
         const writeFileName = (s: string) => system.write(s + system.newLine);
-        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
+        const { onWatchStatusChange, watchFile, watchDirectory, setTimeout, clearTimeout } = createWatchHost(system, reportWatchStatus);
         return {
             useCaseSensitiveFileNames,
             getNewLine: () => system.newLine,
@@ -200,10 +205,10 @@ namespace ts {
             readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),
             realpath: system.realpath && (path => system.realpath!(path)),
             getEnvironmentVariable: system.getEnvironmentVariable && (name => system.getEnvironmentVariable(name)),
-            watchFile: system.watchFile ? ((path, callback, pollingInterval) => system.watchFile!(path, callback, pollingInterval)) : () => noopFileWatcher,
-            watchDirectory: system.watchDirectory ? ((path, callback, recursive) => system.watchDirectory!(path, callback, recursive)) : () => noopFileWatcher,
-            setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout!.call(system, callback, ms, ...args)) : noop,
-            clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout!(timeoutId)) : noop,
+            watchFile,
+            watchDirectory,
+            setTimeout,
+            clearTimeout,
             trace: s => system.write(s),
             onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
@@ -224,10 +229,10 @@ namespace ts {
 
             const reportSummary = (errorCount: number) => {
                 if (errorCount === 1) {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange!(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
                 }
                 else {
-                    onWatchStatusChange(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
+                    onWatchStatusChange!(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
                 }
             };
 
@@ -270,7 +275,21 @@ namespace ts {
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
-    export interface WatchCompilerHost<T extends BuilderProgram> {
+    /** Host that has watch functionality used in --watch mode */
+    export interface WatchHost {
+        /** If provided, called with Diagnostic message that informs about change in watch status */
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
+
+        /** Used to watch changes in source files, missing files needed to update the program or config file */
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
+        clearTimeout?(timeoutId: any): void;
+    }
+    export interface WatchCompilerHost<T extends BuilderProgram> extends WatchHost {
         // TODO: GH#18217 Optional methods are frequently asserted
 
         /**
@@ -279,8 +298,6 @@ namespace ts {
         createProgram: CreateProgram<T>;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
-        /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
 
         // Only for testing
         /*@internal*/
@@ -323,15 +340,6 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-
-        /** Used to watch changes in source files, missing files needed to update the program or config file */
-        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
-        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
-        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        /** If provided, will be used to reset existing delayed compilation */
-        clearTimeout?(timeoutId: any): void;
     }
 
     /** Internal interface used to wire emit through same host */

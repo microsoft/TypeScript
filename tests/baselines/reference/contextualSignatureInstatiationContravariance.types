@@ -18,7 +18,7 @@ var g2: (g: Giraffe, e: Elephant) => void;
 >g : Giraffe
 >e : Elephant
 
-g2 = f2; // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
+g2 = f2; // error because Giraffe and Elephant are disjoint types
 >g2 = f2 : <T extends Animal>(x: T, y: T) => void
 >g2 : (g: Giraffe, e: Elephant) => void
 >f2 : <T extends Animal>(x: T, y: T) => void

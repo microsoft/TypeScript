@@ -107,15 +107,15 @@ class Sql extends Wagon {
     }
 }
 var db = new Sql();
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >Sql : Symbol(Sql, Decl(first.js, 18, 1))
 
 db.numberOxen = db.foonly
 >db.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 >db.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 
 // error, can't extend a TS constructor function

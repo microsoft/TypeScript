@@ -236,8 +236,9 @@ namespace ts {
             if (symbolFlags & SymbolFlags.Value) {
                 const { valueDeclaration } = symbol;
                 if (!valueDeclaration ||
+                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
                     (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules
+                    // other kinds of value declarations take precedence over modules and assignment declarations
                     symbol.valueDeclaration = node;
                 }
             }
@@ -373,7 +374,8 @@ namespace ts {
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
-                    else {
+                    else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.JSContainer)) {
+                        // JSContainers are allowed to merge with variables, no matter what other flags they have.
                         if (isNamedDeclaration(node)) {
                             node.name.parent = node;
                         }
@@ -733,6 +735,8 @@ namespace ts {
                     return isNarrowingBinaryExpression(<BinaryExpression>expr);
                 case SyntaxKind.PrefixUnaryExpression:
                     return (<PrefixUnaryExpression>expr).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((<PrefixUnaryExpression>expr).operand);
+                case SyntaxKind.TypeOfExpression:
+                    return isNarrowingExpression((<TypeOfExpression>expr).expression);
             }
             return false;
         }
@@ -1729,10 +1733,6 @@ namespace ts {
             }
         }
 
-        function bindBlockScopedVariableDeclaration(node: Declaration) {
-            bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
-        }
-
         function delayedBindJSDocTypedefTag() {
             if (!delayedTypeAliases) {
                 return;
@@ -2078,8 +2078,8 @@ namespace ts {
                     if (isInJavaScriptFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
-                        !lookupSymbolForNameWorker(container, "module" as __String)) {
-                        declareSymbol(container.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
+                        !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
+                        declareSymbol(file.locals!, /*parent*/ undefined, (node as PropertyAccessExpression).expression as Identifier,
                             SymbolFlags.FunctionScopedVariable | SymbolFlags.ModuleExports, SymbolFlags.FunctionScopedVariableExcludes);
                     }
                     break;
@@ -2510,11 +2510,10 @@ namespace ts {
 
         function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
             let namespaceSymbol = lookupSymbolForPropertyAccess(name);
-            const isToplevelNamespaceableInitializer = isBinaryExpression(propertyAccess.parent)
-                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile &&
-                    !!getJavascriptInitializer(getInitializerOfBinaryExpression(propertyAccess.parent), isPrototypeAccess(propertyAccess.parent.left))
+            const isToplevel = isBinaryExpression(propertyAccess.parent)
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevelNamespaceableInitializer) {
+            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
@@ -2537,12 +2536,10 @@ namespace ts {
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            // Declare the method/property
-            const jsContainerFlag = isToplevelNamespaceableInitializer ? SymbolFlags.JSContainer : 0;
             const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
-            const symbolFlags = (isMethod ? SymbolFlags.Method : SymbolFlags.Property) | jsContainerFlag;
-            const symbolExcludes = (isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes) & ~jsContainerFlag;
-            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, symbolFlags, symbolExcludes);
+            const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
+            const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
+            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.JSContainer, excludes & ~SymbolFlags.JSContainer);
         }
 
         /**
@@ -2573,7 +2570,7 @@ namespace ts {
             return false;
         }
 
-        function getParentOfBinaryExpression(expr: BinaryExpression) {
+        function getParentOfBinaryExpression(expr: Node) {
             while (isBinaryExpression(expr.parent)) {
                 expr = expr.parent;
             }
@@ -2660,8 +2657,11 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
+                const isEnum = !!getJSDocEnumTag(node);
+                const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
+                const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
-                    bindBlockScopedVariableDeclaration(node);
+                    bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable | enumFlags, SymbolFlags.BlockScopedVariableExcludes | enumExcludes);
                 }
                 else if (isParameterDeclaration(node)) {
                     // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
@@ -2676,7 +2676,7 @@ namespace ts {
                     declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.ParameterExcludes);
                 }
                 else {
-                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable | enumFlags, SymbolFlags.FunctionScopedVariableExcludes | enumExcludes);
                 }
             }
         }
@@ -2804,9 +2804,7 @@ namespace ts {
                     // report error on class declarations
                     node.kind === SyntaxKind.ClassDeclaration ||
                     // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
-                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node)) ||
-                    // report error on regular enums and const enums if preserveConstEnums is set
-                    (isEnumDeclaration(node) && (!isEnumConst(node) || options.preserveConstEnums));
+                    (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(<ModuleDeclaration>node));
 
                 if (reportError) {
                     currentFlow = reportedUnreachableFlow;
@@ -2851,7 +2849,7 @@ namespace ts {
     // As opposed to a pure declaration like an `interface`
     function isExecutableStatement(s: Statement): boolean {
         // Don't remove statements that can validly be used before they appear.
-        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) &&
+        return !isFunctionDeclaration(s) && !isPurelyTypeDeclaration(s) && !isEnumDeclaration(s) &&
             // `var x;` may declare a variable used above
             !(isVariableStatement(s) && !(getCombinedNodeFlags(s) & (NodeFlags.Let | NodeFlags.Const)) && s.declarationList.declarations.some(d => !d.initializer));
     }

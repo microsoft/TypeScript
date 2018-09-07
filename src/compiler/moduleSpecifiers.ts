@@ -1,8 +1,52 @@
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 /* @internal */
 namespace ts.moduleSpecifiers {
-    export interface ModuleSpecifierPreferences {
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+    const enum RelativePreference { Relative, NonRelative, Auto }
+    // See UserPreferences#importPathEnding
+    const enum Ending { Minimal, Index, JsExtension }
+
+    // Processed preferences
+    interface Preferences {
+        readonly relativePreference: RelativePreference;
+        readonly ending: Ending;
+    }
+
+    function getPreferences({ importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences, compilerOptions: CompilerOptions, importingSourceFile: SourceFile): Preferences {
+        return {
+            relativePreference: importModuleSpecifierPreference === "relative" ? RelativePreference.Relative : importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative : RelativePreference.Auto,
+            ending: getEnding(),
+        };
+        function getEnding(): Ending {
+            switch (importModuleSpecifierEnding) {
+                case "minimal": return Ending.Minimal;
+                case "index": return Ending.Index;
+                case "js": return Ending.JsExtension;
+                default: return usesJsExtensionOnImports(importingSourceFile) ? Ending.JsExtension
+                    : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs ? Ending.Index : Ending.Minimal;
+            }
+        }
+    }
+
+    function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
+        return {
+            relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
+            ending: hasJavaScriptOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
+                : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") ? Ending.Index : Ending.Minimal,
+        };
+    }
+
+    export function updateModuleSpecifier(
+        compilerOptions: CompilerOptions,
+        importingSourceFileName: Path,
+        toFileName: string,
+        host: ModuleSpecifierResolutionHost,
+        files: ReadonlyArray<SourceFile>,
+        redirectTargetsMap: RedirectTargetsMap,
+        oldImportSpecifier: string,
+    ): string | undefined {
+        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferencesForUpdate(compilerOptions, oldImportSpecifier));
+        if (res === oldImportSpecifier) return undefined;
+        return res;
     }
 
     // Note: importingSourceFile is just for usesJsExtensionOnImports
@@ -13,158 +57,98 @@ namespace ts.moduleSpecifiers {
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences = {},
+        preferences: UserPreferences = {},
         redirectTargetsMap: RedirectTargetsMap,
     ): string {
-        const info = getInfo(compilerOptions, importingSourceFile, importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
-        return firstDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions)) ||
-            first(getLocalModuleSpecifiers(toFileName, info, compilerOptions, preferences));
+        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, files, redirectTargetsMap, getPreferences(preferences, compilerOptions, importingSourceFile));
     }
 
-    export function getModuleSpecifierForDeclarationFile(
-        moduleSymbol: Symbol,
+    function getModuleSpecifierWorker(
         compilerOptions: CompilerOptions,
-        importingSourceFile: SourceFile,
+        importingSourceFileName: Path,
+        toFileName: string,
         host: ModuleSpecifierResolutionHost,
+        files: ReadonlyArray<SourceFile>,
         redirectTargetsMap: RedirectTargetsMap,
+        preferences: Preferences
     ): string {
-        const isBundle = (compilerOptions.out || compilerOptions.outFile);
-        if (isBundle && host.getCommonSourceDirectory) {
-            // For declaration bundles, we need to generate absolute paths relative to the common source dir for imports,
-            // just like how the declaration emitter does for the ambient module declarations - we can easily accomplish this
-            // using the `baseUrl` compiler option (which we would otherwise never use in declaration emit) and a non-relative
-            // specifier preference
-            compilerOptions = {
-                ...compilerOptions,
-                baseUrl: host.getCommonSourceDirectory(),
-            };
-        }
-        const preferences: ModuleSpecifierPreferences = { importModuleSpecifierPreference: isBundle ? "non-relative" : "relative" };
-        return first(first(getModuleSpecifiers(moduleSymbol, compilerOptions, importingSourceFile, host, host.getSourceFiles ? host.getSourceFiles() : [importingSourceFile], preferences, redirectTargetsMap)));
+        const info = getInfo(importingSourceFileName, host);
+        const modulePaths = getAllModulePaths(files, importingSourceFileName, toFileName, info.getCanonicalFileName, host, redirectTargetsMap);
+        return firstDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions)) ||
+            getLocalModuleSpecifier(toFileName, info, compilerOptions, preferences);
     }
 
-    // For each symlink/original for a module, returns a list of ways to import that file.
+    // Returns an import for each symlink and for the realpath.
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
         compilerOptions: CompilerOptions,
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         files: ReadonlyArray<SourceFile>,
-        preferences: ModuleSpecifierPreferences,
+        userPreferences: UserPreferences,
         redirectTargetsMap: RedirectTargetsMap,
-    ): ReadonlyArray<ReadonlyArray<string>> {
+    ): ReadonlyArray<string> {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol);
-        if (ambient) return [[ambient]];
+        if (ambient) return [ambient];
 
-        const info = getInfo(compilerOptions, importingSourceFile, importingSourceFile.path, host);
-        if (!files) {
-            return Debug.fail("Files list must be present to resolve symlinks in specifier resolution");
-        }
+        const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
         const modulePaths = getAllModulePaths(files, importingSourceFile.path, moduleSourceFile.fileName, info.getCanonicalFileName, host, redirectTargetsMap);
 
-        const global = mapDefined(modulePaths, moduleFileName => getGlobalModuleSpecifier(moduleFileName, info, host, compilerOptions));
-        return global.length ? global.map(g => [g]) : modulePaths.map(moduleFileName =>
-            getLocalModuleSpecifiers(moduleFileName, info, compilerOptions, preferences));
+        const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
+        const global = mapDefined(modulePaths, moduleFileName => tryGetModuleNameAsNodeModule(moduleFileName, info, host, compilerOptions));
+        return global.length ? global : modulePaths.map(moduleFileName => getLocalModuleSpecifier(moduleFileName, info, compilerOptions, preferences));
     }
 
     interface Info {
-        readonly moduleResolutionKind: ModuleResolutionKind;
-        readonly addJsExtension: boolean;
         readonly getCanonicalFileName: GetCanonicalFileName;
         readonly sourceDirectory: Path;
     }
     // importingSourceFileName is separate because getEditsForFileRename may need to specify an updated path
-    function getInfo(compilerOptions: CompilerOptions, importingSourceFile: SourceFile, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
-        const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-        const addJsExtension = usesJsExtensionOnImports(importingSourceFile);
+    function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionHost): Info {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : true);
         const sourceDirectory = getDirectoryPath(importingSourceFileName);
-        return { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory };
+        return { getCanonicalFileName, sourceDirectory };
     }
 
-    function getGlobalModuleSpecifier(
-        moduleFileName: string,
-        { addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
-        host: ModuleSpecifierResolutionHost,
-        compilerOptions: CompilerOptions,
-    ) {
-        return tryGetModuleNameFromTypeRoots(compilerOptions, host, getCanonicalFileName, moduleFileName, addJsExtension)
-            || tryGetModuleNameAsNodeModule(compilerOptions, moduleFileName, host, getCanonicalFileName, sourceDirectory);
-    }
-
-    function getLocalModuleSpecifiers(
-        moduleFileName: string,
-        { moduleResolutionKind, addJsExtension, getCanonicalFileName, sourceDirectory }: Info,
-        compilerOptions: CompilerOptions,
-        preferences: ModuleSpecifierPreferences,
-    ): ReadonlyArray<string> {
+    function getLocalModuleSpecifier(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, compilerOptions: CompilerOptions, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
 
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName) ||
-            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), moduleResolutionKind, addJsExtension);
-        if (!baseUrl || preferences.importModuleSpecifierPreference === "relative") {
-            return [relativePath];
+            removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
+        if (!baseUrl || relativePreference === RelativePreference.Relative) {
+            return relativePath;
         }
 
         const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseUrl, getCanonicalFileName);
         if (!relativeToBaseUrl) {
-            return [relativePath];
+            return relativePath;
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, moduleResolutionKind, addJsExtension);
-        if (paths) {
-            const fromPaths = tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-            if (fromPaths) {
-                return [fromPaths];
-            }
+        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
+        const nonRelative = fromPaths === undefined ? importRelativeToBaseUrl : fromPaths;
+
+        if (relativePreference === RelativePreference.NonRelative) {
+            return nonRelative;
         }
 
-        if (preferences.importModuleSpecifierPreference === "non-relative") {
-            return [importRelativeToBaseUrl];
+        if (relativePreference !== RelativePreference.Auto) Debug.assertNever(relativePreference);
+
+        // Prefer a relative import over a baseUrl import if it has fewer components.
+        return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
+    }
+
+    function countPathComponents(path: string): number {
+        let count = 0;
+        for (let i = startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
+            if (path.charCodeAt(i) === CharacterCodes.slash) count++;
         }
-
-        if (preferences.importModuleSpecifierPreference !== undefined) Debug.assertNever(preferences.importModuleSpecifierPreference);
-
-        if (isPathRelativeToParent(relativeToBaseUrl)) {
-            return [relativePath];
-        }
-
-        /*
-        Prefer a relative import over a baseUrl import if it doesn't traverse up to baseUrl.
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/a/b
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../../foo/bar
-            getRelativePathNParents(relativePath) = 2
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            2 < 2 = false
-        In this case we should prefer using the baseUrl path "/a/b" instead of the relative path "../../foo/bar".
-
-        Suppose we have:
-            baseUrl = /base
-            sourceDirectory = /base/foo/a
-            moduleFileName = /base/foo/bar
-        Then:
-            relativePath = ../a
-            getRelativePathNParents(relativePath) = 1
-            pathFromSourceToBaseUrl = ../../
-            getRelativePathNParents(pathFromSourceToBaseUrl) = 2
-            1 < 2 = true
-        In this case we should prefer using the relative path "../a" instead of the baseUrl path "foo/a".
-        */
-        const pathFromSourceToBaseUrl = ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, baseUrl, getCanonicalFileName));
-        const relativeFirst = getRelativePathNParents(relativePath) < getRelativePathNParents(pathFromSourceToBaseUrl);
-        return relativeFirst ? [relativePath, importRelativeToBaseUrl] : [importRelativeToBaseUrl, relativePath];
+        return count;
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? fileExtensionIs(text, Extension.Js) : undefined) || false;
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJavaScriptOrJsonFileExtension(text) : undefined) || false;
     }
 
     function stringsEqual(a: string, b: string, getCanonicalFileName: GetCanonicalFileName): boolean {
@@ -232,15 +216,6 @@ namespace ts.moduleSpecifiers {
         return result;
     }
 
-    function getRelativePathNParents(relativePath: string): number {
-        const components = getPathComponents(relativePath);
-        if (components[0] || components.length === 1) return 0;
-        for (let i = 1; i < components.length; i++) {
-            if (components[i] !== "..") return i - 1;
-        }
-        return components.length - 1;
-    }
-
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol): string | undefined {
         const decl = find(moduleSymbol.declarations,
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
@@ -283,37 +258,8 @@ namespace ts.moduleSpecifiers {
         return removeFileExtension(relativePath);
     }
 
-    function tryGetModuleNameFromTypeRoots(
-        options: CompilerOptions,
-        host: GetEffectiveTypeRootsHost,
-        getCanonicalFileName: (file: string) => string,
-        moduleFileName: string,
-        addJsExtension: boolean,
-    ): string | undefined {
-        const roots = getEffectiveTypeRoots(options, host);
-        return firstDefined(roots, unNormalizedTypeRoot => {
-            const typeRoot = toPath(unNormalizedTypeRoot, /*basePath*/ undefined, getCanonicalFileName);
-            if (startsWith(moduleFileName, typeRoot)) {
-                // For a type definition, we can strip `/index` even with classic resolution.
-                return removeExtensionAndIndexPostFix(moduleFileName.substring(typeRoot.length + 1), ModuleResolutionKind.NodeJs, addJsExtension);
-            }
-        });
-    }
-
-    function tryGetModuleNameAsNodeModule(
-        options: CompilerOptions,
-        moduleFileName: string,
-        host: ModuleSpecifierResolutionHost,
-        getCanonicalFileName: (file: string) => string,
-        sourceDirectory: Path,
-    ): string | undefined {
-        if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
-            // nothing to do here
-            return undefined;
-        }
-
+    function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
         const parts: NodeModulePathParts = getNodeModulePathParts(moduleFileName)!;
-
         if (!parts) {
             return undefined;
         }
@@ -325,8 +271,12 @@ namespace ts.moduleSpecifiers {
         // Get a path that's relative to node_modules or the importing file's path
         // if node_modules folder is in this folder or any of its parent folders, no need to keep it.
         if (!startsWith(sourceDirectory, getCanonicalFileName(moduleSpecifier.substring(0, parts.topLevelNodeModulesIndex)))) return undefined;
+
         // If the module was found in @types, get the actual Node package name
-        return getPackageNameFromAtTypesDirectory(moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1));
+        const nodeModulesDirectoryName = moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1);
+        const packageName = getPackageNameFromAtTypesDirectory(nodeModulesDirectoryName);
+        // For classic resolution, only allow importing from node_modules/@types, not other node_modules
+        return getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
         function getDirectoryOrExtensionlessFileName(path: string): string {
             // If the file is the main module, it can be imported by the package name
@@ -440,13 +390,36 @@ namespace ts.moduleSpecifiers {
         });
     }
 
-    function removeExtensionAndIndexPostFix(fileName: string, moduleResolutionKind: ModuleResolutionKind, addJsExtension: boolean): string {
+    function removeExtensionAndIndexPostFix(fileName: string, ending: Ending, options: CompilerOptions): string {
+        if (fileExtensionIs(fileName, Extension.Json)) return fileName;
         const noExtension = removeFileExtension(fileName);
-        return addJsExtension
-            ? noExtension + ".js"
-            : moduleResolutionKind === ModuleResolutionKind.NodeJs
-                ? removeSuffix(noExtension, "/index")
-                : noExtension;
+        switch (ending) {
+            case Ending.Minimal:
+                return removeSuffix(noExtension, "/index");
+            case Ending.Index:
+                return noExtension;
+            case Ending.JsExtension:
+                return noExtension + getJavaScriptExtensionForFile(fileName, options);
+            default:
+                return Debug.assertNever(ending);
+        }
+    }
+
+    function getJavaScriptExtensionForFile(fileName: string, options: CompilerOptions): Extension {
+        const ext = extensionFromPath(fileName);
+        switch (ext) {
+            case Extension.Ts:
+            case Extension.Dts:
+                return Extension.Js;
+            case Extension.Tsx:
+                return options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
+            case Extension.Js:
+            case Extension.Jsx:
+            case Extension.Json:
+                return ext;
+            default:
+                return Debug.assertNever(ext);
+        }
     }
 
     function getRelativePathIfInDirectory(path: string, directoryPath: string, getCanonicalFileName: GetCanonicalFileName): string | undefined {

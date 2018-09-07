@@ -1,32 +1,22 @@
 namespace ts {
     let currentTime = 100;
-    let lastDiagnostics: Diagnostic[] = [];
-    const reportDiagnostic: DiagnosticReporter = diagnostic => lastDiagnostics.push(diagnostic);
-    const report = (message: DiagnosticMessage, ...args: string[]) => reportDiagnostic(createCompilerDiagnostic(message, ...args));
-    const buildHost: BuildHost = {
-        error: report,
-        verbose: report,
-        message: report,
-        errorDiagnostic: d => reportDiagnostic(d)
-    };
-
     export namespace Sample1 {
         tick();
         const projFs = loadProjectFromDisk("tests/projects/sample1");
 
         const allExpectedOutputs = ["/src/tests/index.js",
-            "/src/core/index.js", "/src/core/index.d.ts",
-            "/src/logic/index.js", "/src/logic/index.d.ts"];
+            "/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map",
+            "/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
 
         describe("tsbuild - sanity check of clean build of 'sample1' project", () => {
             it("can build the sample project 'sample1' without error", () => {
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
 
-                clearDiagnostics();
+                host.clearDiagnostics();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(/*empty*/);
+                host.assertDiagnosticMessages(/*empty*/);
 
                 // Check for outputs. Not an exhaustive list
                 for (const output of allExpectedOutputs) {
@@ -37,12 +27,11 @@ namespace ts {
 
         describe("tsbuild - dry builds", () => {
             it("doesn't write any files in a dry build", () => {
-                clearDiagnostics();
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: true, force: false, verbose: false });
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
+                host.assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
 
                 // Check for outputs to not be written. Not an exhaustive list
                 for (const output of allExpectedOutputs) {
@@ -51,28 +40,26 @@ namespace ts {
             });
 
             it("indicates that it would skip builds during a dry build", () => {
-                clearDiagnostics();
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
+                const host = new fakes.SolutionBuilderHost(fs);
 
-                let builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
+                let builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
                 tick();
 
-                clearDiagnostics();
-                builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: true, force: false, verbose: false });
+                host.clearDiagnostics();
+                builder = createSolutionBuilder(host, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
+                host.assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
             });
         });
 
         describe("tsbuild - clean builds", () => {
             it("removes all files it built", () => {
-                clearDiagnostics();
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
+                const host = new fakes.SolutionBuilderHost(fs);
 
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
                 // Verify they exist
                 for (const output of allExpectedOutputs) {
@@ -91,9 +78,9 @@ namespace ts {
         describe("tsbuild - force builds", () => {
             it("always builds under --force", () => {
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
+                const host = new fakes.SolutionBuilderHost(fs);
 
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: true, verbose: false });
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: true, verbose: false });
                 builder.buildAllProjects();
                 let currentTime = time();
                 checkOutputTimestamps(currentTime);
@@ -116,14 +103,14 @@ namespace ts {
 
         describe("tsbuild - can detect when and what to rebuild", () => {
             const fs = projFs.shadow();
-            const host = new fakes.CompilerHost(fs);
-            const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: true });
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: true });
 
             it("Builds the project", () => {
-                clearDiagnostics();
+                host.clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
+                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     Diagnostics.Building_project_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
@@ -135,10 +122,10 @@ namespace ts {
 
             // All three projects are up to date
             it("Detects that all projects are up to date", () => {
-                clearDiagnostics();
+                host.clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
+                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2);
@@ -147,12 +134,12 @@ namespace ts {
 
             // Update a file in the leaf node (tests), only it should rebuild the last one
             it("Only builds the leaf node project", () => {
-                clearDiagnostics();
+                host.clearDiagnostics();
                 fs.writeFileSync("/src/tests/index.ts", "const m = 10;");
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
+                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
                     Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
@@ -162,12 +149,12 @@ namespace ts {
 
             // Update a file in the parent (without affecting types), should get fast downstream builds
             it("Detects type-only changes in upstream projects", () => {
-                clearDiagnostics();
+                host.clearDiagnostics();
                 replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET");
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
+                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
                     Diagnostics.Building_project_0,
                     Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
@@ -180,15 +167,13 @@ namespace ts {
         describe("tsbuild - downstream-blocked compilations", () => {
             it("won't build downstream projects if upstream projects have errors", () => {
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: true });
-
-                clearDiagnostics();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: true });
 
                 // Induce an error in the middle project
                 replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`);
                 builder.buildAllProjects();
-                assertDiagnosticMessages(
+                host.assertDiagnosticMessages(
                     Diagnostics.Projects_in_this_build_Colon_0,
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     Diagnostics.Building_project_0,
@@ -204,12 +189,11 @@ namespace ts {
         describe("tsbuild - project invalidation", () => {
             it("invalidates projects correctly", () => {
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/tests"], { dry: false, force: false, verbose: false });
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
 
-                clearDiagnostics();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(/*empty*/);
+                host.assertDiagnosticMessages(/*empty*/);
 
                 // Update a timestamp in the middle project
                 tick();
@@ -221,14 +205,14 @@ namespace ts {
                 // Rebuild this project
                 tick();
                 builder.invalidateProject("/src/logic");
-                builder.buildInvalidatedProjects();
+                builder.buildInvalidatedProject();
                 // The file should be updated
                 assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
 
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
-                builder.buildDependentInvalidatedProjects();
+                builder.buildInvalidatedProject();
                 assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
@@ -240,11 +224,10 @@ namespace ts {
 
             function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
                 const fs = projFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, [configFile], { dry: false, force: false, verbose: false });
-                clearDiagnostics();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
-                assertDiagnosticMessages(...expectedDiagnosticMessages);
+                host.assertDiagnosticMessages(...expectedDiagnosticMessages);
                 if (!expectedDiagnosticMessages.length) {
                     // Check for outputs. Not an exhaustive list
                     for (const output of allExpectedOutputs) {
@@ -274,11 +257,11 @@ namespace ts {
             let fs: vfs.FileSystem | undefined;
             before(() => {
                 fs = outFileFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
-                clearDiagnostics();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
+                host.clearDiagnostics();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(/*none*/);
+                host.assertDiagnosticMessages(/*none*/);
             });
             after(() => {
                 fs = undefined;
@@ -293,25 +276,24 @@ namespace ts {
         describe("tsbuild - downstream prepend projects always get rebuilt", () => {
             it("", () => {
                 const fs = outFileFs.shadow();
-                const host = new fakes.CompilerHost(fs);
-                const builder = createSolutionBuilder(host, buildHost, ["/src/third"], { dry: false, force: false, verbose: false });
-                clearDiagnostics();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
-                assertDiagnosticMessages(/*none*/);
+                host.assertDiagnosticMessages(/*none*/);
                 assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
                 tick();
                 replaceText(fs, "src/first/first_PART1.ts", "Hello", "Hola");
                 tick();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                assertDiagnosticMessages(/*none*/);
+                host.assertDiagnosticMessages(/*none*/);
                 assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
             });
         });
     }
 
     describe("tsbuild - graph-ordering", () => {
-        let host: fakes.CompilerHost | undefined;
+        let host: fakes.SolutionBuilderHost | undefined;
         const deps: [string, string][] = [
             ["A", "B"],
             ["B", "C"],
@@ -324,7 +306,7 @@ namespace ts {
 
         before(() => {
             const fs = new vfs.FileSystem(false);
-            host = new fakes.CompilerHost(fs);
+            host = new fakes.SolutionBuilderHost(fs);
             writeProjects(fs, ["A", "B", "C", "D", "E", "F", "G"], deps);
         });
 
@@ -349,7 +331,7 @@ namespace ts {
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
-            const builder = createSolutionBuilder(host!, buildHost, rootNames, { dry: true, force: false, verbose: false });
+            const builder = createSolutionBuilder(host!, rootNames, { dry: true, force: false, verbose: false });
 
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);
@@ -402,30 +384,6 @@ namespace ts {
         }
         const newContent = old.replace(oldText, newText);
         fs.writeFileSync(path, newContent, "utf-8");
-    }
-
-    function assertDiagnosticMessages(...expected: DiagnosticMessage[]) {
-        const actual = lastDiagnostics.slice();
-        if (actual.length !== expected.length) {
-            assert.fail<any>(actual, expected, `Diagnostic arrays did not match - got\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\nexpected\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
-        }
-        for (let i = 0; i < actual.length; i++) {
-            if (actual[i].code !== expected[i].code) {
-                assert.fail(actual[i].messageText, expected[i].message, `Mismatched error code - expected diagnostic ${i} "${actual[i].messageText}" to match ${expected[i].message}`);
-            }
-        }
-    }
-
-    function clearDiagnostics() {
-        lastDiagnostics = [];
-    }
-
-    export function printDiagnostics(header = "== Diagnostics ==") {
-        const out = createDiagnosticReporter(sys);
-        sys.write(header + "\r\n");
-        for (const d of lastDiagnostics) {
-            out(d);
-        }
     }
 
     function tick() {

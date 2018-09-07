@@ -2,6 +2,7 @@
     "compilerOptions": {
         "composite": true,
         "declaration": true,
+        "sourceMap": true,
         "forceConsistentCasingInFileNames": true
     },
     "references": [
