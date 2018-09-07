@@ -989,13 +989,13 @@ namespace ts {
                 {
                     // GH#21136: check if this is an MPEG-TS file
                     const buffer = Buffer.alloc(50 * 188);
-                    const fd = _fs.openSync(fileName);
+                    const fd = _fs.openSync(fileName, "r");
                     try {
                         const bytesRead = _fs.readSync(fd, buffer, 0, 50 * 188);
                         // check if we have a multiple of 188 bytes (frames)
-                        if (bytesRead % 188 === 0) {
+                        if (bytesRead > 0 && bytesRead % 188 === 0) {
                             let allHex47 = true;
-                            for (let i = 0, n = i * 188; i < n; i = i + 188) {
+                            for (let i = 0, n = 50 * 188; i < n; i = i + 188) {
                                 if (i < bytesRead && buffer[i] !== 0x47) {
                                     allHex47 = false;
                                 }
