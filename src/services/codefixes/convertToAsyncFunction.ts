@@ -254,6 +254,7 @@ namespace ts.codefix {
     }
 
     // dispatch function to recursively build the refactoring
+    // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
     function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         if (!node) {
             return [];
@@ -275,6 +276,7 @@ namespace ts.codefix {
             return transformPromiseCall(node, transformer, prevArgName);
         }
 
+        codeActionSucceeded = false;
         return [];
     }
 
@@ -383,6 +385,7 @@ namespace ts.codefix {
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
 
+    // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
     function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
@@ -498,14 +501,6 @@ namespace ts.codefix {
             });
         }
         return innerCbBody;
-    }
-
-    function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
-        if (!isPropertyAccessExpression(node.expression)) {
-            return false;
-        }
-
-        return node.expression.name.text === funcName;
     }
 
     function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {

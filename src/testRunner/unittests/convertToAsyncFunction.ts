@@ -1,10 +1,4 @@
 namespace ts {
-    const enum TestExpectation {
-        Normal,
-        NoDiagnostic,
-        NoAction
-    }
-
     const libFile: TestFSWithWatch.File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
@@ -261,14 +255,14 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectedResult: TestExpectation = TestExpectation.Normal) {
+    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false) {
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
 
-        const extensions = expectedResult === TestExpectation.Normal ? [Extension.Ts, Extension.Js] : [Extension.Ts];
+        const extensions = expectFailure ? [Extension.Ts] : [Extension.Ts, Extension.Js];
 
         extensions.forEach(extension =>
             it(`${caption} [${extension}]`, () => runBaseline(extension)));
@@ -304,21 +298,21 @@ interface Array<T> {}`
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
                 diagnostic.start === context.span.start && diagnostic.length === context.span.length);
-            if (expectedResult === TestExpectation.NoDiagnostic) {
+            if (expectFailure) {
                 assert.isUndefined(diagnostic);
-                return;
             }
-
-            assert.exists(diagnostic);
+            else {
+                assert.exists(diagnostic);
+            }
 
             const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
-            if (expectedResult === TestExpectation.NoAction) {
-                assert.isUndefined(action);
+            if (expectFailure) {
+                assert.isNotTrue(action && action.changes.length > 0);
                 return;
             }
 
-            assert.exists(action);
+            assert.isTrue(action && action.changes.length > 0);
 
             const data: string[] = [];
             data.push(`// ==ORIGINAL==`);
@@ -481,7 +475,7 @@ function [#|f|]() {
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_NoSuggestion", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestion", `
 function [#|f|]():Promise<Response> {
     return fetch('https://typescriptlang.org');
 }
@@ -495,7 +489,7 @@ function [#|f|]():Promise<void>{
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_NoSuggestionNoPromise", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionNoPromise", `
 function [#|f|]():void{
 }
 `
@@ -548,21 +542,21 @@ function [#|f|]():Promise<void> {
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_Finally1", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally1", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).catch(rej => console.log("error", rej)).finally(console.log("finally!"));
 }
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_Finally2", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally2", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").then(res => console.log(res)).finally(console.log("finally!"));
 }
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_Finally3", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Finally3", `
 function [#|finallyTest|](): Promise<void> {
     return fetch("https://typescriptlang.org").finally(console.log("finally!"));
 }
@@ -590,14 +584,14 @@ function [#|innerPromise|](): Promise<string> {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn01", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
     return blob;
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn02", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn02", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     blob.then(resp => console.log(resp));
@@ -605,7 +599,7 @@ function [#|f|]() {
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn03", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn03", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org")
     let blob2 = blob.then(resp => console.log(resp));
@@ -618,7 +612,7 @@ function err (rej) {
 }
 `
         );
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn04", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn04", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res)), blob2 = fetch("https://microsoft.com").then(res => res.ok).catch(err);
     return blob;
@@ -629,7 +623,7 @@ function err (rej) {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn05", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn05", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org").then(res => console.log(res));
     blob.then(x => x);
@@ -638,7 +632,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn06", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn06", `
 function [#|f|]() {
     var blob = fetch("https://typescriptlang.org");
     return blob;
@@ -646,7 +640,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn07", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn07", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     let blob2 = fetch("https://microsoft.com");
@@ -657,7 +651,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn08", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn08", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org");
     if (!blob.ok){
@@ -669,7 +663,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn09", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn09", `
 function [#|f|]() {
     let blob3;
     let blob = fetch("https://typescriptlang.org");
@@ -683,7 +677,7 @@ function [#|f|]() {
         );
 
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn10", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn10", `
 function [#|f|]() {
     let blob3;
     let blob = fetch("https://typescriptlang.org");
@@ -697,7 +691,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_VarReturn11", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn11", `
 function [#|f|]() {
     let blob;
     return blob;
@@ -707,7 +701,7 @@ function [#|f|]() {
 
 
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_Param1", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_Param1", `
 function [#|f|]() {
     return my_print(fetch("https://typescriptlang.org").then(res => console.log(res)));
 }
@@ -764,7 +758,7 @@ function [#|f|](): Promise<void> {
         );
 
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_SeperateLines", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_SeperateLines", `
 function [#|f|](): Promise<string> {
     var blob = fetch("https://typescriptlang.org")
     blob.then(resp => {
@@ -1027,7 +1021,7 @@ function [#|f|]() {
 }
 
 `);
-_testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_CatchFollowedByCall", `
+_testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchFollowedByCall", `
 function [#|f|](){
     return fetch("https://typescriptlang.org").then(res).catch(rej).toString();
 }
@@ -1091,7 +1085,7 @@ function [#|f|]() {
 `
         );
 
-        _testConvertToAsyncFunctionNoDiagnostic("convertToAsyncFunction_NestedFunctionWrongLocation", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NestedFunctionWrongLocation", `
 function [#|f|]() {
     function fn2(){
         function fn3(){
@@ -1140,13 +1134,13 @@ const [#|foo|] = function () {
 } 
 `);
 
-    _testConvertToAsyncFunctionNoAction("convertToAsyncFunction_thenArgumentNotFunction", `
+    _testConvertToAsyncFunctionFailed("convertToAsyncFunction_thenArgumentNotFunction", `
 function [#|f|]() {
     return Promise.resolve().then(f ? (x => x) : (y => y));
 }
 `);
 
-_testConvertToAsyncFunctionNoAction("convertToAsyncFunction_thenArgumentNotFunctionNotLastInChain", `
+    _testConvertToAsyncFunctionFailed("convertToAsyncFunction_thenArgumentNotFunctionNotLastInChain", `
 function [#|f|]() {
     return Promise.resolve().then(f ? (x => x) : (y => y)).then(q => q);
 }
@@ -1159,11 +1153,7 @@ function [#|f|]() {
         testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true);
     }
 
-    function _testConvertToAsyncFunctionNoDiagnostic(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, TestExpectation.NoDiagnostic);
-    }
-
-    function _testConvertToAsyncFunctionNoAction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, TestExpectation.NoAction);
+    function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
     }
 }

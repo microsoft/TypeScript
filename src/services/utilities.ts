@@ -224,6 +224,14 @@ namespace ts {
         return undefined;
     }
 
+    export function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
+        if (!isPropertyAccessExpression(node.expression)) {
+            return false;
+        }
+
+        return node.expression.name.text === funcName;
+    }
+
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
         return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
     }
