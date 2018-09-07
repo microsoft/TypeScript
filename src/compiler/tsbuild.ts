@@ -37,8 +37,8 @@ namespace ts {
         projectStatus: ConfigFileMap<UpToDateStatus>;
         diagnostics?: ConfigFileMap<number>; // TODO(shkamat): this should be really be diagnostics but thats for later time
 
-        invalidateProject(project: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined): void;
-        getNextInvalidatedProject(): ResolvedConfigFileName | undefined;
+        invalidateProject(project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel | undefined, dependencyGraph: DependencyGraph | undefined): void;
+        getNextInvalidatedProject(): { project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel } | undefined;
         hasPendingInvalidatedProjects(): boolean;
         missingRoots: Map<true>;
     }
@@ -341,40 +341,6 @@ namespace ts {
         return opts.rootDir || getDirectoryPath(configFileName);
     }
 
-    function createConfigFileCache(host: CompilerHost, toPath: ToResolvedConfigFilePath) {
-        const cache = createFileMap<ParsedCommandLine | "error">(toPath);
-        const configParseHost = parseConfigHostFromCompilerHost(host);
-
-        function isParsedCommandLine(value: ParsedCommandLine | "error"): value is ParsedCommandLine {
-            return !(value as "error").length;
-        }
-
-        function parseConfigFile(configFilePath: ResolvedConfigFileName) {
-            const value = cache.getValue(configFilePath);
-            if (value) {
-                return isParsedCommandLine(value) ? value : undefined;
-            }
-
-            const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
-            if (sourceFile === undefined) {
-                return undefined;
-            }
-
-            const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, getDirectoryPath(configFilePath));
-            parsed.options.configFilePath = configFilePath;
-            cache.setValue(configFilePath, parsed);
-            return parsed;
-        }
-
-        function removeKey(configFilePath: ResolvedConfigFileName) {
-            cache.removeKey(configFilePath);
-        }
-
-        return {
-            parseConfigFile,
-            removeKey
-        };
-    }
 
     function newer(date1: Date, date2: Date): Date {
         return date2 > date1 ? date2 : date1;
@@ -387,7 +353,7 @@ namespace ts {
     export function createBuildContext(options: BuildOptions, toPath: ToResolvedConfigFilePath): BuildContext {
         const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
         let nextIndex = 0;
-        const projectPendingBuild = createFileMap<true>(toPath);
+        const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
         const missingRoots = createMap<true>();
         const diagnostics = options.watch ? createFileMap<number>(toPath) : undefined;
 
@@ -402,31 +368,39 @@ namespace ts {
             missingRoots
         };
 
-        function invalidateProject(proj: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined) {
-            if (!projectPendingBuild.hasKey(proj)) {
-                addProjToQueue(proj);
-                if (dependencyGraph) {
-                    queueBuildForDownstreamReferences(proj, dependencyGraph);
-                }
+        function invalidateProject(proj: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel | undefined, dependencyGraph: DependencyGraph | undefined) {
+            if (addProjToQueue(proj, reloadLevel) && dependencyGraph) {
+                queueBuildForDownstreamReferences(proj, dependencyGraph);
             }
         }
 
-        function addProjToQueue(proj: ResolvedConfigFileName) {
-            Debug.assert(!projectPendingBuild.hasKey(proj));
-            projectPendingBuild.setValue(proj, true);
-            invalidatedProjectQueue.push(proj);
+        /**
+         * return true if new addition
+         */
+        function addProjToQueue(proj: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+            const value = projectPendingBuild.getValue(proj);
+            if (value === undefined) {
+                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
+                invalidatedProjectQueue.push(proj);
+                return true;
+            }
+
+            if (value < (reloadLevel || ConfigFileProgramReloadLevel.None)) {
+                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
+            }
         }
 
         function getNextInvalidatedProject() {
             if (nextIndex < invalidatedProjectQueue.length) {
-                const proj = invalidatedProjectQueue[nextIndex];
+                const project = invalidatedProjectQueue[nextIndex];
                 nextIndex++;
-                projectPendingBuild.removeKey(proj);
+                const reloadLevel = projectPendingBuild.getValue(project)!;
+                projectPendingBuild.removeKey(project);
                 if (!projectPendingBuild.getSize()) {
                     invalidatedProjectQueue.length = 0;
                     nextIndex = 0;
                 }
-                return proj;
+                return { project, reloadLevel };
             }
         }
 
@@ -439,8 +413,7 @@ namespace ts {
             const deps = dependencyGraph.dependencyMap.getReferencesTo(root);
             for (const ref of deps) {
                 // Can skip circular references
-                if (!projectPendingBuild.hasKey(ref)) {
-                    addProjToQueue(ref);
+                if (addProjToQueue(ref)) {
                     queueBuildForDownstreamReferences(ref, dependencyGraph);
                 }
             }
@@ -501,12 +474,15 @@ namespace ts {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        const configFileCache = createConfigFileCache(host, toPath);
+        const parseConfigFileHost = parseConfigHostFromCompilerHost(host);
+        type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
+        const configFileCache = createFileMap<ConfigFileCacheEntry>(toPath);
         let context = createBuildContext(defaultOptions, toPath);
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
 
-        const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
+        const existingWatchersForWildcards = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
+
         return {
             buildAllProjects,
             getUpToDateStatus,
@@ -527,6 +503,24 @@ namespace ts {
         function toPath(fileName: string): Path;
         function toPath(fileName: string) {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        }
+
+        function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
+            return !!(entry as ParsedCommandLine).options;
+        }
+
+        function parseConfigFile(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined {
+            const value = configFileCache.getValue(configFilePath);
+            if (value) {
+                return isParsedCommandLine(value) ? value : undefined;
+            }
+
+            let diagnostic: Diagnostic | undefined;
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, {}, parseConfigFileHost);
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+            configFileCache.setValue(configFilePath, parsed || diagnostic!);
+            return parsed;
         }
 
         function reportStatus(message: DiagnosticMessage, ...args: string[]) {
@@ -559,19 +553,36 @@ namespace ts {
             }
 
             for (const resolved of graph.buildQueue) {
-                const cfg = configFileCache.parseConfigFile(resolved);
+                const cfg = parseConfigFile(resolved);
                 if (cfg) {
                     // Watch this file
                     hostWithWatch.watchFile(resolved, () => {
                         configFileCache.removeKey(resolved);
-                        invalidateProjectAndScheduleBuilds(resolved);
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
                     });
 
                     // Update watchers for wildcard directories
                     if (cfg.configFileSpecs) {
-                        updateWatchingWildcardDirectories(existingWatchersForWildcards, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
-                            return hostWithWatch.watchDirectory(dir, () => {
-                                invalidateProjectAndScheduleBuilds(resolved);
+                        const existingWatches = existingWatchersForWildcards.getValue(resolved);
+                        let newWatches: Map<WildcardDirectoryWatcher> | undefined;
+                        if (!existingWatches) {
+                            newWatches = createMap();
+                            existingWatchersForWildcards.setValue(resolved, newWatches);
+                        }
+                        updateWatchingWildcardDirectories(existingWatches || newWatches!, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
+                            return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
+                                const fileOrDirectoryPath = toPath(fileOrDirectory);
+                                if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, cfg.options)) {
+                                    // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+                                    return;
+                                }
+
+                                if (isOutputFile(fileOrDirectory, cfg)) {
+                                    // writeLog(`${fileOrDirectory} is output file`);
+                                    return;
+                                }
+
+                                invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
                             }, !!(flags & WatchDirectoryFlags.Recursive));
                         });
                     }
@@ -579,7 +590,7 @@ namespace ts {
                     // Watch input files
                     for (const input of cfg.fileNames) {
                         hostWithWatch.watchFile(input, () => {
-                            invalidateProjectAndScheduleBuilds(resolved);
+                            invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None);
                         });
                     }
                 }
@@ -587,9 +598,41 @@ namespace ts {
 
         }
 
-        function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
+        function isOutputFile(fileName: string, configFile: ParsedCommandLine) {
+            if (configFile.options.noEmit) return false;
+
+            // ts or tsx files are not output
+            if (!fileExtensionIs(fileName, Extension.Dts) &&
+                (fileExtensionIs(fileName, Extension.Ts) || fileExtensionIs(fileName, Extension.Tsx))) {
+                return false;
+            }
+
+            // If options have --outFile or --out, check if its that
+            const out = configFile.options.outFile || configFile.options.out;
+            if (out && (isSameFile(fileName, out) || isSameFile(fileName, removeFileExtension(out) + Extension.Dts))) {
+                return true;
+            }
+
+            // If declarationDir is specified, return if its a file in that directory
+            if (configFile.options.declarationDir && containsPath(configFile.options.declarationDir, fileName, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
+            // If --outDir, check if file is in that directory
+            if (configFile.options.outDir && containsPath(configFile.options.outDir, fileName, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
+            return !forEach(configFile.fileNames, inputFile => isSameFile(fileName, inputFile));
+        }
+
+        function isSameFile(file1: string, file2: string) {
+            return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
+        function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             reportFileChangeDetected = true;
-            invalidateProject(resolved);
+            invalidateProject(resolved, reloadLevel);
             scheduleBuildInvalidatedProject();
         }
 
@@ -598,7 +641,7 @@ namespace ts {
         }
 
         function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
-            return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
+            return getUpToDateStatus(parseConfigFile(configFileName));
         }
 
         function getBuildGraph(configFileNames: ReadonlyArray<string>) {
@@ -712,7 +755,7 @@ namespace ts {
                 for (const ref of project.projectReferences) {
                     usesPrepend = usesPrepend || !!(ref.prepend);
                     const resolvedRef = resolveProjectReferencePath(host, ref);
-                    const refStatus = getUpToDateStatus(configFileCache.parseConfigFile(resolvedRef));
+                    const refStatus = getUpToDateStatus(parseConfigFile(resolvedRef));
 
                     // An upstream project is blocked
                     if (refStatus.type === UpToDateStatusType.Unbuildable) {
@@ -789,7 +832,7 @@ namespace ts {
             };
         }
 
-        function invalidateProject(configFileName: string) {
+        function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
             const resolved = resolveProjectName(configFileName);
             if (resolved === undefined) {
                 // If this was a rootName, we need to track it as missing.
@@ -800,13 +843,12 @@ namespace ts {
                 return;
             }
 
-            configFileCache.removeKey(resolved);
             context.projectStatus.removeKey(resolved);
             if (context.options.watch) {
                 context.diagnostics!.removeKey(resolved);
             }
 
-            context.invalidateProject(resolved, getGlobalDependencyGraph());
+            context.invalidateProject(resolved, reloadLevel, getGlobalDependencyGraph());
         }
 
         function scheduleBuildInvalidatedProject() {
@@ -826,14 +868,16 @@ namespace ts {
                 reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
             }
             const buildProject = context.getNextInvalidatedProject();
-            buildSomeProjects(p => p === buildProject);
-            if (context.hasPendingInvalidatedProjects()) {
-                if (!timerToBuildInvalidatedProject) {
-                    scheduleBuildInvalidatedProject();
+            if (buildProject) {
+                buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
+                if (context.hasPendingInvalidatedProjects()) {
+                    if (!timerToBuildInvalidatedProject) {
+                        scheduleBuildInvalidatedProject();
+                    }
                 }
-            }
-            else {
-                reportErrorSummary();
+                else {
+                    reportErrorSummary();
+                }
             }
         }
 
@@ -845,29 +889,37 @@ namespace ts {
             }
         }
 
-        function buildSomeProjects(predicate: (projName: ResolvedConfigFileName) => boolean) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(rootNames);
-            if (resolvedNames === undefined) return;
+        function buildSingleInvalidatedProject(project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+            // TODO:: handle this in better way later
 
-            const graph = createDependencyGraph(resolvedNames)!;
-            for (const next of graph.buildQueue) {
-                if (!predicate(next)) continue;
+            const resolved = resolveProjectName(project);
+            if (!resolved) return; // ??
+            const proj = parseConfigFile(resolved);
+            if (!proj) return; // ?
+            // TODO:: If full reload , update watch for wild cards
+            // TODO:: If full or partial reload, update watch for input files
 
-                const resolved = resolveProjectName(next);
-                if (!resolved) continue; // ??
-                const proj = configFileCache.parseConfigFile(resolved);
-                if (!proj) continue; // ?
-
-                const status = getUpToDateStatus(proj);
-                verboseReportProjectStatus(next, status);
-
-                if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    if (context.options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
-                    continue;
+            if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                // Update file names
+                const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(project), proj.options, parseConfigFileHost);
+                if (result.fileNames.length !== 0) {
+                    filterMutate(proj.errors, error => !isErrorNoInputFiles(error));
                 }
-
-                buildSingleProject(next);
+                else if (!proj.configFileSpecs!.filesSpecs && !some(proj.errors, isErrorNoInputFiles)) {
+                    proj.errors.push(getErrorForNoInputFiles(proj.configFileSpecs!, resolved));
+                }
+                proj.fileNames = result.fileNames;
             }
+
+            const status = getUpToDateStatus(proj);
+            verboseReportProjectStatus(project, status);
+
+            if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                if (context.options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
+                return;
+            }
+
+            buildSingleProject(project);
         }
 
         function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph | undefined {
@@ -907,7 +959,7 @@ namespace ts {
 
                 temporaryMarks[projPath] = true;
                 circularityReportStack.push(projPath);
-                const parsed = configFileCache.parseConfigFile(projPath);
+                const parsed = parseConfigFile(projPath);
                 if (parsed === undefined) {
                     hadError = true;
                     return;
@@ -941,10 +993,11 @@ namespace ts {
             let resultFlags = BuildResultFlags.None;
             resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
 
-            const configFile = configFileCache.parseConfigFile(proj);
+            const configFile = parseConfigFile(proj);
             if (!configFile) {
                 // Failed to read the config file
                 resultFlags |= BuildResultFlags.ConfigFileErrors;
+                host.reportDiagnostic(configFileCache.getValue(proj) as Diagnostic);
                 storeErrorSummary(proj, 1);
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
                 return resultFlags;
@@ -959,7 +1012,8 @@ namespace ts {
                 projectReferences: configFile.projectReferences,
                 host,
                 rootNames: configFile.fileNames,
-                options: configFile.options
+                options: configFile.options,
+                configFileParsingDiagnostics: configFile.errors
             };
             const program = createProgram(programOptions);
 
@@ -1068,7 +1122,7 @@ namespace ts {
 
             const filesToDelete: string[] = [];
             for (const proj of graph.buildQueue) {
-                const parsed = configFileCache.parseConfigFile(proj);
+                const parsed = parseConfigFile(proj);
                 if (parsed === undefined) {
                     // File has gone missing; fine to ignore here
                     continue;
@@ -1155,7 +1209,7 @@ namespace ts {
 
             let anyFailed = false;
             for (const next of queue) {
-                const proj = configFileCache.parseConfigFile(next);
+                const proj = parseConfigFile(next);
                 if (proj === undefined) {
                     anyFailed = true;
                     break;

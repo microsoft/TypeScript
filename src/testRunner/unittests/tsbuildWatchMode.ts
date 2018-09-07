@@ -26,8 +26,12 @@ namespace ts.tscWatch {
         type SubProjectFiles = [ReadonlyFile, ReadonlyFile] | [ReadonlyFile, ReadonlyFile, ReadonlyFile, ReadonlyFile];
         const root = Harness.IO.getWorkspaceRoot();
 
+        function projectPath(subProject: SubProject) {
+            return `${projectsLocation}/${project}/${subProject}`;
+        }
+
         function projectFilePath(subProject: SubProject, baseFileName: string) {
-            return `${projectsLocation}/${project}/${subProject}/${baseFileName.toLowerCase()}`;
+            return `${projectPath(subProject)}/${baseFileName.toLowerCase()}`;
         }
 
         function projectFile(subProject: SubProject, baseFileName: string): File {
@@ -92,7 +96,7 @@ namespace ts.tscWatch {
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
             checkWatchedFiles(host, testProjectExpectedWatchedFiles);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ true); // TODO: #26524
+            checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
             checkOutputErrorsInitial(host, emptyArray);
             const outputFileStamps = getOutputFileStamps(host);
             for (const stamp of outputFileStamps) {
