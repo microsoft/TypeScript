@@ -1041,7 +1041,7 @@ namespace ts {
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
         function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape || false);
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -3305,7 +3305,7 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
