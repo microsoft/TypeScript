@@ -6,7 +6,7 @@ module.exports.n = {};
 >module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
 >exports : typeof import("tests/cases/conformance/salsa/mod")
 >n : typeof n
->{} : { [x: string]: any; }
+>{} : {}
 
 module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : typeof C

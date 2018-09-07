@@ -2,7 +2,7 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}foo|]: string;
+////    [|{| "isDefinition": true |}foo|]: string;
 ////}
 
 // @Filename: b.ts

@@ -19,3 +19,8 @@ function f() {
     return x;
 }
 exports.f = f;
+
+
+//// [b.d.ts]
+export { X };
+export declare function f(): X;

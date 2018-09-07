@@ -16,7 +16,7 @@ function padNum(number: number) {
 }
 
 const userName = process.env.GH_USERNAME;
-const reviewers = ["weswigham", "sandersn", "mhegazy"]
+const reviewers = ["weswigham", "sandersn", "RyanCavanaugh"]
 const now = new Date();
 const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;

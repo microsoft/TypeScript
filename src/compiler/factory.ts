@@ -3894,6 +3894,20 @@ namespace ts {
         return statementOffset;
     }
 
+    export function findUseStrictPrologue(statements: ReadonlyArray<Statement>): Statement | undefined {
+        for (const statement of statements) {
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement)) {
+                    return statement;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return undefined;
+    }
+
     export function startsWithUseStrict(statements: ReadonlyArray<Statement>) {
         const firstStatement = firstOrUndefined(statements);
         return firstStatement !== undefined
@@ -3907,18 +3921,7 @@ namespace ts {
      * @param statements An array of statements
      */
     export function ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement> {
-        let foundUseStrict = false;
-        for (const statement of statements) {
-            if (isPrologueDirective(statement)) {
-                if (isUseStrictPrologue(statement as ExpressionStatement)) {
-                    foundUseStrict = true;
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
+        const foundUseStrict = findUseStrictPrologue(statements);
 
         if (!foundUseStrict) {
             return setTextRange(
@@ -4709,7 +4712,7 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement) {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -4752,6 +4755,12 @@ namespace ts {
         }
 
         Debug.fail("Invalid property name for binding element.");
+    }
+
+    function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NumericLiteral;
     }
 
     /**

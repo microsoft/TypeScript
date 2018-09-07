@@ -1,0 +1,17 @@
+=== tests/cases/conformance/jsdoc/bug25618.js ===
+/** @type {<T>(param?: T) => T | undefined} */
+function typed(param) {
+>typed : <T>(param: T | undefined) => T | undefined
+>param : T | undefined
+
+    return param;
+>param : T | undefined
+}
+
+var n = typed(1);
+>n : number | undefined
+>typed(1) : 1 | undefined
+>typed : <T>(param: T | undefined) => T | undefined
+>1 : 1
+
+

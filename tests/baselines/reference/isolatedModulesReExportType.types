@@ -8,7 +8,7 @@ export import T2 = require("./exportEqualsT");
 
 // OK, has a value side
 export { C } from "./exportValue";
->C : typeof C
+>C : typeof import("/exportValue").C
 
 // OK, even though the namespace it exports is only types.
 import * as NS from "./exportT";

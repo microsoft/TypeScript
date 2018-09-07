@@ -987,6 +987,26 @@
         "category": "Error",
         "code": 1344
     },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1960,10 +1980,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2063,6 +2079,14 @@
     "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
         "category": "Error",
         "code": 2575
+    },
+    "Property '{0}' is a static member of type '{1}'": {
+        "category": "Error",
+        "code": 2576
+    },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2428,6 +2452,10 @@
     "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
         "category": "Error",
         "code": 2732
+    },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2884,10 +2912,15 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3929,6 +3962,10 @@
         "category": "Error",
         "code": 7041
     },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4171,7 +4208,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4544,6 +4584,7 @@
         "category": "Message",
         "code": 95062
     },
+    
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4551,5 +4592,13 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Convert to async function":{
+        "category": "Message",
+         "code": 95065
+    },
+    "Convert all to async functions": {
+     "category": "Message",
+         "code": 95066
     }
 }

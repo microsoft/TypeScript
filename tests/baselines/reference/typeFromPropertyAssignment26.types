@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/bug24730.js ===
 var UI = {}
 >UI : typeof UI
->{} : { [x: string]: any; }
+>{} : {}
 
 UI.TreeElement = class {
 >UI.TreeElement = class {    constructor() {        this.treeOutline = 12    }} : typeof TreeElement

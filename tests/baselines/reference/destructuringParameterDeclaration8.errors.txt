@@ -1,11 +1,7 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(4,5): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(5,15): error TS2322: Type '"c"' is not assignable to type '"a" | "b"'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(17,6): error TS2345: Argument of type '{ method: "z"; nested: { p: "b"; }; }' is not assignable to parameter of type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'.
-  Types of property 'method' are incompatible.
-    Type '"z"' is not assignable to type '"x" | "y"'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(18,6): error TS2345: Argument of type '{ method: "one"; nested: { p: "a"; }; }' is not assignable to parameter of type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'.
-  Types of property 'method' are incompatible.
-    Type '"one"' is not assignable to type '"x" | "y"'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(17,8): error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(18,8): error TS2322: Type '"one"' is not assignable to type '"x" | "y"'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts (4 errors) ====
@@ -30,13 +26,11 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts(
     test({});
     test({ method: 'x', nested: { p: 'a' } })
     test({ method: 'z', nested: { p: 'b' } })
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ method: "z"; nested: { p: "b"; }; }' is not assignable to parameter of type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'.
-!!! error TS2345:   Types of property 'method' are incompatible.
-!!! error TS2345:     Type '"z"' is not assignable to type '"x" | "y"'.
+           ~~~~~~
+!!! error TS2322: Type '"z"' is not assignable to type '"x" | "y"'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
     test({ method: 'one', nested: { p: 'a' } })
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ method: "one"; nested: { p: "a"; }; }' is not assignable to parameter of type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'.
-!!! error TS2345:   Types of property 'method' are incompatible.
-!!! error TS2345:     Type '"one"' is not assignable to type '"x" | "y"'.
+           ~~~~~~
+!!! error TS2322: Type '"one"' is not assignable to type '"x" | "y"'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts:7:5: The expected type comes from property 'method' which is declared here on type '{ method?: "x" | "y"; nested?: { p: "a" | "b"; }; }'
     

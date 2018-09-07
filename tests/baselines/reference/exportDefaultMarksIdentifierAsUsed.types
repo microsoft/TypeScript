@@ -1,10 +1,10 @@
 === tests/cases/compiler/a.js ===
 const Obj = {};
->Obj : { [x: string]: any; }
->{} : { [x: string]: any; }
+>Obj : {}
+>{} : {}
 
 export default Obj;
->Obj : { [x: string]: any; }
+>Obj : {}
 
 === tests/cases/compiler/b.js ===
 import Obj from './a';
