@@ -34,8 +34,8 @@ namespace ts {
         /**
          * Map from config file name to up-to-date status
          */
-        projectStatus: FileMap<UpToDateStatus>;
-        diagnostics?: FileMap<number>; // TODO(shkamat): this should be really be diagnostics but thats for later time
+        projectStatus: ConfigFileMap<UpToDateStatus>;
+        diagnostics?: ConfigFileMap<number>; // TODO(shkamat): this should be really be diagnostics but thats for later time
 
         invalidateProject(project: ResolvedConfigFileName, dependencyGraph: DependencyGraph | undefined): void;
         getNextInvalidatedProject(): ResolvedConfigFileName | undefined;
@@ -189,62 +189,56 @@ namespace ts {
         }
     }
 
-    interface FileMap<T> {
-        setValue(fileName: string, value: T): void;
-        getValue(fileName: string): T | never;
-        getValueOrUndefined(fileName: string): T | undefined;
-        hasKey(fileName: string): boolean;
-        removeKey(fileName: string): void;
-        getKeys(): string[];
+    interface FileMap<T, U extends string = string, V extends Path = Path> {
+        setValue(fileName: U, value: T): void;
+        getValue(fileName: U): T | undefined;
+        hasKey(fileName: U): boolean;
+        removeKey(fileName: U): void;
+        forEach(action: (value: T, key: V) => void): void;
         getSize(): number;
     }
+
+    type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
+    type ConfigFileMap<T> = FileMap<T, ResolvedConfigFileName, ResolvedConfigFilePath>;
+    type ToResolvedConfigFilePath = (fileName: ResolvedConfigFileName) => ResolvedConfigFilePath;
+    type ToPath = (fileName: string) => Path;
 
     /**
      * A FileMap maintains a normalized-key to value relationship
      */
-    function createFileMap<T>(): FileMap<T> {
+    function createFileMap<T>(toPath: ToResolvedConfigFilePath): ConfigFileMap<T>;
+    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: ToPath): FileMap<T, U, V>;
+    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: (fileName: U) => V): FileMap<T, U, V> {
         // tslint:disable-next-line:no-null-keyword
         const lookup = createMap<T>();
 
         return {
             setValue,
             getValue,
-            getValueOrUndefined,
             removeKey,
-            getKeys,
+            forEach,
             hasKey,
             getSize
         };
 
-        function getKeys(): string[] {
-            return Object.keys(lookup);
+        function forEach(action: (value: T, key: V) => void) {
+            lookup.forEach(action);
         }
 
-        function hasKey(fileName: string) {
-            return lookup.has(normalizePath(fileName));
+        function hasKey(fileName: U) {
+            return lookup.has(toPath(fileName));
         }
 
-        function removeKey(fileName: string) {
-            lookup.delete(normalizePath(fileName));
+        function removeKey(fileName: U) {
+            lookup.delete(toPath(fileName));
         }
 
-        function setValue(fileName: string, value: T) {
-            lookup.set(normalizePath(fileName), value);
+        function setValue(fileName: U, value: T) {
+            lookup.set(toPath(fileName), value);
         }
 
-        function getValue(fileName: string): T | never {
-            const f = normalizePath(fileName);
-            if (lookup.has(f)) {
-                return lookup.get(f)!;
-            }
-            else {
-                throw new Error(`No value corresponding to ${fileName} exists in this map`);
-            }
-        }
-
-        function getValueOrUndefined(fileName: string): T | undefined {
-            const f = normalizePath(fileName);
-            return lookup.get(f);
+        function getValue(fileName: U): T | undefined {
+            return lookup.get(toPath(fileName));
         }
 
         function getSize() {
@@ -252,10 +246,9 @@ namespace ts {
         }
     }
 
-    function createDependencyMapper() {
-        const childToParents = createFileMap<ResolvedConfigFileName[]>();
-        const parentToChildren = createFileMap<ResolvedConfigFileName[]>();
-        const allKeys = createFileMap<true>();
+    function createDependencyMapper(toPath: ToResolvedConfigFilePath) {
+        const childToParents = createFileMap<ResolvedConfigFileName[]>(toPath);
+        const parentToChildren = createFileMap<ResolvedConfigFileName[]>(toPath);
 
         function addReference(childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName): void {
             addEntry(childToParents, childConfigFileName, parentConfigFileName);
@@ -263,36 +256,29 @@ namespace ts {
         }
 
         function getReferencesTo(parentConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return parentToChildren.getValueOrUndefined(parentConfigFileName) || [];
+            return parentToChildren.getValue(parentConfigFileName) || [];
         }
 
         function getReferencesOf(childConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return childToParents.getValueOrUndefined(childConfigFileName) || [];
-        }
-
-        function getKeys(): ReadonlyArray<ResolvedConfigFileName> {
-            return allKeys.getKeys() as ResolvedConfigFileName[];
+            return childToParents.getValue(childConfigFileName) || [];
         }
 
         function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: ResolvedConfigFileName, element: ResolvedConfigFileName) {
             key = normalizePath(key) as ResolvedConfigFileName;
             element = normalizePath(element) as ResolvedConfigFileName;
-            let arr = mapToAddTo.getValueOrUndefined(key);
+            let arr = mapToAddTo.getValue(key);
             if (arr === undefined) {
                 mapToAddTo.setValue(key, arr = []);
             }
             if (arr.indexOf(element) < 0) {
                 arr.push(element);
             }
-            allKeys.setValue(key, true);
-            allKeys.setValue(element, true);
         }
 
         return {
             addReference,
             getReferencesTo,
             getReferencesOf,
-            getKeys
         };
     }
 
@@ -355,8 +341,8 @@ namespace ts {
         return opts.rootDir || getDirectoryPath(configFileName);
     }
 
-    function createConfigFileCache(host: CompilerHost) {
-        const cache = createFileMap<ParsedCommandLine | "error">();
+    function createConfigFileCache(host: CompilerHost, toPath: ToResolvedConfigFilePath) {
+        const cache = createFileMap<ParsedCommandLine | "error">(toPath);
         const configParseHost = parseConfigHostFromCompilerHost(host);
 
         function isParsedCommandLine(value: ParsedCommandLine | "error"): value is ParsedCommandLine {
@@ -364,7 +350,7 @@ namespace ts {
         }
 
         function parseConfigFile(configFilePath: ResolvedConfigFileName) {
-            const value = cache.getValueOrUndefined(configFilePath);
+            const value = cache.getValue(configFilePath);
             if (value) {
                 return isParsedCommandLine(value) ? value : undefined;
             }
@@ -398,18 +384,18 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export function createBuildContext(options: BuildOptions): BuildContext {
+    export function createBuildContext(options: BuildOptions, toPath: ToResolvedConfigFilePath): BuildContext {
         const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
         let nextIndex = 0;
-        const projectPendingBuild = createFileMap<true>();
+        const projectPendingBuild = createFileMap<true>(toPath);
         const missingRoots = createMap<true>();
-        const diagnostics = options.watch ? createFileMap<number>() : undefined;
+        const diagnostics = options.watch ? createFileMap<number>(toPath) : undefined;
 
         return {
             options,
-            projectStatus: createFileMap(),
+            projectStatus: createFileMap(toPath),
             diagnostics,
-            unchangedOutputs: createFileMap(),
+            unchangedOutputs: createFileMap(toPath as ToPath),
             invalidateProject,
             getNextInvalidatedProject,
             hasPendingInvalidatedProjects,
@@ -513,8 +499,10 @@ namespace ts {
      */
     export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions) {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
-        const configFileCache = createConfigFileCache(host);
-        let context = createBuildContext(defaultOptions);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        const configFileCache = createConfigFileCache(host, toPath);
+        let context = createBuildContext(defaultOptions, toPath);
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
 
@@ -534,6 +522,12 @@ namespace ts {
 
             startWatching
         };
+
+        function toPath(fileName: ResolvedConfigFileName): ResolvedConfigFilePath;
+        function toPath(fileName: string): Path;
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        }
 
         function reportStatus(message: DiagnosticMessage, ...args: string[]) {
             host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
@@ -600,7 +594,7 @@ namespace ts {
         }
 
         function resetBuildContext(opts = defaultOptions) {
-            context = createBuildContext(opts);
+            context = createBuildContext(opts, toPath);
         }
 
         function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
@@ -623,13 +617,13 @@ namespace ts {
                 return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
             }
 
-            const prior = context.projectStatus.getValueOrUndefined(project.options.configFilePath!);
+            const prior = context.projectStatus.getValue(project.options.configFilePath as ResolvedConfigFilePath);
             if (prior !== undefined) {
                 return prior;
             }
 
             const actual = getUpToDateStatusWorker(project);
-            context.projectStatus.setValue(project.options.configFilePath!, actual);
+            context.projectStatus.setValue(project.options.configFilePath as ResolvedConfigFilePath, actual);
             return actual;
         }
 
@@ -700,7 +694,7 @@ namespace ts {
                 // had its file touched but not had its contents changed - this allows us
                 // to skip a downstream typecheck
                 if (isDeclarationFile(output)) {
-                    const unchangedTime = context.unchangedOutputs.getValueOrUndefined(output);
+                    const unchangedTime = context.unchangedOutputs.getValue(output);
                     if (unchangedTime !== undefined) {
                         newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
                     }
@@ -845,9 +839,9 @@ namespace ts {
 
         function reportErrorSummary() {
             if (context.options.watch) {
-                let errorCount = 0;
-                context.diagnostics!.getKeys().forEach(resolved => errorCount += context.diagnostics!.getValue(resolved));
-                reportWatchStatus(errorCount === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount);
+                let totalErrors = 0;
+                context.diagnostics!.forEach(singleProjectErrors => totalErrors += singleProjectErrors);
+                reportWatchStatus(totalErrors === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, totalErrors);
             }
         }
 
@@ -881,7 +875,7 @@ namespace ts {
             const permanentMarks: { [path: string]: true } = {};
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
-            const graph = createDependencyMapper();
+            const graph = createDependencyMapper(toPath);
 
             let hadError = false;
 
@@ -1061,7 +1055,7 @@ namespace ts {
                 host.setModifiedTime(file, now);
             }
 
-            context.projectStatus.setValue(proj.options.configFilePath!, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+            context.projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
         function getFilesToClean(configFileNames: ReadonlyArray<ResolvedConfigFileName>): string[] | undefined {
