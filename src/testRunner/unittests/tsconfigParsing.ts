@@ -290,8 +290,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],
-                Diagnostics.The_files_list_in_config_file_0_is_empty.code,
-                /*noLocation*/ true);
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
         });
 
         it("generates errors for empty files list when no references are provided", () => {
@@ -303,8 +302,7 @@ namespace ts {
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],
-                Diagnostics.The_files_list_in_config_file_0_is_empty.code,
-                /*noLocation*/ true);
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
         });
 
         it("does not generate errors for empty files list when one or more references are provided", () => {
