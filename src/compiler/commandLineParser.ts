@@ -1847,8 +1847,12 @@ namespace ts {
                     const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
                     if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
                         if (sourceFile) {
+                            const fileName = configFileName || "tsconfig.json";
+                            const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
                             const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
-                            const error = createDiagnosticForNodeInSourceFile(sourceFile, nodeValue!, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
+                            const error = nodeValue
+                                ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
+                                : createCompilerDiagnostic(diagnosticMessage, fileName);
                             errors.push(error);
                         }
                         else {
