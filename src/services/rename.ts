@@ -40,13 +40,17 @@ namespace ts.Rename {
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
         const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
-        return moduleSourceFile && {
+        if (!moduleSourceFile) return undefined;
+        const withoutIndex = node.text.endsWith("/index") || node.text.endsWith("/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
+        const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
+        const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
+        return {
             canRename: true,
-            fileToRename: moduleSourceFile.fileName,
-            kind: ScriptElementKind.moduleElement,
-            displayName: moduleSourceFile.fileName,
+            fileToRename: name,
+            kind,
+            displayName: name,
             localizedErrorMessage: undefined,
-            fullDisplayName: moduleSourceFile.fileName,
+            fullDisplayName: name,
             kindModifiers: ScriptElementKindModifier.none,
             triggerSpan: createTriggerSpanForNode(node, sourceFile),
         };

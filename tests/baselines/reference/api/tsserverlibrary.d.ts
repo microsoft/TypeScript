@@ -5102,7 +5102,7 @@ declare namespace ts {
     interface RenameInfo {
         canRename: boolean;
         /**
-         * fileName to rename.
+         * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
@@ -6428,7 +6428,7 @@ declare namespace ts.server.protocol {
          */
         canRename: boolean;
         /**
-         * fileName to rename.
+         * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
