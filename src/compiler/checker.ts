@@ -19208,12 +19208,16 @@ namespace ts {
             let aboveArgCount = Number.POSITIVE_INFINITY;
 
             let argCount = args.length;
+            let closestSignature: Signature | undefined;
             for (const sig of signatures) {
                 const minCount = getMinArgumentCount(sig);
                 const maxCount = getParameterCount(sig);
                 if (minCount < argCount && minCount > belowArgCount) belowArgCount = minCount;
                 if (argCount < maxCount && maxCount < aboveArgCount) aboveArgCount = maxCount;
-                min = Math.min(min, minCount);
+                if (minCount < min) {
+                    min = minCount;
+                    closestSignature = sig;
+                }
                 max = Math.max(max, maxCount);
             }
 
@@ -19226,16 +19230,29 @@ namespace ts {
                 argCount--;
             }
 
+            let related: DiagnosticWithLocation | undefined;
+            if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
+                const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
+                if (paramDecl) {
+                    related = createDiagnosticForNode(
+                        paramDecl,
+                        isBindingPattern(paramDecl.name) ? Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided : Diagnostics.An_argument_for_0_was_not_provided,
+                        !paramDecl.name ? argCount : !isBindingPattern(paramDecl.name) ? idText(getFirstIdentifier(paramDecl.name)) : undefined
+                    );
+                }
+            }
             if (hasRestParameter || hasSpreadArgument) {
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                     hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                     Diagnostics.Expected_0_arguments_but_got_1_or_more;
-                return createDiagnosticForNode(node, error, paramRange, argCount);
+                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
             }
             if (min < argCount && argCount < max) {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
-            return createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+            const diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+            return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
         function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
