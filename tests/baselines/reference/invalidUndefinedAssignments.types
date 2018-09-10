@@ -5,7 +5,7 @@ var x: typeof undefined;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 E = x;
 >E = x : any
@@ -25,7 +25,6 @@ class C { foo: string }
 
 var f: C;
 >f : C
->C : C
 
 C = x;
 >C = x : any
@@ -33,12 +32,10 @@ C = x;
 >x : any
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var g: I;
 >g : I
->I : I
 
 g = x;
 >g = x : any
@@ -62,9 +59,7 @@ M = x;
 
 function i<T>(a: T) { }
 >i : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
 // BUG 767030
 i = x; 

@@ -1,8 +1,7 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts ===
 const strSet: Set<string> = new Set()
 >strSet : Set<string>
->Set : Set<T>
->new Set() : Set<any>
+>new Set() : Set<string>
 >Set : SetConstructor
 
 strSet.add('Hello')

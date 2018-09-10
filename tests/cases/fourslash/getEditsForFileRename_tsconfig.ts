@@ -4,7 +4,6 @@
 ////{
 ////    "compilerOptions": {
 ////        "baseUrl": "./old",
-////        "mapRoot": "../src/old",
 ////        "paths": {
 ////            "foo": ["old"],
 ////        },
@@ -17,6 +16,9 @@
 ////    "exclude": ["old"],
 ////}
 
+// @Filename: /src/old/someFile.ts
+////
+
 verify.getEditsForFileRename({
     oldPath: "/src/old",
     newPath: "/src/new",
@@ -25,7 +27,6 @@ verify.getEditsForFileRename({
 `{
     "compilerOptions": {
         "baseUrl": "new",
-        "mapRoot": "new",
         "paths": {
             "foo": ["new"],
         },

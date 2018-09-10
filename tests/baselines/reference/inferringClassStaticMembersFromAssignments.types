@@ -10,12 +10,12 @@ C1.staticProp = 0;
 >0 : 0
 
 export function F1() { }
->F1 : { (): void; staticProp: number; }
+>F1 : typeof F1
 
 F1.staticProp = 0;
 >F1.staticProp = 0 : 0
 >F1.staticProp : number
->F1 : { (): void; staticProp: number; }
+>F1 : typeof F1
 >staticProp : number
 >0 : 0
 
@@ -53,12 +53,12 @@ C3.staticProp = 0;
 >0 : 0
 
 function F3() { }
->F3 : { (): void; staticProp: number; }
+>F3 : typeof F3
 
 F3.staticProp = 0;
 >F3.staticProp = 0 : 0
 >F3.staticProp : number
->F3 : { (): void; staticProp: number; }
+>F3 : typeof F3
 >staticProp : number
 >0 : 0
 
@@ -110,9 +110,9 @@ var n = a.C2.staticProp;
 var n = a.F1.staticProp;
 >n : number
 >a.F1.staticProp : number
->a.F1 : { (): void; staticProp: number; }
+>a.F1 : typeof a.F1
 >a : typeof a
->F1 : { (): void; staticProp: number; }
+>F1 : typeof a.F1
 >staticProp : number
 
 var n = a.F2.staticProp;
@@ -139,7 +139,7 @@ var n = C4.staticProp;
 var n = F3.staticProp;
 >n : number
 >F3.staticProp : number
->F3 : { (): void; staticProp: number; }
+>F3 : typeof F3
 >staticProp : number
 
 var n = F4.staticProp;

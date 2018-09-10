@@ -29,7 +29,7 @@ namespace ts.codefix {
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false)));
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos)));
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
@@ -51,7 +51,7 @@ namespace ts.codefix {
         const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
         const nonPrivateAndNotExistedInHeritageClauseMembers = implementedTypeSymbols.filter(and(symbolPointsToNonPrivateMember, symbol => !maybeHeritageClauseSymbol.has(symbol.escapedName)));
 
-        const classType = checker.getTypeAtLocation(classDeclaration)!;
+        const classType = checker.getTypeAtLocation(classDeclaration);
 
         if (!classType.getNumberIndexType()) {
             createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
@@ -71,7 +71,7 @@ namespace ts.codefix {
     }
 
     function getHeritageClauseSymbolTable (classDeclaration: ClassLikeDeclaration, checker: TypeChecker): SymbolTable {
-        const heritageClauseNode = getClassExtendsHeritageClauseElement(classDeclaration);
+        const heritageClauseNode = getEffectiveBaseTypeNode(classDeclaration);
         if (!heritageClauseNode) return createSymbolTable();
         const heritageClauseType = checker.getTypeAtLocation(heritageClauseNode) as InterfaceType;
         const heritageClauseTypeSymbols = checker.getPropertiesOfType(heritageClauseType);

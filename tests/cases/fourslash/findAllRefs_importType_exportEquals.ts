@@ -15,7 +15,7 @@ verify.noErrors();
 
 const [r0, r1, r2, r3, r4] = test.ranges();
 verify.referenceGroups(r0, [{ definition: "type T = number\nnamespace T", ranges: [r0, r2, r3] }]);
-verify.referenceGroups(r1, [{ definition: "type T = number\nnamespace T", ranges: [r1, r2] }]);
+verify.referenceGroups(r1, [{ definition: "namespace T", ranges: [r1, r2] }]);
 verify.referenceGroups(r2, [{ definition: "type T = number\nnamespace T", ranges: [r0, r1, r2, r3] }]);
 verify.referenceGroups([r3, r4], [
     { definition: 'module "/a"', ranges: [r4] },

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/controlFlow/definiteAssignmentAssertionsWithObjectShortHand.ts ===
+const a: string | undefined = 'ff';
+>a : Symbol(a, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 0, 5))
+
+const foo = { a! }
+>foo : Symbol(foo, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 1, 5))
+>a : Symbol(a, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 1, 13))
+
+const bar = {
+>bar : Symbol(bar, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 3, 5))
+
+    a ? () { }
+>a : Symbol(a, Decl(definiteAssignmentAssertionsWithObjectShortHand.ts, 3, 13))
+}

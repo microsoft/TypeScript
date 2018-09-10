@@ -6,39 +6,27 @@ module ClassTypeParam {
 
     class Base<T> {
 >Base : Base<T>
->T : T
 
         a: () => T;
 >a : () => T
->T : T
 
         a2: (x?: T) => T;
 >a2 : (x?: T) => T
 >x : T
->T : T
->T : T
 
         a3: (x: T) => T;
 >a3 : (x: T) => T
 >x : T
->T : T
->T : T
 
         a4: (x: T, y?: T) => T;
 >a4 : (x: T, y?: T) => T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         a5: (x?: T, y?: T) => T;
 >a5 : (x?: T, y?: T) => T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         init = () => {
 >init : () => void
@@ -59,7 +47,6 @@ module ClassTypeParam {
 >a : () => T
 >(x?: T) => null : (x?: T) => any
 >x : T
->T : T
 >null : null
 
             this.a = (x: T) => null; // error, too many required params
@@ -69,7 +56,6 @@ module ClassTypeParam {
 >a : () => T
 >(x: T) => null : (x: T) => any
 >x : T
->T : T
 >null : null
 
             this.a2 = () => null; // ok, same T of required params
@@ -87,7 +73,6 @@ module ClassTypeParam {
 >a2 : (x?: T) => T
 >(x?: T) => null : (x?: T) => any
 >x : T
->T : T
 >null : null
 
             this.a2 = (x: T) => null; // ok, same number of params
@@ -97,7 +82,6 @@ module ClassTypeParam {
 >a2 : (x?: T) => T
 >(x: T) => null : (x: T) => any
 >x : T
->T : T
 >null : null
 
             this.a3 = () => null; // ok, fewer required params
@@ -115,7 +99,6 @@ module ClassTypeParam {
 >a3 : (x: T) => T
 >(x?: T) => null : (x?: T) => any
 >x : T
->T : T
 >null : null
 
             this.a3 = (x: T) => null; // ok, same T of required params
@@ -125,7 +108,6 @@ module ClassTypeParam {
 >a3 : (x: T) => T
 >(x: T) => null : (x: T) => any
 >x : T
->T : T
 >null : null
 
             this.a3 = (x: T, y: T) => null;  // error, too many required params
@@ -135,9 +117,7 @@ module ClassTypeParam {
 >a3 : (x: T) => T
 >(x: T, y: T) => null : (x: T, y: T) => any
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a4 = () => null; // ok, fewer required params
@@ -155,9 +135,7 @@ module ClassTypeParam {
 >a4 : (x: T, y?: T) => T
 >(x?: T, y?: T) => null : (x?: T, y?: T) => any
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a4 = (x: T) => null; // ok, same T of required params
@@ -167,7 +145,6 @@ module ClassTypeParam {
 >a4 : (x: T, y?: T) => T
 >(x: T) => null : (x: T) => any
 >x : T
->T : T
 >null : null
 
             this.a4 = (x: T, y: T) => null;  // ok, same number of params
@@ -177,9 +154,7 @@ module ClassTypeParam {
 >a4 : (x: T, y?: T) => T
 >(x: T, y: T) => null : (x: T, y: T) => any
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
 
@@ -198,9 +173,7 @@ module ClassTypeParam {
 >a5 : (x?: T, y?: T) => T
 >(x?: T, y?: T) => null : (x?: T, y?: T) => any
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a5 = (x: T) => null; // ok, all present params match
@@ -210,7 +183,6 @@ module ClassTypeParam {
 >a5 : (x?: T, y?: T) => T
 >(x: T) => null : (x: T) => any
 >x : T
->T : T
 >null : null
 
             this.a5 = (x: T, y: T) => null;  // ok, same number of params
@@ -220,9 +192,7 @@ module ClassTypeParam {
 >a5 : (x?: T, y?: T) => T
 >(x: T, y: T) => null : (x: T, y: T) => any
 >x : T
->T : T
 >y : T
->T : T
 >null : null
         }
     }
@@ -236,92 +206,60 @@ module GenericSignaturesInvalid {
 
         a: <T>() => T;
 >a : <T>() => T
->T : T
->T : T
 
         a2: <T>(x?: T) => T;
 >a2 : <T>(x?: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         a3: <T>(x: T) => T;
 >a3 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         a4: <T>(x: T, y?: T) => T;
 >a4 : <T>(x: T, y?: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         a5: <T>(x?: T, y?: T) => T;
 >a5 : <T>(x?: T, y?: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
     }
 
     class Target<T> {
 >Target : Target<T>
->T : T
 
         a: () => T;
 >a : () => T
->T : T
 
         a2: (x?: T) => T;
 >a2 : (x?: T) => T
 >x : T
->T : T
->T : T
 
         a3: (x: T) => T;
 >a3 : (x: T) => T
 >x : T
->T : T
->T : T
 
         a4: (x: T, y?: T) => T;
 >a4 : (x: T, y?: T) => T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         a5: (x?: T, y?: T) => T;
 >a5 : (x?: T, y?: T) => T
 >x : T
->T : T
 >y : T
->T : T
->T : T
     }
 
 
     function foo<T>() {
 >foo : <T>() => void
->T : T
 
         var b: Base2;
 >b : Base2
->Base2 : Base2
 
         var t: Target<T>;
 >t : Target<T>
->Target : Target<T>
->T : T
 
         // all errors
         b.a = t.a;
@@ -559,40 +497,24 @@ module GenericSignaturesValid {
 
         a: <T>() => T;
 >a : <T>() => T
->T : T
->T : T
 
         a2: <T>(x?: T) => T;
 >a2 : <T>(x?: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         a3: <T>(x: T) => T;
 >a3 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         a4: <T>(x: T, y?: T) => T;
 >a4 : <T>(x: T, y?: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         a5: <T>(x?: T, y?: T) => T;
 >a5 : <T>(x?: T, y?: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         init = () => {
 >init : () => void
@@ -604,7 +526,6 @@ module GenericSignaturesValid {
 >this : this
 >a : <T>() => T
 ><T>() => null : <T>() => any
->T : T
 >null : null
 
             this.a = <T>(x?: T) => null; // ok, same T of required params
@@ -613,9 +534,7 @@ module GenericSignaturesValid {
 >this : this
 >a : <T>() => T
 ><T>(x?: T) => null : <T>(x?: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a = <T>(x: T) => null; // error, too many required params
@@ -624,9 +543,7 @@ module GenericSignaturesValid {
 >this : this
 >a : <T>() => T
 ><T>(x: T) => null : <T>(x: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a2 = <T>() => null; // ok, same T of required params
@@ -635,7 +552,6 @@ module GenericSignaturesValid {
 >this : this
 >a2 : <T>(x?: T) => T
 ><T>() => null : <T>() => any
->T : T
 >null : null
 
             this.a2 = <T>(x?: T) => null; // ok, same T of required params
@@ -644,9 +560,7 @@ module GenericSignaturesValid {
 >this : this
 >a2 : <T>(x?: T) => T
 ><T>(x?: T) => null : <T>(x?: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a2 = <T>(x: T) => null; // ok, same number of params
@@ -655,9 +569,7 @@ module GenericSignaturesValid {
 >this : this
 >a2 : <T>(x?: T) => T
 ><T>(x: T) => null : <T>(x: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a3 = <T>() => null; // ok, fewer required params
@@ -666,7 +578,6 @@ module GenericSignaturesValid {
 >this : this
 >a3 : <T>(x: T) => T
 ><T>() => null : <T>() => any
->T : T
 >null : null
 
             this.a3 = <T>(x?: T) => null; // ok, fewer required params
@@ -675,9 +586,7 @@ module GenericSignaturesValid {
 >this : this
 >a3 : <T>(x: T) => T
 ><T>(x?: T) => null : <T>(x?: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a3 = <T>(x: T) => null; // ok, same T of required params
@@ -686,9 +595,7 @@ module GenericSignaturesValid {
 >this : this
 >a3 : <T>(x: T) => T
 ><T>(x: T) => null : <T>(x: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
@@ -697,11 +604,8 @@ module GenericSignaturesValid {
 >this : this
 >a3 : <T>(x: T) => T
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->T : T
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a4 = <T>() => null; // ok, fewer required params
@@ -710,7 +614,6 @@ module GenericSignaturesValid {
 >this : this
 >a4 : <T>(x: T, y?: T) => T
 ><T>() => null : <T>() => any
->T : T
 >null : null
 
             this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
@@ -719,11 +622,8 @@ module GenericSignaturesValid {
 >this : this
 >a4 : <T>(x: T, y?: T) => T
 ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->T : T
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a4 = <T>(x: T) => null; // ok, same T of required params
@@ -732,9 +632,7 @@ module GenericSignaturesValid {
 >this : this
 >a4 : <T>(x: T, y?: T) => T
 ><T>(x: T) => null : <T>(x: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params
@@ -743,11 +641,8 @@ module GenericSignaturesValid {
 >this : this
 >a4 : <T>(x: T, y?: T) => T
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->T : T
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
 
@@ -757,7 +652,6 @@ module GenericSignaturesValid {
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
 ><T>() => null : <T>() => any
->T : T
 >null : null
 
             this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
@@ -766,11 +660,8 @@ module GenericSignaturesValid {
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
 ><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
->T : T
 >x : T
->T : T
 >y : T
->T : T
 >null : null
 
             this.a5 = <T>(x: T) => null; // ok, all present params match
@@ -779,9 +670,7 @@ module GenericSignaturesValid {
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
 ><T>(x: T) => null : <T>(x: T) => any
->T : T
 >x : T
->T : T
 >null : null
 
             this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params
@@ -790,11 +679,8 @@ module GenericSignaturesValid {
 >this : this
 >a5 : <T>(x?: T, y?: T) => T
 ><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
->T : T
 >x : T
->T : T
 >y : T
->T : T
 >null : null
         }
     }

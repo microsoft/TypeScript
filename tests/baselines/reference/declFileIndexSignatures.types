@@ -1,20 +1,14 @@
 === tests/cases/compiler/declFileIndexSignatures_0.ts ===
 export interface IStringIndexSignature {
->IStringIndexSignature : IStringIndexSignature
-
     [s: string]: string;
 >s : string
 }
 export interface INumberIndexSignature {
->INumberIndexSignature : INumberIndexSignature
-
     [n: number]: number;
 >n : number
 }
 
 export interface IBothIndexSignature {
->IBothIndexSignature : IBothIndexSignature
-
     [s: string]: any;
 >s : string
 
@@ -23,31 +17,21 @@ export interface IBothIndexSignature {
 }
 
 export interface IIndexSignatureWithTypeParameter<T> {
->IIndexSignatureWithTypeParameter : IIndexSignatureWithTypeParameter<T>
->T : T
-
     [a: string]: T;
 >a : string
->T : T
 }
 
 === tests/cases/compiler/declFileIndexSignatures_1.ts ===
 interface IGlobalStringIndexSignature {
->IGlobalStringIndexSignature : IGlobalStringIndexSignature
-
     [s: string]: string;
 >s : string
 }
 interface IGlobalNumberIndexSignature {
->IGlobalNumberIndexSignature : IGlobalNumberIndexSignature
-
     [n: number]: number;
 >n : number
 }
 
 interface IGlobalBothIndexSignature {
->IGlobalBothIndexSignature : IGlobalBothIndexSignature
-
     [s: string]: any;
 >s : string
 
@@ -56,10 +40,6 @@ interface IGlobalBothIndexSignature {
 }
 
 interface IGlobalIndexSignatureWithTypeParameter<T> {
->IGlobalIndexSignatureWithTypeParameter : IGlobalIndexSignatureWithTypeParameter<T>
->T : T
-
     [a: string]: T;
 >a : string
->T : T
 }

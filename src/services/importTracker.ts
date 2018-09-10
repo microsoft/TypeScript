@@ -12,7 +12,7 @@ namespace ts.FindAllReferences {
     export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
+    export function createImportTracker(sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): ImportTracker {
         const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
         return (exportSymbol, exportInfo, isForRename) => {
             const { directImports, indirectUsers } = getImportersForExport(sourceFiles, sourceFilesSet, allDirectImports, exportInfo, checker, cancellationToken);
@@ -43,7 +43,7 @@ namespace ts.FindAllReferences {
         allDirectImports: Map<ImporterOrCallExpression[]>,
         { exportingModuleSymbol, exportKind }: ExportInfo,
         checker: TypeChecker,
-        cancellationToken: CancellationToken
+        cancellationToken: CancellationToken | undefined,
     ): { directImports: Importer[], indirectUsers: ReadonlyArray<SourceFile> } {
         const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
         const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
@@ -80,7 +80,7 @@ namespace ts.FindAllReferences {
                         continue;
                     }
 
-                    cancellationToken.throwIfCancellationRequested();
+                    if (cancellationToken) cancellationToken.throwIfCancellationRequested();
 
                     switch (direct.kind) {
                         case SyntaxKind.CallExpression:
@@ -103,23 +103,17 @@ namespace ts.FindAllReferences {
                             break; // TODO: GH#23879
 
                         case SyntaxKind.ImportEqualsDeclaration:
-                            handleNamespaceImport(direct, direct.name, hasModifier(direct, ModifierFlags.Export));
+                            handleNamespaceImport(direct, direct.name, hasModifier(direct, ModifierFlags.Export), /*alreadyAddedDirect*/ false);
                             break;
 
                         case SyntaxKind.ImportDeclaration:
+                            directImports.push(direct);
                             const namedBindings = direct.importClause && direct.importClause.namedBindings;
                             if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                handleNamespaceImport(direct, namedBindings.name);
+                                handleNamespaceImport(direct, namedBindings.name, /*isReExport*/ false, /*alreadyAddedDirect*/ true);
                             }
-                            else if (isDefaultImport(direct)) {
-                                const sourceFileLike = getSourceFileLikeForImportDeclaration(direct);
-                                if (!isAvailableThroughGlobal) {
-                                    addIndirectUser(sourceFileLike); // Add a check for indirect uses to handle synthetic default imports
-                                }
-                                directImports.push(direct);
-                            }
-                            else {
-                                directImports.push(direct);
+                            else if (!isAvailableThroughGlobal && isDefaultImport(direct)) {
+                                addIndirectUser(getSourceFileLikeForImportDeclaration(direct)); // Add a check for indirect uses to handle synthetic default imports
                             }
                             break;
 
@@ -145,10 +139,10 @@ namespace ts.FindAllReferences {
             }
         }
 
-        function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport?: boolean): void {
+        function handleNamespaceImport(importDeclaration: ImportEqualsDeclaration | ImportDeclaration, name: Identifier, isReExport: boolean, alreadyAddedDirect: boolean): void {
             if (exportKind === ExportKind.ExportEquals) {
                 // This is a direct import, not import-as-namespace.
-                directImports.push(importDeclaration);
+                if (!alreadyAddedDirect) directImports.push(importDeclaration);
             }
             else if (!isAvailableThroughGlobal) {
                 const sourceFileLike = getSourceFileLikeForImportDeclaration(importDeclaration);
@@ -247,34 +241,30 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            const { importClause } = decl;
-            if (!importClause) {
-                return;
-            }
+            const { name, namedBindings } = decl.importClause || { name: undefined, namedBindings: undefined };
 
-            const { namedBindings } = importClause;
-            if (namedBindings && namedBindings.kind === SyntaxKind.NamespaceImport) {
-                handleNamespaceImportLike(namedBindings.name);
-                return;
-            }
-
-            if (exportKind === ExportKind.Named) {
-                searchForNamedImport(namedBindings as NamedImports | undefined); // tslint:disable-line no-unnecessary-type-assertion (TODO: GH#18217)
-            }
-            else {
-                // `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals
-                const { name } = importClause;
-                // If a default import has the same name as the default export, allow to rename it.
-                // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
-                if (name && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))) {
-                    const defaultImportAlias = checker.getSymbolAtLocation(name)!;
-                    addSearch(name, defaultImportAlias);
+            if (namedBindings) {
+                switch (namedBindings.kind) {
+                    case SyntaxKind.NamespaceImport:
+                        handleNamespaceImportLike(namedBindings.name);
+                        break;
+                    case SyntaxKind.NamedImports:
+                        // 'default' might be accessed as a named import `{ default as foo }`.
+                        if (exportKind === ExportKind.Named || exportKind === ExportKind.Default) {
+                            searchForNamedImport(namedBindings);
+                        }
+                        break;
+                    default:
+                        Debug.assertNever(namedBindings);
                 }
+            }
 
-                // 'default' might be accessed as a named import `{ default as foo }`.
-                if (exportKind === ExportKind.Default) {
-                    searchForNamedImport(namedBindings);
-                }
+            // `export =` might be imported by a default import if `--allowSyntheticDefaultImports` is on, so this handles both ExportKind.Default and ExportKind.ExportEquals.
+            // If a default import has the same name as the default export, allow to rename it.
+            // Given `import f` and `export default function f`, we will rename both, but for `import g` we will rename just that.
+            if (name && (exportKind === ExportKind.Default || exportKind === ExportKind.ExportEquals) && (!isForRename || name.escapedText === symbolEscapedNameNoDefault(exportSymbol))) {
+                const defaultImportAlias = checker.getSymbolAtLocation(name)!;
+                addSearch(name, defaultImportAlias);
             }
         }
 
@@ -373,11 +363,11 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken): Map<ImporterOrCallExpression[]> {
+    function getDirectImportsMap(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<ImporterOrCallExpression[]> {
         const map = createMap<ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
-            cancellationToken.throwIfCancellationRequested();
+            if (cancellationToken) cancellationToken.throwIfCancellationRequested();
             forEachImport(sourceFile, (importDecl, moduleSpecifier) => {
                 const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol) {

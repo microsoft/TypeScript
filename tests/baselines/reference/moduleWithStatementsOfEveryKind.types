@@ -8,23 +8,18 @@ module A {
 
     class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
->T : T
 
     interface I { id: number }
->I : I
 >id : number
 
     class B extends AA<string> implements I { id: number }
 >B : B
 >AA : AA<string>
->I : I
 >id : number
 
     class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -56,7 +51,6 @@ module A {
     }
     var array: I[] = null;
 >array : I[]
->I : I
 >null : null
 
     var fn = (s: string) => {
@@ -96,23 +90,18 @@ module Y {
 
     export class AA<T> { s: T }
 >AA : AA<T>
->T : T
 >s : T
->T : T
 
     export interface I { id: number }
->I : I
 >id : number
 
     export class B extends AA<string> implements I { id: number }
 >B : B
 >AA : AA<string>
->I : I
 >id : number
 
     export class BB<T> extends A {
 >BB : BB<T>
->T : T
 >A : A
 
         id: number;
@@ -144,7 +133,6 @@ module Y {
     }
     export var array: I[] = null;
 >array : I[]
->I : I
 >null : null
 
     export var fn = (s: string) => {

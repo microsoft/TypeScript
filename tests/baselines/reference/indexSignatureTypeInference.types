@@ -1,51 +1,30 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/indexSignatureTypeInference.ts ===
 interface NumberMap<T> {
->NumberMap : NumberMap<T>
->T : T
-
     [index: number]: T;
 >index : number
->T : T
 }
 
 interface StringMap<T> {
->StringMap : StringMap<T>
->T : T
-
     [index: string]: T;
 >index : string
->T : T
 }
 
 declare function numberMapToArray<T>(object: NumberMap<T>): T[];
 >numberMapToArray : <T>(object: NumberMap<T>) => T[]
->T : T
 >object : NumberMap<T>
->NumberMap : NumberMap<T>
->T : T
->T : T
 
 declare function stringMapToArray<T>(object: StringMap<T>): T[];
 >stringMapToArray : <T>(object: StringMap<T>) => T[]
->T : T
 >object : StringMap<T>
->StringMap : StringMap<T>
->T : T
->T : T
 
 var numberMap: NumberMap<Function>;
 >numberMap : NumberMap<Function>
->NumberMap : NumberMap<T>
->Function : Function
 
 var stringMap: StringMap<Function>;
 >stringMap : StringMap<Function>
->StringMap : StringMap<T>
->Function : Function
 
 var v1: Function[];
 >v1 : Function[]
->Function : Function
 
 var v1 = numberMapToArray(numberMap);  // Ok
 >v1 : Function[]

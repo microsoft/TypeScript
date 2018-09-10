@@ -4,26 +4,20 @@
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 interface I0 {
->I0 : I0
-
     [x: string]: E;
 >x : string
->E : E
 
     foo: E; // identical and subtype, ok
 >foo : E
->E : E
 }
 
 
 declare function foo(x: E): E;
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
 >x : E
->E : E
->E : E
 
 declare function foo(x: number): number;
 >foo : { (x: E): E; (x: number): number; (x: any): any; }
@@ -61,8 +55,6 @@ declare function foo2(x: string): string;
 declare function foo2(x: E): E;
 >foo2 : { (x: string): string; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo2(E.A);
 >r4 : E
@@ -79,8 +71,6 @@ declare function foo3(x: boolean): boolean;
 declare function foo3(x: E): E;
 >foo3 : { (x: boolean): boolean; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo3(E.A);
 >r4 : E
@@ -93,14 +83,10 @@ var r4 = foo3(E.A);
 declare function foo4(x: Date): Date;
 >foo4 : { (x: Date): Date; (x: E): E; }
 >x : Date
->Date : Date
->Date : Date
 
 declare function foo4(x: E): E;
 >foo4 : { (x: Date): Date; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo4(E.A);
 >r4 : E
@@ -113,14 +99,10 @@ var r4 = foo4(E.A);
 declare function foo5(x: RegExp): RegExp;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
 >x : RegExp
->RegExp : RegExp
->RegExp : RegExp
 
 declare function foo5(x: E): E;
 >foo5 : { (x: RegExp): RegExp; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo5(E.A);
 >r4 : E
@@ -139,8 +121,6 @@ declare function foo6(x: { bar: number }): { bar: number };
 declare function foo6(x: E): E;
 >foo6 : { (x: { bar: number; }): { bar: number; }; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo6(E.A);
 >r4 : E
@@ -157,8 +137,6 @@ declare function foo7(x: number[]): number[];
 declare function foo7(x: E): E;
 >foo7 : { (x: number[]): number[]; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo7(E.A);
 >r4 : E
@@ -169,20 +147,15 @@ var r4 = foo7(E.A);
 >A : E
 
 interface I8 { foo: string; }
->I8 : I8
 >foo : string
 
 declare function foo8(x: I8): I8;
 >foo8 : { (x: I8): I8; (x: E): E; }
 >x : I8
->I8 : I8
->I8 : I8
 
 declare function foo8(x: E): E;
 >foo8 : { (x: I8): I8; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo8(E.A);
 >r4 : E
@@ -199,14 +172,10 @@ class A { foo: number; }
 declare function foo9(x: A): A;
 >foo9 : { (x: A): A; (x: E): E; }
 >x : A
->A : A
->A : A
 
 declare function foo9(x: E): E;
 >foo9 : { (x: A): A; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo9(E.A);
 >r4 : E
@@ -218,21 +187,15 @@ var r4 = foo9(E.A);
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
->T : T
 
 declare function foo10(x: A2<number>): A2<number>;
 >foo10 : { (x: A2<number>): A2<number>; (x: E): E; }
 >x : A2<number>
->A2 : A2<T>
->A2 : A2<T>
 
 declare function foo10(x: E): E;
 >foo10 : { (x: A2<number>): A2<number>; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo10(E.A);
 >r4 : E
@@ -251,8 +214,6 @@ declare function foo11(x: (x) => number): (x) => number;
 declare function foo11(x: E): E;
 >foo11 : { (x: (x: any) => number): (x: any) => number; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo11(E.A);
 >r4 : E
@@ -265,20 +226,12 @@ var r4 = foo11(E.A);
 declare function foo12(x: <T>(x: T) => T): <T>(x: T) => T;
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
 >x : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 declare function foo12(x: E): E;
 >foo12 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo12(E.A);
 >r4 : E
@@ -290,19 +243,15 @@ var r4 = foo12(E.A);
 
 enum E2 { A }
 >E2 : E2
->A : E2
+>A : E2.A
 
 declare function foo13(x: E2): E2;
 >foo13 : { (x: E2): E2; (x: E): E; }
 >x : E2
->E2 : E2
->E2 : E2
 
 declare function foo13(x: E): E;
 >foo13 : { (x: E2): E2; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo13(E.A);
 >r4 : E
@@ -331,8 +280,6 @@ declare function foo14(x: typeof f): typeof f;
 declare function foo14(x: E): E;
 >foo14 : { (x: typeof f): typeof f; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo14(E.A);
 >r4 : E
@@ -356,14 +303,10 @@ module CC {
 declare function foo15(x: CC): CC;
 >foo15 : { (x: CC): CC; (x: E): E; }
 >x : CC
->CC : CC
->CC : CC
 
 declare function foo15(x: E): E;
 >foo15 : { (x: CC): CC; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo15(E.A);
 >r4 : E
@@ -376,14 +319,10 @@ var r4 = foo15(E.A);
 declare function foo16(x: Object): Object;
 >foo16 : { (x: Object): Object; (x: E): E; }
 >x : Object
->Object : Object
->Object : Object
 
 declare function foo16(x: E): E;
 >foo16 : { (x: Object): Object; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo16(E.A);
 >r4 : E
@@ -400,8 +339,6 @@ declare function foo17(x: {}): {};
 declare function foo17(x: E): E;
 >foo17 : { (x: {}): {}; (x: E): E; }
 >x : E
->E : E
->E : E
 
 var r4 = foo16(E.A);
 >r4 : E

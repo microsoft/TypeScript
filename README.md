@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/index?context=allDefinitions&path=%5C&definitionId=4&_a=completed) 
+[![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/latest?definitionId=4&view=logs) 
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 
@@ -7,7 +7,7 @@
 
 [![Join the chat at https://gitter.im/Microsoft/TypeScript](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Microsoft/TypeScript?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types, classes, and modules to JavaScript. TypeScript supports tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescriptlang).
+[TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescriptlang).
 
 ## Installing
 
@@ -61,29 +61,29 @@ Change to the TypeScript directory:
 cd TypeScript
 ```
 
-Install Gulp tools and dev dependencies:
+Install Jake tools and dev dependencies:
 
 ```bash
-npm install -g gulp
+npm install -g jake
 npm install
 ```
 
 Use one of the following to build and test:
 
 ```
-gulp local            # Build the compiler into built/local 
-gulp clean            # Delete the built compiler 
-gulp LKG              # Replace the last known good with the built one.
+jake local            # Build the compiler into built/local 
+jake clean            # Delete the built compiler 
+jake LKG              # Replace the last known good with the built one.
                       # Bootstrapping step to be executed when the built compiler reaches a stable state.
-gulp tests            # Build the test infrastructure using the built compiler. 
-gulp runtests         # Run tests using the built compiler and test infrastructure. 
+jake tests            # Build the test infrastructure using the built compiler. 
+jake runtests         # Run tests using the built compiler and test infrastructure. 
                       # You can override the host or specify a test for this command. 
                       # Use host=<hostName> or tests=<testPath>. 
-gulp runtests-browser # Runs the tests using the built run.js file. Syntax is gulp runtests. Optional
+jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
                         parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
-gulp baseline-accept  # This replaces the baseline test results with the results obtained from gulp runtests.
-gulp lint             # Runs tslint on the TypeScript source.
-gulp help             # List the above commands. 
+jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
+jake lint             # Runs tslint on the TypeScript source.
+jake help             # List the above commands. 
 ```
 
 

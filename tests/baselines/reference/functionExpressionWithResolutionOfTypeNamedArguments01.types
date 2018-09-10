@@ -1,6 +1,5 @@
 === tests/cases/compiler/functionExpressionWithResolutionOfTypeNamedArguments01.ts ===
 interface arguments {
->arguments : arguments
 }
 
 var x = function f() {
@@ -10,6 +9,5 @@ var x = function f() {
 
     <arguments>arguments;
 ><arguments>arguments : arguments
->arguments : arguments
 >arguments : IArguments
 }

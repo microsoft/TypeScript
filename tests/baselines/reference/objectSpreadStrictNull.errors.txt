@@ -10,9 +10,7 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,9): error TS23
   Types of property 'sn' are incompatible.
     Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
       Type 'undefined' is not assignable to type 'string | number | boolean'.
-tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,7): error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
-  Types of property 'title' are incompatible.
-    Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,26): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS2322: Type '{ foo: number | undefined; bar: string | undefined; }' is not assignable to type 'Fields'.
   Types of property 'foo' are incompatible.
     Type 'number | undefined' is not assignable to type 'number'.
@@ -63,10 +61,9 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS23
     const m = { title: "The Matrix", yearReleased: 1999 };
     // should error here because title: undefined is not assignable to string
     const x: Movie = { ...m, title: undefined };
-          ~
-!!! error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
-!!! error TS2322:   Types of property 'title' are incompatible.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+                             ~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:22:5: The expected type comes from property 'title' which is declared here on type 'Movie'
     
     interface Fields {
         foo: number;

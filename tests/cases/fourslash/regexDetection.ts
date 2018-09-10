@@ -7,7 +7,7 @@ verify.not.quickInfoExists();
 
 goTo.marker("2");
 verify.quickInfoIs("const Math: Math",
-    "An intrinsic object that provides basic mathematics functionality and constants. ");
+    "An intrinsic object that provides basic mathematics functionality and constants.");
 
 goTo.marker("3");
 verify.not.quickInfoExists();

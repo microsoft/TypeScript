@@ -111,3 +111,13 @@ for (const y = 0; y < 1;) {
     (function() { return x + y});
     (() => x + y);
 }
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+for (let sx in sobj) {
+    (() => sobj[sx]);
+}
+declare const iobj: { [x: number]: any };
+for (let ix in iobj) {
+    (() => iobj[ix]);
+}

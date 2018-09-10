@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface interface1 {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////interface interface2  extends interface1{
-////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////class class1 implements interface2 {

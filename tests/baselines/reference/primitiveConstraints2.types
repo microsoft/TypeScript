@@ -1,17 +1,11 @@
 === tests/cases/compiler/primitiveConstraints2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
    public bar2<U extends T>(x: T, y: U): T {
 >bar2 : <U extends T>(x: T, y: U) => T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
->T : T
 
       return null;
 >null : null

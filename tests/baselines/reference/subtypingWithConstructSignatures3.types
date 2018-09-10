@@ -39,11 +39,7 @@ module Errors {
 >a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 >x : new (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived2 : Derived2
 >a2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 
     declare function foo7(a2: any): any;
@@ -55,15 +51,9 @@ module Errors {
 >a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 >x : new (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >y : new (arg2: Base) => Derived
 >arg2 : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived : Derived
 >a2 : new (x: new (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 
     declare function foo8(a2: any): any;
@@ -74,8 +64,6 @@ module Errors {
 >foo10 : { (a2: new (...x: Base[]) => Base): new (...x: Base[]) => Base; (a2: any): any; }
 >a2 : new (...x: Base[]) => Base
 >x : Base[]
->Base : Base
->Base : Base
 >a2 : new (...x: Base[]) => Base
 
     declare function foo10(a2: any): any;
@@ -90,7 +78,6 @@ module Errors {
 >y : { foo: string; bar: string; }
 >foo : string
 >bar : string
->Base : Base
 >a2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 
     declare function foo11(a2: any): any;
@@ -101,13 +88,7 @@ module Errors {
 >foo12 : { (a2: new (x: Base[], y: Derived2[]) => Derived[]): new (x: Base[], y: Derived2[]) => Derived[]; (a2: any): any; }
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Derived2[]
->Array : T[]
->Derived2 : Derived2
->Array : T[]
->Derived : Derived
 >a2 : new (x: Base[], y: Derived2[]) => Derived[]
 
     declare function foo12(a2: any): any;
@@ -166,36 +147,20 @@ module Errors {
 >x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
 
             new <T extends Derived>(a: T): T;
->T : T
->Derived : Derived
 >a : T
->T : T
->T : T
 
             new <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
         }): any[];
         new (x: {
 >x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
 
             new <T extends Derived2>(a: T): T;
->T : T
->Derived2 : Derived2
 >a : T
->T : T
->T : T
 
             new <T extends Base>(a: T): T;
->T : T
->Base : Base
 >a : T
->T : T
->T : T
 
         }): any[];
     }): typeof a2;
@@ -207,11 +172,7 @@ module Errors {
 
     var r1arg1: new <T, U>(x: T) => U[];
 >r1arg1 : new <T, U>(x: T) => U[]
->T : T
->U : U
 >x : T
->T : T
->U : U
 
     var r1arg2: new (x: number) => string[]; 
 >r1arg2 : new (x: number) => string[]
@@ -237,29 +198,15 @@ module Errors {
 
     var r2arg1: new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V;
 >r2arg1 : new <T extends Base, U extends Derived, V extends Derived2>(x: new (arg: T) => U) => new (r: T) => V
->T : T
->Base : Base
->U : U
->Derived : Derived
->V : V
->Derived2 : Derived2
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
 >r : T
->T : T
->V : V
 
     var r2arg2: new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2;
 >r2arg2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
 >x : new (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived2 : Derived2
 
     var r2 = foo7(r2arg1); // any
 >r2 : new (x: new (arg: Base) => Derived) => new (r: Base) => Derived2
@@ -281,35 +228,20 @@ module Errors {
 
     var r3arg1: new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U;
 >r3arg1 : new <T extends Base, U extends Derived>(x: new (arg: T) => U, y: (arg2: { foo: number; }) => U) => new (r: T) => U
->T : T
->Base : Base
->U : U
->Derived : Derived
 >x : new (arg: T) => U
 >arg : T
->T : T
->U : U
 >y : (arg2: { foo: number; }) => U
 >arg2 : { foo: number; }
 >foo : number
->U : U
 >r : T
->T : T
->U : U
 
     var r3arg2: new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived;
 >r3arg2 : new (x: (arg: Base) => Derived, y: new (arg2: Base) => Derived) => new (r: Base) => Derived
 >x : (arg: Base) => Derived
 >arg : Base
->Base : Base
->Derived : Derived
 >y : new (arg2: Base) => Derived
 >arg2 : Base
->Base : Base
->Derived : Derived
 >r : Base
->Base : Base
->Derived : Derived
 
     var r3 = foo8(r3arg1); // any
 >r3 : any
@@ -331,17 +263,11 @@ module Errors {
 
     var r4arg1: new <T extends Derived>(...x: T[]) => T;
 >r4arg1 : new <T extends Derived>(...x: T[]) => T
->T : T
->Derived : Derived
 >x : T[]
->T : T
->T : T
 
     var r4arg2: new (...x: Base[]) => Base;
 >r4arg2 : new (...x: Base[]) => Base
 >x : Base[]
->Base : Base
->Base : Base
 
     var r4 = foo10(r4arg1); // any
 >r4 : new (...x: Base[]) => Base
@@ -363,13 +289,8 @@ module Errors {
 
     var r5arg1: new <T extends Derived>(x: T, y: T) => T;
 >r5arg1 : new <T extends Derived>(x: T, y: T) => T
->T : T
->Derived : Derived
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
     var r5arg2: new (x: { foo: string }, y: { foo: string; bar: string }) => Base;
 >r5arg2 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -378,7 +299,6 @@ module Errors {
 >y : { foo: string; bar: string; }
 >foo : string
 >bar : string
->Base : Base
 
     var r5 = foo11(r5arg1); // any
 >r5 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -401,26 +321,12 @@ module Errors {
     var r6arg1: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >r6arg1 : new (x: Base[], y: Derived2[]) => Derived[]
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Derived2[]
->Array : T[]
->Derived2 : Derived2
->Array : T[]
->Derived : Derived
 
     var r6arg2: new <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T;
 >r6arg2 : new <T extends Derived2[]>(x: Base[], y: Base[]) => T
->T : T
->Array : T[]
->Derived2 : Derived2
 >x : Base[]
->Array : T[]
->Base : Base
 >y : Base[]
->Array : T[]
->Base : Base
->T : T
 
     var r6 = foo12(r6arg1); // new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >r6 : new (x: Base[], y: Derived2[]) => Derived[]
@@ -442,13 +348,9 @@ module Errors {
 
     var r7arg1: new <T>(x: { a: T; b: T }) => T;
 >r7arg1 : new <T>(x: { a: T; b: T; }) => T
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
     var r7arg2: new (x: { a: string; b: number }) => number;
 >r7arg2 : new (x: { a: string; b: number; }) => number
@@ -476,13 +378,9 @@ module Errors {
 
     var r7arg3: new <T extends Base>(x: { a: T; b: T }) => number;
 >r7arg3 : new <T extends Base>(x: { a: T; b: T; }) => number
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
 
     var r7c = foo15(r7arg3); // any
 >r7c : any
@@ -504,12 +402,8 @@ module Errors {
 
     var r8arg: new <T>(x: new (a: T) => T) => T[];
 >r8arg : new <T>(x: new (a: T) => T) => T[]
->T : T
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
->T : T
 
     var r8 = foo16(r8arg); // any
 >r8 : any
@@ -519,11 +413,8 @@ module Errors {
 
     var r9arg: new <T>(x: new (a: T) => T) => any[];
 >r9arg : new <T>(x: new (a: T) => T) => any[]
->T : T
 >x : new (a: T) => T
 >a : T
->T : T
->T : T
 
     var r9 = foo17(r9arg); // // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
 >r9 : { new (x: { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }): any[]; new (x: { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }): any[]; }
@@ -538,10 +429,7 @@ module WithGenericSignaturesInBaseType {
     declare function foo2(a2: new <T>(x: T) => T[]): typeof a2;
 >foo2 : { (a2: new <T>(x: T) => T[]): new <T>(x: T) => T[]; (a2: any): any; }
 >a2 : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 >a2 : new <T>(x: T) => T[]
 
     declare function foo2(a2: any): any;
@@ -550,9 +438,7 @@ module WithGenericSignaturesInBaseType {
 
     var r2arg2: new <T>(x: T) => string[];
 >r2arg2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
 >r2 : any
@@ -563,9 +449,7 @@ module WithGenericSignaturesInBaseType {
     declare function foo3(a2: new <T>(x: T) => string[]): typeof a2;
 >foo3 : { (a2: new <T>(x: T) => string[]): new <T>(x: T) => string[]; (a2: any): any; }
 >a2 : new <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 >a2 : new <T>(x: T) => string[]
 
     declare function foo3(a2: any): any;
@@ -574,10 +458,7 @@ module WithGenericSignaturesInBaseType {
 
     var r3arg2: new <T>(x: T) => T[];
 >r3arg2 : new <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
     var r3 = foo3(r3arg2); // any
 >r3 : any

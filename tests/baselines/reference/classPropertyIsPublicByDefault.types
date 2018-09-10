@@ -33,7 +33,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.x;
 >c.x : string

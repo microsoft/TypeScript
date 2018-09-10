@@ -63,10 +63,6 @@ namespace utils {
         return indentation;
     }
 
-    export function toUtf8(text: string): string {
-        return new Buffer(text).toString("utf8");
-    }
-
     export function getByteOrderMarkLength(text: string): number {
         if (text.length >= 1) {
             const ch0 = text.charCodeAt(0);
@@ -85,5 +81,17 @@ namespace utils {
 
     export function addUTF8ByteOrderMark(text: string) {
         return getByteOrderMarkLength(text) === 0 ? "\u00EF\u00BB\u00BF" + text : text;
+    }
+
+    export function theory<T extends any[]>(name: string, cb: (...args: T) => void, data: T[]) {
+        for (const entry of data) {
+            it(`${name}(${entry.map(formatTheoryDatum).join(", ")})`, () => cb(...entry));
+        }
+    }
+
+    function formatTheoryDatum(value: any) {
+        return typeof value === "function" ? value.name || "<anonymous function>" :
+            value === undefined ? "undefined" :
+            JSON.stringify(value);
     }
 }

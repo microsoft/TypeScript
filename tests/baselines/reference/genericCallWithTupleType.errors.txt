@@ -1,17 +1,20 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(12,1): error TS2322: Type '[string, number, boolean, boolean]' is not assignable to type '[string, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(13,20): error TS2733: Index '2' is out-of-bounds in tuple of length 2.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,1): error TS2322: Type '{ a: string; }' is not assignable to type 'string | number'.
   Type '{ a: string; }' is not assignable to type 'number'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,1): error TS2322: Type '[number, string]' is not assignable to type '[string, number]'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,1): error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]'.
-  Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,11): error TS2733: Index '3' is out-of-bounds in tuple of length 2.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(15,20): error TS2733: Index '3' is out-of-bounds in tuple of length 2.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,14): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(22,17): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,14): error TS2322: Type '{}' is not assignable to type 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,18): error TS2322: Type '{}' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(24,1): error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
   Property '1' is missing in type '[{}]'.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts (5 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts (10 errors) ====
     interface I<T, U> {
         tuple1: [T, U];
     } 
@@ -29,11 +32,17 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
 !!! error TS2322:   Types of property 'length' are incompatible.
 !!! error TS2322:     Type '4' is not assignable to type '2'.
     var e3 = i1.tuple1[2];  // {}
+                       ~
+!!! error TS2733: Index '2' is out-of-bounds in tuple of length 2.
     i1.tuple1[3] = { a: "string" };
     ~~~~~~~~~~~~
 !!! error TS2322: Type '{ a: string; }' is not assignable to type 'string | number'.
 !!! error TS2322:   Type '{ a: string; }' is not assignable to type 'number'.
+              ~
+!!! error TS2733: Index '3' is out-of-bounds in tuple of length 2.
     var e4 = i1.tuple1[3];  // {}
+                       ~
+!!! error TS2733: Index '3' is out-of-bounds in tuple of length 2.
     i2.tuple1 = ["foo", 5];
     i2.tuple1 = ["foo", "bar"];
     i2.tuple1 = [5, "bar"];
@@ -41,13 +50,15 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
     
     // error
     i1.tuple1 = [5, "foo"];
-    ~~~~~~~~~
-!!! error TS2322: Type '[number, string]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                 ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                    ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     i1.tuple1 = [{}, {}];
-    ~~~~~~~~~
-!!! error TS2322: Type '[{}, {}]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Type '{}' is not assignable to type 'string'.
+                 ~~
+!!! error TS2322: Type '{}' is not assignable to type 'string'.
+                     ~~
+!!! error TS2322: Type '{}' is not assignable to type 'number'.
     i2.tuple1 = [{}];
     ~~~~~~~~~
 !!! error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.

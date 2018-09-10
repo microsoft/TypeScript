@@ -14,7 +14,6 @@ function b() {
 }
 
 namespace global {
->global : any
 }
 
 function foo(global: number) {

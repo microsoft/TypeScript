@@ -3,6 +3,6 @@ enum Bar {
 >Bar : Bar
 
     interface,
->interface : Bar
+>interface : Bar.interface
 }
 

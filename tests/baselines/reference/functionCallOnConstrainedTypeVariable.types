@@ -21,8 +21,6 @@ type B = {
 function call0(p: A | B) { 
 >call0 : (p: A | B) => void
 >p : A | B
->A : A
->B : B
 
   p.a("s"); // Error
 >p.a("s") : any
@@ -34,11 +32,7 @@ function call0(p: A | B) {
 
 function callN<T extends A | B>(p: T) {
 >callN : <T extends A | B>(p: T) => void
->T : T
->A : A
->B : B
 >p : T
->T : T
 
   p.a("s"); // Error
 >p.a("s") : any
@@ -49,7 +43,6 @@ function callN<T extends A | B>(p: T) {
   
   var a: T["a"] = p.a;
 >a : T["a"]
->T : T
 >p.a : ((x: number) => string) | ((x: boolean) => string)
 >p : T
 >a : ((x: number) => string) | ((x: boolean) => string)

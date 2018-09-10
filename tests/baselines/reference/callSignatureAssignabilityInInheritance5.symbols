@@ -111,23 +111,23 @@ interface A { // T
     a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(A.a12, Decl(callSignatureAssignabilityInInheritance5.ts, 20, 71))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 21, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance5.ts, 0, 0))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance5.ts, 21, 25))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(callSignatureAssignabilityInInheritance5.ts, 4, 43))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance5.ts, 3, 27))
 
     a13: (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 >a13 : Symbol(A.a13, Decl(callSignatureAssignabilityInInheritance5.ts, 21, 64))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 22, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance5.ts, 0, 0))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance5.ts, 22, 25))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance5.ts, 3, 27))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance5.ts, 3, 27))
 
     a14: (x: { a: string; b: number }) => Object;
@@ -135,7 +135,7 @@ interface A { // T
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 23, 10))
 >a : Symbol(a, Decl(callSignatureAssignabilityInInheritance5.ts, 23, 14))
 >b : Symbol(b, Decl(callSignatureAssignabilityInInheritance5.ts, 23, 25))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 interface B extends A {
@@ -280,35 +280,36 @@ interface I extends B {
     a12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
 >a12 : Symbol(I.a12, Decl(callSignatureAssignabilityInInheritance5.ts, 43, 43))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 44, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance5.ts, 0, 0))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 44, 33))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance5.ts, 0, 0))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance5.ts, 44, 48))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 44, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance5.ts, 3, 27))
 
     a13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
 >a13 : Symbol(I.a13, Decl(callSignatureAssignabilityInInheritance5.ts, 44, 73))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 10))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance5.ts, 3, 27))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 36))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance5.ts, 0, 0))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 51))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 10))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 10))
 
-    a14: <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
+    a14: <T, U>(x: { a: T; b: U }) => T; // ok
 >a14 : Symbol(I.a14, Decl(callSignatureAssignabilityInInheritance5.ts, 45, 63))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
->x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 13))
->a : Symbol(a, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 17))
+>U : Symbol(U, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 12))
+>x : Symbol(x, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 16))
+>a : Symbol(a, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 20))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
->b : Symbol(b, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 23))
->T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
+>b : Symbol(b, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 26))
+>U : Symbol(U, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 12))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance5.ts, 46, 10))
 }

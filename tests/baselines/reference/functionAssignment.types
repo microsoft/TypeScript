@@ -2,7 +2,6 @@
 function f(n: Function) { }
 >f : (n: Function) => void
 >n : Function
->Function : Function
 
 f(function () { });
 >f(function () { }) : void
@@ -10,8 +9,6 @@ f(function () { });
 >function () { } : () => void
 
 interface foo {
->foo : foo
-
     get(handler: (bar: number)=>void): void;
 >get : (handler: (bar: number) => void) => void
 >handler : (bar: number) => void
@@ -19,21 +16,16 @@ interface foo {
 }
 
 interface baz {
->baz : baz
-
     get(callback: Function): number;
 >get : (callback: Function) => number
 >callback : Function
->Function : Function
 }
 
 var barbaz: baz;
 >barbaz : baz
->baz : baz
 
 var test: foo;
 >test : foo
->foo : foo
 
 test.get(function (param) {
 >test.get(function (param) {    var x = barbaz.get(function () { });}) : void

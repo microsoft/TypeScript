@@ -113,9 +113,7 @@ function move2(direction: "up" | "down") {
 
 function check<T>(x: T | undefined) {
 >check : <T>(x: T | undefined) => T
->T : T
 >x : T | undefined
->T : T
 
     return x || error("Undefined value");
 >x || error("Undefined value") : T

@@ -7,25 +7,20 @@ class C {
 }
 var ac: C;
 >ac : C
->C : C
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 var ai: I;
 >ai : I
->I : I
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var ae: E;
 >ae : E
->E : E
 
 var b: number = null;
 >b : number
@@ -41,7 +36,6 @@ var d: boolean = null;
 
 var e: Date = null;
 >e : Date
->Date : Date
 >null : null
 
 var f: any = null;
@@ -54,7 +48,6 @@ var g: void = null;
 
 var h: Object = null;
 >h : Object
->Object : Object
 >null : null
 
 var i: {} = null;
@@ -67,7 +60,6 @@ var j: () => {} = null;
 
 var k: Function = null;
 >k : Function
->Function : Function
 >null : null
 
 var l: (x: number) => string = null;
@@ -101,34 +93,22 @@ var n: { foo: string } = null;
 
 var o: <T>(x: T) => T = null;
 >o : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 
 var p: Number = null;
 >p : Number
->Number : Number
 >null : null
 
 var q: String = null;
 >q : String
->String : String
 >null : null
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
->Date : Date
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
 
     x = null;
 >x = null : null

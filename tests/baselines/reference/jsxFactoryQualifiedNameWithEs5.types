@@ -19,7 +19,7 @@ class Component {
 >renderCallback : () => any
 
         return <div>test</div>;
-><div>test</div> : any
+><div>test</div> : error
 >div : any
 >div : any
     }

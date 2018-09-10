@@ -18,7 +18,6 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >im : "I'm"
 >a : "a"
 >dinosaur : RexOrRaptor
->RexOrRaptor : RexOrRaptor
 >['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex"]
 >'I\'m' : "I'm"
 >'a' : "a"
@@ -32,7 +31,6 @@ rawr(dinosaur);
 function rawr(dino: RexOrRaptor) {
 >rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
 >dino : RexOrRaptor
->RexOrRaptor : RexOrRaptor
 
     if (dino === "t-rex") {
 >dino === "t-rex" : boolean

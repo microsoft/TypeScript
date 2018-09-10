@@ -27,9 +27,9 @@ function b() {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
 >cond : Symbol(cond, Decl(controlFlowForStatement.ts, 0, 3))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         x; // number
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
@@ -47,9 +47,9 @@ function c() {
     for (x = 5; x = x.toExponential(); x = 5) {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
->x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
 
         x; // string
@@ -76,7 +76,7 @@ function e() {
 
     let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 27, 7))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     for (x = "" || 0; typeof x !== "string"; x = "" || true) {
 >x : Symbol(x, Decl(controlFlowForStatement.ts, 27, 7))

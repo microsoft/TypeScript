@@ -1,22 +1,13 @@
 === tests/cases/compiler/genericChainedCalls.ts ===
 interface I1<T> {
->I1 : I1<T>
->T : T
-
     func<U>(callback: (value: T) => U): I1<T>;
 >func : <U>(callback: (value: T) => U) => I1<T>
->U : U
 >callback : (value: T) => U
 >value : T
->T : T
->U : U
->I1 : I1<T>
->T : T
 }
  
 declare var v1: I1<number>;
 >v1 : I1<number>
->I1 : I1<T>
  
 var r1 = v1.func(num => num.toString()) 
 >r1 : I1<number>

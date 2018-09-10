@@ -1,0 +1,17 @@
+=== tests/cases/compiler/indexedAccessImplicitlyAny.ts ===
+interface I { foof: number };
+>foof : number
+
+declare const i: I;
+>i : I
+
+i.foo;
+>i.foo : any
+>i : I
+>foo : any
+
+i["foo"];
+>i["foo"] : any
+>i : I
+>"foo" : "foo"
+

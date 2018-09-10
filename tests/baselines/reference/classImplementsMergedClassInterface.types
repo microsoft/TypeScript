@@ -7,20 +7,16 @@ declare class C1 {
 }
 
 interface C1 {
->C1 : C1
-
     y : number;
 >y : number
 }
 
 class C2 implements C1 { // error -- missing x
 >C2 : C2
->C1 : C1
 }
 
 class C3 implements C1 { // error -- missing y
 >C3 : C3
->C1 : C1
 
     x : number;
 >x : number
@@ -28,7 +24,6 @@ class C3 implements C1 { // error -- missing y
 
 class C4 implements C1 { // error -- missing x
 >C4 : C4
->C1 : C1
 
     y : number;
 >y : number
@@ -36,7 +31,6 @@ class C4 implements C1 { // error -- missing x
 
 class C5 implements C1 { // okay
 >C5 : C5
->C1 : C1
 
     x : number;
 >x : number

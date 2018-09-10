@@ -1,22 +1,11 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
-        const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(normalizePath(defaultLibFileName)));
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number): RenameInfo {
         const node = getTouchingPropertyName(sourceFile, position);
         const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, typeChecker, sourceFile, isDefinedInLibraryFile)
+            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()))
             : undefined;
         return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
-
-        function isDefinedInLibraryFile(declaration: Node) {
-            if (!defaultLibFileName) {
-                return false;
-            }
-
-            const sourceFile = declaration.getSourceFile();
-            const canonicalName = getCanonicalFileName(normalizePath(sourceFile.fileName));
-            return canonicalName === getCanonicalDefaultLibName();
-        }
     }
 
     function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean): RenameInfo | undefined {
@@ -41,7 +30,7 @@ namespace ts.Rename {
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
             ? stripQuotes(getTextOfIdentifierOrLiteral(node))
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);

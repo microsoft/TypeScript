@@ -3,68 +3,36 @@
 
 type Attributes<Keys extends keyof any> = {
 >Attributes : Attributes<Keys>
->Keys : Keys
 
     [Key in Keys]: string;
->Key : Key
->Keys : Keys
 }
 
 class Query<A extends Attributes<keyof A>> {
 >Query : Query<A>
->A : A
->Attributes : Attributes<Keys>
->A : A
 
     multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
 >multiply : <B extends Attributes<keyof B>>(x: B) => Query<A & B>
->B : B
->Attributes : Attributes<Keys>
->B : B
 >x : B
->B : B
->Query : Query<A>
->A : A
->B : B
 }
 
 // Repro from #14940
 
 type ClassName<S> = keyof S;
 >ClassName : keyof S
->S : S
->S : S
 
 type ClassNameMap<S> = { [K in keyof S]?: boolean }
 >ClassNameMap : ClassNameMap<S>
->S : S
->K : K
->S : S
 
 type ClassNameObjectMap<S> = object & ClassNameMap<S>;
 >ClassNameObjectMap : ClassNameObjectMap<S>
->S : S
->ClassNameMap : ClassNameMap<S>
->S : S
 
 type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
 >ClassNameArg : ClassNameArg<S>
->S : S
->ClassName : keyof S
->S : S
->ClassNameObjectMap : ClassNameObjectMap<S>
->S : S
 
 export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
 >css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
->S : S
->K : K
->S : S
 >styles : S
->S : S
 >classNames : ClassNameArg<S>[]
->ClassNameArg : ClassNameArg<S>
->S : S
 
   const args = classNames.map(arg => {
 >args : any[]
@@ -90,9 +58,9 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >"string" : "string"
 
       return styles[arg];
->styles[arg] : S[keyof S]
+>styles[arg] : S[keyof S & string]
 >styles : S
->arg : keyof S
+>arg : keyof S & string
     }
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
@@ -109,12 +77,9 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >keys : (o: {}) => string[]
 >arg : ClassNameObjectMap<S>
 >reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }
->ClassNameObject : No type information available!
 >(obj: ClassNameObject, key: keyof S) => {        const exportedClassName = styles[key];        obj[exportedClassName] = (arg as ClassNameMap<S>)[key];         return obj;      } : (obj: any, key: keyof S) => any
 >obj : any
->ClassNameObject : No type information available!
 >key : keyof S
->S : S
 
         const exportedClassName = styles[key];
 >exportedClassName : S[keyof S]
@@ -131,8 +96,6 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >(arg as ClassNameMap<S>) : ClassNameMap<S>
 >arg as ClassNameMap<S> : ClassNameMap<S>
 >arg : ClassNameObjectMap<S>
->ClassNameMap : ClassNameMap<S>
->S : S
 >key : keyof S
 
         return obj;

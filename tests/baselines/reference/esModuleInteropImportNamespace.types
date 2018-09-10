@@ -3,8 +3,6 @@ declare function foo(): void;
 >foo : () => void
 
 declare namespace foo {}
->foo : () => void
-
 export = foo;
 >foo : () => void
 

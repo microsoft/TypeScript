@@ -1,15 +1,9 @@
 === tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts ===
 declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
 >map : <T, U>(f: (x: T) => U, xs: T[]) => U[]
->T : T
->U : U
 >f : (x: T) => U
 >x : T
->T : T
->U : U
 >xs : T[]
->T : T
->U : U
 
 map((a) => a.length, [1]);
 >map((a) => a.length, [1]) : any[]

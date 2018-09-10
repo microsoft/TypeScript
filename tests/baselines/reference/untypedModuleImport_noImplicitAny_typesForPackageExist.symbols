@@ -1,0 +1,27 @@
+=== /a.ts ===
+import * as foo from "foo";
+>foo : Symbol(foo, Decl(a.ts, 0, 6))
+
+import * as fooSub from "foo/sub";
+>fooSub : Symbol(fooSub, Decl(a.ts, 1, 6))
+
+import * as barSub from "bar/sub";
+>barSub : Symbol(barSub, Decl(a.ts, 2, 6))
+
+import * as scopeFoo from "@scope/foo";
+>scopeFoo : Symbol(scopeFoo, Decl(a.ts, 3, 6))
+
+import * as scopeFooSub from "@scope/foo/sub";
+>scopeFooSub : Symbol(scopeFooSub, Decl(a.ts, 4, 6))
+
+import * as scopeBarSub from "@scope/bar/sub";
+>scopeBarSub : Symbol(scopeBarSub, Decl(a.ts, 5, 6))
+
+=== /node_modules/@types/foo/index.d.ts ===
+export const foo: number;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 12))
+
+=== /node_modules/@types/scope__foo/index.d.ts ===
+export const foo: number;
+>foo : Symbol(foo, Decl(index.d.ts, 0, 12))
+

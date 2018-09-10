@@ -1,14 +1,12 @@
 === tests/cases/compiler/assignmentToObjectAndFunction.ts ===
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 >errObj : Object
->Object : Object
 >{ toString: 0 } : { toString: number; }
 >toString : number
 >0 : 0
 
 var goodObj: Object = {
 >goodObj : Object
->Object : Object
 >{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
 
     toString(x?) {
@@ -22,7 +20,6 @@ var goodObj: Object = {
 
 var errFun: Function = {}; // Error for no call signature
 >errFun : Function
->Function : Function
 >{} : {}
 
 function foo() { }
@@ -38,7 +35,6 @@ module foo {
 
 var goodFundule: Function = foo; // ok
 >goodFundule : Function
->Function : Function
 >foo : typeof foo
 
 function bar() { }
@@ -55,7 +51,6 @@ module bar {
 
 var goodFundule2: Function = bar; // ok
 >goodFundule2 : Function
->Function : Function
 >bar : typeof bar
 
 function bad() { }
@@ -71,6 +66,5 @@ module bad {
 
 var badFundule: Function = bad; // error
 >badFundule : Function
->Function : Function
 >bad : typeof bad
 

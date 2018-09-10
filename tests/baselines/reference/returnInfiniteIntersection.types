@@ -5,9 +5,7 @@ function recursive() {
     let x = <T>(subkey: T) => recursive();
 >x : <T>(subkey: T) => any & { p: any; }
 ><T>(subkey: T) => recursive() : <T>(subkey: T) => any & { p: any; }
->T : T
 >subkey : T
->T : T
 >recursive() : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 >recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 

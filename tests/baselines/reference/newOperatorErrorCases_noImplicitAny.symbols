@@ -1,0 +1,21 @@
+=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases_noImplicitAny.ts ===
+function fnNumber(this: void): number { return 90; }
+>fnNumber : Symbol(fnNumber, Decl(newOperatorErrorCases_noImplicitAny.ts, 0, 0))
+>this : Symbol(this, Decl(newOperatorErrorCases_noImplicitAny.ts, 0, 18))
+
+new fnNumber(); // Error
+>fnNumber : Symbol(fnNumber, Decl(newOperatorErrorCases_noImplicitAny.ts, 0, 0))
+
+function fnVoid(this: void): void {}
+>fnVoid : Symbol(fnVoid, Decl(newOperatorErrorCases_noImplicitAny.ts, 1, 15))
+>this : Symbol(this, Decl(newOperatorErrorCases_noImplicitAny.ts, 3, 16))
+
+new fnVoid(); // Error
+>fnVoid : Symbol(fnVoid, Decl(newOperatorErrorCases_noImplicitAny.ts, 1, 15))
+
+function functionVoidNoThis(): void {}
+>functionVoidNoThis : Symbol(functionVoidNoThis, Decl(newOperatorErrorCases_noImplicitAny.ts, 4, 13))
+
+new functionVoidNoThis(); // Error
+>functionVoidNoThis : Symbol(functionVoidNoThis, Decl(newOperatorErrorCases_noImplicitAny.ts, 4, 13))
+

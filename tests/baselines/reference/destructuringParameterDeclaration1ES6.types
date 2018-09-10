@@ -104,8 +104,6 @@ function b3({z: {x, y: {j}}} = { z: { x: "hi", y: { j: 1 } } }) { }
 >1 : 1
 
 interface F1 {
->F1 : F1
-
     b5(z, y, [, a, b], {p, m: { q, r}});
 >b5 : (z: any, y: any, [, a, b]: [any, any, any], { p, m: { q, r } }: { p: any; m: { q: any; r: any; }; }) => any
 >z : any
@@ -176,7 +174,7 @@ b2("string", { x: 200, y: true });
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
 enum Foo { a }
 >Foo : Foo
->a : Foo
+>a : Foo.a
 
 function c0({z: {x, y: {j}}}) { }
 >c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
@@ -212,7 +210,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c=1]]]) { }
->c6 : ([a, b, [[c]]]: [any, any, [[number]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -301,8 +299,6 @@ c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]
 // or by including an initializer.
 
 interface F2 {
->F2 : F2
-
     d3([a, b, c]?);
 >d3 : ([a, b, c]?: [any, any, any]) => any
 >a : any
@@ -324,7 +320,6 @@ interface F2 {
 
 class C2 implements F2 {
 >C2 : C2
->F2 : F2
 
     constructor() { }
     d3() { }
@@ -342,7 +337,6 @@ class C2 implements F2 {
 
 class C3 implements F2 {
 >C3 : C3
->F2 : F2
 
     d3([a, b, c]) { }
 >d3 : ([a, b, c]: [any, any, any]) => void

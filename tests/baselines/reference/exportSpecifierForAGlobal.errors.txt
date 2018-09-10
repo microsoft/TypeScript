@@ -1,17 +1,14 @@
 tests/cases/compiler/b.ts(1,9): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
-tests/cases/compiler/b.ts(2,17): error TS4060: Return type of exported function has or is using private name 'X'.
 
 
 ==== tests/cases/compiler/a.d.ts (0 errors) ====
     declare class X { }
     
-==== tests/cases/compiler/b.ts (2 errors) ====
+==== tests/cases/compiler/b.ts (1 errors) ====
     export {X};
             ~
 !!! error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
     export function f() {
-                    ~
-!!! error TS4060: Return type of exported function has or is using private name 'X'.
         var x: X;
         return x;
     } 

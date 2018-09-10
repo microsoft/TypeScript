@@ -1,0 +1,97 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/run.js",
+        "composite": false,
+        "declaration": false,
+        "declarationMap": false,
+        "types": [
+            "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
+        ]
+    },
+    "references": [
+        { "path": "../compiler", "prepend": true },
+        { "path": "../services", "prepend": true },
+        { "path": "../jsTyping", "prepend": true },
+        { "path": "../server", "prepend": true },
+        { "path": "../typingsInstallerCore", "prepend": true },
+        { "path": "../harness", "prepend": true }
+    ],
+
+    "files": [
+        "fourslashRunner.ts",
+        "compilerRunner.ts",
+        "projectsRunner.ts",
+        "rwcRunner.ts",
+        "externalCompileRunner.ts",
+        "test262Runner.ts",
+
+        "parallel/host.ts",
+        "parallel/worker.ts",
+        "parallel/shared.ts",
+
+        "runner.ts",
+
+        "unittests/extractTestHelpers.ts",
+        "unittests/tsserverProjectSystem.ts",
+        "unittests/typingsInstaller.ts",
+
+        "unittests/asserts.ts",
+        "unittests/base64.ts",
+        "unittests/builder.ts",
+        "unittests/cancellableLanguageServiceOperations.ts",
+        "unittests/commandLineParsing.ts",
+        "unittests/compileOnSave.ts",
+        "unittests/compilerCore.ts",
+        "unittests/configurationExtension.ts",
+        "unittests/convertCompilerOptionsFromJson.ts",
+        "unittests/convertToAsyncFunction.ts",
+        "unittests/convertToBase64.ts",
+        "unittests/convertTypeAcquisitionFromJson.ts",
+        "unittests/customTransforms.ts",
+        "unittests/extractConstants.ts",
+        "unittests/extractFunctions.ts",
+        "unittests/extractRanges.ts",
+        "unittests/factory.ts",
+        "unittests/hostNewLineSupport.ts",
+        "unittests/incrementalParser.ts",
+        "unittests/initializeTSConfig.ts",
+        "unittests/jsDocParsing.ts",
+        "unittests/languageService.ts",
+        "unittests/matchFiles.ts",
+        "unittests/moduleResolution.ts",
+        "unittests/organizeImports.ts",
+        "unittests/paths.ts",
+        "unittests/printer.ts",
+        "unittests/programMissingFiles.ts",
+        "unittests/programNoParseFalsyFileNames.ts",
+        "unittests/projectErrors.ts",
+        "unittests/projectReferences.ts",
+        "unittests/publicApi.ts",
+        "unittests/reuseProgramStructure.ts",
+        "unittests/session.ts",
+        "unittests/semver.ts",
+        "unittests/symbolWalker.ts",
+        "unittests/telemetry.ts",
+        "unittests/textChanges.ts",
+        "unittests/textStorage.ts",
+        "unittests/transform.ts",
+        "unittests/transpile.ts",
+        "unittests/tsbuild.ts",
+        "unittests/tsbuildWatchMode.ts",
+        "unittests/tsconfigParsing.ts",
+        "unittests/tscWatchMode.ts",
+        "unittests/versionCache.ts",
+        "unittests/evaluation/asyncArrow.ts",
+        "unittests/evaluation/asyncGenerator.ts",
+        "unittests/evaluation/forAwaitOf.ts",
+        "unittests/services/colorization.ts",
+        "unittests/services/documentRegistry.ts",
+        "unittests/services/patternMatcher.ts",
+        "unittests/services/preProcessFile.ts"
+    ]
+}

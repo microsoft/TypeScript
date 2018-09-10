@@ -21,12 +21,10 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     Types of property 'prop' are incompatible.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(57,5): error TS2322: Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I11 | I21'.
-  Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I21'.
-    Types of property 'commonMethodDifferentReturnType' are incompatible.
-      Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
-        Type 'string | number' is not assignable to type 'number'.
-          Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
+  Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts (6 errors) ====
@@ -115,12 +113,11 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     };
     var strOrNumber: string | number;
     var i11Ori21: I11 | I21 = { // Like i1 and i2 both
-        ~~~~~~~~
-!!! error TS2322: Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I11 | I21'.
-!!! error TS2322:   Type '{ commonMethodDifferentReturnType: (a: string, b: number) => string | number; }' is not assignable to type 'I21'.
-!!! error TS2322:     Types of property 'commonMethodDifferentReturnType' are incompatible.
-!!! error TS2322:       Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
-!!! error TS2322:         Type 'string | number' is not assignable to type 'number'.
-!!! error TS2322:           Type 'string' is not assignable to type 'number'.
         commonMethodDifferentReturnType: (a, b) => strOrNumber,
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
+!!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:35:5: The expected type comes from property 'commonMethodDifferentReturnType' which is declared here on type 'I11 | I21'
     };

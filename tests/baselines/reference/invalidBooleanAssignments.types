@@ -22,11 +22,10 @@ var d: typeof undefined = x;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var e: E = x;
 >e : E
->E : E
 >x : true
 
 class C { foo: string }
@@ -35,16 +34,13 @@ class C { foo: string }
 
 var f: C = x;
 >f : C
->C : C
 >x : true
 
 interface I { bar: string }
->I : I
 >bar : string
 
 var g: I = x;
 >g : I
->I : I
 >x : true
 
 var h: { (): string } = x;
@@ -68,9 +64,7 @@ M = x;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     a = x;
 >a = x : boolean

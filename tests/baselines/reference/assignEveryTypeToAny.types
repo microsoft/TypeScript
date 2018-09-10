@@ -76,7 +76,7 @@ enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 
 x = E.A;
@@ -98,15 +98,12 @@ x = f;
 >f : E
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 
 var g: I;
 >g : I
->I : I
 
 x = g;
 >x = g : I
@@ -122,7 +119,6 @@ class C {
 
 var h: C;
 >h : C
->C : C
 
 x = h;
 >x = h : C
@@ -149,16 +145,12 @@ x = { f<T>(x: T) { return x; } }
 >x : any
 >{ f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 function j<T>(a: T) {
 >j : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     x = a;
 >x = a : T
