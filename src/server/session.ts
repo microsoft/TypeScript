@@ -607,7 +607,11 @@ namespace ts.server {
             }
         }
 
-        public logError(err: Error, cmd: string) {
+        public logError(err: Error, cmd: string): void {
+            this.logErrorWorker(err, cmd);
+        }
+
+        private logErrorWorker(err: Error, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -615,6 +619,19 @@ namespace ts.server {
                     msg += "\n" + indent((<StackTraceError>err).stack!);
                 }
             }
+
+            if (fileRequest) {
+                try {
+                    const { file, project } = this.getFileAndProject(fileRequest);
+                    const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+                    if (scriptInfo) {
+                        const text = getSnapshotText(scriptInfo.getSnapshot());
+                        msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+                    }
+                }
+                catch {} // tslint:disable-line no-empty
+            }
+
             this.logger.msg(msg, Msg.Err);
         }
 
@@ -2310,8 +2327,10 @@ namespace ts.server {
             }
 
             let request: protocol.Request | undefined;
+            let relevantFile: protocol.FileRequestArgs | undefined;
             try {
                 request = <protocol.Request>JSON.parse(message);
+                relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2337,7 +2356,7 @@ namespace ts.server {
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
-                this.logError(err, message);
+                this.logErrorWorker(err, message, relevantFile);
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
