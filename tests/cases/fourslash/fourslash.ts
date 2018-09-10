@@ -129,7 +129,7 @@ declare namespace FourSlashInterface {
         eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
         eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
-        eachRange(action: () => void): void;
+        eachRange(action: (range: Range) => void): void;
         bof(): void;
         eof(): void;
         implementation(): void;
@@ -315,7 +315,7 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
         renameInfoFailed(message?: string): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
 

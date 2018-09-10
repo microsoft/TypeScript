@@ -3,7 +3,7 @@
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 interface I {
     [x: string]: any;
@@ -133,7 +133,7 @@ interface I13 {
 
 enum E2 { A }
 >E2 : E2
->A : E2
+>A : E2.A
 
 interface I14 {
     [x: string]: E2;

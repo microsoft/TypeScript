@@ -23,6 +23,9 @@ abstract class AbstractClass {
 
     abstract method(num: number): void;
 
+    other = this.prop;
+    fn = () => this.prop;
+
     method2() {
         this.prop = this.prop + "!";
     }
@@ -42,6 +45,8 @@ class User {
 var AbstractClass = /** @class */ (function () {
     function AbstractClass(str, other) {
         var _this = this;
+        this.other = this.prop;
+        this.fn = function () { return _this.prop; };
         this.method(parseInt(str));
         var val = this.prop.toLowerCase();
         if (!str) {

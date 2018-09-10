@@ -1,0 +1,26 @@
+=== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef.ts ===
+function foo1() {
+>foo1 : Symbol(foo1, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 0, 0))
+
+    return E.A
+>E.A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 2, 12))
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 1, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 2, 12))
+
+    enum E { A }
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 1, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 2, 12))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 3, 1))
+
+    return E.A
+>E.A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 7, 18))
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 6, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 7, 18))
+
+    const enum E { A }
+>E : Symbol(E, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 6, 14))
+>A : Symbol(E.A, Decl(blockScopedEnumVariablesUseBeforeDef.ts, 7, 18))
+}

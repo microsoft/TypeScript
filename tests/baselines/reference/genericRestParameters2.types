@@ -416,11 +416,6 @@ f20(42, "hello", ...t2, true);
 >t2 : [string, ...boolean[]]
 >true : true
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
->Parameters : Parameters<T>
->args : U
->args : U
-
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
 >T01 : [number, string, ...boolean[]]
 >x : number
@@ -431,13 +426,13 @@ type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
 >T02 : [number, string, ...boolean[]]
 >args : [number, string, ...boolean[]]
 
-type T03 = Parameters<new (x: number, y: string, ...z: boolean[]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
 >T03 : [number, string, ...boolean[]]
 >x : number
 >y : string
 >z : boolean[]
 
-type T04 = Parameters<new (...args: [number, string, ...boolean[]]) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
 >T04 : [number, string, ...boolean[]]
 >args : [number, string, ...boolean[]]
 

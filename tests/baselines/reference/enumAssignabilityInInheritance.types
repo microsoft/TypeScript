@@ -4,7 +4,7 @@
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 interface I0 {
     [x: string]: E;
@@ -243,7 +243,7 @@ var r4 = foo12(E.A);
 
 enum E2 { A }
 >E2 : E2
->A : E2
+>A : E2.A
 
 declare function foo13(x: E2): E2;
 >foo13 : { (x: E2): E2; (x: E): E; }

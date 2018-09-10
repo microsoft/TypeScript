@@ -3,12 +3,12 @@ export enum E1 {
 >E1 : E1
 
     value1
->value1 : E1
+>value1 : E1.value1
 }
 
 export const enum E2 {
 >E2 : E2
 
     value1
->value1 : E2
+>value1 : E2.value1
 }

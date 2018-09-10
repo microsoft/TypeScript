@@ -21,13 +21,13 @@ namespace ts.JsTyping {
 
     export interface CachedTyping {
         typingLocation: string;
-        version: Semver;
+        version: Version;
     }
 
     /* @internal */
     export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
-        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
-        return !availableVersion.greaterThan(cachedTyping.version);
+        const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
+        return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
     /* @internal */

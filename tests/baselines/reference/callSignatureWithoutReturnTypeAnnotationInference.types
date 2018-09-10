@@ -265,7 +265,7 @@ var r14 = foo14();
 
 enum e1 { A }
 >e1 : e1
->A : e1
+>A : e1.A
 
 module e1 { export var y = 1; }
 >e1 : typeof e1

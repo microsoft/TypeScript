@@ -835,7 +835,7 @@
         "category": "Error",
         "code": 1253
     },
-    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
     },
@@ -982,6 +982,22 @@
     "An expression of type 'void' cannot be tested for truthiness": {
         "category": "Error",
         "code": 1345
+    },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2429,6 +2445,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2884,7 +2904,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },
@@ -3266,7 +3286,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -3663,6 +3683,22 @@
     "All type parameters are unused": {
         "category": "Error",
         "code": 6205
+    },
+    "'package.json' has a 'typesVersions' field with version-specific path mappings.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.": {
+        "category": "Message",
+        "code": 6208
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
     },
 
     "Projects to reference": {
