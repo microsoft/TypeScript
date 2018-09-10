@@ -13752,15 +13752,17 @@ namespace ts {
             if (!inferredType) {
                 const signature = context.signature;
                 if (signature) {
-                    if (inference.contraCandidates && (!inference.candidates || inference.candidates.length === 1 && inference.candidates[0].flags & TypeFlags.Never)) {
-                        // If we have contravariant inferences, but no covariant inferences or a single
-                        // covariant inference of 'never', we find the best common subtype and treat that
-                        // as a single covariant candidate.
-                        inference.candidates = [getContravariantInference(inference)];
-                        inference.contraCandidates = undefined;
+                    const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
+                    if (inference.contraCandidates) {
+                        const inferredContravariantType = getContravariantInference(inference);
+                        // If we have both co- and contra-variant inferences, we prefer the contra-variant inference
+                        // unless the co-variant inference is a subtype and not 'never'.
+                        inferredType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+                            isTypeSubtypeOf(inferredCovariantType, inferredContravariantType) ?
+                            inferredCovariantType : inferredContravariantType;
                     }
-                    if (inference.candidates) {
-                        inferredType = getCovariantInference(inference, signature);
+                    else if (inferredCovariantType) {
+                        inferredType = inferredCovariantType;
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
