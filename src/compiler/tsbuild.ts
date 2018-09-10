@@ -399,7 +399,9 @@ namespace ts {
         let reportFileChangeDetected = false;
 
         // Watches for the solution
-        const existingWatchersForWildcards = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
+        const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
+        const allWatchedInputFiles = createFileMap<Map<FileWatcher>>(toPath);
+        const allWatchedConfigFiles = createFileMap<FileWatcher>(toPath);
 
         return {
             buildAllProjects,
@@ -439,7 +441,9 @@ namespace ts {
                 timerToBuildInvalidatedProject = undefined;
             }
             reportFileChangeDetected = false;
-            existingWatchersForWildcards.forEach(wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
+            clearMap(allWatchedWildcardDirectories, wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
+            clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
+            clearMap(allWatchedConfigFiles, closeFileWatcher);
         }
 
         function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
@@ -493,46 +497,71 @@ namespace ts {
                 const cfg = parseConfigFile(resolved);
                 if (cfg) {
                     // Watch this file
-                    hostWithWatch.watchFile(resolved, () => {
-                        configFileCache.removeKey(resolved);
-                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
-                    });
+                    watchConfigFile(resolved);
 
                     // Update watchers for wildcard directories
-                    if (cfg.configFileSpecs) {
-                        const existingWatches = existingWatchersForWildcards.getValue(resolved);
-                        let newWatches: Map<WildcardDirectoryWatcher> | undefined;
-                        if (!existingWatches) {
-                            newWatches = createMap();
-                            existingWatchersForWildcards.setValue(resolved, newWatches);
-                        }
-                        updateWatchingWildcardDirectories(existingWatches || newWatches!, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
-                            return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
-                                const fileOrDirectoryPath = toPath(fileOrDirectory);
-                                if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, cfg.options)) {
-                                    // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                                    return;
-                                }
-
-                                if (isOutputFile(fileOrDirectory, cfg)) {
-                                    // writeLog(`${fileOrDirectory} is output file`);
-                                    return;
-                                }
-
-                                invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
-                            }, !!(flags & WatchDirectoryFlags.Recursive));
-                        });
-                    }
+                    watchWildCardDirectories(resolved, cfg);
 
                     // Watch input files
-                    for (const input of cfg.fileNames) {
-                        hostWithWatch.watchFile(input, () => {
-                            invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None);
-                        });
-                    }
+                    watchInputFiles(resolved, cfg);
                 }
             }
 
+        }
+
+        function watchConfigFile(resolved: ResolvedConfigFileName) {
+            if (!allWatchedConfigFiles.hasKey(resolved)) {
+                allWatchedConfigFiles.setValue(resolved, hostWithWatch.watchFile(resolved, () => {
+                    configFileCache.removeKey(resolved);
+                    invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
+                }));
+            }
+        }
+
+        function getOrCreateExistingWatches<T>(resolved: ResolvedConfigFileName, allWatches: ConfigFileMap<Map<T>>) {
+            const existingWatches = allWatches.getValue(resolved);
+            let newWatches: Map<T> | undefined;
+            if (!existingWatches) {
+                newWatches = createMap();
+                allWatches.setValue(resolved, newWatches);
+            }
+            return existingWatches || newWatches!;
+        }
+
+        function watchWildCardDirectories(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            updateWatchingWildcardDirectories(
+                getOrCreateExistingWatches(resolved, allWatchedWildcardDirectories),
+                createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
+                (dir, flags) => {
+                    return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
+                        const fileOrDirectoryPath = toPath(fileOrDirectory);
+                        if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
+                            // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+                            return;
+                        }
+
+                        if (isOutputFile(fileOrDirectory, parsed)) {
+                            // writeLog(`${fileOrDirectory} is output file`);
+                            return;
+                        }
+
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
+                    }, !!(flags & WatchDirectoryFlags.Recursive));
+                }
+            );
+        }
+
+        function watchInputFiles(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            mutateMap(
+                getOrCreateExistingWatches(resolved, allWatchedInputFiles),
+                arrayToMap(parsed.fileNames, toPath),
+                {
+                    createNewValue: (_key, input) => hostWithWatch.watchFile(input, () => {
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None);
+                    }),
+                    onDeleteValue: closeFileWatcher,
+                }
+            );
         }
 
         function isOutputFile(fileName: string, configFile: ParsedCommandLine) {
@@ -879,10 +908,12 @@ namespace ts {
             if (!resolved) return; // ??
             const proj = parseConfigFile(resolved);
             if (!proj) return; // ?
-            // TODO:: If full reload , update watch for wild cards
-            // TODO:: If full or partial reload, update watch for input files
-
-            if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+            if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                watchConfigFile(resolved);
+                watchWildCardDirectories(resolved, proj);
+                watchInputFiles(resolved, proj);
+            }
+            else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(project), proj.options, parseConfigFileHost);
                 if (result.fileNames.length !== 0) {
@@ -892,6 +923,7 @@ namespace ts {
                     proj.errors.push(getErrorForNoInputFiles(proj.configFileSpecs!, resolved));
                 }
                 proj.fileNames = result.fileNames;
+                watchInputFiles(resolved, proj);
             }
 
             const status = getUpToDateStatus(proj);

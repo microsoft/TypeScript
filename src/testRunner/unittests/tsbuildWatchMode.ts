@@ -62,13 +62,17 @@ namespace ts.tscWatch {
             return getOutputFileNames(subProject, baseFileNameWithoutExtension).map(f => [f, host.getModifiedTime(f)] as OutputFileStamp);
         }
 
-        function getOutputFileStamps(host: WatchedSystem): OutputFileStamp[] {
-            return [
+        function getOutputFileStamps(host: WatchedSystem, additionalFiles?: ReadonlyArray<[SubProject, string]>): OutputFileStamp[] {
+            const result = [
                 ...getOutputStamps(host, SubProject.core, "anotherModule"),
                 ...getOutputStamps(host, SubProject.core, "index"),
                 ...getOutputStamps(host, SubProject.logic, "index"),
                 ...getOutputStamps(host, SubProject.tests, "index"),
             ];
+            if (additionalFiles) {
+                additionalFiles.forEach(([subProject, baseFileNameWithoutExtension]) => result.push(...getOutputStamps(host, subProject, baseFileNameWithoutExtension)));
+            }
+            return result;
         }
 
         function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: string[]) {
@@ -108,49 +112,89 @@ namespace ts.tscWatch {
             createSolutionInWatchMode();
         });
 
-        it("change builds changes and reports found errors message", () => {
-            const host = createSolutionInWatchMode();
-            verifyChange(`${core[1].content}
+        describe("validates the changes and watched files", () => {
+            const newFileWithoutExtension = "newFile";
+            const newFile: File = {
+                path: projectFilePath(SubProject.core, `${newFileWithoutExtension}.ts`),
+                content: `export const newFileConst = 30;`
+            };
+
+            function createSolutionInWatchModeToVerifyChanges(additionalFiles?: ReadonlyArray<[SubProject, string]>) {
+                const host = createSolutionInWatchMode();
+                return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
+
+                function verifyChangeWithFile(fileName: string, content: string) {
+                    const outputFileStamps = getOutputFileStamps(host, additionalFiles);
+                    host.writeFile(fileName, content);
+                    verifyChangeAfterTimeout(outputFileStamps);
+                }
+
+                function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
+                    host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                    const changedCore = getOutputFileStamps(host, additionalFiles);
+                    verifyChangedFiles(changedCore, outputFileStamps, [
+                        ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
+                        ...getOutputFileNames(SubProject.core, "index"),
+                        ...(additionalFiles ? getOutputFileNames(SubProject.core, newFileWithoutExtension) : emptyArray)
+                    ]);
+                    host.checkTimeoutQueueLengthAndRun(1); // Builds tests
+                    const changedTests = getOutputFileStamps(host, additionalFiles);
+                    verifyChangedFiles(changedTests, changedCore, [
+                        ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
+                    ]);
+                    host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                    const changedLogic = getOutputFileStamps(host, additionalFiles);
+                    verifyChangedFiles(changedLogic, changedTests, [
+                        ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
+                    ]);
+                    host.checkTimeoutQueueLength(0);
+                    checkOutputErrorsIncremental(host, emptyArray);
+                    verifyWatches();
+                }
+
+                function verifyWatches() {
+                    checkWatchedFiles(host, additionalFiles ? testProjectExpectedWatchedFiles.concat(newFile.path) : testProjectExpectedWatchedFiles);
+                    checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                    checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+                }
+            }
+
+            it("change builds changes and reports found errors message", () => {
+                const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = createSolutionInWatchModeToVerifyChanges();
+                verifyChange(`${core[1].content}
 export class someClass { }`);
 
-            // Another change requeues and builds it
-            verifyChange(core[1].content);
+                // Another change requeues and builds it
+                verifyChange(core[1].content);
 
-            // Two changes together report only single time message: File change detected. Starting incremental compilation...
-            const outputFileStamps = getOutputFileStamps(host);
-            const change1 = `${core[1].content}
-export class someClass { }`;
-            host.writeFile(core[1].path, change1);
-            host.writeFile(core[1].path, `${change1}
-export class someClass2 { }`);
-            verifyChangeAfterTimeout(outputFileStamps);
-
-            function verifyChange(coreContent: string) {
+                // Two changes together report only single time message: File change detected. Starting incremental compilation...
                 const outputFileStamps = getOutputFileStamps(host);
-                host.writeFile(core[1].path, coreContent);
+                const change1 = `${core[1].content}
+export class someClass { }`;
+                host.writeFile(core[1].path, change1);
+                host.writeFile(core[1].path, `${change1}
+export class someClass2 { }`);
                 verifyChangeAfterTimeout(outputFileStamps);
-            }
 
-            function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
-                host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                const changedCore = getOutputFileStamps(host);
-                verifyChangedFiles(changedCore, outputFileStamps, [
-                    ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
-                    ...getOutputFileNames(SubProject.core, "index")
-                ]);
-                host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-                const changedTests = getOutputFileStamps(host);
-                verifyChangedFiles(changedTests, changedCore, [
-                    ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
-                ]);
-                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                const changedLogic = getOutputFileStamps(host);
-                verifyChangedFiles(changedLogic, changedTests, [
-                    ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
-                ]);
-                host.checkTimeoutQueueLength(0);
-                checkOutputErrorsIncremental(host, emptyArray);
-            }
+                function verifyChange(coreContent: string) {
+                    verifyChangeWithFile(core[1].path, coreContent);
+                }
+            });
+
+            it("builds when new file is added, and its subsequent updates", () => {
+                const additinalFiles: ReadonlyArray<[SubProject, string]> = [[SubProject.core, newFileWithoutExtension]];
+                const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
+                verifyChange(newFile.content);
+
+                // Another change requeues and builds it
+                verifyChange(`${newFile.content}
+export class someClass2 { }`);
+
+                function verifyChange(newFileContent: string) {
+                    verifyChangeWithFile(newFile.path, newFileContent);
+                }
+            });
+
         });
 
         // TODO: write tests reporting errors but that will have more involved work since file
