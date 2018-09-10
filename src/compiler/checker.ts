@@ -77,6 +77,7 @@ namespace ts {
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
@@ -463,6 +464,8 @@ namespace ts {
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
+        let globalCallableFunctionType: ObjectType;
+        let globalNewableFunctionType: ObjectType;
         let globalArrayType: GenericType;
         let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
@@ -7366,8 +7369,12 @@ namespace ts {
                 if (symbol && symbolIsValue(symbol)) {
                     return symbol;
                 }
-                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                    const symbol = getPropertyOfObjectType(globalFunctionType, name);
+                const functionType = resolved === anyFunctionType ? globalFunctionType :
+                    resolved.callSignatures.length ? globalCallableFunctionType :
+                    resolved.constructSignatures.length ? globalNewableFunctionType :
+                    undefined;
+                if (functionType) {
+                    const symbol = getPropertyOfObjectType(functionType, name);
                     if (symbol) {
                         return symbol;
                     }
@@ -28527,6 +28534,8 @@ namespace ts {
             globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
             globalObjectType = getGlobalType("Object" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalFunctionType = getGlobalType("Function" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalCallableFunctionType = strictBindCallApply && getGlobalType("CallableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
+            globalNewableFunctionType = strictBindCallApply && getGlobalType("NewableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
             globalStringType = getGlobalType("String" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);

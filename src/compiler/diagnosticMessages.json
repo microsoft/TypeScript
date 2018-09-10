@@ -3692,6 +3692,10 @@
         "category": "Error",
         "code": 6205
     },
+    "Enable strict 'bind', 'call', and 'apply' methods on functions.": {
+        "category": "Message",
+        "code": 6206
+    },
 
     "Projects to reference": {
         "category": "Message",
