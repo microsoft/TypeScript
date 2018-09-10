@@ -420,12 +420,12 @@ namespace FourSlash {
             }
         }
 
-        public goToEachRange(action: () => void) {
+        public goToEachRange(action: (range: Range) => void) {
             const ranges = this.getRanges();
             assert(ranges.length);
             for (const range of ranges) {
                 this.selectRange(range);
-                action();
+                action(range);
             }
         }
 
@@ -1525,7 +1525,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
+        public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined): void {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (!renameInfo.canRename) {
                 this.raiseError("Rename did not succeed");
@@ -1535,12 +1535,15 @@ Actual: ${stringify(fullActual)}`);
             this.validate("fullDisplayName", fullDisplayName, renameInfo.fullDisplayName);
             this.validate("kind", kind, renameInfo.kind);
             this.validate("kindModifiers", kindModifiers, renameInfo.kindModifiers);
+            this.validate("fileToRename", fileToRename, renameInfo.fileToRename);
 
-            if (this.getRanges().length !== 1) {
-                this.raiseError("Expected a single range to be selected in the test file.");
+            if (!expectedRange) {
+                if (this.getRanges().length !== 1) {
+                    this.raiseError("Expected a single range to be selected in the test file.");
+                }
+                expectedRange = this.getRanges()[0];
             }
 
-            const expectedRange = this.getRanges()[0];
             if (renameInfo.triggerSpan.start !== expectedRange.pos ||
                 ts.textSpanEnd(renameInfo.triggerSpan) !== expectedRange.end) {
                 this.raiseError("Expected triggerSpan [" + expectedRange.pos + "," + expectedRange.end + ").  Got [" +
@@ -3977,7 +3980,7 @@ namespace FourSlashInterface {
             this.state.goToRangeStart(range);
         }
 
-        public eachRange(action: () => void) {
+        public eachRange(action: (range: FourSlash.Range) => void) {
             this.state.goToEachRange(action);
         }
 
@@ -4456,8 +4459,8 @@ namespace FourSlashInterface {
             this.state.verifySemanticClassifications(classifications);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers);
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange);
         }
 
         public renameInfoFailed(message?: string) {
