@@ -68,9 +68,11 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): erro
     prefix(...ns) // required parameters are required
     ~~~~~~~~~~~~~
 !!! error TS2556: Expected 1-3 arguments, but got 0 or more.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts:3:25: An argument for 's' was not provided.
     prefix(...mixed)
     ~~~~~~~~~~~~~~~~
 !!! error TS2556: Expected 1-3 arguments, but got 0 or more.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts:3:25: An argument for 's' was not provided.
     prefix(...tuple)
            ~~~~~~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.

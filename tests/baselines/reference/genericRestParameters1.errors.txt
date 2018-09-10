@@ -49,6 +49,7 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS232
     f2(...ns, true);  // Error, tuple spread only expanded when last
     ~~~~~~~~~~~~~~~
 !!! error TS2556: Expected 3 arguments, but got 1 or more.
+!!! related TS6210 tests/cases/conformance/types/rest/genericRestParameters1.ts:2:30: An argument for 'x1' was not provided.
     
     declare function f10<T extends unknown[]>(...args: T): T;
     
