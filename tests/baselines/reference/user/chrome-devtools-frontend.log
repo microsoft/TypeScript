@@ -46,6 +46,7 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS235
 node_modules/chrome-devtools-frontend/front_end/Tests.js(107,5): error TS2322: Type 'Timer' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(208,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(221,7): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(378,17): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(397,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(416,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(440,5): error TS2554: Expected 4 arguments, but got 3.
@@ -55,6 +56,7 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(590,27): error TS2554: 
 node_modules/chrome-devtools-frontend/front_end/Tests.js(687,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(711,7): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(735,5): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(814,38): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(816,7): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(847,9): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(848,9): error TS2554: Expected 2 arguments, but got 1.
@@ -86,10 +88,14 @@ node_modules/chrome-devtools-frontend/front_end/Tests.js(977,11): error TS2554: 
 node_modules/chrome-devtools-frontend/front_end/Tests.js(978,11): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(986,5): error TS2554: Expected 3 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(988,5): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1033,32): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1040,30): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1084,27): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1139,33): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1142,31): error TS2339: Property 'ConsoleView' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1186,5): error TS2554: Expected 4 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,9): error TS2554: Expected 4 arguments, but got 3.
+node_modules/chrome-devtools-frontend/front_end/Tests.js(1199,35): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,10): error TS2339: Property 'uiTests' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Tests.js(1229,41): error TS2339: Property 'domAutomationController' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(9,11): error TS2554: Expected 2 arguments, but got 1.
@@ -109,10 +115,8 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(182,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(209,39): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAAttributesView.js(213,36): error TS2339: Property '_isEditingName' does not exist on type 'ARIAAttributePrompt'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAConfig.js(5,28): error TS2339: Property '_config' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(56,35): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(57,32): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
-node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(57,102): error TS2339: Property '_config' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/ARIAMetadata.js(58,37): error TS2339: Property '_instance' does not exist on type 'typeof ARIAMetadata'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(10,11): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(14,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
@@ -431,10 +435,27 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(380,11)
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(387,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(394,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationUI.js(402,11): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(53,47): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(102,25): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(130,39): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/AppcacheTestRunner.js(131,36): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(11,13): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(13,13): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(19,13): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(21,37): error TS2339: Property 'resources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(32,5): error TS2304: Cannot find name 'promise'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(40,11): error TS2304: Cannot find name 'promise'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(61,13): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(68,37): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(70,13): error TS2339: Property 'resources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/CacheStorageTestRunner.js(135,10): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/IndexedDBTestRunner.js(12,40): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/IndexedDBTestRunner.js(47,42): error TS2339: Property 'resources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/application_test_runner/IndexedDBTestRunner.js(140,24): error TS2554: Expected 1 arguments, but got 2.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/ResourceTreeTestRunner.js(69,18): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/ResourcesTestRunner.js(76,15): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/ResourcesTestRunner.js(77,33): error TS2339: Property 'resources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/application_test_runner/ServiceWorkersTestRunner.js(44,26): error TS2339: Property 'resources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(16,50): error TS2345: Argument of type '(msg: string) => void' is not assignable to parameter of type '(arg0: string) => undefined'.
   Type 'void' is not assignable to type 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/audits2/Audits2Panel.js(16,76): error TS2555: Expected at least 2 arguments, but got 1.
@@ -843,6 +864,16 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24079,1): error TS2323: Cannot redeclare exported variable 'Buf16'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24080,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26059,1): error TS2323: Cannot redeclare exported variable 'deflate'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27915,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27918,30): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27921,30): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27928,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27929,20): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
+  Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27956,16): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28222,51): error TS2300: Duplicate identifier '_read'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28457,20): error TS2339: Property 'emit' does not exist on type 'Readable'.
@@ -3223,7 +3254,7 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(47,37): e
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(50,20): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(75,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(111,22): error TS2554: Expected 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(133,20): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(133,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(139,22): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(155,26): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(156,25): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
@@ -3600,14 +3631,6 @@ node_modules/chrome-devtools-frontend/front_end/common/Color.js(149,13): error T
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(182,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(217,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(235,58): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(320,58): error TS2339: Property '_tmpHSLA' does not exist on type '(hsva: number[], out_rgba: number[]) => void'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(321,49): error TS2339: Property '_tmpHSLA' does not exist on type '(hsva: number[], out_rgba: number[]) => void'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(323,48): error TS2339: Property '_tmpHSLA' does not exist on type '(hsva: number[], out_rgba: number[]) => void'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(324,30): error TS2339: Property '_tmpHSLA' does not exist on type '(hsva: number[], out_rgba: number[]) => void'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(369,82): error TS2339: Property '_blendedFg' does not exist on type '(fgRGBA: number[], bgRGBA: number[]) => number'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(371,82): error TS2339: Property '_blendedFg' does not exist on type '(fgRGBA: number[], bgRGBA: number[]) => number'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(375,61): error TS2339: Property '_blendedFg' does not exist on type '(fgRGBA: number[], bgRGBA: number[]) => number'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(376,43): error TS2339: Property '_blendedFg' does not exist on type '(fgRGBA: number[], bgRGBA: number[]) => number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(563,23): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(566,23): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(573,23): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
@@ -3623,8 +3646,6 @@ node_modules/chrome-devtools-frontend/front_end/common/Color.js(650,25): error T
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(661,5): error TS2322: Type '{ r: number; g: number; b: number; }' is not assignable to type '{ r: number; g: number; b: number; a: number; }'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(661,5): error TS2322: Type '{ r: number; g: number; b: number; }' is not assignable to type '{ r: number; g: number; b: number; a: number; }'.
   Property 'a' is missing in type '{ r: number; g: number; b: number; }'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(718,24): error TS2339: Property '_tmpHSLA' does not exist on type '(hsva: number[], out_rgba: number[]) => void'.
-node_modules/chrome-devtools-frontend/front_end/common/Color.js(721,37): error TS2339: Property '_blendedFg' does not exist on type '(fgRGBA: number[], bgRGBA: number[]) => number'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(934,23): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/common/Color.js(935,45): error TS2345: Argument of type 'number | { min: number; max: number; }' is not assignable to parameter of type 'number | { min: number; max: number; count: number; }'.
   Type '{ min: number; max: number; }' is not assignable to type 'number | { min: number; max: number; count: number; }'.
@@ -3772,7 +3793,6 @@ node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(390,12):
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(392,12): error TS2339: Property 'href' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(418,10): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(432,31): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(440,43): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(443,16): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(445,16): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/components/Linkifier.js(481,27): error TS2694: Namespace 'Components' has no exported member '_LinkInfo'.
@@ -4165,7 +4185,6 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(14
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1430,15): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1431,15): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1433,33): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
-node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1435,39): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1435,76): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1437,55): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(1453,26): error TS2339: Property 'ConsoleViewMessage' does not exist on type '{ new (): Console; prototype: Console; }'.
@@ -4391,7 +4410,6 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(19,
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(21,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(29,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(112,11): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(201,24): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(206,18): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(208,18): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageListView.js(210,18): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4422,13 +4440,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(210,23
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(214,21): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(230,25): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(250,31): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(251,24): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(267,37): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(288,26): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(301,25): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(340,24): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(371,24): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(398,25): error TS2694: Namespace 'Coverage' has no exported member 'CoverageType'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(405,31): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(427,31): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(428,31): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
@@ -4459,6 +4471,9 @@ node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTes
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(28,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(52,31): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(87,31): error TS2339: Property 'runtime' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/cpu_profiler_test_runner/ProfilerTestRunner.js(12,35): error TS2339: Property 'js_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/cpu_profiler_test_runner/ProfilerTestRunner.js(49,15): error TS2339: Property 'js_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/cpu_profiler_test_runner/ProfilerTestRunner.js(54,33): error TS2339: Property 'js_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(32,41): error TS2694: Namespace 'DataGrid.DataGrid' has no exported member 'ColumnDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(41,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(49,40): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -4935,9 +4950,8 @@ node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(1290,2
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(1292,31): error TS2339: Property '__originalDOMTokenListToggle' does not exist on type 'DOMTokenList'.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(1293,28): error TS2339: Property '__originalDOMTokenListToggle' does not exist on type 'DOMTokenList'.
 node_modules/chrome-devtools-frontend/front_end/devtools_compatibility.js(1302,19): error TS2339: Property '__originalDOMTokenListToggle' does not exist on type 'DOMTokenList'.
-node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(22,21): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
-node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(43,20): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
-node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(91,33): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
+node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(22,26): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
+node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(43,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,116): error TS2322: Type 'string[]' is not assignable to type '{ chars1: string; chars2: string; lineArray: string[]; }'.
   Property 'chars1' is missing in type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,240): error TS2322: Type '0' is not assignable to type '{ chars1: string; chars2: string; lineArray: string[]; }'.
@@ -5351,7 +5365,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(855,24): error TS2339: Property 'keyCode' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(855,79): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(856,15): error TS2339: Property 'consume' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(868,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(878,19): error TS2339: Property 'runPendingUpdates' does not exist on type 'TreeOutline'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(972,37): error TS2339: Property 'selectNodeAfterEdit' does not exist on type 'TreeOutline'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1106,27): error TS2339: Property '_decoratorExtensions' does not exist on type 'TreeOutline'.
@@ -5388,7 +5401,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1528,37): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1533,40): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1537,18): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElement.js(1577,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeElementHighlighter.js(24,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(34,32): error TS2417: Class static side 'typeof ElementsTreeOutline' incorrectly extends base class static side 'typeof TreeOutline'.
   Types of property 'Events' are incompatible.
@@ -5404,7 +5416,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(173,11): error TS2339: Property 'handled' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(197,11): error TS2339: Property 'handled' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(254,11): error TS2339: Property 'handled' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(270,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(271,26): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(495,29): error TS2339: Property 'totalOffsetLeft' does not exist on type 'HTMLElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(515,19): error TS2694: Namespace 'UI' has no exported member 'PopoverRequest'.
@@ -5420,7 +5431,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(755,33): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(758,36): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(813,22): error TS2339: Property 'index' does not exist on type 'DOMNode'.
-node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(847,24): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(920,9): error TS2322: Type 'Node & ParentNode' is not assignable to type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/ElementsTreeOutline.js(920,9): error TS2322: Type 'Node & ParentNode' is not assignable to type 'Element'.
   Property 'assignedSlot' is missing in type 'Node & ParentNode'.
@@ -5756,7 +5766,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(29
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3021,19): error TS2339: Property 'key' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3049,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3120,39): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3244,39): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3265,15): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3272,15): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(3282,41): error TS2555: Expected at least 2 arguments, but got 1.
@@ -5767,13 +5776,26 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(33
   Type 'ToolbarButton' is not assignable to type '{ item(): any & any; }'.
     Property 'item' is missing in type 'ToolbarButton'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(15,5): error TS2304: Cannot find name 'eventSender'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/EditDOMTestRunner.js(19,37): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(112,55): error TS2339: Property 'eventListener' does not exist on type 'TreeElement'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(128,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(132,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(191,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(316,20): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(322,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(326,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(372,22): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(384,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(429,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(490,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(549,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(735,11): error TS2540: Cannot assign to 'name' because it is a constant or a read-only property.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1024,26): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1048,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1052,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1080,35): error TS2339: Property 'AnimationTimeline' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/StylesUpdateLinksTestRunner.js(99,35): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/StylesUpdateLinksTestRunner.js(119,31): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(56,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(92,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/emulation/AdvancedApp.js(105,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -6125,7 +6147,6 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(789,2
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(790,12): error TS2339: Property 'webInspector' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionPanel.js(232,23): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionPanel.js(240,18): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionPanel.js(246,24): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionPanel.js(279,40): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionRegistryStub.js(30,13): error TS2339: Property 'InspectorExtensionRegistry' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(129,5): error TS2555: Expected at least 2 arguments, but got 1.
@@ -6137,11 +6158,9 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(24
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(290,77): error TS2345: Argument of type 'ToolbarButton' is not assignable to parameter of type '{ item(): any & any; } & { item(): any & any; }'.
   Type 'ToolbarButton' is not assignable to type '{ item(): any & any; }'.
     Property 'item' is missing in type 'ToolbarButton'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(416,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(463,53): error TS2345: Argument of type '{ url: string; type: string; }' is not assignable to parameter of type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
   Property 'contentURL' is missing in type '{ url: string; type: string; }'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(471,22): error TS2339: Property 'valuesArray' does not exist on type 'Map<string, { contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }>'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(502,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(542,14): error TS2339: Property '_extensionOrigin' does not exist on type 'MessagePort'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(567,30): error TS2339: Property 'KeyboardEvent' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionServer.js(599,76): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'string'.
@@ -6476,6 +6495,13 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker.js(5,11): error
 node_modules/chrome-devtools-frontend/front_end/formatter_worker.js(6,8): error TS2339: Property 'importScripts' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(26,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'page' must be of type 'any', but here has type 'HARPage'.
 node_modules/chrome-devtools-frontend/front_end/har_importer/HARImporter.js(46,5): error TS2322: Type 'Date' is not assignable to type 'number'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(320,70): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(321,35): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(366,55): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(590,24): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(624,20): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(653,15): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(658,33): error TS2339: Property 'heap_profiler' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(678,36): error TS2339: Property 'instance' does not exist on type 'typeof SamplingHeapProfileType'.
 node_modules/chrome-devtools-frontend/front_end/heap_profiler_test_runner/HeapProfilerTestRunner.js(682,36): error TS2339: Property 'instance' does not exist on type 'typeof SamplingHeapProfileType'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(37,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -6735,8 +6761,6 @@ node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowEditor.js
 node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowEditor.js(356,20): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowEditor.js(361,30): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowEditor.js(367,20): error TS2339: Property 'value' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowModel.js(46,38): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/inline_editor/CSSShadowModel.js(63,41): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(16,35): error TS2339: Property '_constructor' does not exist on type 'typeof ColorSwatch'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(17,32): error TS2339: Property '_constructor' does not exist on type 'typeof ColorSwatch'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(21,83): error TS2339: Property '_constructor' does not exist on type 'typeof ColorSwatch'.
@@ -6755,7 +6779,6 @@ node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(210
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(227,39): error TS2339: Property '_constructor' does not exist on type 'typeof CSSShadowSwatch'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(228,36): error TS2339: Property '_constructor' does not exist on type 'typeof CSSShadowSwatch'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(232,91): error TS2339: Property '_constructor' does not exist on type 'typeof CSSShadowSwatch'.
-node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(248,39): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(290,10): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/ColorSwatch.js(291,33): error TS2339: Property 'createChild' does not exist on type 'CSSShadowSwatch'.
 node_modules/chrome-devtools-frontend/front_end/inline_editor/SwatchPopoverHelper.js(13,37): error TS2345: Argument of type 'symbol' is not assignable to parameter of type 'boolean'.
@@ -6980,6 +7003,7 @@ node_modules/chrome-devtools-frontend/front_end/layers/LayersPanel.js(150,22): e
 node_modules/chrome-devtools-frontend/front_end/layers/LayersPanel.js(160,58): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/layers/LayersPanel.js(169,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/layers/LayersPanel.js(187,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
+node_modules/chrome-devtools-frontend/front_end/layers_test_runner/LayersTestRunner.js(55,22): error TS2339: Property 'layers' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/layers_test_runner/LayersTestRunner.js(130,3): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(63,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/main/ExecutionContextSelector.js(83,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -7099,7 +7123,6 @@ node_modules/chrome-devtools-frontend/front_end/mobile_throttling/NetworkThrottl
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/NetworkThrottlingSelector.js(37,32): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/NetworkThrottlingSelector.js(38,31): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/NetworkThrottlingSelector.js(43,62): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
-node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(11,34): error TS2694: Namespace 'MobileThrottling' has no exported member 'CPUThrottlingRates'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(16,59): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(18,36): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(20,36): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
@@ -7117,13 +7140,11 @@ node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingMana
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(141,81): error TS2694: Namespace 'MobileThrottling' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(147,42): error TS2694: Namespace 'MobileThrottling' has no exported member 'MobileThrottlingConditionsGroup'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(148,35): error TS2694: Namespace 'MobileThrottling' has no exported member 'ConditionsList'.
-node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(178,32): error TS2694: Namespace 'MobileThrottling' has no exported member 'CPUThrottlingRates'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(188,20): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(218,82): error TS2339: Property 'selectedIndex' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(224,32): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingManager.js(266,15): error TS2339: Property 'singleton' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(16,35): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
-node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(17,43): error TS2694: Namespace 'MobileThrottling' has no exported member 'CPUThrottlingRates'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(20,18): error TS2300: Duplicate identifier 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(22,30): error TS2694: Namespace 'MobileThrottling' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(25,16): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7146,7 +7167,6 @@ node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPres
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(77,38): error TS2694: Namespace 'MobileThrottling' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(82,38): error TS2694: Namespace 'MobileThrottling' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(87,39): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
-node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingPresets.js(94,37): error TS2694: Namespace 'MobileThrottling' has no exported member 'CPUThrottlingRates'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingSettingsTab.js(14,25): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingSettingsTab.js(14,68): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/mobile_throttling/ThrottlingSettingsTab.js(17,9): error TS2555: Expected at least 2 arguments, but got 1.
@@ -7735,6 +7755,9 @@ node_modules/chrome-devtools-frontend/front_end/network_priorities/NetworkPriori
 node_modules/chrome-devtools-frontend/front_end/network_priorities/NetworkPriorities.js(56,29): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/network_priorities/NetworkPriorities.js(57,66): error TS2339: Property '_symbolicToNumericPriorityMap' does not exist on type '() => Map<any, number>'.
 node_modules/chrome-devtools-frontend/front_end/network_priorities/NetworkPriorities.js(68,48): error TS2339: Property '_symbolicToNumericPriorityMap' does not exist on type '() => Map<any, number>'.
+node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(20,34): error TS2339: Property 'network' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(49,13): error TS2339: Property 'network' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(53,20): error TS2339: Property 'network' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(69,8): error TS2304: Cannot find name 'i'.
 node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(69,15): error TS2304: Cannot find name 'i'.
 node_modules/chrome-devtools-frontend/front_end/network_test_runner/NetworkTestRunner.js(69,36): error TS2304: Cannot find name 'i'.
@@ -8096,12 +8119,23 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(495,14): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/TimelineOverviewPane.js(508,61): error TS2339: Property 'boxInWindow' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(74,36): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(81,20): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(91,33): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(98,5): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(108,20): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(120,43): error TS2554: Expected 0 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(130,13): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(131,97): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(135,35): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(139,27): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(147,15): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(159,9): error TS2554: Expected 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(189,60): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(220,44): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(254,19): error TS2554: Expected 2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(321,53): error TS2345: Argument of type 'number' is not assignable to parameter of type 'V'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(347,30): error TS2339: Property 'timeline' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(355,13): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(67,40): error TS2339: Property 'valuesArray' does not exist on type 'Set<PersistenceBinding>'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(155,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(315,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
@@ -8951,7 +8985,6 @@ node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(310
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(312,16): error TS2339: Property 'sendRequestTime' does not exist on type '(arg0: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,49): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(422,67): error TS2339: Property 'context' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(634,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,49): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(716,67): error TS2339: Property 'context' does not exist on type 'Console'.
 node_modules/chrome-devtools-frontend/front_end/quick_open/CommandMenu.js(75,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -9556,7 +9589,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(18,24): error
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(39,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(168,56): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(170,17): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/sdk/CSSProperty.js(259,32): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(9,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(33,32): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSRule.js(33,98): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
@@ -9634,14 +9666,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(136,53): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(137,28): error TS2339: Property 'documentElement' does not exist on type 'DOMDocument'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(138,53): error TS2339: Property 'body' does not exist on type 'DOMDocument'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(139,28): error TS2339: Property 'body' does not exist on type 'DOMDocument'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(369,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(396,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(419,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(433,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(447,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(454,35): error TS2694: Namespace 'SDK.DOMNode' has no exported member 'Attribute'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(507,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(519,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(554,31): error TS2339: Property 'index' does not exist on type 'DOMNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(555,16): error TS2339: Property 'index' does not exist on type 'DOMNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(590,25): error TS2694: Namespace 'Protocol' has no exported member 'Page'.
@@ -9650,9 +9675,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(659,32): error T
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(672,32): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(687,32): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(743,24): error TS2339: Property 'remove' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(751,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(751,50): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(768,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(852,31): error TS2339: Property 'baseURL' does not exist on type 'DOMNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(853,65): error TS2339: Property 'baseURL' does not exist on type 'DOMNode'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(860,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -9671,8 +9694,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1096,16): error 
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1165,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1176,34): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1188,46): error TS2339: Property 'valuesArray' does not exist on type 'Set<number>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1203,34): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1208,26): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1214,16): error TS2345: Argument of type 'T' is not assignable to parameter of type 'T'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1220,24): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMModel.js(1235,24): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
@@ -9741,11 +9762,8 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(355,24): er
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(356,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(389,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(419,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(421,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(429,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(431,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(431,50): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(432,24): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(433,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(434,32): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(435,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -10259,9 +10277,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(489,36): err
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(492,18): error TS2339: Property 'CompileScriptResult' does not exist on type 'typeof RuntimeModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(503,18): error TS2339: Property 'EvaluationOptions' does not exist on type 'typeof RuntimeModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(507,36): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(508,25): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(511,18): error TS2339: Property 'EvaluationResult' does not exist on type 'typeof RuntimeModel'.
-node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(515,25): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(518,18): error TS2339: Property 'QueryObjectResult' does not exist on type 'typeof RuntimeModel'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(523,30): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/RuntimeModel.js(526,30): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -10300,11 +10316,11 @@ node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(159,5): error TS23
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(159,5): error TS2322: Type 'StaticContentProvider' is not assignable to type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
   Property '_contentURL' does not exist on type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(174,43): error TS2339: Property 'debuggerAgent' does not exist on type 'Target'.
-node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,33): error TS2694: Namespace 'Protocol' has no exported member 'Error'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,50): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,95): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,127): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,158): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(198,16): error TS2345: Argument of type '"Script failed to parse"' is not assignable to parameter of type 'symbol'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(203,54): error TS2339: Property 'debuggerAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(247,31): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(251,54): error TS2339: Property 'debuggerAgent' does not exist on type 'Target'.
@@ -10764,8 +10780,8 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/ResourceSourceFrame
 node_modules/chrome-devtools-frontend/front_end/source_frame/ResourceSourceFrame.js(69,5): error TS2554: Expected 3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(15,22): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(89,28): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(110,20): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,20): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(110,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(202,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'lineNumber' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(206,41): error TS2339: Property 'diff' does not exist on type 'Map<number, GutterDecoration>'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(275,22): error TS2339: Property 'setGutterDecoration' does not exist on type 'CodeMirrorTextEditor'.
@@ -10796,9 +10812,6 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(39,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(45,12): error TS2339: Property '_isHandlingMouseDownEvent' does not exist on type 'SourcesTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(54,20): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(55,65): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(73,53): error TS2339: Property 'isSpaceChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(80,53): error TS2339: Property 'isSpaceChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(90,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(93,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(134,12): error TS2339: Property '_tokenHighlighter' does not exist on type 'CodeMirrorTextEditor'.
@@ -10823,13 +10836,11 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(284,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(285,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(295,38): error TS2339: Property 'lineInfo' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(359,40): error TS2339: Property 'Indent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(360,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(361,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(363,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(364,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(373,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(392,72): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(393,27): error TS2339: Property 'replaceRange' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(409,25): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(411,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
@@ -10844,10 +10855,6 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(614,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(622,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(631,14): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(639,40): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(670,40): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(714,40): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(729,40): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(764,24): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(769,24): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(780,51): error TS2339: Property 'markText' does not exist on type 'CodeMirror'.
@@ -10857,9 +10864,6 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(803,39): error TS2339: Property 'getSelections' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(809,26): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(821,33): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(822,63): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,72): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(824,59): error TS2339: Property 'isWord' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(829,24): error TS2339: Property 'removeOverlay' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(854,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
@@ -10868,11 +10872,9 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(873,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(873,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(873,33): error TS1345: An expression of type 'void' cannot be tested for truthiness
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(873,70): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(874,14): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,46): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,71): error TS2367: This condition will always return 'true' since the types 'void' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(887,22): error TS2339: Property 'addOverlay' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(39,35): error TS2555: Expected at least 2 arguments, but got 1.
@@ -10916,7 +10918,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/AdvancedSearchView.js(31
 node_modules/chrome-devtools-frontend/front_end/sources/AdvancedSearchView.js(397,46): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(84,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(102,19): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(150,41): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(197,26): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(197,34): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(212,26): error TS2339: Property 'title' does not exist on type 'Element'.
@@ -10928,7 +10929,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(266,25): er
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(288,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(292,25): error TS2339: Property 'setBezierText' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(315,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(327,32): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/sources/CSSPlugin.js(333,40): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(33,11): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/CallStackSidebarPane.js(39,57): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -11427,14 +11427,10 @@ node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(550
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(552,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(603,22): error TS2339: Property '_messageBucket' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(604,35): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(624,42): error TS2339: Property 'lineIndent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(638,38): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(652,23): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(722,23): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(728,21): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
-node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(733,32): error TS2339: Property '_messageLevelPriority' does not exist on type 'typeof Message'.
-node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(744,41): error TS2339: Property '_messageLevelPriority' does not exist on type 'typeof Message'.
-node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(745,38): error TS2339: Property '_messageLevelPriority' does not exist on type 'typeof Message'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(755,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(761,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(767,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -11527,6 +11523,14 @@ node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointMa
   Property '_settings' is missing in type '{ get: () => any; set: (breakpoints: any) => void; }'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/BreakpointManagerTestRunner.js(333,12): error TS2339: Property 'setBreakpointCallback' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(125,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(170,17): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(171,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(212,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(218,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(224,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(230,15): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(396,25): error TS2339: Property 'sources' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(426,25): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(483,26): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(515,23): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/DebuggerTestRunner.js(644,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -11539,6 +11543,7 @@ node_modules/chrome-devtools-frontend/front_end/sources_test_runner/EditorTestRu
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(91,3): error TS2304: Cannot find name 'editor'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(94,23): error TS2304: Cannot find name 'editor'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(95,19): error TS2304: Cannot find name 'editor'.
+node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(97,34): error TS2339: Property 'sources' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(114,23): error TS2304: Cannot find name 'editor'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SearchTestRunner.js(115,19): error TS2304: Cannot find name 'editor'.
 node_modules/chrome-devtools-frontend/front_end/sources_test_runner/SourcesTestRunner.js(26,29): error TS2339: Property 'map' does not exist on type 'NodeListOf<Element>'.
@@ -11725,19 +11730,7 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(270,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(356,16): error TS2339: Property 'addKeyMap' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(395,29): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(425,31): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(425,81): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(426,31): error TS2339: Property 'isUpperCase' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(426,82): error TS2339: Property 'isLowerCase' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(438,31): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(438,81): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(439,31): error TS2339: Property 'isUpperCase' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(439,82): error TS2339: Property 'isLowerCase' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(449,60): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(461,61): error TS2339: Property 'isSpaceChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(466,29): error TS2339: Property 'isStopChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(467,63): error TS2339: Property 'isStopChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(476,32): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(557,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(565,9): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(570,18): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
@@ -11761,13 +11754,6 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1261,5): error TS2322: Type 'CodeMirrorPositionHandle' is not assignable to type '{ resolve(): { lineNumber: number; columnNumber: number; }; equal(positionHandle: any): boolean; }'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1261,5): error TS2322: Type 'CodeMirrorPositionHandle' is not assignable to type '{ resolve(): { lineNumber: number; columnNumber: number; }; equal(positionHandle: any): boolean; }'.
   Property '_codeMirror' does not exist on type '{ resolve(): { lineNumber: number; columnNumber: number; }; equal(positionHandle: any): boolean; }'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1280,21): error TS2339: Property 'autocomplete' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1283,21): error TS2339: Property 'undoLastSelection' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1286,21): error TS2339: Property 'selectNextOccurrence' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1289,21): error TS2339: Property 'moveCamelLeft' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1290,21): error TS2339: Property 'selectCamelLeft' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1293,21): error TS2339: Property 'moveCamelRight' does not exist on type 'typeof commands'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1294,21): error TS2339: Property 'selectCamelRight' does not exist on type 'typeof commands'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1301,31): error TS2339: Property 'listSelections' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1305,38): error TS2339: Property 'findMatchingBracket' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1313,14): error TS2339: Property 'setSelections' does not exist on type 'CodeMirror'.
@@ -11784,8 +11770,6 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1392,35): error TS2339: Property 'getLineHandle' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1401,58): error TS2339: Property 'getLineNumber' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1451,22): error TS2339: Property 'execCommand' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1494,96): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1497,90): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1539,44): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1543,22): error TS2339: Property 'eachLine' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1543,69): error TS2339: Property 'lineCount' does not exist on type 'CodeMirror'.
@@ -11823,8 +11807,6 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocomple
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(55,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(62,26): error TS2694: Namespace 'CodeMirror' has no exported member 'BeforeChangeObject'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(67,48): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(74,25): error TS2339: Property 'textToWords' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(91,25): error TS2339: Property 'textToWords' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(113,40): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(135,34): error TS2694: Namespace 'CodeMirror' has no exported member 'ChangeObject'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(151,47): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
@@ -11853,28 +11835,10 @@ node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(122,16): erro
 node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(122,16): error TS2339: Property 'Position' does not exist on type 'typeof Text'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(160,42): error TS2339: Property 'lowerBound' does not exist on type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextRange.js(84,31): error TS2339: Property 'computeLineEndings' does not exist on type 'string'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(35,3): error TS2322: Type '{ isStopChar: (char: string) => boolean; isWordChar: (char: string) => boolean; isSpaceChar: (char: string) => boolean; isWord: (word: string) => boolean; isOpeningBraceChar: (char: string) => boolean; ... 6 more ...; splitStringByRegexes(text: string, regexes: RegExp[]): { ...; }[]; }' is not assignable to type 'typeof TextUtils'.
-  Object literal may only specify known properties, and 'isStopChar' does not exist in type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(45,33): error TS2339: Property 'isStopChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(45,74): error TS2339: Property 'isSpaceChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(53,32): error TS2339: Property '_SpaceCharRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(62,32): error TS2339: Property 'isWordChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(89,32): error TS2339: Property 'isOpeningBraceChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(89,80): error TS2339: Property 'isClosingBraceChar' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(118,61): error TS2339: Property 'isSpaceChar' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(201,38): error TS2694: Namespace 'TextUtils.FilterParser' has no exported member 'ParsedFilter'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(202,39): error TS2694: Namespace 'TextUtils.FilterParser' has no exported member 'ParsedFilter'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(210,46): error TS2694: Namespace 'TextUtils.FilterParser' has no exported member 'ParsedFilter'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(213,43): error TS2339: Property 'splitStringByRegexes' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(214,27): error TS2339: Property '_keyValueFilterRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(214,69): error TS2339: Property '_regexFilterRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(215,27): error TS2339: Property '_textFilterRegex' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(243,24): error TS2339: Property 'ParsedFilter' does not exist on type 'typeof FilterParser'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(245,21): error TS2339: Property '_keyValueFilterRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(246,21): error TS2339: Property '_regexFilterRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(247,21): error TS2339: Property '_textFilterRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(248,21): error TS2339: Property '_SpaceCharRegex' does not exist on type 'typeof TextUtils'.
-node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(253,21): error TS2339: Property 'Indent' does not exist on type 'typeof TextUtils'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/TextUtils.js(340,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/timeline/CountersGraph.js(59,42): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/timeline/CountersGraph.js(75,9): error TS2555: Expected at least 2 arguments, but got 1.
@@ -13778,15 +13742,15 @@ node_modules/chrome-devtools-frontend/front_end/workspace/Workspace.js(243,25): 
   Type 'ProjectStore' is not comparable to type '{ workspace(): Workspace; id(): string; type(): string; isServiceProject(): boolean; displayName(): string; requestMetadata(uiSourceCode: UISourceCode): Promise<UISourceCodeMetadata>; ... 17 more ...; uiSourceCodes(): UISourceCode[]; }'.
     Property 'isServiceProject' is missing in type 'ProjectStore'.
 node_modules/chrome-devtools-frontend/front_end/workspace/Workspace.js(432,27): error TS2339: Property 'valuesArray' does not exist on type 'Map<string, { workspace(): Workspace; id(): string; type(): string; isServiceProject(): boolean; displayName(): string; requestMetadata(uiSourceCode: UISourceCode): Promise<UISourceCodeMetadata>; ... 17 more ...; uiSourceCodes(): UISourceCode[]; }>'.
-node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(30,30): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
+node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(30,35): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(38,31): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(47,31): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(72,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(80,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(88,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(96,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(236,30): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
-node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(260,30): error TS2694: Namespace 'Diff' has no exported member 'Diff'.
+node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(236,35): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
+node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(260,35): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(301,36): error TS2339: Property '_instance' does not exist on type 'typeof WorkspaceDiff'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(302,33): error TS2339: Property '_instance' does not exist on type 'typeof WorkspaceDiff'.
 node_modules/chrome-devtools-frontend/front_end/workspace_diff/WorkspaceDiff.js(303,38): error TS2339: Property '_instance' does not exist on type 'typeof WorkspaceDiff'.
