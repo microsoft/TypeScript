@@ -165,7 +165,7 @@ namespace ts {
     }
 
     function performBuild(args: string[]): number | undefined {
-        const { buildOptions, projects: buildProjects, errors } = parseBuildCommand(args);
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -179,16 +179,6 @@ namespace ts {
 
         // Update to pretty if host supports it
         updateReportDiagnostic();
-        const projects = mapDefined(buildProjects, project => {
-            const fileName = resolvePath(sys.getCurrentDirectory(), project);
-            const refPath = resolveProjectReferencePath(sys, { path: fileName });
-            if (!sys.fileExists(refPath)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
-                return undefined;
-            }
-            return refPath;
-        });
-
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");

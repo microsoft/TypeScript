@@ -598,7 +598,7 @@ namespace ts {
 
         function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             reportFileChangeDetected = true;
-            invalidateProject(resolved, reloadLevel);
+            invalidateResolvedProject(resolved, reloadLevel);
             scheduleBuildInvalidatedProject();
         }
 
@@ -716,7 +716,7 @@ namespace ts {
             if (project.projectReferences) {
                 for (const ref of project.projectReferences) {
                     usesPrepend = usesPrepend || !!(ref.prepend);
-                    const resolvedRef = resolveProjectReferencePath(host, ref);
+                    const resolvedRef = resolveProjectReferencePath(ref);
                     const refStatus = getUpToDateStatus(parseConfigFile(resolvedRef));
 
                     // An upstream project is blocked
@@ -795,16 +795,10 @@ namespace ts {
         }
 
         function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
-            const resolved = resolveProjectName(configFileName);
-            if (resolved === undefined) {
-                // If this was a rootName, we need to track it as missing.
-                // Otherwise we can just ignore it and have it possibly surface as an error in any downstream projects,
-                // if they exist
+            invalidateResolvedProject(resolveProjectName(configFileName), reloadLevel);
+        }
 
-                // TODO: do those things
-                return;
-            }
-
+        function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
             projectStatus.removeKey(resolved);
             if (options.watch) {
                 diagnostics.removeKey(resolved);
@@ -901,11 +895,9 @@ namespace ts {
             }
         }
 
-        function buildSingleInvalidatedProject(project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+        function buildSingleInvalidatedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             // TODO:: handle this in better way later
 
-            const resolved = resolveProjectName(project);
-            if (!resolved) return; // ??
             const proj = parseConfigFile(resolved);
             if (!proj) return; // ?
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
@@ -915,7 +907,7 @@ namespace ts {
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
-                const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(project), proj.options, parseConfigFileHost);
+                const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
                 if (result.fileNames.length !== 0) {
                     filterMutate(proj.errors, error => !isErrorNoInputFiles(error));
                 }
@@ -927,14 +919,14 @@ namespace ts {
             }
 
             const status = getUpToDateStatus(proj);
-            verboseReportProjectStatus(project, status);
+            verboseReportProjectStatus(resolved, status);
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
                 if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
                 return;
             }
 
-            buildSingleProject(project);
+            buildSingleProject(resolved);
         }
 
         function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph | undefined {
@@ -982,10 +974,6 @@ namespace ts {
                 if (parsed.projectReferences) {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
-                        if (resolvedRefPath === undefined) {
-                            hadError = true;
-                            break;
-                        }
                         visit(resolvedRefPath, inCircularContext || ref.circular);
                         graph.addReference(projPath, resolvedRefPath);
                     }
@@ -1184,30 +1172,12 @@ namespace ts {
             return ExitStatus.Success;
         }
 
-        function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
-            const fullPath = resolvePath(host.getCurrentDirectory(), name);
-            if (host.fileExists(fullPath)) {
-                return fullPath as ResolvedConfigFileName;
-            }
-            const fullPathWithTsconfig = combinePaths(fullPath, "tsconfig.json");
-            if (host.fileExists(fullPathWithTsconfig)) {
-                return fullPathWithTsconfig as ResolvedConfigFileName;
-            }
-            // TODO(shkamat): right now this is accounted as 1 error in config file, but we need to do better
-            host.reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_not_found, relName(fullPath)));
-            return undefined;
+        function resolveProjectName(name: string): ResolvedConfigFileName {
+            return resolveConfigFileProjectName(resolvePath(host.getCurrentDirectory(), name));
         }
 
         function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] | undefined {
-            const resolvedNames: ResolvedConfigFileName[] = [];
-            for (const name of configFileNames) {
-                const resolved = resolveProjectName(name);
-                if (resolved === undefined) {
-                    return undefined;
-                }
-                resolvedNames.push(resolved);
-            }
-            return resolvedNames;
+            return configFileNames.map(resolveProjectName);
         }
 
         function buildAllProjects(): ExitStatus {
@@ -1298,6 +1268,14 @@ namespace ts {
             if (!options.verbose) return;
             return formatUpToDateStatus(configFileName, status, relName, reportStatus);
         }
+    }
+
+    export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
+        if (fileExtensionIs(project, Extension.Json)) {
+            return project as ResolvedConfigFileName;
+        }
+
+        return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
 
     export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {

@@ -199,7 +199,7 @@ namespace ts {
                 tick();
                 touch(fs, "/src/logic/index.ts");
                 // Because we haven't reset the build context, the builder should assume there's nothing to do right now
-                const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic")!);
+                const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic"));
                 assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
 
                 // Rebuild this project
