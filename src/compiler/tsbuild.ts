@@ -11,10 +11,9 @@ namespace ts {
         message(diag: DiagnosticMessage, ...args: string[]): void;
     }
 
-    type Mapper = ReturnType<typeof createDependencyMapper>;
     interface DependencyGraph {
         buildQueue: ResolvedConfigFileName[];
-        dependencyMap: Mapper;
+        referencingProjectsMap: ConfigFileMap<ConfigFileMap<true>>;
     }
 
     export interface BuildOptions {
@@ -220,40 +219,18 @@ namespace ts {
         }
     }
 
-    function createDependencyMapper(toPath: ToResolvedConfigFilePath) {
-        const childToParents = createFileMap<ResolvedConfigFileName[]>(toPath);
-        const parentToChildren = createFileMap<ResolvedConfigFileName[]>(toPath);
-
-        function addReference(childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName): void {
-            addEntry(childToParents, childConfigFileName, parentConfigFileName);
-            addEntry(parentToChildren, parentConfigFileName, childConfigFileName);
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFileName, createT: () => T): T {
+        const existingValue = configFileMap.getValue(resolved);
+        let newValue: T | undefined;
+        if (!existingValue) {
+            newValue = createT();
+            configFileMap.setValue(resolved, newValue);
         }
+        return existingValue || newValue!;
+    }
 
-        function getReferencesTo(parentConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return parentToChildren.getValue(parentConfigFileName) || [];
-        }
-
-        function getReferencesOf(childConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return childToParents.getValue(childConfigFileName) || [];
-        }
-
-        function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: ResolvedConfigFileName, element: ResolvedConfigFileName) {
-            key = normalizePath(key) as ResolvedConfigFileName;
-            element = normalizePath(element) as ResolvedConfigFileName;
-            let arr = mapToAddTo.getValue(key);
-            if (arr === undefined) {
-                mapToAddTo.setValue(key, arr = []);
-            }
-            if (arr.indexOf(element) < 0) {
-                arr.push(element);
-            }
-        }
-
-        return {
-            addReference,
-            getReferencesTo,
-            getReferencesOf,
-        };
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFileName): Map<T> {
+        return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
     function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
@@ -529,19 +506,9 @@ namespace ts {
             }
         }
 
-        function getOrCreateExistingWatches<T>(resolved: ResolvedConfigFileName, allWatches: ConfigFileMap<Map<T>>) {
-            const existingWatches = allWatches.getValue(resolved);
-            let newWatches: Map<T> | undefined;
-            if (!existingWatches) {
-                newWatches = createMap();
-                allWatches.setValue(resolved, newWatches);
-            }
-            return existingWatches || newWatches!;
-        }
-
         function watchWildCardDirectories(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
             updateWatchingWildcardDirectories(
-                getOrCreateExistingWatches(resolved, allWatchedWildcardDirectories),
+                getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolved),
                 createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
                 (dir, flags) => {
                     return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
@@ -564,7 +531,7 @@ namespace ts {
 
         function watchInputFiles(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
             mutateMap(
-                getOrCreateExistingWatches(resolved, allWatchedInputFiles),
+                getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolved),
                 arrayToMap(parsed.fileNames, toPath),
                 {
                     createNewValue: (_key, input) => hostWithWatch.watchFile(input, () => {
@@ -818,7 +785,7 @@ namespace ts {
 
             if (addProjToQueue(resolved, reloadLevel)) {
                 // TODO: instead of adding the dependent project to queue right away postpone this
-                queueBuildForDownstreamReferences(resolved, getGlobalDependencyGraph());
+                queueBuildForDownstreamReferences(resolved);
             }
         }
 
@@ -857,12 +824,15 @@ namespace ts {
         }
 
         // Mark all downstream projects of this one needing to be built "later"
-        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName, dependencyGraph: DependencyGraph) {
-            const deps = dependencyGraph.dependencyMap.getReferencesTo(root);
-            for (const ref of deps) {
+        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
+            const dependencyGraph = getGlobalDependencyGraph();
+            const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(root);
+            if (!referencingProjects) return;
+            // Always use build order to queue projects
+            for (const project of dependencyGraph.buildQueue) {
                 // Can skip circular references
-                if (addProjToQueue(ref)) {
-                    queueBuildForDownstreamReferences(ref, dependencyGraph);
+                if (referencingProjects.hasKey(project) && addProjToQueue(project)) {
+                    queueBuildForDownstreamReferences(project);
                 }
             }
         }
@@ -944,14 +914,14 @@ namespace ts {
             const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
-            const graph = createDependencyMapper(toPath);
+            const referencingProjectsMap = createFileMap<ConfigFileMap<true>>(toPath);
             for (const root of roots) {
                 visit(root);
             }
 
             return {
                 buildQueue: buildOrder,
-                dependencyMap: graph,
+                referencingProjectsMap
             };
 
             function visit(projPath: ResolvedConfigFileName, inCircularContext = false) {
@@ -972,7 +942,9 @@ namespace ts {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
                         visit(resolvedRefPath, inCircularContext || ref.circular);
-                        graph.addReference(projPath, resolvedRefPath);
+                        // Get projects referencing resolvedRefPath and add projPath to it
+                        const referencingProjects = getOrCreateValueFromConfigFileMap(referencingProjectsMap, resolvedRefPath, () => createFileMap(toPath));
+                        referencingProjects.setValue(projPath, true);
                     }
                 }
 

@@ -137,15 +137,15 @@ namespace ts.tscWatch {
                         ...getOutputFileNames(SubProject.core, "index"),
                         ...(additionalFiles ? getOutputFileNames(SubProject.core, newFileWithoutExtension) : emptyArray)
                     ]);
-                    host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-                    const changedTests = getOutputFileStamps(host, additionalFiles);
-                    verifyChangedFiles(changedTests, changedCore, [
-                        ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
-                    ]);
                     host.checkTimeoutQueueLengthAndRun(1); // Builds logic
                     const changedLogic = getOutputFileStamps(host, additionalFiles);
-                    verifyChangedFiles(changedLogic, changedTests, [
+                    verifyChangedFiles(changedLogic, changedCore, [
                         ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
+                    ]);
+                    host.checkTimeoutQueueLengthAndRun(1); // Builds tests
+                    const changedTests = getOutputFileStamps(host, additionalFiles);
+                    verifyChangedFiles(changedTests, changedLogic, [
+                        ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
                     ]);
                     host.checkTimeoutQueueLength(0);
                     checkOutputErrorsIncremental(host, emptyArray);
