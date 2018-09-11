@@ -3838,10 +3838,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

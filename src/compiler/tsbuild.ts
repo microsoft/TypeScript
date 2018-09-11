@@ -341,7 +341,7 @@ namespace ts {
 
         /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
         /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
-        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph | undefined;
+        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
 
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildInvalidatedProject(): void;
@@ -404,7 +404,7 @@ namespace ts {
         /** Map from config file name to up-to-date status */
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
         const missingRoots = createMap<true>();
-        let globalDependencyGraph: DependencyGraph | false | undefined;
+        let globalDependencyGraph: DependencyGraph | undefined;
 
         // Watch state
         // TODO(shkamat): this should be really be diagnostics but thats for later time
@@ -504,12 +504,7 @@ namespace ts {
         }
 
         function startWatching() {
-            const graph = getGlobalDependencyGraph()!;
-            if (!graph.buildQueue) {
-                // Everything is broken - we don't even know what to watch. Give up.
-                return;
-            }
-
+            const graph = getGlobalDependencyGraph();
             for (const resolved of graph.buildQueue) {
                 const cfg = parseConfigFile(resolved);
                 if (cfg) {
@@ -627,10 +622,7 @@ namespace ts {
         }
 
         function getGlobalDependencyGraph() {
-            if (globalDependencyGraph === undefined) {
-                globalDependencyGraph = getBuildGraph(rootNames) || false;
-            }
-            return globalDependencyGraph || undefined;
+            return globalDependencyGraph || (globalDependencyGraph = getBuildGraph(rootNames));
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -826,10 +818,7 @@ namespace ts {
 
             if (addProjToQueue(resolved, reloadLevel)) {
                 // TODO: instead of adding the dependent project to queue right away postpone this
-                const dependencyGraph = getGlobalDependencyGraph();
-                if (dependencyGraph) {
-                    queueBuildForDownstreamReferences(resolved, dependencyGraph);
-                }
+                queueBuildForDownstreamReferences(resolved, getGlobalDependencyGraph());
             }
         }
 
@@ -950,49 +939,36 @@ namespace ts {
             buildSingleProject(resolved);
         }
 
-        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph | undefined {
-            const temporaryMarks: { [path: string]: true } = {};
-            const permanentMarks: { [path: string]: true } = {};
+        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
+            const temporaryMarks = createFileMap<true>(toPath);
+            const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
             const graph = createDependencyMapper(toPath);
-
-            let hadError = false;
-
             for (const root of roots) {
                 visit(root);
             }
 
-            if (hadError) {
-                return undefined;
-            }
-
             return {
                 buildQueue: buildOrder,
-                dependencyMap: graph
+                dependencyMap: graph,
             };
 
             function visit(projPath: ResolvedConfigFileName, inCircularContext = false) {
                 // Already visited
-                if (permanentMarks[projPath]) return;
+                if (permanentMarks.hasKey(projPath)) return;
                 // Circular
-                if (temporaryMarks[projPath]) {
+                if (temporaryMarks.hasKey(projPath)) {
                     if (!inCircularContext) {
-                        hadError = true;
-                        // TODO(shkamat): Account for this error
                         reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
                         return;
                     }
                 }
 
-                temporaryMarks[projPath] = true;
+                temporaryMarks.setValue(projPath, true);
                 circularityReportStack.push(projPath);
                 const parsed = parseConfigFile(projPath);
-                if (parsed === undefined) {
-                    hadError = true;
-                    return;
-                }
-                if (parsed.projectReferences) {
+                if (parsed && parsed.projectReferences) {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
                         visit(resolvedRefPath, inCircularContext || ref.circular);
@@ -1001,7 +977,7 @@ namespace ts {
                 }
 
                 circularityReportStack.pop();
-                permanentMarks[projPath] = true;
+                permanentMarks.setValue(projPath, true);
                 buildOrder.push(projPath);
             }
         }
@@ -1135,11 +1111,9 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(): string[] | undefined {
+        function getFilesToClean(): string[] {
             // Get the same graph for cleaning we'd use for building
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) return undefined;
-
             const filesToDelete: string[] = [];
             for (const proj of graph.buildQueue) {
                 const parsed = parseConfigFile(proj);
@@ -1159,11 +1133,6 @@ namespace ts {
 
         function cleanAllProjects() {
             const filesToDelete = getFilesToClean();
-            if (filesToDelete === undefined) {
-                reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-
             if (options.dry) {
                 reportStatus(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
                 return ExitStatus.Success;
@@ -1187,11 +1156,6 @@ namespace ts {
         function buildAllProjects(): ExitStatus {
             if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) {
-                reportErrorSummary();
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
             let anyFailed = false;

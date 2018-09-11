@@ -377,7 +377,6 @@ namespace ts {
 
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);
-            if (graph === undefined) throw new Error("Graph shouldn't be undefined");
 
             assert.sameMembers(graph.buildQueue, expectedBuildSet.map(getProjectFileName));
 
