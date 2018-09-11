@@ -98,9 +98,7 @@ namespace ts.tscWatch {
         function createSolutionInWatchMode() {
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, testProjectExpectedWatchedFiles);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+            verifyWatches(host);
             checkOutputErrorsInitial(host, emptyArray);
             const outputFileStamps = getOutputFileStamps(host);
             for (const stamp of outputFileStamps) {
@@ -108,6 +106,13 @@ namespace ts.tscWatch {
             }
             return host;
         }
+
+        function verifyWatches(host: WatchedSystem) {
+            checkWatchedFiles(host, testProjectExpectedWatchedFiles);
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+        }
+
         it("creates solution in watch mode", () => {
             createSolutionInWatchMode();
         });
@@ -195,6 +200,47 @@ export class someClass2 { }`);
                 }
             });
 
+        });
+
+        it("watches config files that are not present", () => {
+            const allFiles = [libFile, ...core, logic[1], ...tests];
+            const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
+            checkWatchedFiles(host, [core[0], core[1], core[2], logic[0], ...tests].map(f => f.path));
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+            checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
+            checkOutputErrorsInitial(host, [
+                createCompilerDiagnostic(Diagnostics.File_0_not_found, logic[0].path)
+            ]);
+            for (const f of [
+                ...getOutputFileNames(SubProject.core, "anotherModule"),
+                ...getOutputFileNames(SubProject.core, "index")
+            ]) {
+                assert.isTrue(host.fileExists(f), `${f} expected to be present`);
+            }
+            for (const f of [
+                ...getOutputFileNames(SubProject.logic, "index"),
+                ...getOutputFileNames(SubProject.tests, "index")
+            ]) {
+                assert.isFalse(host.fileExists(f), `${f} expected to be absent`);
+            }
+
+            // Create tsconfig file for logic and see that build succeeds
+            const initial = getOutputFileStamps(host);
+            host.writeFile(logic[0].path, logic[0].content);
+            host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+            const changedLogic = getOutputFileStamps(host);
+            verifyChangedFiles(changedLogic, initial, [
+                ...getOutputFileNames(SubProject.logic, "index")
+            ]);
+            host.checkTimeoutQueueLengthAndRun(1); // Builds tests
+            const changedTests = getOutputFileStamps(host);
+            verifyChangedFiles(changedTests, changedLogic, [
+                ...getOutputFileNames(SubProject.tests, "index")
+            ]);
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsIncremental(host, emptyArray);
+            verifyWatches(host);
         });
 
         // TODO: write tests reporting errors but that will have more involved work since file
