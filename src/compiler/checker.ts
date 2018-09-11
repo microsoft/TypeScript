@@ -10573,7 +10573,7 @@ namespace ts {
 
         function checkTypeRelatedToAndOptionallyElaborate(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorNode: Node | undefined, expr: Expression | undefined, headMessage?: DiagnosticMessage, containingMessageChain?: () => DiagnosticMessageChain | undefined): boolean {
             if (isTypeRelatedTo(source, target, relation)) return true;
-            if (!errorNode || !elaborateError(expr, source, target)) {
+            if (!errorNode || !elaborateError(expr, source, target, relation)) {
                 return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain);
             }
             return false;
@@ -10583,25 +10583,49 @@ namespace ts {
             return !!(type.flags & TypeFlags.Conditional || (type.flags & TypeFlags.Intersection && some((type as IntersectionType).types, isOrHasGenericConditional)));
         }
 
-        function elaborateError(node: Expression | undefined, source: Type, target: Type): boolean {
+        function elaborateError(node: Expression | undefined, source: Type, target: Type, relation: Map<RelationComparisonResult>): boolean {
             if (!node || isOrHasGenericConditional(target)) return false;
+            if (!checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined) && elaborateDidYouMeanToCallOrConstruct(node, source, target, relation)) {
+                return true;
+            }
             switch (node.kind) {
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.ParenthesizedExpression:
-                    return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target);
+                    return elaborateError((node as ParenthesizedExpression | JsxExpression).expression, source, target, relation);
                 case SyntaxKind.BinaryExpression:
                     switch ((node as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.EqualsToken:
                         case SyntaxKind.CommaToken:
-                            return elaborateError((node as BinaryExpression).right, source, target);
+                            return elaborateError((node as BinaryExpression).right, source, target, relation);
                     }
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target);
+                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target, relation);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target);
+                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
                 case SyntaxKind.JsxAttributes:
-                    return elaborateJsxAttributes(node as JsxAttributes, source, target);
+                    return elaborateJsxAttributes(node as JsxAttributes, source, target, relation);
+            }
+            return false;
+        }
+
+        function elaborateDidYouMeanToCallOrConstruct(node: Expression, source: Type, target: Type, relation: Map<RelationComparisonResult>): boolean {
+            const callSignatures = getSignaturesOfType(source, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(source, SignatureKind.Construct);
+            for (const signatures of [constructSignatures, callSignatures]) {
+                if (some(signatures, s => {
+                    const returnType = getReturnTypeOfSignature(s);
+                    return !(returnType.flags & (TypeFlags.Any | TypeFlags.Never)) && checkTypeRelatedTo(returnType, target, relation, /*errorNode*/ undefined);
+                })) {
+                    const resultObj: { error?: Diagnostic } = {};
+                    checkTypeAssignableTo(source, target, node, /*errorMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                    const diagnostic = resultObj.error!;
+                    addRelatedInfo(diagnostic, createDiagnosticForNode(
+                        node,
+                        signatures === constructSignatures ? Diagnostics.Did_you_mean_to_use_new_with_this_expression : Diagnostics.Did_you_mean_to_call_this_expression
+                    ));
+                    return true;
+                }
             }
             return false;
         }
@@ -10612,7 +10636,7 @@ namespace ts {
          * If that element would issue an error, we first attempt to dive into that element's inner expression and issue a more specific error by recuring into `elaborateError`
          * Otherwise, we issue an error on _every_ element which fail the assignability check
          */
-        function elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type) {
+        function elaborateElementwise(iterator: ElaborationIterator, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
@@ -10620,7 +10644,7 @@ namespace ts {
                 const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
                 const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, errorType);
                 if (sourcePropType !== errorType && targetPropType !== errorType && !isTypeAssignableTo(sourcePropType, targetPropType)) {
-                    const elaborated = next && elaborateError(next, sourcePropType, targetPropType);
+                    const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation);
                     if (elaborated) {
                         reportedError = true;
                     }
@@ -10629,10 +10653,10 @@ namespace ts {
                         const resultObj: { error?: Diagnostic } = {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocation(next, CheckMode.Normal, sourcePropType) : sourcePropType;
-                        const result = checkTypeAssignableTo(specificSource, targetPropType, prop, errorMessage, /*containingChain*/ undefined, resultObj);
+                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, /*containingChain*/ undefined, resultObj);
                         if (result && specificSource !== sourcePropType) {
                             // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeAssignableTo(sourcePropType, targetPropType, prop, errorMessage, /*containingChain*/ undefined, resultObj);
+                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, /*containingChain*/ undefined, resultObj);
                         }
                         if (resultObj.error) {
                             const reportedDiag = resultObj.error;
@@ -10674,8 +10698,8 @@ namespace ts {
             }
         }
 
-        function elaborateJsxAttributes(node: JsxAttributes, source: Type, target: Type) {
-            return elaborateElementwise(generateJsxAttributes(node), source, target);
+        function elaborateJsxAttributes(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            return elaborateElementwise(generateJsxAttributes(node), source, target, relation);
         }
 
         function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
@@ -10691,9 +10715,9 @@ namespace ts {
             }
         }
 
-        function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type) {
+        function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             if (isTupleLikeType(source)) {
-                return elaborateElementwise(generateLimitedTupleElements(node, target), source, target);
+                return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
             }
             return false;
         }
@@ -10722,8 +10746,8 @@ namespace ts {
             }
         }
 
-        function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type) {
-            return elaborateElementwise(generateObjectLiteralElements(node), source, target);
+        function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            return elaborateElementwise(generateObjectLiteralElements(node), source, target, relation);
         }
 
         /**
