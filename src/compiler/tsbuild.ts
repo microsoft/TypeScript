@@ -946,7 +946,6 @@ namespace ts {
                 context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
                 return resultFlags;
             }
-
             if (configFile.fileNames.length === 0) {
                 // Nothing to build - must be a solution file, basically
                 return BuildResultFlags.None;
@@ -956,7 +955,8 @@ namespace ts {
                 projectReferences: configFile.projectReferences,
                 host,
                 rootNames: configFile.fileNames,
-                options: configFile.options
+                options: configFile.options,
+                configFileParsingDiagnostics: configFile.errors,
             };
             const program = createProgram(programOptions);
 
@@ -1149,7 +1149,6 @@ namespace ts {
 
             const queue = graph.buildQueue;
             reportBuildQueue(graph);
-
             let anyFailed = false;
             for (const next of queue) {
                 const proj = configFileCache.parseConfigFile(next);
@@ -1157,11 +1156,15 @@ namespace ts {
                     anyFailed = true;
                     break;
                 }
+
+                // report errors early when using continue or break statements
+                const errors = proj.errors;
                 const status = getUpToDateStatus(proj);
                 verboseReportProjectStatus(next, status);
 
                 const projName = proj.options.configFilePath!;
                 if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
+                    reportErrors(errors);
                     // Up to date, skip
                     if (defaultOptions.dry) {
                         // In a dry build, inform the user of this fact
@@ -1171,17 +1174,20 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !context.options.force) {
+                    reportErrors(errors);
                     // Fake build
                     updateOutputTimestamps(proj);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                    reportErrors(errors);
                     if (context.options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.ContainerOnly) {
+                    reportErrors(errors);
                     // Do nothing
                     continue;
                 }
@@ -1191,6 +1197,10 @@ namespace ts {
             }
             reportErrorSummary();
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
+        }
+
+        function reportErrors(errors: Diagnostic[]) {
+            errors.forEach((err) => host.reportDiagnostic(err));
         }
 
         /**
