@@ -2818,7 +2818,8 @@ namespace ts {
             const parameter = singleOrUndefined(parameters);
             return parameter
                 && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
-                && !(isArrowFunction(parentNode) && parentNode.type) // arrow function may not have return type annotation
+                && isArrowFunction(parentNode)      // only arrow functions may have simple arrow head
+                && !parentNode.type                 // arrow function may not have return type annotation
                 && !some(parentNode.decorators)     // parent may not have decorators
                 && !some(parentNode.modifiers)      // parent may not have modifiers
                 && !some(parentNode.typeParameters) // parent may not have type parameters
