@@ -135,9 +135,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_1254" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_refere_1254" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[A 'const' initializer in an ambient context must be a string or numeric literal.]]></Val>
+                <Val><![CDATA[A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -858,6 +858,18 @@
             <Item ItemId=";An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file_1234" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[An ambient module declaration is only allowed at the top level in a file.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";An_argument_for_0_was_not_provided_6210" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[An argument for '{0}' was not provided.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";An_argument_matching_this_binding_pattern_was_not_provided_6211" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[An argument matching this binding pattern was not provided.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2421,9 +2433,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Expected_type_of_0_field_in_package_json_to_be_string_got_1_6105" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Expected_type_of_0_field_in_package_json_to_be_1_got_2_6105" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.]]></Val>
+                <Val><![CDATA[Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -2829,12 +2841,6 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Generic_type_instantiation_is_excessively_deep_and_possibly_infinite_2550" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[Generic type instantiation is excessively deep and possibly infinite.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
             <Item ItemId=";Getter_and_setter_accessors_do_not_agree_in_visibility_2379" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Getter and setter accessors do not agree in visibility.]]></Val>
@@ -3042,6 +3048,12 @@
             <Item ItemId=";Include_modules_imported_with_json_extension_6197" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Include modules imported with '.json' extension]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Index_0_is_out_of_bounds_in_tuple_of_length_1_2733" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Index '{0}' is out-of-bounds in tuple of length {1}.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -3705,6 +3717,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Non_simple_parameter_declared_here_1348" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Non-simple parameter declared here.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Not_all_code_paths_return_a_value_7030" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Not all code paths return a value.]]></Val>
@@ -3909,9 +3927,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs_5071" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs_amd_es2015_or_5071" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.]]></Val>
+                <Val><![CDATA[Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -5589,6 +5607,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";This_parameter_is_not_allowed_with_use_strict_directive_1346" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[This parameter is not allowed with 'use strict' directive.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -6048,6 +6072,12 @@
             <Item ItemId=";Unexpected_token_expected_1179" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Unexpected token. '{' expected.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Unknown_build_option_0_5072" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Unknown build option '{0}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -6657,9 +6687,33 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";package_json_does_not_have_a_typesVersions_entry_that_matches_version_0_6207" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['package.json' does not have a 'typesVersions' entry that matches version '{0}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";package_json_has_0_field_1_that_references_2_6101" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['package.json' has '{0}' field '{1}' that references '{2}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";package_json_has_a_typesVersions_entry_0_that_is_not_a_valid_semver_range_6209" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_ma_6208" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";package_json_has_a_typesVersions_field_with_version_specific_path_mappings_6206" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['package.json' has a 'typesVersions' field with version-specific path mappings.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -6828,6 +6882,18 @@
             <Item ItemId=";unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name_1333" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA['unique symbol' types may not be used on a variable declaration with a binding name.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";use_strict_directive_cannot_be_used_with_non_simple_parameter_list_1347" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['use strict' directive cannot be used with non-simple parameter list.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";use_strict_directive_used_here_1349" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA['use strict' directive used here.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
