@@ -27758,8 +27758,11 @@ namespace ts {
         function getAugmentedPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
             const propsByName = createSymbolTable(getPropertiesOfType(type));
-            if (typeHasCallOrConstructSignatures(type)) {
-                forEach(getPropertiesOfType(globalFunctionType), p => {
+            const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType :
+                getSignaturesOfType(type, SignatureKind.Call).length ? globalNewableFunctionType :
+                undefined;
+            if (functionType) {
+                forEach(getPropertiesOfType(functionType), p => {
                     if (!propsByName.has(p.escapedName)) {
                         propsByName.set(p.escapedName, p);
                     }
