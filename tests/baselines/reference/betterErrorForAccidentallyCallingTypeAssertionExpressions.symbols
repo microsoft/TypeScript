@@ -18,3 +18,8 @@ foo()
 
     (1 as number).toString();
 
+foo()   
+>foo : Symbol(foo, Decl(betterErrorForAccidentallyCallingTypeAssertionExpressions.ts, 0, 0))
+
+    (<number>1).toString();
+

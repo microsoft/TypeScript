@@ -9,3 +9,6 @@ foo()
 
 foo()   
     (1 as number).toString();
+
+foo()   
+    (<number>1).toString();

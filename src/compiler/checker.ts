@@ -19655,14 +19655,14 @@ namespace ts {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
+                    let relatedInformation: DiagnosticRelatedInformation | undefined;
                     if (node.arguments.length === 1 && isTypeAssertion(first(node.arguments))) {
                         const text = getSourceFileOfNode(node).text;
-                        const pos = skipTrivia(text, node.expression.end, /* stepAfterLineBreak */ true) - 1;
-                        if (isLineBreak(text.charCodeAt(pos))) {
-                            error(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
+                        if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
+                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
                         }
                     }
-                    invocationError(node, apparentType, SignatureKind.Call);
+                    invocationError(node, apparentType, SignatureKind.Call, relatedInformation);
                 }
                 return resolveErrorCall(node);
             }
@@ -19832,11 +19832,12 @@ namespace ts {
             return true;
         }
 
-        function invocationError(node: Node, apparentType: Type, kind: SignatureKind) {
-            invocationErrorRecovery(apparentType, kind, error(node, kind === SignatureKind.Call
-                ? Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures
-                : Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
-            , typeToString(apparentType)));
+        function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
+            const diagnostic = error(node, (kind === SignatureKind.Call ?
+                Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures :
+                Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
+            ), typeToString(apparentType));
+            invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
 
         function invocationErrorRecovery(apparentType: Type, kind: SignatureKind, diagnostic: Diagnostic) {

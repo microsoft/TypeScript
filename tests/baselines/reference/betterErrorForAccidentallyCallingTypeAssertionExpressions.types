@@ -46,3 +46,15 @@ foo()
 >1 : 1
 >toString : any
 
+foo()   
+>foo()       (<number>1).toString() : any
+>foo()       (<number>1).toString : any
+>foo()       (<number>1) : any
+>foo() : string
+>foo : () => string
+
+    (<number>1).toString();
+><number>1 : number
+>1 : 1
+>toString : any
+
