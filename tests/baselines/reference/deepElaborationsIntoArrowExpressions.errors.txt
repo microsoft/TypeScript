@@ -1,0 +1,13 @@
+tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts(4,14): error TS2322: Type '"b"' is not assignable to type '"a"'.
+
+
+==== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts (1 errors) ====
+    const a: {
+        y(): "a"
+    } = {
+        y: () => "b"
+                 ~~~
+!!! error TS2322: Type '"b"' is not assignable to type '"a"'.
+!!! related TS6502 tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts:2:5: The expected type comes from the return type of this signature.
+    };
+    

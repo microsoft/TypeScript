@@ -1,0 +1,17 @@
+=== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts ===
+const a: {
+>a : { y(): "a"; }
+
+    y(): "a"
+>y : () => "a"
+
+} = {
+>{    y: () => "b"} : { y: () => "b"; }
+
+    y: () => "b"
+>y : () => "b"
+>() => "b" : () => "b"
+>"b" : "b"
+
+};
+

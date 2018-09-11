@@ -1,5 +1,4 @@
-tests/cases/compiler/promiseChaining1.ts(7,50): error TS2345: Argument of type '(x: S) => string' is not assignable to parameter of type '(x: S) => Function'.
-  Type 'string' is not assignable to type 'Function'.
+tests/cases/compiler/promiseChaining1.ts(7,55): error TS2322: Type 'string' is not assignable to type 'Function'.
 
 
 ==== tests/cases/compiler/promiseChaining1.ts (1 errors) ====
@@ -10,9 +9,9 @@ tests/cases/compiler/promiseChaining1.ts(7,50): error TS2345: Argument of type '
             var result = cb(this.value);
             // should get a fresh type parameter which each then call
             var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
-                                                     ~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: S) => string' is not assignable to parameter of type '(x: S) => Function'.
-!!! error TS2345:   Type 'string' is not assignable to type 'Function'.
+                                                          ~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'Function'.
+!!! related TS6502 tests/cases/compiler/promiseChaining1.ts:4:34: The expected type comes from the return type of this signature.
             return new Chain2(result);
         }
     }

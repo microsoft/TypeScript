@@ -1,0 +1,13 @@
+=== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts ===
+const a: {
+>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 0, 5))
+
+    y(): "a"
+>y : Symbol(y, Decl(deepElaborationsIntoArrowExpressions.ts, 0, 10))
+
+} = {
+    y: () => "b"
+>y : Symbol(y, Decl(deepElaborationsIntoArrowExpressions.ts, 2, 5))
+
+};
+

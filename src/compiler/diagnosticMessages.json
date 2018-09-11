@@ -3863,6 +3863,10 @@
         "category": "Message",
         "code": 6501
     },
+    "The expected type comes from the return type of this signature.": {
+        "category": "Message",
+        "code": 6502
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

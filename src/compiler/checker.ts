@@ -10605,6 +10605,8 @@ namespace ts {
                     return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
                 case SyntaxKind.JsxAttributes:
                     return elaborateJsxAttributes(node as JsxAttributes, source, target, relation);
+                case SyntaxKind.ArrowFunction:
+                    return elaborateArrowFunction(node as ArrowFunction, source, target, relation);
             }
             return false;
         }
@@ -10630,6 +10632,46 @@ namespace ts {
             return false;
         }
 
+        function elaborateArrowFunction(node: ArrowFunction, source: Type, target: Type, relation: Map<RelationComparisonResult>): boolean {
+            // Don't elaborate blocks
+            if (isBlock(node.body)) {
+                return false;
+            }
+            // Or functions with annotated parameter types
+            if (some(node.parameters, ts.hasType)) {
+                return false;
+            }
+            const sourceSig = getSingleCallSignature(source);
+            if (!sourceSig) {
+                return false;
+            }
+            const targetSignatures = getSignaturesOfType(target, SignatureKind.Call);
+            if (!length(targetSignatures)) {
+                return false;
+            }
+            const returnExpression = node.body;
+            const sourceReturn = getReturnTypeOfSignature(sourceSig);
+            const targetReturn = getUnionType(map(targetSignatures, getReturnTypeOfSignature));
+            if (!checkTypeRelatedTo(sourceReturn, targetReturn, relation, /*errorNode*/ undefined)) {
+                const elaborated = returnExpression && elaborateError(returnExpression, sourceReturn, targetReturn, relation);
+                if (elaborated) {
+                    return elaborated;
+                }
+                const resultObj: { error?: Diagnostic } = {};
+                checkTypeRelatedTo(sourceReturn, targetReturn, relation, returnExpression, /*message*/ undefined, /*chain*/ undefined, resultObj);
+                if (resultObj.error) {
+                    if (target.symbol && length(target.symbol.declarations)) {
+                        addRelatedInfo(resultObj.error, createDiagnosticForNode(
+                            target.symbol.declarations[0],
+                            Diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature,
+                        ));
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
@@ -10643,7 +10685,7 @@ namespace ts {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
                 const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
                 const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, errorType);
-                if (sourcePropType !== errorType && targetPropType !== errorType && !isTypeAssignableTo(sourcePropType, targetPropType)) {
+                if (sourcePropType !== errorType && targetPropType !== errorType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation);
                     if (elaborated) {
                         reportedError = true;
