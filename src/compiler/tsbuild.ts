@@ -607,10 +607,7 @@ namespace ts {
         }
 
         function getBuildGraph(configFileNames: ReadonlyArray<string>) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return undefined;
-
-            return createDependencyGraph(resolvedNames);
+            return createDependencyGraph(resolveProjectNames(configFileNames));
         }
 
         function getGlobalDependencyGraph() {
@@ -1114,12 +1111,9 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(configFileNames: ReadonlyArray<ResolvedConfigFileName>): string[] | undefined {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return undefined;
-
+        function getFilesToClean(configFileNames: ReadonlyArray<string>): string[] | undefined {
             // Get the same graph for cleaning we'd use for building
-            const graph = createDependencyGraph(resolvedNames);
+            const graph = getBuildGraph(configFileNames);
             if (graph === undefined) return undefined;
 
             const filesToDelete: string[] = [];
@@ -1139,22 +1133,8 @@ namespace ts {
             return filesToDelete;
         }
 
-        function getAllProjectsInScope(): ReadonlyArray<ResolvedConfigFileName> | undefined {
-            const resolvedNames = resolveProjectNames(rootNames);
-            if (resolvedNames === undefined) return undefined;
-            const graph = createDependencyGraph(resolvedNames);
-            if (graph === undefined) return undefined;
-            return graph.buildQueue;
-        }
-
         function cleanAllProjects() {
-            const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
-            if (resolvedNames === undefined) {
-                reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-
-            const filesToDelete = getFilesToClean(resolvedNames);
+            const filesToDelete = getFilesToClean(rootNames);
             if (filesToDelete === undefined) {
                 reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
@@ -1176,7 +1156,7 @@ namespace ts {
             return resolveConfigFileProjectName(resolvePath(host.getCurrentDirectory(), name));
         }
 
-        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] | undefined {
+        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] {
             return configFileNames.map(resolveProjectName);
         }
 
