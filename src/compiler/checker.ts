@@ -27759,7 +27759,7 @@ namespace ts {
             type = getApparentType(type);
             const propsByName = createSymbolTable(getPropertiesOfType(type));
             const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType :
-                getSignaturesOfType(type, SignatureKind.Call).length ? globalNewableFunctionType :
+                getSignaturesOfType(type, SignatureKind.Construct).length ? globalNewableFunctionType :
                 undefined;
             if (functionType) {
                 forEach(getPropertiesOfType(functionType), p => {
