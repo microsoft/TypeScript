@@ -7671,6 +7671,15 @@ namespace ts {
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;
+
+    export function regExpEscape(text: string) {
+        return text.replace(reservedCharacterPattern, escapeRegExpCharacter);
+    }
+
+    function escapeRegExpCharacter(match: string) {
+        return "\\" + match;
+    }
+
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
     export function hasExtension(fileName: string): boolean {
