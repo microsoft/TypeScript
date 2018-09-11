@@ -19655,6 +19655,13 @@ namespace ts {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
+                    if (node.arguments.length === 1 && isTypeAssertion(first(node.arguments))) {
+                        const text = getSourceFileOfNode(node).text;
+                        const pos = skipTrivia(text, node.expression.end, /* stepAfterLineBreak */ true) - 1;
+                        if (isLineBreak(text.charCodeAt(pos))) {
+                            error(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
+                        }
+                    }
                     invocationError(node, apparentType, SignatureKind.Call);
                 }
                 return resolveErrorCall(node);
