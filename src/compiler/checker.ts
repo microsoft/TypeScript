@@ -10761,6 +10761,11 @@ namespace ts {
             if (isTupleLikeType(source)) {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
             }
+            // recreate a tuple from the elements, if possible
+            const tupleizedType = checkArrayLiteral(node, CheckMode.Normal, /*forceTuple*/ true);
+            if (isTupleLikeType(tupleizedType)) {
+                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation);
+            }
             return false;
         }
 
@@ -16915,7 +16920,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
             const elements = node.elements;
             const elementCount = elements.length;
             let hasNonEndingSpreadElement = false;
@@ -16982,6 +16987,9 @@ namespace ts {
                             }
                         }
                     }
+                    return createTupleType(elementTypes, minLength, hasRestElement);
+                }
+                else if (forceTuple) {
                     return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }

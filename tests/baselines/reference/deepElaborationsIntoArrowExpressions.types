@@ -15,3 +15,35 @@ const a: {
 
 };
 
+interface Foo {
+    a: number;
+>a : number
+}
+
+function foo1(): () => Foo {
+>foo1 : () => () => Foo
+
+    return () => ({a: ''});
+>() => ({a: ''}) : () => { a: string; }
+>({a: ''}) : { a: string; }
+>{a: ''} : { a: string; }
+>a : string
+>'' : ""
+}
+
+function foo3(): Foo[] {
+>foo3 : () => Foo[]
+
+    return [{a: ''}];
+>[{a: ''}] : { a: string; }[]
+>{a: ''} : { a: string; }
+>a : string
+>'' : ""
+}
+var y: Foo[] = [{a: ''}]
+>y : Foo[]
+>[{a: ''}] : { a: string; }[]
+>{a: ''} : { a: string; }
+>a : string
+>'' : ""
+

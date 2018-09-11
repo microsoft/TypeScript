@@ -5,8 +5,27 @@ const a: {
     y: () => "b"
 };
 
+interface Foo {
+    a: number;
+}
+
+function foo1(): () => Foo {
+    return () => ({a: ''});
+}
+
+function foo3(): Foo[] {
+    return [{a: ''}];
+}
+var y: Foo[] = [{a: ''}]
 
 //// [deepElaborationsIntoArrowExpressions.js]
-var a = {
-    y: function () { return "b"; }
+const a = {
+    y: () => "b"
 };
+function foo1() {
+    return () => ({ a: '' });
+}
+function foo3() {
+    return [{ a: '' }];
+}
+var y = [{ a: '' }];
