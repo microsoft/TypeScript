@@ -4608,7 +4608,6 @@
         "category": "Message",
         "code": 95062
     },
-    
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4619,10 +4618,18 @@
     },
     "Convert to async function":{
         "category": "Message",
-         "code": 95065
+        "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
-         "code": 95066
+        "category": "Message",
+        "code": 95066
+    },
+    "Add missing 'new' operator to caller": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Add missing 'new' operator to all callers": {
+        "category": "Message",
+        "code": 95068
     }
 }

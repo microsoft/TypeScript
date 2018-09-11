@@ -53,6 +53,7 @@
         "codefixes/importFixes.ts",
         "codefixes/fixSpelling.ts",
         "codefixes/fixAddMissingMember.ts",
+        "codefixes/fixAddMissingNewOperator.ts",
         "codefixes/fixCannotFindModule.ts",
         "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
         "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
