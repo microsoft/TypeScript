@@ -5,7 +5,7 @@
 ////var c = C();
 
 verify.codeFix({
-    description: "Add missing 'new' operator to caller",
+    description: "Add missing 'new' operator to call",
     index: 0,
     newFileContent: `class C {
 }

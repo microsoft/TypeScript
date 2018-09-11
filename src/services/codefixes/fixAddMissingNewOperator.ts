@@ -6,24 +6,23 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span } = context;
-            const identifierWithoutNew = getIdentifier(sourceFile, span.start);
-            const changes = textChanges.ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, identifierWithoutNew));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_caller, fixId, Diagnostics.Add_missing_new_operator_to_all_callers)];
+            const missingNewExpression = getMissingNewExpression(sourceFile, span.start);
+            const changes = textChanges.ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, missingNewExpression));
+            return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_call, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            addMissingNewOperator(changes, context.sourceFile, getIdentifier(diag.file, diag.start))),
+            addMissingNewOperator(changes, context.sourceFile, getMissingNewExpression(diag.file, diag.start))),
     });
 
-    function getIdentifier(sourceFile: SourceFile, pos: number): Identifier {
+    function getMissingNewExpression(sourceFile: SourceFile, pos: number): Expression {
         const token = getTokenAtPosition(sourceFile, pos);
-        Debug.assert(token.kind === SyntaxKind.Identifier);
         Debug.assert(isCallExpression(token.parent));
-        return <Identifier>token;
+        return <Expression>token;
     }
 
-    function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, identifierWithoutNew: Identifier): void {
-        const newTypeNode = createNew(identifierWithoutNew, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
-        changes.replaceNode(sourceFile, identifierWithoutNew, newTypeNode);
+    function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, missingNewExpression: Expression): void {
+        const newTypeNode = createNew(missingNewExpression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        changes.replaceNode(sourceFile, missingNewExpression, newTypeNode);
     }
 }

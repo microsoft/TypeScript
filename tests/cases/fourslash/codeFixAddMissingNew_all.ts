@@ -8,7 +8,7 @@
 
 verify.codeFixAll({
     fixId: "addMissingNewOperator",
-    fixAllDescription: "Add missing 'new' operator to all callers",
+    fixAllDescription: "Add missing 'new' operator to all calls",
     newFileContent:
 `class C {
     constructor(num?: number) {}

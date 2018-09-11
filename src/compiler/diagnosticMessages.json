@@ -4624,11 +4624,11 @@
         "category": "Message",
         "code": 95066
     },
-    "Add missing 'new' operator to caller": {
+    "Add missing 'new' operator to call": {
         "category": "Message",
         "code": 95067
     },
-    "Add missing 'new' operator to all callers": {
+    "Add missing 'new' operator to all calls": {
         "category": "Message",
         "code": 95068
     }
