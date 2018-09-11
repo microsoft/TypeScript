@@ -13,5 +13,5 @@ function /*[#|*/f/*|]*/(): Promise<string> {
 async function f(): Promise<string> {
     const resp = await fetch("https://typescriptlang.org");
     var blob = resp.blob().then(blob_1 => blob_1.byteOffset).catch(err => 'Error');
-    return blob_1.toString();
+    return blob_2.toString();
 }
