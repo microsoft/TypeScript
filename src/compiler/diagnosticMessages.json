@@ -2088,6 +2088,30 @@
         "category": "Error",
         "code": 2577
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+        "category": "Error",
+        "code": 2580
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+        "category": "Error",
+        "code": 2581
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+        "category": "Error",
+        "code": 2582
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2583
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2584
+    },
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2585
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
