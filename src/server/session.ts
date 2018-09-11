@@ -1096,7 +1096,7 @@ namespace ts.server {
             return projectInfo;
         }
 
-        private getRenameInfo(args: protocol.FileLocationRequestArgs) {
+        private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             return project.getLanguageService().getRenameInfo(file, position);

@@ -144,7 +144,14 @@ namespace ts.Completions {
             getCompletionEntriesFromSymbols(symbols, entries, location, sourceFile, typeChecker, compilerOptions.target!, log, completionKind, preferences, propertyAccessToConvert, isJsxInitializer, recommendedCompletion, symbolToOriginInfoMap);
         }
 
-        addRange(entries, getKeywordCompletions(keywordFilters));
+        if (keywordFilters !== KeywordCompletionFilters.None) {
+            const entryNames = arrayToSet(entries, e => e.name);
+            for (const keywordEntry of getKeywordCompletions(keywordFilters)) {
+                if (!entryNames.has(keywordEntry.name)) {
+                    entries.push(keywordEntry);
+                }
+            }
+        }
 
         for (const literal of literals) {
             entries.push(createCompletionEntryForLiteral(literal));
@@ -180,7 +187,7 @@ namespace ts.Completions {
                 return;
             }
             const realName = unescapeLeadingUnderscores(name);
-            if (addToSeen(uniqueNames, realName) && isIdentifierText(realName, target) && !isStringANonContextualKeyword(realName)) {
+            if (addToSeen(uniqueNames, realName) && isIdentifierText(realName, target)) {
                 entries.push({
                     name: realName,
                     kind: ScriptElementKind.warning,

@@ -10,14 +10,14 @@ enum E01 {
 >E01 : E01
 
     A
->A : E01
+>A : E01.A
 }
 
 enum E02 {
 >E02 : E02
 
     A = 123
->A : E02
+>A : E02.A
 >123 : 123
 }
 
@@ -25,7 +25,7 @@ enum E03 {
 >E03 : E03
 
     A = "hello"
->A : E03
+>A : E03.A
 >"hello" : "hello"
 }
 

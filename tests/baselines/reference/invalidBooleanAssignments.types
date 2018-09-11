@@ -22,7 +22,7 @@ var d: typeof undefined = x;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var e: E = x;
 >e : E

@@ -13,3 +13,4 @@ tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,1): error TS2554: E
     x.b<string>(); // error
     ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/typeAssertionToGenericFunctionType.ts:3:12: An argument for 'x' was not provided.

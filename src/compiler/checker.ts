@@ -2295,12 +2295,12 @@ namespace ts {
                     ? chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
-                        packageId.name, getMangledNameForScopedPackage(packageId.name))
+                        packageId.name, mangleScopedPackageName(packageId.name))
                     : chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
                         moduleReference,
-                        getMangledNameForScopedPackage(packageId.name))
+                        mangleScopedPackageName(packageId.name))
                 : undefined;
             errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
                 errorInfo,
@@ -5910,9 +5910,9 @@ namespace ts {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
-                            const memberType = getLiteralType(getEnumMemberValue(member)!, enumCount, getSymbolOfNode(member)); // TODO: GH#18217
+                            const memberType = getFreshTypeOfLiteralType(getLiteralType(getEnumMemberValue(member)!, enumCount, getSymbolOfNode(member))); // TODO: GH#18217
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            memberTypeList.push(memberType);
+                            memberTypeList.push(getRegularTypeOfLiteralType(memberType));
                         }
                     }
                 }
@@ -8249,7 +8249,7 @@ namespace ts {
             const res = tryGetDeclaredTypeOfSymbol(symbol);
             if (res) {
                 return checkNoTypeArguments(node, symbol) ?
-                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : res :
+                    res.flags & TypeFlags.TypeParameter ? getConstrainedTypeVariable(<TypeParameter>res, node) : getRegularTypeOfLiteralType(res) :
                     errorType;
             }
 
@@ -12743,7 +12743,7 @@ namespace ts {
         }
 
         function getWidenedLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+            return type.flags & TypeFlags.EnumLiteral && type.flags & TypeFlags.FreshLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
@@ -19217,12 +19217,16 @@ namespace ts {
             let aboveArgCount = Number.POSITIVE_INFINITY;
 
             let argCount = args.length;
+            let closestSignature: Signature | undefined;
             for (const sig of signatures) {
                 const minCount = getMinArgumentCount(sig);
                 const maxCount = getParameterCount(sig);
                 if (minCount < argCount && minCount > belowArgCount) belowArgCount = minCount;
                 if (argCount < maxCount && maxCount < aboveArgCount) aboveArgCount = maxCount;
-                min = Math.min(min, minCount);
+                if (minCount < min) {
+                    min = minCount;
+                    closestSignature = sig;
+                }
                 max = Math.max(max, maxCount);
             }
 
@@ -19235,16 +19239,29 @@ namespace ts {
                 argCount--;
             }
 
+            let related: DiagnosticWithLocation | undefined;
+            if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
+                const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
+                if (paramDecl) {
+                    related = createDiagnosticForNode(
+                        paramDecl,
+                        isBindingPattern(paramDecl.name) ? Diagnostics.An_argument_matching_this_binding_pattern_was_not_provided : Diagnostics.An_argument_for_0_was_not_provided,
+                        !paramDecl.name ? argCount : !isBindingPattern(paramDecl.name) ? idText(getFirstIdentifier(paramDecl.name)) : undefined
+                    );
+                }
+            }
             if (hasRestParameter || hasSpreadArgument) {
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                     hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                     Diagnostics.Expected_0_arguments_but_got_1_or_more;
-                return createDiagnosticForNode(node, error, paramRange, argCount);
+                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
             }
             if (min < argCount && argCount < max) {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
-            return createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+            const diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+            return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
         function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
@@ -28286,13 +28303,14 @@ namespace ts {
             return false;
         }
 
-        function literalTypeToNode(type: LiteralType): Expression {
-            return createLiteral(type.value);
+        function literalTypeToNode(type: LiteralType, enclosing: Node): Expression {
+            const enumResult = type.flags & TypeFlags.EnumLiteral && nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing);
+            return enumResult || createLiteral(type.value);
         }
 
         function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
-            return literalTypeToNode(<LiteralType>type);
+            return literalTypeToNode(<LiteralType>type, node);
         }
 
         function createResolver(): EmitResolver {
@@ -29657,13 +29675,20 @@ namespace ts {
                 (<PrefixUnaryExpression>expr).operand.kind === SyntaxKind.NumericLiteral;
         }
 
+        function isSimpleLiteralEnumReference(expr: Expression) {
+            if (
+                (isPropertyAccessExpression(expr) || (isElementAccessExpression(expr) && isStringOrNumberLiteralExpression(expr.argumentExpression))) &&
+                isEntityNameExpression(expr.expression)
+            ) return !!(checkExpressionCached(expr).flags & TypeFlags.EnumLiteral);
+        }
+
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
             if (node.initializer) {
-                const isInvalidInitializer = !isStringOrNumberLiteralExpression(node.initializer);
+                const isInvalidInitializer = !(isStringOrNumberLiteralExpression(node.initializer) || isSimpleLiteralEnumReference(node.initializer));
                 const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
                 if (isConstOrReadonly && !node.type) {
                     if (isInvalidInitializer) {
-                        return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal);
+                        return grammarErrorOnNode(node.initializer!, Diagnostics.A_const_initializer_in_an_ambient_context_must_be_a_string_or_numeric_literal_or_literal_enum_reference);
                     }
                 }
                 else {
