@@ -1128,10 +1128,9 @@ namespace ts {
         function buildAllProjects(): ExitStatus {
             if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             const graph = getGlobalDependencyGraph();
-            const queue = graph.buildQueue;
             reportBuildQueue(graph);
             let anyFailed = false;
-            for (const next of queue) {
+            for (const next of graph.buildQueue) {
                 const proj = parseConfigFile(next);
                 if (proj === undefined) {
                     anyFailed = true;
@@ -1188,13 +1187,9 @@ namespace ts {
          * Report the build ordering inferred from the current project graph if we're in verbose mode
          */
         function reportBuildQueue(graph: DependencyGraph) {
-            if (!options.verbose) return;
-
-            const names: string[] = [];
-            for (const name of graph.buildQueue) {
-                names.push(name);
+            if (options.verbose) {
+                reportStatus(Diagnostics.Projects_in_this_build_Colon_0, graph.buildQueue.map(s => "\r\n    * " + relName(s)).join(""));
             }
-            if (options.verbose) reportStatus(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + relName(s)).join(""));
         }
 
         function relName(path: string): string {
