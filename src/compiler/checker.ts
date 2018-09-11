@@ -10585,6 +10585,9 @@ namespace ts {
 
         function elaborateError(node: Expression | undefined, source: Type, target: Type): boolean {
             if (!node || isOrHasGenericConditional(target)) return false;
+            if (!isTypeAssignableTo(source, target) && elaborateDidYouMeanToCallOrConstruct(node, source, target)) {
+                return true;
+            }
             switch (node.kind) {
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.ParenthesizedExpression:
@@ -10602,6 +10605,29 @@ namespace ts {
                     return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target);
                 case SyntaxKind.JsxAttributes:
                     return elaborateJsxAttributes(node as JsxAttributes, source, target);
+            }
+            return false;
+        }
+
+        function elaborateDidYouMeanToCallOrConstruct(node: Expression, source: Type, target: Type): boolean {
+            const callSignatures = getSignaturesOfType(source, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(source, SignatureKind.Construct);
+            for (const signatures of [constructSignatures, callSignatures]) {
+                if (length(signatures)) {
+                    if (some(signatures, s => {
+                        const returnType = getReturnTypeOfSignature(s);
+                        return !(returnType.flags & (TypeFlags.Any | TypeFlags.Never)) && isTypeAssignableTo(returnType, target);
+                    })) {
+                        const resultObj: { error?: Diagnostic } = {};
+                        checkTypeAssignableTo(source, target, node, /*errorMessage*/ undefined, /*containingChain*/ undefined, resultObj);
+                        const diagnostic = resultObj.error!;
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(
+                            node,
+                            signatures === constructSignatures ? Diagnostics.Did_you_mean_to_use_new_with_this_expression : Diagnostics.Did_you_mean_to_call_this_expression
+                        ));
+                        return true;
+                    }
+                }
             }
             return false;
         }

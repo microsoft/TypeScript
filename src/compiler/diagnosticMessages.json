@@ -3716,6 +3716,14 @@
         "category": "Message",
         "code": 6211
     },
+    "Did you mean to call this expression?": {
+        "category": "Message",
+        "code": 6212
+    },
+    "Did you mean to use `new` with this expression?": {
+        "category": "Message",
+        "code": 6213
+    },
 
     "Projects to reference": {
         "category": "Message",
