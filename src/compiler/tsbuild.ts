@@ -404,6 +404,7 @@ namespace ts {
         /** Map from config file name to up-to-date status */
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
         const missingRoots = createMap<true>();
+        let globalDependencyGraph: DependencyGraph | false | undefined;
 
         // Watch state
         // TODO(shkamat): this should be really be diagnostics but thats for later time
@@ -446,6 +447,7 @@ namespace ts {
             unchangedOutputs.clear();
             projectStatus.clear();
             missingRoots.clear();
+            globalDependencyGraph = undefined;
 
             diagnostics.clear();
             projectPendingBuild.clear();
@@ -527,7 +529,6 @@ namespace ts {
         function watchConfigFile(resolved: ResolvedConfigFileName) {
             if (!allWatchedConfigFiles.hasKey(resolved)) {
                 allWatchedConfigFiles.setValue(resolved, hostWithWatch.watchFile(resolved, () => {
-                    configFileCache.removeKey(resolved);
                     invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
                 }));
             }
@@ -626,7 +627,10 @@ namespace ts {
         }
 
         function getGlobalDependencyGraph() {
-            return getBuildGraph(rootNames);
+            if (globalDependencyGraph === undefined) {
+                globalDependencyGraph = getBuildGraph(rootNames) || false;
+            }
+            return globalDependencyGraph || undefined;
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -811,12 +815,17 @@ namespace ts {
         }
 
         function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+            if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                configFileCache.removeKey(resolved);
+                globalDependencyGraph = undefined;
+            }
             projectStatus.removeKey(resolved);
             if (options.watch) {
                 diagnostics.removeKey(resolved);
             }
 
             if (addProjToQueue(resolved, reloadLevel)) {
+                // TODO: instead of adding the dependent project to queue right away postpone this
                 const dependencyGraph = getGlobalDependencyGraph();
                 if (dependencyGraph) {
                     queueBuildForDownstreamReferences(resolved, dependencyGraph);
@@ -1126,9 +1135,9 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(configFileNames: ReadonlyArray<string>): string[] | undefined {
+        function getFilesToClean(): string[] | undefined {
             // Get the same graph for cleaning we'd use for building
-            const graph = getBuildGraph(configFileNames);
+            const graph = getGlobalDependencyGraph();
             if (graph === undefined) return undefined;
 
             const filesToDelete: string[] = [];
@@ -1149,7 +1158,7 @@ namespace ts {
         }
 
         function cleanAllProjects() {
-            const filesToDelete = getFilesToClean(rootNames);
+            const filesToDelete = getFilesToClean();
             if (filesToDelete === undefined) {
                 reportStatus(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
                 return ExitStatus.DiagnosticsPresent_OutputsSkipped;
