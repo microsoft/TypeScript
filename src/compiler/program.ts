@@ -250,7 +250,7 @@ namespace ts {
         Blue = "\u001b[94m",
         Cyan = "\u001b[96m"
     }
-    const gutterStyleSequence = "\u001b[30;47m";
+    const gutterStyleSequence = "\u001b[7m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
