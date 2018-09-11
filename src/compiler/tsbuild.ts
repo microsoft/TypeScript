@@ -335,6 +335,22 @@ namespace ts {
     export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
     }
 
+    export interface SolutionBuilder {
+        buildAllProjects(): ExitStatus;
+        cleanAllProjects(): ExitStatus;
+
+        /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
+        /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
+        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph | undefined;
+
+        /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
+        /*@internal*/ buildInvalidatedProject(): void;
+
+        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
+
+        /*@internal*/ startWatching(): void;
+    }
+
     /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
      */
@@ -373,7 +389,7 @@ namespace ts {
      * TODO: use SolutionBuilderWithWatchHost => watchedSolution
      *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions) {
+    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -405,7 +421,6 @@ namespace ts {
 
         return {
             buildAllProjects,
-            getUpToDateStatus,
             getUpToDateStatusOfFile,
             cleanAllProjects,
             resetBuildContext,
