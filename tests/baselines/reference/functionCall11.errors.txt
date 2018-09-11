@@ -10,6 +10,7 @@ tests/cases/compiler/functionCall11.ts(6,1): error TS2554: Expected 1-2 argument
     foo();
     ~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/functionCall11.ts:1:14: An argument for 'a' was not provided.
     foo(1, 'bar');
         ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.

@@ -3708,6 +3708,14 @@
         "category": "Message",
         "code": 6209
     },
+    "An argument for '{0}' was not provided.": {
+        "category": "Message",
+        "code": 6210
+    },
+    "An argument matching this binding pattern was not provided.": {
+        "category": "Message",
+        "code": 6211
+    },
 
     "Projects to reference": {
         "category": "Message",
