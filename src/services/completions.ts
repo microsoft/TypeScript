@@ -1268,10 +1268,10 @@ namespace ts.Completions {
             if (sourceFile.externalModuleIndicator) return true;
             // If already using commonjs, don't introduce ES6.
             if (sourceFile.commonJsModuleIndicator) return false;
-            // If some file is using ES6 modules, assume that it's OK to add more.
-            if (programContainsEs6Modules(program)) return true;
             // For JS, stay on the safe side.
             if (isUncheckedFile) return false;
+            // If some file is using ES6 modules, assume that it's OK to add more.
+            if (programContainsEs6Modules(program)) return true;
             // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
             return compilerOptionsIndicateEs6Modules(program.getCompilerOptions());
         }
