@@ -218,8 +218,31 @@ namespace ts {
         return builder.buildAllProjects();
     }
 
+    function addCache<T>(func: (arg: string) => T) {
+        const cache = createMap<T>();
+        return (arg: string) => {
+            let result = cache.get(arg);
+            if (result !== undefined) {
+                return result;
+            }
+
+            result = func(arg);
+            cache.set(arg, result);
+            return result;
+        };
+    }
+
+    function addCachesToHost(host: CompilerHost) {
+        host.fileExists = addCache(host.fileExists);
+
+        if (host.directoryExists !== undefined) {
+            host.directoryExists = addCache(host.directoryExists);
+        }
+    }
+
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
+        addCachesToHost(host);
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
