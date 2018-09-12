@@ -187,6 +187,22 @@ export class someClass2 { }`);
                     }
                 });
 
+                it("non local change does not start build of referencing projects", () => {
+                    const host = createSolutionInWatchMode(allFiles);
+                    const outputFileStamps = getOutputFileStamps(host);
+                    host.writeFile(core[1].path, `${core[1].content}
+function foo() { }`);
+                    host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                    const changedCore = getOutputFileStamps(host);
+                    verifyChangedFiles(changedCore, outputFileStamps, [
+                        ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
+                        ...getOutputFileNames(SubProject.core, "index"),
+                    ]);
+                    host.checkTimeoutQueueLength(0);
+                    checkOutputErrorsIncremental(host, emptyArray);
+                    verifyWatches(host);
+                });
+
                 it("builds when new file is added, and its subsequent updates", () => {
                     const additinalFiles: ReadonlyArray<[SubProject, string]> = [[SubProject.core, newFileWithoutExtension]];
                     const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
