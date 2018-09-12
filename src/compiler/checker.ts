@@ -19453,7 +19453,10 @@ namespace ts {
                         checkCandidate = candidate;
                     }
                     if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                        candidateForArgumentError = checkCandidate;
+                        // Give preference to error candidates that have no rest parameters (as they are more specific)
+                        if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
+                            candidateForArgumentError = checkCandidate;
+                        }
                         continue;
                     }
                     if (excludeArgument) {
@@ -19466,7 +19469,10 @@ namespace ts {
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJavaScriptFile(candidate.declaration));
                         }
                         if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                            candidateForArgumentError = checkCandidate;
+                            // Give preference to error candidates that have no rest parameters (as they are more specific)
+                            if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
+                                candidateForArgumentError = checkCandidate;
+                            }
                             continue;
                         }
                     }
