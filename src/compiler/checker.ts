@@ -15809,30 +15809,27 @@ namespace ts {
         }
 
         function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
+            const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
-
                 // If this is a function in a JS file, it might be a class method.
-                // Check if it's the RHS of a x.prototype.y = function [name]() { .... }
-                if (container.kind === SyntaxKind.FunctionExpression &&
-                    container.parent.kind === SyntaxKind.BinaryExpression &&
-                    getAssignmentDeclarationKind(container.parent as BinaryExpression) === AssignmentDeclarationKind.PrototypeProperty) {
-                    // Get the 'x' of 'x.prototype.y = f' (here, 'f' is 'container')
-                    const className = (((container.parent as BinaryExpression)   // x.prototype.y = f
-                        .left as PropertyAccessExpression)       // x.prototype.y
-                        .expression as PropertyAccessExpression) // x.prototype
-                        .expression;                             // x
+                const className = getClassNameFromPrototypeMethod(container);
+                if (isInJS && className) {
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
-                        return getFlowTypeOfReference(node, getInferredClassType(classSymbol));
+                        const classType = getJavascriptClassType(classSymbol);
+                        if (classType) {
+                            return getFlowTypeOfReference(node, classType);
+                        }
                     }
                 }
                 // Check if it's a constructor definition, can be either a variable decl or function decl
                 // i.e.
                 //   * /** @constructor */ function [name]() { ... }
                 //   * /** @constructor */ var x = function() { ... }
-                else if ((container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
+                else if (isInJS &&
+                         (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
                     const classType = getJavascriptClassType(container.symbol);
                     if (classType) {
@@ -15852,11 +15849,39 @@ namespace ts {
                 return getFlowTypeOfReference(node, type);
             }
 
-            if (isInJSFile(node)) {
+            if (isInJS) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
                 }
+            }
+        }
+
+        function getClassNameFromPrototypeMethod(container: Node) {
+            // Check if it's the RHS of a x.prototype.y = function [name]() { .... }
+            if (container.kind === SyntaxKind.FunctionExpression &&
+                isBinaryExpression(container.parent) &&
+                getAssignmentDeclarationKind(container.parent) === AssignmentDeclarationKind.PrototypeProperty) {
+                // Get the 'x' of 'x.prototype.y = container'
+                return ((container.parent   // x.prototype.y = container
+                    .left as PropertyAccessExpression)       // x.prototype.y
+                    .expression as PropertyAccessExpression) // x.prototype
+                    .expression;                             // x
+            }
+            // x.prototype = { method() { } }
+            else if (container.kind === SyntaxKind.MethodDeclaration &&
+                container.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                isBinaryExpression(container.parent.parent) &&
+                getAssignmentDeclarationKind(container.parent.parent) === AssignmentDeclarationKind.Prototype) {
+                return (container.parent.parent.left as PropertyAccessExpression).expression;
+            }
+            // x.prototype = { method: function() { } }
+            else if (container.kind === SyntaxKind.FunctionExpression &&
+                container.parent.kind === SyntaxKind.PropertyAssignment &&
+                container.parent.parent.kind === SyntaxKind.ObjectLiteralExpression &&
+                isBinaryExpression(container.parent.parent.parent) &&
+                getAssignmentDeclarationKind(container.parent.parent.parent) === AssignmentDeclarationKind.Prototype) {
+                return (container.parent.parent.parent.left as PropertyAccessExpression).expression;
             }
         }
 
