@@ -1,14 +1,21 @@
 namespace ts {
-    export function checkResolvedModule(expected: ResolvedModuleFull | undefined, actual: ResolvedModuleFull): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
-                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+    export function checkResolvedModule(actual: ResolvedModuleFull | undefined, expected: ResolvedModuleFull | undefined): boolean {
+        if (!expected) {
+            if (actual) {
+                assert.fail(actual, expected, "expected resolved module to be undefined");
+                return false;
             }
             return true;
         }
-        return false;
+        else if (!actual) {
+            assert.fail(actual, expected, "expected resolved module to be defined");
+            return false;
+        }
+
+        assert.isTrue(actual.resolvedFileName === expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
+        assert.isTrue(actual.extension === expected.extension, `'ext': expected '${actual.extension}' to be equal to '${expected.extension}'`);
+        assert.isTrue(actual.isExternalLibraryImport === expected.isExternalLibraryImport, `'isExternalLibraryImport': expected '${actual.isExternalLibraryImport}' to be equal to '${expected.isExternalLibraryImport}'`);
+        return true;
     }
 
     export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
@@ -76,7 +83,7 @@ namespace ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTypeScriptExtensions) {
+            for (const ext of supportedTypescriptExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -89,7 +96,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTypeScriptExtensions) {
+                for (const e of supportedTypescriptExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -130,7 +137,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTypescriptExtensions.length);
             }
         }
 
@@ -396,8 +403,12 @@ namespace ts {
         function testPreserveSymlinks(preserveSymlinks: boolean) {
             it(`preserveSymlinks: ${preserveSymlinks}`, () => {
                 const realFileName = "/linked/index.d.ts";
-                const symlinkFileName = "/app/node_modulex/linked/index.d.ts";
-                const host = createModuleResolutionHost(/*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] });
+                const symlinkFileName = "/app/node_modules/linked/index.d.ts";
+                const host = createModuleResolutionHost(
+                    /*hasDirectoryExists*/ true,
+                    { name: realFileName, symlinks: [symlinkFileName] },
+                    { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
+                );
                 const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
                 const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));

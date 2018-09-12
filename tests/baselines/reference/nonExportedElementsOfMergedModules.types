@@ -4,7 +4,7 @@ module One {
 
     enum A { X }
 >A : A
->X : A
+>X : A.X
 
     module B {
 >B : typeof B
@@ -19,7 +19,7 @@ module One {
 
     enum A { Y }
 >A : A
->Y : A
+>Y : A.Y
 
     module B {
 >B : typeof B

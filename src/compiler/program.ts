@@ -250,7 +250,7 @@ namespace ts {
         Blue = "\u001b[94m",
         Cyan = "\u001b[96m"
     }
-    const gutterStyleSequence = "\u001b[30;47m";
+    const gutterStyleSequence = "\u001b[7m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
@@ -1178,7 +1178,8 @@ namespace ts {
                     }
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
-                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, x => x.fileName);
+                    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+                    const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
                     const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath);
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
@@ -1437,9 +1438,9 @@ namespace ts {
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
-                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                    sourceFile.additionalSyntacticDiagnostics = getJavascriptSyntacticDiagnosticsForFile(sourceFile);
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1537,7 +1538,7 @@ namespace ts {
             return true;
         }
 
-        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
+        function getJavascriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
                 let parent: Node = sourceFile;
@@ -1800,7 +1801,7 @@ namespace ts {
                 return;
             }
 
-            const isJavaScriptFile = isSourceFileJavaScript(file);
+            const isJavaScriptFile = isSourceFileJS(file);
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
@@ -2294,7 +2295,7 @@ namespace ts {
                         && i < file.imports.length
                         && !elideImport
                         && !(isJsFile && !options.allowJs)
-                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
+                        && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2549,9 +2550,9 @@ namespace ts {
                 if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs) {
                     createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
                 }
-                // Any emit other than common js is error
-                else if (getEmitModuleKind(options) !== ModuleKind.CommonJS) {
-                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs, "resolveJsonModule", "module");
+                // Any emit other than common js, amd, es2015 or esnext is error
+                else if (!hasJsonModuleEmitEnabled(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_can_only_be_specified_when_module_code_generation_is_commonjs_amd_es2015_or_esNext, "resolveJsonModule", "module");
                 }
             }
 

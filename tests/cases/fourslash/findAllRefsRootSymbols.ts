@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-////interface I { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: {}; }
-////interface J { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: {}; }
+////interface I { [|{| "isDefinition": true |}x|]: {}; }
+////interface J { [|{| "isDefinition": true |}x|]: {}; }
 ////declare const o: (I | J) & { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: string };
 ////o.[|x|];
 

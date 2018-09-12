@@ -4,6 +4,10 @@ node_modules/uglify-js/lib/ast.js(207,23): error TS2554: Expected 0 arguments, b
 node_modules/uglify-js/lib/ast.js(328,33): error TS2339: Property 'transform' does not exist on type 'string'.
 node_modules/uglify-js/lib/ast.js(869,5): error TS2322: Type '{ _visit: (node: any, descend: any) => any; parent: (n: any) => any; push: typeof push; pop: typeof pop; self: () => any; find_parent: (type: any) => any; has_directive: (type: any) => any; loopcontrol_target: (node: any) => any; in_boolean_context: () => boolean | undefined; }' is not assignable to type 'TreeWalker'.
   Object literal may only specify known properties, but '_visit' does not exist in type 'TreeWalker'. Did you mean to write 'visit'?
+node_modules/uglify-js/lib/ast.js(870,14): error TS2339: Property 'push' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(877,14): error TS2339: Property 'pop' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(932,25): error TS2339: Property 'self' does not exist on type 'TreeWalker'.
+node_modules/uglify-js/lib/ast.js(933,37): error TS2339: Property 'parent' does not exist on type 'TreeWalker'.
 node_modules/uglify-js/lib/compress.js(167,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(500,26): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(817,18): error TS2554: Expected 0 arguments, but got 1.

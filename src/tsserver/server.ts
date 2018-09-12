@@ -891,7 +891,7 @@ namespace ts.server {
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJavaScriptModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJavascriptModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };
@@ -924,7 +924,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {
