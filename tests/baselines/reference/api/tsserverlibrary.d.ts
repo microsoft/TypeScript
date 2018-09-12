@@ -536,6 +536,7 @@ declare namespace ts {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -632,6 +633,7 @@ declare namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
     }
@@ -668,6 +670,7 @@ declare namespace ts {
         _functionLikeDeclarationBrand: any;
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
@@ -5098,6 +5101,11 @@ declare namespace ts {
     }
     interface RenameInfo {
         canRename: boolean;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
@@ -6419,6 +6427,11 @@ declare namespace ts.server.protocol {
          * True if item can be renamed.
          */
         canRename: boolean;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         /**
          * Error message if item can not be renamed.
          */

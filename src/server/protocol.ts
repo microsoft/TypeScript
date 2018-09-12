@@ -1094,6 +1094,12 @@ namespace ts.server.protocol {
         canRename: boolean;
 
         /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
+
+        /**
          * Error message if item can not be renamed.
          */
         localizedErrorMessage?: string;

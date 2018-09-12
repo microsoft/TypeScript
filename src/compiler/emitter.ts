@@ -1780,7 +1780,9 @@ namespace ts {
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
-            if (!isJsonSourceFile(currentSourceFile)) {
+            // Emit semicolon in non json files
+            // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
+            if (!isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
                 writeSemicolon();
             }
         }
@@ -2816,7 +2818,8 @@ namespace ts {
             const parameter = singleOrUndefined(parameters);
             return parameter
                 && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
-                && !(isArrowFunction(parentNode) && parentNode.type) // arrow function may not have return type annotation
+                && isArrowFunction(parentNode)      // only arrow functions may have simple arrow head
+                && !parentNode.type                 // arrow function may not have return type annotation
                 && !some(parentNode.decorators)     // parent may not have decorators
                 && !some(parentNode.modifiers)      // parent may not have modifiers
                 && !some(parentNode.typeParameters) // parent may not have type parameters

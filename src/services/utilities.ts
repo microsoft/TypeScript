@@ -88,7 +88,7 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment || node.parent.kind === SyntaxKind.ExternalModuleReference) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -755,7 +755,7 @@ namespace ts {
         return result;
 
         function find(n: Node): Node | undefined {
-            if (isNonWhitespaceToken(n)) {
+            if (isNonWhitespaceToken(n) && n.kind !== SyntaxKind.EndOfFileToken) {
                 return n;
             }
 
@@ -786,16 +786,14 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.EndOfFileToken || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
-                return candidate && findRightmostToken(candidate, sourceFile);
-            }
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+            return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
 
@@ -1048,7 +1046,7 @@ namespace ts {
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth(sourceFile) !== 0;
+        return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {
@@ -1165,7 +1163,7 @@ namespace ts {
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
-        return createTextRange(node.getStart(sourceFile), node.end);
+        return createRange(node.getStart(sourceFile), node.end);
     }
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
@@ -1173,7 +1171,7 @@ namespace ts {
     }
 
     export function createTextRangeFromSpan(span: TextSpan): TextRange {
-        return createTextRange(span.start, span.start + span.length);
+        return createRange(span.start, span.start + span.length);
     }
 
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {

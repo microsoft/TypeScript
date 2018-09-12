@@ -151,9 +151,39 @@ namespace ts.Completions.PathCompletions {
                     }
                 }
             }
+
+            // check for a version redirect
+            const packageJsonPath = findPackageJson(baseDirectory, host);
+            if (packageJsonPath) {
+                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+                const typesVersions = (packageJson as any).typesVersions;
+                if (typeof typesVersions === "object") {
+                    const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
+                    const versionPaths = versionResult && versionResult.paths;
+                    const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
+                    if (versionPaths) {
+                        addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
+                    }
+                }
+            }
         }
 
         return result;
+    }
+
+    function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: ReadonlyArray<string>, paths: MapLike<string[]>, host: LanguageServiceHost) {
+        for (const path in paths) {
+            if (!hasProperty(paths, path)) continue;
+            const patterns = paths[path];
+            if (patterns) {
+                for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
+                    // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
+                    if (!result.some(entry => entry.name === name)) {
+                        result.push(nameAndKind(name, kind));
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -171,19 +201,10 @@ namespace ts.Completions.PathCompletions {
         const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
-            const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-            getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
-
-            for (const path in paths!) {
-                const patterns = paths![path];
-                if (paths!.hasOwnProperty(path) && patterns) {
-                    for (const { name, kind } of getCompletionsForPathMapping(path, patterns, fragment, baseUrl, fileExtensions, host)) {
-                        // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                        if (!result.some(entry => entry.name === name)) {
-                            result.push(nameAndKind(name, kind));
-                        }
-                    }
-                }
+            const absolute = normalizePath(combinePaths(projectDir, baseUrl));
+            getCompletionEntriesForDirectoryFragment(fragment, absolute, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
+            if (paths) {
+                addCompletionEntriesFromPaths(result, fragment, absolute, fileExtensions, paths, host);
             }
         }
 
@@ -329,7 +350,7 @@ namespace ts.Completions.PathCompletions {
         const seen = createMap<true>();
         if (options.types) {
             for (const typesName of options.types) {
-                const moduleName = getUnmangledNameForScopedPackage(typesName);
+                const moduleName = unmangleScopedPackageName(typesName);
                 pushResult(moduleName);
             }
         }
@@ -363,7 +384,7 @@ namespace ts.Completions.PathCompletions {
                     for (let typeDirectory of directories) {
                         typeDirectory = normalizePath(typeDirectory);
                         const directoryName = getBaseFileName(typeDirectory);
-                        const moduleName = getUnmangledNameForScopedPackage(directoryName);
+                        const moduleName = unmangleScopedPackageName(directoryName);
                         pushResult(moduleName);
                     }
                 }
@@ -388,6 +409,18 @@ namespace ts.Completions.PathCompletions {
             paths.push(currentConfigPath);
         });
         return paths;
+    }
+
+    function findPackageJson(directory: string, host: LanguageServiceHost): string | undefined {
+        let packageJson: string | undefined;
+        forEachAncestorDirectory(directory, ancestor => {
+            if (ancestor === "node_modules") return true;
+            packageJson = findConfigFile(ancestor, (f) => tryFileExists(host, f), "package.json");
+            if (packageJson) {
+                return true; // break out
+            }
+        });
+        return packageJson;
     }
 
     function enumerateNodeModulesVisibleToScript(host: LanguageServiceHost, scriptPath: string): ReadonlyArray<string> {

@@ -14,7 +14,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
@@ -920,6 +919,10 @@ namespace ts {
 
     export function isEnumConst(node: EnumDeclaration): boolean {
         return !!(getCombinedModifierFlags(node) & ModifierFlags.Const);
+    }
+
+    export function isDeclarationReadonly(declaration: Declaration): boolean {
+        return !!(getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration));
     }
 
     export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
@@ -2380,29 +2383,33 @@ namespace ts {
     }
 
     // See GH#16030
-    export function isAnyDeclarationName(name: Node): boolean {
+    export function getDeclarationFromName(name: Node): Declaration | undefined {
+        const parent = name.parent;
         switch (name.kind) {
-            case SyntaxKind.Identifier:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral: {
-                const parent = name.parent;
+            case SyntaxKind.NumericLiteral:
+                if (isComputedPropertyName(parent)) return parent.parent;
+                // falls through
+
+            case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
-                    return parent.name === name;
+                    return parent.name === name ? parent : undefined;
                 }
-                else if (isQualifiedName(name.parent)) {
-                    const tag = name.parent.parent;
-                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                else if (isQualifiedName(parent)) {
+                    const tag = parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === parent ? tag : undefined;
                 }
                 else {
-                    const binExp = name.parent.parent;
+                    const binExp = parent.parent;
                     return isBinaryExpression(binExp) &&
                         getAssignmentDeclarationKind(binExp) !== AssignmentDeclarationKind.None &&
                         (binExp.left.symbol || binExp.symbol) &&
-                        getNameOfDeclaration(binExp) === name;
+                        getNameOfDeclaration(binExp) === name
+                        ? binExp
+                        : undefined;
                 }
-            }
             default:
-                return false;
+                return undefined;
         }
     }
 
@@ -3966,6 +3973,27 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
+        try {
+            const jsonText = host.readFile(path);
+            if (!jsonText) return {};
+            const result = parseConfigFileTextToJson(path, jsonText);
+            if (result.error) {
+                return {};
+            }
+            return result.config;
+        }
+        catch (e) {
+            // gracefully handle if readFile fails or returns not JSON
+            return {};
+        }
+    }
+
+    export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
+        // if host does not support 'directoryExists' assume that directory will exist
+        return !host.directoryExists || host.directoryExists(directoryName);
+    }
+
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions, getNewLine?: () => string): string {
@@ -4056,7 +4084,8 @@ namespace ts {
      * @param pos The start position.
      * @param end The end position.
      */
-    export function createRange(pos: number, end: number): TextRange {
+    export function createRange(pos: number, end: number = pos): TextRange {
+        Debug.assert(end >= pos || end === -1);
         return { pos, end };
     }
 
@@ -4518,12 +4547,6 @@ namespace ts {
         }
 
         return { start, length };
-    }
-
-    /* @internal */
-    export function createTextRange(pos: number, end: number = pos): TextRange {
-        Debug.assert(end >= pos);
-        return { pos, end };
     }
 
     export function createTextSpanFromBounds(start: number, end: number) {
@@ -7034,6 +7057,18 @@ namespace ts {
         return moduleResolution;
     }
 
+    export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
+        switch (getEmitModuleKind(options)) {
+            case ModuleKind.CommonJS:
+            case ModuleKind.AMD:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function unreachableCodeIsError(options: CompilerOptions): boolean {
         return options.allowUnreachableCode === false;
     }
@@ -7636,6 +7671,15 @@ namespace ts {
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;
+
+    export function regExpEscape(text: string) {
+        return text.replace(reservedCharacterPattern, escapeRegExpCharacter);
+    }
+
+    function escapeRegExpCharacter(match: string) {
+        return "\\" + match;
+    }
+
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
     export function hasExtension(fileName: string): boolean {
