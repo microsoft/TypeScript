@@ -82,7 +82,7 @@ namespace ts.codefix {
         }
 
         for (const statement of returnStatements) {
-            forEachChild(statement, function visit(node: Node) {
+            forEachChild(statement, function visit(node) {
                 if (isCallExpression(node)) {
                     startTransformation(node, statement);
                 }
@@ -179,7 +179,7 @@ namespace ts.codefix {
                 // Note - the choice of the last call signature is arbitrary
                 if (lastCallSignature && lastCallSignature.parameters.length && !synthNamesMap.has(symbolIdString)) {
                     const name = lastCallSignature.parameters[0].name;
-                    const synthName = getNewNameIfConflict(createIdentifier(lastCallSignature.parameters[0].name), allVarNames);
+                    const synthName = getNewNameIfConflict(createIdentifier(name), allVarNames);
                     synthNamesMap.set(symbolIdString, synthName);
                     allVarNames.push({ identifier: synthName.identifier, symbol, originalName: name });
                 }
@@ -404,8 +404,13 @@ namespace ts.codefix {
                 // Arrow functions with block bodies { } will enter this control flow
                 if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
                     let refactoredStmts: Statement[] = [];
+                    let seenReturnStatement = false;
 
                     for (const statement of func.body.statements) {
+                        if (isReturnStatement(statement)) {
+                            seenReturnStatement = true;
+                        }
+
                         if (getReturnStatementsWithPromiseHandlers(statement).length) {
                             refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
@@ -415,7 +420,7 @@ namespace ts.codefix {
                     }
 
                     return shouldReturn ? getSynthesizedDeepClones(createNodeArray(refactoredStmts)) :
-                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers);
+                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers, seenReturnStatement);
                 }
                 else {
                     const funcBody = (<ArrowFunction>func).body;
@@ -443,12 +448,12 @@ namespace ts.codefix {
     }
 
     function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
-        const callSignatures = type && checker.getSignaturesOfType(type, SignatureKind.Call);
+        const callSignatures = checker.getSignaturesOfType(type, SignatureKind.Call);
         return callSignatures && callSignatures[callSignatures.length - 1];
     }
 
 
-    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[]): NodeArray<Statement> {
+    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[], seenReturnStatement: boolean): NodeArray<Statement> {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
@@ -460,6 +465,12 @@ namespace ts.codefix {
             else {
                 ret.push(getSynthesizedDeepClone(stmt));
             }
+        }
+
+        // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
+        if (!seenReturnStatement) {
+            ret.push(createVariableStatement(/*modifiers*/ undefined,
+                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
         }
 
         return createNodeArray(ret);
