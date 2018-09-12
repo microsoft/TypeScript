@@ -218,13 +218,24 @@ namespace ts {
         return builder.buildAllProjects();
     }
 
-    function addCache<T>(func: (arg: string) => T) {
+    function cachePerfMarkNames(cacheName: string) {
+        return {
+            misses: `${cacheName} cache misses`,
+            hits: `${cacheName} cache hits`,
+        };
+    }
+
+    function addCache<T>(func: (arg: string) => T, perfName: string) {
         const cache = createMap<T>();
+        const perfNames = cachePerfMarkNames(perfName);
         return (arg: string) => {
             let result = cache.get(arg);
             if (result !== undefined) {
+                performance.mark(perfNames.hits);
                 return result;
             }
+
+            performance.mark(perfNames.misses);
 
             result = func(arg);
             cache.set(arg, result);
@@ -233,10 +244,10 @@ namespace ts {
     }
 
     function addCachesToHost(host: CompilerHost) {
-        host.fileExists = addCache(host.fileExists);
+        host.fileExists = addCache(host.fileExists, "fileExists");
 
         if (host.directoryExists !== undefined) {
-            host.directoryExists = addCache(host.directoryExists);
+            host.directoryExists = addCache(host.directoryExists, "directoryExists");
         }
     }
 
@@ -320,6 +331,15 @@ namespace ts {
             const emitTime = performance.getDuration("Emit");
             if (compilerOptions.extendedDiagnostics) {
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
+
+                forEach([
+                    "fileExists",
+                    "directoryExists"
+                ], (cacheName: string) => {
+                    const fileExistCacheNames = cachePerfMarkNames(cacheName);
+                    reportCountStatistic(`${fileExistCacheNames.hits} count`, performance.getCount(fileExistCacheNames.hits));
+                    reportCountStatistic(`${fileExistCacheNames.misses} count`, performance.getCount(fileExistCacheNames.misses));
+                });
             }
             else {
                 // Individual component times.
