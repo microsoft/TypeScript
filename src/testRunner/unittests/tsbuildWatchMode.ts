@@ -351,6 +351,33 @@ function myFunc() { return 100; }`);
             }
         });
 
+        it("reports errors in all projects on incremental compile", () => {
+            const host = createSolutionInWatchMode(allFiles);
+            const outputFileStamps = getOutputFileStamps(host);
+
+            host.writeFile(logic[1].path, `${logic[1].content}
+let y: string = 10;`);
+
+            host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+            const changedLogic = getOutputFileStamps(host);
+            verifyChangedFiles(changedLogic, outputFileStamps, emptyArray);
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsIncremental(host, [
+                `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
+            ]);
+
+            host.writeFile(core[1].path, `${core[1].content}
+let x: string = 10;`);
+
+            host.checkTimeoutQueueLengthAndRun(1); // Builds core
+            const changedCore = getOutputFileStamps(host);
+            verifyChangedFiles(changedCore, changedLogic, emptyArray);
+            host.checkTimeoutQueueLength(0);
+            checkOutputErrorsIncremental(host, [
+                `sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.\n`,
+                `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
+            ]);
+        });
         // TODO: write tests reporting errors but that will have more involved work since file
     });
 }

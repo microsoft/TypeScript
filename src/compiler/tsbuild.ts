@@ -394,9 +394,9 @@ namespace ts {
         let globalDependencyGraph: DependencyGraph | undefined;
 
         // Watch state
-        // TODO(shkamat): this should be really be diagnostics but thats for later time
-        const diagnostics = createFileMap<number>(toPath);
+        const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
         const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
+        const projectErrorsReported = createFileMap<true>(toPath);
         const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
         let nextProjectToBuild = 0;
         let timerToBuildInvalidatedProject: any;
@@ -438,6 +438,7 @@ namespace ts {
 
             diagnostics.clear();
             projectPendingBuild.clear();
+            projectErrorsReported.clear();
             invalidatedProjectQueue.length = 0;
             nextProjectToBuild = 0;
             if (timerToBuildInvalidatedProject) {
@@ -472,18 +473,6 @@ namespace ts {
             host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
         }
 
-        function storeErrors(proj: ResolvedConfigFileName, diagnostics: ReadonlyArray<Diagnostic>) {
-            if (options.watch) {
-                storeErrorSummary(proj, diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
-            }
-        }
-
-        function storeErrorSummary(proj: ResolvedConfigFileName, errorCount: number) {
-            if (options.watch) {
-                diagnostics.setValue(proj, errorCount);
-            }
-        }
-
         function reportWatchStatus(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             if (hostWithWatch.onWatchStatusChange) {
                 hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), { preserveWatchOutput: options.preserveWatchOutput });
@@ -509,7 +498,7 @@ namespace ts {
         }
 
         function watchConfigFile(resolved: ResolvedConfigFileName) {
-            if (!allWatchedConfigFiles.hasKey(resolved)) {
+            if (options.watch && !allWatchedConfigFiles.hasKey(resolved)) {
                 allWatchedConfigFiles.setValue(resolved, hostWithWatch.watchFile(resolved, () => {
                     invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
                 }));
@@ -517,6 +506,7 @@ namespace ts {
         }
 
         function watchWildCardDirectories(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (!options.watch) return;
             updateWatchingWildcardDirectories(
                 getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolved),
                 createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
@@ -540,6 +530,7 @@ namespace ts {
         }
 
         function watchInputFiles(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (!options.watch) return;
             mutateMap(
                 getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolved),
                 arrayToMap(parsed.fileNames, toPath),
@@ -848,6 +839,7 @@ namespace ts {
             timerToBuildInvalidatedProject = undefined;
             if (reportFileChangeDetected) {
                 reportFileChangeDetected = false;
+                projectErrorsReported.clear();
                 reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
             }
             const buildProject = getNextInvalidatedProject();
@@ -866,15 +858,19 @@ namespace ts {
 
         function reportErrorSummary() {
             if (options.watch) {
+                // Report errors from the other projects
+                getGlobalDependencyGraph().buildQueue.forEach(project => {
+                    if (!projectErrorsReported.hasKey(project)) {
+                        reportErrors(diagnostics.getValue(project) || emptyArray);
+                    }
+                });
                 let totalErrors = 0;
-                diagnostics.forEach(singleProjectErrors => totalErrors += singleProjectErrors);
+                diagnostics.forEach(singleProjectErrors => totalErrors += singleProjectErrors.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
                 reportWatchStatus(totalErrors === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, totalErrors);
             }
         }
 
         function buildSingleInvalidatedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
-            // TODO:: handle this in better way later
-
             const proj = parseConfigFile(resolved);
             if (!proj) {
                 reportParseConfigFileDiagnostic(resolved);
@@ -968,10 +964,6 @@ namespace ts {
             }
         }
 
-        function reportParseConfigFileDiagnostic(proj: ResolvedConfigFileName) {
-            host.reportDiagnostic(configFileCache.getValue(proj) as Diagnostic);
-            storeErrorSummary(proj, 1);
-        }
 
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (options.dry) {
@@ -1013,7 +1005,7 @@ namespace ts {
                 ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
                 resultFlags |= BuildResultFlags.SyntaxErrors;
-                reportErrors(proj, syntaxDiagnostics);
+                reportAndStoreErrors(proj, syntaxDiagnostics);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
                 return resultFlags;
             }
@@ -1023,7 +1015,7 @@ namespace ts {
                 const declDiagnostics = program.getDeclarationDiagnostics();
                 if (declDiagnostics.length) {
                     resultFlags |= BuildResultFlags.DeclarationEmitErrors;
-                    reportErrors(proj, declDiagnostics);
+                    reportAndStoreErrors(proj, declDiagnostics);
                     projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
                     return resultFlags;
                 }
@@ -1033,7 +1025,7 @@ namespace ts {
             const semanticDiagnostics = program.getSemanticDiagnostics();
             if (semanticDiagnostics.length) {
                 resultFlags |= BuildResultFlags.TypeErrors;
-                reportErrors(proj, semanticDiagnostics);
+                reportAndStoreErrors(proj, semanticDiagnostics);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
                 return resultFlags;
             }
@@ -1154,7 +1146,7 @@ namespace ts {
 
                 const projName = proj.options.configFilePath!;
                 if (status.type === UpToDateStatusType.UpToDate && !options.force) {
-                    reportErrors(next, errors);
+                    reportAndStoreErrors(next, errors);
                     // Up to date, skip
                     if (defaultOptions.dry) {
                         // In a dry build, inform the user of this fact
@@ -1164,20 +1156,20 @@ namespace ts {
                 }
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !options.force) {
-                    reportErrors(next, errors);
+                    reportAndStoreErrors(next, errors);
                     // Fake build
                     updateOutputTimestamps(proj);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    reportErrors(next, errors);
+                    reportAndStoreErrors(next, errors);
                     if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.ContainerOnly) {
-                    reportErrors(next, errors);
+                    reportAndStoreErrors(next, errors);
                     // Do nothing
                     continue;
                 }
@@ -1189,9 +1181,20 @@ namespace ts {
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
-        function reportErrors(proj: ResolvedConfigFileName, errors: ReadonlyArray<Diagnostic>) {
+        function reportParseConfigFileDiagnostic(proj: ResolvedConfigFileName) {
+            reportAndStoreErrors(proj, [configFileCache.getValue(proj) as Diagnostic]);
+        }
+
+        function reportAndStoreErrors(proj: ResolvedConfigFileName, errors: ReadonlyArray<Diagnostic>) {
+            reportErrors(errors);
+            if (options.watch) {
+                projectErrorsReported.setValue(proj, true);
+                diagnostics.setValue(proj, errors);
+            }
+        }
+
+        function reportErrors(errors: ReadonlyArray<Diagnostic>) {
             errors.forEach(err => host.reportDiagnostic(err));
-            storeErrors(proj, errors);
         }
 
         /**
