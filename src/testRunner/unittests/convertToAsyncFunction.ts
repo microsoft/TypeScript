@@ -1200,6 +1200,15 @@ function [#|f|]() {
 } 
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPattern", `
+function [#|f|]():Promise<void> {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
