@@ -21,8 +21,8 @@ namespace vpath {
     export import relative = ts.getRelativePathFromDirectory;
     export import beneath = ts.containsPath;
     export import changeExtension = ts.changeAnyExtension;
-    export import isTypeScript = ts.hasTypeScriptFileExtension;
-    export import isJavaScript = ts.hasJavaScriptFileExtension;
+    export import isTypeScript = ts.hasTypescriptFileExtension;
+    export import isJavaScript = ts.hasJavascriptFileExtension;
 
     const invalidRootComponentRegExp = /^(?!(\/|\/\/\w+\/|[a-zA-Z]:\/?|)$)/;
     const invalidNavigableComponentRegExp = /[:*?"<>|]/;
