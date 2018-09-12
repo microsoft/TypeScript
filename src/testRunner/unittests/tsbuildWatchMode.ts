@@ -95,7 +95,7 @@ namespace ts.tscWatch {
         const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
         const testProjectExpectedWatchedFiles = [core[0], core[1], core[2], ...logic, ...tests].map(f => f.path);
 
-        function createSolutionInWatchMode() {
+        function createSolutionInWatchMode(allFiles: ReadonlyArray<File>) {
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
             verifyWatches(host);
@@ -114,7 +114,7 @@ namespace ts.tscWatch {
         }
 
         it("creates solution in watch mode", () => {
-            createSolutionInWatchMode();
+            createSolutionInWatchMode(allFiles);
         });
 
         describe("validates the changes and watched files", () => {
@@ -124,82 +124,99 @@ namespace ts.tscWatch {
                 content: `export const newFileConst = 30;`
             };
 
-            function createSolutionInWatchModeToVerifyChanges(additionalFiles?: ReadonlyArray<[SubProject, string]>) {
-                const host = createSolutionInWatchMode();
-                return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
+            function verifyProjectChanges(allFiles: ReadonlyArray<File>) {
+                function createSolutionInWatchModeToVerifyChanges(additionalFiles?: ReadonlyArray<[SubProject, string]>) {
+                    const host = createSolutionInWatchMode(allFiles);
+                    return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
 
-                function verifyChangeWithFile(fileName: string, content: string) {
-                    const outputFileStamps = getOutputFileStamps(host, additionalFiles);
-                    host.writeFile(fileName, content);
-                    verifyChangeAfterTimeout(outputFileStamps);
+                    function verifyChangeWithFile(fileName: string, content: string) {
+                        const outputFileStamps = getOutputFileStamps(host, additionalFiles);
+                        host.writeFile(fileName, content);
+                        verifyChangeAfterTimeout(outputFileStamps);
+                    }
+
+                    function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
+                        host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                        const changedCore = getOutputFileStamps(host, additionalFiles);
+                        verifyChangedFiles(changedCore, outputFileStamps, [
+                            ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
+                            ...getOutputFileNames(SubProject.core, "index"),
+                            ...(additionalFiles ? getOutputFileNames(SubProject.core, newFileWithoutExtension) : emptyArray)
+                        ]);
+                        host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                        const changedLogic = getOutputFileStamps(host, additionalFiles);
+                        verifyChangedFiles(changedLogic, changedCore, [
+                            ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
+                        ]);
+                        host.checkTimeoutQueueLengthAndRun(1); // Builds tests
+                        const changedTests = getOutputFileStamps(host, additionalFiles);
+                        verifyChangedFiles(changedTests, changedLogic, [
+                            ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
+                        ]);
+                        host.checkTimeoutQueueLength(0);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyWatches();
+                    }
+
+                    function verifyWatches() {
+                        checkWatchedFiles(host, additionalFiles ? testProjectExpectedWatchedFiles.concat(newFile.path) : testProjectExpectedWatchedFiles);
+                        checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                        checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+                    }
                 }
 
-                function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
-                    host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                    const changedCore = getOutputFileStamps(host, additionalFiles);
-                    verifyChangedFiles(changedCore, outputFileStamps, [
-                        ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
-                        ...getOutputFileNames(SubProject.core, "index"),
-                        ...(additionalFiles ? getOutputFileNames(SubProject.core, newFileWithoutExtension) : emptyArray)
-                    ]);
-                    host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-                    const changedLogic = getOutputFileStamps(host, additionalFiles);
-                    verifyChangedFiles(changedLogic, changedCore, [
-                        ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
-                    ]);
-                    host.checkTimeoutQueueLengthAndRun(1); // Builds tests
-                    const changedTests = getOutputFileStamps(host, additionalFiles);
-                    verifyChangedFiles(changedTests, changedLogic, [
-                        ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
-                    ]);
-                    host.checkTimeoutQueueLength(0);
-                    checkOutputErrorsIncremental(host, emptyArray);
-                    verifyWatches();
-                }
-
-                function verifyWatches() {
-                    checkWatchedFiles(host, additionalFiles ? testProjectExpectedWatchedFiles.concat(newFile.path) : testProjectExpectedWatchedFiles);
-                    checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                    checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
-                }
-            }
-
-            it("change builds changes and reports found errors message", () => {
-                const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = createSolutionInWatchModeToVerifyChanges();
-                verifyChange(`${core[1].content}
+                it("change builds changes and reports found errors message", () => {
+                    const { host, verifyChangeWithFile, verifyChangeAfterTimeout } = createSolutionInWatchModeToVerifyChanges();
+                    verifyChange(`${core[1].content}
 export class someClass { }`);
 
-                // Another change requeues and builds it
-                verifyChange(core[1].content);
+                    // Another change requeues and builds it
+                    verifyChange(core[1].content);
 
-                // Two changes together report only single time message: File change detected. Starting incremental compilation...
-                const outputFileStamps = getOutputFileStamps(host);
-                const change1 = `${core[1].content}
+                    // Two changes together report only single time message: File change detected. Starting incremental compilation...
+                    const outputFileStamps = getOutputFileStamps(host);
+                    const change1 = `${core[1].content}
 export class someClass { }`;
-                host.writeFile(core[1].path, change1);
-                host.writeFile(core[1].path, `${change1}
+                    host.writeFile(core[1].path, change1);
+                    host.writeFile(core[1].path, `${change1}
 export class someClass2 { }`);
-                verifyChangeAfterTimeout(outputFileStamps);
+                    verifyChangeAfterTimeout(outputFileStamps);
 
-                function verifyChange(coreContent: string) {
-                    verifyChangeWithFile(core[1].path, coreContent);
-                }
+                    function verifyChange(coreContent: string) {
+                        verifyChangeWithFile(core[1].path, coreContent);
+                    }
+                });
+
+                it("builds when new file is added, and its subsequent updates", () => {
+                    const additinalFiles: ReadonlyArray<[SubProject, string]> = [[SubProject.core, newFileWithoutExtension]];
+                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
+                    verifyChange(newFile.content);
+
+                    // Another change requeues and builds it
+                    verifyChange(`${newFile.content}
+export class someClass2 { }`);
+
+                    function verifyChange(newFileContent: string) {
+                        verifyChangeWithFile(newFile.path, newFileContent);
+                    }
+                });
+            }
+
+            describe("with simple project reference graph", () => {
+                verifyProjectChanges(allFiles);
             });
 
-            it("builds when new file is added, and its subsequent updates", () => {
-                const additinalFiles: ReadonlyArray<[SubProject, string]> = [[SubProject.core, newFileWithoutExtension]];
-                const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges(additinalFiles);
-                verifyChange(newFile.content);
-
-                // Another change requeues and builds it
-                verifyChange(`${newFile.content}
-export class someClass2 { }`);
-
-                function verifyChange(newFileContent: string) {
-                    verifyChangeWithFile(newFile.path, newFileContent);
-                }
+            describe("with circular project reference", () => {
+                const [coreTsconfig, ...otherCoreFiles] = core;
+                const circularCoreConfig: File = {
+                    path: coreTsconfig.path,
+                    content: JSON.stringify({
+                        compilerOptions: { composite: true, declaration: true },
+                        references: [{ path: "../tests", circular: true }]
+                    })
+                };
+                verifyProjectChanges([libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests]);
             });
-
         });
 
         it("watches config files that are not present", () => {

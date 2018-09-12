@@ -61,6 +61,7 @@ namespace ts {
         OutOfDateWithUpstream,
         UpstreamOutOfDate,
         UpstreamBlocked,
+        ComputingUpstream,
 
         /**
          * Projects with no outputs (i.e. "solution" files)
@@ -76,6 +77,7 @@ namespace ts {
         | Status.OutOfDateWithUpstream
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked
+        | Status.ComputingUpstream
         | Status.ContainerOnly;
 
     export namespace Status {
@@ -143,6 +145,13 @@ namespace ts {
         export interface UpstreamBlocked {
             type: UpToDateStatusType.UpstreamBlocked;
             upstreamProjectName: string;
+        }
+
+        /**
+         *  Computing status of upstream projects referenced
+         */
+        export interface ComputingUpstream {
+            type: UpToDateStatusType.ComputingUpstream;
         }
 
         /**
@@ -689,10 +698,16 @@ namespace ts {
             let usesPrepend = false;
             let upstreamChangedProject: string | undefined;
             if (project.projectReferences) {
+                projectStatus.setValue(project.options.configFilePath as ResolvedConfigFileName, { type: UpToDateStatusType.ComputingUpstream });
                 for (const ref of project.projectReferences) {
                     usesPrepend = usesPrepend || !!(ref.prepend);
                     const resolvedRef = resolveProjectReferencePath(ref);
                     const refStatus = getUpToDateStatus(parseConfigFile(resolvedRef));
+
+                    // Its a circular reference ignore the status of this project
+                    if (refStatus.type === UpToDateStatusType.ComputingUpstream) {
+                        continue;
+                    }
 
                     // An upstream project is blocked
                     if (refStatus.type === UpToDateStatusType.Unbuildable) {
@@ -928,9 +943,10 @@ namespace ts {
                 // Circular
                 if (temporaryMarks.hasKey(projPath)) {
                     if (!inCircularContext) {
+                        // TODO:: Do we report this as error?
                         reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
-                        return;
                     }
+                    return;
                 }
 
                 temporaryMarks.setValue(projPath, true);
@@ -1263,6 +1279,8 @@ namespace ts {
                     status.reason);
             case UpToDateStatusType.ContainerOnly:
                 // Don't report status on "solution" projects
+            case UpToDateStatusType.ComputingUpstream:
+                // Should never leak from getUptoDateStatusWorker
                 break;
             default:
                 assertType<never>(status);
