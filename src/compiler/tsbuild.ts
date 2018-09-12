@@ -783,10 +783,7 @@ namespace ts {
                 diagnostics.removeKey(resolved);
             }
 
-            if (addProjToQueue(resolved, reloadLevel)) {
-                // TODO: instead of adding the dependent project to queue right away postpone this
-                queueBuildForDownstreamReferences(resolved);
-            }
+            addProjToQueue(resolved, reloadLevel);
         }
 
         /**
@@ -797,10 +794,8 @@ namespace ts {
             if (value === undefined) {
                 projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
                 invalidatedProjectQueue.push(proj);
-                return true;
             }
-
-            if (value < (reloadLevel || ConfigFileProgramReloadLevel.None)) {
+            else if (value < (reloadLevel || ConfigFileProgramReloadLevel.None)) {
                 projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
             }
         }
@@ -821,20 +816,6 @@ namespace ts {
 
         function hasPendingInvalidatedProjects() {
             return !!projectPendingBuild.getSize();
-        }
-
-        // Mark all downstream projects of this one needing to be built "later"
-        function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
-            const dependencyGraph = getGlobalDependencyGraph();
-            const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(root);
-            if (!referencingProjects) return;
-            // Always use build order to queue projects
-            for (const project of dependencyGraph.buildQueue) {
-                // Can skip circular references
-                if (referencingProjects.hasKey(project) && addProjToQueue(project)) {
-                    queueBuildForDownstreamReferences(project);
-                }
-            }
         }
 
         function scheduleBuildInvalidatedProject() {
@@ -910,7 +891,20 @@ namespace ts {
                 return;
             }
 
-            buildSingleProject(resolved);
+            const buildResult = buildSingleProject(resolved);
+            // If declaration output changed then only queue in build for downstream projects
+            if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
+                const dependencyGraph = getGlobalDependencyGraph();
+                const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(resolved);
+                if (!referencingProjects) return;
+                // Always use build order to queue projects
+                for (const project of dependencyGraph.buildQueue) {
+                    // Can skip circular references
+                    if (referencingProjects.hasKey(project)) {
+                        addProjToQueue(project);
+                    }
+                }
+            }
         }
 
         function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
@@ -928,7 +922,7 @@ namespace ts {
                 referencingProjectsMap
             };
 
-            function visit(projPath: ResolvedConfigFileName, inCircularContext = false) {
+            function visit(projPath: ResolvedConfigFileName, inCircularContext?: boolean) {
                 // Already visited
                 if (permanentMarks.hasKey(projPath)) return;
                 // Circular
@@ -1032,14 +1026,13 @@ namespace ts {
             let anyDtsChanged = false;
             program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
-
-                if (!anyDtsChanged && isDeclarationFile(fileName) && host.fileExists(fileName)) {
-                    if (host.readFile(fileName) === content) {
-                        // Check for unchanged .d.ts files
-                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                if (!anyDtsChanged && isDeclarationFile(fileName)) {
+                    // Check for unchanged .d.ts files
+                    if (host.fileExists(fileName) && host.readFile(fileName) === content) {
                         priorChangeTime = host.getModifiedTime(fileName);
                     }
                     else {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                         anyDtsChanged = true;
                     }
                 }

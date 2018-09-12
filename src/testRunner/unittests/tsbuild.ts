@@ -210,10 +210,26 @@ namespace ts {
                 assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
 
+                // Does not build tests or core because there is no change in declaration file
+                tick();
+                builder.buildInvalidatedProject();
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+
+                // Rebuild this project
+                tick();
+                fs.writeFileSync("/src/logic/index.ts", `${fs.readFileSync("/src/logic/index.ts")}
+export class cNew {}`);
+                builder.invalidateProject("/src/logic");
+                builder.buildInvalidatedProject();
+                // The file should be updated
+                assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
+
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
                 builder.buildInvalidatedProject();
-                assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
         });
