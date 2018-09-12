@@ -15809,13 +15809,13 @@ namespace ts {
         }
 
         function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
+            const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
                 // Note: a parameter initializer should refer to class-this unless function-this is explicitly annotated.
-
                 // If this is a function in a JS file, it might be a class method.
                 const className = getClassNameFromPrototypeMethod(container);
-                if (className) {
+                if (isInJS && className) {
                     const classSymbol = checkExpression(className).symbol;
                     if (classSymbol && classSymbol.members && (classSymbol.flags & SymbolFlags.Function)) {
                         const classType = getJavascriptClassType(classSymbol);
@@ -15828,7 +15828,8 @@ namespace ts {
                 // i.e.
                 //   * /** @constructor */ function [name]() { ... }
                 //   * /** @constructor */ var x = function() { ... }
-                else if ((container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
+                else if (isInJS &&
+                         (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
                     const classType = getJavascriptClassType(container.symbol);
                     if (classType) {
@@ -15848,7 +15849,7 @@ namespace ts {
                 return getFlowTypeOfReference(node, type);
             }
 
-            if (isInJSFile(node)) {
+            if (isInJS) {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
