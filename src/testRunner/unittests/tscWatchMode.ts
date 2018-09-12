@@ -439,6 +439,33 @@ namespace ts.tscWatch {
             checkOutputErrorsIncremental(host, emptyArray);
         });
 
+        it("Updates diagnostics when '--noUnusedLabels' changes", () => {
+            const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
+            const files = [libFile, aTs];
+            const paths = files.map(f => f.path);
+            const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+            const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
+
+            const host = createWatchedSystem([...files, tsconfig]);
+            const watch = createWatchOfConfigFile(tsconfig.path, host);
+
+            checkProgramActualFiles(watch(), paths);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
+            host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
+
+            checkProgramActualFiles(watch(), paths);
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), aTs.path, 0, "label".length, Diagnostics.Unused_label),
+            ]);
+
+            host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ true));
+            host.checkTimeoutQueueLengthAndRun(1); // reload the configured project
+            checkProgramActualFiles(watch(), paths);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
+
         it("files explicitly excluded in config file", () => {
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
@@ -1186,7 +1213,7 @@ namespace ts.tscWatch {
             host.reloadFS(files);
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), files.map(file => file.path));
-            checkOutputErrorsIncremental(host, []);
+            checkOutputErrorsIncremental(host, emptyArray);
         });
 
         it("watched files when file is deleted and new file is added as part of change", () => {

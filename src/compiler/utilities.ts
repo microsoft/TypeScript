@@ -8374,4 +8374,37 @@ namespace ts {
         // '/// <reference no-default-lib="true"/>' directive.
         return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
     }
+
+    export function isJsonEqual(a: unknown, b: unknown): boolean {
+        return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>);
+    }
+
+    export function getSourceFileAffectingCompilerOptions(compilerOptions: CompilerOptions): CompilerOptions {
+        const res: CompilerOptions = {};
+        for (const option of optionDeclarations) {
+            if (option.name in compilerOptions && isSourceFileAffectingCompilerOption(option)) {
+                res[option.name] = compilerOptions[option.name];
+            }
+        }
+        return res;
+    }
+
+    function isSourceFileAffectingCompilerOption(option: CommandLineOption): boolean {
+        switch (option.name) {
+            case "target":
+            case "module":
+            case "moduleResolution":
+            case "noResolve":
+            case "jsx":
+            case "allowJs":
+            case "disableSizeLimit":
+            case "baseUrl":
+            case "typeRoots":
+            case "rootDirs":
+            case "paths":
+                return true;
+            default:
+                return !!option.affectsSemanticDiagnostics;
+        }
+    }
 }
