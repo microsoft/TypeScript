@@ -3034,8 +3034,8 @@ namespace ts {
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
-        /* @internal */ getFalseType(): Type;
-        /* @internal */ getTrueType(): Type;
+        /* @internal */ getFalseType(fresh?: boolean): Type;
+        /* @internal */ getTrueType(fresh?: boolean): Type;
         /* @internal */ getVoidType(): Type;
         /* @internal */ getUndefinedType(): Type;
         /* @internal */ getNullType(): Type;
@@ -3731,7 +3731,7 @@ namespace ts {
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | UniqueESSymbol,
+        StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -3801,6 +3801,15 @@ namespace ts {
     export interface IntrinsicType extends Type {
         intrinsicName: string;        // Name of intrinsic type
     }
+
+    /* @internal */
+    export interface FreshableIntrinsicType extends IntrinsicType {
+        freshType: IntrinsicType;     // Fresh version of type
+        regularType: IntrinsicType;   // Regular version of type
+    }
+
+    /* @internal */
+    export type FreshableType = LiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
