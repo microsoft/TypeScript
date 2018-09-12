@@ -13128,10 +13128,8 @@ namespace ts {
             const targetCount = getParameterCount(target);
             const sourceRestType = getEffectiveRestType(source);
             const targetRestType = getEffectiveRestType(target);
-            const paramCount = targetRestType ? Math.min(targetCount - 1, sourceCount) :
-                sourceRestType ? targetCount :
-                Math.min(sourceCount, targetCount);
-
+            const targetNonRestCount = targetRestType ? targetCount - 1 : targetCount;
+            const paramCount = sourceRestType ? targetNonRestCount : Math.min(sourceCount, targetNonRestCount);
             const sourceThisType = getThisTypeOfSignature(source);
             if (sourceThisType) {
                 const targetThisType = getThisTypeOfSignature(target);
