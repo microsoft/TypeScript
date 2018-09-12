@@ -13,7 +13,8 @@ namespace ts {
 
     interface DependencyGraph {
         buildQueue: ResolvedConfigFileName[];
-        referencingProjectsMap: ConfigFileMap<ConfigFileMap<true>>;
+        /** value in config File map is true if project is referenced using prepend */
+        referencingProjectsMap: ConfigFileMap<ConfigFileMap<boolean>>;
     }
 
     export interface BuildOptions {
@@ -907,17 +908,16 @@ namespace ts {
             }
 
             const buildResult = buildSingleProject(resolved);
-            // If declaration output changed then only queue in build for downstream projects
-            if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
-                const dependencyGraph = getGlobalDependencyGraph();
-                const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(resolved);
-                if (!referencingProjects) return;
-                // Always use build order to queue projects
-                for (const project of dependencyGraph.buildQueue) {
-                    // Can skip circular references
-                    if (referencingProjects.hasKey(project)) {
-                        addProjToQueue(project);
-                    }
+            const dependencyGraph = getGlobalDependencyGraph();
+            const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(resolved);
+            if (!referencingProjects) return;
+            // Always use build order to queue projects
+            for (const project of dependencyGraph.buildQueue) {
+                const prepend = referencingProjects.getValue(project);
+                // If the project is referenced with prepend, always build downstream projectm,
+                // otherwise queue it only if declaration output changed
+                if (prepend || (prepend !== undefined && !(buildResult & BuildResultFlags.DeclarationOutputUnchanged))) {
+                    addProjToQueue(project);
                 }
             }
         }
@@ -927,7 +927,7 @@ namespace ts {
             const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
-            const referencingProjectsMap = createFileMap<ConfigFileMap<true>>(toPath);
+            const referencingProjectsMap = createFileMap<ConfigFileMap<boolean>>(toPath);
             for (const root of roots) {
                 visit(root);
             }
@@ -958,7 +958,7 @@ namespace ts {
                         visit(resolvedRefPath, inCircularContext || ref.circular);
                         // Get projects referencing resolvedRefPath and add projPath to it
                         const referencingProjects = getOrCreateValueFromConfigFileMap(referencingProjectsMap, resolvedRefPath, () => createFileMap(toPath));
-                        referencingProjects.setValue(projPath, true);
+                        referencingProjects.setValue(projPath, !!ref.prepend);
                     }
                 }
 

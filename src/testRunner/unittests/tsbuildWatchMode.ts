@@ -276,6 +276,81 @@ export class someClass2 { }`);
             verifyWatches(host);
         });
 
+        it("when referenced using prepend, builds referencing project even for non local change", () => {
+            const coreTsConfig: File = {
+                path: core[0].path,
+                content: JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
+                })
+            };
+            const coreIndex: File = {
+                path: core[1].path,
+                content: `function foo() { return 10; }`
+            };
+            const logicTsConfig: File = {
+                path: logic[0].path,
+                content: JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                    references: [{ path: "../core", prepend: true }]
+                })
+            };
+            const logicIndex: File = {
+                path: logic[1].path,
+                content: `function bar() { return foo() + 1 };`
+            };
+
+            const projectFiles = [coreTsConfig, coreIndex, logicTsConfig, logicIndex];
+            const host = createWatchedSystem([libFile, ...projectFiles], { currentDirectory: projectsLocation });
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.logic}`]);
+            verifyWatches();
+            checkOutputErrorsInitial(host, emptyArray);
+            const outputFileStamps = getOutputFileStamps();
+            for (const stamp of outputFileStamps) {
+                assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
+            }
+
+            // Make non local change
+            verifyChangeInCore(`${coreIndex.content}
+function myFunc() { return 10; }`);
+
+            // Make local change to function bar
+            verifyChangeInCore(`${coreIndex.content}
+function myFunc() { return 100; }`);
+
+            function verifyChangeInCore(content: string) {
+                const outputFileStamps = getOutputFileStamps();
+                host.writeFile(coreIndex.path, content);
+
+                host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                const changedCore = getOutputFileStamps();
+                verifyChangedFiles(changedCore, outputFileStamps, [
+                    ...getOutputFileNames(SubProject.core, "index")
+                ]);
+                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                const changedLogic = getOutputFileStamps();
+                verifyChangedFiles(changedLogic, changedCore, [
+                    ...getOutputFileNames(SubProject.logic, "index")
+                ]);
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, emptyArray);
+                verifyWatches();
+            }
+
+            function getOutputFileStamps(): OutputFileStamp[] {
+                const result = [
+                    ...getOutputStamps(host, SubProject.core, "index"),
+                    ...getOutputStamps(host, SubProject.logic, "index"),
+                ];
+                return result;
+            }
+
+            function verifyWatches() {
+                checkWatchedFiles(host, projectFiles.map(f => f.path));
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+            }
+        });
+
         // TODO: write tests reporting errors but that will have more involved work since file
     });
 }
