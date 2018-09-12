@@ -16920,7 +16920,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean): Type {
             const elements = node.elements;
             const elementCount = elements.length;
             let hasNonEndingSpreadElement = false;
@@ -22202,7 +22202,7 @@ namespace ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode);
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode, /*forceTuple*/ false);
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
