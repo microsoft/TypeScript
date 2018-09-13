@@ -1209,6 +1209,16 @@ function res({ status, trailer }){
 } 
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPatternNameCollision", `
+function [#|f|]():Promise<void> {
+    const result = 'https://typescriptlang.org';
+    return fetch(result).then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {

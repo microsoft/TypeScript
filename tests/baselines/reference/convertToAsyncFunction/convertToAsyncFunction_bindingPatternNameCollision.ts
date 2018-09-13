@@ -1,7 +1,8 @@
 // ==ORIGINAL==
 
 function /*[#|*/f/*|]*/():Promise<void> {
-    return fetch('https://typescriptlang.org').then(res);
+    const result = 'https://typescriptlang.org';
+    return fetch(result).then(res);
 }
 function res({ status, trailer }){
     console.log(status);
@@ -10,8 +11,9 @@ function res({ status, trailer }){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f():Promise<void> {
-    const result = await fetch('https://typescriptlang.org');
-    return res(result);
+    const result = 'https://typescriptlang.org';
+    const result_1 = await fetch(result);
+    return res(result_1);
 }
 function res({ status, trailer }){
     console.log(status);
