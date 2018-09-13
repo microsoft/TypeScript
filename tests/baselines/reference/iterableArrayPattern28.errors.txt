@@ -1,17 +1,11 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(1,33): error TS2501: A rest element cannot contain a binding pattern.
-tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,33): error TS2322: Type '(string | number)[]' is not assignable to type '[string, number]'.
-  Property '0' is missing in type '(string | number)[]'.
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,52): error TS2322: Type 'true' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts (3 errors) ====
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts (2 errors) ====
     function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
                                     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2501: A rest element cannot contain a binding pattern.
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
-                                    ~~~~~~~
-!!! error TS2322: Type '(string | number)[]' is not assignable to type '[string, number]'.
-!!! error TS2322:   Property '0' is missing in type '(string | number)[]'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1125:5: The expected type comes from this index signature.
                                                        ~~~~
 !!! error TS2322: Type 'true' is not assignable to type 'number'.

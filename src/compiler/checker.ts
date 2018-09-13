@@ -10762,7 +10762,7 @@ namespace ts {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
             }
             // recreate a tuple from the elements, if possible
-            const tupleizedType = checkArrayLiteral(node, CheckMode.Normal, /*forceTuple*/ true);
+            const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
             if (isTupleLikeType(tupleizedType)) {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation);
             }
@@ -16920,7 +16920,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
             const elements = node.elements;
             const elementCount = elements.length;
             let hasNonEndingSpreadElement = false;
@@ -16942,7 +16942,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
@@ -16951,7 +16951,7 @@ namespace ts {
                 }
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
-                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
                     elementTypes.push(type);
                 }
                 if (index < elementCount - 1 && e.kind === SyntaxKind.SpreadElement) {
@@ -22037,11 +22037,11 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type): Type {
+        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             if (arguments.length === 2) {
                 contextualType = getContextualType(node);
             }
-            const type = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode, forceTuple);
             return isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, contextualType);
         }
@@ -22141,13 +22141,13 @@ namespace ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
             }
             else {
-                const uninstantiatedType = checkExpressionWorker(node, checkMode);
+                const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
                 type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             }
 
@@ -22177,7 +22177,7 @@ namespace ts {
             return checkExpression(node.expression, checkMode);
         }
 
-        function checkExpressionWorker(node: Expression, checkMode: CheckMode | undefined): Type {
+        function checkExpressionWorker(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -22202,7 +22202,7 @@ namespace ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode, /*forceTuple*/ false);
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode, forceTuple);
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
