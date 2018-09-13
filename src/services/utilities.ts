@@ -23,8 +23,10 @@ namespace ts {
 
     export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         switch (node.kind) {
-            case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
+                return isInJSFile(node) && getJSDocEnumTag(node) ? SemanticMeaning.All : SemanticMeaning.Value;
+
+            case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
