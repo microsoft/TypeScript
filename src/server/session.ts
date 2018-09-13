@@ -620,7 +620,7 @@ namespace ts.server {
                 }
             }
 
-            if (fileRequest) {
+            if (fileRequest && this.logger.hasLevel(LogLevel.verbose)) {
                 try {
                     const { file, project } = this.getFileAndProject(fileRequest);
                     const scriptInfo = project.getScriptInfoForNormalizedPath(file);
