@@ -823,7 +823,7 @@ function [#|f|](): Promise<void> {
     }
     return x.then(resp => {
         var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-        return fetch("https://micorosft.com").then(res => console.log("Another one!"));
+        return fetch("https://microsoft.com").then(res => console.log("Another one!"));
     });
 }
 `
@@ -1201,7 +1201,7 @@ function [#|f|]() {
 `);
 
     _testConvertToAsyncFunction("convertToAsyncFunction_bindingPattern", `
-function [#|f|]():Promise<void> {
+function [#|f|]() {
     return fetch('https://typescriptlang.org').then(res);
 }
 function res({ status, trailer }){
@@ -1210,7 +1210,7 @@ function res({ status, trailer }){
 `);
 
     _testConvertToAsyncFunction("convertToAsyncFunction_bindingPatternNameCollision", `
-function [#|f|]():Promise<void> {
+function [#|f|]() {
     const result = 'https://typescriptlang.org';
     return fetch(result).then(res);
 }

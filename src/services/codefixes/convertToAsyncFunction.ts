@@ -186,20 +186,21 @@ namespace ts.codefix {
                 }
                 // we only care about identifiers that are parameters and declarations (don't care about other uses)
                 else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
+                    const originalName = node.text;
 
                     // if the identifier name conflicts with a different identifier that we've already seen
                     if (allVarNames.some(ident => ident.originalName === node.text && ident.symbol !== symbol)) {
                         const newName = getNewNameIfConflict(node, allVarNames);
                         identsToRenameMap.set(symbolIdString, newName.identifier);
                         synthNamesMap.set(symbolIdString, newName);
-                        allVarNames.push({ identifier: newName.identifier, symbol, originalName: node.text });
+                        allVarNames.push({ identifier: newName.identifier, symbol, originalName });
                     }
                     else {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
                         synthNamesMap.set(symbolIdString, { identifier, types: [], numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/ });
                         if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
-                            allVarNames.push({ identifier, symbol, originalName: node.text });
+                            allVarNames.push({ identifier, symbol, originalName });
                         }
                     }
                 }

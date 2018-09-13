@@ -1654,11 +1654,10 @@ namespace ts {
         return clone;
     }
 
-    export function getSynthesizedDeepCloneWithRenames<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
-
+    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
-        if (node && isIdentifier(node!) && renameMap && checker) {
-            const symbol = checker.getSymbolAtLocation(node!);
+        if (isIdentifier(node) && renameMap && checker) {
+            const symbol = checker.getSymbolAtLocation(node);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
@@ -1667,11 +1666,11 @@ namespace ts {
         }
 
         if (!clone) {
-            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
+            clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
         }
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        if (callback && node && clone) callback(node!, clone);
+        if (callback && clone) callback(node, clone);
 
         return clone as T;
     }
