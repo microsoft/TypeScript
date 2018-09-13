@@ -178,10 +178,11 @@ namespace ts.codefix {
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                 // Note - the choice of the last call signature is arbitrary
                 if (lastCallSignature && lastCallSignature.parameters.length && !synthNamesMap.has(symbolIdString)) {
-                    const name = lastCallSignature.parameters[0].name;
-                    const synthName = getNewNameIfConflict(createIdentifier(name), allVarNames);
+                    const firstParameter = lastCallSignature.parameters[0];
+                    const ident = isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
+                    const synthName = getNewNameIfConflict(ident, allVarNames);
                     synthNamesMap.set(symbolIdString, synthName);
-                    allVarNames.push({ identifier: synthName.identifier, symbol, originalName: name });
+                    allVarNames.push({ identifier: synthName.identifier, symbol, originalName: ident.text });
                 }
                 // we only care about identifiers that are parameters and declarations (don't care about other uses)
                 else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
@@ -449,7 +450,7 @@ namespace ts.codefix {
 
     function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
         const callSignatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-        return callSignatures && callSignatures[callSignatures.length - 1];
+        return lastOrUndefined(callSignatures);
     }
 
 
