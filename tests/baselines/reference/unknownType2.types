@@ -49,7 +49,7 @@ if (u === 5) {
 >10 : 10
 }
 
-if (u === true || u === false) {    
+if (u === true || u === false) {
 >u === true || u === false : boolean
 >u === true : boolean
 >u : unknown
@@ -84,7 +84,7 @@ if (u === null) {
 >u : null
 }
 
-if(u === symb) {
+if (u === symb) {
 >u === symb : boolean
 >u : unknown
 >symb : unique symbol
@@ -102,22 +102,14 @@ if (!(u === 42)) {
 >u : unknown
 >42 : 42
 
-    u // u should still be `unknown` here
+    type A = isTrue<isUnknown<typeof u>>
+>A : true
 >u : unknown
+
 }
 
 if (u !== 42) {
 >u !== 42 : boolean
->u : unknown
->42 : 42
-
-    type A = isTrue<isUnknown<typeof u>>
->A : true
->u : unknown
-}
-
-if (u == 42) {
->u == 42 : boolean
 >u : unknown
 >42 : 42
 
@@ -126,13 +118,23 @@ if (u == 42) {
 >u : unknown
 }
 
+if (u == 42) {
+>u == 42 : boolean
+>u : unknown
+>42 : 42
+
+    type C = isTrue<isUnknown<typeof u>>
+>C : true
+>u : unknown
+}
+
 if (u == true) {
 >u == true : boolean
 >u : unknown
 >true : true
 
-    type C = isTrue<isUnknown<typeof u>>
->C : true
+    type D = isTrue<isUnknown<typeof u>>
+>D : true
 >u : unknown
 }
 
@@ -141,8 +143,8 @@ if (u == Object) {
 >u : unknown
 >Object : ObjectConstructor
 
-    type D = isTrue<isUnknown<typeof u>>
->D : true
+    type E = isTrue<isUnknown<typeof u>>
+>E : true
 >u : unknown
 }
 

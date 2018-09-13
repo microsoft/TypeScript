@@ -38,7 +38,7 @@ if (u === 5) {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
-if (u === true || u === false) {    
+if (u === true || u === false) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 
@@ -64,7 +64,7 @@ if (u === null) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 }
 
-if(u === symb) {
+if (u === symb) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 >symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
 
@@ -77,15 +77,19 @@ if(u === symb) {
 if (!(u === 42)) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 
-    u // u should still be `unknown` here
+    type A = isTrue<isUnknown<typeof u>>
+>A : Symbol(A, Decl(unknownType2.ts, 30, 18))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
 }
 
 if (u !== 42) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 
-    type A = isTrue<isUnknown<typeof u>>
->A : Symbol(A, Decl(unknownType2.ts, 34, 15))
+    type B = isTrue<isUnknown<typeof u>>
+>B : Symbol(B, Decl(unknownType2.ts, 35, 15))
 >isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
 >isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
@@ -94,8 +98,8 @@ if (u !== 42) {
 if (u == 42) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 
-    type B = isTrue<isUnknown<typeof u>>
->B : Symbol(B, Decl(unknownType2.ts, 38, 14))
+    type C = isTrue<isUnknown<typeof u>>
+>C : Symbol(C, Decl(unknownType2.ts, 39, 14))
 >isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
 >isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
@@ -104,8 +108,8 @@ if (u == 42) {
 if (u == true) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 
-    type C = isTrue<isUnknown<typeof u>>
->C : Symbol(C, Decl(unknownType2.ts, 42, 16))
+    type D = isTrue<isUnknown<typeof u>>
+>D : Symbol(D, Decl(unknownType2.ts, 43, 16))
 >isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
 >isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
@@ -115,8 +119,8 @@ if (u == Object) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-    type D = isTrue<isUnknown<typeof u>>
->D : Symbol(D, Decl(unknownType2.ts, 46, 18))
+    type E = isTrue<isUnknown<typeof u>>
+>E : Symbol(E, Decl(unknownType2.ts, 47, 18))
 >isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
 >isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
