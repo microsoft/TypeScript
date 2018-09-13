@@ -2657,7 +2657,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                const isEnum = !!getJSDocEnumTag(node);
+                const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
                 const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
                 const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
