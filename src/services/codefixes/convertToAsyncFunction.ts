@@ -520,10 +520,6 @@ namespace ts.codefix {
                 name = getMapEntryIfExists(param);
             }
         }
-        // currently not relevant, since we don't produce a valid transformation if the argument to a promise operation is a CallExpression
-        else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = { identifier: funcNode.arguments[0] as Identifier, types, numberOfAssignmentsOriginal };
-        }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);
         }
