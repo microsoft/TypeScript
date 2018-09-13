@@ -30,7 +30,7 @@ namespace ts.moduleSpecifiers {
     function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
         return {
             relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
-            ending: hasJavascriptOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
+            ending: hasJSOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
                 : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") ? Ending.Index : Ending.Minimal,
         };
     }
@@ -148,7 +148,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJavascriptOrJsonFileExtension(text) : undefined) || false;
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSOrJsonFileExtension(text) : undefined) || false;
     }
 
     function stringsEqual(a: string, b: string, getCanonicalFileName: GetCanonicalFileName): boolean {
@@ -415,13 +415,13 @@ namespace ts.moduleSpecifiers {
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
-                return noExtension + getJavascriptExtensionForFile(fileName, options);
+                return noExtension + getJSExtensionForFile(fileName, options);
             default:
                 return Debug.assertNever(ending);
         }
     }
 
-    function getJavascriptExtensionForFile(fileName: string, options: CompilerOptions): Extension {
+    function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension {
         const ext = extensionFromPath(fileName);
         switch (ext) {
             case Extension.Ts:
