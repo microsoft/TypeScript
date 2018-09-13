@@ -17,7 +17,7 @@ namespace ts {
         referencingProjectsMap: ConfigFileMap<ConfigFileMap<boolean>>;
     }
 
-    export interface BuildOptions {
+    export interface BuildOptions extends OptionsBase {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
@@ -370,6 +370,14 @@ namespace ts {
         return host;
     }
 
+    function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
+        const result = {} as CompilerOptions;
+        commonOptionsWithBuild.forEach(option => {
+            result[option.name] = buildOptions[option.name];
+        });
+        return result;
+    }
+
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
@@ -384,6 +392,7 @@ namespace ts {
 
         // State of the solution
         let options = defaultOptions;
+        let baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
         type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
         const configFileCache = createFileMap<ConfigFileCacheEntry>(toPath);
         /** Map from output file name to its pre-build timestamp */
@@ -430,6 +439,7 @@ namespace ts {
 
         function resetBuildContext(opts = defaultOptions) {
             options = opts;
+            baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
             configFileCache.clear();
             unchangedOutputs.clear();
             projectStatus.clear();
@@ -463,7 +473,7 @@ namespace ts {
 
             let diagnostic: Diagnostic | undefined;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            const parsed = getParsedCommandLineOfConfigFile(configFilePath, {}, parseConfigFileHost);
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
             configFileCache.setValue(configFilePath, parsed || diagnostic!);
             return parsed;
@@ -475,7 +485,7 @@ namespace ts {
 
         function reportWatchStatus(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
             if (hostWithWatch.onWatchStatusChange) {
-                hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), { preserveWatchOutput: options.preserveWatchOutput });
+                hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), baseCompilerOptions);
             }
         }
 
