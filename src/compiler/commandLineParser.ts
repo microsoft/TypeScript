@@ -178,7 +178,7 @@ namespace ts {
                 es2015: ModuleKind.ES2015,
                 esnext: ModuleKind.ESNext
             }),
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -198,7 +198,7 @@ namespace ts {
         {
             name: "allowJs",
             type: "boolean",
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Allow_javascript_files_to_be_compiled
@@ -320,6 +320,7 @@ namespace ts {
         {
             name: "strict",
             type: "boolean",
+            affectsSourceFile: true, // via affecting "alwaysStrict"
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_all_strict_type_checking_options
@@ -367,6 +368,7 @@ namespace ts {
         {
             name: "alwaysStrict",
             type: "boolean",
+            affectsSourceFile: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -415,7 +417,7 @@ namespace ts {
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
             }),
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
@@ -423,7 +425,7 @@ namespace ts {
         {
             name: "baseUrl",
             type: "string",
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             isFilePath: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Base_directory_to_resolve_non_absolute_module_names
@@ -433,7 +435,7 @@ namespace ts {
             // use type = object to copy the value as-is
             name: "paths",
             type: "object",
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
@@ -449,7 +451,7 @@ namespace ts {
                 type: "string",
                 isFilePath: true
             },
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime
         },
@@ -461,7 +463,6 @@ namespace ts {
                 type: "string",
                 isFilePath: true
             },
-            affectsSourceFile: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.List_of_folders_to_include_type_definitions_from
         },
@@ -648,7 +649,7 @@ namespace ts {
         {
             name: "noResolve",
             type: "boolean",
-            affectsSourceFile: true,
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_add_triple_slash_references_or_imported_modules_to_the_list_of_compiled_files
         },

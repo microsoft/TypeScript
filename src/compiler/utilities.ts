@@ -8382,7 +8382,8 @@ namespace ts {
     export function getSourceFileAffectingCompilerOptions(compilerOptions: CompilerOptions): CompilerOptions {
         const res: CompilerOptions = {};
         for (const option of optionDeclarations) {
-            if (option.name in compilerOptions && (!!option.affectsSourceFile || !!option.affectsBindDiagnostics)) {
+            // SourceFile stores `resolvedModules` and `bindDiagnostics` so changing those means changing the SourceFile
+            if (option.name in compilerOptions && (!!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics)) {
                 res[option.name] = compilerOptions[option.name];
             }
         }
