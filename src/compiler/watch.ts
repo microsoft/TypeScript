@@ -263,10 +263,11 @@ namespace ts {
     /**
      * Creates the watch compiler host from system for compiling root files and options in watch mode
      */
-    export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T> {
+    export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: ReadonlyArray<ProjectReference>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
         const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
         host.rootFiles = rootFiles;
         host.options = options;
+        host.projectReferences = projectReferences;
         return host;
     }
 }
@@ -274,7 +275,7 @@ namespace ts {
 namespace ts {
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
-    export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
+    export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
     /** Host that has watch functionality used in --watch mode */
     export interface WatchHost {
         /** If provided, called with Diagnostic message that informs about change in watch status */
@@ -360,6 +361,9 @@ namespace ts {
 
         /** Compiler options */
         options: CompilerOptions;
+
+        /** Project References */
+        projectReferences?: ReadonlyArray<ProjectReference>;
     }
 
     /**
@@ -413,11 +417,11 @@ namespace ts {
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
      */
-    export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     export function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T>;
-    export function createWatchCompilerHost<T extends BuilderProgram>(rootFilesOrConfigFileName: string | string[], options: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T> | WatchCompilerHostOfConfigFile<T> {
+    export function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: ReadonlyArray<ProjectReference>): WatchCompilerHostOfFilesAndCompilerOptions<T>;
+    export function createWatchCompilerHost<T extends BuilderProgram>(rootFilesOrConfigFileName: string | string[], options: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: ReadonlyArray<ProjectReference>): WatchCompilerHostOfFilesAndCompilerOptions<T> | WatchCompilerHostOfConfigFile<T> {
         if (isArray(rootFilesOrConfigFileName)) {
-            return createWatchCompilerHostOfFilesAndCompilerOptions(rootFilesOrConfigFileName, options!, system, createProgram, reportDiagnostic, reportWatchStatus); // TODO: GH#18217
+            return createWatchCompilerHostOfFilesAndCompilerOptions(rootFilesOrConfigFileName, options!, system, createProgram, reportDiagnostic, reportWatchStatus, projectReferences); // TODO: GH#18217
         }
         else {
             return createWatchCompilerHostOfConfigFile(rootFilesOrConfigFileName, options, system, createProgram, reportDiagnostic, reportWatchStatus);
@@ -463,7 +467,7 @@ namespace ts {
         const getCurrentDirectory = () => currentDirectory;
         const readFile: (path: string, encoding?: string) => string | undefined = (path, encoding) => host.readFile(path, encoding);
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, createProgram } = host;
-        let { rootFiles: rootFileNames, options: compilerOptions } = host;
+        let { rootFiles: rootFileNames, options: compilerOptions, projectReferences } = host;
         let configFileSpecs: ConfigFileSpecs;
         let configFileParsingDiagnostics: ReadonlyArray<Diagnostic> | undefined;
         let hasChangedConfigFileParsingErrors = false;
@@ -589,9 +593,9 @@ namespace ts {
 
             // All resolutions are invalid if user provided resolutions
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
-            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
-                    builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics);
+                    builderProgram = createProgram(/*rootNames*/ undefined, /*options*/ undefined, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
                     hasChangedConfigFileParsingErrors = false;
                 }
             }
@@ -620,7 +624,7 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
-            builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics);
+            builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
@@ -861,6 +865,7 @@ namespace ts {
             rootFileNames = configFileParseResult.fileNames;
             compilerOptions = configFileParseResult.options;
             configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
+            projectReferences = configFileParseResult.projectReferences;
             configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult);
             hasChangedConfigFileParsingErrors = true;
         }

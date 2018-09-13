@@ -914,7 +914,8 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false
+                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*projectReferences*/ undefined
             );
             assert.isTrue(actual);
         }

@@ -149,6 +149,14 @@ export class someClass2 { }`);
             }
         });
 
+        it("tsc-watch works with project references", () => {
+            // Build the composite project
+            const host = createSolutionInWatchMode();
+
+            createWatchOfConfigFile(tests[0].path, host);
+            checkOutputErrorsInitial(host, emptyArray);
+        });
+
         // TODO: write tests reporting errors but that will have more involved work since file
     });
 }

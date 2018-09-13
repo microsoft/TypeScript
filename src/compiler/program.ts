@@ -442,6 +442,7 @@ namespace ts {
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
+        projectReferences: ReadonlyArray<ProjectReference> | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
@@ -450,6 +451,11 @@ namespace ts {
 
         // If number of files in the program do not match, it is not up-to-date
         if (program.getRootFileNames().length !== rootFileNames.length) {
+            return false;
+        }
+
+        // If project references dont match
+        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences)) {
             return false;
         }
 
@@ -759,7 +765,8 @@ namespace ts {
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
-            getProjectReferences
+            getProjectReferences,
+            getResolvedProjectReferences
         };
 
         verifyCompilerOptions();
@@ -1007,15 +1014,21 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-            const oldRefs = oldProgram.getProjectReferences();
+
+            // If array of references is changed, we cant resue old program
+            const oldProjectReferences = oldProgram.getProjectReferences();
+            if (!arrayIsEqualTo(oldProjectReferences!, projectReferences, projectReferencesIsEqualTo)) {
+                return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
+            // Check the json files for the project references
+            const oldRefs = oldProgram.getResolvedProjectReferences();
             if (projectReferences) {
-                if (!oldRefs) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
-                }
+                Debug.assert(!!oldRefs);
                 for (let i = 0; i < projectReferences.length; i++) {
-                    const oldRef = oldRefs[i];
+                    const oldRef = oldRefs![i];
+                    const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
                     if (oldRef) {
-                        const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
                         if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
                             // Resolved project reference has gone missing or changed
                             return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1023,16 +1036,14 @@ namespace ts {
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
-                        if (parseProjectReferenceConfigFile(projectReferences[i]) !== undefined) {
+                        if (newRef !== undefined) {
                             return oldProgram.structureIsReused = StructureIsReused.Not;
                         }
                     }
                 }
             }
             else {
-                if (oldRefs) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
-                }
+                Debug.assert(!oldRefs);
             }
 
             // check if program source files has changed in the way that can affect structure of the program
@@ -1219,7 +1230,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
-            resolvedProjectReferences = oldProgram.getProjectReferences();
+            resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
@@ -1257,8 +1268,12 @@ namespace ts {
             };
         }
 
-        function getProjectReferences() {
+        function getResolvedProjectReferences() {
             return resolvedProjectReferences;
+        }
+
+        function getProjectReferences() {
+            return projectReferences;
         }
 
         function getPrependNodes(): InputFiles[] {

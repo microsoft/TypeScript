@@ -249,6 +249,12 @@ namespace ts {
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
+    export function projectReferencesIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
+        return oldRef.path === newRef.path &&
+            !oldRef.prepend === !newRef.prepend &&
+            !oldRef.circular === !newRef.circular;
+    }
+
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
         return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
             oldResolution.extension === newResolution.extension &&
