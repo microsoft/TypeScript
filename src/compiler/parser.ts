@@ -6513,7 +6513,7 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(next: () => void = nextJSDocToken): void {
+                function skipWhitespaceOrAsterisk(next: () => void): void {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
                             return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
@@ -6684,7 +6684,7 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
-                    skipWhitespaceOrAsterisk();
+                    skipWhitespaceOrAsterisk(nextJSDocToken);
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
@@ -6724,7 +6724,7 @@ namespace ts {
                 function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number | undefined): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
-                    skipWhitespaceOrAsterisk();
+                    skipWhitespaceOrAsterisk(nextJSDocToken);
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
@@ -6859,7 +6859,7 @@ namespace ts {
 
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
-                    skipWhitespaceOrAsterisk();
+                    skipWhitespaceOrAsterisk(nextJSDocToken);
 
                     const typedefTag = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
                     typedefTag.atToken = atToken;
