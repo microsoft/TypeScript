@@ -264,6 +264,63 @@ export class cNew {}`);
                 verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeAndFiles.json");
             });
         });
+
+        describe("tsbuild - lists files", () => {
+            it("listFiles", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { listFiles: true });
+                builder.buildAllProjects();
+                assert.deepEqual(host.traces, [
+                    ...getLibs(),
+                    "/src/core/anotherModule.ts",
+                    "/src/core/index.ts",
+                    "/src/core/some_decl.d.ts",
+                    ...getLibs(),
+                    ...getCoreOutputs(),
+                    "/src/logic/index.ts",
+                    ...getLibs(),
+                    ...getCoreOutputs(),
+                    "/src/logic/index.d.ts",
+                    "/src/tests/index.ts"
+                ]);
+
+                function getLibs() {
+                    return [
+                        "/lib/lib.d.ts",
+                        "/lib/lib.es5.d.ts",
+                        "/lib/lib.dom.d.ts",
+                        "/lib/lib.webworker.importscripts.d.ts",
+                        "/lib/lib.scripthost.d.ts"
+                    ];
+                }
+
+                function getCoreOutputs() {
+                    return [
+                        "/src/core/index.d.ts",
+                        "/src/core/anotherModule.d.ts"
+                    ];
+                }
+            });
+
+            it("listEmittedFiles", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { listEmittedFiles: true });
+                builder.buildAllProjects();
+                assert.deepEqual(host.traces, [
+                    "TSFILE: /src/core/anotherModule.js",
+                    "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/index.js",
+                    "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/logic/index.js",
+                    "TSFILE: /src/logic/index.js.map",
+                    "TSFILE: /src/logic/index.d.ts",
+                    "TSFILE: /src/tests/index.js",
+                    "TSFILE: /src/tests/index.d.ts",
+                ]);
+            });
+        });
     }
 
     export namespace OutFile {

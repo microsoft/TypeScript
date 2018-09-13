@@ -21,10 +21,14 @@ namespace ts {
         dry?: boolean;
         force?: boolean;
         verbose?: boolean;
+
         /*@internal*/ clean?: boolean;
         /*@internal*/ watch?: boolean;
         /*@internal*/ help?: boolean;
+
         preserveWatchOutput?: boolean;
+        listEmittedFiles?: boolean;
+        listFiles?: boolean;
     }
 
     enum BuildResultFlags {
@@ -44,8 +48,9 @@ namespace ts {
         SyntaxErrors = 1 << 3,
         TypeErrors = 1 << 4,
         DeclarationEmitErrors = 1 << 5,
+        EmitErrors = 1 << 6,
 
-        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors
+        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
     }
 
     export enum UpToDateStatusType {
@@ -401,6 +406,7 @@ namespace ts {
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
         const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
+        const writeFileName = (s: string) => host.trace && host.trace(s);
 
         // Watch state
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
@@ -1014,35 +1020,28 @@ namespace ts {
                 ...program.getConfigFileParsingDiagnostics(),
                 ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
-                resultFlags |= BuildResultFlags.SyntaxErrors;
-                reportAndStoreErrors(proj, syntaxDiagnostics);
-                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
-                return resultFlags;
+                return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");
             }
 
             // Don't emit .d.ts if there are decl file errors
             if (getEmitDeclarations(program.getCompilerOptions())) {
                 const declDiagnostics = program.getDeclarationDiagnostics();
                 if (declDiagnostics.length) {
-                    resultFlags |= BuildResultFlags.DeclarationEmitErrors;
-                    reportAndStoreErrors(proj, declDiagnostics);
-                    projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
-                    return resultFlags;
+                    return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
                 }
             }
 
             // Same as above but now for semantic diagnostics
             const semanticDiagnostics = program.getSemanticDiagnostics();
             if (semanticDiagnostics.length) {
-                resultFlags |= BuildResultFlags.TypeErrors;
-                reportAndStoreErrors(proj, semanticDiagnostics);
-                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
-                return resultFlags;
+                return buildErrors(semanticDiagnostics, BuildResultFlags.TypeErrors, "Semantic");
             }
 
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
-            program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
+            let emitDiagnostics: Diagnostic[] | undefined;
+            const reportEmitDiagnostic = (d: Diagnostic) => (emitDiagnostics || (emitDiagnostics = [])).push(d);
+            emitFilesAndReportErrors(program, reportEmitDiagnostic, writeFileName, /*reportSummary*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(fileName)) {
                     // Check for unchanged .d.ts files
@@ -1062,12 +1061,23 @@ namespace ts {
                 }
             });
 
+            if (emitDiagnostics) {
+                return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
+            }
+
             const status: UpToDateStatus = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
             projectStatus.setValue(proj, status);
             return resultFlags;
+
+            function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
+                resultFlags |= errorFlags;
+                reportAndStoreErrors(proj, diagnostics);
+                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
+                return resultFlags;
+            }
         }
 
         function updateOutputTimestamps(proj: ParsedCommandLine) {

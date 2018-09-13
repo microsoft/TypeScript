@@ -85,6 +85,18 @@ namespace ts {
             description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
         },
         {
+            name: "listFiles",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Print_names_of_files_part_of_the_compilation
+        },
+        {
+            name: "listEmittedFiles",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
+        },
+        {
             name: "watch",
             shortName: "w",
             type: "boolean",
@@ -561,18 +573,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Include_modules_imported_with_json_extension
-        },
-        {
-            name: "listFiles",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Print_names_of_files_part_of_the_compilation
-        },
-        {
-            name: "listEmittedFiles",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
 
         {
