@@ -6724,7 +6724,7 @@ namespace ts {
                     }
                 }
 
-                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number | undefined): JSDocParameterTag | JSDocPropertyTag {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
                     skipWhitespaceOrAsterisk();
@@ -6739,9 +6739,8 @@ namespace ts {
                     const result = target === PropertyLikeParse.Property ?
                         <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos) :
                         <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
-                    let comment: string | undefined;
-                    if (indent !== undefined) comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
-                    const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target);
+                    const comment = parseTagComments(indent + scanner.getStartPos() - atToken.pos);
+                    const nestedTypeLiteral = target !== PropertyLikeParse.CallbackParameter && parseNestedTypeLiteral(typeExpression, name, target, indent);
                     if (nestedTypeLiteral) {
                         typeExpression = nestedTypeLiteral;
                         isNameFirst = true;
@@ -6756,14 +6755,14 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression | undefined, name: EntityName, target: PropertyLikeParse) {
+                function parseNestedTypeLiteral(typeExpression: JSDocTypeExpression | undefined, name: EntityName, target: PropertyLikeParse, indent: number) {
                     if (typeExpression && isObjectOrObjectArrayTypeReference(typeExpression.type)) {
                         const typeLiteralExpression = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
                         let child: JSDocPropertyLikeTag | JSDocTypeTag | false;
                         let jsdocTypeLiteral: JSDocTypeLiteral;
                         const start = scanner.getStartPos();
                         let children: JSDocPropertyLikeTag[] | undefined;
-                        while (child = tryParse(() => parseChildParameterOrPropertyTag(target, name))) {
+                        while (child = tryParse(() => parseChildParameterOrPropertyTag(target, indent, name))) {
                             if (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) {
                                 children = append(children, child);
                             }
@@ -6879,7 +6878,7 @@ namespace ts {
                         let jsdocTypeLiteral: JSDocTypeLiteral | undefined;
                         let childTypeTag: JSDocTypeTag | undefined;
                         const start = atToken.pos;
-                        while (child = tryParse(() => parseChildPropertyTag())) {
+                        while (child = tryParse(() => parseChildPropertyTag(indent))) {
                             if (!jsdocTypeLiteral) {
                                 jsdocTypeLiteral = <JSDocTypeLiteral>createNode(SyntaxKind.JSDocTypeLiteral, start);
                             }
@@ -6945,7 +6944,7 @@ namespace ts {
                     const start = scanner.getStartPos();
                     const jsdocSignature = createNode(SyntaxKind.JSDocSignature, start) as JSDocSignature;
                     jsdocSignature.parameters = [];
-                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter) as JSDocParameterTag)) {
+                    while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter, indent) as JSDocParameterTag)) {
                         jsdocSignature.parameters = append(jsdocSignature.parameters as MutableNodeArray<JSDocParameterTag>, child);
                     }
                     const returnTag = tryParse(() => {
@@ -6988,18 +6987,18 @@ namespace ts {
                     return a.escapedText === b.escapedText;
                 }
 
-                function parseChildPropertyTag() {
-                    return parseChildParameterOrPropertyTag(PropertyLikeParse.Property) as JSDocTypeTag | JSDocPropertyTag | false;
+                function parseChildPropertyTag(indent: number) {
+                    return parseChildParameterOrPropertyTag(PropertyLikeParse.Property, indent) as JSDocTypeTag | JSDocPropertyTag | false;
                 }
 
-                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function parseChildParameterOrPropertyTag(target: PropertyLikeParse, indent: number, name?: EntityName): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     let canParseTag = true;
                     let seenAsterisk = false;
                     while (true) {
                         switch (nextJSDocToken()) {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
-                                    const child = tryParseChildTag(target);
+                                    const child = tryParseChildTag(target, indent);
                                     if (child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
                                         target !== PropertyLikeParse.CallbackParameter &&
                                         name && (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
@@ -7028,7 +7027,7 @@ namespace ts {
                     }
                 }
 
-                function tryParseChildTag(target: PropertyLikeParse): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
+                function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const atToken = <AtToken>createNode(SyntaxKind.AtToken);
                     atToken.end = scanner.getTextPos();
@@ -7055,9 +7054,7 @@ namespace ts {
                     if (!(target & t)) {
                         return false;
                     }
-                    const tag = parseParameterOrPropertyTag(atToken, tagName, target, /*indent*/ undefined);
-                    tag.comment = parseTagComments(tag.end - tag.pos);
-                    return tag;
+                    return parseParameterOrPropertyTag(atToken, tagName, target, indent);
                 }
 
                 function parseTemplateTag(atToken: AtToken, tagName: Identifier): JSDocTemplateTag {
