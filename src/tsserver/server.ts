@@ -891,7 +891,7 @@ namespace ts.server {
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJavascriptModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };

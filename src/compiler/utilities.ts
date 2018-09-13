@@ -1682,7 +1682,7 @@ namespace ts {
         return isInJSFile(file);
     }
 
-    export function isSourceFileNotJavascript(file: SourceFile): boolean {
+    export function isSourceFileNotJS(file: SourceFile): boolean {
         return !isInJSFile(file);
     }
 
@@ -3818,8 +3818,8 @@ namespace ts {
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
-    export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
-        return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
+    export function tryExtractTSExtension(fileName: string): string | undefined {
+        return find(supportedTSExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
     }
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
@@ -8010,42 +8010,42 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypescriptExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTSExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
-    export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
-    export const supportedJavascriptAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
-    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypescriptExtensions, ...supportedJavascriptExtensions];
+    export const supportedTSExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
+    export const supportedJSExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    export const supportedJSAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
+    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
-            return needJsExtensions ? allSupportedExtensions : supportedTypescriptExtensions;
+            return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;
         }
 
         const extensions = [
-            ...needJsExtensions ? allSupportedExtensions : supportedTypescriptExtensions,
-            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavascriptLike(x.scriptKind) ? x.extension : undefined)
+            ...needJsExtensions ? allSupportedExtensions : supportedTSExtensions,
+            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) ? x.extension : undefined)
         ];
 
         return deduplicate<string>(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
-    function isJavascriptLike(scriptKind: ScriptKind | undefined): boolean {
+    function isJSLike(scriptKind: ScriptKind | undefined): boolean {
         return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
-    export function hasJavascriptFileExtension(fileName: string): boolean {
-        return some(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    export function hasJSFileExtension(fileName: string): boolean {
+        return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function hasJavascriptOrJsonFileExtension(fileName: string): boolean {
-        return supportedJavascriptAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
+    export function hasJSOrJsonFileExtension(fileName: string): boolean {
+        return supportedJSAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
     }
 
-    export function hasTypescriptFileExtension(fileName: string): boolean {
-        return some(supportedTypescriptExtensions, extension => fileExtensionIs(fileName, extension));
+    export function hasTSFileExtension(fileName: string): boolean {
+        return some(supportedTSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
@@ -8181,12 +8181,12 @@ namespace ts {
     }
 
     /** True if an extension is one of the supported TypeScript extensions. */
-    export function extensionIsTypeScript(ext: Extension): boolean {
+    export function extensionIsTS(ext: Extension): boolean {
         return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
     }
 
-    export function resolutionExtensionIsTypeScriptOrJson(ext: Extension) {
-        return extensionIsTypeScript(ext) || ext === Extension.Json;
+    export function resolutionExtensionIsTSOrJson(ext: Extension) {
+        return extensionIsTS(ext) || ext === Extension.Json;
     }
 
     /**
