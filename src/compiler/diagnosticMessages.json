@@ -835,7 +835,7 @@
         "category": "Error",
         "code": 1253
     },
-    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
     },
@@ -990,6 +990,22 @@
     "An expression of type 'void' cannot be tested for truthiness": {
         "category": "Error",
         "code": 1345
+    },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2072,6 +2088,30 @@
         "category": "Error",
         "code": 2577
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+        "category": "Error",
+        "code": 2580
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+        "category": "Error",
+        "code": 2581
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+        "category": "Error",
+        "code": 2582
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2583
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2584
+    },
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2585
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2436,6 +2476,14 @@
     "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
         "category": "Error",
         "code": 2732
+    },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
+    },
+    "It is highly likely that you are missing a semicolon.": {
+        "category": "Error",
+        "code": 2734
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2892,7 +2940,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },
@@ -3274,7 +3322,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -3671,6 +3719,38 @@
     "All type parameters are unused": {
         "category": "Error",
         "code": 6205
+    },
+    "'package.json' has a 'typesVersions' field with version-specific path mappings.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.": {
+        "category": "Message",
+        "code": 6208
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
+    },
+    "An argument for '{0}' was not provided.": {
+        "category": "Message",
+        "code": 6210
+    },
+    "An argument matching this binding pattern was not provided.": {
+        "category": "Message",
+        "code": 6211
+    },
+    "Did you mean to call this expression?": {
+        "category": "Message",
+        "code": 6212
+    },
+    "Did you mean to use `new` with this expression?": {
+        "category": "Message",
+        "code": 6213
     },
 
     "Projects to reference": {

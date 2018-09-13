@@ -6,12 +6,12 @@
 
 // property assignment
 var ns = {}
->ns : Symbol(ns, Decl(test.js, 6, 3))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11))
 
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
->ns : Symbol(ns, Decl(test.js, 6, 3))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11))
 >x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
     status: 'done',
@@ -24,7 +24,7 @@ ns.x = {
 
 ns.x = {
 >ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
->ns : Symbol(ns, Decl(test.js, 6, 3))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11))
 >x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
     status: 'done',
@@ -36,7 +36,7 @@ ns.x = {
 }
 ns.x
 >ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
->ns : Symbol(ns, Decl(test.js, 6, 3))
+>ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11))
 >x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
 

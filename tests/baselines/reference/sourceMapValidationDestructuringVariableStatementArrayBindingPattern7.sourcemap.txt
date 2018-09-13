@@ -28,8 +28,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern7
 6 >                           
 7 >                             x = 20
 8 >                                                        , 
-9 >                                                          j
-10>                                                                   ] = [1, 2];
+9 >                                                          j] = [1, 2]
+10>                                                                   ;
 1 >Emitted(1, 1) Source(1, 5) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
 3 >Emitted(1, 16) Source(1, 25) + SourceIndex(0)
@@ -38,7 +38,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern7
 6 >Emitted(1, 30) Source(1, 6) + SourceIndex(0)
 7 >Emitted(1, 57) Source(1, 12) + SourceIndex(0)
 8 >Emitted(1, 59) Source(1, 14) + SourceIndex(0)
-9 >Emitted(1, 68) Source(1, 15) + SourceIndex(0)
+9 >Emitted(1, 68) Source(1, 25) + SourceIndex(0)
 10>Emitted(1, 69) Source(1, 26) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern7.js.map

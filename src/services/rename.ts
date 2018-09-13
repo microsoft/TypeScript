@@ -25,8 +25,9 @@ namespace ts.Rename {
             return undefined;
         }
 
-        // Can't rename a module name.
-        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
+        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
+            return getRenameInfoForModule(node, sourceFile, symbol);
+        }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
         const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
@@ -37,9 +38,28 @@ namespace ts.Rename {
         return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
     }
 
+    function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
+        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        if (!moduleSourceFile) return undefined;
+        const withoutIndex = node.text.endsWith("/index") || node.text.endsWith("/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
+        const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
+        const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
+        return {
+            canRename: true,
+            fileToRename: name,
+            kind,
+            displayName: name,
+            localizedErrorMessage: undefined,
+            fullDisplayName: name,
+            kindModifiers: ScriptElementKindModifier.none,
+            triggerSpan: createTriggerSpanForNode(node, sourceFile),
+        };
+    }
+
     function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
         return {
             canRename: true,
+            fileToRename: undefined,
             kind,
             displayName,
             localizedErrorMessage: undefined,
