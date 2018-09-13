@@ -1015,7 +1015,7 @@ namespace ts {
                             writeLines(helper.text);
                         }
                         else {
-                            writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
+                            writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
                         helpersEmitted = true;
                     }
@@ -3588,7 +3588,7 @@ namespace ts {
             }
         }
 
-        function makeFileLevelOptmiisticUniqueName(name: string) {
+        function makeFileLevelOptimisticUniqueName(name: string) {
             return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
         }
 
