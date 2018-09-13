@@ -2,7 +2,9 @@
 
 ////class C {
 ////}
-////var c = C();
+////class D {
+////}
+////let x = (true ? C : D)();
 
 verify.codeFix({
     description: "Add missing 'new' operator to call",
@@ -10,5 +12,7 @@ verify.codeFix({
     newFileContent:
 `class C {
 }
-var c = new C();`
+class D {
+}
+let x = new (true ? C : D)();`
 });

@@ -2,7 +2,8 @@
 
 ////class C {
 ////}
-////var c = C();
+////let x = [C];
+////let a = x[0]();
 
 verify.codeFix({
     description: "Add missing 'new' operator to call",
@@ -10,5 +11,6 @@ verify.codeFix({
     newFileContent:
 `class C {
 }
-var c = new C();`
+let x = [C];
+let a = new x[0]();`
 });
