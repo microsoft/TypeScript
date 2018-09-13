@@ -234,13 +234,17 @@ namespace ts {
             }
 
             if (symbolFlags & SymbolFlags.Value) {
-                const { valueDeclaration } = symbol;
-                if (!valueDeclaration ||
-                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules and assignment declarations
-                    symbol.valueDeclaration = node;
-                }
+                setValueDeclaration(symbol, node);
+            }
+        }
+
+        function setValueDeclaration(symbol: Symbol, node: Declaration): void {
+            const { valueDeclaration } = symbol;
+            if (!valueDeclaration ||
+                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
+                (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
+                // other kinds of value declarations take precedence over modules and assignment declarations
+                symbol.valueDeclaration = node;
             }
         }
 
@@ -2286,14 +2290,19 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
             }
             else {
-                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
+                const flags = exportAssignmentIsAlias(node)
                     // An export default clause with an EntityNameExpression or a class expression exports all meanings of that identifier or expression;
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
                 // If there is an `export default x;` alias declaration, can't `export default` anything else.
                 // (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+                const symbol = declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+
+                if (node.isExportEquals) {
+                    // Will be an error later, since the module already has other exports. Just make sure this has a valueDeclaration set.
+                    setValueDeclaration(symbol, node);
+                }
             }
         }
 
