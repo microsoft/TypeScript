@@ -4559,6 +4559,8 @@ namespace ts {
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
         strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
+        affectsBindDiagnostics?: true;                          // true if this affects binding (currently same affect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 

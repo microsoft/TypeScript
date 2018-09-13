@@ -159,6 +159,7 @@ namespace ts {
                 es2018: ScriptTarget.ES2018,
                 esnext: ScriptTarget.ESNext,
             }),
+            affectsSourceFile: true,
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -177,6 +178,7 @@ namespace ts {
                 es2015: ModuleKind.ES2015,
                 esnext: ModuleKind.ESNext
             }),
+            affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -196,6 +198,7 @@ namespace ts {
         {
             name: "allowJs",
             type: "boolean",
+            affectsSourceFile: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Allow_javascript_files_to_be_compiled
@@ -213,6 +216,7 @@ namespace ts {
                 "react-native": JsxEmit.ReactNative,
                 "react": JsxEmit.React
             }),
+            affectsSourceFile: true,
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -397,6 +401,7 @@ namespace ts {
         {
             name: "noFallthroughCasesInSwitch",
             type: "boolean",
+            affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
@@ -410,6 +415,7 @@ namespace ts {
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
             }),
+            affectsSourceFile: true,
             paramType: Diagnostics.STRATEGY,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Specify_module_resolution_strategy_Colon_node_Node_js_or_classic_TypeScript_pre_1_6,
@@ -417,6 +423,7 @@ namespace ts {
         {
             name: "baseUrl",
             type: "string",
+            affectsSourceFile: true,
             isFilePath: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Base_directory_to_resolve_non_absolute_module_names
@@ -426,6 +433,7 @@ namespace ts {
             // use type = object to copy the value as-is
             name: "paths",
             type: "object",
+            affectsSourceFile: true,
             isTSConfigOnly: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl
@@ -441,6 +449,7 @@ namespace ts {
                 type: "string",
                 isFilePath: true
             },
+            affectsSourceFile: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.List_of_root_folders_whose_combined_content_represents_the_structure_of_the_project_at_runtime
         },
@@ -452,6 +461,7 @@ namespace ts {
                 type: "string",
                 isFilePath: true
             },
+            affectsSourceFile: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.List_of_folders_to_include_type_definitions_from
         },
@@ -638,6 +648,7 @@ namespace ts {
         {
             name: "noResolve",
             type: "boolean",
+            affectsSourceFile: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_add_triple_slash_references_or_imported_modules_to_the_list_of_compiled_files
         },
@@ -650,6 +661,7 @@ namespace ts {
         {
             name: "disableSizeLimit",
             type: "boolean",
+            affectsSourceFile: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
@@ -695,6 +707,7 @@ namespace ts {
         {
             name: "allowUnusedLabels",
             type: "boolean",
+            affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_report_errors_on_unused_labels
@@ -702,6 +715,7 @@ namespace ts {
         {
             name: "allowUnreachableCode",
             type: "boolean",
+            affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_report_errors_on_unreachable_code

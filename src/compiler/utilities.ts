@@ -8382,29 +8382,10 @@ namespace ts {
     export function getSourceFileAffectingCompilerOptions(compilerOptions: CompilerOptions): CompilerOptions {
         const res: CompilerOptions = {};
         for (const option of optionDeclarations) {
-            if (option.name in compilerOptions && isSourceFileAffectingCompilerOption(option)) {
+            if (option.name in compilerOptions && (!!option.affectsSourceFile || !!option.affectsBindDiagnostics)) {
                 res[option.name] = compilerOptions[option.name];
             }
         }
         return res;
-    }
-
-    function isSourceFileAffectingCompilerOption(option: CommandLineOption): boolean {
-        switch (option.name) {
-            case "target":
-            case "module":
-            case "moduleResolution":
-            case "noResolve":
-            case "jsx":
-            case "allowJs":
-            case "disableSizeLimit":
-            case "baseUrl":
-            case "typeRoots":
-            case "rootDirs":
-            case "paths":
-                return true;
-            default:
-                return !!option.affectsSemanticDiagnostics;
-        }
     }
 }
