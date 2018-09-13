@@ -3097,6 +3097,16 @@ namespace ts {
             return result;
         }
 
+        function getRelationTypeName(left: Type, right: Type): [string, string] {
+            let leftStr = typeToString(left);
+            let rightStr = typeToString(right);
+            if (leftStr === rightStr) {
+                leftStr = typeToString(left, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+                rightStr = typeToString(right, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
+            }
+            return [leftStr, rightStr];
+        }
+
         function toNodeBuilderFlags(flags = TypeFormatFlags.None): NodeBuilderFlags {
             return flags & TypeFormatFlags.NodeBuilderFlagsMask;
         }
@@ -11137,12 +11147,7 @@ namespace ts {
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
-                let sourceType = typeToString(source);
-                let targetType = typeToString(target);
-                if (sourceType === targetType) {
-                    sourceType = typeToString(source, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                    targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
-                }
+                const [ sourceType, targetType ] = getRelationTypeName(source, target);
 
                 if (!message) {
                     if (relation === comparableRelation) {
@@ -21838,8 +21843,7 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                const leftStr = typeToString(leftType);
-                const rightStr = typeToString(rightType);
+                const [ leftStr, rightStr ] = getRelationTypeName(leftType, rightType);
                 const errNode = errorNode || operatorToken;
                 if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
                     error(
