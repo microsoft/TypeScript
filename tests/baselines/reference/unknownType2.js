@@ -31,7 +31,6 @@ if (u === symb) {
 
 if (!(u === 42)) {
     type A = isTrue<isUnknown<typeof u>>
-
 }
 
 if (u !== 42) {
@@ -48,6 +47,71 @@ if (u == true) {
 
 if (u == Object) {
     type E = isTrue<isUnknown<typeof u>>
+}
+
+declare const aString: string;
+declare const aBoolean: boolean;
+declare const aNumber: number;
+declare const anObject: object;
+declare const anObjectLiteral: { x: number };
+declare const aUnion: { x: number } | { y: string };
+declare const anIntersection: { x: number } & { y: string };
+declare const aFunction: () => number;
+
+if (u === aString) {
+    let uString: string = u;
+}
+
+if (u === aBoolean) {
+    let uString: boolean = u;
+}
+
+if (u === aNumber) {
+    let uNumber: number = u;
+}
+
+if (u === anObject) {
+    let uObject: object = u;
+}
+
+if (u === anObjectLiteral) {
+    let uObjectLiteral: object = u;
+}
+
+if (u === aUnion) {
+    type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+}
+
+if (u === anIntersection) {
+    type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+}
+
+if (u === aFunction) {
+    let uFunction: object = u;
+}
+
+enum NumberEnum {
+    A,
+    B,
+    C
+}
+
+enum StringEnum {
+    A = "A",
+    B = "B",
+    C = "C"
+}
+
+if (u === NumberEnum || u === StringEnum) {
+    let enumObj: object = u;
+}
+
+if(u === NumberEnum.A) {
+    let a: NumberEnum.A = u
+}
+
+if(u === StringEnum.B) {
+    let b: StringEnum.B = u
 }
 
 
@@ -79,4 +143,47 @@ if (u == 42) {
 if (u == true) {
 }
 if (u == Object) {
+}
+if (u === aString) {
+    var uString = u;
+}
+if (u === aBoolean) {
+    var uString = u;
+}
+if (u === aNumber) {
+    var uNumber = u;
+}
+if (u === anObject) {
+    var uObject = u;
+}
+if (u === anObjectLiteral) {
+    var uObjectLiteral = u;
+}
+if (u === aUnion) {
+}
+if (u === anIntersection) {
+}
+if (u === aFunction) {
+    var uFunction = u;
+}
+var NumberEnum;
+(function (NumberEnum) {
+    NumberEnum[NumberEnum["A"] = 0] = "A";
+    NumberEnum[NumberEnum["B"] = 1] = "B";
+    NumberEnum[NumberEnum["C"] = 2] = "C";
+})(NumberEnum || (NumberEnum = {}));
+var StringEnum;
+(function (StringEnum) {
+    StringEnum["A"] = "A";
+    StringEnum["B"] = "B";
+    StringEnum["C"] = "C";
+})(StringEnum || (StringEnum = {}));
+if (u === NumberEnum || u === StringEnum) {
+    var enumObj = u;
+}
+if (u === NumberEnum.A) {
+    var a = u;
+}
+if (u === StringEnum.B) {
+    var b = u;
 }

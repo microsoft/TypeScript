@@ -16018,8 +16018,14 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
-                if ((type.flags & TypeFlags.Unknown) && (operator === SyntaxKind.EqualsEqualsEqualsToken) && (valueType.flags & TypeFlags.Unit)) {
-                    return assumeTrue ? valueType : type;
+                if ((type.flags & TypeFlags.Unknown) && (operator === SyntaxKind.EqualsEqualsEqualsToken) && assumeTrue) {
+                    if (valueType.flags & TypeFlags.Primitive || valueType.flags & TypeFlags.NonPrimitive) {
+                        return valueType;
+                    }
+                    if (valueType.flags & TypeFlags.Object) {
+                        return nonPrimitiveType;
+                    }
+                    return type;
                 }
                 if (valueType.flags & TypeFlags.Nullable) {
                     if (!strictNullChecks) {

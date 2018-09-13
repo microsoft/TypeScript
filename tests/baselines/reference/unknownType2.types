@@ -105,7 +105,6 @@ if (!(u === 42)) {
     type A = isTrue<isUnknown<typeof u>>
 >A : true
 >u : unknown
-
 }
 
 if (u !== 42) {
@@ -146,5 +145,183 @@ if (u == Object) {
     type E = isTrue<isUnknown<typeof u>>
 >E : true
 >u : unknown
+}
+
+declare const aString: string;
+>aString : string
+
+declare const aBoolean: boolean;
+>aBoolean : boolean
+
+declare const aNumber: number;
+>aNumber : number
+
+declare const anObject: object;
+>anObject : object
+
+declare const anObjectLiteral: { x: number };
+>anObjectLiteral : { x: number; }
+>x : number
+
+declare const aUnion: { x: number } | { y: string };
+>aUnion : { x: number; } | { y: string; }
+>x : number
+>y : string
+
+declare const anIntersection: { x: number } & { y: string };
+>anIntersection : { x: number; } & { y: string; }
+>x : number
+>y : string
+
+declare const aFunction: () => number;
+>aFunction : () => number
+
+if (u === aString) {
+>u === aString : boolean
+>u : unknown
+>aString : string
+
+    let uString: string = u;
+>uString : string
+>u : string
+}
+
+if (u === aBoolean) {
+>u === aBoolean : boolean
+>u : unknown
+>aBoolean : boolean
+
+    let uString: boolean = u;
+>uString : boolean
+>u : boolean
+}
+
+if (u === aNumber) {
+>u === aNumber : boolean
+>u : unknown
+>aNumber : number
+
+    let uNumber: number = u;
+>uNumber : number
+>u : number
+}
+
+if (u === anObject) {
+>u === anObject : boolean
+>u : unknown
+>anObject : object
+
+    let uObject: object = u;
+>uObject : object
+>u : object
+}
+
+if (u === anObjectLiteral) {
+>u === anObjectLiteral : boolean
+>u : unknown
+>anObjectLiteral : { x: number; }
+
+    let uObjectLiteral: object = u;
+>uObjectLiteral : object
+>u : object
+}
+
+if (u === aUnion) {
+>u === aUnion : boolean
+>u : unknown
+>aUnion : { x: number; } | { y: string; }
+
+    type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+>unionDoesNotNarrow : true
+>u : unknown
+}
+
+if (u === anIntersection) {
+>u === anIntersection : boolean
+>u : unknown
+>anIntersection : { x: number; } & { y: string; }
+
+    type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+>intersectionDoesNotNarrow : true
+>u : unknown
+}
+
+if (u === aFunction) {
+>u === aFunction : boolean
+>u : unknown
+>aFunction : () => number
+
+    let uFunction: object = u;
+>uFunction : object
+>u : object
+}
+
+enum NumberEnum {
+>NumberEnum : NumberEnum
+
+    A,
+>A : NumberEnum.A
+
+    B,
+>B : NumberEnum.B
+
+    C
+>C : NumberEnum.C
+}
+
+enum StringEnum {
+>StringEnum : StringEnum
+
+    A = "A",
+>A : StringEnum.A
+>"A" : "A"
+
+    B = "B",
+>B : StringEnum.B
+>"B" : "B"
+
+    C = "C"
+>C : StringEnum.C
+>"C" : "C"
+}
+
+if (u === NumberEnum || u === StringEnum) {
+>u === NumberEnum || u === StringEnum : boolean
+>u === NumberEnum : boolean
+>u : unknown
+>NumberEnum : typeof NumberEnum
+>u === StringEnum : boolean
+>u : unknown
+>StringEnum : typeof StringEnum
+
+    let enumObj: object = u;
+>enumObj : object
+>u : object
+}
+
+if(u === NumberEnum.A) {
+>u === NumberEnum.A : boolean
+>u : unknown
+>NumberEnum.A : NumberEnum.A
+>NumberEnum : typeof NumberEnum
+>A : NumberEnum.A
+
+    let a: NumberEnum.A = u
+>a : NumberEnum.A
+>NumberEnum : any
+>u : NumberEnum.A
+}
+
+if(u === StringEnum.B) {
+>u === StringEnum.B : boolean
+>u : unknown
+>StringEnum.B : StringEnum.B
+>StringEnum : typeof StringEnum
+>B : StringEnum.B
+
+    let b: StringEnum.B = u
+>b : StringEnum.B
+>StringEnum : any
+>u : StringEnum.B
 }
 

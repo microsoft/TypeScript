@@ -32,7 +32,6 @@ if (u === symb) {
 
 if (!(u === 42)) {
     type A = isTrue<isUnknown<typeof u>>
-
 }
 
 if (u !== 42) {
@@ -49,4 +48,69 @@ if (u == true) {
 
 if (u == Object) {
     type E = isTrue<isUnknown<typeof u>>
+}
+
+declare const aString: string;
+declare const aBoolean: boolean;
+declare const aNumber: number;
+declare const anObject: object;
+declare const anObjectLiteral: { x: number };
+declare const aUnion: { x: number } | { y: string };
+declare const anIntersection: { x: number } & { y: string };
+declare const aFunction: () => number;
+
+if (u === aString) {
+    let uString: string = u;
+}
+
+if (u === aBoolean) {
+    let uString: boolean = u;
+}
+
+if (u === aNumber) {
+    let uNumber: number = u;
+}
+
+if (u === anObject) {
+    let uObject: object = u;
+}
+
+if (u === anObjectLiteral) {
+    let uObjectLiteral: object = u;
+}
+
+if (u === aUnion) {
+    type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+}
+
+if (u === anIntersection) {
+    type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+}
+
+if (u === aFunction) {
+    let uFunction: object = u;
+}
+
+enum NumberEnum {
+    A,
+    B,
+    C
+}
+
+enum StringEnum {
+    A = "A",
+    B = "B",
+    C = "C"
+}
+
+if (u === NumberEnum || u === StringEnum) {
+    let enumObj: object = u;
+}
+
+if(u === NumberEnum.A) {
+    let a: NumberEnum.A = u
+}
+
+if(u === StringEnum.B) {
+    let b: StringEnum.B = u
 }
