@@ -1312,7 +1312,10 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (result = lookup(getMembersOfSymbol(getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration)), name, meaning & SymbolFlags.Type)) {
+                        // The below is used to lookup type parameters within a class or interface, as they are added to the class/interface locals
+                        // These can never be latebound, so the symbol's raw members are sufficient. `getMembersOfNode` cannot be used, as it would
+                        // trigger resolving late-bound names, which we may already be in the process of doing while we're here!
+                        if (result = lookup(getSymbolOfNode(location as ClassLikeDeclaration | InterfaceDeclaration).members || emptySymbols, name, meaning & SymbolFlags.Type)) {
                             if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
                                 // ignore type parameters not declared in this container
                                 result = undefined;
