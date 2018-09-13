@@ -1,0 +1,131 @@
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(16,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(19,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(32,31): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(33,35): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(44,1): error TS2554: Expected 3 arguments, but got 1.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(51,1): error TS2554: Expected 4 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(52,1): error TS2554: Expected 4 arguments, but got 3.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(53,1): error TS2554: Expected 4 arguments, but got 1.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(71,6): error TS2345: Argument of type '(x: number, y: number) => number' is not assignable to parameter of type '() => void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(75,6): error TS2345: Argument of type '(x: number, y: void) => number' is not assignable to parameter of type '(args_0: number) => void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(76,6): error TS2345: Argument of type '(x: void, y: void) => number' is not assignable to parameter of type '() => void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(77,6): error TS2345: Argument of type '(x: number | void, y: number | void) => number' is not assignable to parameter of type '() => void'.
+tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts(78,6): error TS2345: Argument of type '(x: number | void, y: number | void) => number' is not assignable to parameter of type '(args_0: number) => void'.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts (13 errors) ====
+    // From #4260
+    class X<T> {
+        f(t: T) {
+            return { a: t };
+        }
+    }
+    
+    declare const x: X<void>;
+    x.f() // no error because f expects void
+    
+    declare const xUnion: X<void | number>;
+    xUnion.f(42) // no error because f accepts number
+    xUnion.f() // no error because f accepts void
+    
+    declare const xAny: X<any>;
+    xAny.f() // error, any still expects an argument
+    ~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
+    
+    declare const xUnknown: X<unknown>;
+    xUnknown.f() // error, unknown still expects an argument
+    ~~~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:3:7: An argument for 't' was not provided.
+    
+    
+    // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
+    
+    class MyPromise<X> {
+        constructor(executor: (resolve: (value: X) => void) => void) {
+    
+        }
+    }
+    
+    new MyPromise<void>(resolve => resolve()); // no error
+    new MyPromise<void | number>(resolve => resolve()); // no error
+    new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
+                                  ~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:25:38: An argument for 'value' was not provided.
+    new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cannot be omitted
+                                      ~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:25:38: An argument for 'value' was not provided.
+    
+    
+    // Multiple parameters
+    
+    function a(x: number, y: string, z: void): void  {
+        
+    }
+    
+    a(4, "hello"); // ok
+    a(4, "hello", void 0); // ok
+    a(4); // not ok
+    ~~~~
+!!! error TS2554: Expected 3 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:38:23: An argument for 'y' was not provided.
+    
+    function b(x: number, y: string, z: void, what: number): void  {
+        
+    }
+    
+    b(4, "hello", void 0, 2); // ok
+    b(4, "hello"); // not ok
+    ~~~~~~~~~~~~~
+!!! error TS2554: Expected 4 arguments, but got 2.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:46:34: An argument for 'z' was not provided.
+    b(4, "hello", void 0); // not ok
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 4 arguments, but got 3.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:46:43: An argument for 'what' was not provided.
+    b(4); // not ok
+    ~~~~
+!!! error TS2554: Expected 4 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts:46:23: An argument for 'y' was not provided.
+    
+    function c(x: number | void, y: void, z: void | string | number): void  {
+        
+    }
+    
+    c(3, void 0, void 0); // ok
+    c(3, void 0); // ok
+    c(3); // ok
+    c(); // ok
+    
+    
+    // Spread Parameters
+    
+    declare function call<TS extends unknown[]>(
+        handler: (...args: TS) => void,
+        ...args: TS): void;
+    
+    call((x: number, y: number) => x + y) // error
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number, y: number) => number' is not assignable to parameter of type '() => void'.
+    call((x: number, y: number) => x + y, 4, 2) // ok
+    
+    call((x: number, y: void) => x, 4, void 0) // ok
+    call((x: number, y: void) => x, 4) // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number, y: void) => number' is not assignable to parameter of type '(args_0: number) => void'.
+    call((x: void, y: void) => 42) // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: void, y: void) => number' is not assignable to parameter of type '() => void'.
+    call((x: number | void, y: number | void) => 42) // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number | void, y: number | void) => number' is not assignable to parameter of type '() => void'.
+    call((x: number | void, y: number | void) => 42, 4) // ok
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: number | void, y: number | void) => number' is not assignable to parameter of type '(args_0: number) => void'.
+    call((x: number | void, y: number | void) => 42, 4, 2) // ok
+    
+    
