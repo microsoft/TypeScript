@@ -37,8 +37,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -79,8 +78,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -137,8 +135,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   }
 ]

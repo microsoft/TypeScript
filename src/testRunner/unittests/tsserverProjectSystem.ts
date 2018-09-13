@@ -3204,7 +3204,7 @@ namespace ts.projectSystem {
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [],
-                tags: []
+                tags: undefined,
             });
         });
 
@@ -9501,7 +9501,7 @@ export function Test2() {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: emptyArray,
+                tags: undefined,
             };
             assert.deepEqual<ReadonlyArray<protocol.CompletionEntryDetails> | undefined>(detailsResponse, [
                 {
@@ -9583,7 +9583,7 @@ declare class TestLib {
 
     constructor() {
         var l = new TestLib();
-        
+
     }
 
     public test2() {

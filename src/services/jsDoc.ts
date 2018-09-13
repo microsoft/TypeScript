@@ -208,7 +208,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            tags: emptyArray,
+            tags: undefined,
             codeActions: undefined,
         };
     }
@@ -242,7 +242,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            tags: emptyArray,
+            tags: undefined,
             codeActions: undefined,
         };
     }
