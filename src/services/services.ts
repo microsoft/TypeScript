@@ -760,7 +760,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.BinaryExpression:
-                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                        if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
                             addDeclaration(node as BinaryExpression);
                         }
                     // falls through

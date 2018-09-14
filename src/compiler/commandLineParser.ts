@@ -1843,8 +1843,21 @@ namespace ts {
             if (hasProperty(raw, "files") && !isNullOrUndefined(raw.files)) {
                 if (isArray(raw.files)) {
                     filesSpecs = <ReadonlyArray<string>>raw.files;
-                    if (filesSpecs.length === 0) {
-                        createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
+                    const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
+                    const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
+                    if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
+                        if (sourceFile) {
+                            const fileName = configFileName || "tsconfig.json";
+                            const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
+                            const nodeValue = firstDefined(getTsConfigPropArray(sourceFile, "files"), property => property.initializer);
+                            const error = nodeValue
+                                ? createDiagnosticForNodeInSourceFile(sourceFile, nodeValue, diagnosticMessage, fileName)
+                                : createCompilerDiagnostic(diagnosticMessage, fileName);
+                            errors.push(error);
+                        }
+                        else {
+                            createCompilerDiagnosticOnlyIfJson(Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json");
+                        }
                     }
                 }
                 else {
@@ -2067,11 +2080,6 @@ namespace ts {
                                 createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
                         );
                         return;
-                    case "files":
-                        if ((<ReadonlyArray<string>>value).length === 0) {
-                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueNode, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
-                        }
-                        return;
                 }
             },
             onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
@@ -2081,6 +2089,7 @@ namespace ts {
             }
         };
         const json = convertToObjectWorker(sourceFile, errors, /*returnValue*/ true, getTsconfigRootOptionsMap(), optionsIterator);
+
         if (!typeAcquisition) {
             if (typingOptionstypeAcquisition) {
                 typeAcquisition = (typingOptionstypeAcquisition.enableAutoDiscovery !== undefined) ?

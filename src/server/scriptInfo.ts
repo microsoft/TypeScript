@@ -167,7 +167,7 @@ namespace ts.server {
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTypeScriptFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);

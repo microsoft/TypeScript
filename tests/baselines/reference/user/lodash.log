@@ -36,7 +36,7 @@ node_modules/lodash/_baseDifference.js(37,5): error TS2322: Type '(array?: any[]
 node_modules/lodash/_baseDifference.js(43,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
   Property 'length' is missing in type 'SetCache'.
 node_modules/lodash/_baseDifference.js(60,15): error TS2554: Expected 2 arguments, but got 3.
-node_modules/lodash/_baseFlatten.js(19,17): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
+node_modules/lodash/_baseFlatten.js(19,29): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
 node_modules/lodash/_baseFlatten.js(24,22): error TS2532: Object is possibly 'undefined'.
@@ -180,7 +180,7 @@ node_modules/lodash/cloneWith.js(39,27): error TS2345: Argument of type 'number'
 node_modules/lodash/conforms.js(32,41): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 node_modules/lodash/core.js(68,58): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/lodash/core.js(77,82): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
-node_modules/lodash/core.js(540,19): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
+node_modules/lodash/core.js(540,31): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/core.js(545,24): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'Boolean' has no compatible call signatures.
 node_modules/lodash/core.js(545,24): error TS2532: Object is possibly 'undefined'.
@@ -251,12 +251,12 @@ node_modules/lodash/debounce.js(86,30): error TS2532: Object is possibly 'undefi
 node_modules/lodash/debounce.js(111,23): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/debounce.js(125,65): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/deburr.js(42,44): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-node_modules/lodash/difference.js(29,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/difference.js(29,52): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
-node_modules/lodash/differenceBy.js(40,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/differenceBy.js(40,52): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/differenceBy.js(40,78): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/differenceWith.js(36,52): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/differenceWith.js(36,52): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/drop.js(13,10): error TS1003: Identifier expected.
 node_modules/lodash/drop.js(13,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
@@ -425,12 +425,12 @@ node_modules/lodash/truncate.js(78,16): error TS2454: Variable 'strSymbols' is u
 node_modules/lodash/truncate.js(85,7): error TS2454: Variable 'strSymbols' is used before being assigned.
 node_modules/lodash/unary.js(19,10): error TS2554: Expected 3 arguments, but got 2.
 node_modules/lodash/unescape.js(30,37): error TS2345: Argument of type 'Function' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-node_modules/lodash/union.js(23,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/union.js(23,42): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
-node_modules/lodash/unionBy.js(36,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/unionBy.js(36,42): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/unionBy.js(36,68): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/lodash/unionWith.js(31,42): error TS2345: Argument of type '(value: any) => boolean' is not assignable to parameter of type 'boolean | undefined'.
+node_modules/lodash/unionWith.js(31,42): error TS2322: Type '(value: any) => boolean' is not assignable to type 'boolean | undefined'.
   Type '(value: any) => boolean' is not assignable to type 'true'.
 node_modules/lodash/uniqBy.js(28,52): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/words.js(15,10): error TS1003: Identifier expected.

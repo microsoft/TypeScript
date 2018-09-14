@@ -250,7 +250,7 @@ namespace ts {
         Blue = "\u001b[94m",
         Cyan = "\u001b[96m"
     }
-    const gutterStyleSequence = "\u001b[30;47m";
+    const gutterStyleSequence = "\u001b[7m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
@@ -1438,9 +1438,9 @@ namespace ts {
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
-                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                    sourceFile.additionalSyntacticDiagnostics = getJSSyntacticDiagnosticsForFile(sourceFile);
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1538,7 +1538,7 @@ namespace ts {
             return true;
         }
 
-        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
+        function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
                 let parent: Node = sourceFile;
@@ -1801,7 +1801,7 @@ namespace ts {
                 return;
             }
 
-            const isJavaScriptFile = isSourceFileJavaScript(file);
+            const isJavaScriptFile = isSourceFileJS(file);
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
@@ -2273,7 +2273,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFile = !resolutionExtensionIsTypeScriptOrJson(resolution.extension);
+                    const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
@@ -2295,7 +2295,7 @@ namespace ts {
                         && i < file.imports.length
                         && !elideImport
                         && !(isJsFile && !options.allowJs)
-                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
+                        && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2794,7 +2794,7 @@ namespace ts {
                 return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
             }
 
-            if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
+            if (fileExtensionIsOneOf(filePath, supportedJSExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
                 // Otherwise just check if sourceFile with the name exists
                 const filePathWithoutExtension = removeFileExtension(filePath);
                 return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||

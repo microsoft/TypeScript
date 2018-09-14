@@ -657,7 +657,7 @@ namespace ts.refactor {
 
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                return isBinaryExpression(expression) && getSpecialPropertyAssignmentKind(expression) === SpecialPropertyAssignmentKind.ExportsProperty
+                return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
                     ? cb(statement as TopLevelExpressionStatement)
                     : undefined;
             }

@@ -1447,14 +1447,14 @@ namespace ts.server {
 
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
-                if (hasTypeScriptFileExtension(fileName)) {
+                if (hasTSFileExtension(fileName)) {
                     continue;
                 }
 
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
@@ -1464,14 +1464,14 @@ namespace ts.server {
 
             return;
 
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
+            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
                 const files = getTop5LargestFiles(context);
 
                 return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
             }
-            function getTop5LargestFiles({ propertyReader, hasTypeScriptFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }) {
+            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
                 return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTypeScriptFileExtension(name))
+                    .filter(name => hasTSFileExtension(name))
                     .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
                     .sort((a, b) => b.size - a.size)
                     .slice(0, 5);
