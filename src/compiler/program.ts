@@ -1017,13 +1017,14 @@ namespace ts {
 
             // If array of references is changed, we cant resue old program
             const oldProjectReferences = oldProgram.getProjectReferences();
-            if (!arrayIsEqualTo(oldProjectReferences!, projectReferences, projectReferencesIsEqualTo)) {
+            if (!arrayIsEqualTo(oldProjectReferences!, projectReferences, projectReferenceIsEqualTo)) {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             // Check the json files for the project references
             const oldRefs = oldProgram.getResolvedProjectReferences();
             if (projectReferences) {
+                // Resolved project referenced should be array if projectReferences provided are array
                 Debug.assert(!!oldRefs);
                 for (let i = 0; i < projectReferences.length; i++) {
                     const oldRef = oldRefs![i];
@@ -1043,6 +1044,7 @@ namespace ts {
                 }
             }
             else {
+                // Resolved project referenced should be undefined if projectReferences is undefined
                 Debug.assert(!oldRefs);
             }
 

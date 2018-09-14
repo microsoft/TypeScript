@@ -249,7 +249,7 @@ namespace ts {
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
     }
 
-    export function projectReferencesIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
+    export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
         return oldRef.path === newRef.path &&
             !oldRef.prepend === !newRef.prepend &&
             !oldRef.circular === !newRef.circular;
