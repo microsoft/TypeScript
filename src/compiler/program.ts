@@ -2341,7 +2341,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
-            const refPath = resolveProjectReferencePath(host, ref);
+            const refPath = resolveProjectReferencePath(ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
@@ -2820,18 +2820,13 @@ namespace ts {
         };
     }
 
-    export interface ResolveProjectReferencePathHost {
-        fileExists(fileName: string): boolean;
-    }
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName {
-        if (!host.fileExists(ref.path)) {
-            return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
-        }
-        return ref.path as ResolvedConfigFileName;
+    // TODO: Does this need to be exposed
+    export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName {
+        return resolveConfigFileProjectName(ref.path);
     }
 
     /* @internal */

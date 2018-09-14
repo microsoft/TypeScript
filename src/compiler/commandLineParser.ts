@@ -1825,7 +1825,8 @@ namespace ts {
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
         setConfigFileInOptions(options, sourceFile);
-        const { fileNames, wildcardDirectories, spec, projectReferences } = getFileNames();
+        let projectReferences: ProjectReference[] | undefined;
+        const { fileNames, wildcardDirectories, spec } = getFileNames();
         return {
             options,
             fileNames,
@@ -1904,13 +1905,12 @@ namespace ts {
 
             if (hasProperty(raw, "references") && !isNullOrUndefined(raw.references)) {
                 if (isArray(raw.references)) {
-                    const references: ProjectReference[] = [];
                     for (const ref of raw.references) {
                         if (typeof ref.path !== "string") {
                             createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
                         }
                         else {
-                            references.push({
+                            (projectReferences || (projectReferences = [])).push({
                                 path: getNormalizedAbsolutePath(ref.path, basePath),
                                 originalPath: ref.path,
                                 prepend: ref.prepend,
@@ -1918,7 +1918,6 @@ namespace ts {
                             });
                         }
                     }
-                    result.projectReferences = references;
                 }
                 else {
                     createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "references", "Array");
@@ -2407,7 +2406,7 @@ namespace ts {
         // new entries in these paths.
         const wildcardDirectories = getWildcardDirectories(validatedIncludeSpecs, validatedExcludeSpecs, basePath, host.useCaseSensitiveFileNames);
 
-        const spec: ConfigFileSpecs = { filesSpecs, referencesSpecs: undefined, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
+        const spec: ConfigFileSpecs = { filesSpecs, includeSpecs, excludeSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories };
         return getFileNamesFromConfigSpecs(spec, basePath, options, host, extraFileExtensions);
     }
 
@@ -2478,16 +2477,9 @@ namespace ts {
 
         const literalFiles = arrayFrom(literalFileMap.values());
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
-        const projectReferences = spec.referencesSpecs && spec.referencesSpecs.map((r): ProjectReference => {
-            return {
-                ...r,
-                path: getNormalizedAbsolutePath(r.path, basePath)
-            };
-        });
 
         return {
             fileNames: literalFiles.concat(wildcardFiles),
-            projectReferences,
             wildcardDirectories,
             spec
         };
