@@ -1,0 +1,77 @@
+=== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 15))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 1, 14))
+
+};
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+
+    b: string;
+>b : Symbol(Bar.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 5, 15))
+}
+
+interface Other {
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+    totallyUnrelatedProperty: number;
+>totallyUnrelatedProperty : Symbol(Other.totallyUnrelatedProperty, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 9, 17))
+}
+
+export let x = { a: '', b: '' };
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 16))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 23))
+
+declare function f(x: Foo | Other): any;
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 15, 19))
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+f(x);
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+f({ a: '', b: '' })
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 10))
+
+declare function g(x: Bar | Other): any;
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 20, 19))
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+g(x);
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+g({ a: '', b: '' })
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 10))
+
+declare function h(x: Foo | Bar | Other): any;
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 25, 19))
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+h(x);
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+h({ a: '', b: '' })
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 10))
+

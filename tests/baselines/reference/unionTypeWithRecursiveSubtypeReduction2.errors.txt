@@ -6,8 +6,11 @@ tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(19,1): error TS2
 tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2322: Type 'Class' is not assignable to type 'Property'.
   Types of property 'parent' are incompatible.
     Type 'Namespace' is not assignable to type 'Module | Class'.
-      Type 'Namespace' is not assignable to type 'Class'.
-        Property 'parent' is missing in type 'Namespace'.
+      Type 'Namespace' is not assignable to type 'Module'.
+        Types of property 'members' are incompatible.
+          Type '(Class | Property)[]' is not assignable to type 'Class[]'.
+            Type 'Class | Property' is not assignable to type 'Class'.
+              Type 'Property' is not assignable to type 'Class'.
 
 
 ==== tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts (2 errors) ====
@@ -41,6 +44,9 @@ tests/cases/compiler/unionTypeWithRecursiveSubtypeReduction2.ts(20,1): error TS2
 !!! error TS2322: Type 'Class' is not assignable to type 'Property'.
 !!! error TS2322:   Types of property 'parent' are incompatible.
 !!! error TS2322:     Type 'Namespace' is not assignable to type 'Module | Class'.
-!!! error TS2322:       Type 'Namespace' is not assignable to type 'Class'.
-!!! error TS2322:         Property 'parent' is missing in type 'Namespace'.
+!!! error TS2322:       Type 'Namespace' is not assignable to type 'Module'.
+!!! error TS2322:         Types of property 'members' are incompatible.
+!!! error TS2322:           Type '(Class | Property)[]' is not assignable to type 'Class[]'.
+!!! error TS2322:             Type 'Class | Property' is not assignable to type 'Class'.
+!!! error TS2322:               Type 'Property' is not assignable to type 'Class'.
     
