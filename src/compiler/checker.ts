@@ -923,6 +923,14 @@ namespace ts {
             return combined;
         }
 
+        /** CommonJS is *almost* a module -- no merges -- except that assignment declarations need to merge with globals. */
+        function mergeCommonJsSymbolTable(target: SymbolTable, source: SymbolTable) {
+            source.forEach((sourceSymbol, id) => {
+                if (target.has(id) && sourceSymbol.flags & SymbolFlags.Assignment) {
+                    target.set(id, mergeSymbol(target.get(id)!, sourceSymbol));
+                }
+            });
+        }
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
                 target.set(id, target.has(id) ? mergeSymbol(target.get(id)!, sourceSymbol) : sourceSymbol);
@@ -28588,8 +28596,13 @@ namespace ts {
                 if (file.redirectInfo) {
                     continue;
                 }
-                if (!isExternalOrCommonJsModule(file)) {
-                    mergeSymbolTable(globals, file.locals!);
+                if (!isExternalModule(file)) {
+                    if(file.commonJsModuleIndicator) {
+                        mergeCommonJsSymbolTable(globals, file.locals!);
+                    }
+                    else {
+                        mergeSymbolTable(globals, file.locals!);
+                    }
                 }
                 if (file.patternAmbientModules && file.patternAmbientModules.length) {
                     patternAmbientModules = concatenate(patternAmbientModules, file.patternAmbientModules);
