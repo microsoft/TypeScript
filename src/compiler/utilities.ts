@@ -7095,6 +7095,21 @@ namespace ts {
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
+    export function isStrictOptionName(name: string): name is StrictOptionName {
+        const strictName = name as StrictOptionName;
+        switch (strictName) {
+            case "noImplicitAny":
+            case "noImplicitThis":
+            case "strictNullChecks":
+            case "strictFunctionTypes":
+            case "strictPropertyInitialization":
+            case "alwaysStrict":
+                return true;
+            default:
+                assertType<never>(strictName);
+                return false;
+        }
+    }
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
@@ -8384,7 +8399,7 @@ namespace ts {
         for (const option of optionDeclarations) {
             // SourceFile stores `resolvedModules` and `bindDiagnostics` so changing those means changing the SourceFile
             if (option.name in compilerOptions && (!!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics)) {
-                res[option.name] = compilerOptions[option.name];
+                res[option.name] = isStrictOptionName(option.name) ? getStrictOptionValue(compilerOptions, option.name) : compilerOptions[option.name];
             }
         }
         return res;

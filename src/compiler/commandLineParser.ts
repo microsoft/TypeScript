@@ -320,7 +320,6 @@ namespace ts {
         {
             name: "strict",
             type: "boolean",
-            affectsSourceFile: true, // via affecting "alwaysStrict"
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_all_strict_type_checking_options
