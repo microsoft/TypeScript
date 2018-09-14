@@ -160,7 +160,7 @@ namespace ts {
             }
 
             function addHandlers(returnChild: Node) {
-                if (isPromiseHandler(returnChild)) {
+                if (isFixablePromiseHandler(returnChild)) {
                     returnStatements.push(child as ReturnStatement);
                 }
             }
@@ -170,8 +170,39 @@ namespace ts {
         return returnStatements;
     }
 
-    function isPromiseHandler(node: Node): boolean {
-        return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
-            (node.expression.name.text === "then" || node.expression.name.text === "catch"));
+    // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
+    function isFixablePromiseHandler(node: Node): boolean {
+        // ensure outermost call exists and is a promise handler
+        if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
+            return false;
+        }
+
+        // ensure all chained calls are valid
+        let currentNode = node.expression;
+        while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
+            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
+                return false;
+            }
+            currentNode = currentNode.expression;
+        }
+        return true;
+    }
+
+    function isPromiseHandler(node: Node): node is CallExpression {
+        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
+    function isFixablePromiseArgument(arg: Expression): boolean {
+        switch (arg.kind) {
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.Identifier: // identifier includes undefined
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

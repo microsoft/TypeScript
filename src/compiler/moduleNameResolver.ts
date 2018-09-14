@@ -74,7 +74,7 @@ namespace ts {
         if (!resolved) {
             return undefined;
         }
-        Debug.assert(extensionIsTypeScript(resolved.extension));
+        Debug.assert(extensionIsTS(resolved.extension));
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
@@ -778,7 +778,7 @@ namespace ts {
      * Throws an error if the module can't be resolved.
      */
     /* @internal */
-    export function resolveJavascriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+    export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
         const { resolvedModule, failedLookupLocations } =
             nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
         if (!resolvedModule) {
@@ -958,7 +958,7 @@ namespace ts {
 
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJavascriptFileExtension(candidate)) {
+        if (hasJSFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
@@ -1052,7 +1052,7 @@ namespace ts {
                     const jsPath = readPackageJsonMainField(packageJsonContent, packageDirectory, state);
                     if (typeof jsPath === "string" && jsPath.length > packageDirectory.length) {
                         const potentialSubModule = jsPath.substring(packageDirectory.length + 1);
-                        subModuleName = (forEach(supportedJavascriptExtensions, extension =>
+                        subModuleName = (forEach(supportedJSExtensions, extension =>
                             tryRemoveExtension(potentialSubModule, extension)) || potentialSubModule) + Extension.Dts;
                     }
                     else {

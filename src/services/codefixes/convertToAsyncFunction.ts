@@ -2,11 +2,13 @@
 namespace ts.codefix {
     const fixId = "convertToAsyncFunction";
     const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
+    let codeActionSucceeded = true;
     registerCodeFix({
         errorCodes,
         getCodeActions(context: CodeFixContext) {
+            codeActionSucceeded = true;
             const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)];
+            return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
@@ -252,6 +254,7 @@ namespace ts.codefix {
     }
 
     // dispatch function to recursively build the refactoring
+    // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
     function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         if (!node) {
             return [];
@@ -273,6 +276,7 @@ namespace ts.codefix {
             return transformPromiseCall(node, transformer, prevArgName);
         }
 
+        codeActionSucceeded = false;
         return [];
     }
 
@@ -381,13 +385,18 @@ namespace ts.codefix {
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
 
+    // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
     function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const hasArgName = argName && argName.identifier.text.length > 0;
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
+            case SyntaxKind.NullKeyword:
+                // do not produce a transformed statement for a null argument
+                break;
             case SyntaxKind.Identifier:
+                // identifier includes undefined
                 if (!hasArgName) break;
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
@@ -443,6 +452,9 @@ namespace ts.codefix {
                         return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody) as Expression)]);
                     }
                 }
+            default:
+                // We've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
+                codeActionSucceeded = false;
                 break;
         }
         return createNodeArray([]);
@@ -490,14 +502,6 @@ namespace ts.codefix {
             });
         }
         return innerCbBody;
-    }
-
-    function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
-        if (!isPropertyAccessExpression(node.expression)) {
-            return false;
-        }
-
-        return node.expression.name.text === funcName;
     }
 
     function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {

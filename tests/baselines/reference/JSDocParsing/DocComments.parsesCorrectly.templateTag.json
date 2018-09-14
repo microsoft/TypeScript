@@ -21,7 +21,7 @@
             "typeParameters": {
                 "0": {
                     "kind": "TypeParameter",
-                    "pos": 18,
+                    "pos": 17,
                     "end": 19,
                     "name": {
                         "kind": "Identifier",
@@ -31,7 +31,7 @@
                     }
                 },
                 "length": 1,
-                "pos": 18,
+                "pos": 17,
                 "end": 19
             }
         },

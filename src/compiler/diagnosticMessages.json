@@ -2948,7 +2948,10 @@
         "category": "Error",
         "code": 5072
     },
-
+    "Build option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5073
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3874,10 +3877,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4644,7 +4643,7 @@
         "category": "Message",
         "code": 95062
     },
-    
+
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4653,12 +4652,12 @@
         "category": "Message",
         "code": 95064
     },
-    "Convert to async function":{
+    "Convert to async function": {
         "category": "Message",
-         "code": 95065
+        "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
-         "code": 95066
+        "category": "Message",
+        "code": 95066
     }
 }
