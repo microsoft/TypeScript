@@ -1,0 +1,131 @@
+=== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
+
+interface BaseProps {
+>BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+
+  when?: (value: string) => boolean;
+>when : Symbol(BaseProps.when, Decl(reactDefaultPropsInferenceSuccess.tsx, 4, 21))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 5, 10))
+}
+
+interface Props extends BaseProps {
+>Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 6, 1))
+>BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+}
+
+class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
+>FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 9, 1))
+>P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 11, 20))
+>Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 6, 1))
+>BaseProps : Symbol(BaseProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 26))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(reactDefaultPropsInferenceSuccess.tsx, 2, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 11, 20))
+
+  static defaultProps = {
+>defaultProps : Symbol(FieldFeedback.defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 11, 77))
+
+    when: () => true
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 12, 25))
+
+  };
+
+  render() {
+>render : Symbol(FieldFeedback.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 14, 4))
+
+    return <div>Hello</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+  }
+}
+
+// OK
+const Test1 = () => <FieldFeedback when={value => !!value} />;
+>Test1 : Symbol(Test1, Decl(reactDefaultPropsInferenceSuccess.tsx, 22, 5))
+>FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 9, 1))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 22, 34))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 22, 41))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 22, 41))
+
+// Error: Void not assignable to boolean
+const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
+>Test2 : Symbol(Test2, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 5))
+>FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 9, 1))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 34))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 41))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 41))
+
+
+interface MyPropsProps extends Props {
+>MyPropsProps : Symbol(MyPropsProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 73))
+>Props : Symbol(Props, Decl(reactDefaultPropsInferenceSuccess.tsx, 6, 1))
+
+  when: (value: string) => boolean;
+>when : Symbol(MyPropsProps.when, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 38))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 29, 9))
+}
+
+class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
+>FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 30, 1))
+>P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 32, 21))
+>MyPropsProps : Symbol(MyPropsProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 73))
+>MyPropsProps : Symbol(MyPropsProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 25, 73))
+>FieldFeedback : Symbol(FieldFeedback, Decl(reactDefaultPropsInferenceSuccess.tsx, 9, 1))
+>P : Symbol(P, Decl(reactDefaultPropsInferenceSuccess.tsx, 32, 21))
+
+  static defaultProps = {
+>defaultProps : Symbol(FieldFeedback2.defaultProps, Decl(reactDefaultPropsInferenceSuccess.tsx, 32, 86))
+
+    when: () => true
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 33, 25))
+
+  };
+
+  render() {
+>render : Symbol(FieldFeedback2.render, Decl(reactDefaultPropsInferenceSuccess.tsx, 35, 4))
+
+    this.props.when("now"); // OK, always defined
+>this.props.when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 38))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>this : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 30, 1))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 28, 38))
+
+    return <div>Hello</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+  }
+}
+
+// OK
+const Test3 = () => <FieldFeedback2 when={value => !!value} />;
+>Test3 : Symbol(Test3, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 5))
+>FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 30, 1))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 35))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 42))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 44, 42))
+
+// Error: Void not assignable to boolean
+const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
+>Test4 : Symbol(Test4, Decl(reactDefaultPropsInferenceSuccess.tsx, 47, 5))
+>FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 30, 1))
+>when : Symbol(when, Decl(reactDefaultPropsInferenceSuccess.tsx, 47, 35))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 47, 42))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(reactDefaultPropsInferenceSuccess.tsx, 47, 42))
+
+// OK
+const Test5 = () => <FieldFeedback2 />;
+>Test5 : Symbol(Test5, Decl(reactDefaultPropsInferenceSuccess.tsx, 50, 5))
+>FieldFeedback2 : Symbol(FieldFeedback2, Decl(reactDefaultPropsInferenceSuccess.tsx, 30, 1))
+
