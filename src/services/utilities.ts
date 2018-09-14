@@ -23,8 +23,10 @@ namespace ts {
 
     export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         switch (node.kind) {
-            case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
+                return isInJSFile(node) && getJSDocEnumTag(node) ? SemanticMeaning.All : SemanticMeaning.Value;
+
+            case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -224,6 +226,14 @@ namespace ts {
         return undefined;
     }
 
+    export function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
+        if (!isPropertyAccessExpression(node.expression)) {
+            return false;
+        }
+
+        return node.expression.name.text === funcName;
+    }
+
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
         return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
     }
@@ -355,23 +365,23 @@ namespace ts {
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
             case SyntaxKind.BinaryExpression:
-                const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const kind = getAssignmentDeclarationKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
                 switch (kind) {
-                    case SpecialPropertyAssignmentKind.None:
+                    case AssignmentDeclarationKind.None:
                         return ScriptElementKind.unknown;
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case AssignmentDeclarationKind.ExportsProperty:
+                    case AssignmentDeclarationKind.ModuleExports:
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case AssignmentDeclarationKind.PrototypeProperty:
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
-                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case AssignmentDeclarationKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
-                    case SpecialPropertyAssignmentKind.Property:
+                    case AssignmentDeclarationKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
-                    case SpecialPropertyAssignmentKind.Prototype:
+                    case AssignmentDeclarationKind.Prototype:
                         return ScriptElementKind.localClassElement;
                     default: {
                         assertType<never>(kind);

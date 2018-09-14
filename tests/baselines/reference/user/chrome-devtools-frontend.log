@@ -284,7 +284,7 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationModel.js(811,44): error TS2300: Duplicate identifier 'Request'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(7,11): error TS2339: Property 'AnimationScreenshotPopover' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(9,23): error TS2304: Cannot find name 'Image'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(18,39): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(18,39): error TS2322: Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'Node'.
   Property 'baseURI' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(19,13): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationScreenshotPopover.js(22,21): error TS2339: Property 'style' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
@@ -12007,7 +12007,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataP
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(621,36): error TS2339: Property 'preciseMillisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(654,37): error TS2339: Property 'naturalHeight' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(655,39): error TS2339: Property 'naturalWidth' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(660,23): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'CanvasImageSource'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(660,23): error TS2322: Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'CanvasImageSource'.
   Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'ImageBitmap'.
     Property 'height' is missing in type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(788,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'GroupStyle'.
@@ -12519,7 +12519,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1649
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1651,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1652,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1652,69): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1657,64): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'Node'.
+node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1657,64): error TS2322: Type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to type 'Node'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1664,11): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1665,67): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineUIUtils.js(1675,5): error TS2322: Type 'DocumentFragment' is not assignable to type 'Element'.

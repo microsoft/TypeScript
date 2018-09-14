@@ -502,11 +502,11 @@ namespace ts.FindAllReferences {
 
             function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
                 let kind: ExportKind;
-                switch (getSpecialPropertyAssignmentKind(node)) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                switch (getAssignmentDeclarationKind(node)) {
+                    case AssignmentDeclarationKind.ExportsProperty:
                         kind = ExportKind.Named;
                         break;
-                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case AssignmentDeclarationKind.ModuleExports:
                         kind = ExportKind.ExportEquals;
                         break;
                     default:

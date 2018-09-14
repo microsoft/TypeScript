@@ -254,7 +254,7 @@ namespace ts {
         return changeExtension(outputPath, Extension.Dts);
     }
 
-    function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
@@ -269,7 +269,7 @@ namespace ts {
         }
 
         const outputs: string[] = [];
-        const js = getOutputJavaScriptFileName(inputFileName, configFile);
+        const js = getOutputJSFileName(inputFileName, configFile);
         outputs.push(js);
         if (configFile.options.sourceMap) {
             outputs.push(`${js}.map`);

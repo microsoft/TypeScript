@@ -73,8 +73,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -175,8 +174,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -225,8 +223,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -327,8 +324,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -377,8 +373,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -455,8 +450,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -549,8 +543,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -667,8 +660,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -733,8 +725,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -851,8 +842,7 @@
           "kind": "typeParameterName"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -917,8 +907,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -995,8 +984,7 @@
           "kind": "stringLiteral"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   }
 ]
