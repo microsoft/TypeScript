@@ -20,12 +20,12 @@ tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(2
            ~~~
 !!! error TS2322: Type 'typeof Bar' is not assignable to type 'Bar'.
 !!! error TS2322:   Property 'x' is missing in type 'typeof Bar'.
-!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:10:8: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:10:8: Did you mean to use 'new' with this expression?
         y: Date
            ~~~~
 !!! error TS2322: Type 'DateConstructor' is not assignable to type 'Date'.
 !!! error TS2322:   Property 'toDateString' is missing in type 'DateConstructor'.
-!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:11:8: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:11:8: Did you mean to use 'new' with this expression?
     }, getNum());
     
     foo({
