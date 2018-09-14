@@ -12838,7 +12838,8 @@ namespace ts {
         }
 
         function getDefinitelyFalsyPartOfType(type: Type): Type {
-            return type.flags & TypeFlags.String ? emptyStringType :
+            return type.flags & TypeFlags.Instantiable ? extractDefinitelyFalsyTypes(getBaseConstraintOfType(type) || unknownType) :
+                type.flags & TypeFlags.String ? emptyStringType :
                 type.flags & TypeFlags.Number ? zeroType :
                 type.flags & TypeFlags.Boolean || type === falseType ? falseType :
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
