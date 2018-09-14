@@ -11472,7 +11472,8 @@ namespace ts {
                         findMatchingDiscriminantType(source, target) ||
                         findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
                         findBestTypeForObjectLiteral(source, target) ||
-                        findBestTypeForInvokable(source, target);
+                        findBestTypeForInvokable(source, target) ||
+                        findMostOverlappyType(source, target);
 
                     isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
@@ -11510,6 +11511,32 @@ namespace ts {
                 if (hasSignatures) {
                     return find(unionTarget.types, t => getSignaturesOfType(t, signatureKind).length > 0);
                 }
+            }
+
+            function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
+                if (!(source.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                    return undefined;
+                }
+                const sourceProperties = getPropertiesOfType(source);
+                let bestType;
+                let count = -1;
+                for (const target of unionTarget.types) {
+                    if (!(target.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                        continue;
+                    }
+
+                    let currentCount = 0;
+                    for (const prop of sourceProperties) {
+                        if (getPropertyOfType(target, prop.escapedName)) {
+                            currentCount++;
+                        }
+                    }
+                    if (currentCount >= count) {
+                        count = currentCount;
+                        bestType = target;
+                    }
+                }
+                return bestType;
             }
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
