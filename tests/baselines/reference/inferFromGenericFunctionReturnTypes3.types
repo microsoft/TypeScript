@@ -231,9 +231,9 @@ function objectToMap(obj: any) {
 >Object.keys(obj).map(key => [key, obj[key]]) : [string, any][]
 >Object.keys(obj).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >Object.keys(obj) : string[]
->Object.keys : (o: {}) => string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
 >Object : ObjectConstructor
->keys : (o: {}) => string[]
+>keys : { (o: object): string[]; (o: {}): string[]; }
 >obj : any
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >key => [key, obj[key]] : (key: string) => [string, any]
