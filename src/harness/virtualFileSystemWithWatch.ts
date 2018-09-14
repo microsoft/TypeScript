@@ -934,7 +934,12 @@ interface Array<T> {}`
             const folder = this.fs.get(base) as FsFolder;
             Debug.assert(isFsFolder(folder));
 
-            this.addFileOrFolderInFolder(folder, file);
+            if (!this.fs.has(file.path)) {
+                this.addFileOrFolderInFolder(folder, file);
+            }
+            else {
+                this.modifyFile(path, content);
+            }
         }
 
         write(message: string) {

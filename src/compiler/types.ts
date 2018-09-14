@@ -2551,6 +2551,11 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /** Resolved path can be different from path property,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case resolvedPath = path to output file
+         * path = input file's path
+         */
         /* @internal */ resolvedPath: Path;
 
         /**
@@ -2819,6 +2824,7 @@ namespace ts {
 
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
         getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
     }
 
     /* @internal */

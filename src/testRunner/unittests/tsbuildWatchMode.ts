@@ -94,6 +94,7 @@ namespace ts.tscWatch {
         const ui = subProjectFiles(SubProject.ui);
         const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
         const testProjectExpectedWatchedFiles = [core[0], core[1], core[2], ...logic, ...tests].map(f => f.path);
+        const testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
 
         function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
@@ -110,7 +111,7 @@ namespace ts.tscWatch {
         function verifyWatches(host: WatchedSystem) {
             checkWatchedFiles(host, testProjectExpectedWatchedFiles);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+            checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
         }
 
         it("creates solution in watch mode", () => {
@@ -161,7 +162,7 @@ namespace ts.tscWatch {
                     function verifyWatches() {
                         checkWatchedFiles(host, additionalFiles ? testProjectExpectedWatchedFiles.concat(newFile.path) : testProjectExpectedWatchedFiles);
                         checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                        checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+                        checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
                     }
                 }
 
@@ -347,7 +348,7 @@ function myFunc() { return 100; }`);
             function verifyWatches() {
                 checkWatchedFiles(host, projectFiles.map(f => f.path));
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-                checkWatchedDirectories(host, [projectPath(SubProject.core), projectPath(SubProject.logic)], /*recursive*/ true);
+                checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
             }
         });
 
@@ -389,12 +390,87 @@ let x: string = 10;`);
             });
         });
 
-        it("tsc-watch works with project references", () => {
-            // Build the composite project
-            const host = createSolutionInWatchMode(allFiles);
+        describe("tsc-watch works with project references", () => {
+            const coreIndexDts = projectFilePath(SubProject.core, "index.d.ts");
+            const coreAnotherModuleDts = projectFilePath(SubProject.core, "anotherModule.d.ts");
+            const logicIndexDts = projectFilePath(SubProject.logic, "index.d.ts");
+            const expectedWatchedFiles = [core[0], logic[0], ...tests, libFile].map(f => f.path).concat(coreIndexDts, coreAnotherModuleDts, logicIndexDts);
+            const expectedWatchedDirectoriesRecursive = projectSystem.getTypeRootsFromLocation(projectPath(SubProject.tests));
 
-            createWatchOfConfigFile(tests[0].path, host);
-            checkOutputErrorsInitial(host, emptyArray);
+            function createSolution() {
+                const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
+                const solutionBuilder = createSolutionBuilder(host, [`${project}/${SubProject.tests}`], {});
+                return { host, solutionBuilder };
+            }
+
+            function createBuiltSolution() {
+                const result = createSolution();
+                const { host, solutionBuilder } = result;
+                solutionBuilder.buildAllProjects();
+                const outputFileStamps = getOutputFileStamps(host);
+                for (const stamp of outputFileStamps) {
+                    assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
+                }
+                return result;
+            }
+
+            function verifyWatches(host: WatchedSystem) {
+                checkWatchedFilesDetailed(host, expectedWatchedFiles, 1);
+                checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
+                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, 1, /*recursive*/ true);
+            }
+
+            function createSolutionAndWatchMode() {
+                // Build the composite project
+                const { host, solutionBuilder } = createBuiltSolution();
+
+                // Build in watch mode
+                const watch = createWatchOfConfigFileReturningBuilder(tests[0].path, host);
+                checkOutputErrorsInitial(host, emptyArray);
+
+                return { host, solutionBuilder, watch };
+            }
+
+            function verifyDependencies(watch: () => BuilderProgram, filePath: string, expected: ReadonlyArray<string>) {
+                checkArray(`${filePath} dependencies`, watch().getAllDependencies(watch().getSourceFile(filePath)!).map(f => f.toLocaleLowerCase()), expected);
+            }
+
+            describe("invoking when references are already built", () => {
+                it("verifies dependencies and watches", () => {
+                    const { host, watch } = createSolutionAndWatchMode();
+
+                    verifyWatches(host);
+                    verifyDependencies(watch, coreIndexDts, [coreIndexDts]);
+                    verifyDependencies(watch, coreAnotherModuleDts, [coreAnotherModuleDts]);
+                    verifyDependencies(watch, logicIndexDts, [logicIndexDts, coreAnotherModuleDts]);
+                    verifyDependencies(watch, tests[1].path, [tests[1].path, coreAnotherModuleDts, logicIndexDts, coreAnotherModuleDts]);
+                });
+
+                it("local edit in ts file, result in watch compilation because logic.d.ts is written", () => {
+                    const { host, solutionBuilder } = createSolutionAndWatchMode();
+                    host.writeFile(logic[1].path, `${logic[1].content}
+function foo() {
+}`);
+                    solutionBuilder.invalidateProject(`${project}/${SubProject.logic}`);
+                    solutionBuilder.buildInvalidatedProject();
+
+                    host.checkTimeoutQueueLengthAndRun(1); // not ideal, but currently because of d.ts but no new file is written
+                    checkOutputErrorsIncremental(host, emptyArray);
+                });
+
+                it("non local edit in ts file, rebuilds in watch compilation", () => {
+                    const { host, solutionBuilder } = createSolutionAndWatchMode();
+                    host.writeFile(logic[1].path, `${logic[1].content}
+export function gfoo() {
+}`);
+                    solutionBuilder.invalidateProject(logic[0].path);
+                    solutionBuilder.buildInvalidatedProject();
+
+                    host.checkTimeoutQueueLengthAndRun(1);
+                    checkOutputErrorsIncremental(host, emptyArray);
+                });
+
+            });
         });
     });
 }

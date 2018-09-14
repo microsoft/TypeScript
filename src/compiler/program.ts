@@ -758,7 +758,8 @@ namespace ts {
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
             getProjectReferences,
-            getResolvedProjectReferences
+            getResolvedProjectReferences,
+            getProjectReferenceRedirect
         };
 
         verifyCompilerOptions();

@@ -20,6 +20,13 @@ namespace ts.tscWatch {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
+    export function createWatchOfConfigFileReturningBuilder(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
+        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
+        const watch = createWatchProgram(compilerHost);
+        return () => watch.getCurrentProgram();
+    }
+
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
         const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;

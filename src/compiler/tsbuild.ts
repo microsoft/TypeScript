@@ -862,7 +862,7 @@ namespace ts {
             if (buildProject) {
                 buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
                 if (hasPendingInvalidatedProjects()) {
-                    if (!timerToBuildInvalidatedProject) {
+                    if (options.watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
                     }
                 }
