@@ -25,9 +25,9 @@ class C<T extends Options> {
 >foo : { [P in keyof T]: T[P]; }
 
         !(a && b);
->!(a && b) : false
->(a && b) : T["b"]
->a && b : T["b"]
+>!(a && b) : boolean
+>(a && b) : 0 | T["b"] | undefined
+>a && b : 0 | T["b"] | undefined
 >a : T["a"]
 >b : T["b"]
 
