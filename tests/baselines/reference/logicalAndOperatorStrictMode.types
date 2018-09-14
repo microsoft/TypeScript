@@ -420,3 +420,16 @@ const z8 = z && z;
 >z : undefined
 >z : never
 
+function f1<T extends string | number | boolean | undefined | null>(t: T) {
+>f1 : <T extends string | number | boolean | null | undefined>(t: T) => void
+>null : null
+>t : T
+
+    const r1 = t && [0];
+>r1 : false | "" | 0 | number[] | null | undefined
+>t && [0] : false | "" | 0 | number[] | null | undefined
+>t : T
+>[0] : number[]
+>0 : 0
+}
+

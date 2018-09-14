@@ -80,6 +80,11 @@ const z6 = z && u;
 const z7 = z && n;
 const z8 = z && z;
 
+function f1<T extends string | number | boolean | undefined | null>(t: T) {
+    const r1 = t && [0];
+}
+
+
 //// [logicalAndOperatorStrictMode.js]
 var a = [0];
 var s = "";
@@ -153,3 +158,6 @@ var z5 = z && v;
 var z6 = z && u;
 var z7 = z && n;
 var z8 = z && z;
+function f1(t) {
+    var r1 = t && [0];
+}

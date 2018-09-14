@@ -348,3 +348,14 @@ const z8 = z && z;
 >z : Symbol(z, Decl(logicalAndOperatorStrictMode.ts, 7, 5))
 >z : Symbol(z, Decl(logicalAndOperatorStrictMode.ts, 7, 5))
 
+function f1<T extends string | number | boolean | undefined | null>(t: T) {
+>f1 : Symbol(f1, Decl(logicalAndOperatorStrictMode.ts, 79, 18))
+>T : Symbol(T, Decl(logicalAndOperatorStrictMode.ts, 81, 12))
+>t : Symbol(t, Decl(logicalAndOperatorStrictMode.ts, 81, 68))
+>T : Symbol(T, Decl(logicalAndOperatorStrictMode.ts, 81, 12))
+
+    const r1 = t && [0];
+>r1 : Symbol(r1, Decl(logicalAndOperatorStrictMode.ts, 82, 9))
+>t : Symbol(t, Decl(logicalAndOperatorStrictMode.ts, 81, 68))
+}
+
