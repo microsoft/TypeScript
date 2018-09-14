@@ -296,8 +296,8 @@ namespace ts {
             createPromiseType,
             createArrayType,
             getBooleanType: () => booleanType,
-            getFalseType: () => falseType,
-            getTrueType: () => trueType,
+            getFalseType: (fresh?) => fresh ? falseType : regularFalseType,
+            getTrueType: (fresh?) => fresh ? trueType : regularTrueType,
             getVoidType: () => voidType,
             getUndefinedType: () => undefinedType,
             getNullType: () => nullType,
@@ -405,9 +405,22 @@ namespace ts {
         const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null | TypeFlags.ContainsWideningType, "null");
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
-        const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false");
-        const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true");
-        const booleanType = createBooleanType([falseType, trueType]);
+        const falseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false") as FreshableIntrinsicType;
+        const regularFalseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false") as FreshableIntrinsicType;
+        const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true") as FreshableIntrinsicType;
+        const regularTrueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true") as FreshableIntrinsicType;
+        falseType.flags |= TypeFlags.FreshLiteral;
+        trueType.flags |= TypeFlags.FreshLiteral;
+        trueType.regularType = regularTrueType;
+        regularTrueType.freshType = trueType;
+        falseType.regularType = regularFalseType;
+        regularFalseType.freshType = falseType;
+        const booleanType = createBooleanType([regularFalseType, regularTrueType]);
+        // Also mark all combinations of fresh/regular booleans as "Boolean" so they print as `boolean` instead of `true | false`
+        // (The union is cached, so simply doing the marking here is sufficient)
+        createBooleanType([regularFalseType, trueType]);
+        createBooleanType([falseType, regularTrueType]);
+        createBooleanType([falseType, trueType]);
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
@@ -4173,7 +4186,7 @@ namespace ts {
                         const baseType = t.flags & TypeFlags.BooleanLiteral ? booleanType : getBaseTypeOfEnumLiteralType(<LiteralType>t);
                         if (baseType.flags & TypeFlags.Union) {
                             const count = (<UnionType>baseType).types.length;
-                            if (i + count <= types.length && types[i + count - 1] === (<UnionType>baseType).types[count - 1]) {
+                            if (i + count <= types.length && getRegularTypeOfLiteralType(types[i + count - 1]) === getRegularTypeOfLiteralType((<UnionType>baseType).types[count - 1])) {
                                 result.push(baseType);
                                 i += count - 1;
                                 continue;
@@ -6160,7 +6173,7 @@ namespace ts {
             if (type.flags & TypeFlags.UniqueESSymbol) {
                 return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             }
-            if (type.flags & TypeFlags.StringOrNumberLiteral) {
+            if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                 return escapeLeadingUnderscores("" + (<LiteralType>type).value);
             }
             return Debug.fail();
@@ -8813,7 +8826,7 @@ namespace ts {
                     t.flags & TypeFlags.StringLiteral && includes & TypeFlags.String ||
                     t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
-                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
+                    t.flags & TypeFlags.Literal && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
                 }
@@ -9813,8 +9826,8 @@ namespace ts {
         }
 
         function getFreshTypeOfLiteralType(type: Type): Type {
-            if (type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral)) {
-                if (!(<LiteralType>type).freshType) {
+            if (type.flags & TypeFlags.Literal && !(type.flags & TypeFlags.FreshLiteral)) {
+                if (!(<LiteralType>type).freshType) { // NOTE: Safe because all freshable intrinsics always have fresh types already
                     const freshType = createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).value, (<LiteralType>type).symbol);
                     freshType.regularType = <LiteralType>type;
                     (<LiteralType>type).freshType = freshType;
@@ -9825,7 +9838,7 @@ namespace ts {
         }
 
         function getRegularTypeOfLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType :
+            return type.flags & TypeFlags.Literal && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType :
                 type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) :
                 type;
         }
@@ -11038,11 +11051,11 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
-                source = (<LiteralType>source).regularType;
+            if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                source = (<FreshableType>source).regularType;
             }
-            if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
-                target = (<LiteralType>target).regularType;
+            if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                target = (<FreshableType>target).regularType;
             }
             if (source === target ||
                 relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
@@ -11197,11 +11210,11 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage): Ternary {
-                if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
-                    source = (<LiteralType>source).regularType;
+                if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                    source = (<FreshableType>source).regularType;
                 }
-                if (target.flags & TypeFlags.StringOrNumberLiteral && target.flags & TypeFlags.FreshLiteral) {
-                    target = (<LiteralType>target).regularType;
+                if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                    target = (<FreshableType>target).regularType;
                 }
                 if (source.flags & TypeFlags.Substitution) {
                     source = relation === definitelyAssignableRelation ? (<SubstitutionType>source).typeVariable : (<SubstitutionType>source).substitute;
@@ -12769,7 +12782,7 @@ namespace ts {
             return type.flags & TypeFlags.EnumLiteral && type.flags & TypeFlags.FreshLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                type.flags & TypeFlags.BooleanLiteral && type.flags & TypeFlags.FreshLiteral ? booleanType :
                 type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
                 type;
         }
@@ -12823,7 +12836,7 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
                 type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).value === "" ? TypeFlags.StringLiteral : 0 :
                 type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).value === 0 ? TypeFlags.NumberLiteral : 0 :
-                type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
+                type.flags & TypeFlags.BooleanLiteral ? (type === falseType || type === regularFalseType) ? TypeFlags.BooleanLiteral : 0 :
                 type.flags & TypeFlags.PossiblyFalsy;
         }
 
@@ -12840,7 +12853,8 @@ namespace ts {
         function getDefinitelyFalsyPartOfType(type: Type): Type {
             return type.flags & TypeFlags.String ? emptyStringType :
                 type.flags & TypeFlags.Number ? zeroType :
-                type.flags & TypeFlags.Boolean || type === falseType ? falseType :
+                type.flags & TypeFlags.Boolean || type === regularFalseType ? regularFalseType :
+                type === falseType ? falseType :
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
                 type.flags & TypeFlags.StringLiteral && (<LiteralType>type).value === "" ||
                 type.flags & TypeFlags.NumberLiteral && (<LiteralType>type).value === 0 ? type :
@@ -14095,7 +14109,10 @@ namespace ts {
                 if (assignedType.flags & TypeFlags.Never) {
                     return assignedType;
                 }
-                const reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                if (assignedType.flags & (TypeFlags.FreshLiteral | TypeFlags.Literal)) {
+                    reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
+                }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
                 // For now, when that happens, we give up and don't narrow at all.  (This also
                 // means we'll never narrow for erroneous assignments where the assigned type
@@ -14148,8 +14165,8 @@ namespace ts {
             }
             if (flags & TypeFlags.BooleanLike) {
                 return strictNullChecks ?
-                    type === falseType ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
-                    type === falseType ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
+                    (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
+                    (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
             if (flags & TypeFlags.Object) {
                 return isFunctionObjectType(<ObjectType>type) ?
@@ -28381,19 +28398,20 @@ namespace ts {
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
-                return !!(type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral);
+                return !!(type.flags & TypeFlags.Literal && type.flags & TypeFlags.FreshLiteral);
             }
             return false;
         }
 
-        function literalTypeToNode(type: LiteralType, enclosing: Node): Expression {
-            const enumResult = type.flags & TypeFlags.EnumLiteral && nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing);
-            return enumResult || createLiteral(type.value);
+        function literalTypeToNode(type: FreshableType, enclosing: Node): Expression {
+            const enumResult = type.flags & TypeFlags.EnumLiteral ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing)
+                : type === trueType ? createTrue() : type === falseType && createFalse();
+            return enumResult || createLiteral((type as LiteralType).value);
         }
 
         function createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration) {
             const type = getTypeOfSymbol(getSymbolOfNode(node));
-            return literalTypeToNode(<LiteralType>type, node);
+            return literalTypeToNode(<FreshableType>type, node);
         }
 
         function createResolver(): EmitResolver {
@@ -29765,7 +29783,7 @@ namespace ts {
 
         function checkAmbientInitializer(node: VariableDeclaration | PropertyDeclaration | PropertySignature) {
             if (node.initializer) {
-                const isInvalidInitializer = !(isStringOrNumberLiteralExpression(node.initializer) || isSimpleLiteralEnumReference(node.initializer));
+                const isInvalidInitializer = !(isStringOrNumberLiteralExpression(node.initializer) || isSimpleLiteralEnumReference(node.initializer) || node.initializer.kind === SyntaxKind.TrueKeyword || node.initializer.kind === SyntaxKind.FalseKeyword);
                 const isConstOrReadonly = isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node);
                 if (isConstOrReadonly && !node.type) {
                     if (isInvalidInitializer) {
