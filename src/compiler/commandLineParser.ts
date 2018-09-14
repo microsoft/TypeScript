@@ -912,12 +912,12 @@ namespace ts {
     /** Tuple with error messages for 'unknown compiler option', 'option requires type' */
     type ParseCommandLineWorkerDiagnostics = [DiagnosticMessage, DiagnosticMessage];
 
-    function parseCommandLineWorker<T extends OptionsBase>(
+    function parseCommandLineWorker(
         getOptionNameMap: () => OptionNameMap,
         [unknownOptionDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
         commandLine: ReadonlyArray<string>,
         readFile?: (path: string) => string | undefined) {
-        const options = {} as T;
+        const options = {} as OptionsBase;
         const fileNames: string[] = [];
         const errors: Diagnostic[] = [];
 
@@ -1061,10 +1061,11 @@ namespace ts {
     export function parseBuildCommand(args: string[]): ParsedBuildCommand {
         let buildOptionNameMap: OptionNameMap | undefined;
         const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
-        const { options: buildOptions, fileNames: projects, errors } = parseCommandLineWorker<BuildOptions>(returnBuildOptionNameMap, [
+        const { options, fileNames: projects, errors } = parseCommandLineWorker(returnBuildOptionNameMap, [
             Diagnostics.Unknown_build_option_0,
             Diagnostics.Build_option_0_requires_a_value_of_type_1
         ], args);
+        const buildOptions = options as BuildOptions;
 
         if (projects.length === 0) {
             // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
