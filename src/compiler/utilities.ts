@@ -101,22 +101,8 @@ namespace ts {
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
-        return !oldOptions ||
-            (oldOptions.module !== newOptions.module) ||
-            (oldOptions.moduleResolution !== newOptions.moduleResolution) ||
-            (oldOptions.noResolve !== newOptions.noResolve) ||
-            (oldOptions.target !== newOptions.target) ||
-            (oldOptions.noLib !== newOptions.noLib) ||
-            (oldOptions.jsx !== newOptions.jsx) ||
-            (oldOptions.allowJs !== newOptions.allowJs) ||
-            (oldOptions.rootDir !== newOptions.rootDir) ||
-            (oldOptions.configFilePath !== newOptions.configFilePath) ||
-            (oldOptions.baseUrl !== newOptions.baseUrl) ||
-            (oldOptions.maxNodeModuleJsDepth !== newOptions.maxNodeModuleJsDepth) ||
-            !arrayIsEqualTo(oldOptions.lib, newOptions.lib) ||
-            !arrayIsEqualTo(oldOptions.typeRoots, newOptions.typeRoots) ||
-            !arrayIsEqualTo(oldOptions.rootDirs, newOptions.rootDirs) ||
-            !equalOwnProperties(oldOptions.paths, newOptions.paths);
+        return oldOptions.configFilePath !== newOptions.configFilePath || moduleResolutionOptionDeclarations.some(o =>
+            !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
     /**
@@ -7095,33 +7081,18 @@ namespace ts {
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
-    export function isStrictOptionName(name: string): name is StrictOptionName {
-        const strictName = name as StrictOptionName;
-        switch (strictName) {
-            case "noImplicitAny":
-            case "noImplicitThis":
-            case "strictNullChecks":
-            case "strictFunctionTypes":
-            case "strictPropertyInitialization":
-            case "alwaysStrict":
-                return true;
-            default:
-                assertType<never>(strictName);
-                return false;
-        }
-    }
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
-    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions) {
-        if (oldOptions === newOptions) {
-            return false;
-        }
+    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return oldOptions !== newOptions &&
+            semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+    }
 
-        return optionDeclarations.some(option => (!!option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
-            (!!option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name]));
+    export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
+        return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -8391,17 +8362,6 @@ namespace ts {
     }
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {
-        return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>);
-    }
-
-    export function getSourceFileAffectingCompilerOptions(compilerOptions: CompilerOptions): CompilerOptions {
-        const res: CompilerOptions = {};
-        for (const option of optionDeclarations) {
-            // SourceFile stores `resolvedModules` and `bindDiagnostics` so changing those means changing the SourceFile
-            if (option.name in compilerOptions && (!!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics)) {
-                res[option.name] = isStrictOptionName(option.name) ? getStrictOptionValue(compilerOptions, option.name) : compilerOptions[option.name];
-            }
-        }
-        return res;
+        return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
     }
 }

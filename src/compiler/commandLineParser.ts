@@ -160,6 +160,7 @@ namespace ts {
                 esnext: ScriptTarget.ESNext,
             }),
             affectsSourceFile: true,
+            affectsModuleResolution: true,
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
@@ -191,6 +192,7 @@ namespace ts {
                 name: "lib",
                 type: libMap
             },
+            affectsModuleResolution: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation
@@ -327,6 +329,7 @@ namespace ts {
         {
             name: "noImplicitAny",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -335,6 +338,7 @@ namespace ts {
         {
             name: "strictNullChecks",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -343,6 +347,7 @@ namespace ts {
         {
             name: "strictFunctionTypes",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -351,6 +356,7 @@ namespace ts {
         {
             name: "strictPropertyInitialization",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -359,6 +365,7 @@ namespace ts {
         {
             name: "noImplicitThis",
             type: "boolean",
+            affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
@@ -462,6 +469,7 @@ namespace ts {
                 type: "string",
                 isFilePath: true
             },
+            affectsModuleResolution: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.List_of_folders_to_include_type_definitions_from
         },
@@ -472,6 +480,7 @@ namespace ts {
                 name: "types",
                 type: "string"
             },
+            affectsModuleResolution: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation
@@ -642,6 +651,7 @@ namespace ts {
         {
             name: "noLib",
             type: "boolean",
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts
         },
@@ -743,6 +753,7 @@ namespace ts {
         {
             name: "maxNodeModuleJsDepth",
             type: "number",
+            // TODO: GH#27108 affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
@@ -771,6 +782,18 @@ namespace ts {
             description: Diagnostics.List_of_language_service_plugins
         }
     ];
+
+    /* @internal */
+    export const semanticDiagnosticsOptionDeclarations: ReadonlyArray<CommandLineOption> =
+        optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
+
+    /* @internal */
+    export const moduleResolutionOptionDeclarations: ReadonlyArray<CommandLineOption> =
+        optionDeclarations.filter(option => !!option.affectsModuleResolution);
+
+    /* @internal */
+    export const sourceFileAffectingCompilerOptions: ReadonlyArray<CommandLineOption> = optionDeclarations.filter(option =>
+        !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
 
     /* @internal */
     export const buildOpts: CommandLineOption[] = [

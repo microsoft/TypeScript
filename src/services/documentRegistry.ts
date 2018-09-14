@@ -271,6 +271,6 @@ namespace ts {
     }
 
     function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-        return <DocumentRegistryBucketKey>JSON.stringify(getSourceFileAffectingCompilerOptions(settings));
+        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
     }
 }
