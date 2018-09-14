@@ -3136,7 +3136,7 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects.get(configFile.path)!;
             assert.isDefined(project);
             checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
-            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
             watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
@@ -3204,7 +3204,7 @@ namespace ts.projectSystem {
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [],
-                tags: []
+                tags: undefined,
             });
         });
 
@@ -7435,7 +7435,7 @@ namespace ts.projectSystem {
                     const projectFilePaths = map(projectFiles, f => f.path);
                     checkProjectActualFiles(project, projectFilePaths);
 
-                    const filesWatched = filter(projectFilePaths, p => p !== app.path);
+                    const filesWatched = filter(projectFilePaths, p => p !== app.path && p.indexOf("/a/b/node_modules") === -1);
                     checkWatchedFiles(host, filesWatched);
                     checkWatchedDirectories(host, typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
                     checkWatchedDirectories(host, [], /*recursive*/ false);
@@ -8658,10 +8658,21 @@ new C();`
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: ReadonlyArray<string>) {
-            checkWatchedFiles(host, mapDefined(files, f => f === openFile ? undefined : f.path));
+            const expectedRecursiveDirectories = arrayToSet([projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            checkWatchedFiles(host, mapDefined(files, f => {
+                if (f === openFile) {
+                    return undefined;
+                }
+                const indexOfNodeModules = f.path.indexOf("/node_modules/");
+                if (indexOfNodeModules === -1) {
+                    return f.path;
+                }
+                expectedRecursiveDirectories.set(f.path.substr(0, indexOfNodeModules + "/node_modules".length), true);
+                return undefined;
+            }));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, [projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)], /*recursive*/ true);
-        }
+            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.keys()), /*recursive*/ true);
+       }
 
         describe("from files in same folder", () => {
             function getFiles(fileContent: string) {
@@ -8862,7 +8873,7 @@ new C();`
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
-                const watchedFiles = mapDefined(files, f => f === file1 ? undefined : f.path);
+                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path);
                 forEachAncestorDirectory(currentDirectory, d => {
                     watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
                 });
@@ -9501,7 +9512,7 @@ export function Test2() {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: emptyArray,
+                tags: undefined,
             };
             assert.deepEqual<ReadonlyArray<protocol.CompletionEntryDetails> | undefined>(detailsResponse, [
                 {
@@ -9552,6 +9563,65 @@ export function Test2() {
                     ...detailsCommon,
                 }
             ]);
+        });
+    });
+
+    describe("tsserverProjectSystem typeReferenceDirectives", () => {
+        it("when typeReferenceDirective contains UpperCasePackage", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const libProjectLocation = `${projectLocation}/lib`;
+            const typeLib: File = {
+                path: `${libProjectLocation}/@types/UpperCasePackage/index.d.ts`,
+                content: `declare class BrokenTest {
+    constructor(name: string, width: number, height: number, onSelect: Function);
+    Name: string;
+    SelectedFile: string;
+}`
+            };
+            const appLib: File = {
+                path: `${libProjectLocation}/@app/lib/index.d.ts`,
+                content: `/// <reference types="UpperCasePackage" />
+declare class TestLib {
+    issue: BrokenTest;
+    constructor();
+    test(): void;
+}`
+            };
+            const testProjectLocation = `${projectLocation}/test`;
+            const testFile: File = {
+                path: `${testProjectLocation}/test.ts`,
+                content: `class TestClass1 {
+
+    constructor() {
+        var l = new TestLib();
+
+    }
+
+    public test2() {
+        var x = new BrokenTest('',0,0,null);
+
+    }
+}`
+            };
+            const testConfig: File = {
+                path: `${testProjectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        module: "amd",
+                        typeRoots: ["../lib/@types", "../lib/@app"]
+                    }
+                })
+            };
+
+            const files = [typeLib, appLib, testFile, testConfig, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(testFile.path);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(testConfig.path)!;
+            checkProjectActualFiles(project, files.map(f => f.path));
+            host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
+            host.checkTimeoutQueueLengthAndRun(2);
         });
     });
 

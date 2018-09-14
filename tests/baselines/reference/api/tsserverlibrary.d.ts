@@ -536,6 +536,7 @@ declare namespace ts {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -632,6 +633,7 @@ declare namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
     }
@@ -668,6 +670,7 @@ declare namespace ts {
         _functionLikeDeclarationBrand: any;
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
@@ -2056,7 +2059,7 @@ declare namespace ts {
         ExportStar = 8388608,
         Optional = 16777216,
         Transient = 33554432,
-        JSContainer = 67108864,
+        Assignment = 67108864,
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
@@ -2581,7 +2584,6 @@ declare namespace ts {
     }
     interface ExpandResult {
         fileNames: string[];
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
     interface CreateProgramOptions {
@@ -4180,14 +4182,11 @@ declare namespace ts {
      * @returns A 'Program' object.
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
-    interface ResolveProjectReferencePathHost {
-        fileExists(fileName: string): boolean;
-    }
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
 }
 declare namespace ts {
     interface EmitOutput {
@@ -5098,6 +5097,11 @@ declare namespace ts {
     }
     interface RenameInfo {
         canRename: boolean;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
@@ -6419,6 +6423,11 @@ declare namespace ts.server.protocol {
          * True if item can be renamed.
          */
         canRename: boolean;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         /**
          * Error message if item can not be renamed.
          */
@@ -8369,6 +8378,7 @@ declare namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo;
+        private readonly scriptInfoInNodeModulesWatchers;
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
@@ -8539,6 +8549,10 @@ declare namespace ts.server {
         private createInferredProject;
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         private watchClosedScriptInfo;
+        private watchClosedScriptInfoInNodeModules;
+        private getModifiedTime;
+        private refreshScriptInfo;
+        private refreshScriptInfosInDirectory;
         private stopWatchingScriptInfo;
         private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
         private getOrCreateScriptInfoOpenedByClientForNormalizedPath;

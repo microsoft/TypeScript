@@ -498,6 +498,9 @@ node_modules/npm/lib/ls.js(260,16): error TS2339: Property 'problems' does not e
   Property 'problems' does not exist on type 'string'.
 node_modules/npm/lib/ls.js(262,54): error TS2339: Property 'problems' does not exist on type 'string | { name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; } | { required: any; missing: boolean; } | { ...; }'.
   Property 'problems' does not exist on type 'string'.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ name: any; version: any; extraneous: boolean; problems: any; invalid: boolean; from: any; resolved: any; peerInvalid: boolean; dependencies: {}; }' cannot be used as an index type.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; missing: boolean; }' cannot be used as an index type.
+node_modules/npm/lib/ls.js(264,12): error TS2538: Type '{ required: any; peerMissing: boolean; }' cannot be used as an index type.
 node_modules/npm/lib/ls.js(357,40): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(362,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(365,15): error TS2339: Property 'color' does not exist on type 'typeof EventEmitter'.
@@ -1010,6 +1013,7 @@ node_modules/npm/test/network/registry.js(5,20): error TS2307: Cannot find modul
 node_modules/npm/test/network/registry.js(29,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/tap/00-check-mock-dep.js(12,20): error TS2732: Cannot find module 'npm-registry-mock/package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 node_modules/npm/test/tap/00-check-mock-dep.js(13,19): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+node_modules/npm/test/tap/00-config-setup.js(23,39): error TS2339: Property 'HOME' does not exist on type 'typeof env'.
 node_modules/npm/test/tap/00-verify-bundle-deps.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/00-verify-bundle-deps.js(3,24): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
 node_modules/npm/test/tap/00-verify-ls-ok.js(2,20): error TS2307: Cannot find module 'tap'.
@@ -1219,13 +1223,19 @@ node_modules/npm/test/tap/gist-shortcut.js(7,29): error TS2307: Cannot find modu
 node_modules/npm/test/tap/gist-shortcut.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/git-dependency-install-link.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/git-dependency-install-link.js(9,18): error TS2307: Cannot find module 'npm-registry-mock'.
+node_modules/npm/test/tap/git-dependency-install-link.js(66,11): error TS2339: Property 'chdir' does not exist on type 'typeof process'.
+node_modules/npm/test/tap/git-dependency-install-link.js(84,11): error TS2339: Property 'chdir' does not exist on type 'typeof process'.
+node_modules/npm/test/tap/git-dependency-install-link.js(110,11): error TS2339: Property 'kill' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/git-dependency-install-link.js(125,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/test/tap/git-dependency-install-link.js(175,11): error TS2339: Property 'chdir' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/git-npmignore.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/git-npmignore.js(12,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/git-prepare.js(8,22): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/git-prepare.js(9,20): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/git-prepare.js(19,21): error TS2307: Cannot find module 'tacks'.
+node_modules/npm/test/tap/git-prepare.js(123,11): error TS2339: Property 'kill' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/git-prepare.js(131,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/test/tap/git-prepare.js(179,11): error TS2339: Property 'chdir' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/github-shortcut-package.js(7,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/github-shortcut-package.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/github-shortcut.js(10,31): error TS2307: Cannot find module 'require-inject'.
@@ -1277,6 +1287,7 @@ node_modules/npm/test/tap/install-duplicate-deps-warning.js(8,20): error TS2307:
 node_modules/npm/test/tap/install-from-local.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-into-likenamed-folder.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-link-scripts.js(7,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/tap/install-link-scripts.js(130,11): error TS2339: Property 'chdir' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/install-local-dep-cycle.js(6,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-man.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-noargs-dev.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1489,7 +1500,6 @@ node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of typ
 node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/progress-config.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/progress-config.js(12,29): error TS2307: Cannot find module 'require-inject'.
-node_modules/npm/test/tap/progress-config.js(18,9): error TS2339: Property 'stderr' does not exist on type 'typeof process'.
 node_modules/npm/test/tap/prune-dev-dep-cycle.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/prune-dev-dep-cycle.js(5,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/prune-dev-dep-with-bins.js(4,20): error TS2307: Cannot find module 'tap'.

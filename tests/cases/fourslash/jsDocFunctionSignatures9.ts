@@ -20,4 +20,4 @@ verify.verifyQuickInfoDisplayParts('function',
                                     {"text": "void", "kind": "keyword"}
                                    ],
                                    [{"text": "first line of the comment\n\nthird line", "kind": "text"}],
-                                   []);
+                                   undefined);

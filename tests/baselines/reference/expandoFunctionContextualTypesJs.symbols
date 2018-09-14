@@ -9,11 +9,11 @@
   * @type {StatelessComponent<MyComponentProps>}
   */
 const MyComponent = () => /* @type {any} */(null);
->MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
+>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
 
 MyComponent.defaultProps = {
 >MyComponent.defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
->MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
+>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
 >defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
 
     color: "red"
@@ -22,14 +22,14 @@ MyComponent.defaultProps = {
 };
 
 const MyComponent2 = () => null;
->MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
 
 /**
  * @type {MyComponentProps}
  */
 MyComponent2.defaultProps = {
 >MyComponent2.defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
->MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
 >defaultProps : Symbol(MyComponent2.defaultProps, Decl(input.js, 15, 32))
 
     color: "red"
@@ -41,7 +41,7 @@ MyComponent2.defaultProps = {
  */
 const check = MyComponent2;
 >check : Symbol(check, Decl(input.js, 27, 5))
->MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
+>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
 
 /**
  * 

@@ -25,13 +25,13 @@ enum A {
 >A : A
 
     b
->b : A
+>b : A.b
 }
 enum A {
 >A : A
 
     c
->c : A
+>c : A.b
 }
 module A {
 >A : typeof A

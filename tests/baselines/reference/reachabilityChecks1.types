@@ -61,7 +61,7 @@ module A4 {
     module A {
         const enum E { X }
 >E : E
->X : E
+>X : E.X
     }
 }
 
@@ -112,7 +112,7 @@ function f3() {
 >E : E
 
         X = 1
->X : E
+>X : E.X
 >1 : 1
     }
 }
@@ -131,7 +131,7 @@ function f4() {
 >E : E
 
         X = 1
->X : E
+>X : E.X
 >1 : 1
     }
 }

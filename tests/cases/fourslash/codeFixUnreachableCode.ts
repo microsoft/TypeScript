@@ -3,12 +3,12 @@
 ////function f() {
 ////    return f();
 ////    [|return 1;|]
-////    function f() {}
+////    function f(a?: EE) { return a; }
 ////    [|return 2;|]
 ////    type T = number;
 ////    interface I {}
 ////    const enum E {}
-////    [|enum E {}|]
+////    enum EE {}
 ////    namespace N { export type T = number; }
 ////    [|namespace N { export const x: T = 0; }|]
 ////    var x: I;
@@ -29,11 +29,23 @@ verify.codeFixAll({
     newFileContent:
 `function f() {
     return f();
-    function f() {}
+    function f(a?: EE) { return a; }
     type T = number;
     interface I {}
     const enum E {}
+    enum EE {}
     namespace N { export type T = number; }
     var x: I;
 }`,
 });
+
+function f() {
+   return f();
+   function f(a?: EE) { return a; }
+   type T = number;
+   interface I {}
+   const enum E {}
+   enum EE {}
+   namespace N { export type T = number; }
+   var x: I;
+}
