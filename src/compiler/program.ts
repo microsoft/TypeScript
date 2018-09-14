@@ -2820,13 +2820,20 @@ namespace ts {
         };
     }
 
+    // For backward compatibility
+    /** @deprecated */ export interface ResolveProjectReferencePathHost {
+        fileExists(fileName: string): boolean;
+    }
+
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    // TODO: Does this need to be exposed
-    export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName {
-        return resolveConfigFileProjectName(ref.path);
+    export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
+    /** @deprecated */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePathHost | ProjectReference, ref?: ProjectReference): ResolvedConfigFileName {
+        const passedInRef = ref ? ref : hostOrRef as ProjectReference;
+        return resolveConfigFileProjectName(passedInRef.path);
     }
 
     /* @internal */
