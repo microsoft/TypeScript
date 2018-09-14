@@ -53,14 +53,10 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const result = performBuild(args.slice(1));
-            // undefined = in watch mode, do not exit
-            if (result !== undefined) {
-                return sys.exit(result);
-            }
-            else {
-                return;
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
             }
         }
 
@@ -164,17 +160,17 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[]): number | undefined {
+    function performBuild(args: string[]) {
         const { buildOptions, projects, errors } = parseBuildCommand(args);
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (buildOptions.help) {
             printVersion();
             printHelp(buildOpts, "--build ");
-            return ExitStatus.Success;
+            return sys.exit(ExitStatus.Success);
         }
 
         // Update to pretty if host supports it
@@ -182,12 +178,12 @@ namespace ts {
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
-            return ExitStatus.Success;
+            return sys.exit(ExitStatus.Success);
         }
 
         if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
         if (buildOptions.watch) {
             reportWatchModeWithoutSysSupport();
@@ -196,16 +192,15 @@ namespace ts {
         // TODO: change this to host if watch => watchHost otherwiue without wathc
         const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
         if (buildOptions.clean) {
-            return builder.cleanAllProjects();
+            return sys.exit(builder.cleanAllProjects());
         }
 
         if (buildOptions.watch) {
             builder.buildAllProjects();
-            builder.startWatching();
-            return undefined;
+            return builder.startWatching();
         }
 
-        return builder.buildAllProjects();
+        return sys.exit(builder.buildAllProjects());
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {

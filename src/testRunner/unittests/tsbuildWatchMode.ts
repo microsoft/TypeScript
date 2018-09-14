@@ -2,7 +2,7 @@ namespace ts.tscWatch {
     export import libFile = TestFSWithWatch.libFile;
     function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
-        return ts.createSolutionBuilder(host, rootNames, defaultOptions || { dry: false, force: false, verbose: false, watch: true });
+        return ts.createSolutionBuilder(host, rootNames, defaultOptions || { watch: true });
     }
 
     function createSolutionBuilderWithWatch(host: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
@@ -95,11 +95,11 @@ namespace ts.tscWatch {
         const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
         const testProjectExpectedWatchedFiles = [core[0], core[1], core[2], ...logic, ...tests].map(f => f.path);
 
-        function createSolutionInWatchMode(allFiles: ReadonlyArray<File>) {
+        function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
-            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], defaultOptions);
             verifyWatches(host);
-            checkOutputErrorsInitial(host, emptyArray);
+            checkOutputErrorsInitial(host, emptyArray, disableConsoleClears);
             const outputFileStamps = getOutputFileStamps(host);
             for (const stamp of outputFileStamps) {
                 assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
@@ -351,32 +351,42 @@ function myFunc() { return 100; }`);
             }
         });
 
-        it("reports errors in all projects on incremental compile", () => {
-            const host = createSolutionInWatchMode(allFiles);
-            const outputFileStamps = getOutputFileStamps(host);
+        describe("reports errors in all projects on incremental compile", () => {
+            function verifyIncrementalErrors(defaultBuildOptions?: BuildOptions, disabledConsoleClear?: boolean) {
+                const host = createSolutionInWatchMode(allFiles, defaultBuildOptions, disabledConsoleClear);
+                const outputFileStamps = getOutputFileStamps(host);
 
-            host.writeFile(logic[1].path, `${logic[1].content}
+                host.writeFile(logic[1].path, `${logic[1].content}
 let y: string = 10;`);
 
-            host.checkTimeoutQueueLengthAndRun(1); // Builds logic
-            const changedLogic = getOutputFileStamps(host);
-            verifyChangedFiles(changedLogic, outputFileStamps, emptyArray);
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, [
-                `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
-            ]);
+                host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                const changedLogic = getOutputFileStamps(host);
+                verifyChangedFiles(changedLogic, outputFileStamps, emptyArray);
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, [
+                    `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
+                ], disabledConsoleClear);
 
-            host.writeFile(core[1].path, `${core[1].content}
+                host.writeFile(core[1].path, `${core[1].content}
 let x: string = 10;`);
 
-            host.checkTimeoutQueueLengthAndRun(1); // Builds core
-            const changedCore = getOutputFileStamps(host);
-            verifyChangedFiles(changedCore, changedLogic, emptyArray);
-            host.checkTimeoutQueueLength(0);
-            checkOutputErrorsIncremental(host, [
-                `sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.\n`,
-                `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
-            ]);
+                host.checkTimeoutQueueLengthAndRun(1); // Builds core
+                const changedCore = getOutputFileStamps(host);
+                verifyChangedFiles(changedCore, changedLogic, emptyArray);
+                host.checkTimeoutQueueLength(0);
+                checkOutputErrorsIncremental(host, [
+                    `sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.\n`,
+                    `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
+                ], disabledConsoleClear);
+            }
+
+            it("when preserveWatchOutput is not used", () => {
+                verifyIncrementalErrors();
+            });
+
+            it("when preserveWatchOutput is passed on command line", () => {
+                verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
+            });
         });
         // TODO: write tests reporting errors but that will have more involved work since file
     });
