@@ -393,9 +393,10 @@ namespace ts.codefix {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
-                // do not produce a transformed statement for a null or undefined argument
+                // do not produce a transformed statement for a null argument
                 break;
             case SyntaxKind.Identifier:
+                // identifier includes undefined
                 if (!hasArgName) break;
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);

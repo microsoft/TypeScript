@@ -196,7 +196,7 @@ namespace ts {
     function isFixablePromiseArgument(arg: Expression): boolean {
         switch (arg.kind) {
             case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier:
+            case SyntaxKind.Identifier: // identifier includes undefined
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
