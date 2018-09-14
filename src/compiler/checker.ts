@@ -20179,10 +20179,10 @@ namespace ts {
                 (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
                  isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
-            if (assignmentSymbol) {
-                const prototype = forEach(assignmentSymbol.declarations, getAssignedJSPrototype);
-                if (prototype) {
-                    return checkExpression(prototype);
+            if (assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.has("prototype" as __String)) {
+                const init = getAssignedJSPrototype(assignmentSymbol.exports.get("prototype" as __String)!.valueDeclaration);
+                if (init) {
+                    return checkExpression(init);
                 }
             }
         }

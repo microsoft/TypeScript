@@ -2465,7 +2465,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2522,7 +2522,7 @@ namespace ts {
             const isToplevel = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
+            if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
