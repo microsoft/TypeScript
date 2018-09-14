@@ -141,8 +141,8 @@ namespace ts {
     }
 
     /** @internal */
-    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
-        const returnStatements: Node[] = [];
+    export function getReturnStatementsWithPromiseHandlers(node: Node): ReturnStatement[] {
+        const returnStatements: ReturnStatement[] = [];
         if (isFunctionLike(node)) {
             forEachChild(node, visit);
         }
@@ -155,14 +155,8 @@ namespace ts {
                 return;
             }
 
-            if (isReturnStatement(child)) {
-                forEachChild(child, addHandlers);
-            }
-
-            function addHandlers(returnChild: Node) {
-                if (isFixablePromiseHandler(returnChild)) {
-                    returnStatements.push(child as ReturnStatement);
-                }
+            if (isReturnStatement(child) && child.expression && isFixablePromiseHandler(child.expression)) {
+                returnStatements.push(child);
             }
 
             forEachChild(child, visit);

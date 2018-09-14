@@ -751,7 +751,7 @@ function [#|f|](): Promise<void> {
     }
     return x.then(resp => {
         var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-        return fetch("https://micorosft.com").then(res => console.log("Another one!"));
+        return fetch("https://microsoft.com").then(res => console.log("Another one!"));
     });
 }
 `
@@ -1134,6 +1134,31 @@ const [#|foo|] = function () {
 } 
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParams", `
+function [#|f|]() {
+	return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x); 
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPattern", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPatternNameCollision", `
+function [#|f|]() {
+    const result = 'https://typescriptlang.org';
+    return fetch(result).then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
     _testConvertToAsyncFunctionFailed("convertToAsyncFunction_thenArgumentNotFunction", `
 function [#|f|]() {
     return Promise.resolve().then(f ? (x => x) : (y => y));
@@ -1145,7 +1170,6 @@ function [#|f|]() {
     return Promise.resolve().then(f ? (x => x) : (y => y)).then(q => q);
 }
 `);
-
 
     });
 

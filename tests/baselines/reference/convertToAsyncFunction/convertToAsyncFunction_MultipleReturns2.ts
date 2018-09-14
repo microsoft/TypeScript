@@ -7,7 +7,7 @@ function /*[#|*/f/*|]*/(): Promise<void> {
     }
     return x.then(resp => {
         var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-        return fetch("https://micorosft.com").then(res => console.log("Another one!"));
+        return fetch("https://microsoft.com").then(res => console.log("Another one!"));
     });
 }
 
@@ -21,6 +21,6 @@ async function f(): Promise<void> {
     }
     const resp = await x;
     var blob = resp.blob().then(blob_1 => blob_1.byteOffset).catch(err => 'Error');
-    const res_1 = await fetch("https://micorosft.com");
+    const res_2 = await fetch("https://microsoft.com");
     return console.log("Another one!");
 }
