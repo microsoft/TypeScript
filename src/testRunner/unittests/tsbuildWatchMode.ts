@@ -388,6 +388,13 @@ let x: string = 10;`);
                 verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
             });
         });
-        // TODO: write tests reporting errors but that will have more involved work since file
+
+        it("tsc-watch works with project references", () => {
+            // Build the composite project
+            const host = createSolutionInWatchMode(allFiles);
+
+            createWatchOfConfigFile(tests[0].path, host);
+            checkOutputErrorsInitial(host, emptyArray);
+        });
     });
 }

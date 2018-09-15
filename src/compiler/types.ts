@@ -2815,7 +2815,8 @@ namespace ts {
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
-        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
     }
 
     /* @internal */

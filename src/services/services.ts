@@ -1175,9 +1175,10 @@ namespace ts {
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -1240,7 +1241,7 @@ namespace ts {
                 options: newSettings,
                 host: compilerHost,
                 oldProgram: program,
-                projectReferences: hostCache.getProjectReferences()
+                projectReferences
             };
             program = createProgram(options);
 
