@@ -34,6 +34,10 @@ namespace ts.tscWatch {
             return `${projectPath(subProject)}/${baseFileName.toLowerCase()}`;
         }
 
+        function projectFileName(subProject: SubProject, baseFileName: string) {
+            return `${projectPath(subProject)}/${baseFileName}`;
+        }
+
         function projectFile(subProject: SubProject, baseFileName: string): File {
             return {
                 path: projectFilePath(subProject, baseFileName),
@@ -391,10 +395,10 @@ let x: string = 10;`);
         });
 
         describe("tsc-watch works with project references", () => {
-            const coreIndexDts = projectFilePath(SubProject.core, "index.d.ts");
-            const coreAnotherModuleDts = projectFilePath(SubProject.core, "anotherModule.d.ts");
-            const logicIndexDts = projectFilePath(SubProject.logic, "index.d.ts");
-            const expectedWatchedFiles = [core[0], logic[0], ...tests, libFile].map(f => f.path).concat(coreIndexDts, coreAnotherModuleDts, logicIndexDts);
+            const coreIndexDts = projectFileName(SubProject.core, "index.d.ts");
+            const coreAnotherModuleDts = projectFileName(SubProject.core, "anotherModule.d.ts");
+            const logicIndexDts = projectFileName(SubProject.logic, "index.d.ts");
+            const expectedWatchedFiles = [core[0], logic[0], ...tests, libFile].map(f => f.path).concat([coreIndexDts, coreAnotherModuleDts, logicIndexDts].map(f => f.toLowerCase()));
             const expectedWatchedDirectoriesRecursive = projectSystem.getTypeRootsFromLocation(projectPath(SubProject.tests));
 
             function createSolution() {
@@ -432,7 +436,7 @@ let x: string = 10;`);
             }
 
             function verifyDependencies(watch: () => BuilderProgram, filePath: string, expected: ReadonlyArray<string>) {
-                checkArray(`${filePath} dependencies`, watch().getAllDependencies(watch().getSourceFile(filePath)!).map(f => f.toLocaleLowerCase()), expected);
+                checkArray(`${filePath} dependencies`, watch().getAllDependencies(watch().getSourceFile(filePath)!), expected);
             }
 
             describe("invoking when references are already built", () => {
@@ -447,7 +451,7 @@ let x: string = 10;`);
                 });
 
                 it("local edit in ts file, result in watch compilation because logic.d.ts is written", () => {
-                    const { host, solutionBuilder } = createSolutionAndWatchMode();
+                    const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
                     host.writeFile(logic[1].path, `${logic[1].content}
 function foo() {
 }`);
@@ -456,10 +460,11 @@ function foo() {
 
                     host.checkTimeoutQueueLengthAndRun(1); // not ideal, but currently because of d.ts but no new file is written
                     checkOutputErrorsIncremental(host, emptyArray);
+                    checkProgramActualFiles(watch().getProgram(), [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts]);
                 });
 
                 it("non local edit in ts file, rebuilds in watch compilation", () => {
-                    const { host, solutionBuilder } = createSolutionAndWatchMode();
+                    const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
                     host.writeFile(logic[1].path, `${logic[1].content}
 export function gfoo() {
 }`);
@@ -468,8 +473,26 @@ export function gfoo() {
 
                     host.checkTimeoutQueueLengthAndRun(1);
                     checkOutputErrorsIncremental(host, emptyArray);
+                    checkProgramActualFiles(watch().getProgram(), [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, logicIndexDts]);
                 });
 
+                it("change in project reference config file builds correctly", () => {
+                    const { host, solutionBuilder, watch } = createSolutionAndWatchMode();
+                    host.writeFile(logic[0].path, JSON.stringify({
+                        compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
+                        references: [{ path: "../core" }]
+                    }));
+                    solutionBuilder.invalidateProject(logic[0].path, ConfigFileProgramReloadLevel.Full);
+                    solutionBuilder.buildInvalidatedProject();
+
+                    host.checkTimeoutQueueLengthAndRun(1);
+                    checkOutputErrorsIncremental(host, [
+                        // TODO: #26036
+                        // The error is reported in d.ts file because it isnt resolved from ts file path, but is resolved from .d.ts file
+                        "sample1/logic/decls/index.d.ts(2,22): error TS2307: Cannot find module '../core/anotherModule'.\n"
+                    ]);
+                    checkProgramActualFiles(watch().getProgram(), [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
+                });
             });
         });
     });

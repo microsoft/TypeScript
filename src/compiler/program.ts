@@ -455,7 +455,7 @@ namespace ts {
         }
 
         // If project references dont match
-        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences)) {
+        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
         }
 
@@ -483,9 +483,27 @@ namespace ts {
 
         return true;
 
-        function sourceFileNotUptoDate(sourceFile: SourceFile): boolean {
-            return sourceFile.version !== getSourceVersion(sourceFile.path) ||
-                hasInvalidatedResolution(sourceFile.path);
+        function sourceFileNotUptoDate(sourceFile: SourceFile) {
+            return !sourceFileVersionUptoDate(sourceFile) ||
+                hasInvalidatedResolution(sourceFile.resolvedPath || sourceFile.path);
+        }
+
+        function sourceFileVersionUptoDate(sourceFile: SourceFile) {
+            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath || sourceFile.path);
+        }
+
+        function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
+            if (!projectReferenceIsEqualTo(oldRef, newRef)) {
+                return false;
+            }
+            const oldResolvedRef = program!.getResolvedProjectReferences()![index];
+            if (oldResolvedRef) {
+                // If sourceFile for the oldResolvedRef existed, check the version for uptodate
+                return sourceFileVersionUptoDate(oldResolvedRef.sourceFile);
+            }
+            // In old program, not able to resolve project reference path,
+            // so if config file doesnt exist, it is uptodate.
+            return !fileExists(resolveProjectReferencePath(oldRef));
         }
     }
 
