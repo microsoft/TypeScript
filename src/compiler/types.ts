@@ -2593,6 +2593,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator?: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
+        // JS identifier-declarations that are intended to merge with globals
+        /* @internal */ jsGlobalAugmentations?: SymbolTable;
 
         /* @internal */ identifiers: Map<string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
