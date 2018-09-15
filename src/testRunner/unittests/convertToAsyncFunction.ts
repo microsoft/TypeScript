@@ -1140,6 +1140,12 @@ const foo = function [#|f|]() {
 } 
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpressionAssignedToBindingPattern", `
+const { length } = [#|function|] () {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
+`);
+
     _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParams", `
 function [#|f|]() {
 	return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x); 
