@@ -14734,6 +14734,14 @@ namespace ts {
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
                 if (containsMatchingReference(reference, node)) {
+                    // A matching dotted name might also be an expando property on a function *expression*,
+                    // in which case we continue control flow analysis back to the function's declaration
+                    if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
+                        const init = getDeclaredExpandoInitializer(node);
+                        if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
+                            return getTypeAtFlowNode(flow.antecedent);
+                        }
+                    }
                     return declaredType;
                 }
                 // Assignment doesn't affect reference
@@ -18394,6 +18402,9 @@ namespace ts {
                         assumeUninitialized = true;
                     }
                 }
+            }
+            else if (strictNullChecks && prop && prop.valueDeclaration && isPropertyAccessExpression(prop.valueDeclaration) && getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration)) {
+                assumeUninitialized = true;
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
