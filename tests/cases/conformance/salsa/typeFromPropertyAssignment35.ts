@@ -1,73 +1,22 @@
-// @strict: true
-function f(b: boolean) {
-    function d() {
-    }
-    d.e = 12
-    d.e
+// @noEmit: true
+// @allowJs: true
+// @checkJs: true
 
-    if (b) {
-        d.q = false
-    }
-    // error d.q might not be assigned
-    d.q
-    if (b) {
-        d.q = false
-    }
-    else {
-        d.q = true
-    }
-    d.q
-    if (b) {
-        d.r = 1
-    }
-    else {
-        d.r = 2
-    }
-    d.r
-    if (b) {
-        d.s = 'hi'
-    }
-    return d
+// @Filename: bug26877.js
+/** @param {Emu.D} x */
+function ollKorrect(x) {
+    x._model
+    const y = new Emu.D()
+    const z = Emu.D._wrapperInstance;
 }
-// OK to access possibly-unassigned properties outside the initialising scope
-var test = f(true).s
+Emu.D = class {
+    constructor() {
+        this._model = 1
+    }
+}
 
-function d() {
-}
-d.e = 12
-d.e
+// @Filename: second.js
+var Emu = {}
+/** @type {string} */
+Emu.D._wrapperInstance;
 
-if (!!false) {
-    d.q = false
-}
-d.q
-if (!!false) {
-    d.q = false
-}
-else {
-    d.q = true
-}
-d.q
-if (!!false) {
-    d.r = 1
-}
-else {
-    d.r = 2
-}
-d.r
-
-// test function expressions too
-const g = function() {
-}
-if (!!false) {
-    g.expando = 1
-}
-g.expando // error
-
-if (!!false) {
-    g.both = 'hi'
-}
-else {
-    g.both = 0
-}
-g.both

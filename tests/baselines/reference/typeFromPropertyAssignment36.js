@@ -1,4 +1,4 @@
-//// [typeFromPropertyAssignment35.ts]
+//// [typeFromPropertyAssignment36.ts]
 function f(b: boolean) {
     function d() {
     }
@@ -73,7 +73,7 @@ else {
 g.both
 
 
-//// [typeFromPropertyAssignment35.js]
+//// [typeFromPropertyAssignment36.js]
 "use strict";
 function f(b) {
     function d() {
