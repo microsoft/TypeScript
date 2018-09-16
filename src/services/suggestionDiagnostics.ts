@@ -132,7 +132,7 @@ namespace ts {
         // check that a property access expression exists in there and that it is a handler
         const returnStatements = getReturnStatementsWithPromiseHandlers(node);
         if (returnStatements.length > 0) {
-            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
+            diags.push(createDiagnosticForNode(!node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
         }
     }
 
