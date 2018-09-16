@@ -2532,7 +2532,9 @@ namespace ts {
                         return symbol;
                     }
                     else {
-                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
+                        const table = parent ? parent.exports! :
+                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                        return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
             }
@@ -2900,6 +2902,9 @@ namespace ts {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
+        }
+        if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
+            return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }
