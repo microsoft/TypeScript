@@ -3470,8 +3470,8 @@ namespace ts {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                             const hasRestElement = (<TupleType>type.target).hasRestElement;
-                            if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
-                                for (let i = (<TupleType>type.target).minLength; i < arity; i++) {
+                            if (tupleConstituentNodes) {
+                                for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                     tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
                                         createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
