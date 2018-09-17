@@ -311,7 +311,7 @@ namespace ts.codefix {
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
 
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchArg = argName.identifier.text.length > 0 ? argName.identifier.text : "e";
+        const catchArg = argName ? argName.identifier.text : "e";
         const catchClause = createCatchClause(catchArg, createBlock(transformationBody));
 
         /*
@@ -353,7 +353,7 @@ namespace ts.codefix {
 
             const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
 
-            const catchArg = argNameRej.identifier.text.length > 0 ? argNameRej.identifier.text : "e";
+            const catchArg = argNameRej ? argNameRej.identifier.text : "e";
             const catchClause = createCatchClause(catchArg, createBlock(transformationBody2));
 
             return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined) as Statement];
@@ -370,12 +370,11 @@ namespace ts.codefix {
     function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
-        const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
-        if (hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
-            return createTransformedStatement(prevArgName!, createAwait(node), transformer).concat(); // hack to make the types match
+        if (prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
+            return createTransformedStatement(prevArgName, createAwait(node), transformer).concat(); // hack to make the types match
         }
-        else if (!hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
+        else if (!prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
         }
 
@@ -398,18 +397,17 @@ namespace ts.codefix {
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
-    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
+    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier | undefined, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
-        const hasArgName = argName && argName.identifier.text.length > 0;
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
                 break;
             case SyntaxKind.Identifier: // identifier includes undefined
-                if (!hasArgName) break;
+                if (!argName) break;
 
-                const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
+                const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, argName ? [argName.identifier] : []);
                 if (shouldReturn) {
                     return createNodeArray([createReturn(synthCall)]);
                 }
@@ -534,7 +532,7 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {
+    function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier | undefined {
 
         const numberOfAssignmentsOriginal = 0;
         const types: Type[] = [];
@@ -552,7 +550,7 @@ namespace ts.codefix {
         }
 
         if (!name || name.identifier === undefined || name.identifier.text === "undefined") {
-            return { identifier: createIdentifier(""), types, numberOfAssignmentsOriginal };
+            return undefined;
         }
 
         return name;
