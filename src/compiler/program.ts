@@ -496,23 +496,15 @@ namespace ts {
     }
 
     /**
-     * Determined if source file needs to be re-created even if its text hasn't changed
+     * Determine if source file needs to be re-created even if its text hasn't changed
      */
-    function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions) {
-        // If any of these options change, we can't reuse old source file even if version match
-        // The change in options like these could result in change in syntax tree change
-        const oldOptions = program && program.getCompilerOptions();
-        return oldOptions && (
-            oldOptions.target !== newOptions.target ||
-            oldOptions.module !== newOptions.module ||
-            oldOptions.moduleResolution !== newOptions.moduleResolution ||
-            oldOptions.noResolve !== newOptions.noResolve ||
-            oldOptions.jsx !== newOptions.jsx ||
-            oldOptions.allowJs !== newOptions.allowJs ||
-            oldOptions.disableSizeLimit !== newOptions.disableSizeLimit ||
-            oldOptions.baseUrl !== newOptions.baseUrl ||
-            !equalOwnProperties(oldOptions.paths, newOptions.paths)
-        );
+    function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions): boolean {
+        if (!program) return false;
+        // If any compiler options change, we can't reuse old source file even if version match
+        // The change in options like these could result in change in syntax tree or `sourceFile.bindDiagnostics`.
+        const oldOptions = program.getCompilerOptions();
+        return !!sourceFileAffectingCompilerOptions.some(option =>
+            !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
     }
 
     function createCreateProgramOptions(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): CreateProgramOptions {

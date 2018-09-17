@@ -10180,6 +10180,35 @@ declare class TestLib {
         });
     });
 
+    describe("tsserverProjectSystem config file change", () => {
+        it("Updates diagnostics when '--noUnusedLabels' changes", () => {
+            const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
+            const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+            const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
+
+            const host = createServerHost([aTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+
+            host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
+            host.runQueuedTimeoutCallbacks();
+
+            const response = executeSessionRequest<protocol.SemanticDiagnosticsSyncRequest, protocol.SemanticDiagnosticsSyncResponse>(session, protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as protocol.Diagnostic[] | undefined;
+            assert.deepEqual<protocol.Diagnostic[] | undefined>(response, [
+                {
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 1 + "label".length },
+                    text: "Unused label.",
+                    category: "error",
+                    code: Diagnostics.Unused_label.code,
+                    relatedInformation: undefined,
+                    reportsUnnecessary: true,
+                    source: undefined,
+                },
+            ]);
+        });
+    });
+
     function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanFromSubstring(file, text, options),
