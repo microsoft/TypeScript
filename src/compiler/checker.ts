@@ -10636,6 +10636,8 @@ namespace ts {
                     return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
                 case SyntaxKind.JsxAttributes:
                     return elaborateJsxAttributes(node as JsxAttributes, source, target, relation);
+                case SyntaxKind.ArrowFunction:
+                    return elaborateArrowFunction(node as ArrowFunction, source, target, relation);
             }
             return false;
         }
@@ -10661,6 +10663,46 @@ namespace ts {
             return false;
         }
 
+        function elaborateArrowFunction(node: ArrowFunction, source: Type, target: Type, relation: Map<RelationComparisonResult>): boolean {
+            // Don't elaborate blocks
+            if (isBlock(node.body)) {
+                return false;
+            }
+            // Or functions with annotated parameter types
+            if (some(node.parameters, ts.hasType)) {
+                return false;
+            }
+            const sourceSig = getSingleCallSignature(source);
+            if (!sourceSig) {
+                return false;
+            }
+            const targetSignatures = getSignaturesOfType(target, SignatureKind.Call);
+            if (!length(targetSignatures)) {
+                return false;
+            }
+            const returnExpression = node.body;
+            const sourceReturn = getReturnTypeOfSignature(sourceSig);
+            const targetReturn = getUnionType(map(targetSignatures, getReturnTypeOfSignature));
+            if (!checkTypeRelatedTo(sourceReturn, targetReturn, relation, /*errorNode*/ undefined)) {
+                const elaborated = returnExpression && elaborateError(returnExpression, sourceReturn, targetReturn, relation, /*headMessage*/ undefined);
+                if (elaborated) {
+                    return elaborated;
+                }
+                const resultObj: { error?: Diagnostic } = {};
+                checkTypeRelatedTo(sourceReturn, targetReturn, relation, returnExpression, /*message*/ undefined, /*chain*/ undefined, resultObj);
+                if (resultObj.error) {
+                    if (target.symbol && length(target.symbol.declarations)) {
+                        addRelatedInfo(resultObj.error, createDiagnosticForNode(
+                            target.symbol.declarations[0],
+                            Diagnostics.The_expected_type_comes_from_the_return_type_of_this_signature,
+                        ));
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
         /**
          * For every element returned from the iterator, checks that element to issue an error on a property of that element's type
@@ -10674,7 +10716,7 @@ namespace ts {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
                 const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
                 const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, errorType);
-                if (sourcePropType !== errorType && targetPropType !== errorType && !isTypeAssignableTo(sourcePropType, targetPropType)) {
+                if (sourcePropType !== errorType && targetPropType !== errorType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined);
                     if (elaborated) {
                         reportedError = true;
@@ -10699,19 +10741,22 @@ namespace ts {
                                 const indexInfo = isTypeAssignableToKind(nameType, TypeFlags.NumberLike) && getIndexInfoOfType(target, IndexKind.Number) ||
                                     getIndexInfoOfType(target, IndexKind.String) ||
                                     undefined;
-                                if (indexInfo && indexInfo.declaration) {
+                                if (indexInfo && indexInfo.declaration && !getSourceFileOfNode(indexInfo.declaration).hasNoDefaultLib) {
                                     issuedElaboration = true;
                                     addRelatedInfo(reportedDiag, createDiagnosticForNode(indexInfo.declaration, Diagnostics.The_expected_type_comes_from_this_index_signature));
                                 }
                             }
 
                             if (!issuedElaboration && (targetProp && length(targetProp.declarations) || target.symbol && length(target.symbol.declarations))) {
-                                addRelatedInfo(reportedDiag, createDiagnosticForNode(
-                                    targetProp && length(targetProp.declarations) ? targetProp.declarations[0] : target.symbol.declarations[0],
-                                    Diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1,
-                                    propertyName && !(nameType.flags & TypeFlags.UniqueESSymbol) ? unescapeLeadingUnderscores(propertyName) : typeToString(nameType),
-                                    typeToString(target)
-                                ));
+                                const targetNode = targetProp && length(targetProp.declarations) ? targetProp.declarations[0] : target.symbol.declarations[0];
+                                if (!getSourceFileOfNode(targetNode).hasNoDefaultLib) {
+                                    addRelatedInfo(reportedDiag, createDiagnosticForNode(
+                                        targetNode,
+                                        Diagnostics.The_expected_type_comes_from_property_0_which_is_declared_here_on_type_1,
+                                        propertyName && !(nameType.flags & TypeFlags.UniqueESSymbol) ? unescapeLeadingUnderscores(propertyName) : typeToString(nameType),
+                                        typeToString(target)
+                                    ));
+                                }
                             }
                         }
                         reportedError = true;
@@ -10749,6 +10794,11 @@ namespace ts {
         function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             if (isTupleLikeType(source)) {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
+            }
+            // recreate a tuple from the elements, if possible
+            const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
+            if (isTupleLikeType(tupleizedType)) {
+                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation);
             }
             return false;
         }
@@ -16981,7 +17031,7 @@ namespace ts {
                 (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.EqualsToken);
         }
 
-        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
+        function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
             const elements = node.elements;
             const elementCount = elements.length;
             let hasNonEndingSpreadElement = false;
@@ -17003,7 +17053,7 @@ namespace ts {
                     // get the contextual element type from it. So we do something similar to
                     // getContextualTypeForElementExpression, which will crucially not error
                     // if there is no index type / iterated type.
-                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode);
+                    const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode, forceTuple);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
                         getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
@@ -17012,7 +17062,7 @@ namespace ts {
                 }
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, index);
-                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType);
+                    const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
                     elementTypes.push(type);
                 }
                 if (index < elementCount - 1 && e.kind === SyntaxKind.SpreadElement) {
@@ -17048,6 +17098,9 @@ namespace ts {
                             }
                         }
                     }
+                    return createTupleType(elementTypes, minLength, hasRestElement);
+                }
+                else if (forceTuple) {
                     return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }
@@ -22097,11 +22150,11 @@ namespace ts {
             return false;
         }
 
-        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type): Type {
+        function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             if (arguments.length === 2) {
                 contextualType = getContextualType(node);
             }
-            const type = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode, forceTuple);
             return isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, contextualType);
         }
@@ -22201,13 +22254,13 @@ namespace ts {
         // object, it serves as an indicator that all contained function and arrow expressions should be considered to
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
-        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+        function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {
                 type = checkQualifiedName(<QualifiedName>node);
             }
             else {
-                const uninstantiatedType = checkExpressionWorker(node, checkMode);
+                const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
                 type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             }
 
@@ -22237,7 +22290,7 @@ namespace ts {
             return checkExpression(node.expression, checkMode);
         }
 
-        function checkExpressionWorker(node: Expression, checkMode: CheckMode | undefined): Type {
+        function checkExpressionWorker(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -22262,7 +22315,7 @@ namespace ts {
                 case SyntaxKind.RegularExpressionLiteral:
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode);
+                    return checkArrayLiteral(<ArrayLiteralExpression>node, checkMode, forceTuple);
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
