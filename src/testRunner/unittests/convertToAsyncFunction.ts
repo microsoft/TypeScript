@@ -1183,6 +1183,15 @@ function [#|f|]() {
 }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_runEffectfulContinuation", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res).then(_ => console.log("done"));
+}
+function res(result) {
+    return Promise.resolve().then(x => console.log(result));
+} 
+`);
+
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
