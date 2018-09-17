@@ -435,7 +435,6 @@ namespace ts.codefix {
                 }
                 return varDeclOrAssignment;
 
-            case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 // Arrow functions with block bodies { } will enter this control flow
@@ -457,11 +456,11 @@ namespace ts.codefix {
                     }
 
                     return shouldReturn ? getSynthesizedDeepClones(createNodeArray(refactoredStmts)) :
-                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers, seenReturnStatement);
+                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer, seenReturnStatement);
                 }
                 else {
-                    const funcBody = (<ArrowFunction>func).body;
-                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody as Expression));
+                    const funcBody = cast((<ArrowFunction>func).body, isExpression);
+                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody));
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -471,14 +470,16 @@ namespace ts.codefix {
                     if (!shouldReturn) {
                         const type = transformer.checker.getTypeAtLocation(func);
                         const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, getSynthesizedDeepClone(funcBody) as Expression, transformer);
+                        const rightHandSide = getSynthesizedDeepClone(funcBody);
+                        const possiblyAwaitedRightHandSide = isPromiseReturningExpression(funcBody, transformer.checker) ? createAwait(rightHandSide) : rightHandSide;
+                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, possiblyAwaitedRightHandSide, transformer);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
                         }
                         return varDeclOrAssignment;
                     }
                     else {
-                        return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody) as Expression)]);
+                        return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody))]);
                     }
                 }
             default:
@@ -495,13 +496,14 @@ namespace ts.codefix {
     }
 
 
-    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[], seenReturnStatement: boolean): NodeArray<Statement> {
+    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, transformer: Transformer, seenReturnStatement: boolean): NodeArray<Statement> {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
                 if (stmt.expression) {
+                    const possiblyAwaitedExpression = isPromiseReturningExpression(stmt.expression, transformer.checker) ? createAwait(stmt.expression) : stmt.expression;
                     ret.push(createVariableStatement(/*modifiers*/ undefined,
-                        (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, stmt.expression)], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
+                        (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, possiblyAwaitedExpression)], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
                 }
             }
             else {
@@ -512,7 +514,7 @@ namespace ts.codefix {
         // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
         if (!seenReturnStatement) {
             ret.push(createVariableStatement(/*modifiers*/ undefined,
-                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
+                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
         }
 
         return createNodeArray(ret);
