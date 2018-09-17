@@ -530,6 +530,17 @@ namespace ts {
                     if (symbol) {
                         (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
                     }
+                    if ((options.outDir || options.declarationDir) && pathIsRelative(input.text) && currentSourceFile.redirectedReferences) {
+                        const normalizedTargetPath = getNormalizedAbsolutePath(input.text, getDirectoryPath(currentSourceFile.fileName));
+                        for (const ext of [Extension.Ts, Extension.Tsx]) {
+                            const probePath = normalizedTargetPath + ext;
+                            if (currentSourceFile.redirectedReferences.indexOf(probePath) >= 0) {
+                                const outputDir = getDirectoryPath(getOutputPathsFor(currentSourceFile, host, /*forceDtsPaths*/ true).declarationFilePath!);
+                                const relativePath = getRelativePathFromDirectory(outputDir, normalizedTargetPath, host.getCanonicalFileName);
+                                return createLiteral(relativePath);
+                            }
+                        }
+                    }
                 }
             }
             return input;
