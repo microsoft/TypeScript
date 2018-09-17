@@ -3470,8 +3470,8 @@ namespace ts {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                             const hasRestElement = (<TupleType>type.target).hasRestElement;
-                            if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
-                                for (let i = (<TupleType>type.target).minLength; i < arity; i++) {
+                            if (tupleConstituentNodes) {
+                                for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                     tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
                                         createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
@@ -13420,7 +13420,7 @@ namespace ts {
             let propagationType: Type;
             inferFromTypes(originalSource, originalTarget);
 
-            function inferFromTypes(source: Type, target: Type) {
+            function inferFromTypes(source: Type, target: Type): void {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
@@ -13555,6 +13555,9 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    inferFromTypes(source, getUnionType([getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)]));
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -13588,7 +13591,14 @@ namespace ts {
                 }
                 else {
                     if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
-                        source = getApparentType(source);
+                        const apparentSource = getApparentType(source);
+                        // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
+                        // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
+                        // with the simplified source.
+                        if (apparentSource !== source && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                            return inferFromTypes(apparentSource, target);
+                        }
+                        source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
@@ -13794,7 +13804,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function isObjectLiteralType(type: Type) {
