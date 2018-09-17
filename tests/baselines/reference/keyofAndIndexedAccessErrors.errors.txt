@@ -8,9 +8,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(25,18): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(26,18): error TS2538: Type 'void' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(27,18): error TS2538: Type 'undefined' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(28,18): error TS2538: Type '{ x: string; }' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(30,18): error TS2538: Type 'string & number' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'false' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'true' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(35,21): error TS2537: Type 'string[]' has no matching index signature for type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
@@ -60,7 +63,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
   Type 'T' is not assignable to type 'U'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (33 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (36 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -111,6 +114,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
 !!! error TS2538: Type '{ x: string; }' cannot be used as an index type.
     type T20 = Shape[string | number];  // Error
                      ~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+                     ~~~~~~~~~~~~~~~
 !!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
     type T21 = Shape[string & number];  // Error
                      ~~~~~~~~~~~~~~~
@@ -118,6 +123,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
     type T22 = Shape[string | boolean];  // Error
                      ~~~~~~~~~~~~~~~~
 !!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'false' cannot be used as an index type.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'true' cannot be used as an index type.
     
     type T30 = string[]["length"];
     type T31 = string[][number];

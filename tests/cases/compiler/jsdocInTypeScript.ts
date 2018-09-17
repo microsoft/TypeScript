@@ -46,3 +46,7 @@ import M = N; // Error: @typedef does not create namespaces in TypeScript code.
  * @type {{foo: (function(string, string): string)}}
  */
 const obj = { foo: (a, b) => a + b };
+
+/** @enum {string} */
+var E = {};
+E[""];

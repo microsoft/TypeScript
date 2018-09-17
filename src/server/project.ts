@@ -583,7 +583,7 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
-                const projectReferences = this.program.getProjectReferences();
+                const projectReferences = this.program.getResolvedProjectReferences();
                 if (projectReferences) {
                     for (const ref of projectReferences) {
                         if (ref) {
@@ -1399,7 +1399,7 @@ namespace ts.server {
         /*@internal*/
         getResolvedProjectReferences() {
             const program = this.getCurrentProgram();
-            return program && program.getProjectReferences();
+            return program && program.getResolvedProjectReferences();
         }
 
         enablePlugins() {

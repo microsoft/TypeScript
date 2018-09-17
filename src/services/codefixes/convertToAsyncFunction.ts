@@ -2,11 +2,13 @@
 namespace ts.codefix {
     const fixId = "convertToAsyncFunction";
     const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
+    let codeActionSucceeded = true;
     registerCodeFix({
         errorCodes,
         getCodeActions(context: CodeFixContext) {
+            codeActionSucceeded = true;
             const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)];
+            return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
@@ -61,12 +63,12 @@ namespace ts.codefix {
         const synthNamesMap: Map<SynthIdentifier> = createMap();
         const originalTypeMap: Map<Type> = createMap();
         const allVarNames: SymbolAndIdentifier[] = [];
-        const isInJSFile = isInJavaScriptFile(functionToConvert);
+        const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseHandlers(functionToConvertRenamed);
-        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile };
+        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile: isInJavascript };
 
         if (!returnStatements.length) {
             return;
@@ -81,19 +83,14 @@ namespace ts.codefix {
         }
 
         for (const statement of returnStatements) {
-            if (isCallExpression(statement)) {
-                startTransformation(statement, statement);
-            }
-            else {
-                forEachChild(statement, function visit(node: Node) {
-                    if (isCallExpression(node)) {
-                        startTransformation(node, statement);
-                    }
-                    else if (!isFunctionLike(node)) {
-                        forEachChild(node, visit);
-                    }
-                });
-            }
+            forEachChild(statement, function visit(node) {
+                if (isCallExpression(node)) {
+                    startTransformation(node, statement);
+                }
+                else if (!isFunctionLike(node)) {
+                    forEachChild(node, visit);
+                }
+            });
         }
     }
 
@@ -165,6 +162,7 @@ namespace ts.codefix {
     function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<SynthIdentifier>, context: CodeFixContextBase, setOfAllExpressionsToReturn: Map<true>, originalType: Map<Type>, allVarNames: SymbolAndIdentifier[]): FunctionLikeDeclaration {
 
         const identsToRenameMap: Map<Identifier> = createMap(); // key is the symbol id
+        const collidingSymbolMap: Map<Symbol[]> = createMap();
         forEachChild(nodeToRename, function visit(node: Node) {
             if (!isIdentifier(node)) {
                 forEachChild(node, visit);
@@ -182,19 +180,25 @@ namespace ts.codefix {
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                 // Note - the choice of the last call signature is arbitrary
                 if (lastCallSignature && lastCallSignature.parameters.length && !synthNamesMap.has(symbolIdString)) {
-                    const synthName = getNewNameIfConflict(createIdentifier(lastCallSignature.parameters[0].name), allVarNames);
+                    const firstParameter = lastCallSignature.parameters[0];
+                    const ident = isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
+                    const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
                     allVarNames.push({ identifier: synthName.identifier, symbol });
+                    addNameToFrequencyMap(collidingSymbolMap, ident.text, symbol);
                 }
                 // we only care about identifiers that are parameters and declarations (don't care about other uses)
                 else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
+                    const originalName = node.text;
+                    const collidingSymbols = collidingSymbolMap.get(originalName);
 
                     // if the identifier name conflicts with a different identifier that we've already seen
-                    if (allVarNames.some(ident => ident.identifier.text === node.text && ident.symbol !== symbol)) {
-                        const newName = getNewNameIfConflict(node, allVarNames);
+                    if (collidingSymbols && collidingSymbols.some(prevSymbol => prevSymbol !== symbol)) {
+                        const newName = getNewNameIfConflict(node, collidingSymbolMap);
                         identsToRenameMap.set(symbolIdString, newName.identifier);
                         synthNamesMap.set(symbolIdString, newName);
                         allVarNames.push({ identifier: newName.identifier, symbol });
+                        addNameToFrequencyMap(collidingSymbolMap, originalName, symbol);
                     }
                     else {
                         const identifier = getSynthesizedDeepClone(node);
@@ -202,6 +206,7 @@ namespace ts.codefix {
                         synthNamesMap.set(symbolIdString, { identifier, types: [], numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/ });
                         if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
+                            addNameToFrequencyMap(collidingSymbolMap, originalName, symbol);
                         }
                     }
                 }
@@ -244,14 +249,24 @@ namespace ts.codefix {
 
     }
 
-    function getNewNameIfConflict(name: Identifier, allVarNames: SymbolAndIdentifier[]): SynthIdentifier {
-        const numVarsSameName = allVarNames.filter(elem => elem.identifier.text === name.text).length;
+    function addNameToFrequencyMap(renamedVarNameFrequencyMap: Map<Symbol[]>, originalName: string, symbol: Symbol) {
+        if (renamedVarNameFrequencyMap.has(originalName)) {
+            renamedVarNameFrequencyMap.get(originalName)!.push(symbol);
+        }
+        else {
+            renamedVarNameFrequencyMap.set(originalName, [symbol]);
+        }
+    }
+
+    function getNewNameIfConflict(name: Identifier, originalNames: Map<Symbol[]>): SynthIdentifier {
+        const numVarsSameName = (originalNames.get(name.text) || []).length;
         const numberOfAssignmentsOriginal = 0;
         const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
         return { identifier, types: [], numberOfAssignmentsOriginal };
     }
 
     // dispatch function to recursively build the refactoring
+    // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
     function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         if (!node) {
             return [];
@@ -273,6 +288,7 @@ namespace ts.codefix {
             return transformPromiseCall(node, transformer, prevArgName);
         }
 
+        codeActionSucceeded = false;
         return [];
     }
 
@@ -290,13 +306,14 @@ namespace ts.codefix {
             prevArgName.numberOfAssignmentsOriginal = 2; // Try block and catch block
             transformer.synthNamesMap.forEach((val, key) => {
                 if (val.identifier.text === prevArgName.identifier.text) {
-                    transformer.synthNamesMap.set(key, getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames));
+                    const newSynthName = createUniqueSynthName(prevArgName);
+                    transformer.synthNamesMap.set(key, newSynthName);
                 }
             });
 
             // update the constIdentifiers list
             if (transformer.constIdentifiers.some(elem => elem.text === prevArgName.identifier.text)) {
-                transformer.constIdentifiers.push(getNewNameIfConflict(prevArgName.identifier, transformer.allVarNames).identifier);
+                transformer.constIdentifiers.push(createUniqueSynthName(prevArgName).identifier);
             }
         }
 
@@ -322,6 +339,12 @@ namespace ts.codefix {
         return varDeclList ? [varDeclList, tryStatement] : [tryStatement];
     }
 
+    function createUniqueSynthName(prevArgName: SynthIdentifier) {
+        const renamedPrevArg = createOptimisticUniqueName(prevArgName.identifier.text);
+        const newSynthName = { identifier: renamedPrevArg, types: [], numberOfAssignmentsOriginal: 0 };
+        return newSynthName;
+    }
+
     function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
         const [res, rej] = node.arguments;
 
@@ -344,11 +367,8 @@ namespace ts.codefix {
 
             return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined) as Statement];
         }
-        else {
-            return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
-        }
 
-        return [];
+        return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
     }
 
     function getFlagOfIdentifier(node: Identifier, constIdentifiers: Identifier[]): NodeFlags {
@@ -381,13 +401,18 @@ namespace ts.codefix {
             (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
     }
 
-    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
+    // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
+    function getTransformationBody(func: Expression, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const hasArgName = argName && argName.identifier.text.length > 0;
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
+            case SyntaxKind.NullKeyword:
+                // do not produce a transformed statement for a null argument
+                break;
             case SyntaxKind.Identifier:
+                // identifier includes undefined
                 if (!hasArgName) break;
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
@@ -404,14 +429,19 @@ namespace ts.codefix {
                 prevArgName!.types.push(returnType!);
                 return varDeclOrAssignment;
 
-            case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ArrowFunction: {
+                const funcBody = (func as FunctionExpression | ArrowFunction).body;
                 // Arrow functions with block bodies { } will enter this control flow
-                if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
+                if (isBlock(funcBody)) {
                     let refactoredStmts: Statement[] = [];
+                    let seenReturnStatement = false;
 
-                    for (const statement of func.body.statements) {
+                    for (const statement of funcBody.statements) {
+                        if (isReturnStatement(statement)) {
+                            seenReturnStatement = true;
+                        }
+
                         if (getReturnStatementsWithPromiseHandlers(statement).length) {
                             refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
@@ -421,11 +451,10 @@ namespace ts.codefix {
                     }
 
                     return shouldReturn ? getSynthesizedDeepClones(createNodeArray(refactoredStmts)) :
-                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers);
+                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers, seenReturnStatement);
                 }
                 else {
-                    const funcBody = (<ArrowFunction>func).body;
-                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody as Expression));
+                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody));
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
@@ -434,27 +463,31 @@ namespace ts.codefix {
 
                     if (hasPrevArgName && !shouldReturn) {
                         const type = transformer.checker.getTypeAtLocation(func);
-                        const returnType = getLastCallSignature(type, transformer.checker).getReturnType();
-                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
+                        const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
+                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody), transformer);
                         prevArgName!.types.push(returnType);
                         return varDeclOrAssignment;
                     }
                     else {
-                        return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody) as Expression)]);
+                        return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody))]);
                     }
                 }
+            }
+            default:
+                // We've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
+                codeActionSucceeded = false;
                 break;
         }
         return createNodeArray([]);
     }
 
-    function getLastCallSignature(type: Type, checker: TypeChecker): Signature {
-        const callSignatures = type && checker.getSignaturesOfType(type, SignatureKind.Call);
-        return callSignatures && callSignatures[callSignatures.length - 1];
+    function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
+        const callSignatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+        return lastOrUndefined(callSignatures);
     }
 
 
-    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[]): NodeArray<Statement> {
+    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[], seenReturnStatement: boolean): NodeArray<Statement> {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
@@ -466,6 +499,12 @@ namespace ts.codefix {
             else {
                 ret.push(getSynthesizedDeepClone(stmt));
             }
+        }
+
+        // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
+        if (!seenReturnStatement) {
+            ret.push(createVariableStatement(/*modifiers*/ undefined,
+                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
         }
 
         return createNodeArray(ret);
@@ -492,14 +531,6 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
-        if (!isPropertyAccessExpression(node.expression)) {
-            return false;
-        }
-
-        return node.expression.name.text === funcName;
-    }
-
     function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {
 
         const numberOfAssignmentsOriginal = 0;
@@ -512,9 +543,6 @@ namespace ts.codefix {
                 const param = funcNode.parameters[0].name as Identifier;
                 name = getMapEntryIfExists(param);
             }
-        }
-        else if (isCallExpression(funcNode) && funcNode.arguments.length > 0 && isIdentifier(funcNode.arguments[0])) {
-            name = { identifier: funcNode.arguments[0] as Identifier, types, numberOfAssignmentsOriginal };
         }
         else if (isIdentifier(funcNode)) {
             name = getMapEntryIfExists(funcNode);

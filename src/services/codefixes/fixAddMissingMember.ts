@@ -20,7 +20,7 @@ namespace ts.codefix {
             const { parentDeclaration, declSourceFile, inJs, makeStatic, token, call } = info;
             const methodCodeAction = call && getActionForMethodDeclaration(context, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, context.preferences);
             const addMember = inJs && !isInterfaceDeclaration(parentDeclaration) ?
-                singleElementArray(getActionsForAddMissingMemberInJavaScriptFile(context, declSourceFile, parentDeclaration, token.text, makeStatic)) :
+                singleElementArray(getActionsForAddMissingMemberInJavascriptFile(context, declSourceFile, parentDeclaration, token.text, makeStatic)) :
                 getActionsForAddMissingMemberInTypeScriptFile(context, declSourceFile, parentDeclaration, token, makeStatic);
             return concatenate(singleElementArray(methodCodeAction), addMember);
         },
@@ -131,7 +131,7 @@ namespace ts.codefix {
         if (classOrInterface) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             const declSourceFile = classOrInterface.getSourceFile();
-            const inJs = isSourceFileJavaScript(declSourceFile);
+            const inJs = isSourceFileJS(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
@@ -142,7 +142,7 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
+    function getActionsForAddMissingMemberInJavascriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
         const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, declSourceFile, classDeclaration, tokenName, makeStatic));
         return changes.length === 0 ? undefined
             : createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor, tokenName], fixId, Diagnostics.Add_all_missing_members);

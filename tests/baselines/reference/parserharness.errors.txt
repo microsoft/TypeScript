@@ -5,8 +5,8 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,21): er
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,29): error TS2694: Namespace 'Harness' has no exported member 'Assert'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2304: Cannot find name 'require'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(44,14): error TS2304: Cannot find name 'require'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(44,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(341,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(347,13): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(351,17): error TS2662: Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?
@@ -169,10 +169,10 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
         eval(typescriptServiceFile);
     } else if (typeof require === "function") {
                       ~~~~~~~
-!!! error TS2304: Cannot find name 'require'.
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
         var vm = require('vm');
                  ~~~~~~~
-!!! error TS2304: Cannot find name 'require'.
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
         vm.runInThisContext(typescriptServiceFile, 'typescriptServices.js');
     } else {
         throw new Error('Unknown context');

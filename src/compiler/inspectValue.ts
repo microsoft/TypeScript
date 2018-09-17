@@ -96,7 +96,7 @@ namespace ts {
 
     function getPrototypeMembers(fn: AnyFunction, recurser: Recurser): ReadonlyArray<ValueInfo> {
         const prototype = fn.prototype as unknown;
-        return typeof prototype !== "object" || prototype === null ? emptyArray : mapDefined(getEntriesOfObject(prototype as object), ({ key, value }) =>
+        return typeof prototype !== "object" || prototype === null ? emptyArray : mapDefined(getEntriesOfObject(prototype), ({ key, value }) =>
             key === "constructor" ? undefined : getValueInfo(key, value, recurser));
     }
 

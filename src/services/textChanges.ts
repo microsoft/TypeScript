@@ -291,7 +291,7 @@ namespace ts.textChanges {
         }
 
         public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
-            this.replaceRange(sourceFile, createTextRange(pos), newNode, options);
+            this.replaceRange(sourceFile, createRange(pos), newNode, options);
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
@@ -334,7 +334,7 @@ namespace ts.textChanges {
         }
 
         public insertText(sourceFile: SourceFile, pos: number, text: string): void {
-            this.replaceRangeWithText(sourceFile, createTextRange(pos), text);
+            this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -464,7 +464,7 @@ namespace ts.textChanges {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
-                    this.replaceRange(sourceFile, createTextRange(after.end), createToken(SyntaxKind.SemicolonToken));
+                    this.replaceRange(sourceFile, createRange(after.end), createToken(SyntaxKind.SemicolonToken));
                 }
             }
             const endPosition = getAdjustedEndPosition(sourceFile, after, {});
@@ -603,7 +603,7 @@ namespace ts.textChanges {
 
                     // write separator and leading trivia of the next element as suffix
                     const suffix = `${tokenToString(nextToken.kind)}${sourceFile.text.substring(nextToken.end, containingList[index + 1].getStart(sourceFile))}`;
-                    this.replaceRange(sourceFile, createTextRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
+                    this.replaceRange(sourceFile, createRange(startPos, containingList[index + 1].getStart(sourceFile)), newNode, { prefix, suffix });
                 }
             }
             else {
@@ -637,7 +637,7 @@ namespace ts.textChanges {
                 }
                 if (multilineList) {
                     // insert separator immediately following the 'after' node to preserve comments in trailing trivia
-                    this.replaceRange(sourceFile, createTextRange(end), createToken(separator));
+                    this.replaceRange(sourceFile, createRange(end), createToken(separator));
                     // use the same indentation as 'after' item
                     const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                     // insert element before the line break on the line that contains 'after' element
@@ -645,10 +645,10 @@ namespace ts.textChanges {
                     if (insertPos !== end && isLineBreak(sourceFile.text.charCodeAt(insertPos - 1))) {
                         insertPos--;
                     }
-                    this.replaceRange(sourceFile, createTextRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
+                    this.replaceRange(sourceFile, createRange(insertPos), newNode, { indentation, prefix: this.newLineCharacter });
                 }
                 else {
-                    this.replaceRange(sourceFile, createTextRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
+                    this.replaceRange(sourceFile, createRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
                 }
             }
             return this;
@@ -659,7 +659,7 @@ namespace ts.textChanges {
                 const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
                 // For `class C { }` remove the whitespace inside the braces.
                 if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
-                    this.deleteRange(sourceFile, createTextRange(openBraceEnd, closeBraceEnd - 1));
+                    this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
                 }
             });
         }
@@ -799,7 +799,7 @@ namespace ts.textChanges {
         function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = new Writer(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
-            createPrinter({ newLine }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
+            createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
             return { text: writer.getText(), node: assignPositionsToNode(node) };
         }
     }

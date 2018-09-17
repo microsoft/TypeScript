@@ -177,15 +177,10 @@ namespace ts {
         file.text = file.text.updateProgram(newProgramText);
     }
 
-    function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.equal(expected.resolvedFileName, actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.equal(expected.primary, actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
-            }
-            return true;
-        }
-        return false;
+    function checkResolvedTypeDirective(actual: ResolvedTypeReferenceDirective, expected: ResolvedTypeReferenceDirective) {
+        assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
+        assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
+        return true;
     }
 
     function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
@@ -310,10 +305,10 @@ namespace ts {
             assert.equal(program1.structureIsReused, StructureIsReused.Not);
         });
 
-        it("fails if rootdir changes", () => {
+        it("succeeds if rootdir changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
             updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if config path changes", () => {
@@ -397,6 +392,30 @@ namespace ts {
                 files[0].text = files[0].text.updateProgram('import * as aa from "a";');
             });
             assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+        });
+
+        it("works with updated SourceFiles", () => {
+            // adapted repro from https://github.com/Microsoft/TypeScript/issues/26166
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";a;') },
+                { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            ];
+            const host = createTestCompilerHost(files, target);
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
+            const program1 = createProgram(["/a.ts"], options, host);
+            let sourceFile = program1.getSourceFile("/a.ts")!;
+            assert.isDefined(sourceFile, "'/a.ts' is included in the program");
+            sourceFile = updateSourceFile(sourceFile, "'use strict';" + sourceFile.text, { newLength: "'use strict';".length, span: { start: 0, length: 0 } });
+            assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are updated");
+            const updateHost: TestCompilerHost = {
+                ...host,
+                getSourceFile(fileName) {
+                    return fileName === sourceFile.fileName ? sourceFile : program1.getSourceFile(fileName);
+                }
+            };
+            const program2 = createProgram(["/a.ts"], options, updateHost, program1);
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are not altered");
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -895,7 +914,8 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false
+                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*projectReferences*/ undefined
             );
             assert.isTrue(actual);
         }

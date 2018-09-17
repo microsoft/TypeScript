@@ -9,6 +9,7 @@
     "files": [
         "core.ts",
         "performance.ts",
+        "semver.ts",
 
         "types.ts",
         "sys.ts",

@@ -1,0 +1,68 @@
+=== tests/cases/compiler/conditionalTypeContextualTypeSimplificationsSuceeds.ts ===
+// repro from https://github.com/Microsoft/TypeScript/issues/26395
+interface Props {
+>Props : Symbol(Props, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 0, 0))
+
+    when: (value: string) => boolean;
+>when : Symbol(Props.when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 1, 17))
+>value : Symbol(value, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 2, 11))
+}
+
+function bad<P extends Props>(
+>bad : Symbol(bad, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 3, 1))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>Props : Symbol(Props, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 0, 0))
+
+    attrs: string extends keyof P ? { [K in keyof P]: P[K] } : { [K in keyof P]: P[K] }) { }
+>attrs : Symbol(attrs, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 30))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 39))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 39))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 66))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 5, 13))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 66))
+
+function good1<P extends Props>(
+>good1 : Symbol(good1, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 92))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 15))
+>Props : Symbol(Props, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 0, 0))
+
+    attrs: string extends keyof P ? P : { [K in keyof P]: P[K] }) { }
+>attrs : Symbol(attrs, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 32))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 15))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 15))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 8, 43))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 15))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 7, 15))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 8, 43))
+
+function good2<P extends Props>(
+>good2 : Symbol(good2, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 8, 69))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 9, 15))
+>Props : Symbol(Props, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 0, 0))
+
+    attrs: { [K in keyof P]: P[K] }) { }
+>attrs : Symbol(attrs, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 9, 32))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 10, 14))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 9, 15))
+>P : Symbol(P, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 9, 15))
+>K : Symbol(K, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 10, 14))
+
+bad({ when: value => false });
+>bad : Symbol(bad, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 3, 1))
+>when : Symbol(when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 12, 5))
+>value : Symbol(value, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 12, 11))
+
+good1({ when: value => false });
+>good1 : Symbol(good1, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 6, 92))
+>when : Symbol(when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 13, 7))
+>value : Symbol(value, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 13, 13))
+
+good2({ when: value => false });
+>good2 : Symbol(good2, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 8, 69))
+>when : Symbol(when, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 14, 7))
+>value : Symbol(value, Decl(conditionalTypeContextualTypeSimplificationsSuceeds.ts, 14, 13))
+

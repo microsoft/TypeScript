@@ -58,7 +58,7 @@ namespace ts.codefix {
 
     function tryGenerateTypes(typesDir: string, packageName: string, context: CodeFixContextBase): GenerateTypesAction | undefined {
         const file = context.sourceFile.fileName;
-        const fileToGenerateTypesFor = tryResolveJavaScriptModule(packageName, getDirectoryPath(file), context.host as ModuleResolutionHost); // TODO: GH#18217
+        const fileToGenerateTypesFor = tryResolveJSModule(packageName, getDirectoryPath(file), context.host as ModuleResolutionHost); // TODO: GH#18217
         if (fileToGenerateTypesFor === undefined) return undefined;
 
         const outputFileName = resolvePath(getDirectoryPath(context.program.getCompilerOptions().configFile!.fileName), typesDir, packageName + ".d.ts");
@@ -143,7 +143,7 @@ namespace ts.codefix {
 
     function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string | undefined {
         const moduleName = cast(getTokenAtPosition(sourceFile, pos), isStringLiteral).text;
-        const { packageName } = getPackageName(moduleName);
+        const { packageName } = parsePackageName(moduleName);
         return isExternalModuleNameRelative(packageName) ? undefined : packageName;
     }
 

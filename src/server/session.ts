@@ -266,8 +266,6 @@ namespace ts.server {
         getValue: (path: Path) => T,
         projects: Projects,
         action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
-        comparer?: (a: U, b: U) => number,
-        areEqual?: (a: U, b: U) => boolean,
     ): U[] {
         const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
@@ -276,10 +274,7 @@ namespace ts.server {
                 outputs.push(...flatMap(projects, project => action(project, value)));
             });
         }
-
-        return comparer
-            ? sortAndDeduplicate(outputs, comparer, areEqual)
-            : deduplicate(outputs, areEqual);
+        return deduplicate(outputs, equateValues);
     }
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
@@ -341,16 +336,23 @@ namespace ts.server {
     function combineProjectOutputForReferences(projects: Projects, defaultProject: Project, initialLocation: sourcemaps.SourceMappableLocation, projectService: ProjectService): ReadonlyArray<ReferencedSymbol> {
         const outputs: ReferencedSymbol[] = [];
 
-        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, tryAddToTodo) => {
+        combineProjectOutputWorker<sourcemaps.SourceMappableLocation>(projects, defaultProject, initialLocation, projectService, ({ project, location }, getMappedLocation) => {
             for (const outputReferencedSymbol of project.getLanguageService().findReferences(location.fileName, location.position) || emptyArray) {
-                let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, outputReferencedSymbol.definition));
+                const mappedDefinitionFile = getMappedLocation(project, documentSpanLocation(outputReferencedSymbol.definition));
+                const definition: ReferencedSymbolDefinitionInfo = mappedDefinitionFile === undefined ? outputReferencedSymbol.definition : {
+                    ...outputReferencedSymbol.definition,
+                    textSpan: createTextSpan(mappedDefinitionFile.position, outputReferencedSymbol.definition.textSpan.length),
+                    fileName: mappedDefinitionFile.fileName,
+                };
+                let symbolToAddTo = find(outputs, o => documentSpansEqual(o.definition, definition));
                 if (!symbolToAddTo) {
-                    symbolToAddTo = { definition: outputReferencedSymbol.definition, references: [] };
+                    symbolToAddTo = { definition, references: [] };
                     outputs.push(symbolToAddTo);
                 }
 
                 for (const ref of outputReferencedSymbol.references) {
-                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(ref))) {
+                    // If it's in a mapped file, that is added to the todo list by `getMappedLocation`.
+                    if (!contains(symbolToAddTo.references, ref, documentSpansEqual) && !getMappedLocation(project, documentSpanLocation(ref))) {
                         symbolToAddTo.references.push(ref);
                     }
                 }
@@ -378,12 +380,17 @@ namespace ts.server {
         }
     }
 
+    type CombineProjectOutputCallback<TLocation extends sourcemaps.SourceMappableLocation | undefined> = (
+        where: ProjectAndLocation<TLocation>,
+        getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => sourcemaps.SourceMappableLocation | undefined,
+    ) => void;
+
     function combineProjectOutputWorker<TLocation extends sourcemaps.SourceMappableLocation | undefined>(
         projects: Projects,
         defaultProject: Project,
         initialLocation: TLocation,
         projectService: ProjectService,
-        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+        cb: CombineProjectOutputCallback<TLocation>,
         getDefinition: (() => sourcemaps.SourceMappableLocation | undefined) | undefined,
     ): void {
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
@@ -422,13 +429,13 @@ namespace ts.server {
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
         seenProjects: Map<true>,
-        cb: (where: ProjectAndLocation<TLocation>, getMappedLocation: (project: Project, location: sourcemaps.SourceMappableLocation) => boolean) => void,
+        cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
             seenProjects.set(projectAndLocation.project.projectName, true);
             const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
-            if (!originalLocation) return false;
+            if (!originalLocation) return undefined;
 
             const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
             toDo = toDo || [];
@@ -442,7 +449,7 @@ namespace ts.server {
                     for (const symlinkedProject of symlinkedProjects) addToTodo({ project: symlinkedProject, location: originalLocation as TLocation }, toDo!, seenProjects);
                 });
             }
-            return true;
+            return originalLocation;
         });
         return toDo;
     }
@@ -1101,7 +1108,7 @@ namespace ts.server {
             return projectInfo;
         }
 
-        private getRenameInfo(args: protocol.FileLocationRequestArgs) {
+        private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             return project.getLanguageService().getRenameInfo(file, position);
@@ -1154,13 +1161,12 @@ namespace ts.server {
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo = Session.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position), Debug.assertDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
-        // strips 'triggerSpan'
-        private static mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers }: RenameInfo): protocol.RenameInfo {
-            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers };
+        private mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan }: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
+            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) };
         }
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {

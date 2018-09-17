@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/typeRelationships/assignmentCompatibility/numberAssignableToEnum.ts ===
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var n: number;
 >n : number
