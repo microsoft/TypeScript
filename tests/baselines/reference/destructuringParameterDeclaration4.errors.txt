@@ -52,7 +52,6 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     a6([1, 2, "string"]);                   // Error, parameter type is number[]
               ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     
     
     var temp = [1, 2, 3];

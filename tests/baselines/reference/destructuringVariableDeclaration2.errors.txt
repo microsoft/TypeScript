@@ -34,4 +34,3 @@ tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts(1
     var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
                    ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.

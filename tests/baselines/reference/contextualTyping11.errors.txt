@@ -7,4 +7,3 @@ tests/cases/compiler/contextualTyping11.ts(1,42): error TS2322: Type 'foo' is no
                                              ~~~~~~~~~
 !!! error TS2322: Type 'foo' is not assignable to type '{ id: number; }'.
 !!! error TS2322:   Property 'id' is missing in type 'foo'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.

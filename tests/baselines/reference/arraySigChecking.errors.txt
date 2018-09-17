@@ -27,17 +27,14 @@ tests/cases/compiler/arraySigChecking.ts(22,16): error TS2322: Type 'number' is 
     var strArray: string[] = [myVar.voidFn()];
                               ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'void' is not assignable to type 'string'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     
     
     var myArray: number[][][];
     myArray = [[1, 2]];
                 ~
 !!! error TS2322: Type 'number' is not assignable to type 'number[]'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
                    ~
 !!! error TS2322: Type 'number' is not assignable to type 'number[]'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     
     function isEmpty(l: { length: number }) {
         return l.length === 0;

@@ -6,4 +6,3 @@ tests/cases/conformance/es6/for-ofStatements/for-of10.ts(2,12): error TS2322: Ty
     for (v of [0]) { }
                ~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
-!!! related TS6501 /.ts/lib.es5.d.ts:444:5: The expected type comes from this index signature.

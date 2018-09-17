@@ -20,10 +20,8 @@ tests/cases/compiler/assignmentCompatBug5.ts(9,6): error TS2345: Argument of typ
     foo2(["s", "t"]);
           ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
                ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     
     function foo3(x: (n: number) =>number) { };
     foo3((s:string) => { });

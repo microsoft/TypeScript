@@ -12,7 +12,6 @@ tests/cases/compiler/keyofIsLiteralContexualType.ts(13,11): error TS2339: Proper
                                         ~~~
 !!! error TS2322: Type '"c"' is not assignable to type 'keyof T'.
 !!! error TS2322:   Type '"c"' is not assignable to type '"a" | "b"'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     }
     
     // Repro from #12455

@@ -26,12 +26,10 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(32,18): error TS2322: Type '{ 
                  ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ id: number; trueness: boolean; }' is not assignable to type 'Action'.
 !!! error TS2322:   Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
         { id: 3, name: "three" }
                  ~~~~~~~~~~~~~
 !!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type 'Action'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type 'Action'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     ]
     
     var x2: Action[] = [
@@ -51,12 +49,10 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(32,18): error TS2322: Type '{ 
                      ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ id: number; trueness: boolean; }' is not assignable to type '{ id: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
             { id: 3, name: "three" }
                      ~~~~~~~~~~~~~
 !!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
         ]
     
     var z2: { id: number }[] =

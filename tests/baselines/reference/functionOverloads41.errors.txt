@@ -10,5 +10,4 @@ tests/cases/compiler/functionOverloads41.ts(4,14): error TS2322: Type '{}' is no
                  ~~
 !!! error TS2322: Type '{}' is not assignable to type '{ a: boolean; }'.
 !!! error TS2322:   Property 'a' is missing in type '{}'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
     

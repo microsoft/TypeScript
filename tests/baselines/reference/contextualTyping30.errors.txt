@@ -5,4 +5,3 @@ tests/cases/compiler/contextualTyping30.ts(1,41): error TS2322: Type 'string' is
     function foo(param:number[]){}; foo([1, "a"]);
                                             ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.

@@ -18,4 +18,3 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray5.ts(14,30): error TS232
     var array: number[] = [0, 1, ...new SymbolIterator];
                                  ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'symbol' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.

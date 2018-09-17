@@ -7,4 +7,3 @@ tests/cases/compiler/contextualTyping12.ts(1,57): error TS2322: Type '{ id: numb
                                                             ~~~~~~~~~~
 !!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.

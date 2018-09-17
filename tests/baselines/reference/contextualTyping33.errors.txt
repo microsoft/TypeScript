@@ -7,4 +7,3 @@ tests/cases/compiler/contextualTyping33.ts(1,90): error TS2322: Type '() => stri
                                                                                              ~~~~~~~~
 !!! error TS2322: Type '() => string' is not assignable to type '{ (): number; (i: number): number; }'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
-!!! related TS6501 /.ts/lib.es5.d.ts:1284:5: The expected type comes from this index signature.
