@@ -4967,7 +4967,7 @@ namespace ts {
     /* @internal */
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags: EmitFlags;                       // Flags that customize emit
+        flags: EmitFlags;                        // Flags that customize emit
         leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -5327,6 +5327,7 @@ namespace ts {
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
+        /*@internal*/ neverAsciiEscape?: boolean;
     }
 
     /* @internal */

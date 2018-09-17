@@ -524,14 +524,14 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        const escapeText = getEmitFlags(node) & EmitFlags.NoAsciiEscaping ? escapeString : escapeNonAsciiString;
+        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
