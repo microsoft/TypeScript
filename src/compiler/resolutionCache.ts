@@ -226,7 +226,7 @@ namespace ts {
 
             // otherwise try to load typings from @types
             const globalCache = resolutionHost.getGlobalCache();
-            if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension))) {
+            if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, resolutionHost.projectName, compilerOptions, host, globalCache);
@@ -419,7 +419,7 @@ namespace ts {
 
         function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path) {
             // If directory path contains node module, get the most parent node_modules directory for watching
-            while (stringContains(dirPath, "/node_modules/")) {
+            while (stringContains(dirPath, nodeModulesPathPart)) {
                 dir = getDirectoryPath(dir);
                 dirPath = getDirectoryPath(dirPath);
             }

@@ -2,6 +2,7 @@
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "outDir": "../../built/local/",
+        "rootDir": ".",
         "composite": false,
         "declaration": false,
         "declarationMap": false,

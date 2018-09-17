@@ -166,13 +166,16 @@ namespace ts.server {
             let text: string;
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
-            const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
-            if (fileSize > maxFileSize) {
-                Debug.assert(!!this.info.containingProjects.length);
-                const service = this.info.containingProjects[0].projectService;
-                service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
-                this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
-                return "";
+            // Only non typescript files have size limitation
+            if (!hasTSFileExtension(this.fileName)) {
+                const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
+                if (fileSize > maxFileSize) {
+                    Debug.assert(!!this.info.containingProjects.length);
+                    const service = this.info.containingProjects[0].projectService;
+                    service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
+                    this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
+                    return "";
+                }
             }
             return getText();
         }
@@ -231,7 +234,7 @@ namespace ts.server {
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private preferences: UserPreferences | undefined;
+        private preferences: protocol.UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher | undefined;
@@ -246,6 +249,9 @@ namespace ts.server {
 
         /*@internal*/
         cacheSourceFile: DocumentRegistrySourceFileCache;
+
+        /*@internal*/
+        mTime?: number;
 
         constructor(
             private readonly host: ServerHost,
@@ -330,7 +336,7 @@ namespace ts.server {
         }
 
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-        getPreferences(): UserPreferences | undefined { return this.preferences; }
+        getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -429,7 +435,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);

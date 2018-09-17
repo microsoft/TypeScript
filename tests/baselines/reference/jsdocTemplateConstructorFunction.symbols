@@ -45,16 +45,16 @@ Zet.prototype.add = function(v, id) {
 >u : Symbol(Zet.u, Decl(templateTagOnConstructorFunctions.js, 8, 17), Decl(templateTagOnConstructorFunctions.js, 17, 37))
 }
 var z = new Zet(1)
->z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3), Decl(templateTagOnConstructorFunctions.js, 21, 18))
 >Zet : Symbol(Zet, Decl(templateTagOnConstructorFunctions.js, 0, 0))
 
 z.t = 2
 >z.t : Symbol(Zet.t, Decl(templateTagOnConstructorFunctions.js, 10, 10))
->z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3), Decl(templateTagOnConstructorFunctions.js, 21, 18))
 >t : Symbol(Zet.t, Decl(templateTagOnConstructorFunctions.js, 10, 10))
 
 z.u = false
 >z.u : Symbol(Zet.u, Decl(templateTagOnConstructorFunctions.js, 8, 17), Decl(templateTagOnConstructorFunctions.js, 17, 37))
->z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3))
+>z : Symbol(z, Decl(templateTagOnConstructorFunctions.js, 21, 3), Decl(templateTagOnConstructorFunctions.js, 21, 18))
 >u : Symbol(Zet.u, Decl(templateTagOnConstructorFunctions.js, 8, 17), Decl(templateTagOnConstructorFunctions.js, 17, 37))
 

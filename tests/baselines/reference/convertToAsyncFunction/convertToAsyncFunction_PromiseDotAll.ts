@@ -2,7 +2,7 @@
 
 function /*[#|*/f/*|]*/():Promise<void>{
     return Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
-        vals.forEach(console.log); 
+        vals.forEach(console.log);
     });
 }
 

@@ -139,15 +139,19 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
     c1o1.C1M2();
     ~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:23:17: An argument for 'C1M2A1' was not provided.
     i1o1.C1M2();
     ~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:11:10: An argument for 'C1M2A1' was not provided.
     F2();
     ~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:45:13: An argument for 'F2A1' was not provided.
     L2();
     ~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:50:20: An argument for 'L2A1' was not provided.
     c1o1.C1M2(1,2);
     ~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
@@ -175,15 +179,19 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2
     c1o1.C1M4();
     ~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:29:17: An argument for 'C1M4A1' was not provided.
     i1o1.C1M4();
     ~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:13:10: An argument for 'C1M4A1' was not provided.
     F4();
     ~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:47:13: An argument for 'F4A1' was not provided.
     L4();
     ~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/optionalParamArgsTest.ts:52:20: An argument for 'L4A1' was not provided.
     
     function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = [], isRoot?: boolean): void {}
     function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}

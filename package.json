@@ -81,6 +81,7 @@
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
         "plugin-error": "latest",
+        "prex": "^0.4.3",
         "q": "latest",
         "remove-internal": "^2.9.2",
         "run-sequence": "latest",

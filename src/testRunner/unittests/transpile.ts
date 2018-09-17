@@ -57,50 +57,26 @@ namespace ts {
                 });
 
                 it("Correct errors for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), () => {
-                        if (transpileResult.diagnostics!.length === 0) {
-                            /* tslint:disable:no-null-keyword */
-                            return null;
-                            /* tslint:enable:no-null-keyword */
-                        }
-
-                        return Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!);
-                    });
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"),
+                        // tslint:disable-next-line no-null-keyword
+                        transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
                 });
 
                 if (canUseOldTranspile) {
                     it("Correct errors (old transpile) for " + justName, () => {
-                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), () => {
-                            if (oldTranspileDiagnostics.length === 0) {
-                                /* tslint:disable:no-null-keyword */
-                                return null;
-                                /* tslint:enable:no-null-keyword */
-                            }
-
-                            return Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics);
-                        });
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
+                            // tslint:disable-next-line no-null-keyword
+                            oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                     });
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), () => {
-                        if (transpileResult.outputText) {
-                            return transpileResult.outputText;
-                        }
-                        else {
-                            // This can happen if compiler recieve invalid compiler-options
-                            /* tslint:disable:no-null-keyword */
-                            return null;
-                            /* tslint:enable:no-null-keyword */
-                        }
-                    });
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), transpileResult.outputText);
                 });
 
                 if (canUseOldTranspile) {
                     it("Correct output (old transpile) for " + justName, () => {
-                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), () => {
-                            return oldTranspileResult;
-                        });
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
                     });
                 }
             });

@@ -1,7 +1,7 @@
 /// <reference path="./fourslash.ts" />
 
 ////interface IFoo {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////}
 ////class C<T extends IFoo> {
 ////    method() {

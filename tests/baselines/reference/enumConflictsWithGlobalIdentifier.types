@@ -3,7 +3,7 @@ enum Position {
 >Position : Position
 
     IgnoreRulesSpecific = 0,
->IgnoreRulesSpecific : Position
+>IgnoreRulesSpecific : Position.IgnoreRulesSpecific
 >0 : 0
 }
 var x = IgnoreRulesSpecific.

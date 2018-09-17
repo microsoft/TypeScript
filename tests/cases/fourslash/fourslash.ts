@@ -129,7 +129,7 @@ declare namespace FourSlashInterface {
         eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
         eachMarker(action: (marker: Marker, index: number) => void): void;
         rangeStart(range: Range): void;
-        eachRange(action: () => void): void;
+        eachRange(action: (range: Range) => void): void;
         bof(): void;
         eof(): void;
         implementation(): void;
@@ -183,6 +183,8 @@ declare namespace FourSlashInterface {
             errorCode?: number,
             index?: number,
             preferences?: UserPreferences,
+            applyChanges?: boolean,
+            commands?: {}[],
         });
         codeFixAvailable(options?: ReadonlyArray<VerifyCodeFixAvailableOptions>): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
@@ -297,7 +299,7 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
+        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -313,7 +315,7 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
         renameInfoFailed(message?: string): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
 
@@ -329,7 +331,7 @@ declare namespace FourSlashInterface {
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
-        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[]): void;
+        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -526,10 +528,11 @@ declare namespace FourSlashInterface {
         filesToSearch?: ReadonlyArray<string>;
     }
     interface UserPreferences {
-        quotePreference?: "double" | "single";
-        includeCompletionsForModuleExports?: boolean;
-        includeInsertTextCompletions?: boolean;
-        importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeInsertTextCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsAtOptions extends UserPreferences {
         triggerCharacter?: string;
@@ -547,6 +550,7 @@ declare namespace FourSlashInterface {
         // details
         readonly text?: string,
         readonly documentation?: string,
+        readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string,
     };
 
@@ -629,8 +633,8 @@ declare namespace FourSlashInterface {
     }
 
     interface JSDocTagInfo {
-        name: string;
-        text: string | undefined;
+        readonly name: string;
+        readonly text: string | undefined;
     }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;

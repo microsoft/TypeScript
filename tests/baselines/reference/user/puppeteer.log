@@ -27,8 +27,8 @@ lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(685,57): error TS2345: Argument of type 'string | number | Function' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
-lib/NetworkManager.js(82,5): error TS2322: Type '{}' is not assignable to type '{ [x: string]: string; }'.
-  Index signature is missing in type '{}'.
+lib/Launcher.js(160,105): error TS2733: Index '3' is out-of-bounds in tuple of length 3.
+lib/Launcher.js(160,169): error TS2733: Index '4' is out-of-bounds in tuple of length 3.
 lib/NetworkManager.js(129,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(174,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(207,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -54,7 +54,6 @@ lib/Page.js(935,3): error TS2322: Type '{ width: number; height: number; }' is n
 lib/Page.js(936,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(937,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(938,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
-lib/externs.d.ts(2,30): error TS2497: Module '"/puppeteer/puppeteer/lib/Browser"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.

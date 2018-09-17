@@ -155,8 +155,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 6 >                                                
 7 >                                                  primarySkillA
 8 >                                                                       , 
-9 >                                                                         secondarySkillA
-10>                                                                                                ]] = multiRobotA;
+9 >                                                                         secondarySkillA]
+10>                                                                                                ] = multiRobotA;
 1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
 2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
 3 >Emitted(5, 28) Source(10, 12) + SourceIndex(0)
@@ -165,7 +165,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 6 >Emitted(5, 51) Source(10, 15) + SourceIndex(0)
 7 >Emitted(5, 72) Source(10, 28) + SourceIndex(0)
 8 >Emitted(5, 74) Source(10, 30) + SourceIndex(0)
-9 >Emitted(5, 97) Source(10, 45) + SourceIndex(0)
+9 >Emitted(5, 97) Source(10, 46) + SourceIndex(0)
 10>Emitted(5, 98) Source(10, 62) + SourceIndex(0)
 ---
 >>>var nameMC = ["roomba", ["vaccum", "mopping"]][0];
@@ -209,8 +209,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 8 >                                                                       
 9 >                                                                         primarySkillC
 10>                                                                                              , 
-11>                                                                                                secondarySkillC
-12>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
+11>                                                                                                secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
+12>                                                                                                                       ;
 1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)
@@ -221,7 +221,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 8 >Emitted(7, 74) Source(13, 16) + SourceIndex(0)
 9 >Emitted(7, 95) Source(13, 29) + SourceIndex(0)
 10>Emitted(7, 97) Source(13, 31) + SourceIndex(0)
-11>Emitted(7, 120) Source(13, 46) + SourceIndex(0)
+11>Emitted(7, 120) Source(13, 84) + SourceIndex(0)
 12>Emitted(7, 121) Source(13, 85) + SourceIndex(0)
 ---
 >>>var multiRobotAInfo = multiRobotA.slice(0);

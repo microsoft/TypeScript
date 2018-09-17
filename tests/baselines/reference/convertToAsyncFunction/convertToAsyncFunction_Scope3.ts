@@ -9,7 +9,7 @@ function /*[#|*/f/*|]*/() {
       }
     };
   });
-} 
+}
 
 // ==ASYNC FUNCTION::Convert to async function==
 
@@ -21,4 +21,4 @@ async function f() {
             console.log(res);
         }
     };
-} 
+}

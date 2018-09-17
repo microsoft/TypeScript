@@ -1,3 +1,5 @@
+// Currently we do not want to expose API for build, we should work out the API, and then expose it just like we did for builder/watch
+/*@internal*/
 namespace ts {
     const minimumDate = new Date(-8640000000000000);
     const maximumDate = new Date(8640000000000000);
@@ -9,46 +11,24 @@ namespace ts {
         message(diag: DiagnosticMessage, ...args: string[]): void;
     }
 
-    /**
-     * A BuildContext tracks what's going on during the course of a build.
-     *
-     * Callers may invoke any number of build requests within the same context;
-     * until the context is reset, each project will only be built at most once.
-     *
-     * Example: In a standard setup where project B depends on project A, and both are out of date,
-     * a failed build of A will result in A remaining out of date. When we try to build
-     * B, we should immediately bail instead of recomputing A's up-to-date status again.
-     *
-     * This also matters for performing fast (i.e. fake) downstream builds of projects
-     * when their upstream .d.ts files haven't changed content (but have newer timestamps)
-     */
-    export interface BuildContext {
-        options: BuildOptions;
-        /**
-         * Map from output file name to its pre-build timestamp
-         */
-        unchangedOutputs: FileMap<Date>;
-
-        /**
-         * Map from config file name to up-to-date status
-         */
-        projectStatus: FileMap<UpToDateStatus>;
-
-        invalidatedProjects: FileMap<true>;
-        queuedProjects: FileMap<true>;
-        missingRoots: Map<true>;
-    }
-
-    type Mapper = ReturnType<typeof createDependencyMapper>;
     interface DependencyGraph {
         buildQueue: ResolvedConfigFileName[];
-        dependencyMap: Mapper;
+        /** value in config File map is true if project is referenced using prepend */
+        referencingProjectsMap: ConfigFileMap<ConfigFileMap<boolean>>;
     }
 
-    interface BuildOptions {
-        dry: boolean;
-        force: boolean;
-        verbose: boolean;
+    export interface BuildOptions extends OptionsBase {
+        dry?: boolean;
+        force?: boolean;
+        verbose?: boolean;
+
+        /*@internal*/ clean?: boolean;
+        /*@internal*/ watch?: boolean;
+        /*@internal*/ help?: boolean;
+
+        preserveWatchOutput?: boolean;
+        listEmittedFiles?: boolean;
+        listFiles?: boolean;
     }
 
     enum BuildResultFlags {
@@ -68,8 +48,9 @@ namespace ts {
         SyntaxErrors = 1 << 3,
         TypeErrors = 1 << 4,
         DeclarationEmitErrors = 1 << 5,
+        EmitErrors = 1 << 6,
 
-        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors
+        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
     }
 
     export enum UpToDateStatusType {
@@ -86,6 +67,7 @@ namespace ts {
         OutOfDateWithUpstream,
         UpstreamOutOfDate,
         UpstreamBlocked,
+        ComputingUpstream,
 
         /**
          * Projects with no outputs (i.e. "solution" files)
@@ -101,6 +83,7 @@ namespace ts {
         | Status.OutOfDateWithUpstream
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked
+        | Status.ComputingUpstream
         | Status.ContainerOnly;
 
     export namespace Status {
@@ -171,6 +154,13 @@ namespace ts {
         }
 
         /**
+         *  Computing status of upstream projects referenced
+         */
+        export interface ComputingUpstream {
+            type: UpToDateStatusType.ComputingUpstream;
+        }
+
+        /**
          * One or more of the project's outputs is older than the newest output of
          * an upstream project.
          */
@@ -181,105 +171,81 @@ namespace ts {
         }
     }
 
-    interface FileMap<T> {
-        setValue(fileName: string, value: T): void;
-        getValue(fileName: string): T | never;
-        getValueOrUndefined(fileName: string): T | undefined;
-        hasKey(fileName: string): boolean;
-        removeKey(fileName: string): void;
-        getKeys(): string[];
+    interface FileMap<T, U extends string = string, V extends Path = Path> {
+        setValue(fileName: U, value: T): void;
+        getValue(fileName: U): T | undefined;
+        hasKey(fileName: U): boolean;
+        removeKey(fileName: U): void;
+        forEach(action: (value: T, key: V) => void): void;
+        getSize(): number;
+        clear(): void;
     }
+
+    type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
+    type ConfigFileMap<T> = FileMap<T, ResolvedConfigFileName, ResolvedConfigFilePath>;
+    type ToResolvedConfigFilePath = (fileName: ResolvedConfigFileName) => ResolvedConfigFilePath;
+    type ToPath = (fileName: string) => Path;
 
     /**
      * A FileMap maintains a normalized-key to value relationship
      */
-    function createFileMap<T>(): FileMap<T> {
+    function createFileMap<T>(toPath: ToResolvedConfigFilePath): ConfigFileMap<T>;
+    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: ToPath): FileMap<T, U, V>;
+    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: (fileName: U) => V): FileMap<T, U, V> {
         // tslint:disable-next-line:no-null-keyword
         const lookup = createMap<T>();
 
         return {
             setValue,
             getValue,
-            getValueOrUndefined,
             removeKey,
-            getKeys,
-            hasKey
+            forEach,
+            hasKey,
+            getSize,
+            clear
         };
 
-        function getKeys(): string[] {
-            return Object.keys(lookup);
+        function forEach(action: (value: T, key: V) => void) {
+            lookup.forEach(action);
         }
 
-        function hasKey(fileName: string) {
-            return lookup.has(normalizePath(fileName));
+        function hasKey(fileName: U) {
+            return lookup.has(toPath(fileName));
         }
 
-        function removeKey(fileName: string) {
-            lookup.delete(normalizePath(fileName));
+        function removeKey(fileName: U) {
+            lookup.delete(toPath(fileName));
         }
 
-        function setValue(fileName: string, value: T) {
-            lookup.set(normalizePath(fileName), value);
+        function setValue(fileName: U, value: T) {
+            lookup.set(toPath(fileName), value);
         }
 
-        function getValue(fileName: string): T | never {
-            const f = normalizePath(fileName);
-            if (lookup.has(f)) {
-                return lookup.get(f)!;
-            }
-            else {
-                throw new Error(`No value corresponding to ${fileName} exists in this map`);
-            }
+        function getValue(fileName: U): T | undefined {
+            return lookup.get(toPath(fileName));
         }
 
-        function getValueOrUndefined(fileName: string): T | undefined {
-            const f = normalizePath(fileName);
-            return lookup.get(f);
+        function getSize() {
+            return lookup.size;
+        }
+
+        function clear() {
+            lookup.clear();
         }
     }
 
-    function createDependencyMapper() {
-        const childToParents = createFileMap<ResolvedConfigFileName[]>();
-        const parentToChildren = createFileMap<ResolvedConfigFileName[]>();
-        const allKeys = createFileMap<true>();
-
-        function addReference(childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName): void {
-            addEntry(childToParents, childConfigFileName, parentConfigFileName);
-            addEntry(parentToChildren, parentConfigFileName, childConfigFileName);
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFileName, createT: () => T): T {
+        const existingValue = configFileMap.getValue(resolved);
+        let newValue: T | undefined;
+        if (!existingValue) {
+            newValue = createT();
+            configFileMap.setValue(resolved, newValue);
         }
+        return existingValue || newValue!;
+    }
 
-        function getReferencesTo(parentConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return parentToChildren.getValueOrUndefined(parentConfigFileName) || [];
-        }
-
-        function getReferencesOf(childConfigFileName: ResolvedConfigFileName): ResolvedConfigFileName[] {
-            return childToParents.getValueOrUndefined(childConfigFileName) || [];
-        }
-
-        function getKeys(): ReadonlyArray<ResolvedConfigFileName> {
-            return allKeys.getKeys() as ResolvedConfigFileName[];
-        }
-
-        function addEntry(mapToAddTo: typeof childToParents | typeof parentToChildren, key: ResolvedConfigFileName, element: ResolvedConfigFileName) {
-            key = normalizePath(key) as ResolvedConfigFileName;
-            element = normalizePath(element) as ResolvedConfigFileName;
-            let arr = mapToAddTo.getValueOrUndefined(key);
-            if (arr === undefined) {
-                mapToAddTo.setValue(key, arr = []);
-            }
-            if (arr.indexOf(element) < 0) {
-                arr.push(element);
-            }
-            allKeys.setValue(key, true);
-            allKeys.setValue(element, true);
-        }
-
-        return {
-            addReference,
-            getReferencesTo,
-            getReferencesOf,
-            getKeys
-        };
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFileName): Map<T> {
+        return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
     function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
@@ -288,7 +254,7 @@ namespace ts {
         return changeExtension(outputPath, Extension.Dts);
     }
 
-    function getOutputJavaScriptFileName(inputFileName: string, configFile: ParsedCommandLine) {
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
@@ -303,12 +269,16 @@ namespace ts {
         }
 
         const outputs: string[] = [];
-        outputs.push(getOutputJavaScriptFileName(inputFileName, configFile));
+        const js = getOutputJSFileName(inputFileName, configFile);
+        outputs.push(js);
+        if (configFile.options.sourceMap) {
+            outputs.push(`${js}.map`);
+        }
         if (getEmitDeclarations(configFile.options) && !fileExtensionIs(inputFileName, Extension.Json)) {
             const dts = getOutputDeclarationFileName(inputFileName, configFile);
             outputs.push(dts);
             if (configFile.options.declarationMap) {
-                outputs.push(dts + ".map");
+                outputs.push(`${dts}.map`);
             }
         }
         return outputs;
@@ -320,11 +290,14 @@ namespace ts {
         }
         const outputs: string[] = [];
         outputs.push(project.options.outFile);
+        if (project.options.sourceMap) {
+            outputs.push(`${project.options.outFile}.map`);
+        }
         if (getEmitDeclarations(project.options)) {
             const dts = changeExtension(project.options.outFile, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
-                outputs.push(dts + ".map");
+                outputs.push(`${dts}.map`);
             }
         }
         return outputs;
@@ -332,32 +305,6 @@ namespace ts {
 
     function rootDirOfOptions(opts: CompilerOptions, configFileName: string) {
         return opts.rootDir || getDirectoryPath(configFileName);
-    }
-
-    function createConfigFileCache(host: CompilerHost) {
-        const cache = createFileMap<ParsedCommandLine>();
-        const configParseHost = parseConfigHostFromCompilerHost(host);
-
-        function parseConfigFile(configFilePath: ResolvedConfigFileName) {
-            const sourceFile = host.getSourceFile(configFilePath, ScriptTarget.JSON) as JsonSourceFile;
-            if (sourceFile === undefined) {
-                return undefined;
-            }
-
-            const parsed = parseJsonSourceFileConfigFileContent(sourceFile, configParseHost, getDirectoryPath(configFilePath));
-            parsed.options.configFilePath = configFilePath;
-            cache.setValue(configFilePath, parsed);
-            return parsed;
-        }
-
-        function removeKey(configFilePath: ResolvedConfigFileName) {
-            cache.removeKey(configFilePath);
-        }
-
-        return {
-            parseConfigFile,
-            removeKey
-        };
     }
 
     function newer(date1: Date, date2: Date): Date {
@@ -368,394 +315,691 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export function createBuildContext(options: BuildOptions): BuildContext {
-        const invalidatedProjects = createFileMap<true>();
-        const queuedProjects = createFileMap<true>();
-        const missingRoots = createMap<true>();
+    export interface SolutionBuilderHost extends CompilerHost {
+        getModifiedTime(fileName: string): Date | undefined;
+        setModifiedTime(fileName: string, date: Date): void;
+        deleteFile(fileName: string): void;
 
-        return {
-            options,
-            projectStatus: createFileMap(),
-            unchangedOutputs: createFileMap(),
-            invalidatedProjects,
-            missingRoots,
-            queuedProjects
+        reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
+        reportSolutionBuilderStatus: DiagnosticReporter;
+    }
+
+    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
+    }
+
+    export interface SolutionBuilder {
+        buildAllProjects(): ExitStatus;
+        cleanAllProjects(): ExitStatus;
+
+        /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
+        /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
+        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
+
+        /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
+        /*@internal*/ buildInvalidatedProject(): void;
+
+        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
+
+        /*@internal*/ startWatching(): void;
+    }
+
+    /**
+     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     */
+    export function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter {
+        return diagnostic => {
+            let output = pretty ? `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] ` : `${new Date().toLocaleTimeString()} - `;
+            output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${system.newLine + system.newLine}`;
+            system.write(output);
         };
     }
 
-    const buildOpts: CommandLineOption[] = [
-        {
-            name: "verbose",
-            shortName: "v",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Enable_verbose_logging,
-            type: "boolean"
-        },
-        {
-            name: "dry",
-            shortName: "d",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
-            type: "boolean"
-        },
-        {
-            name: "force",
-            shortName: "f",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
-            type: "boolean"
-        },
-        {
-            name: "clean",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Delete_the_outputs_of_all_projects,
-            type: "boolean"
-        },
-        {
-            name: "watch",
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Watch_input_files,
-            type: "boolean"
-        }
-    ];
+    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
+        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
+        host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
+        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
+        host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
+        host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
+        return host;
+    }
 
-    export function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined {
-        let verbose = false;
-        let dry = false;
-        let force = false;
-        let clean = false;
-        let watch = false;
+    export function createSolutionBuilderWithWatchHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+        const host = createSolutionBuilderHost(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
+        const watchHost = createWatchHost(system, reportWatchStatus);
+        host.onWatchStatusChange = watchHost.onWatchStatusChange;
+        host.watchFile = watchHost.watchFile;
+        host.watchDirectory = watchHost.watchDirectory;
+        host.setTimeout = watchHost.setTimeout;
+        host.clearTimeout = watchHost.clearTimeout;
+        return host;
+    }
 
-        const projects: string[] = [];
-        for (const arg of args) {
-            switch (arg.toLowerCase()) {
-                case "-v":
-                case "--verbose":
-                    verbose = true;
-                    continue;
-                case "-d":
-                case "--dry":
-                    dry = true;
-                    continue;
-                case "-f":
-                case "--force":
-                    force = true;
-                    continue;
-                case "--clean":
-                    clean = true;
-                    continue;
-                case "--watch":
-                case "-w":
-                    watch = true;
-                    continue;
-
-                case "--?":
-                case "-?":
-                case "--help":
-                    printHelp(buildOpts, "--build ");
-                    return ExitStatus.Success;
-            }
-            // Not a flag, parse as filename
-            addProject(arg);
-        }
-
-        // Nonsensical combinations
-        if (clean && force) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force");
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (clean && verbose) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose");
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (clean && watch) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch");
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (watch && dry) {
-            buildHost.error(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry");
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-
-        if (projects.length === 0) {
-            // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
-            addProject(".");
-        }
-
-        const builder = createSolutionBuilder(compilerHost, buildHost, projects, { dry, force, verbose }, system);
-        if (clean) {
-            return builder.cleanAllProjects();
-        }
-
-        if (watch) {
-            builder.buildAllProjects();
-            builder.startWatching();
-            return undefined;
-        }
-
-        return builder.buildAllProjects();
-
-        function addProject(projectSpecification: string) {
-            const fileName = resolvePath(compilerHost.getCurrentDirectory(), projectSpecification);
-            const refPath = resolveProjectReferencePath(compilerHost, { path: fileName });
-            if (!compilerHost.fileExists(refPath)) {
-                return buildHost.error(Diagnostics.File_0_does_not_exist, fileName);
-            }
-            projects.push(refPath);
-        }
+    function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
+        const result = {} as CompilerOptions;
+        commonOptionsWithBuild.forEach(option => {
+            result[option.name] = buildOptions[option.name];
+        });
+        return result;
     }
 
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
+     * TODO: use SolutionBuilderWithWatchHost => watchedSolution
+     *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System) {
-        if (!compilerHost.getModifiedTime || !compilerHost.setModifiedTime) {
-            throw new Error("Host must support timestamp APIs");
-        }
+    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+        const hostWithWatch = host as SolutionBuilderWithWatchHost;
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        const parseConfigFileHost = parseConfigHostFromCompilerHost(host);
 
-        const configFileCache = createConfigFileCache(compilerHost);
-        let context = createBuildContext(defaultOptions);
+        // State of the solution
+        let options = defaultOptions;
+        let baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
+        type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
+        const configFileCache = createFileMap<ConfigFileCacheEntry>(toPath);
+        /** Map from output file name to its pre-build timestamp */
+        const unchangedOutputs = createFileMap<Date>(toPath as ToPath);
+        /** Map from config file name to up-to-date status */
+        const projectStatus = createFileMap<UpToDateStatus>(toPath);
+        const missingRoots = createMap<true>();
+        let globalDependencyGraph: DependencyGraph | undefined;
+        const writeFileName = (s: string) => host.trace && host.trace(s);
 
-        const existingWatchersForWildcards = createMap<WildcardDirectoryWatcher>();
+        // Watch state
+        const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
+        const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
+        const projectErrorsReported = createFileMap<true>(toPath);
+        const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
+        let nextProjectToBuild = 0;
+        let timerToBuildInvalidatedProject: any;
+        let reportFileChangeDetected = false;
 
-        const upToDateHost: UpToDateHost = {
-            fileExists: fileName => compilerHost.fileExists(fileName),
-            getModifiedTime: fileName => compilerHost.getModifiedTime!(fileName),
-            getUnchangedTime: fileName => context.unchangedOutputs.getValueOrUndefined(fileName),
-            getLastStatus: fileName => context.projectStatus.getValueOrUndefined(fileName),
-            setLastStatus: (fileName, status) => context.projectStatus.setValue(fileName, status),
-            parseConfigFile: configFilePath => configFileCache.parseConfigFile(configFilePath)
-        };
+        // Watches for the solution
+        const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
+        const allWatchedInputFiles = createFileMap<Map<FileWatcher>>(toPath);
+        const allWatchedConfigFiles = createFileMap<FileWatcher>(toPath);
 
         return {
             buildAllProjects,
-            getUpToDateStatus,
             getUpToDateStatusOfFile,
             cleanAllProjects,
             resetBuildContext,
             getBuildGraph,
 
             invalidateProject,
-            buildInvalidatedProjects,
-            buildDependentInvalidatedProjects,
+            buildInvalidatedProject,
 
             resolveProjectName,
 
             startWatching
         };
 
-        function startWatching() {
-            if (!system) throw new Error("System host must be provided if using --watch");
-            if (!system.watchFile || !system.watchDirectory || !system.setTimeout) throw new Error("System host must support watchFile / watchDirectory / setTimeout if using --watch");
-
-            const graph = getGlobalDependencyGraph()!;
-            if (!graph.buildQueue) {
-                // Everything is broken - we don't even know what to watch. Give up.
-                return;
-            }
-
-            for (const resolved of graph.buildQueue) {
-                const cfg = configFileCache.parseConfigFile(resolved);
-                if (cfg) {
-                    // Watch this file
-                    system.watchFile(resolved, () => {
-                        configFileCache.removeKey(resolved);
-                        invalidateProjectAndScheduleBuilds(resolved);
-                    });
-
-                    // Update watchers for wildcard directories
-                    if (cfg.configFileSpecs) {
-                        updateWatchingWildcardDirectories(existingWatchersForWildcards, createMapFromTemplate(cfg.configFileSpecs.wildcardDirectories), (dir, flags) => {
-                            return system.watchDirectory!(dir, () => {
-                                invalidateProjectAndScheduleBuilds(resolved);
-                            }, !!(flags & WatchDirectoryFlags.Recursive));
-                        });
-                    }
-
-                    // Watch input files
-                    for (const input of cfg.fileNames) {
-                        system.watchFile(input, () => {
-                            invalidateProjectAndScheduleBuilds(resolved);
-                        });
-                    }
-                }
-            }
-
-            function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName) {
-                invalidateProject(resolved);
-                system!.setTimeout!(buildInvalidatedProjects, 100);
-                system!.setTimeout!(buildDependentInvalidatedProjects, 3000);
-            }
+        function toPath(fileName: ResolvedConfigFileName): ResolvedConfigFilePath;
+        function toPath(fileName: string): Path;
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
         function resetBuildContext(opts = defaultOptions) {
-            context = createBuildContext(opts);
+            options = opts;
+            baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
+            configFileCache.clear();
+            unchangedOutputs.clear();
+            projectStatus.clear();
+            missingRoots.clear();
+            globalDependencyGraph = undefined;
+
+            diagnostics.clear();
+            projectPendingBuild.clear();
+            projectErrorsReported.clear();
+            invalidatedProjectQueue.length = 0;
+            nextProjectToBuild = 0;
+            if (timerToBuildInvalidatedProject) {
+                clearTimeout(timerToBuildInvalidatedProject);
+                timerToBuildInvalidatedProject = undefined;
+            }
+            reportFileChangeDetected = false;
+            clearMap(allWatchedWildcardDirectories, wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
+            clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
+            clearMap(allWatchedConfigFiles, closeFileWatcher);
+        }
+
+        function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
+            return !!(entry as ParsedCommandLine).options;
+        }
+
+        function parseConfigFile(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined {
+            const value = configFileCache.getValue(configFilePath);
+            if (value) {
+                return isParsedCommandLine(value) ? value : undefined;
+            }
+
+            let diagnostic: Diagnostic | undefined;
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost);
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+            configFileCache.setValue(configFilePath, parsed || diagnostic!);
+            return parsed;
+        }
+
+        function reportStatus(message: DiagnosticMessage, ...args: string[]) {
+            host.reportSolutionBuilderStatus(createCompilerDiagnostic(message, ...args));
+        }
+
+        function reportWatchStatus(message: DiagnosticMessage, ...args: (string | number | undefined)[]) {
+            if (hostWithWatch.onWatchStatusChange) {
+                hostWithWatch.onWatchStatusChange(createCompilerDiagnostic(message, ...args), host.getNewLine(), baseCompilerOptions);
+            }
+        }
+
+        function startWatching() {
+            const graph = getGlobalDependencyGraph();
+            for (const resolved of graph.buildQueue) {
+                // Watch this file
+                watchConfigFile(resolved);
+
+                const cfg = parseConfigFile(resolved);
+                if (cfg) {
+                    // Update watchers for wildcard directories
+                    watchWildCardDirectories(resolved, cfg);
+
+                    // Watch input files
+                    watchInputFiles(resolved, cfg);
+                }
+            }
+
+        }
+
+        function watchConfigFile(resolved: ResolvedConfigFileName) {
+            if (options.watch && !allWatchedConfigFiles.hasKey(resolved)) {
+                allWatchedConfigFiles.setValue(resolved, hostWithWatch.watchFile(resolved, () => {
+                    invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
+                }));
+            }
+        }
+
+        function watchWildCardDirectories(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (!options.watch) return;
+            updateWatchingWildcardDirectories(
+                getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolved),
+                createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
+                (dir, flags) => {
+                    return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
+                        const fileOrDirectoryPath = toPath(fileOrDirectory);
+                        if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
+                            // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+                            return;
+                        }
+
+                        if (isOutputFile(fileOrDirectory, parsed)) {
+                            // writeLog(`${fileOrDirectory} is output file`);
+                            return;
+                        }
+
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
+                    }, !!(flags & WatchDirectoryFlags.Recursive));
+                }
+            );
+        }
+
+        function watchInputFiles(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (!options.watch) return;
+            mutateMap(
+                getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolved),
+                arrayToMap(parsed.fileNames, toPath),
+                {
+                    createNewValue: (_key, input) => hostWithWatch.watchFile(input, () => {
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None);
+                    }),
+                    onDeleteValue: closeFileWatcher,
+                }
+            );
+        }
+
+        function isOutputFile(fileName: string, configFile: ParsedCommandLine) {
+            if (configFile.options.noEmit) return false;
+
+            // ts or tsx files are not output
+            if (!fileExtensionIs(fileName, Extension.Dts) &&
+                (fileExtensionIs(fileName, Extension.Ts) || fileExtensionIs(fileName, Extension.Tsx))) {
+                return false;
+            }
+
+            // If options have --outFile or --out, check if its that
+            const out = configFile.options.outFile || configFile.options.out;
+            if (out && (isSameFile(fileName, out) || isSameFile(fileName, removeFileExtension(out) + Extension.Dts))) {
+                return true;
+            }
+
+            // If declarationDir is specified, return if its a file in that directory
+            if (configFile.options.declarationDir && containsPath(configFile.options.declarationDir, fileName, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
+            // If --outDir, check if file is in that directory
+            if (configFile.options.outDir && containsPath(configFile.options.outDir, fileName, currentDirectory, !host.useCaseSensitiveFileNames())) {
+                return true;
+            }
+
+            return !forEach(configFile.fileNames, inputFile => isSameFile(fileName, inputFile));
+        }
+
+        function isSameFile(file1: string, file2: string) {
+            return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+        }
+
+        function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+            reportFileChangeDetected = true;
+            invalidateResolvedProject(resolved, reloadLevel);
+            scheduleBuildInvalidatedProject();
         }
 
         function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
-            return getUpToDateStatus(configFileCache.parseConfigFile(configFileName));
+            return getUpToDateStatus(parseConfigFile(configFileName));
         }
 
         function getBuildGraph(configFileNames: ReadonlyArray<string>) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return undefined;
-
-            return createDependencyGraph(resolvedNames);
+            return createDependencyGraph(resolveProjectNames(configFileNames));
         }
 
         function getGlobalDependencyGraph() {
-            return getBuildGraph(rootNames);
+            return globalDependencyGraph || (globalDependencyGraph = getBuildGraph(rootNames));
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
-            return ts.getUpToDateStatus(upToDateHost, project);
+            if (project === undefined) {
+                return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
+            }
+
+            const prior = projectStatus.getValue(project.options.configFilePath as ResolvedConfigFilePath);
+            if (prior !== undefined) {
+                return prior;
+            }
+
+            const actual = getUpToDateStatusWorker(project);
+            projectStatus.setValue(project.options.configFilePath as ResolvedConfigFilePath, actual);
+            return actual;
         }
 
-        function invalidateProject(configFileName: string) {
-            const resolved = resolveProjectName(configFileName);
-            if (resolved === undefined) {
-                // If this was a rootName, we need to track it as missing.
-                // Otherwise we can just ignore it and have it possibly surface as an error in any downstream projects,
-                // if they exist
+        function getUpToDateStatusWorker(project: ParsedCommandLine): UpToDateStatus {
+            let newestInputFileName: string = undefined!;
+            let newestInputFileTime = minimumDate;
+            // Get timestamps of input files
+            for (const inputFile of project.fileNames) {
+                if (!host.fileExists(inputFile)) {
+                    return {
+                        type: UpToDateStatusType.Unbuildable,
+                        reason: `${inputFile} does not exist`
+                    };
+                }
 
-                // TODO: do those things
-                return;
+                const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
+                if (inputTime > newestInputFileTime) {
+                    newestInputFileName = inputFile;
+                    newestInputFileTime = inputTime;
+                }
             }
 
-            configFileCache.removeKey(resolved);
-            context.invalidatedProjects.setValue(resolved, true);
-            context.projectStatus.removeKey(resolved);
+            // Collect the expected outputs of this project
+            const outputs = getAllProjectOutputs(project);
 
-            const graph = getGlobalDependencyGraph()!;
-            if (graph) {
-                queueBuildForDownstreamReferences(resolved);
+            if (outputs.length === 0) {
+                return {
+                    type: UpToDateStatusType.ContainerOnly
+                };
             }
 
-            // Mark all downstream projects of this one needing to be built "later"
-            function queueBuildForDownstreamReferences(root: ResolvedConfigFileName) {
-                const deps = graph.dependencyMap.getReferencesTo(root);
-                for (const ref of deps) {
-                    // Can skip circular references
-                    if (!context.queuedProjects.hasKey(ref)) {
-                        context.queuedProjects.setValue(ref, true);
-                        queueBuildForDownstreamReferences(ref);
+            // Now see if all outputs are newer than the newest input
+            let oldestOutputFileName = "(none)";
+            let oldestOutputFileTime = maximumDate;
+            let newestOutputFileName = "(none)";
+            let newestOutputFileTime = minimumDate;
+            let missingOutputFileName: string | undefined;
+            let newestDeclarationFileContentChangedTime = minimumDate;
+            let isOutOfDateWithInputs = false;
+            for (const output of outputs) {
+                // Output is missing; can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (!host.fileExists(output)) {
+                    missingOutputFileName = output;
+                    break;
+                }
+
+                const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                if (outputTime < oldestOutputFileTime) {
+                    oldestOutputFileTime = outputTime;
+                    oldestOutputFileName = output;
+                }
+
+                // If an output is older than the newest input, we can stop checking
+                // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
+                if (outputTime < newestInputFileTime) {
+                    isOutOfDateWithInputs = true;
+                    break;
+                }
+
+                if (outputTime > newestOutputFileTime) {
+                    newestOutputFileTime = outputTime;
+                    newestOutputFileName = output;
+                }
+
+                // Keep track of when the most recent time a .d.ts file was changed.
+                // In addition to file timestamps, we also keep track of when a .d.ts file
+                // had its file touched but not had its contents changed - this allows us
+                // to skip a downstream typecheck
+                if (isDeclarationFile(output)) {
+                    const unchangedTime = unchangedOutputs.getValue(output);
+                    if (unchangedTime !== undefined) {
+                        newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
+                    }
+                    else {
+                        const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                     }
                 }
             }
-        }
 
-        function buildInvalidatedProjects() {
-            buildSomeProjects(p => context.invalidatedProjects.hasKey(p));
-        }
+            let pseudoUpToDate = false;
+            let usesPrepend = false;
+            let upstreamChangedProject: string | undefined;
+            if (project.projectReferences) {
+                projectStatus.setValue(project.options.configFilePath as ResolvedConfigFileName, { type: UpToDateStatusType.ComputingUpstream });
+                for (const ref of project.projectReferences) {
+                    usesPrepend = usesPrepend || !!(ref.prepend);
+                    const resolvedRef = resolveProjectReferencePath(ref);
+                    const refStatus = getUpToDateStatus(parseConfigFile(resolvedRef));
 
-        function buildDependentInvalidatedProjects() {
-            buildSomeProjects(p => context.queuedProjects.hasKey(p));
-        }
+                    // Its a circular reference ignore the status of this project
+                    if (refStatus.type === UpToDateStatusType.ComputingUpstream) {
+                        continue;
+                    }
 
-        function buildSomeProjects(predicate: (projName: ResolvedConfigFileName) => boolean) {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(rootNames);
-            if (resolvedNames === undefined) return;
+                    // An upstream project is blocked
+                    if (refStatus.type === UpToDateStatusType.Unbuildable) {
+                        return {
+                            type: UpToDateStatusType.UpstreamBlocked,
+                            upstreamProjectName: ref.path
+                        };
+                    }
 
-            const graph = createDependencyGraph(resolvedNames)!;
-            for (const next of graph.buildQueue) {
-                if (!predicate(next)) continue;
+                    // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
+                    if (refStatus.type !== UpToDateStatusType.UpToDate) {
+                        return {
+                            type: UpToDateStatusType.UpstreamOutOfDate,
+                            upstreamProjectName: ref.path
+                        };
+                    }
 
-                const resolved = resolveProjectName(next);
-                if (!resolved) continue; // ??
-                const proj = configFileCache.parseConfigFile(resolved);
-                if (!proj) continue; // ?
+                    // If the upstream project's newest file is older than our oldest output, we
+                    // can't be out of date because of it
+                    if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
+                        continue;
+                    }
 
-                const status = getUpToDateStatus(proj);
-                verboseReportProjectStatus(next, status);
+                    // If the upstream project has only change .d.ts files, and we've built
+                    // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+                    if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+                        pseudoUpToDate = true;
+                        upstreamChangedProject = ref.path;
+                        continue;
+                    }
 
-                if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    if (context.options.verbose) buildHost.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
-                    continue;
+                    // We have an output older than an upstream output - we are out of date
+                    Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
+                    return {
+                        type: UpToDateStatusType.OutOfDateWithUpstream,
+                        outOfDateOutputFileName: oldestOutputFileName,
+                        newerProjectName: ref.path
+                    };
                 }
+            }
 
-                buildSingleProject(next);
+            if (missingOutputFileName !== undefined) {
+                return {
+                    type: UpToDateStatusType.OutputMissing,
+                    missingOutputFileName
+                };
+            }
+
+            if (isOutOfDateWithInputs) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerInputFileName: newestInputFileName
+                };
+            }
+
+            if (usesPrepend && pseudoUpToDate) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithUpstream,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerProjectName: upstreamChangedProject!
+                };
+            }
+
+            // Up to date
+            return {
+                type: pseudoUpToDate ? UpToDateStatusType.UpToDateWithUpstreamTypes : UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime,
+                newestInputFileTime,
+                newestOutputFileTime,
+                newestInputFileName,
+                newestOutputFileName,
+                oldestOutputFileName
+            };
+        }
+
+        function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
+            invalidateResolvedProject(resolveProjectName(configFileName), reloadLevel);
+        }
+
+        function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+            if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                configFileCache.removeKey(resolved);
+                globalDependencyGraph = undefined;
+            }
+            projectStatus.removeKey(resolved);
+            if (options.watch) {
+                diagnostics.removeKey(resolved);
+            }
+
+            addProjToQueue(resolved, reloadLevel);
+        }
+
+        /**
+         * return true if new addition
+         */
+        function addProjToQueue(proj: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+            const value = projectPendingBuild.getValue(proj);
+            if (value === undefined) {
+                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
+                invalidatedProjectQueue.push(proj);
+            }
+            else if (value < (reloadLevel || ConfigFileProgramReloadLevel.None)) {
+                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
             }
         }
 
-        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph | undefined {
-            const temporaryMarks: { [path: string]: true } = {};
-            const permanentMarks: { [path: string]: true } = {};
+        function getNextInvalidatedProject() {
+            if (nextProjectToBuild < invalidatedProjectQueue.length) {
+                const project = invalidatedProjectQueue[nextProjectToBuild];
+                nextProjectToBuild++;
+                const reloadLevel = projectPendingBuild.getValue(project)!;
+                projectPendingBuild.removeKey(project);
+                if (!projectPendingBuild.getSize()) {
+                    invalidatedProjectQueue.length = 0;
+                    nextProjectToBuild = 0;
+                }
+                return { project, reloadLevel };
+            }
+        }
+
+        function hasPendingInvalidatedProjects() {
+            return !!projectPendingBuild.getSize();
+        }
+
+        function scheduleBuildInvalidatedProject() {
+            if (!hostWithWatch.setTimeout || !hostWithWatch.clearTimeout) {
+                return;
+            }
+            if (timerToBuildInvalidatedProject) {
+                hostWithWatch.clearTimeout(timerToBuildInvalidatedProject);
+            }
+            timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildInvalidatedProject, 250);
+        }
+
+        function buildInvalidatedProject() {
+            timerToBuildInvalidatedProject = undefined;
+            if (reportFileChangeDetected) {
+                reportFileChangeDetected = false;
+                projectErrorsReported.clear();
+                reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
+            }
+            const buildProject = getNextInvalidatedProject();
+            if (buildProject) {
+                buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
+                if (hasPendingInvalidatedProjects()) {
+                    if (!timerToBuildInvalidatedProject) {
+                        scheduleBuildInvalidatedProject();
+                    }
+                }
+                else {
+                    reportErrorSummary();
+                }
+            }
+        }
+
+        function reportErrorSummary() {
+            if (options.watch) {
+                // Report errors from the other projects
+                getGlobalDependencyGraph().buildQueue.forEach(project => {
+                    if (!projectErrorsReported.hasKey(project)) {
+                        reportErrors(diagnostics.getValue(project) || emptyArray);
+                    }
+                });
+                let totalErrors = 0;
+                diagnostics.forEach(singleProjectErrors => totalErrors += singleProjectErrors.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+                reportWatchStatus(totalErrors === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, totalErrors);
+            }
+        }
+
+        function buildSingleInvalidatedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+            const proj = parseConfigFile(resolved);
+            if (!proj) {
+                reportParseConfigFileDiagnostic(resolved);
+                return;
+            }
+
+            if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                watchConfigFile(resolved);
+                watchWildCardDirectories(resolved, proj);
+                watchInputFiles(resolved, proj);
+            }
+            else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                // Update file names
+                const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
+                if (result.fileNames.length !== 0) {
+                    filterMutate(proj.errors, error => !isErrorNoInputFiles(error));
+                }
+                else if (!proj.configFileSpecs!.filesSpecs && !some(proj.errors, isErrorNoInputFiles)) {
+                    proj.errors.push(getErrorForNoInputFiles(proj.configFileSpecs!, resolved));
+                }
+                proj.fileNames = result.fileNames;
+                watchInputFiles(resolved, proj);
+            }
+
+            const status = getUpToDateStatus(proj);
+            verboseReportProjectStatus(resolved, status);
+
+            if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
+                return;
+            }
+
+            const buildResult = buildSingleProject(resolved);
+            const dependencyGraph = getGlobalDependencyGraph();
+            const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(resolved);
+            if (!referencingProjects) return;
+            // Always use build order to queue projects
+            for (const project of dependencyGraph.buildQueue) {
+                const prepend = referencingProjects.getValue(project);
+                // If the project is referenced with prepend, always build downstream projectm,
+                // otherwise queue it only if declaration output changed
+                if (prepend || (prepend !== undefined && !(buildResult & BuildResultFlags.DeclarationOutputUnchanged))) {
+                    addProjToQueue(project);
+                }
+            }
+        }
+
+        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
+            const temporaryMarks = createFileMap<true>(toPath);
+            const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
-            const graph = createDependencyMapper();
-
-            let hadError = false;
-
+            const referencingProjectsMap = createFileMap<ConfigFileMap<boolean>>(toPath);
             for (const root of roots) {
                 visit(root);
             }
 
-            if (hadError) {
-                return undefined;
-            }
-
             return {
                 buildQueue: buildOrder,
-                dependencyMap: graph
+                referencingProjectsMap
             };
 
-            function visit(projPath: ResolvedConfigFileName, inCircularContext = false) {
+            function visit(projPath: ResolvedConfigFileName, inCircularContext?: boolean) {
                 // Already visited
-                if (permanentMarks[projPath]) return;
+                if (permanentMarks.hasKey(projPath)) return;
                 // Circular
-                if (temporaryMarks[projPath]) {
+                if (temporaryMarks.hasKey(projPath)) {
                     if (!inCircularContext) {
-                        hadError = true;
-                        buildHost.error(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
-                        return;
+                        // TODO:: Do we report this as error?
+                        reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
                     }
-                }
-
-                temporaryMarks[projPath] = true;
-                circularityReportStack.push(projPath);
-                const parsed = configFileCache.parseConfigFile(projPath);
-                if (parsed === undefined) {
-                    hadError = true;
                     return;
                 }
-                if (parsed.projectReferences) {
+
+                temporaryMarks.setValue(projPath, true);
+                circularityReportStack.push(projPath);
+                const parsed = parseConfigFile(projPath);
+                if (parsed && parsed.projectReferences) {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
-                        if (resolvedRefPath === undefined) {
-                            hadError = true;
-                            break;
-                        }
                         visit(resolvedRefPath, inCircularContext || ref.circular);
-                        graph.addReference(projPath, resolvedRefPath);
+                        // Get projects referencing resolvedRefPath and add projPath to it
+                        const referencingProjects = getOrCreateValueFromConfigFileMap(referencingProjectsMap, resolvedRefPath, () => createFileMap(toPath));
+                        referencingProjects.setValue(projPath, !!ref.prepend);
                     }
                 }
 
                 circularityReportStack.pop();
-                permanentMarks[projPath] = true;
+                permanentMarks.setValue(projPath, true);
                 buildOrder.push(projPath);
             }
         }
 
+
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
-            if (context.options.dry) {
-                buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj);
+            if (options.dry) {
+                reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj);
                 return BuildResultFlags.Success;
             }
 
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Building_project_0, proj);
+            if (options.verbose) reportStatus(Diagnostics.Building_project_0, proj);
 
             let resultFlags = BuildResultFlags.None;
             resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
 
-            const configFile = configFileCache.parseConfigFile(proj);
+            const configFile = parseConfigFile(proj);
             if (!configFile) {
                 // Failed to read the config file
                 resultFlags |= BuildResultFlags.ConfigFileErrors;
-                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
+                reportParseConfigFileDiagnostic(proj);
+                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
                 return resultFlags;
             }
-
             if (configFile.fileNames.length === 0) {
                 // Nothing to build - must be a solution file, basically
                 return BuildResultFlags.None;
@@ -763,9 +1007,10 @@ namespace ts {
 
             const programOptions: CreateProgramOptions = {
                 projectReferences: configFile.projectReferences,
-                host: compilerHost,
+                host,
                 rootNames: configFile.fileNames,
-                options: configFile.options
+                options: configFile.options,
+                configFileParsingDiagnostics: configFile.errors
             };
             const program = createProgram(programOptions);
 
@@ -775,76 +1020,73 @@ namespace ts {
                 ...program.getConfigFileParsingDiagnostics(),
                 ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
-                resultFlags |= BuildResultFlags.SyntaxErrors;
-                for (const diag of syntaxDiagnostics) {
-                    buildHost.errorDiagnostic(diag);
-                }
-                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Syntactic errors" });
-                return resultFlags;
+                return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");
             }
 
             // Don't emit .d.ts if there are decl file errors
             if (getEmitDeclarations(program.getCompilerOptions())) {
                 const declDiagnostics = program.getDeclarationDiagnostics();
                 if (declDiagnostics.length) {
-                    resultFlags |= BuildResultFlags.DeclarationEmitErrors;
-                    for (const diag of declDiagnostics) {
-                        buildHost.errorDiagnostic(diag);
-                    }
-                    context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Declaration file errors" });
-                    return resultFlags;
+                    return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
                 }
             }
 
             // Same as above but now for semantic diagnostics
             const semanticDiagnostics = program.getSemanticDiagnostics();
             if (semanticDiagnostics.length) {
-                resultFlags |= BuildResultFlags.TypeErrors;
-                for (const diag of semanticDiagnostics) {
-                    buildHost.errorDiagnostic(diag);
-                }
-                context.projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Semantic errors" });
-                return resultFlags;
+                return buildErrors(semanticDiagnostics, BuildResultFlags.TypeErrors, "Semantic");
             }
 
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
-            program.emit(/*targetSourceFile*/ undefined, (fileName, content, writeBom, onError) => {
+            let emitDiagnostics: Diagnostic[] | undefined;
+            const reportEmitDiagnostic = (d: Diagnostic) => (emitDiagnostics || (emitDiagnostics = [])).push(d);
+            emitFilesAndReportErrors(program, reportEmitDiagnostic, writeFileName, /*reportSummary*/ undefined, (fileName, content, writeBom, onError) => {
                 let priorChangeTime: Date | undefined;
-
-                if (!anyDtsChanged && isDeclarationFile(fileName) && compilerHost.fileExists(fileName)) {
-                    if (compilerHost.readFile(fileName) === content) {
-                        // Check for unchanged .d.ts files
-                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                        priorChangeTime = compilerHost.getModifiedTime && compilerHost.getModifiedTime(fileName);
+                if (!anyDtsChanged && isDeclarationFile(fileName)) {
+                    // Check for unchanged .d.ts files
+                    if (host.fileExists(fileName) && host.readFile(fileName) === content) {
+                        priorChangeTime = host.getModifiedTime(fileName);
                     }
                     else {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                         anyDtsChanged = true;
                     }
                 }
 
-                compilerHost.writeFile(fileName, content, writeBom, onError, emptyArray);
+                host.writeFile(fileName, content, writeBom, onError, emptyArray);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-                    context.unchangedOutputs.setValue(fileName, priorChangeTime);
+                    unchangedOutputs.setValue(fileName, priorChangeTime);
                 }
             });
+
+            if (emitDiagnostics) {
+                return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
+            }
 
             const status: UpToDateStatus = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
-            context.projectStatus.setValue(proj, status);
+            projectStatus.setValue(proj, status);
             return resultFlags;
+
+            function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
+                resultFlags |= errorFlags;
+                reportAndStoreErrors(proj, diagnostics);
+                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
+                return resultFlags;
+            }
         }
 
         function updateOutputTimestamps(proj: ParsedCommandLine) {
-            if (context.options.dry) {
-                return buildHost.message(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
+            if (options.dry) {
+                return reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
 
-            if (context.options.verbose) {
-                buildHost.verbose(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
+            if (options.verbose) {
+                reportStatus(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
             }
 
             const now = new Date();
@@ -852,33 +1094,29 @@ namespace ts {
             let priorNewestUpdateTime = minimumDate;
             for (const file of outputs) {
                 if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, compilerHost.getModifiedTime!(file) || missingFileModifiedTime);
+                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
                 }
 
-                compilerHost.setModifiedTime!(file, now);
+                host.setModifiedTime(file, now);
             }
 
-            context.projectStatus.setValue(proj.options.configFilePath!, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+            projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
         }
 
-        function getFilesToClean(configFileNames: ReadonlyArray<ResolvedConfigFileName>): string[] | undefined {
-            const resolvedNames: ResolvedConfigFileName[] | undefined = resolveProjectNames(configFileNames);
-            if (resolvedNames === undefined) return undefined;
-
+        function getFilesToClean(): string[] {
             // Get the same graph for cleaning we'd use for building
-            const graph = createDependencyGraph(resolvedNames);
-            if (graph === undefined) return undefined;
-
+            const graph = getGlobalDependencyGraph();
             const filesToDelete: string[] = [];
             for (const proj of graph.buildQueue) {
-                const parsed = configFileCache.parseConfigFile(proj);
+                const parsed = parseConfigFile(proj);
                 if (parsed === undefined) {
                     // File has gone missing; fine to ignore here
+                    reportParseConfigFileDiagnostic(proj);
                     continue;
                 }
                 const outputs = getAllProjectOutputs(parsed);
                 for (const output of outputs) {
-                    if (compilerHost.fileExists(output)) {
+                    if (host.fileExists(output)) {
                         filesToDelete.push(output);
                     }
                 }
@@ -886,108 +1124,72 @@ namespace ts {
             return filesToDelete;
         }
 
-        function getAllProjectsInScope(): ReadonlyArray<ResolvedConfigFileName> | undefined {
-            const resolvedNames = resolveProjectNames(rootNames);
-            if (resolvedNames === undefined) return undefined;
-            const graph = createDependencyGraph(resolvedNames);
-            if (graph === undefined) return undefined;
-            return graph.buildQueue;
-        }
-
         function cleanAllProjects() {
-            const resolvedNames: ReadonlyArray<ResolvedConfigFileName> | undefined = getAllProjectsInScope();
-            if (resolvedNames === undefined) {
-                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-
-            const filesToDelete = getFilesToClean(resolvedNames);
-            if (filesToDelete === undefined) {
-                buildHost.message(Diagnostics.Skipping_clean_because_not_all_projects_could_be_located);
-                return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-            }
-
-            if (context.options.dry) {
-                buildHost.message(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
+            const filesToDelete = getFilesToClean();
+            if (options.dry) {
+                reportStatus(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
                 return ExitStatus.Success;
             }
 
-            // Do this check later to allow --clean --dry to function even if the host can't delete files
-            if (!compilerHost.deleteFile) {
-                throw new Error("Host does not support deleting files");
-            }
-
             for (const output of filesToDelete) {
-                compilerHost.deleteFile(output);
+                host.deleteFile(output);
             }
 
             return ExitStatus.Success;
         }
 
-        function resolveProjectName(name: string): ResolvedConfigFileName | undefined {
-            const fullPath = resolvePath(compilerHost.getCurrentDirectory(), name);
-            if (compilerHost.fileExists(fullPath)) {
-                return fullPath as ResolvedConfigFileName;
-            }
-            const fullPathWithTsconfig = combinePaths(fullPath, "tsconfig.json");
-            if (compilerHost.fileExists(fullPathWithTsconfig)) {
-                return fullPathWithTsconfig as ResolvedConfigFileName;
-            }
-            buildHost.error(Diagnostics.File_0_not_found, relName(fullPath));
-            return undefined;
+        function resolveProjectName(name: string): ResolvedConfigFileName {
+            return resolveConfigFileProjectName(resolvePath(host.getCurrentDirectory(), name));
         }
 
-        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] | undefined {
-            const resolvedNames: ResolvedConfigFileName[] = [];
-            for (const name of configFileNames) {
-                const resolved = resolveProjectName(name);
-                if (resolved === undefined) {
-                    return undefined;
-                }
-                resolvedNames.push(resolved);
-            }
-            return resolvedNames;
+        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] {
+            return configFileNames.map(resolveProjectName);
         }
 
         function buildAllProjects(): ExitStatus {
+            if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             const graph = getGlobalDependencyGraph();
-            if (graph === undefined) return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-
-            const queue = graph.buildQueue;
             reportBuildQueue(graph);
-
             let anyFailed = false;
-            for (const next of queue) {
-                const proj = configFileCache.parseConfigFile(next);
+            for (const next of graph.buildQueue) {
+                const proj = parseConfigFile(next);
                 if (proj === undefined) {
+                    reportParseConfigFileDiagnostic(next);
                     anyFailed = true;
                     break;
                 }
+
+                // report errors early when using continue or break statements
+                const errors = proj.errors;
                 const status = getUpToDateStatus(proj);
                 verboseReportProjectStatus(next, status);
 
                 const projName = proj.options.configFilePath!;
-                if (status.type === UpToDateStatusType.UpToDate && !context.options.force) {
+                if (status.type === UpToDateStatusType.UpToDate && !options.force) {
+                    reportAndStoreErrors(next, errors);
                     // Up to date, skip
                     if (defaultOptions.dry) {
                         // In a dry build, inform the user of this fact
-                        buildHost.message(Diagnostics.Project_0_is_up_to_date, projName);
+                        reportStatus(Diagnostics.Project_0_is_up_to_date, projName);
                     }
                     continue;
                 }
 
-                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !context.options.force) {
+                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !options.force) {
+                    reportAndStoreErrors(next, errors);
                     // Fake build
                     updateOutputTimestamps(proj);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    if (context.options.verbose) buildHost.verbose(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
+                    reportAndStoreErrors(next, errors);
+                    if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
                     continue;
                 }
 
                 if (status.type === UpToDateStatusType.ContainerOnly) {
+                    reportAndStoreErrors(next, errors);
                     // Do nothing
                     continue;
                 }
@@ -995,220 +1197,54 @@ namespace ts {
                 const buildResult = buildSingleProject(next);
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
+            reportErrorSummary();
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
+        }
+
+        function reportParseConfigFileDiagnostic(proj: ResolvedConfigFileName) {
+            reportAndStoreErrors(proj, [configFileCache.getValue(proj) as Diagnostic]);
+        }
+
+        function reportAndStoreErrors(proj: ResolvedConfigFileName, errors: ReadonlyArray<Diagnostic>) {
+            reportErrors(errors);
+            if (options.watch) {
+                projectErrorsReported.setValue(proj, true);
+                diagnostics.setValue(proj, errors);
+            }
+        }
+
+        function reportErrors(errors: ReadonlyArray<Diagnostic>) {
+            errors.forEach(err => host.reportDiagnostic(err));
         }
 
         /**
          * Report the build ordering inferred from the current project graph if we're in verbose mode
          */
         function reportBuildQueue(graph: DependencyGraph) {
-            if (!context.options.verbose) return;
-
-            const names: string[] = [];
-            for (const name of graph.buildQueue) {
-                names.push(name);
+            if (options.verbose) {
+                reportStatus(Diagnostics.Projects_in_this_build_Colon_0, graph.buildQueue.map(s => "\r\n    * " + relName(s)).join(""));
             }
-            if (context.options.verbose) buildHost.verbose(Diagnostics.Projects_in_this_build_Colon_0, names.map(s => "\r\n    * " + relName(s)).join(""));
         }
 
         function relName(path: string): string {
-            return convertToRelativePath(path, compilerHost.getCurrentDirectory(), f => compilerHost.getCanonicalFileName(f));
-        }
-
-        function reportVerbose(message: DiagnosticMessage, ...args: string[]) {
-            buildHost.verbose(message, ...args);
+            return convertToRelativePath(path, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
         }
 
         /**
          * Report the up-to-date status of a project if we're in verbose mode
          */
         function verboseReportProjectStatus(configFileName: string, status: UpToDateStatus) {
-            if (!context.options.verbose) return;
-            return formatUpToDateStatus(configFileName, status, relName, reportVerbose);
+            if (!options.verbose) return;
+            return formatUpToDateStatus(configFileName, status, relName, reportStatus);
         }
     }
 
-    /**
-     * Gets the UpToDateStatus for a project
-     */
-    export function getUpToDateStatus(host: UpToDateHost, project: ParsedCommandLine | undefined): UpToDateStatus {
-        if (project === undefined) {
-            return { type: UpToDateStatusType.Unbuildable, reason: "File deleted mid-build" };
+    export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
+        if (fileExtensionIs(project, Extension.Json)) {
+            return project as ResolvedConfigFileName;
         }
 
-        const prior = host.getLastStatus ? host.getLastStatus(project.options.configFilePath!) : undefined;
-        if (prior !== undefined) {
-            return prior;
-        }
-
-        const actual = getUpToDateStatusWorker(host, project);
-        if (host.setLastStatus) {
-            host.setLastStatus(project.options.configFilePath!, actual);
-        }
-
-        return actual;
-    }
-
-    function getUpToDateStatusWorker(host: UpToDateHost, project: ParsedCommandLine): UpToDateStatus {
-        let newestInputFileName: string = undefined!;
-        let newestInputFileTime = minimumDate;
-        // Get timestamps of input files
-        for (const inputFile of project.fileNames) {
-            if (!host.fileExists(inputFile)) {
-                return {
-                    type: UpToDateStatusType.Unbuildable,
-                    reason: `${inputFile} does not exist`
-                };
-            }
-
-            const inputTime = host.getModifiedTime(inputFile) || missingFileModifiedTime;
-            if (inputTime > newestInputFileTime) {
-                newestInputFileName = inputFile;
-                newestInputFileTime = inputTime;
-            }
-        }
-
-        // Collect the expected outputs of this project
-        const outputs = getAllProjectOutputs(project);
-
-        if (outputs.length === 0) {
-            return {
-                type: UpToDateStatusType.ContainerOnly
-            };
-        }
-
-        // Now see if all outputs are newer than the newest input
-        let oldestOutputFileName = "(none)";
-        let oldestOutputFileTime = maximumDate;
-        let newestOutputFileName = "(none)";
-        let newestOutputFileTime = minimumDate;
-        let missingOutputFileName: string | undefined;
-        let newestDeclarationFileContentChangedTime = minimumDate;
-        let isOutOfDateWithInputs = false;
-        for (const output of outputs) {
-            // Output is missing; can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (!host.fileExists(output)) {
-                missingOutputFileName = output;
-                break;
-            }
-
-            const outputTime = host.getModifiedTime(output) || missingFileModifiedTime;
-            if (outputTime < oldestOutputFileTime) {
-                oldestOutputFileTime = outputTime;
-                oldestOutputFileName = output;
-            }
-
-            // If an output is older than the newest input, we can stop checking
-            // Don't immediately return because we can still be upstream-blocked, which is a higher-priority status
-            if (outputTime < newestInputFileTime) {
-                isOutOfDateWithInputs = true;
-                break;
-            }
-
-            if (outputTime > newestOutputFileTime) {
-                newestOutputFileTime = outputTime;
-                newestOutputFileName = output;
-            }
-
-            // Keep track of when the most recent time a .d.ts file was changed.
-            // In addition to file timestamps, we also keep track of when a .d.ts file
-            // had its file touched but not had its contents changed - this allows us
-            // to skip a downstream typecheck
-            if (isDeclarationFile(output)) {
-                const unchangedTime = host.getUnchangedTime ? host.getUnchangedTime(output) : undefined;
-                if (unchangedTime !== undefined) {
-                    newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
-                }
-                else {
-                    const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
-                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
-                }
-            }
-        }
-
-        let pseudoUpToDate = false;
-        let usesPrepend = false;
-        let upstreamChangedProject: string | undefined;
-        if (project.projectReferences && host.parseConfigFile) {
-            for (const ref of project.projectReferences) {
-                usesPrepend = usesPrepend || !!(ref.prepend);
-                const resolvedRef = resolveProjectReferencePath(host, ref);
-                const refStatus = getUpToDateStatus(host, host.parseConfigFile(resolvedRef));
-
-                // An upstream project is blocked
-                if (refStatus.type === UpToDateStatusType.Unbuildable) {
-                    return {
-                        type: UpToDateStatusType.UpstreamBlocked,
-                        upstreamProjectName: ref.path
-                    };
-                }
-
-                // If the upstream project is out of date, then so are we (someone shouldn't have asked, though?)
-                if (refStatus.type !== UpToDateStatusType.UpToDate) {
-                    return {
-                        type: UpToDateStatusType.UpstreamOutOfDate,
-                        upstreamProjectName: ref.path
-                    };
-                }
-
-                // If the upstream project's newest file is older than our oldest output, we
-                // can't be out of date because of it
-                if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
-                    continue;
-                }
-
-                // If the upstream project has only change .d.ts files, and we've built
-                // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
-                    pseudoUpToDate = true;
-                    upstreamChangedProject = ref.path;
-                    continue;
-                }
-
-                // We have an output older than an upstream output - we are out of date
-                Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
-                return {
-                    type: UpToDateStatusType.OutOfDateWithUpstream,
-                    outOfDateOutputFileName: oldestOutputFileName,
-                    newerProjectName: ref.path
-                };
-            }
-        }
-
-        if (missingOutputFileName !== undefined) {
-            return {
-                type: UpToDateStatusType.OutputMissing,
-                missingOutputFileName
-            };
-        }
-
-        if (isOutOfDateWithInputs) {
-            return {
-                type: UpToDateStatusType.OutOfDateWithSelf,
-                outOfDateOutputFileName: oldestOutputFileName,
-                newerInputFileName: newestInputFileName
-            };
-        }
-
-        if (usesPrepend && pseudoUpToDate) {
-            return {
-                type: UpToDateStatusType.OutOfDateWithUpstream,
-                outOfDateOutputFileName: oldestOutputFileName,
-                newerProjectName: upstreamChangedProject!
-            };
-        }
-
-        // Up to date
-        return {
-            type: pseudoUpToDate ? UpToDateStatusType.UpToDateWithUpstreamTypes : UpToDateStatusType.UpToDate,
-            newestDeclarationFileContentChangedTime,
-            newestInputFileTime,
-            newestOutputFileTime,
-            newestInputFileName,
-            newestOutputFileName,
-            oldestOutputFileName
-        };
+        return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
 
     export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
@@ -1266,6 +1302,8 @@ namespace ts {
                     status.reason);
             case UpToDateStatusType.ContainerOnly:
                 // Don't report status on "solution" projects
+            case UpToDateStatusType.ComputingUpstream:
+                // Should never leak from getUptoDateStatusWorker
                 break;
             default:
                 assertType<never>(status);

@@ -25,6 +25,6 @@ verify.signatureHelp(
     },
     {
         marker: "b",
-        text: "f(a: {}): {}",
+        text: "f(a: 2): 2",
     },
 );

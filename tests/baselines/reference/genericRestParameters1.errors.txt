@@ -1,11 +1,19 @@
 tests/cases/conformance/types/rest/genericRestParameters1.ts(22,1): error TS2556: Expected 3 arguments, but got 1 or more.
 tests/cases/conformance/types/rest/genericRestParameters1.ts(31,1): error TS2556: Expected 3 arguments, but got 1 or more.
-tests/cases/conformance/types/rest/genericRestParameters1.ts(166,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(133,40): error TS2344: Type '(...args: T) => void' does not satisfy the constraint '(...args: any[]) => any'.
+  Types of parameters 'args' and 'args' are incompatible.
+    Type 'any[]' is not assignable to type 'T'.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(134,51): error TS2344: Type 'new (...args: T) => void' does not satisfy the constraint 'new (...args: any[]) => any'.
+  Types of parameters 'args' and 'args' are incompatible.
+    Type 'any[]' is not assignable to type 'T'.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(135,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+  Type 'Function' provides no match for the signature '(...args: any[]): any'.
+tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS2322: Type '(a: never) => void' is not assignable to type '(...args: any[]) => void'.
   Types of parameters 'a' and 'args' are incompatible.
     Type 'any' is not assignable to type 'never'.
 
 
-==== tests/cases/conformance/types/rest/genericRestParameters1.ts (3 errors) ====
+==== tests/cases/conformance/types/rest/genericRestParameters1.ts (6 errors) ====
     declare let f1: (...x: [number, string, boolean]) => void;
     declare let f2: (x0: number, x1: string, x2: boolean) => void;
     
@@ -41,6 +49,7 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(166,1): error TS232
     f2(...ns, true);  // Error, tuple spread only expanded when last
     ~~~~~~~~~~~~~~~
 !!! error TS2556: Expected 3 arguments, but got 1 or more.
+!!! related TS6210 tests/cases/conformance/types/rest/genericRestParameters1.ts:2:30: An argument for 'x1' was not provided.
     
     declare function f10<T extends unknown[]>(...args: T): T;
     
@@ -136,17 +145,26 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(166,1): error TS232
     
     const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
     
-    type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
-    
     type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
     type T02 = Parameters<(...args: [number, string, boolean]) => void>;
-    type T03 = Parameters<new (x: number, y: string, z: boolean) => void>;
-    type T04 = Parameters<new (...args: [number, string, boolean]) => void>;
+    type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
+    type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
     type T05<T> = Parameters<(...args: T[]) => void>;
-    type T06<T> = Parameters<new (...args: []) => void>;
+    type T06<T> = ConstructorParameters<new (...args: []) => void>;
     type T07<T extends any[]> = Parameters<(...args: T) => void>;
-    type T08<T extends any[]> = Parameters<new (...args: T) => void>;
+                                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type '(...args: T) => void' does not satisfy the constraint '(...args: any[]) => any'.
+!!! error TS2344:   Types of parameters 'args' and 'args' are incompatible.
+!!! error TS2344:     Type 'any[]' is not assignable to type 'T'.
+    type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
+                                                      ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'new (...args: T) => void' does not satisfy the constraint 'new (...args: any[]) => any'.
+!!! error TS2344:   Types of parameters 'args' and 'args' are incompatible.
+!!! error TS2344:     Type 'any[]' is not assignable to type 'T'.
     type T09 = Parameters<Function>;
+                          ~~~~~~~~
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any[]): any'.
     
     type Record1 = {
       move: [number, 'left' | 'right'];

@@ -233,14 +233,6 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
     }
 
-    export interface UserPreferences {
-        readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
-        readonly includeCompletionsForModuleExports?: boolean;
-        readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
-        readonly allowTextChangesInNewFiles?: boolean;
-    }
     /* @internal */
     export const emptyOptions = {};
 
@@ -792,6 +784,11 @@ namespace ts {
 
     export interface RenameInfo {
         canRename: boolean;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;

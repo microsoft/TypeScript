@@ -28,7 +28,7 @@ let a = ['c', 'd'];
 
 a[Symbol.isConcatSpreadable] = false;
 >a[Symbol.isConcatSpreadable] = false : false
->a[Symbol.isConcatSpreadable] : any
+>a[Symbol.isConcatSpreadable] : error
 >a : string[]
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor

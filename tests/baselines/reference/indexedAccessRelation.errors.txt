@@ -1,0 +1,34 @@
+tests/cases/compiler/indexedAccessRelation.ts(16,25): error TS2322: Type 'T' is not assignable to type 'S["a"] & T'.
+  Type 'Foo' is not assignable to type 'S["a"] & T'.
+    Type 'Foo' is not assignable to type 'S["a"]'.
+      Type 'T' is not assignable to type 'S["a"]'.
+        Type 'Foo' is not assignable to type 'S["a"]'.
+
+
+==== tests/cases/compiler/indexedAccessRelation.ts (1 errors) ====
+    // Repro from #14723
+    
+    class Component<S> {
+        setState<K extends keyof S>(state: Pick<S, K>) {}
+    }
+    
+    export interface State<T> {
+        a?: T;
+    }
+    
+    class Foo {}
+    
+    class Comp<T extends Foo, S> extends Component<S & State<T>>
+    {
+        foo(a: T) {
+            this.setState({ a: a });
+                            ~
+!!! error TS2322: Type 'T' is not assignable to type 'S["a"] & T'.
+!!! error TS2322:   Type 'Foo' is not assignable to type 'S["a"] & T'.
+!!! error TS2322:     Type 'Foo' is not assignable to type 'S["a"]'.
+!!! error TS2322:       Type 'T' is not assignable to type 'S["a"]'.
+!!! error TS2322:         Type 'Foo' is not assignable to type 'S["a"]'.
+!!! related TS6500 tests/cases/compiler/indexedAccessRelation.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Pick<S & State<T>, "a">'
+        }
+    }
+    

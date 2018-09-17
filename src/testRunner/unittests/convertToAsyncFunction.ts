@@ -1,68 +1,4 @@
 namespace ts {
-    interface Range {
-        pos: number;
-        end: number;
-        name: string;
-    }
-
-    interface Test {
-        source: string;
-        ranges: Map<Range>;
-    }
-
-    function getTest(source: string): Test {
-        const activeRanges: Range[] = [];
-        let text = "";
-        let lastPos = 0;
-        let pos = 0;
-        const ranges = createMap<Range>();
-
-        while (pos < source.length) {
-            if (source.charCodeAt(pos) === CharacterCodes.openBracket &&
-                (source.charCodeAt(pos + 1) === CharacterCodes.hash || source.charCodeAt(pos + 1) === CharacterCodes.$)) {
-                const saved = pos;
-                pos += 2;
-                const s = pos;
-                consumeIdentifier();
-                const e = pos;
-                if (source.charCodeAt(pos) === CharacterCodes.bar) {
-                    pos++;
-                    text += source.substring(lastPos, saved);
-                    const name = s === e
-                        ? source.charCodeAt(saved + 1) === CharacterCodes.hash ? "selection" : "extracted"
-                        : source.substring(s, e);
-                    activeRanges.push({ name, pos: text.length, end: undefined! });
-                    lastPos = pos;
-                    continue;
-                }
-                else {
-                    pos = saved;
-                }
-            }
-            else if (source.charCodeAt(pos) === CharacterCodes.bar && source.charCodeAt(pos + 1) === CharacterCodes.closeBracket) {
-                text += source.substring(lastPos, pos);
-                activeRanges[activeRanges.length - 1].end = text.length;
-                const range = activeRanges.pop()!;
-                if (range.name in ranges) {
-                    throw new Error(`Duplicate name of range ${range.name}`);
-                }
-                ranges.set(range.name, range);
-                pos += 2;
-                lastPos = pos;
-                continue;
-            }
-            pos++;
-        }
-        text += source.substring(lastPos, pos);
-
-        function consumeIdentifier() {
-            while (isIdentifierPart(source.charCodeAt(pos), ScriptTarget.Latest)) {
-                pos++;
-            }
-        }
-        return { source: text, ranges };
-    }
-
     const libFile: TestFSWithWatch.File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
@@ -319,51 +255,22 @@ interface String { charAt: any; }
 interface Array<T> {}`
     };
 
-    const newLineCharacter = "\n";
-    const formatOptions: FormatCodeSettings = {
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter,
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceBeforeFunctionParenthesis: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-    };
-
-    const notImplementedHost: LanguageServiceHost = {
-        getCompilationSettings: notImplemented,
-        getScriptFileNames: notImplemented,
-        getScriptVersion: notImplemented,
-        getScriptSnapshot: notImplemented,
-        getDefaultLibFileName: notImplemented,
-        getCurrentDirectory: notImplemented,
-    };
-
-    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, description: DiagnosticMessage, includeLib?: boolean) {
-        const t = getTest(text);
+    function testConvertToAsyncFunction(caption: string, text: string, baselineFolder: string, includeLib?: boolean, expectFailure = false) {
+        const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
             throw new Error(`Test ${caption} does not specify selection range`);
         }
 
-        [Extension.Ts, Extension.Js].forEach(extension =>
+        const extensions = expectFailure ? [Extension.Ts] : [Extension.Ts, Extension.Js];
+
+        extensions.forEach(extension =>
             it(`${caption} [${extension}]`, () => runBaseline(extension)));
 
         function runBaseline(extension: Extension) {
             const path = "/a" + extension;
-            const program = makeProgram({ path, content: t.source }, includeLib)!;
+            const languageService = makeLanguageService({ path, content: t.source }, includeLib);
+            const program = languageService.getProgram()!;
 
             if (hasSyntacticDiagnostics(program)) {
                 // Don't bother generating JS baselines for inputs that aren't valid JS.
@@ -377,10 +284,6 @@ interface Array<T> {}`
             };
 
             const sourceFile = program.getSourceFile(path)!;
-            const host = projectSystem.createServerHost([f, libFile]);
-            const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
-            const languageService = projectService.inferredProjects[0].getLanguageService();
             const context: CodeFixContext = {
                 errorCode: 80006,
                 span: { start: selectionRange.pos, length: selectionRange.end - selectionRange.pos },
@@ -389,41 +292,49 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(formatOptions)
+                formatContext: formatting.getFormatContext(testFormatOptions)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === description.message);
-            assert.isNotNull(diagnostic);
+            const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
+                diagnostic.start === context.span.start && diagnostic.length === context.span.length);
+            if (expectFailure) {
+                assert.isUndefined(diagnostic);
+            }
+            else {
+                assert.exists(diagnostic);
+            }
 
             const actions = codefix.getFixes(context);
-            const action = find(actions, action => action.description === description.message)!;
-            assert.isNotNull(action);
+            const action = find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
+            if (expectFailure) {
+                assert.isNotTrue(action && action.changes.length > 0);
+                return;
+            }
 
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
-                const data: string[] = [];
-                data.push(`// ==ORIGINAL==`);
-                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-                const changes = action.changes;
-                assert.lengthOf(changes, 1);
+            assert.isTrue(action && action.changes.length > 0);
 
-                data.push(`// ==ASYNC FUNCTION::${action.description}==`);
-                const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-                data.push(newText);
+            const data: string[] = [];
+            data.push(`// ==ORIGINAL==`);
+            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+            const changes = action!.changes;
+            assert.lengthOf(changes, 1);
 
-                const diagProgram = makeProgram({ path, content: newText }, includeLib)!;
-                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-                return data.join(newLineCharacter);
-            });
+            data.push(`// ==ASYNC FUNCTION::${action!.description}==`);
+            const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+            data.push(newText);
+
+            const diagProgram = makeLanguageService({ path, content: newText }, includeLib).getProgram()!;
+            assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
-        function makeProgram(f: { path: string, content: string }, includeLib?: boolean) {
+        function makeLanguageService(f: { path: string, content: string }, includeLib?: boolean) {
 
             const host = projectSystem.createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
             const projectService = projectSystem.createProjectService(host);
             projectService.openClientFile(f.path);
-            const program = projectService.inferredProjects[0].getLanguageService().getProgram();
-            return program;
+            return projectService.inferredProjects[0].getLanguageService();
         }
 
         function hasSyntacticDiagnostics(program: Program) {
@@ -432,43 +343,30 @@ interface Array<T> {}`
         }
     }
 
-    function testConvertToAsyncFunctionFailed(caption: string, text: string, description: DiagnosticMessage) {
-        it(caption, () => {
-            const t = extractTest(text);
-            const selectionRange = t.ranges.get("selection");
-            if (!selectionRange) {
-                throw new Error(`Test ${caption} does not specify selection range`);
-            }
-            const f = {
-                path: "/a.ts",
-                content: t.source
-            };
-            const host = projectSystem.createServerHost([f, libFile]);
-            const projectService = projectSystem.createProjectService(host);
-            projectService.openClientFile(f.path);
-            const languageService = projectService.inferredProjects[0].getLanguageService();
-
-            const actions = languageService.getSuggestionDiagnostics(f.path);
-            assert.isUndefined(find(actions, action => action.messageText === description.message));
-        });
-    }
-
     describe("convertToAsyncFunctions", () => {
         _testConvertToAsyncFunction("convertToAsyncFunction_basic", `
 function [#|f|](): Promise<void>{
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+}`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
+function [#|f|]() {
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicWithComments", `
 function [#|f|](): Promise<void>{
     /* Note - some of these comments are removed during the refactor. This is not ideal. */
 
-    // a 
+    // a
     /*b*/ return /*c*/ fetch( /*d*/ 'https://typescriptlang.org' /*e*/).then( /*f*/ result /*g*/ => { /*h*/ console.log(/*i*/ result /*j*/) /*k*/}/*l*/);
     // m
 }`);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunction", `
 [#|():Promise<void> => {|]
+    return fetch('https://typescriptlang.org').then(result => console.log(result));
+}`);
+    _testConvertToAsyncFunction("convertToAsyncFunction_ArrowFunctionNoAnnotation", `
+[#|() => {|]
     return fetch('https://typescriptlang.org').then(result => console.log(result));
 }`);
         _testConvertToAsyncFunction("convertToAsyncFunction_Catch", `
@@ -571,6 +469,12 @@ function [#|f|]():Promise<void | Response> {
 }
 `
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoRes4", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(undefined, rejection => console.log("rejected:", rejection));
+}
+`
+        );
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestion", `
 function [#|f|]():Promise<Response> {
     return fetch('https://typescriptlang.org');
@@ -580,7 +484,7 @@ function [#|f|]():Promise<Response> {
         _testConvertToAsyncFunction("convertToAsyncFunction_PromiseDotAll", `
 function [#|f|]():Promise<void>{
     return Promise.all([fetch('https://typescriptlang.org'), fetch('https://microsoft.com'), fetch('https://youtube.com')]).then(function(vals){
-        vals.forEach(console.log); 
+        vals.forEach(console.log);
     });
 }
 `
@@ -664,7 +568,7 @@ function [#|innerPromise|](): Promise<string> {
         var blob2 = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
         return blob2;
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 `
@@ -674,7 +578,7 @@ function [#|innerPromise|](): Promise<string> {
     return fetch("https://typescriptlang.org").then(resp => {
         return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
     }).then(blob => {
-        return blob.toString();   
+        return blob.toString();
     });
 }
 `
@@ -847,7 +751,7 @@ function [#|f|](): Promise<void> {
     }
     return x.then(resp => {
         var blob = resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
-        return fetch("https://micorosft.com").then(res => console.log("Another one!"));
+        return fetch("https://microsoft.com").then(res => console.log("Another one!"));
     });
 }
 `
@@ -914,7 +818,7 @@ function [#|f|]() {
         _testConvertToAsyncFunction("convertToAsyncFunction_Scope1", `
 function [#|f|]() {
     var var1:Promise<Response>, var2;
-    return fetch('https://typescriptlang.org').then( _ => 
+    return fetch('https://typescriptlang.org').then( _ =>
       Promise.resolve().then( res => {
         var2 = "test";
         return fetch("https://microsoft.com");
@@ -933,11 +837,11 @@ function [#|f|](){
     return fetch("https://typescriptlang.org").then(res => {
       if (res.ok) {
         return fetch("https://microsoft.com");
-      } 
+      }
       else {
         if (res.buffer.length > 5) {
           return res;
-        } 
+        }
         else {
             return fetch("https://github.com");
         }
@@ -1177,11 +1081,11 @@ function [#|f|]() {
       }
     };
   });
-} 
+}
 `
         );
 
-        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NestedFunction", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NestedFunctionWrongLocation", `
 function [#|f|]() {
     function fn2(){
         function fn3(){
@@ -1190,36 +1094,102 @@ function [#|f|]() {
         return fn3();
     }
     return fn2();
-} 
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_NestedFunctionRightLocation", `
+function f() {
+    function fn2(){
+        function [#|fn3|](){
+            return fetch("https://typescriptlang.org").then(res => console.log(res));
+        }
+        return fn3();
+    }
+    return fn2();
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_UntypedFunction", `
 function [#|f|]() {
     return Promise.resolve().then(res => console.log(res));
-} 
+}
 `);
 
         _testConvertToAsyncFunction("convertToAsyncFunction_TernaryConditional", `
 function [#|f|]() {
     let i;
     return Promise.resolve().then(res => res ? i = res : i = 100);
-} 
+}
 `);
 
     _testConvertToAsyncFunction("convertToAsyncFunction_ResRejNoArgsArrow", `
     function [#|f|]() {
-        return Promise.resolve().then(() => 1, () => "a"); 
+        return Promise.resolve().then(() => 1, () => "a");
     }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpression", `
+const [#|foo|] = function () {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpressionWithName", `
+const foo = function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_simpleFunctionExpressionAssignedToBindingPattern", `
+const { length } = [#|function|] () {
+    return fetch('https://typescriptlang.org').then(result => { console.log(result) });
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParams", `
+function [#|f|]() {
+	return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x); 
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPattern", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_bindingPatternNameCollision", `
+function [#|f|]() {
+    const result = 'https://typescriptlang.org';
+    return fetch(result).then(res);
+}
+function res({ status, trailer }){
+    console.log(status);
+} 
+`);
+
+    _testConvertToAsyncFunctionFailed("convertToAsyncFunction_thenArgumentNotFunction", `
+function [#|f|]() {
+    return Promise.resolve().then(f ? (x => x) : (y => y));
+}
+`);
+
+    _testConvertToAsyncFunctionFailed("convertToAsyncFunction_thenArgumentNotFunctionNotLastInChain", `
+function [#|f|]() {
+    return Promise.resolve().then(f ? (x => x) : (y => y)).then(q => q);
+}
+`);
 
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
-        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", Diagnostics.Convert_to_async_function, /*includeLib*/ true);
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true);
     }
 
     function _testConvertToAsyncFunctionFailed(caption: string, text: string) {
-        testConvertToAsyncFunctionFailed(caption, text, Diagnostics.Convert_to_async_function);
+        testConvertToAsyncFunction(caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*expectFailure*/ true);
     }
 }
