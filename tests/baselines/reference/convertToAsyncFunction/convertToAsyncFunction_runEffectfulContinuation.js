@@ -11,7 +11,7 @@ function res(result) {
 
 async function f() {
     const result = await fetch('https://typescriptlang.org');
-    await res(result);
+    const _ = await res(result);
     return console.log("done");
 }
 function res(result) {

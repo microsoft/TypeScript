@@ -558,7 +558,7 @@ namespace ts.codefix {
             name = getMapEntryIfExists(funcNode);
         }
 
-        if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
+        if (!name || name.identifier === undefined || name.identifier.text === "undefined") {
             return { identifier: createIdentifier(""), types, numberOfAssignmentsOriginal };
         }
 
