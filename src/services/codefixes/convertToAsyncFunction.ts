@@ -234,9 +234,7 @@ namespace ts.codefix {
 
                 if (renameInfo) {
                     const type = checker.getTypeAtLocation(node);
-                    if (type) {
-                        originalType.set(getNodeId(clone).toString(), type);
-                    }
+                    originalType.set(getNodeId(clone).toString(), type);
                 }
             }
 
@@ -391,9 +389,14 @@ namespace ts.codefix {
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+    function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+        if (!prevArgName || prevArgName.identifier.text.length === 0) {
+            // if there's no argName to assign to, there still might be side effects
+            return createNodeArray([createStatement(rightHandSide)]);
+        }
 
         if (prevArgName.types.length < prevArgName.numberOfAssignmentsOriginal) {
+            // if the variable has already been declared, we don't need "let" or "const"
             return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
         }
 
@@ -404,15 +407,13 @@ namespace ts.codefix {
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
     function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
-        const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const hasArgName = argName && argName.identifier.text.length > 0;
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
                 break;
-            case SyntaxKind.Identifier:
-                // identifier includes undefined
+            case SyntaxKind.Identifier: // identifier includes undefined
                 if (!hasArgName) break;
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
@@ -420,13 +421,18 @@ namespace ts.codefix {
                     return createNodeArray([createReturn(synthCall)]);
                 }
 
-                if (!hasPrevArgName) break;
-
-                const type = transformer.originalTypeMap.get(getNodeId(func).toString());
-                const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
-                const returnType = callSignatures && callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
-                prevArgName!.types.push(returnType!);
+                const type = transformer.originalTypeMap.get(getNodeId(func).toString()) || transformer.checker.getTypeAtLocation(func);
+                const callSignatures = transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
+                if (!callSignatures.length) {
+                    // if identifier in handler has no call signatures, it's invalid
+                    codeActionSucceeded = false;
+                    break;
+                }
+                const returnType = callSignatures[0].getReturnType();
+                const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, createAwait(synthCall), transformer);
+                if (prevArgName) {
+                    prevArgName.types.push(returnType);
+                }
                 return varDeclOrAssignment;
 
             case SyntaxKind.FunctionDeclaration:
@@ -462,11 +468,13 @@ namespace ts.codefix {
                         return createNodeArray(innerCbBody);
                     }
 
-                    if (hasPrevArgName && !shouldReturn) {
+                    if (!shouldReturn) {
                         const type = transformer.checker.getTypeAtLocation(func);
                         const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
-                        prevArgName!.types.push(returnType);
+                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, getSynthesizedDeepClone(funcBody) as Expression, transformer);
+                        if (prevArgName) {
+                            prevArgName.types.push(returnType);
+                        }
                         return varDeclOrAssignment;
                     }
                     else {
@@ -474,7 +482,7 @@ namespace ts.codefix {
                     }
                 }
             default:
-                // We've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
+                // If no cases apply, we've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
                 codeActionSucceeded = false;
                 break;
         }
