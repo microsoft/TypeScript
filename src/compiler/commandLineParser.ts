@@ -78,6 +78,14 @@ namespace ts {
             type: "boolean"
         },
         {
+            name: "watch",
+            shortName: "w",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Watch_input_files,
+        },
+        {
             name: "preserveWatchOutput",
             type: "boolean",
             showInSimplifiedHelpView: false,
@@ -96,13 +104,12 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
+
         {
-            name: "watch",
-            shortName: "w",
+            name: "traceResolution",
             type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Watch_input_files,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
     ];
 
@@ -580,12 +587,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Show_verbose_diagnostic_information
-        },
-        {
-            name: "traceResolution",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
         {
             name: "resolveJsonModule",
