@@ -13508,6 +13508,9 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    inferFromTypes(source, getUnionType([getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)]));
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -13754,7 +13757,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function isObjectLiteralType(type: Type) {
