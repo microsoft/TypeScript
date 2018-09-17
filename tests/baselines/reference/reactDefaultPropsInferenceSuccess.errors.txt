@@ -1,0 +1,67 @@
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(26,36): error TS2322: Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
+tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(48,37): error TS2322: Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
+  Type 'void' is not assignable to type 'boolean'.
+
+
+==== tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx (2 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    import React from 'react';
+    
+    interface BaseProps {
+      when?: (value: string) => boolean;
+    }
+    
+    interface Props extends BaseProps {
+    }
+    
+    class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
+      static defaultProps = {
+        when: () => true
+      };
+    
+      render() {
+        return <div>Hello</div>;
+      }
+    }
+    
+    // OK
+    const Test1 = () => <FieldFeedback when={value => !!value} />;
+    
+    // Error: Void not assignable to boolean
+    const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
+                                       ~~~~
+!!! error TS2322: Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
+!!! error TS2322:   Type 'void' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
+    
+    
+    interface MyPropsProps extends Props {
+      when: (value: string) => boolean;
+    }
+    
+    class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedback<P> {
+      static defaultProps = {
+        when: () => true
+      };
+    
+      render() {
+        this.props.when("now"); // OK, always defined
+        return <div>Hello</div>;
+      }
+    }
+    
+    // OK
+    const Test3 = () => <FieldFeedback2 when={value => !!value} />;
+    
+    // Error: Void not assignable to boolean
+    const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
+                                        ~~~~
+!!! error TS2322: Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
+!!! error TS2322:   Type 'void' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:30:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback2<MyPropsProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<MyPropsProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
+    
+    // OK
+    const Test5 = () => <FieldFeedback2 />;
+    

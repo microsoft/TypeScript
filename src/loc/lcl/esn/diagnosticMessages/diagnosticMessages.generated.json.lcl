@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="es-ES" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -3067,7 +3067,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Do not generate custom helper functions like '__extends' in compiled output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[No generar funciones auxiliares personalizadas como "__extends" en la salida compilada.]]></Val>
+            <Val><![CDATA[No generar funciones del asistente personalizadas como "__extends" en la salida compilada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4441,7 +4441,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Import emit helpers from 'tslib'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Importe elementos auxiliares de emisión de "tslib".]]></Val>
+            <Val><![CDATA[Importe asistentes de emisión de "tslib".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8272,7 +8272,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta sintaxis requiere una aplicación auxiliar importada, pero no se puede encontrar el módulo "{0}".]]></Val>
+            <Val><![CDATA[Esta sintaxis requiere un asistente importado, pero no se puede encontrar el módulo "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8281,7 +8281,7 @@
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper named '{1}', but module '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esta sintaxis requiere una aplicación auxiliar importada denominada "{1}", pero el módulo "{0}" no tiene el miembro exportado "{1}".]]></Val>
+            <Val><![CDATA[Esta sintaxis requiere un asistente importado denominado "{1}", pero el módulo "{0}" no tiene el miembro exportado "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

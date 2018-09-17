@@ -14,7 +14,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    export const emptyArray: never[] = [] as never[];
     export const resolvingEmptyArray: never[] = [] as never[];
     export const emptyMap = createMap<never>() as ReadonlyMap<never> & ReadonlyPragmaMap;
     export const emptyUnderscoreEscapedMap: ReadonlyUnderscoreEscapedMap<never> = emptyMap as ReadonlyUnderscoreEscapedMap<never>;
@@ -248,6 +247,12 @@ namespace ts {
         }
 
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
+    }
+
+    export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
+        return oldRef.path === newRef.path &&
+            !oldRef.prepend === !newRef.prepend &&
+            !oldRef.circular === !newRef.circular;
     }
 
     export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
@@ -1679,15 +1684,15 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind !== SyntaxKind.ExternalModuleReference;
     }
 
-    export function isSourceFileJavaScript(file: SourceFile): boolean {
-        return isInJavaScriptFile(file);
+    export function isSourceFileJS(file: SourceFile): boolean {
+        return isInJSFile(file);
     }
 
-    export function isSourceFileNotJavaScript(file: SourceFile): boolean {
-        return !isInJavaScriptFile(file);
+    export function isSourceFileNotJS(file: SourceFile): boolean {
+        return !isInJSFile(file);
     }
 
-    export function isInJavaScriptFile(node: Node | undefined): boolean {
+    export function isInJSFile(node: Node | undefined): boolean {
         return !!node && !!(node.flags & NodeFlags.JavaScriptFile);
     }
 
@@ -1739,14 +1744,14 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(sourceFile, str).charCodeAt(0) === CharacterCodes.doubleQuote;
     }
 
-    export function getDeclarationOfJSInitializer(node: Node): Node | undefined {
+    export function getDeclarationOfExpando(node: Node): Node | undefined {
         if (!node.parent) {
             return undefined;
         }
         let name: Expression | BindingName | undefined;
         let decl: Node | undefined;
         if (isVariableDeclaration(node.parent) && node.parent.initializer === node) {
-            if (!isInJavaScriptFile(node) && !isVarConst(node.parent)) {
+            if (!isInJSFile(node) && !isVarConst(node.parent)) {
                 return undefined;
             }
             name = node.parent.name;
@@ -1771,7 +1776,7 @@ namespace ts {
             }
         }
 
-        if (!name || !getJavascriptInitializer(node, isPrototypeAccess(name))) {
+        if (!name || !getExpandoInitializer(node, isPrototypeAccess(name))) {
             return undefined;
         }
         return decl;
@@ -1783,7 +1788,7 @@ namespace ts {
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
     export function getEffectiveInitializer(node: HasExpressionInitializer) {
-        if (isInJavaScriptFile(node) && node.initializer &&
+        if (isInJSFile(node) && node.initializer &&
             isBinaryExpression(node.initializer) && node.initializer.operatorToken.kind === SyntaxKind.BarBarToken &&
             node.name && isEntityNameExpression(node.name) && isSameEntityName(node.name, node.initializer.left)) {
             return node.initializer.right;
@@ -1791,26 +1796,26 @@ namespace ts {
         return node.initializer;
     }
 
-    /** Get the declaration initializer when it is container-like (See getJavascriptInitializer). */
-    export function getDeclaredJavascriptInitializer(node: HasExpressionInitializer) {
+    /** Get the declaration initializer when it is container-like (See getExpandoInitializer). */
+    export function getDeclaredExpandoInitializer(node: HasExpressionInitializer) {
         const init = getEffectiveInitializer(node);
-        return init && getJavascriptInitializer(init, isPrototypeAccess(node.name));
+        return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
     }
 
     /**
-     * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getJavascriptInitializer).
+     * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedJavascriptInitializer(node: Node) {
+    export function getAssignedExpandoInitializer(node: Node) {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
-            return getJavascriptInitializer(node.parent.right, isPrototypeAssignment) ||
-                getDefaultedJavascriptInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+            return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
+                getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
         }
     }
 
     /**
-     * Recognized Javascript container-like initializers are:
+     * Recognized expando initializers are:
      * 1. (function() {})() -- IIFEs
      * 2. function() { } -- Function expressions
      * 3. class { } -- Class expressions
@@ -1819,7 +1824,7 @@ namespace ts {
      *
      * This function returns the provided initializer, or undefined if it is not valid.
      */
-    export function getJavascriptInitializer(initializer: Node, isPrototypeAssignment: boolean): Expression | undefined {
+    export function getExpandoInitializer(initializer: Node, isPrototypeAssignment: boolean): Expression | undefined {
         if (isCallExpression(initializer)) {
             const e = skipParentheses(initializer.expression);
             return e.kind === SyntaxKind.FunctionExpression || e.kind === SyntaxKind.ArrowFunction ? initializer : undefined;
@@ -1835,29 +1840,29 @@ namespace ts {
     }
 
     /**
-     * A defaulted Javascript initializer matches the pattern
-     * `Lhs = Lhs || JavascriptInitializer`
-     * or `var Lhs = Lhs || JavascriptInitializer`
+     * A defaulted expando initializer matches the pattern
+     * `Lhs = Lhs || ExpandoInitializer`
+     * or `var Lhs = Lhs || ExpandoInitializer`
      *
      * The second Lhs is required to be the same as the first except that it may be prefixed with
      * 'window.', 'global.' or 'self.' The second Lhs is otherwise ignored by the binder and checker.
      */
-    function getDefaultedJavascriptInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
-        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getJavascriptInitializer(initializer.right, isPrototypeAssignment);
+    function getDefaultedExpandoInitializer(name: EntityNameExpression, initializer: Expression, isPrototypeAssignment: boolean) {
+        const e = isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.BarBarToken && getExpandoInitializer(initializer.right, isPrototypeAssignment);
         if (e && isSameEntityName(name, (initializer as BinaryExpression).left as EntityNameExpression)) {
             return e;
         }
     }
 
-    export function isDefaultedJavascriptInitializer(node: BinaryExpression) {
+    export function isDefaultedExpandoInitializer(node: BinaryExpression) {
         const name = isVariableDeclaration(node.parent) ? node.parent.name :
             isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken ? node.parent.left :
                 undefined;
-        return name && getJavascriptInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
+        return name && getExpandoInitializer(node.right, isPrototypeAccess(name)) && isEntityNameExpression(name) && isSameEntityName(name, node.left);
     }
 
-    /** Given a Javascript initializer, return the outer name. That is, the lhs of the assignment or the declaration name. */
-    export function getOuterNameOfJsInitializer(node: Declaration): DeclarationName | undefined {
+    /** Given an expando initializer, return its declaration name, or the left-hand side of the assignment if it's part of an assignment declaration. */
+    export function getNameOfExpando(node: Declaration): DeclarationName | undefined {
         if (isBinaryExpression(node.parent)) {
             const parent = (node.parent.operatorToken.kind === SyntaxKind.BarBarToken && isBinaryExpression(node.parent.parent)) ? node.parent.parent : node.parent;
             if (parent.operatorToken.kind === SyntaxKind.EqualsToken && isIdentifier(parent.left)) {
@@ -1913,36 +1918,36 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expr: BinaryExpression): SpecialPropertyAssignmentKind {
-        const special = getSpecialPropertyAssignmentKindWorker(expr);
-        return special === SpecialPropertyAssignmentKind.Property || isInJavaScriptFile(expr) ? special : SpecialPropertyAssignmentKind.None;
+    export function getAssignmentDeclarationKind(expr: BinaryExpression): AssignmentDeclarationKind {
+        const special = getAssignmentDeclarationKindWorker(expr);
+        return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
-    function getSpecialPropertyAssignmentKindWorker(expr: BinaryExpression): SpecialPropertyAssignmentKind {
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression): AssignmentDeclarationKind {
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
-            return SpecialPropertyAssignmentKind.None;
+            return AssignmentDeclarationKind.None;
         }
         const lhs = expr.left;
         if (isEntityNameExpression(lhs.expression) && lhs.name.escapedText === "prototype" && isObjectLiteralExpression(getInitializerOfBinaryExpression(expr))) {
                 // F.prototype = { ... }
-                return SpecialPropertyAssignmentKind.Prototype;
+                return AssignmentDeclarationKind.Prototype;
         }
-        return getSpecialPropertyAccessKind(lhs);
+        return getAssignmentDeclarationPropertyAccessKind(lhs);
     }
 
-    export function getSpecialPropertyAccessKind(lhs: PropertyAccessExpression): SpecialPropertyAssignmentKind {
+    export function getAssignmentDeclarationPropertyAccessKind(lhs: PropertyAccessExpression): AssignmentDeclarationKind {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
-            return SpecialPropertyAssignmentKind.ThisProperty;
+            return AssignmentDeclarationKind.ThisProperty;
         }
         else if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
             // module.exports = expr
-            return SpecialPropertyAssignmentKind.ModuleExports;
+            return AssignmentDeclarationKind.ModuleExports;
         }
         else if (isEntityNameExpression(lhs.expression)) {
             if (isPrototypeAccess(lhs.expression)) {
                 // F.G....prototype.x = expr
-                return SpecialPropertyAssignmentKind.PrototypeProperty;
+                return AssignmentDeclarationKind.PrototypeProperty;
             }
 
             let nextToLast = lhs;
@@ -1954,13 +1959,13 @@ namespace ts {
             if (id.escapedText === "exports" ||
                 id.escapedText === "module" && nextToLast.name.escapedText === "exports") {
                 // exports.name = expr OR module.exports.name = expr
-                return SpecialPropertyAssignmentKind.ExportsProperty;
+                return AssignmentDeclarationKind.ExportsProperty;
             }
             // F.G...x = expr
-            return SpecialPropertyAssignmentKind.Property;
+            return AssignmentDeclarationKind.Property;
         }
 
-        return SpecialPropertyAssignmentKind.None;
+        return AssignmentDeclarationKind.None;
     }
 
     export function getInitializerOfBinaryExpression(expr: BinaryExpression) {
@@ -1971,11 +1976,11 @@ namespace ts {
     }
 
     export function isPrototypePropertyAssignment(node: Node): boolean {
-        return isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.PrototypeProperty;
+        return isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.PrototypeProperty;
     }
 
     export function isSpecialPropertyDeclaration(expr: PropertyAccessExpression): boolean {
-        return isInJavaScriptFile(expr) &&
+        return isInJSFile(expr) &&
             expr.parent && expr.parent.kind === SyntaxKind.ExpressionStatement &&
             !!getJSDocTypeTag(expr.parent);
     }
@@ -2083,7 +2088,7 @@ namespace ts {
     function getSourceOfDefaultedAssignment(node: Node): Node | undefined {
         return isExpressionStatement(node) &&
             isBinaryExpression(node.expression) &&
-            getSpecialPropertyAssignmentKind(node.expression) !== SpecialPropertyAssignmentKind.None &&
+            getAssignmentDeclarationKind(node.expression) !== AssignmentDeclarationKind.None &&
             isBinaryExpression(node.expression.right) &&
             node.expression.right.operatorToken.kind === SyntaxKind.BarBarToken
             ? node.expression.right.right
@@ -2384,29 +2389,33 @@ namespace ts {
     }
 
     // See GH#16030
-    export function isAnyDeclarationName(name: Node): boolean {
+    export function getDeclarationFromName(name: Node): Declaration | undefined {
+        const parent = name.parent;
         switch (name.kind) {
-            case SyntaxKind.Identifier:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NumericLiteral: {
-                const parent = name.parent;
+            case SyntaxKind.NumericLiteral:
+                if (isComputedPropertyName(parent)) return parent.parent;
+                // falls through
+
+            case SyntaxKind.Identifier:
                 if (isDeclaration(parent)) {
-                    return parent.name === name;
+                    return parent.name === name ? parent : undefined;
                 }
-                else if (isQualifiedName(name.parent)) {
-                    const tag = name.parent.parent;
-                    return isJSDocParameterTag(tag) && tag.name === name.parent;
+                else if (isQualifiedName(parent)) {
+                    const tag = parent.parent;
+                    return isJSDocParameterTag(tag) && tag.name === parent ? tag : undefined;
                 }
                 else {
-                    const binExp = name.parent.parent;
+                    const binExp = parent.parent;
                     return isBinaryExpression(binExp) &&
-                        getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None &&
+                        getAssignmentDeclarationKind(binExp) !== AssignmentDeclarationKind.None &&
                         (binExp.left.symbol || binExp.symbol) &&
-                        getNameOfDeclaration(binExp) === name;
+                        getNameOfDeclaration(binExp) === name
+                        ? binExp
+                        : undefined;
                 }
-            }
             default:
-                return false;
+                return undefined;
         }
     }
 
@@ -2468,7 +2477,7 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getSpecialPropertyAssignmentKind(node) === SpecialPropertyAssignmentKind.ModuleExports;
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports;
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
@@ -2477,7 +2486,7 @@ namespace ts {
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
-        if (isInJavaScriptFile(node)) {
+        if (isInJSFile(node)) {
             // Prefer an @augments tag because it may have type parameters.
             const tag = getJSDocAugmentsTag(node);
             if (tag) {
@@ -3283,7 +3292,7 @@ namespace ts {
 
     /** Don't call this for `--outFile`, just for `--outDir` or plain emit. `--outFile` needs additional checks. */
     export function sourceFileMayBeEmitted(sourceFile: SourceFile, options: CompilerOptions, isSourceFileFromExternalLibrary: (file: SourceFile) => boolean) {
-        return !(options.noEmitForJsFiles && isSourceFileJavaScript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
+        return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
@@ -3407,7 +3416,7 @@ namespace ts {
      */
     export function getEffectiveTypeAnnotationNode(node: Node): TypeNode | undefined {
         const type = (node as HasType).type;
-        if (type || !isInJavaScriptFile(node)) return type;
+        if (type || !isInJSFile(node)) return type;
         return isJSDocPropertyLikeTag(node) ? node.typeExpression && node.typeExpression.type : getJSDocType(node);
     }
 
@@ -3422,7 +3431,7 @@ namespace ts {
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
         return isJSDocSignature(node) ?
             node.type && node.type.typeExpression && node.type.typeExpression.type :
-            node.type || (isInJavaScriptFile(node) ? getJSDocReturnType(node) : undefined);
+            node.type || (isInJSFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): ReadonlyArray<TypeParameterDeclaration> {
@@ -3815,8 +3824,8 @@ namespace ts {
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
-    export function tryExtractTypeScriptExtension(fileName: string): string | undefined {
-        return find(supportedTypescriptExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
+    export function tryExtractTSExtension(fileName: string): string | undefined {
+        return find(supportedTSExtensionsForExtractExtension, extension => fileExtensionIs(fileName, extension));
     }
     /**
      * Replace each instance of non-ascii characters by one, two, three, or four escape sequences
@@ -3968,6 +3977,27 @@ namespace ts {
             i += 4;
         }
         return getStringFromExpandedCharCodes(expandedCharCodes);
+    }
+
+    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
+        try {
+            const jsonText = host.readFile(path);
+            if (!jsonText) return {};
+            const result = parseConfigFileTextToJson(path, jsonText);
+            if (result.error) {
+                return {};
+            }
+            return result.config;
+        }
+        catch (e) {
+            // gracefully handle if readFile fails or returns not JSON
+            return {};
+        }
+    }
+
+    export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
+        // if host does not support 'directoryExists' assume that directory will exist
+        return !host.directoryExists || host.directoryExists(directoryName);
     }
 
     const carriageReturnLineFeed = "\r\n";
@@ -4305,7 +4335,7 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: Map<T>, onDeleteValue: (valueInMap: T, key: string) => void) {
+    export function clearMap<T>(map: { forEach: Map<T>["forEach"]; clear: Map<T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
@@ -4962,11 +4992,11 @@ namespace ts {
             }
             case SyntaxKind.BinaryExpression: {
                 const expr = declaration as BinaryExpression;
-                switch (getSpecialPropertyAssignmentKind(expr)) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ThisProperty:
-                    case SpecialPropertyAssignmentKind.Property:
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                switch (getAssignmentDeclarationKind(expr)) {
+                    case AssignmentDeclarationKind.ExportsProperty:
+                    case AssignmentDeclarationKind.ThisProperty:
+                    case AssignmentDeclarationKind.Property:
+                    case AssignmentDeclarationKind.PrototypeProperty:
                         return (expr.left as PropertyAccessExpression).name;
                     default:
                         return undefined;
@@ -5183,7 +5213,7 @@ namespace ts {
         if (node.typeParameters) {
             return node.typeParameters;
         }
-        if (isInJavaScriptFile(node)) {
+        if (isInJSFile(node)) {
             const decls = getJSDocTypeParameterDeclarations(node);
             if (decls.length) {
                 return decls;
@@ -6589,7 +6619,7 @@ namespace ts {
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
         if (node.kind === SyntaxKind.TypeParameter) {
-            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJavaScriptFile(node);
+            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJSFile(node);
         }
 
         return isDeclarationKind(node.kind);
@@ -7031,6 +7061,18 @@ namespace ts {
             moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
         }
         return moduleResolution;
+    }
+
+    export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
+        switch (getEmitModuleKind(options)) {
+            case ModuleKind.CommonJS:
+            case ModuleKind.AMD:
+            case ModuleKind.ES2015:
+            case ModuleKind.ESNext:
+                return true;
+            default:
+                return false;
+        }
     }
 
     export function unreachableCodeIsError(options: CompilerOptions): boolean {
@@ -7635,6 +7677,15 @@ namespace ts {
     // It may be inefficient (we could just match (/[-[\]{}()*+?.,\\^$|#\s]/g), but this is future
     // proof.
     const reservedCharacterPattern = /[^\w\s\/]/g;
+
+    export function regExpEscape(text: string) {
+        return text.replace(reservedCharacterPattern, escapeRegExpCharacter);
+    }
+
+    function escapeRegExpCharacter(match: string) {
+        return "\\" + match;
+    }
+
     const wildcardCharCodes = [CharacterCodes.asterisk, CharacterCodes.question];
 
     export function hasExtension(fileName: string): boolean {
@@ -7965,42 +8016,42 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTSExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
-    export const supportedJavascriptExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
-    export const supportedJavaScriptAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
-    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTypeScriptExtensions, ...supportedJavascriptExtensions];
+    export const supportedTSExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
+    export const supportedJSExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
+    export const supportedJSAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
+    const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
 
         if (!extraFileExtensions || extraFileExtensions.length === 0) {
-            return needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+            return needJsExtensions ? allSupportedExtensions : supportedTSExtensions;
         }
 
         const extensions = [
-            ...needJsExtensions ? allSupportedExtensions : supportedTypeScriptExtensions,
-            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJavaScriptLike(x.scriptKind) ? x.extension : undefined)
+            ...needJsExtensions ? allSupportedExtensions : supportedTSExtensions,
+            ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) ? x.extension : undefined)
         ];
 
         return deduplicate<string>(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
     }
 
-    function isJavaScriptLike(scriptKind: ScriptKind | undefined): boolean {
+    function isJSLike(scriptKind: ScriptKind | undefined): boolean {
         return scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX;
     }
 
-    export function hasJavaScriptFileExtension(fileName: string): boolean {
-        return some(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    export function hasJSFileExtension(fileName: string): boolean {
+        return some(supportedJSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function hasJavaScriptOrJsonFileExtension(fileName: string): boolean {
-        return supportedJavaScriptAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
+    export function hasJSOrJsonFileExtension(fileName: string): boolean {
+        return supportedJSAndJsonExtensions.some(ext => fileExtensionIs(fileName, ext));
     }
 
-    export function hasTypeScriptFileExtension(fileName: string): boolean {
-        return some(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
+    export function hasTSFileExtension(fileName: string): boolean {
+        return some(supportedTSExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
@@ -8136,12 +8187,12 @@ namespace ts {
     }
 
     /** True if an extension is one of the supported TypeScript extensions. */
-    export function extensionIsTypeScript(ext: Extension): boolean {
+    export function extensionIsTS(ext: Extension): boolean {
         return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
     }
 
-    export function resolutionExtensionIsTypeScriptOrJson(ext: Extension) {
-        return extensionIsTypeScript(ext) || ext === Extension.Json;
+    export function resolutionExtensionIsTSOrJson(ext: Extension) {
+        return extensionIsTS(ext) || ext === Extension.Json;
     }
 
     /**

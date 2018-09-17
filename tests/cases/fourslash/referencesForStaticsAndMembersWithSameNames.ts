@@ -3,8 +3,8 @@
 ////module FindRef4 {
 ////	module MixedStaticsClassTest {
 ////		export class Foo {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}bar|]: Foo;
-////			static [|{| "isWriteAccess": true, "isDefinition": true |}bar|]: Foo;
+////			[|{| "isDefinition": true |}bar|]: Foo;
+////			static [|{| "isDefinition": true |}bar|]: Foo;
 ////
 ////			public [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {
 ////			}

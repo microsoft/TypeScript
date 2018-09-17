@@ -10,7 +10,7 @@ module Outer {
 module Outer {
     export const enum A { X }
 >A : A
->X : A
+>X : A.X
 }
 
 module B {

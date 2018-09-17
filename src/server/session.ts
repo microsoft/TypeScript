@@ -266,8 +266,6 @@ namespace ts.server {
         getValue: (path: Path) => T,
         projects: Projects,
         action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
-        comparer?: (a: U, b: U) => number,
-        areEqual?: (a: U, b: U) => boolean,
     ): U[] {
         const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
@@ -276,10 +274,7 @@ namespace ts.server {
                 outputs.push(...flatMap(projects, project => action(project, value)));
             });
         }
-
-        return comparer
-            ? sortAndDeduplicate(outputs, comparer, areEqual)
-            : deduplicate(outputs, areEqual);
+        return deduplicate(outputs, equateValues);
     }
 
     function combineProjectOutputFromEveryProject<T>(projectService: ProjectService, action: (project: Project) => ReadonlyArray<T>, areEqual: (a: T, b: T) => boolean) {
@@ -1101,7 +1096,7 @@ namespace ts.server {
             return projectInfo;
         }
 
-        private getRenameInfo(args: protocol.FileLocationRequestArgs) {
+        private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             return project.getLanguageService().getRenameInfo(file, position);

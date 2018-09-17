@@ -22,6 +22,9 @@ abstract class AbstractClass {
 
     abstract method(num: number): void;
 
+    other = this.prop;
+    fn = () => this.prop;
+
     method2() {
         this.prop = this.prop + "!";
     }

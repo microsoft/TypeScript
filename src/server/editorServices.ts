@@ -291,7 +291,8 @@ namespace ts.server {
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root",
         FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
-        TypeRoots = "Type root directory"
+        TypeRoots = "Type root directory",
+        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
     }
 
     const enum ConfigFileWatcherStatus {
@@ -353,8 +354,16 @@ namespace ts.server {
         return !!(infoOrFileName as ScriptInfo).containingProjects;
     }
 
+    interface ScriptInfoInNodeModulesWatcher extends FileWatcher {
+        refCount: number;
+    }
+
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
+    }
+
+    function isScriptInfoWatchedFromNodeModules(info: ScriptInfo) {
+        return !info.isScriptOpen() && info.mTime !== undefined;
     }
 
     /*@internal*/
@@ -380,6 +389,7 @@ namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
@@ -487,7 +497,7 @@ namespace ts.server {
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
-            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(this.getExecutingFilePath(), "../typesMap.json") : opts.typesMapLocation;
+            this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
             this.syntaxOnly = opts.syntaxOnly;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
@@ -1447,14 +1457,14 @@ namespace ts.server {
 
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
-                if (hasTypeScriptFileExtension(fileName)) {
+                if (hasTSFileExtension(fileName)) {
                     continue;
                 }
 
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
@@ -1464,14 +1474,14 @@ namespace ts.server {
 
             return;
 
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
+            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
                 const files = getTop5LargestFiles(context);
 
                 return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
             }
-            function getTop5LargestFiles({ propertyReader, hasTypeScriptFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }) {
+            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
                 return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTypeScriptFileExtension(name))
+                    .filter(name => hasTSFileExtension(name))
                     .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
                     .sort((a, b) => b.size - a.size)
                     .slice(0, 5);
@@ -1923,16 +1933,95 @@ namespace ts.server {
             if (!info.isDynamicOrHasMixedContent() &&
                 (!this.globalCacheLocationDirectoryPath ||
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
-                const { fileName } = info;
-                info.fileWatcher = this.watchFactory.watchFilePath(
-                    this.host,
-                    fileName,
-                    (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
-                    PollingInterval.Medium,
-                    info.path,
-                    WatchType.ClosedScriptInfo
-                );
+                const indexOfNodeModules = info.path.indexOf("/node_modules/");
+                if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
+                    info.fileWatcher = this.watchFactory.watchFilePath(
+                        this.host,
+                        info.fileName,
+                        (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                        PollingInterval.Medium,
+                        info.path,
+                        WatchType.ClosedScriptInfo
+                    );
+                }
+                else {
+                    info.mTime = this.getModifiedTime(info);
+                    info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.path.substr(0, indexOfNodeModules) as Path);
+                }
             }
+        }
+
+        private watchClosedScriptInfoInNodeModules(dir: Path): ScriptInfoInNodeModulesWatcher {
+            // Watch only directory
+            const existing = this.scriptInfoInNodeModulesWatchers.get(dir);
+            if (existing) {
+                existing.refCount++;
+                return existing;
+            }
+
+            const watchDir = dir + "/node_modules" as Path;
+            const watcher = this.watchFactory.watchDirectory(
+                this.host,
+                watchDir,
+                (fileOrDirectory) => {
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    // Has extension
+                    Debug.assert(result.refCount > 0);
+                    if (watchDir === fileOrDirectoryPath) {
+                        this.refreshScriptInfosInDirectory(watchDir);
+                    }
+                    else {
+                        const info = this.getScriptInfoForPath(fileOrDirectoryPath);
+                        if (info) {
+                            if (isScriptInfoWatchedFromNodeModules(info)) {
+                                this.refreshScriptInfo(info);
+                            }
+                        }
+                        // Folder
+                        else if (!hasExtension(fileOrDirectoryPath)) {
+                            this.refreshScriptInfosInDirectory(fileOrDirectoryPath);
+                        }
+                    }
+                },
+                WatchDirectoryFlags.Recursive,
+                WatchType.NodeModulesForClosedScriptInfo
+            );
+            const result: ScriptInfoInNodeModulesWatcher = {
+                close: () => {
+                    if (result.refCount === 1) {
+                        watcher.close();
+                        this.scriptInfoInNodeModulesWatchers.delete(dir);
+                    }
+                    else {
+                        result.refCount--;
+                    }
+                },
+                refCount: 1
+            };
+            this.scriptInfoInNodeModulesWatchers.set(dir, result);
+            return result;
+        }
+
+        private getModifiedTime(info: ScriptInfo) {
+            return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+        }
+
+        private refreshScriptInfo(info: ScriptInfo) {
+            const mTime = this.getModifiedTime(info);
+            if (mTime !== info.mTime) {
+                const eventKind = getFileWatcherEventKind(info.mTime!, mTime);
+                info.mTime = mTime;
+                this.onSourceFileChanged(info.fileName, eventKind, info.path);
+            }
+        }
+
+        private refreshScriptInfosInDirectory(dir: Path) {
+            dir = dir + directorySeparator as Path;
+            this.filenameToScriptInfo.forEach(info => {
+                if (isScriptInfoWatchedFromNodeModules(info) && startsWith(info.path, dir)) {
+                    this.refreshScriptInfo(info);
+                }
+            });
         }
 
         private stopWatchingScriptInfo(info: ScriptInfo) {
