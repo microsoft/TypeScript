@@ -250,7 +250,7 @@ namespace ts {
         Blue = "\u001b[94m",
         Cyan = "\u001b[96m"
     }
-    const gutterStyleSequence = "\u001b[30;47m";
+    const gutterStyleSequence = "\u001b[7m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
@@ -442,6 +442,7 @@ namespace ts {
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: boolean,
+        projectReferences: ReadonlyArray<ProjectReference> | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
         if (!program || hasChangedAutomaticTypeDirectiveNames) {
@@ -450,6 +451,11 @@ namespace ts {
 
         // If number of files in the program do not match, it is not up-to-date
         if (program.getRootFileNames().length !== rootFileNames.length) {
+            return false;
+        }
+
+        // If project references dont match
+        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences)) {
             return false;
         }
 
@@ -759,7 +765,8 @@ namespace ts {
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
-            getProjectReferences
+            getProjectReferences,
+            getResolvedProjectReferences
         };
 
         verifyCompilerOptions();
@@ -1007,15 +1014,22 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-            const oldRefs = oldProgram.getProjectReferences();
+
+            // If array of references is changed, we cant resue old program
+            const oldProjectReferences = oldProgram.getProjectReferences();
+            if (!arrayIsEqualTo(oldProjectReferences!, projectReferences, projectReferenceIsEqualTo)) {
+                return oldProgram.structureIsReused = StructureIsReused.Not;
+            }
+
+            // Check the json files for the project references
+            const oldRefs = oldProgram.getResolvedProjectReferences();
             if (projectReferences) {
-                if (!oldRefs) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
-                }
+                // Resolved project referenced should be array if projectReferences provided are array
+                Debug.assert(!!oldRefs);
                 for (let i = 0; i < projectReferences.length; i++) {
-                    const oldRef = oldRefs[i];
+                    const oldRef = oldRefs![i];
+                    const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
                     if (oldRef) {
-                        const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
                         if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
                             // Resolved project reference has gone missing or changed
                             return oldProgram.structureIsReused = StructureIsReused.Not;
@@ -1023,16 +1037,15 @@ namespace ts {
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
-                        if (parseProjectReferenceConfigFile(projectReferences[i]) !== undefined) {
+                        if (newRef !== undefined) {
                             return oldProgram.structureIsReused = StructureIsReused.Not;
                         }
                     }
                 }
             }
             else {
-                if (oldRefs) {
-                    return oldProgram.structureIsReused = StructureIsReused.Not;
-                }
+                // Resolved project referenced should be undefined if projectReferences is undefined
+                Debug.assert(!oldRefs);
             }
 
             // check if program source files has changed in the way that can affect structure of the program
@@ -1219,7 +1232,7 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
-            resolvedProjectReferences = oldProgram.getProjectReferences();
+            resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
@@ -1257,8 +1270,12 @@ namespace ts {
             };
         }
 
-        function getProjectReferences() {
+        function getResolvedProjectReferences() {
             return resolvedProjectReferences;
+        }
+
+        function getProjectReferences() {
+            return projectReferences;
         }
 
         function getPrependNodes(): InputFiles[] {
@@ -1438,9 +1455,9 @@ namespace ts {
         function getSyntacticDiagnosticsForFile(sourceFile: SourceFile): ReadonlyArray<DiagnosticWithLocation> {
             // For JavaScript files, we report semantic errors for using TypeScript-only
             // constructs from within a JavaScript file as syntactic errors.
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 if (!sourceFile.additionalSyntacticDiagnostics) {
-                    sourceFile.additionalSyntacticDiagnostics = getJavaScriptSyntacticDiagnosticsForFile(sourceFile);
+                    sourceFile.additionalSyntacticDiagnostics = getJSSyntacticDiagnosticsForFile(sourceFile);
                 }
                 return concatenate(sourceFile.additionalSyntacticDiagnostics, sourceFile.parseDiagnostics);
             }
@@ -1538,7 +1555,7 @@ namespace ts {
             return true;
         }
 
-        function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
+        function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
             return runWithCancellationToken(() => {
                 const diagnostics: DiagnosticWithLocation[] = [];
                 let parent: Node = sourceFile;
@@ -1801,7 +1818,7 @@ namespace ts {
                 return;
             }
 
-            const isJavaScriptFile = isSourceFileJavaScript(file);
+            const isJavaScriptFile = isSourceFileJS(file);
             const isExternalModuleFile = isExternalModule(file);
 
             // file.imports may not be undefined if there exists dynamic import
@@ -2273,7 +2290,7 @@ namespace ts {
                     }
 
                     const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                    const isJsFile = !resolutionExtensionIsTypeScriptOrJson(resolution.extension);
+                    const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
                     const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile;
                     const resolvedFileName = resolution.resolvedFileName;
 
@@ -2295,7 +2312,7 @@ namespace ts {
                         && i < file.imports.length
                         && !elideImport
                         && !(isJsFile && !options.allowJs)
-                        && (isInJavaScriptFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
+                        && (isInJSFile(file.imports[i]) || !(file.imports[i].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
                         modulesWithElidedImports.set(file.path, true);
@@ -2341,7 +2358,7 @@ namespace ts {
 
         function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
-            const refPath = resolveProjectReferencePath(host, ref);
+            const refPath = resolveProjectReferencePath(ref);
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
@@ -2794,7 +2811,7 @@ namespace ts {
                 return containsPath(options.outDir, filePath, currentDirectory, !host.useCaseSensitiveFileNames());
             }
 
-            if (fileExtensionIsOneOf(filePath, supportedJavascriptExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
+            if (fileExtensionIsOneOf(filePath, supportedJSExtensions) || fileExtensionIs(filePath, Extension.Dts)) {
                 // Otherwise just check if sourceFile with the name exists
                 const filePathWithoutExtension = removeFileExtension(filePath);
                 return !!getSourceFileByPath((filePathWithoutExtension + Extension.Ts) as Path) ||
@@ -2820,18 +2837,20 @@ namespace ts {
         };
     }
 
-    export interface ResolveProjectReferencePathHost {
+    // For backward compatibility
+    /** @deprecated */ export interface ResolveProjectReferencePathHost {
         fileExists(fileName: string): boolean;
     }
+
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName {
-        if (!host.fileExists(ref.path)) {
-            return combinePaths(ref.path, "tsconfig.json") as ResolvedConfigFileName;
-        }
-        return ref.path as ResolvedConfigFileName;
+    export function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
+    /** @deprecated */ export function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePathHost | ProjectReference, ref?: ProjectReference): ResolvedConfigFileName {
+        const passedInRef = ref ? ref : hostOrRef as ProjectReference;
+        return resolveConfigFileProjectName(passedInRef.path);
     }
 
     /* @internal */

@@ -234,13 +234,17 @@ namespace ts {
             }
 
             if (symbolFlags & SymbolFlags.Value) {
-                const { valueDeclaration } = symbol;
-                if (!valueDeclaration ||
-                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules and assignment declarations
-                    symbol.valueDeclaration = node;
-                }
+                setValueDeclaration(symbol, node);
+            }
+        }
+
+        function setValueDeclaration(symbol: Symbol, node: Declaration): void {
+            const { valueDeclaration } = symbol;
+            if (!valueDeclaration ||
+                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
+                (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
+                // other kinds of value declarations take precedence over modules and assignment declarations
+                symbol.valueDeclaration = node;
             }
         }
 
@@ -288,7 +292,7 @@ namespace ts {
                     // module.exports = ...
                     return InternalSymbolName.ExportEquals;
                 case SyntaxKind.BinaryExpression:
-                    if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
+                    if (getAssignmentDeclarationKind(node as BinaryExpression) === AssignmentDeclarationKind.ModuleExports) {
                         // module.exports = ...
                         return InternalSymbolName.ExportEquals;
                     }
@@ -374,8 +378,8 @@ namespace ts {
                         // prototype symbols like methods.
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
-                    else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.JSContainer)) {
-                        // JSContainers are allowed to merge with variables, no matter what other flags they have.
+                    else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.Assignment)) {
+                        // Assignment declarations are allowed to merge with variables, no matter what other flags they have.
                         if (isNamedDeclaration(node)) {
                             node.name.parent = node;
                         }
@@ -461,7 +465,7 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                if (isJSDocTypeAlias(node)) Debug.assert(isInJavaScriptFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
+                if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypeAlias(node)) {
                     if (hasModifier(node, ModifierFlags.Default) && !getDeclarationName(node)) {
                         return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
@@ -2009,7 +2013,7 @@ namespace ts {
 
         function bindJSDoc(node: Node) {
             if (hasJSDocNodes(node)) {
-                if (isInJavaScriptFile(node)) {
+                if (isInJSFile(node)) {
                     for (const j of node.jsDoc!) {
                         bind(j);
                     }
@@ -2075,7 +2079,7 @@ namespace ts {
                     if (isSpecialPropertyDeclaration(node as PropertyAccessExpression)) {
                         bindSpecialPropertyDeclaration(node as PropertyAccessExpression);
                     }
-                    if (isInJavaScriptFile(node) &&
+                    if (isInJSFile(node) &&
                         file.commonJsModuleIndicator &&
                         isModuleExportsPropertyAccessExpression(node as PropertyAccessExpression) &&
                         !lookupSymbolForNameWorker(blockScopeContainer, "module" as __String)) {
@@ -2084,27 +2088,27 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                    const specialKind = getAssignmentDeclarationKind(node as BinaryExpression);
                     switch (specialKind) {
-                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                        case AssignmentDeclarationKind.ExportsProperty:
                             bindExportsPropertyAssignment(node as BinaryExpression);
                             break;
-                        case SpecialPropertyAssignmentKind.ModuleExports:
+                        case AssignmentDeclarationKind.ModuleExports:
                             bindModuleExportsAssignment(node as BinaryExpression);
                             break;
-                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                        case AssignmentDeclarationKind.PrototypeProperty:
                             bindPrototypePropertyAssignment((node as BinaryExpression).left as PropertyAccessEntityNameExpression, node);
                             break;
-                        case SpecialPropertyAssignmentKind.Prototype:
+                        case AssignmentDeclarationKind.Prototype:
                             bindPrototypeAssignment(node as BinaryExpression);
                             break;
-                        case SpecialPropertyAssignmentKind.ThisProperty:
+                        case AssignmentDeclarationKind.ThisProperty:
                             bindThisPropertyAssignment(node as BinaryExpression);
                             break;
-                        case SpecialPropertyAssignmentKind.Property:
+                        case AssignmentDeclarationKind.Property:
                             bindSpecialPropertyAssignment(node as BinaryExpression);
                             break;
-                        case SpecialPropertyAssignmentKind.None:
+                        case AssignmentDeclarationKind.None:
                             // Nothing to do
                             break;
                         default:
@@ -2184,7 +2188,7 @@ namespace ts {
                     return bindFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.CallExpression:
-                    if (isInJavaScriptFile(node)) {
+                    if (isInJSFile(node)) {
                         bindCallExpression(<CallExpression>node);
                     }
                     break;
@@ -2286,14 +2290,19 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
             }
             else {
-                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
+                const flags = exportAssignmentIsAlias(node)
                     // An export default clause with an EntityNameExpression or a class expression exports all meanings of that identifier or expression;
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
                 // If there is an `export default x;` alias declaration, can't `export default` anything else.
                 // (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+                const symbol = declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+
+                if (node.isExportEquals) {
+                    // Will be an error later, since the module already has other exports. Just make sure this has a valueDeclaration set.
+                    setValueDeclaration(symbol, node);
+                }
             }
         }
 
@@ -2361,7 +2370,7 @@ namespace ts {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             const symbol = forEachIdentifierInEntityName(lhs.expression, /*parent*/ undefined, (id, symbol) => {
                 if (symbol) {
-                    addDeclarationToSymbol(symbol, id, SymbolFlags.Module | SymbolFlags.JSContainer);
+                    addDeclarationToSymbol(symbol, id, SymbolFlags.Module | SymbolFlags.Assignment);
                 }
                 return symbol;
             });
@@ -2394,7 +2403,7 @@ namespace ts {
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
-            Debug.assert(isInJavaScriptFile(node));
+            Debug.assert(isInJSFile(node));
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -2482,7 +2491,7 @@ namespace ts {
             const lhs = node.left as PropertyAccessEntityNameExpression;
             // Class declarations in Typescript do not allow property declarations
             const parentSymbol = lookupSymbolForPropertyAccess(lhs.expression);
-            if (!isInJavaScriptFile(node) && !isFunctionSymbol(parentSymbol)) {
+            if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them
@@ -2515,19 +2524,21 @@ namespace ts {
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
             if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
                 // make symbols or add declarations for intermediate containers
-                const flags = SymbolFlags.Module | SymbolFlags.JSContainer;
-                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.JSContainer;
+                const flags = SymbolFlags.Module | SymbolFlags.Assignment;
+                const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
                 namespaceSymbol = forEachIdentifierInEntityName(propertyAccess.expression, namespaceSymbol, (id, symbol, parent) => {
                     if (symbol) {
                         addDeclarationToSymbol(symbol, id, flags);
                         return symbol;
                     }
                     else {
-                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
+                        const table = parent ? parent.exports! :
+                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                        return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
             }
-            if (!namespaceSymbol || !isJavascriptContainer(namespaceSymbol)) {
+            if (!namespaceSymbol || !isExpandoSymbol(namespaceSymbol)) {
                 return;
             }
 
@@ -2536,14 +2547,14 @@ namespace ts {
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            const isMethod = isFunctionLikeDeclaration(getAssignedJavascriptInitializer(propertyAccess)!);
+            const isMethod = isFunctionLikeDeclaration(getAssignedExpandoInitializer(propertyAccess)!);
             const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
             const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
-            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.JSContainer, excludes & ~SymbolFlags.JSContainer);
+            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
         }
 
         /**
-         * Javascript containers are:
+         * Javascript expando values are:
          * - Functions
          * - classes
          * - namespaces
@@ -2552,7 +2563,7 @@ namespace ts {
          * -                       with empty object literals
          * -                       with non-empty object literals if assigned to the prototype property
          */
-        function isJavascriptContainer(symbol: Symbol): boolean {
+        function isExpandoSymbol(symbol: Symbol): boolean {
             if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.NamespaceModule)) {
                 return true;
             }
@@ -2565,7 +2576,7 @@ namespace ts {
             init = init && getRightMostAssignedExpression(init);
             if (init) {
                 const isPrototypeAssignment = isPrototypeAccess(isVariableDeclaration(node) ? node.name : isBinaryExpression(node) ? node.left : node);
-                return !!getJavascriptInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);
+                return !!getExpandoInitializer(isBinaryExpression(init) && init.operatorToken.kind === SyntaxKind.BarBarToken ? init.right : init, isPrototypeAssignment);
             }
             return false;
         }
@@ -2657,7 +2668,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                const isEnum = !!getJSDocEnumTag(node);
+                const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
                 const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
                 const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
@@ -2891,6 +2902,9 @@ namespace ts {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
+        }
+        if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
+            return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }

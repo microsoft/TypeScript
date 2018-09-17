@@ -83,3 +83,10 @@ const obj = { foo: (a, b) => a + b };
 >a : Symbol(a, Decl(jsdocInTypeScript.ts, 47, 20))
 >b : Symbol(b, Decl(jsdocInTypeScript.ts, 47, 22))
 
+/** @enum {string} */
+var E = {};
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+
+E[""];
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+

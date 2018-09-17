@@ -2088,6 +2088,30 @@
         "category": "Error",
         "code": 2577
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+        "category": "Error",
+        "code": 2580
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+        "category": "Error",
+        "code": 2581
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+        "category": "Error",
+        "code": 2582
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2583
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2584
+    },
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2585
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2456,6 +2480,10 @@
     "Index '{0}' is out-of-bounds in tuple of length {1}.": {
         "category": "Error",
         "code": 2733
+    },
+    "It is highly likely that you are missing a semicolon.": {
+        "category": "Error",
+        "code": 2734
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2920,7 +2948,10 @@
         "category": "Error",
         "code": 5072
     },
-
+    "Build option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5073
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3716,6 +3747,14 @@
         "category": "Message",
         "code": 6211
     },
+    "Did you mean to call this expression?": {
+        "category": "Message",
+        "code": 6212
+    },
+    "Did you mean to use 'new' with this expression?": {
+        "category": "Message",
+        "code": 6213
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3837,10 +3876,6 @@
     "Options '{0}' and '{1}' cannot be combined.": {
         "category": "Error",
         "code": 6370
-    },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -4616,7 +4651,7 @@
         "category": "Message",
         "code": 95064
     },
-    "Convert to async function":{
+    "Convert to async function": {
         "category": "Message",
         "code": 95065
     },

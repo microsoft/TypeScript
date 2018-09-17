@@ -35,7 +35,7 @@ node_modules/adonis-framework/src/Env/index.js(54,15): error TS2304: Cannot find
 node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/src/Event/index.js(128,5): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
+node_modules/adonis-framework/src/Event/index.js(128,12): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
   Property 'pop' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.

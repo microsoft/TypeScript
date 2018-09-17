@@ -48,6 +48,10 @@ import M = N; // Error: @typedef does not create namespaces in TypeScript code.
  */
 const obj = { foo: (a, b) => a + b };
 
+/** @enum {string} */
+var E = {};
+E[""];
+
 
 //// [jsdocInTypeScript.js]
 var T = /** @class */ (function () {
@@ -79,3 +83,6 @@ var M = N; // Error: @typedef does not create namespaces in TypeScript code.
  * @type {{foo: (function(string, string): string)}}
  */
 var obj = { foo: function (a, b) { return a + b; } };
+/** @enum {string} */
+var E = {};
+E[""];

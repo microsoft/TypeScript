@@ -83,7 +83,7 @@ namespace ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTypeScriptExtensions) {
+            for (const ext of supportedTSExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -96,7 +96,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTypeScriptExtensions) {
+                for (const e of supportedTSExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -137,7 +137,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions.length);
             }
         }
 

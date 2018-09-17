@@ -1,12 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-//// type A = 'fooooo' | 'barrrrr';
+//// type A = 'foo' | 'bar' | 'baz';
 //// type B<T extends A> = {};
-//// type C = B<'fooooo' | '/**/'>
+//// type C = B<'foo' | '/**/'>
 
-
-goTo.marker();
-verify.completionListContains("fooooo");
-verify.completionListContains("barrrrr");
+verify.completions({ marker: "", exact: ["bar", "baz"] });
 edit.insert("b");
-verify.completionListContains("barrrrr");
+verify.completions({ exact: ["bar", "baz"] });
+edit.insert("ar");
+verify.completions({ exact: ["bar", "baz"] });
