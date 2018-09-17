@@ -6441,13 +6441,6 @@ namespace ts {
                                     indent += asterisk.length;
                                 }
                                 break;
-                            case SyntaxKind.Identifier:
-                                // Anything else is doc comment text. We just save it. Because it
-                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
-                                // line break.
-                                pushComment(scanner.getTokenText());
-                                state = JSDocState.SavingComments;
-                                break;
                             case SyntaxKind.WhitespaceTrivia:
                                 // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                                 const whitespace = scanner.getTokenText();
@@ -6462,7 +6455,9 @@ namespace ts {
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
                             default:
-                                // anything other than whitespace or asterisk at the beginning of the line starts the comment text
+                                // Anything else is doc comment text. We just save it. Because it
+                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                                // line break.
                                 state = JSDocState.SavingComments;
                                 pushComment(scanner.getTokenText());
                                 break;
