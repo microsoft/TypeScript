@@ -101,22 +101,8 @@ namespace ts {
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
-        return !oldOptions ||
-            (oldOptions.module !== newOptions.module) ||
-            (oldOptions.moduleResolution !== newOptions.moduleResolution) ||
-            (oldOptions.noResolve !== newOptions.noResolve) ||
-            (oldOptions.target !== newOptions.target) ||
-            (oldOptions.noLib !== newOptions.noLib) ||
-            (oldOptions.jsx !== newOptions.jsx) ||
-            (oldOptions.allowJs !== newOptions.allowJs) ||
-            (oldOptions.rootDir !== newOptions.rootDir) ||
-            (oldOptions.configFilePath !== newOptions.configFilePath) ||
-            (oldOptions.baseUrl !== newOptions.baseUrl) ||
-            (oldOptions.maxNodeModuleJsDepth !== newOptions.maxNodeModuleJsDepth) ||
-            !arrayIsEqualTo(oldOptions.lib, newOptions.lib) ||
-            !arrayIsEqualTo(oldOptions.typeRoots, newOptions.typeRoots) ||
-            !arrayIsEqualTo(oldOptions.rootDirs, newOptions.rootDirs) ||
-            !equalOwnProperties(oldOptions.paths, newOptions.paths);
+        return oldOptions.configFilePath !== newOptions.configFilePath || moduleResolutionOptionDeclarations.some(o =>
+            !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
     /**
@@ -538,14 +524,14 @@ namespace ts {
         return emitNode && emitNode.flags || 0;
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator)) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        const escapeText = getEmitFlags(node) & EmitFlags.NoAsciiEscaping ? escapeString : escapeNonAsciiString;
+        const escapeText = neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString : escapeNonAsciiString;
 
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
@@ -7106,13 +7092,13 @@ namespace ts {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
     }
 
-    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions) {
-        if (oldOptions === newOptions) {
-            return false;
-        }
+    export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return oldOptions !== newOptions &&
+            semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+    }
 
-        return optionDeclarations.some(option => (!!option.strictFlag && getStrictOptionValue(newOptions, option.name as StrictOptionName) !== getStrictOptionValue(oldOptions, option.name as StrictOptionName)) ||
-            (!!option.affectsSemanticDiagnostics && !newOptions[option.name] !== !oldOptions[option.name]));
+    export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
+        return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
 
     export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
@@ -8379,5 +8365,9 @@ namespace ts {
         // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
         // '/// <reference no-default-lib="true"/>' directive.
         return options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib;
+    }
+
+    export function isJsonEqual(a: unknown, b: unknown): boolean {
+        return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
     }
 }
