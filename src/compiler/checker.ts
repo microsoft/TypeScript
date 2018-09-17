@@ -20173,18 +20173,15 @@ namespace ts {
                 assigned || inferred;
         }
 
-        function getAssignedClassType(symbol: Symbol) {
+        function getAssignedClassType(symbol: Symbol): Type | undefined {
             const decl = symbol.valueDeclaration;
             const assignmentSymbol = decl && decl.parent &&
                 (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
                  isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
-            if (assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.has("prototype" as __String)) {
-                const init = getAssignedJSPrototype(assignmentSymbol.exports.get("prototype" as __String)!.valueDeclaration);
-                if (init) {
-                    return checkExpression(init);
-                }
-            }
+            const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
+            const init = prototype && getAssignedJSPrototype(prototype.valueDeclaration);
+            return init ? checkExpression(init) : undefined;
         }
 
         function getAssignedJSPrototype(node: Node) {
