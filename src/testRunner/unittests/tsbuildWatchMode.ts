@@ -486,11 +486,7 @@ export function gfoo() {
                     solutionBuilder.buildInvalidatedProject();
 
                     host.checkTimeoutQueueLengthAndRun(1);
-                    checkOutputErrorsIncremental(host, [
-                        // TODO: #26036
-                        // The error is reported in d.ts file because it isnt resolved from ts file path, but is resolved from .d.ts file
-                        "sample1/logic/decls/index.d.ts(2,22): error TS2307: Cannot find module '../core/anotherModule'.\n"
-                    ]);
+                    checkOutputErrorsIncremental(host, emptyArray);
                     checkProgramActualFiles(watch().getProgram(), [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
                 });
             });

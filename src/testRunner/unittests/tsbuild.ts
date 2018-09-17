@@ -3,7 +3,7 @@ namespace ts {
     export namespace Sample1 {
         tick();
         const projFs = loadProjectFromDisk("tests/projects/sample1");
-
+        const sample1ProjectOutput = loadOutputProjectFromDisk("sample1");
         const allExpectedOutputs = ["/src/tests/index.js",
             "/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map",
             "/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
@@ -17,11 +17,34 @@ namespace ts {
                 host.clearDiagnostics();
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(/*empty*/);
+                // Check for outputs
+                verifyOutputsFs(fs, sample1ProjectOutput, "/src");
+            });
 
-                // Check for outputs. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+            it("builds correctly when outDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, outDir: "outDir" },
+                    references: [{ path: "../core" }]
+                }));
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                verifyOutputs(fs, "sample1WithLogicOutDir");
+            });
+
+            it("builds correctly when declarationDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, declarationDir: "out/decls" },
+                    references: [{ path: "../core" }]
+                }));
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                verifyOutputs(fs, "sample1WithLogicDeclarationDir");
             });
         });
 
@@ -34,9 +57,7 @@ namespace ts {
                 host.assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
 
                 // Check for outputs to not be written. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
-                }
+                verifyOutputsNotExistOnFs(fs, sample1ProjectOutput, "/src");
             });
 
             it("indicates that it would skip builds during a dry build", () => {
@@ -62,14 +83,10 @@ namespace ts {
                 const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
                 // Verify they exist
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsFs(fs, sample1ProjectOutput, "/src");
                 builder.cleanAllProjects();
                 // Verify they are gone
-                for (const output of allExpectedOutputs) {
-                    assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
-                }
+                verifyOutputsNotExistOnFs(fs, sample1ProjectOutput, "/src");
                 // Subsequent clean shouldn't throw / etc
                 builder.cleanAllProjects();
             });
@@ -528,5 +545,51 @@ export class cNew {}`);
         });
         fs.makeReadonly();
         return fs;
+    }
+
+    function loadOutputProjectFromDisk(project: string): vfs.FileSystem {
+        const resolver = vfs.createResolver(Harness.IO);
+        const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
+            files: {
+                ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), `tests/baselines/reference/projects/${project}`), resolver)
+            },
+            cwd: "/",
+            time,
+        });
+        fs.makeReadonly();
+        return fs;
+    }
+
+    function verifyOutputs(buildFs: vfs.FileSystem, expectedOutputProject: string) {
+        const fs = loadOutputProjectFromDisk(expectedOutputProject);
+        verifyOutputsFs(buildFs, fs, "/src");
+    }
+
+    function verifyOutputsFs(buildFs: vfs.FileSystem, expectedOutputFs: vfs.FileSystem, directory: string) {
+        withOutputFs(expectedOutputFs, directory, outputFile => {
+            const actual = buildFs.readFileSync(outputFile, "utf8");
+            const expected = expectedOutputFs.readFileSync(outputFile, "utf8");
+            assert.equal(actual, expected, `File contents of ${outputFile} expected to be:
+actual: ${actual}
+expected: ${expected}`);
+        });
+    }
+
+    function verifyOutputsNotExistOnFs(buildFs: vfs.FileSystem, expectedOutputFs: vfs.FileSystem, directory: string) {
+        withOutputFs(expectedOutputFs, directory, outputFile =>
+            assert(!buildFs.existsSync(outputFile), `Expect file ${outputFile} to not exist`));
+    }
+
+    function withOutputFs(expectedOutputFs: vfs.FileSystem, directory: string, actionOnFile: (outputFile: string) => void) {
+        const children = expectedOutputFs.readdirSync(directory);
+        for (const child of children) {
+            const fullName = `${directory}/${child}`;
+            if (expectedOutputFs.statSync(fullName).isFile()) {
+                actionOnFile(fullName);
+            }
+            else {
+                withOutputFs(expectedOutputFs, fullName, actionOnFile);
+            }
+        }
     }
 }
