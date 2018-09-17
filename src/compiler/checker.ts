@@ -640,7 +640,7 @@ namespace ts {
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<RelationComparisonResult>();
 
-        type TypeSystemEntity = Symbol | Type | Signature;
+        type TypeSystemEntity = Node | Symbol | Type | Signature;
 
         const enum TypeSystemPropertyName {
             Type,
@@ -648,6 +648,7 @@ namespace ts {
             DeclaredType,
             ResolvedReturnType,
             ImmediateBaseConstraint,
+            EnumTagType,
         }
 
         const enum CheckMode {
@@ -3470,8 +3471,8 @@ namespace ts {
                             const arity = getTypeReferenceArity(type);
                             const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, arity), context);
                             const hasRestElement = (<TupleType>type.target).hasRestElement;
-                            if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
-                                for (let i = (<TupleType>type.target).minLength; i < arity; i++) {
+                            if (tupleConstituentNodes) {
+                                for (let i = (<TupleType>type.target).minLength; i < Math.min(arity, tupleConstituentNodes.length); i++) {
                                     tupleConstituentNodes[i] = hasRestElement && i === arity - 1 ?
                                         createRestTypeNode(createArrayTypeNode(tupleConstituentNodes[i])) :
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
@@ -4475,6 +4476,8 @@ namespace ts {
             switch (propertyName) {
                 case TypeSystemPropertyName.Type:
                     return !!getSymbolLinks(<Symbol>target).type;
+                case TypeSystemPropertyName.EnumTagType:
+                    return !!(getNodeLinks(target as JSDocEnumTag).resolvedEnumType);
                 case TypeSystemPropertyName.DeclaredType:
                     return !!getSymbolLinks(<Symbol>target).declaredType;
                 case TypeSystemPropertyName.ResolvedBaseConstructorType:
@@ -8252,9 +8255,18 @@ namespace ts {
             }
 
             // JS are 'string' or 'number', not an enum type.
-            const enumTag = symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
+            const enumTag = isInJSFile(node) && symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
             if (enumTag) {
-                return enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
+                const links = getNodeLinks(enumTag);
+                if (!pushTypeResolution(enumTag, TypeSystemPropertyName.EnumTagType)) {
+                    return errorType;
+                }
+                let type = enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
+                if (!popTypeResolution()) {
+                    type = errorType;
+                    error(node, Diagnostics.Enum_type_0_circularly_references_itself, symbolToString(symbol));
+                }
+                return (links.resolvedEnumType = type);
             }
 
             // Get type from reference to named type that cannot be generic (enum or type parameter)
@@ -13373,7 +13385,7 @@ namespace ts {
             let propagationType: Type;
             inferFromTypes(originalSource, originalTarget);
 
-            function inferFromTypes(source: Type, target: Type) {
+            function inferFromTypes(source: Type, target: Type): void {
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
@@ -13508,6 +13520,9 @@ namespace ts {
                     inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    inferFromTypes(source, getUnionType([getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)]));
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     const targetTypes = (<UnionOrIntersectionType>target).types;
                     let typeVariableCount = 0;
@@ -13541,7 +13556,14 @@ namespace ts {
                 }
                 else {
                     if (!(priority & InferencePriority.NoConstraints && source.flags & (TypeFlags.Intersection | TypeFlags.Instantiable))) {
-                        source = getApparentType(source);
+                        const apparentSource = getApparentType(source);
+                        // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
+                        // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
+                        // with the simplified source.
+                        if (apparentSource !== source && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                            return inferFromTypes(apparentSource, target);
+                        }
+                        source = apparentSource;
                     }
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                         const key = source.id + "," + target.id;
@@ -13747,7 +13769,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
+            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function isObjectLiteralType(type: Type) {
@@ -14734,6 +14756,14 @@ namespace ts {
                 // reference 'x.y.z', we may be at an assignment to 'x.y' or 'x'. In that case,
                 // return the declared type.
                 if (containsMatchingReference(reference, node)) {
+                    // A matching dotted name might also be an expando property on a function *expression*,
+                    // in which case we continue control flow analysis back to the function's declaration
+                    if (isVariableDeclaration(node) && (isInJSFile(node) || isVarConst(node))) {
+                        const init = getDeclaredExpandoInitializer(node);
+                        if (init && (init.kind === SyntaxKind.FunctionExpression || init.kind === SyntaxKind.ArrowFunction)) {
+                            return getTypeAtFlowNode(flow.antecedent);
+                        }
+                    }
                     return declaredType;
                 }
                 // Assignment doesn't affect reference
@@ -18208,7 +18238,7 @@ namespace ts {
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && isThisProperty(node) && symbolHasNonMethodDeclaration(prop)) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-                if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node, declaringClassDeclaration)) {
+                if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node)) {
                     error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
                     return false;
                 }
@@ -18394,6 +18424,9 @@ namespace ts {
                         assumeUninitialized = true;
                     }
                 }
+            }
+            else if (strictNullChecks && prop && prop.valueDeclaration && isPropertyAccessExpression(prop.valueDeclaration) && getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration)) {
+                assumeUninitialized = true;
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
@@ -20192,18 +20225,15 @@ namespace ts {
                 assigned || inferred;
         }
 
-        function getAssignedClassType(symbol: Symbol) {
+        function getAssignedClassType(symbol: Symbol): Type | undefined {
             const decl = symbol.valueDeclaration;
             const assignmentSymbol = decl && decl.parent &&
                 (isFunctionDeclaration(decl) && getSymbolOfNode(decl) ||
                  isBinaryExpression(decl.parent) && getSymbolOfNode(decl.parent.left) ||
                  isVariableDeclaration(decl.parent) && getSymbolOfNode(decl.parent));
-            if (assignmentSymbol) {
-                const prototype = forEach(assignmentSymbol.declarations, getAssignedJSPrototype);
-                if (prototype) {
-                    return checkExpression(prototype);
-                }
-            }
+            const prototype = assignmentSymbol && assignmentSymbol.exports && assignmentSymbol.exports.get("prototype" as __String);
+            const init = prototype && getAssignedJSPrototype(prototype.valueDeclaration);
+            return init ? checkExpression(init) : undefined;
         }
 
         function getAssignedJSPrototype(node: Node) {
@@ -27419,12 +27449,12 @@ namespace ts {
             return result;
         }
 
-        function isNodeUsedDuringClassInitialization(node: Node, classDeclaration: ClassLikeDeclaration) {
+        function isNodeUsedDuringClassInitialization(node: Node) {
             return !!findAncestor(node, element => {
-                if ((isConstructorDeclaration(element) && nodeIsPresent(element.body) || isPropertyDeclaration(element)) && element.parent === classDeclaration) {
+                if (isConstructorDeclaration(element) && nodeIsPresent(element.body) || isPropertyDeclaration(element)) {
                     return true;
                 }
-                else if (element === classDeclaration || isFunctionLikeDeclaration(element)) {
+                else if (isClassLike(element) || isFunctionLikeDeclaration(element)) {
                     return "quit";
                 }
 

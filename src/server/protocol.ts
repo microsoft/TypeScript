@@ -1123,6 +1123,9 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers: string;
+
+        /** Span of text to rename. */
+        triggerSpan: TextSpan;
     }
 
     /**

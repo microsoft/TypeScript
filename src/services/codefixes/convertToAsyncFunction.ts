@@ -397,7 +397,7 @@ namespace ts.codefix {
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
-    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier | undefined, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
+    function getTransformationBody(func: Expression, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier | undefined, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
 
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
@@ -427,13 +427,14 @@ namespace ts.codefix {
                 return varDeclOrAssignment;
 
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ArrowFunction: {
+                const funcBody = (func as FunctionExpression | ArrowFunction).body;
                 // Arrow functions with block bodies { } will enter this control flow
-                if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
+                if (isBlock(funcBody)) {
                     let refactoredStmts: Statement[] = [];
                     let seenReturnStatement = false;
 
-                    for (const statement of func.body.statements) {
+                    for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
                         }
@@ -450,7 +451,6 @@ namespace ts.codefix {
                         removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer, seenReturnStatement);
                 }
                 else {
-                    const funcBody = cast((<ArrowFunction>func).body, isExpression);
                     const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody));
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
@@ -473,6 +473,7 @@ namespace ts.codefix {
                         return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody))]);
                     }
                 }
+            }
             default:
                 // If no cases apply, we've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
                 codeActionSucceeded = false;
