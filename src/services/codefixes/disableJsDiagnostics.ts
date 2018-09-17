@@ -12,7 +12,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, span, host, formatContext } = context;
 
-            if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+            if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
                 return undefined;
             }
 

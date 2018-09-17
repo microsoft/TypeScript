@@ -654,7 +654,7 @@ interface Array<T> {}`
             invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
         }
 
-        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
+        private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
             invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath))!, ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 

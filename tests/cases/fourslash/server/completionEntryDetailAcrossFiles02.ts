@@ -15,6 +15,6 @@
 //// a.fo/*2*/
 
 verify.completions(
-    { marker: "1", includes: { name: "foo", text: "var foo: (p1: string) => void", documentation: "Modify the parameter" } },
-    { marker: "2", exact: { name: "foo", text: "(property) a.foo: (p1: string) => void", documentation: "Modify the parameter" } },
+    { marker: "1", includes: { name: "foo", text: "var foo: (p1: string) => void", documentation: "Modify the parameter", tags: [{ name: "param", text: "p1" }] } },
+    { marker: "2", exact: { name: "foo", text: "(property) a.foo: (p1: string) => void", documentation: "Modify the parameter", tags: [{ name: "param", text: "p1" }] } },
 );
