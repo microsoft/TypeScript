@@ -421,6 +421,15 @@ function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then( () => console.log("almost done") ).then( () => console.log("done") );
 }`
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs4", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res(){
+    console.log("done");
+}`
+        );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_Method", `
 class Parser {
     [#|f|]():Promise<void> {
