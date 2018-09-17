@@ -1,0 +1,16 @@
+{
+    "files": [
+        "Jakefile.js",
+        "Gulpfile.js"
+    ],
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "target": "esnext",
+        // TODO: "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noEmit": true,
+        "types": []
+    },
+}

@@ -24,11 +24,7 @@ else if (process.env.PATH !== undefined) {
 
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
-const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
-
 const defaultTestTimeout = 40000;
-
-let useDebugMode = true;
 
 const TaskNames = {
     local: "local",
@@ -114,19 +110,6 @@ const ConfigFileFor = {
     typescriptServices: "built/local/typescriptServices.tsconfig.json",
     tsserverLibrary: "built/local/tsserverlibrary.tsconfig.json",
 };
-
-const ExpectedLKGFiles = [
-    "tsc.js",
-    "tsserver.js",
-    "typescriptServices.js",
-    "typescriptServices.d.ts",
-    "typescript.js",
-    "typescript.d.ts",
-    "cancellationToken.js",
-    "typingsInstaller.js",
-    "protocol.d.ts",
-    "watchGuard.js"
-];
 
 directory(Paths.builtLocal);
 
@@ -274,16 +257,6 @@ task(TaskNames.publishInsiders, [TaskNames.coreBuild, TaskNames.configureInsider
     var cmd = "npm publish --tag insiders";
     exec(cmd, () => complete());
 }, { async: true });
-
-desc("Sets the release mode flag");
-task("release", function () {
-    useDebugMode = false;
-});
-
-desc("Clears the release mode flag");
-task("setDebugMode", function () {
-    useDebugMode = true;
-});
 
 desc("Generates localized diagnostic messages");
 task(TaskNames.localize, [Paths.generatedLCGFile]);
@@ -520,7 +493,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     let testTimeout = process.env.timeout || defaultTestTimeout;
-    const debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     const inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     const runners = process.env.runners || process.env.runner || process.env.ru;
     const tests = process.env.test || process.env.tests || process.env.t;
@@ -592,7 +564,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
             runLinterAndComplete();
-        }, function (e, status) {
+        }, function (_e, status) {
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
             finish(status);
@@ -608,7 +580,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
             runLinterAndComplete();
-        }, function (e, status) {
+        }, function (_e, status) {
             // Tests failed
             process.env.NODE_ENV = savedNodeEnv;
             Travis.measure(startTime);
@@ -709,19 +681,6 @@ const Travis = {
         console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
     }
 };
-
-function buildLocalizedTargets() {
-    /**
-     * The localization target produces the two following transformations:
-     *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
-     *       convert localized resources into a .json file the compiler can understand
-     *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
-     *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
-     */
-    const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
-        .map(f => path.join(Paths.builtLocal,f))
-        .concat(path.dirname(Paths.generatedLCGFile));
-}
 
 function toNs(diff) {
     return diff[0] * 1e9 + diff[1];
@@ -842,10 +801,6 @@ function concatenateFiles(destinationFile, sourceFiles, extraContent) {
     fs.writeFileSync(temp, text);
     // Move the file to the final destination
     fs.renameSync(temp, destinationFile);
-}
-
-function appendToFile(path, content) {
-    fs.writeFileSync(path, readFileSync(path) + "\r\n" + content);
 }
 
 /**

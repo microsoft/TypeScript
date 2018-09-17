@@ -26,7 +26,7 @@ const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
 const prepend = require("./scripts/build/prepend");
 const { removeSourceMaps } = require("./scripts/build/sourcemaps");
-const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex");
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -121,7 +121,7 @@ const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt
     .map(f => `built/local/${f}/diagnosticMessages.generated.json`)
     .concat(generatedLCGFile);
 
-gulp.task(generatedLCGFile, /*help*/ false, [generateLocalizedDiagnosticMessagesJs, diagnosticInformationMapTs], (done) => {
+gulp.task(generatedLCGFile, /*help*/ false, [generateLocalizedDiagnosticMessagesJs, diagnosticInformationMapTs], () => {
     if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
         return exec(host, [generateLocalizedDiagnosticMessagesJs, "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
     }
@@ -435,7 +435,7 @@ gulp.task(
 // Instrumented compiler
 const loggedIOTs = "src/harness/loggedIO.ts";
 const loggedIOJs = "built/local/loggedIO.js";
-gulp.task(loggedIOJs, /*help*/ false, [], (done) => {
+gulp.task(loggedIOJs, /*help*/ false, [], () => {
     return mkdirp("built/local/temp")
         .then(() => exec(host, ["lib/tsc.js", "--types", "--target es5", "--lib es5", "--outdir", "built/local/temp", loggedIOTs]))
         .then(() => { fs.renameSync(path.join("built/local/temp", "/harness/loggedIO.js"), loggedIOJs); })
@@ -585,7 +585,7 @@ gulp.task(
                         project.waitForWorkToStart().then(() => {
                             source.cancel();
                         });
-                    
+
                         if (cmdLineOptions.tests || cmdLineOptions.failed) {
                             await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
                         }
