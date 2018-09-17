@@ -14,17 +14,10 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
     });
 
-
-    /*
-        custom type to encapsulate information for variable declarations synthesized in the refactor
-        numberOfUsesOriginal - number of times the variable should be assigned in the refactor
-        numberOfUsesSynthesized - count of how many times the variable has been assigned so far
-        At the end of the refactor, numberOfUsesOriginal should === numberOfUsesSynthesized
-    */
     interface SynthIdentifier {
         identifier: Identifier;
         types: Type[];
-        numberOfAssignmentsOriginal: number;
+        numberOfAssignmentsOriginal: number; // number of times the variable should be assigned in the refactor
     }
 
     interface SymbolAndIdentifier {
@@ -380,7 +373,7 @@ namespace ts.codefix {
         const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
         if (hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
-            return createVariableDeclarationOrAssignment(prevArgName!, createAwait(node), transformer).concat(); // hack to make the types match
+            return createTransformedStatement(prevArgName!, createAwait(node), transformer).concat(); // hack to make the types match
         }
         else if (!hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
@@ -389,7 +382,7 @@ namespace ts.codefix {
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+    function createTransformedStatement(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
         if (!prevArgName || prevArgName.identifier.text.length === 0) {
             // if there's no argName to assign to, there still might be side effects
             return createNodeArray([createStatement(rightHandSide)]);
@@ -429,7 +422,7 @@ namespace ts.codefix {
                     break;
                 }
                 const returnType = callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, createAwait(synthCall), transformer);
+                const varDeclOrAssignment = createTransformedStatement(prevArgName, createAwait(synthCall), transformer);
                 if (prevArgName) {
                     prevArgName.types.push(returnType);
                 }
@@ -471,12 +464,12 @@ namespace ts.codefix {
                         const type = transformer.checker.getTypeAtLocation(func);
                         const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
                         const rightHandSide = getSynthesizedDeepClone(funcBody);
-                        const possiblyAwaitedRightHandSide = isPromiseReturningExpression(funcBody, transformer.checker) ? createAwait(rightHandSide) : rightHandSide;
-                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName, possiblyAwaitedRightHandSide, transformer);
+                        const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
+                        const transformedStatement = createTransformedStatement(prevArgName, possiblyAwaitedRightHandSide, transformer);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
                         }
-                        return varDeclOrAssignment;
+                        return transformedStatement;
                     }
                     else {
                         return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody))]);

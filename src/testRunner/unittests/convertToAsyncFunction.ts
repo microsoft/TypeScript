@@ -416,6 +416,11 @@ function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then( () => console.log("done") );
 }`
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs3", `
+function [#|f|](): Promise<void> {
+    return fetch('https://typescriptlang.org').then( () => console.log("almost done") ).then( () => console.log("done") );
+}`
+        );
         _testConvertToAsyncFunction("convertToAsyncFunction_Method", `
 class Parser {
     [#|f|]():Promise<void> {
@@ -1216,6 +1221,12 @@ function [#|f|]() {
 }
 `);
 
+
+_testConvertToAsyncFunction("convertToAsyncFunction_nestedPromises", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(x => Promise.resolve(3).then(y => Promise.resolve(x.statusText.length + y)));
+}
+`);
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {
