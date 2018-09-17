@@ -9,8 +9,8 @@ function res(){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f() {
-    const result_1 = await fetch('https://typescriptlang.org');
-    return res(result_1);
+    const result = await fetch('https://typescriptlang.org');
+    return res(result);
 }
 function res(){
     console.log("done");

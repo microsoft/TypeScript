@@ -172,7 +172,7 @@ namespace ts.codefix {
 
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                 // Note - the choice of the last call signature is arbitrary
-                if (lastCallSignature && !synthNamesMap.has(symbolIdString)) {
+                if (lastCallSignature && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
                     const firstParameter = firstOrUndefined(lastCallSignature.parameters);
                     const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
