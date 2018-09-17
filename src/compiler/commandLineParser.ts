@@ -1993,7 +1993,7 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile!, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors);
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, resolutionStack, errors);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
                 const raw = ownConfig.raw;
@@ -2134,7 +2134,7 @@ namespace ts {
     }
 
     function getExtendedConfig(
-        sourceFile: TsConfigSourceFile,
+        sourceFile: TsConfigSourceFile | undefined,
         extendedConfigPath: string,
         host: ParseConfigHost,
         basePath: string,
@@ -2143,7 +2143,12 @@ namespace ts {
     ): ParsedTsconfig | undefined {
         const extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
         if (sourceFile) {
-            (sourceFile.extendedSourceFiles || (sourceFile.extendedSourceFiles = [])).push(extendedResult.fileName);
+            if (sourceFile.extendedSourceFiles) {
+                pushIfUnique(sourceFile.extendedSourceFiles, extendedResult.fileName);
+            }
+            else {
+                sourceFile.extendedSourceFiles = [extendedResult.fileName];
+            }
         }
         if (extendedResult.parseDiagnostics.length) {
             errors.push(...extendedResult.parseDiagnostics);
@@ -2153,8 +2158,10 @@ namespace ts {
         const extendedDirname = getDirectoryPath(extendedConfigPath);
         const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
             getBaseFileName(extendedConfigPath), resolutionStack, errors);
-        if (sourceFile) {
-            sourceFile.extendedSourceFiles!.push(...extendedResult.extendedSourceFiles!);
+        if (sourceFile && extendedResult.extendedSourceFiles) {
+            for (const extended of extendedResult.extendedSourceFiles) {
+                pushIfUnique(sourceFile.extendedSourceFiles!, extended);
+            }
         }
 
         if (isSuccessfulParsedTsconfig(extendedConfig)) {
