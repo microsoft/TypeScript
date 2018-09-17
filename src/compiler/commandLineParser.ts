@@ -2143,12 +2143,7 @@ namespace ts {
     ): ParsedTsconfig | undefined {
         const extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
         if (sourceFile) {
-            if (sourceFile.extendedSourceFiles) {
-                pushIfUnique(sourceFile.extendedSourceFiles, extendedResult.fileName);
-            }
-            else {
-                sourceFile.extendedSourceFiles = [extendedResult.fileName];
-            }
+            sourceFile.extendedSourceFiles = [extendedResult.fileName];
         }
         if (extendedResult.parseDiagnostics.length) {
             errors.push(...extendedResult.parseDiagnostics);
@@ -2159,9 +2154,7 @@ namespace ts {
         const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
             getBaseFileName(extendedConfigPath), resolutionStack, errors);
         if (sourceFile && extendedResult.extendedSourceFiles) {
-            for (const extended of extendedResult.extendedSourceFiles) {
-                pushIfUnique(sourceFile.extendedSourceFiles!, extended);
-            }
+            sourceFile.extendedSourceFiles!.push(...extendedResult.extendedSourceFiles);
         }
 
         if (isSuccessfulParsedTsconfig(extendedConfig)) {
