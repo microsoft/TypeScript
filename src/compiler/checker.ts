@@ -640,7 +640,7 @@ namespace ts {
         const identityRelation = createMap<RelationComparisonResult>();
         const enumRelation = createMap<RelationComparisonResult>();
 
-        type TypeSystemEntity = Symbol | Type | Signature;
+        type TypeSystemEntity = Node | Symbol | Type | Signature;
 
         const enum TypeSystemPropertyName {
             Type,
@@ -648,6 +648,7 @@ namespace ts {
             DeclaredType,
             ResolvedReturnType,
             ImmediateBaseConstraint,
+            EnumTagType,
         }
 
         const enum CheckMode {
@@ -4475,6 +4476,8 @@ namespace ts {
             switch (propertyName) {
                 case TypeSystemPropertyName.Type:
                     return !!getSymbolLinks(<Symbol>target).type;
+                case TypeSystemPropertyName.EnumTagType:
+                    return !!(getNodeLinks(target as JSDocEnumTag).resolvedEnumType);
                 case TypeSystemPropertyName.DeclaredType:
                     return !!getSymbolLinks(<Symbol>target).declaredType;
                 case TypeSystemPropertyName.ResolvedBaseConstructorType:
@@ -8252,9 +8255,18 @@ namespace ts {
             }
 
             // JS are 'string' or 'number', not an enum type.
-            const enumTag = symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
+            const enumTag = isInJSFile(node) && symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
             if (enumTag) {
-                return enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
+                const links = getNodeLinks(enumTag);
+                if (!pushTypeResolution(enumTag, TypeSystemPropertyName.EnumTagType)) {
+                    return errorType;
+                }
+                let type = enumTag.typeExpression ? getTypeFromTypeNode(enumTag.typeExpression) : errorType;
+                if (!popTypeResolution()) {
+                    type = errorType;
+                    error(node, Diagnostics.Enum_type_0_circularly_references_itself, symbolToString(symbol));
+                }
+                return (links.resolvedEnumType = type);
             }
 
             // Get type from reference to named type that cannot be generic (enum or type parameter)
