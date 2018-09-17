@@ -676,8 +676,9 @@ namespace ts {
                     const parsedRef = parseProjectReferenceConfigFile(ref);
                     resolvedProjectReferences!.push(parsedRef);
                     if (parsedRef) {
-                        if (parsedRef.commandLine.options.outFile) {
-                            const dtsOutfile = changeExtension(parsedRef.commandLine.options.outFile, ".d.ts");
+                        const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
+                        if (out) {
+                            const dtsOutfile = changeExtension(out, ".d.ts");
                             processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                         }
                         addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
@@ -1244,6 +1245,13 @@ namespace ts {
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
             resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
+            if (resolvedProjectReferences) {
+                resolvedProjectReferences.forEach(ref => {
+                    if (ref) {
+                        addProjectReferenceRedirects(ref.commandLine, projectReferenceRedirects);
+                    }
+                });
+            }
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
@@ -1299,12 +1307,13 @@ namespace ts {
                 const ref = projectReferences[i];
                 const resolvedRefOpts = resolvedProjectReferences![i]!.commandLine;
                 if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
+                    const out = resolvedRefOpts.options.outFile || resolvedRefOpts.options.out;
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
-                    if (!resolvedRefOpts.options.outFile) continue;
+                    if (!out) continue;
 
-                    const dtsFilename = changeExtension(resolvedRefOpts.options.outFile, ".d.ts");
-                    const js = host.readFile(resolvedRefOpts.options.outFile) || `/* Input file ${resolvedRefOpts.options.outFile} was missing */\r\n`;
-                    const jsMapPath = resolvedRefOpts.options.outFile + ".map"; // TODO: try to read sourceMappingUrl comment from the file
+                    const dtsFilename = changeExtension(out, ".d.ts");
+                    const js = host.readFile(out) || `/* Input file ${out} was missing */\r\n`;
+                    const jsMapPath = out + ".map"; // TODO: try to read sourceMappingUrl comment from the file
                     const jsMap = host.readFile(jsMapPath);
                     const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
                     const dtsMapPath = dtsFilename + ".map";
@@ -2446,9 +2455,10 @@ namespace ts {
                         createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
                     }
                     if (ref.prepend) {
-                        if (resolvedRefOpts.outFile) {
-                            if (!host.fileExists(resolvedRefOpts.outFile)) {
-                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, resolvedRefOpts.outFile, ref.path);
+                        const out = resolvedRefOpts.outFile || resolvedRefOpts.out;
+                        if (out) {
+                            if (!host.fileExists(out)) {
+                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
                             }
                         }
                         else {
