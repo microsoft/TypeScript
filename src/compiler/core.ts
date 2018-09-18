@@ -842,7 +842,7 @@ namespace ts {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -852,7 +852,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; i++) {
-            if (!equalityComparer(array1[i], array2[i])) {
+            if (!equalityComparer(array1[i], array2[i], i)) {
                 return false;
             }
         }

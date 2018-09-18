@@ -96,7 +96,8 @@ namespace ts {
 
     function getPrototypeMembers(fn: AnyFunction, recurser: Recurser): ReadonlyArray<ValueInfo> {
         const prototype = fn.prototype as unknown;
-        return typeof prototype !== "object" || prototype === null ? emptyArray : mapDefined(getEntriesOfObject(prototype), ({ key, value }) =>
+        // tslint:disable-next-line no-unnecessary-type-assertion (TODO: update LKG and it will really be unnecessary)
+        return typeof prototype !== "object" || prototype === null ? emptyArray : mapDefined(getEntriesOfObject(prototype as object), ({ key, value }) =>
             key === "constructor" ? undefined : getValueInfo(key, value, recurser));
     }
 

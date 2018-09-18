@@ -285,16 +285,17 @@ namespace ts {
     }
 
     function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        if (!project.options.outFile) {
+        const out = project.options.outFile || project.options.out;
+        if (!out) {
             return Debug.fail("outFile must be set");
         }
         const outputs: string[] = [];
-        outputs.push(project.options.outFile);
+        outputs.push(out);
         if (project.options.sourceMap) {
-            outputs.push(`${project.options.outFile}.map`);
+            outputs.push(`${out}.map`);
         }
         if (getEmitDeclarations(project.options)) {
-            const dts = changeExtension(project.options.outFile, Extension.Dts);
+            const dts = changeExtension(out, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
                 outputs.push(`${dts}.map`);
@@ -862,7 +863,7 @@ namespace ts {
             if (buildProject) {
                 buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
                 if (hasPendingInvalidatedProjects()) {
-                    if (!timerToBuildInvalidatedProject) {
+                    if (options.watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
                     }
                 }
@@ -1248,7 +1249,7 @@ namespace ts {
     }
 
     export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        if (project.options.outFile) {
+        if (project.options.outFile || project.options.out) {
             return getOutFileOutputs(project);
         }
         else {

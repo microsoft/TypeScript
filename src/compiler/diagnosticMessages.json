@@ -2112,6 +2112,10 @@
         "category": "Error",
         "code": 2585
     },
+    "Enum type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2586
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3885,6 +3889,10 @@
     "The expected type comes from this index signature.": {
         "category": "Message",
         "code": 6501
+    },
+    "The expected type comes from the return type of this signature.": {
+        "category": "Message",
+        "code": 6502
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

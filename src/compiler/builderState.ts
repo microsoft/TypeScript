@@ -88,7 +88,7 @@ namespace ts.BuilderState {
     function getReferencedFileFromImportedModuleSymbol(symbol: Symbol) {
         if (symbol.declarations && symbol.declarations[0]) {
             const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-            return declarationSourceFile && declarationSourceFile.path;
+            return declarationSourceFile && (declarationSourceFile.resolvedPath || declarationSourceFile.path);
         }
     }
 
@@ -98,6 +98,13 @@ namespace ts.BuilderState {
     function getReferencedFileFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike) {
         const symbol = checker.getSymbolAtLocation(importName);
         return symbol && getReferencedFileFromImportedModuleSymbol(symbol);
+    }
+
+    /**
+     * Gets the path to reference file from file name, it could be resolvedPath if present otherwise path
+     */
+    function getReferencedFileFromFileName(program: Program, fileName: string, sourceFileDirectory: Path, getCanonicalFileName: GetCanonicalFileName): Path {
+        return toPath(program.getProjectReferenceRedirect(fileName) || fileName, sourceFileDirectory, getCanonicalFileName);
     }
 
     /**
@@ -123,7 +130,7 @@ namespace ts.BuilderState {
         // Handle triple slash references
         if (sourceFile.referencedFiles && sourceFile.referencedFiles.length > 0) {
             for (const referencedFile of sourceFile.referencedFiles) {
-                const referencedPath = toPath(referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
+                const referencedPath = getReferencedFileFromFileName(program, referencedFile.fileName, sourceFileDirectory, getCanonicalFileName);
                 addReferencedFile(referencedPath);
             }
         }
@@ -136,7 +143,7 @@ namespace ts.BuilderState {
                 }
 
                 const fileName = resolvedTypeReferenceDirective.resolvedFileName!; // TODO: GH#18217
-                const typeFilePath = toPath(fileName, sourceFileDirectory, getCanonicalFileName);
+                const typeFilePath = getReferencedFileFromFileName(program, fileName, sourceFileDirectory, getCanonicalFileName);
                 addReferencedFile(typeFilePath);
             });
         }
