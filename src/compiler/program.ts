@@ -663,7 +663,7 @@ namespace ts {
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
-        const projectReferenceRedirects: Map<string> = createMap();
+        let projectReferenceRedirects: ParsedCommandLine[] | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -681,7 +681,7 @@ namespace ts {
                             const dtsOutfile = changeExtension(out, ".d.ts");
                             processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                         }
-                        addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
+                        addProjectReferenceRedirects(parsedRef.commandLine);
                     }
                 }
             }
@@ -1252,7 +1252,7 @@ namespace ts {
             if (resolvedProjectReferences) {
                 resolvedProjectReferences.forEach(ref => {
                     if (ref) {
-                        addProjectReferenceRedirects(ref.commandLine, projectReferenceRedirects);
+                        addProjectReferenceRedirects(ref.commandLine);
                     }
                 });
             }
@@ -2179,20 +2179,24 @@ namespace ts {
         }
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
-            const path = toPath(fileName);
+            // Ignore dts or any of the non ts files
+            if (!projectReferenceRedirects || fileExtensionIs(fileName, Extension.Dts) || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
+                return undefined;
+            }
+
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
-            const normalized = getNormalizedAbsolutePath(fileName, path);
-            let result: string | undefined;
-            projectReferenceRedirects.forEach((v, k) => {
-                if (result !== undefined) {
+            return forEach(projectReferenceRedirects, referencedProject => {
+                // not input file from the referenced project, ignore
+                if (!contains(referencedProject.fileNames, fileName, isSameFile)) {
                     return undefined;
                 }
-                if (normalized.indexOf(k) === 0) {
-                    result = changeExtension(fileName.replace(k, v), ".d.ts");
-                }
+
+                const out = referencedProject.options.outFile || referencedProject.options.out;
+                return out ?
+                    changeExtension(out, Extension.Dts) :
+                    getOutputDeclarationFileName(fileName, referencedProject);
             });
-            return result;
         }
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
@@ -2396,15 +2400,8 @@ namespace ts {
             return { commandLine, sourceFile };
         }
 
-        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
-            const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath!)); // TODO: GH#18217
-            target.set(rootDir, getDeclarationOutputDirectory(referencedProject));
-        }
-
-        function getDeclarationOutputDirectory(proj: ParsedCommandLine) {
-            return proj.options.declarationDir ||
-                proj.options.outDir ||
-                getDirectoryPath(proj.options.configFilePath!); // TODO: GH#18217
+        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine) {
+            (projectReferenceRedirects || (projectReferenceRedirects = [])).push(referencedProject);
         }
 
         function verifyCompilerOptions() {
