@@ -2829,7 +2829,7 @@ namespace ts {
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
-        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getResolvedProjectReferences(): ReadonlyArray<ResolvedProjectReference | undefined> | undefined;
         /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
     }
 
@@ -2839,6 +2839,7 @@ namespace ts {
     export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
         sourceFile: SourceFile;
+        references?: ReadonlyArray<ResolvedProjectReference | undefined>;
     }
 
     /* @internal */

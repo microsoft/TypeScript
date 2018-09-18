@@ -454,6 +454,8 @@ namespace ts {
             return false;
         }
 
+        let seenResolvedRefs: ResolvedProjectReference[] | undefined;
+
         // If project references dont match
         if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
             return false;
@@ -496,11 +498,29 @@ namespace ts {
             if (!projectReferenceIsEqualTo(oldRef, newRef)) {
                 return false;
             }
-            const oldResolvedRef = program!.getResolvedProjectReferences()![index];
+            return resolvedProjectReferenceUptoDate(program!.getResolvedProjectReferences()![index], oldRef);
+        }
+
+        function resolvedProjectReferenceUptoDate(oldResolvedRef: ResolvedProjectReference | undefined, oldRef: ProjectReference): boolean {
             if (oldResolvedRef) {
+                if (contains(seenResolvedRefs, oldResolvedRef)) {
+                    // Assume true
+                    return true;
+                }
+
                 // If sourceFile for the oldResolvedRef existed, check the version for uptodate
-                return sourceFileVersionUptoDate(oldResolvedRef.sourceFile);
+                if (!sourceFileVersionUptoDate(oldResolvedRef.sourceFile)) {
+                    return false;
+                }
+
+                // Add to seen before checking the referenced paths of this config file
+                (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
+
+                // If child project references are upto date, this project reference is uptodate
+                return !forEach(oldResolvedRef.references, (childResolvedRef, index) =>
+                    !resolvedProjectReferenceUptoDate(childResolvedRef, oldResolvedRef.commandLine.projectReferences![index]));
             }
+
             // In old program, not able to resolve project reference path,
             // so if config file doesnt exist, it is uptodate.
             return !fileExists(resolveProjectReferencePath(oldRef));
@@ -662,8 +682,8 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createMap<SourceFile>() : undefined;
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
-        let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
-        let projectReferenceRedirects: ParsedCommandLine[] | undefined;
+        let resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined;
+        let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -672,16 +692,16 @@ namespace ts {
             processingOtherFiles = [];
 
             if (projectReferences) {
-                for (const ref of projectReferences) {
-                    const parsedRef = parseProjectReferenceConfigFile(ref);
-                    resolvedProjectReferences!.push(parsedRef);
+                if (!resolvedProjectReferences) {
+                    resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
+                }
+                for (const parsedRef of resolvedProjectReferences) {
                     if (parsedRef) {
                         const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
                         if (out) {
                             const dtsOutfile = changeExtension(out, ".d.ts");
                             processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                         }
-                        addProjectReferenceRedirects(parsedRef.commandLine);
                     }
                 }
             }
@@ -740,6 +760,12 @@ namespace ts {
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
+        // Do not use our own command line for projectReferenceRedirects
+        if (projectReferenceRedirects) {
+            Debug.assert(!!options.configFilePath);
+            const path = toPath(options.configFilePath!);
+            projectReferenceRedirects.delete(path);
+        }
 
         program = {
             getRootFileNames: () => rootNames,
@@ -1001,6 +1027,48 @@ namespace ts {
             }
         }
 
+        function canReuseProjectReferences(
+            newProjectReferences: ReadonlyArray<ProjectReference> | undefined,
+            oldProjectReferences: ReadonlyArray<ProjectReference> | undefined,
+            oldResolvedReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined): boolean {
+            // If array of references is changed, we cant resue old program
+            if (!arrayIsEqualTo(oldProjectReferences!, newProjectReferences, projectReferenceIsEqualTo)) {
+                return false;
+            }
+
+            // Check the json files for the project references
+            if (newProjectReferences) {
+                // Resolved project referenced should be array if projectReferences provided are array
+                Debug.assert(!!oldResolvedReferences);
+                for (let i = 0; i < newProjectReferences.length; i++) {
+                    const oldRef = oldResolvedReferences![i];
+                    const newRef = parseProjectReferenceConfigFile(newProjectReferences[i]);
+                    if (oldRef) {
+                        if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
+                            // Resolved project reference has gone missing or changed
+                            return false;
+                        }
+
+                        // If the transitive references can be reused then only this reference can be reused
+                        if (!canReuseProjectReferences(newRef.commandLine.projectReferences, oldRef.commandLine.projectReferences, oldRef.references)) {
+                            return false;
+                        }
+                    }
+                    else {
+                        // A previously-unresolved reference may be resolved now
+                        if (newRef !== undefined) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            else {
+                // Resolved project referenced should be undefined if projectReferences is undefined
+                Debug.assert(!oldResolvedReferences);
+            }
+            return true;
+        }
+
         function tryReuseStructureFromOldProgram(): StructureIsReused {
             if (!oldProgram) {
                 return StructureIsReused.Not;
@@ -1026,39 +1094,10 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-
-            // If array of references is changed, we cant resue old program
-            const oldProjectReferences = oldProgram.getProjectReferences();
-            if (!arrayIsEqualTo(oldProjectReferences!, projectReferences, projectReferenceIsEqualTo)) {
+            if (!canReuseProjectReferences(projectReferences, oldProgram.getProjectReferences(), oldProgram.getResolvedProjectReferences())) {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
-
-            // Check the json files for the project references
-            const oldRefs = oldProgram.getResolvedProjectReferences();
-            if (projectReferences) {
-                // Resolved project referenced should be array if projectReferences provided are array
-                Debug.assert(!!oldRefs);
-                for (let i = 0; i < projectReferences.length; i++) {
-                    const oldRef = oldRefs![i];
-                    const newRef = parseProjectReferenceConfigFile(projectReferences[i]);
-                    if (oldRef) {
-                        if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
-                            // Resolved project reference has gone missing or changed
-                            return oldProgram.structureIsReused = StructureIsReused.Not;
-                        }
-                    }
-                    else {
-                        // A previously-unresolved reference may be resolved now
-                        if (newRef !== undefined) {
-                            return oldProgram.structureIsReused = StructureIsReused.Not;
-                        }
-                    }
-                }
-            }
-            else {
-                // Resolved project referenced should be undefined if projectReferences is undefined
-                Debug.assert(!oldRefs);
-            }
+            resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
@@ -1248,14 +1287,6 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
-            resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
-            if (resolvedProjectReferences) {
-                resolvedProjectReferences.forEach(ref => {
-                    if (ref) {
-                        addProjectReferenceRedirects(ref.commandLine);
-                    }
-                });
-            }
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
@@ -2182,22 +2213,22 @@ namespace ts {
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
             // Ignore dts or any of the non ts files
-            if (!projectReferenceRedirects || fileExtensionIs(fileName, Extension.Dts) || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts) || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
                 return undefined;
             }
 
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
-            return forEach(projectReferenceRedirects, referencedProject => {
+            return forEachEntry(projectReferenceRedirects!, referencedProject => {
                 // not input file from the referenced project, ignore
-                if (!contains(referencedProject.fileNames, fileName, isSameFile)) {
+                if (!referencedProject || !contains(referencedProject.commandLine.fileNames, fileName, isSameFile)) {
                     return undefined;
                 }
 
-                const out = referencedProject.options.outFile || referencedProject.options.out;
+                const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
                 return out ?
                     changeExtension(out, Extension.Dts) :
-                    getOutputDeclarationFileName(fileName, referencedProject);
+                    getOutputDeclarationFileName(fileName, referencedProject.commandLine);
             });
         }
 
@@ -2388,22 +2419,34 @@ namespace ts {
             return allFilesBelongToPath;
         }
 
-        function parseProjectReferenceConfigFile(ref: ProjectReference): { commandLine: ParsedCommandLine, sourceFile: SourceFile } | undefined {
+        function parseProjectReferenceConfigFile(ref: ProjectReference): ResolvedProjectReference | undefined {
+            if (!projectReferenceRedirects) {
+                projectReferenceRedirects = createMap<ResolvedProjectReference | false>();
+            }
+
             // The actual filename (i.e. add "/tsconfig.json" if necessary)
             const refPath = resolveProjectReferencePath(ref);
+            const sourceFilePath = toPath(refPath);
+            const fromCache = projectReferenceRedirects.get(sourceFilePath);
+            if (fromCache !== undefined) {
+                return fromCache || undefined;
+            }
+
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
             if (sourceFile === undefined) {
+                projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;
             }
-            sourceFile.path = toPath(refPath);
+            sourceFile.path = sourceFilePath;
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
-            return { commandLine, sourceFile };
-        }
-
-        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine) {
-            (projectReferenceRedirects || (projectReferenceRedirects = [])).push(referencedProject);
+            const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
+            projectReferenceRedirects.set(sourceFilePath, resolvedRef);
+            if (commandLine.projectReferences) {
+                resolvedRef.references = commandLine.projectReferences.map(parseProjectReferenceConfigFile);
+            }
+            return resolvedRef;
         }
 
         function verifyCompilerOptions() {

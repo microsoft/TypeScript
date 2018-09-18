@@ -1293,6 +1293,7 @@ namespace ts {
 
         const result = parseJsonText(configFileName, configFileText);
         const cwd = host.getCurrentDirectory();
+        result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
         return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 

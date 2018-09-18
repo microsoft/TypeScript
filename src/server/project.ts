@@ -281,8 +281,8 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
         }
 
         getScriptFileNames() {
@@ -1391,8 +1391,8 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return this.projectReferences || emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
         }
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {

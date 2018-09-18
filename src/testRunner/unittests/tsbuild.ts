@@ -321,16 +321,6 @@ export class cNew {}`);
                     "/src/tests/index.ts"
                 ]);
 
-                function getLibs() {
-                    return [
-                        "/lib/lib.d.ts",
-                        "/lib/lib.es5.d.ts",
-                        "/lib/lib.dom.d.ts",
-                        "/lib/lib.webworker.importscripts.d.ts",
-                        "/lib/lib.scripthost.d.ts"
-                    ];
-                }
-
                 function getCoreOutputs() {
                     return [
                         "/src/core/index.d.ts",
@@ -374,6 +364,36 @@ export class cNew {}`);
                 for (const output of allExpectedOutputs) {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
+            });
+        });
+
+        describe("tsbuild - when project reference is referenced transitively", () => {
+            const projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
+            const allExpectedOutputs = [
+                "/src/a.js", "/src/a.d.ts",
+                "/src/b.js", "/src/b.d.ts",
+                "/src/c.js"
+            ];
+            it("verify that it builds correctly", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+                assert.deepEqual(host.traces, [
+                    ...getLibs(),
+                    "/src/a.ts",
+                    ...getLibs(),
+                    "/src/a.d.ts",
+                    "/src/b.ts",
+                    ...getLibs(),
+                    "/src/a.d.ts",
+                    "/src/b.d.ts",
+                    "/src/c.ts"
+                ]);
             });
         });
     }
@@ -583,5 +603,15 @@ export class cNew {}`);
         });
         fs.makeReadonly();
         return fs;
+    }
+
+    function getLibs() {
+        return [
+            "/lib/lib.d.ts",
+            "/lib/lib.es5.d.ts",
+            "/lib/lib.dom.d.ts",
+            "/lib/lib.webworker.importscripts.d.ts",
+            "/lib/lib.scripthost.d.ts"
+        ];
     }
 }
