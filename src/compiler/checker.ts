@@ -15274,7 +15274,7 @@ namespace ts {
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
                     let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(getTypeFromName)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
-                        impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
+                        impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOrType(type));
                     }
                     if (isTypeSubtypeOf(impliedType, type)) {
                         return impliedType;
