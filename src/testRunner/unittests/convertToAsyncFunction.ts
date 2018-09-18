@@ -416,6 +416,20 @@ function [#|f|](): Promise<void> {
     return fetch('https://typescriptlang.org').then( () => console.log("done") );
 }`
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs3", `
+function [#|f|](): Promise<void> {
+    return fetch('https://typescriptlang.org').then( () => console.log("almost done") ).then( () => console.log("done") );
+}`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_IgnoreArgs4", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+function res(){
+    console.log("done");
+}`
+        );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_Method", `
 class Parser {
     [#|f|]():Promise<void> {
@@ -817,7 +831,7 @@ function [#|f|]() {
         );
         _testConvertToAsyncFunction("convertToAsyncFunction_Scope1", `
 function [#|f|]() {
-    var var1:Promise<Response>, var2;
+    var var1: Response, var2;
     return fetch('https://typescriptlang.org').then( _ =>
       Promise.resolve().then( res => {
         var2 = "test";
@@ -1183,6 +1197,45 @@ function [#|f|]() {
 }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_runEffectfulContinuation", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res).then(_ => console.log("done"));
+}
+function res(result) {
+    return Promise.resolve().then(x => console.log(result));
+} 
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsPromise", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(s => Promise.resolve(s.statusText.length)).then(x => console.log(x + 5));
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsPromiseInBlock", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(s => { return Promise.resolve(s.statusText.length) }).then(x => x + 5);
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsFixablePromise", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(s => Promise.resolve(s.statusText).then(st => st.length)).then(x => console.log(x + 5));
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsPromiseLastInChain", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(s => Promise.resolve(s.statusText.length));
+}
+`);
+
+
+_testConvertToAsyncFunction("convertToAsyncFunction_nestedPromises", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(x => Promise.resolve(3).then(y => Promise.resolve(x.statusText.length + y)));
+}
+`);
     });
 
     function _testConvertToAsyncFunction(caption: string, text: string) {

@@ -601,6 +601,8 @@ namespace ts {
             FunctionFacts = FunctionStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             UndefinedFacts = TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | EQUndefined | EQUndefinedOrNull | NENull | Falsy,
             NullFacts = TypeofEQObject | TypeofNEString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEFunction | TypeofNEHostObject | EQNull | EQUndefinedOrNull | NEUndefined | Falsy,
+            EmptyObjectStrictFacts = All & ~(EQUndefined | EQNull | EQUndefinedOrNull),
+            EmptyObjectFacts = All,
         }
 
         const typeofEQFacts = createMapFromTemplate({
@@ -11836,8 +11838,12 @@ namespace ts {
                         const simplified = getSimplifiedType((<IndexType>target).type);
                         const constraint = simplified !== (<IndexType>target).type ? simplified : getConstraintOfType((<IndexType>target).type);
                         if (constraint) {
-                            if (result = isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors)) {
-                                return result;
+                            // We require Ternary.True here such that circular constraints don't cause
+                            // false positives. For example, given 'T extends { [K in keyof T]: string }',
+                            // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
+                            // related to other types.
+                            if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors) === Ternary.True) {
+                                return Ternary.True;
                             }
                         }
                     }
@@ -14241,9 +14247,11 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
             if (flags & TypeFlags.Object) {
-                return isFunctionObjectType(<ObjectType>type) ?
-                    strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
-                    strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+                return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(<ObjectType>type) ?
+                    strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
+                    isFunctionObjectType(<ObjectType>type) ?
+                        strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
+                        strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & (TypeFlags.Void | TypeFlags.Undefined)) {
                 return TypeFacts.UndefinedFacts;
@@ -15163,23 +15171,24 @@ namespace ts {
                 return getTypeWithFacts(assumeTrue ? mapType(type, narrowTypeForTypeof) : type, facts);
 
                 function narrowTypeForTypeof(type: Type) {
-                    if (assumeTrue && !(type.flags & TypeFlags.Union)) {
-                        if (type.flags & TypeFlags.Unknown && literal.text === "object") {
-                            return getUnionType([nonPrimitiveType, nullType]);
+                    if (type.flags & TypeFlags.Unknown && literal.text === "object") {
+                        return getUnionType([nonPrimitiveType, nullType]);
+                    }
+                    // We narrow a non-union type to an exact primitive type if the non-union type
+                    // is a supertype of that primitive type. For example, type 'any' can be narrowed
+                    // to one of the primitive types.
+                    const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
+                    if (targetType) {
+                        if (isTypeSubtypeOf(type, targetType)) {
+                            return type;
                         }
-                        // We narrow a non-union type to an exact primitive type if the non-union type
-                        // is a supertype of that primitive type. For example, type 'any' can be narrowed
-                        // to one of the primitive types.
-                        const targetType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
-                        if (targetType) {
-                            if (isTypeSubtypeOf(targetType, type)) {
-                                return isTypeAny(type) ? targetType : getIntersectionType([type, targetType]); // Intersection to handle `string` being a subtype of `keyof T`
-                            }
-                            if (type.flags & TypeFlags.Instantiable) {
-                                const constraint = getBaseConstraintOfType(type) || anyType;
-                                if (isTypeSubtypeOf(targetType, constraint)) {
-                                    return getIntersectionType([type, targetType]);
-                                }
+                        if (isTypeSubtypeOf(targetType, type)) {
+                            return targetType;
+                        }
+                        if (type.flags & TypeFlags.Instantiable) {
+                            const constraint = getBaseConstraintOfType(type) || anyType;
+                            if (isTypeSubtypeOf(targetType, constraint)) {
+                                return getIntersectionType([type, targetType]);
                             }
                         }
                     }

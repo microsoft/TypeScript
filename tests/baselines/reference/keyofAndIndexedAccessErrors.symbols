@@ -412,3 +412,19 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
 }
 
+// The constraint of 'keyof T' is 'keyof T'
+function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+>f4 : Symbol(f4, Decl(keyofAndIndexedAccessErrors.ts, 117, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 120, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+
+    k = 42; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+
+    k = "hello"; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+}
+
