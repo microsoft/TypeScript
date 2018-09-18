@@ -8,6 +8,8 @@ namespace ts.server {
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
+        /* @internal */
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo>;
         enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
@@ -18,6 +20,7 @@ namespace ts.server {
         isKnownTypesPackageName: returnFalse,
         // Should never be called because we never provide a types registry.
         installPackage: notImplemented,
+        inspectValue: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
@@ -93,6 +96,10 @@ namespace ts.server {
 
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
             return this.installer.installPackage(options);
+        }
+
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            return this.installer.inspectValue(options);
         }
 
         enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {

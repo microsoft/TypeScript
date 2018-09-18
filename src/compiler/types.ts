@@ -2551,6 +2551,11 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /** Resolved path can be different from path property,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case resolvedPath = path to output file
+         * path = input file's path
+         */
         /* @internal */ resolvedPath: Path;
 
         /**
@@ -2819,6 +2824,7 @@ namespace ts {
 
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
         getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
     }
 
     /* @internal */
@@ -3670,6 +3676,7 @@ namespace ts {
     export interface NodeLinks {
         flags: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
+        resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
@@ -4569,6 +4576,9 @@ namespace ts {
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
         strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
+        affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
+        affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
@@ -4964,7 +4974,7 @@ namespace ts {
     /* @internal */
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags: EmitFlags;                       // Flags that customize emit
+        flags: EmitFlags;                        // Flags that customize emit
         leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -5324,6 +5334,7 @@ namespace ts {
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
+        /*@internal*/ neverAsciiEscape?: boolean;
     }
 
     /* @internal */

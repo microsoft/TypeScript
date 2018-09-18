@@ -4445,6 +4445,7 @@ declare namespace ts.server {
     type ActionSet = "action::set";
     type ActionInvalidate = "action::invalidate";
     type ActionPackageInstalled = "action::packageInstalled";
+    type ActionValueInspected = "action::valueInspected";
     type EventTypesRegistry = "event::typesRegistry";
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
@@ -4453,7 +4454,7 @@ declare namespace ts.server {
         " __sortedArrayBrand": any;
     }
     interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
     interface TypingInstallerRequestWithProjectName {
         readonly projectName: string;
@@ -4661,6 +4662,7 @@ declare namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
+        writeFile?(fileName: string, content: string): void;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4718,9 +4720,9 @@ declare namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
-        applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         /** @deprecated `fileName` will be ignored */
@@ -4882,8 +4884,15 @@ declare namespace ts {
         changes: ReadonlyArray<FileTextChanges>;
         commands?: ReadonlyArray<CodeActionCommand>;
     }
-    type CodeActionCommand = InstallPackageAction;
+    type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
     interface InstallPackageAction {
+    }
+    interface GenerateTypesAction extends GenerateTypesOptions {
+    }
+    interface GenerateTypesOptions {
+        readonly file: string;
+        readonly fileToGenerateTypesFor: string;
+        readonly outputFileName: string;
     }
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
@@ -6455,6 +6464,8 @@ declare namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers: string;
+        /** Span of text to rename. */
+        triggerSpan: TextSpan;
     }
     /**
      *  A group of text spans, all in 'file'.
@@ -8100,6 +8111,7 @@ declare namespace ts.server {
         useCaseSensitiveFileNames(): boolean;
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         readFile(fileName: string): string | undefined;
+        writeFile(fileName: string, content: string): void;
         fileExists(file: string): boolean;
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
@@ -8733,7 +8745,7 @@ declare namespace ts.server {
         private getProjects;
         private getDefaultProject;
         private getRenameLocations;
-        private static mapRenameInfo;
+        private mapRenameInfo;
         private toSpanGroups;
         private getReferences;
         /**

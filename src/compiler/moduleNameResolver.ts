@@ -779,12 +779,21 @@ namespace ts {
      */
     /* @internal */
     export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
-        const { resolvedModule, failedLookupLocations } =
-            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+        const { resolvedModule, failedLookupLocations } = tryResolveJSModuleWorker(moduleName, initialDir, host);
         if (!resolvedModule) {
             throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
         return resolvedModule.resolvedFileName;
+    }
+
+    /* @internal */
+    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string | undefined {
+        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
+        return resolvedModule && resolvedModule.resolvedFileName;
+    }
+
+    function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
