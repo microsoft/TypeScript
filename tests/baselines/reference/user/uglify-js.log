@@ -22,6 +22,7 @@ node_modules/uglify-js/lib/compress.js(1316,38): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(1411,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1519,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1551,26): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(1579,46): error TS2565: Property 'skip' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(1975,44): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2161,19): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3214,23): error TS2554: Expected 0 arguments, but got 1.
@@ -30,6 +31,7 @@ node_modules/uglify-js/lib/compress.js(3367,18): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(3422,14): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3439,29): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(3464,62): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/compress.js(3569,42): error TS2565: Property 'skip' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(3690,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3711,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(3721,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
@@ -94,12 +96,15 @@ node_modules/uglify-js/lib/propmangle.js(70,45): error TS2339: Property 'prototy
 node_modules/uglify-js/lib/propmangle.js(80,14): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(94,15): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/propmangle.js(146,14): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(57,25): error TS2565: Property 'next_id' is used before being assigned.
 node_modules/uglify-js/lib/scope.js(104,14): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(159,14): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(194,32): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(405,14): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(462,15): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(481,12): error TS2565: Property 'reset' is used before being assigned.
 node_modules/uglify-js/lib/scope.js(487,15): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(522,12): error TS2565: Property 'reset' is used before being assigned.
 node_modules/uglify-js/lib/sourcemap.js(55,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/lib/sourcemap.js(61,23): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/tools/exit.js(7,32): error TS2339: Property 'bufferSize' does not exist on type 'WriteStream'.

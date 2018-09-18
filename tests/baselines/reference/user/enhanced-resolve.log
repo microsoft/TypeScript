@@ -1,5 +1,6 @@
 Exit Code: 1
 Standard output:
+node_modules/enhanced-resolve/lib/AliasFieldPlugin.js(23,43): error TS2565: Property 'getField' is used before being assigned.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(116,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
   Type 'null' is not assignable to type 'number | undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(129,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
@@ -16,14 +17,24 @@ node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(209,4): error TS2322:
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(220,4): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(224,23): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(227,27): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.
+node_modules/enhanced-resolve/lib/ConcordExtensionsPlugin.js(21,46): error TS2565: Property 'getField' is used before being assigned.
+node_modules/enhanced-resolve/lib/ConcordExtensionsPlugin.js(23,31): error TS2565: Property 'getExtensions' is used before being assigned.
+node_modules/enhanced-resolve/lib/ConcordMainPlugin.js(22,46): error TS2565: Property 'getField' is used before being assigned.
+node_modules/enhanced-resolve/lib/ConcordMainPlugin.js(24,31): error TS2565: Property 'getMain' is used before being assigned.
+node_modules/enhanced-resolve/lib/ConcordModulesPlugin.js(23,46): error TS2565: Property 'getField' is used before being assigned.
+node_modules/enhanced-resolve/lib/ConcordModulesPlugin.js(25,25): error TS2565: Property 'matchModule' is used before being assigned.
+node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js(20,25): error TS2565: Property 'loadDescriptionFile' is used before being assigned.
 node_modules/enhanced-resolve/lib/Resolver.js(165,17): error TS2339: Property 'push' does not exist on type 'Set<any>'.
 node_modules/enhanced-resolve/lib/Resolver.js(181,11): error TS2339: Property 'details' does not exist on type 'Error'.
 node_modules/enhanced-resolve/lib/Resolver.js(182,11): error TS2339: Property 'missing' does not exist on type 'Error'.
 node_modules/enhanced-resolve/lib/Resolver.js(219,20): error TS2339: Property 'recursion' does not exist on type 'Error'.
+node_modules/enhanced-resolve/lib/SymlinkPlugin.js(25,16): error TS2565: Property 'withIndex' is used before being assigned.
 node_modules/enhanced-resolve/lib/concord.js(75,30): error TS2531: Object is possibly 'null'.
 node_modules/enhanced-resolve/lib/concord.js(76,17): error TS2531: Object is possibly 'null'.
 node_modules/enhanced-resolve/lib/createInnerCallback.js(17,20): error TS2339: Property 'stack' does not exist on type '(...args: any[]) => any'.
 node_modules/enhanced-resolve/lib/createInnerCallback.js(18,20): error TS2339: Property 'missing' does not exist on type '(...args: any[]) => any'.
+node_modules/enhanced-resolve/lib/node.js(126,35): error TS2565: Property 'createResolver' is used before being assigned.
+node_modules/enhanced-resolve/lib/node.js(147,35): error TS2565: Property 'createResolver' is used before being assigned.
 
 
 

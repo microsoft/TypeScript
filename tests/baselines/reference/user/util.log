@@ -5,9 +5,17 @@ node_modules/util/util.js(35,45): error TS2345: Argument of type '(x: string) =>
   Type 'string | number' is not assignable to type 'string'.
     Type 'number' is not assignable to type 'string'.
 node_modules/util/util.js(55,20): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/util/util.js(69,22): error TS2565: Property 'deprecate' is used before being assigned.
 node_modules/util/util.js(73,15): error TS2339: Property 'noDeprecation' does not exist on type 'Process'.
 node_modules/util/util.js(80,19): error TS2339: Property 'throwDeprecation' does not exist on type 'Process'.
 node_modules/util/util.js(82,26): error TS2339: Property 'traceDeprecation' does not exist on type 'Process'.
+node_modules/util/util.js(106,27): error TS2565: Property 'format' is used before being assigned.
+node_modules/util/util.js(139,13): error TS2565: Property '_extend' is used before being assigned.
+node_modules/util/util.js(184,23): error TS2565: Property 'styles' is used before being assigned.
+node_modules/util/util.js(187,32): error TS2565: Property 'colors' is used before being assigned.
+node_modules/util/util.js(188,32): error TS2565: Property 'colors' is used before being assigned.
+node_modules/util/util.js(218,33): error TS2565: Property 'inspect' is used before being assigned.
+node_modules/util/util.js(553,47): error TS2565: Property 'format' is used before being assigned.
 
 
 

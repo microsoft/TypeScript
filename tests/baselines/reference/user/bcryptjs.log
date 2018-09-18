@@ -19,6 +19,10 @@ node_modules/bcryptjs/src/bcrypt/prng/accum.js(53,22): error TS2339: Property 'a
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(65,74): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(66,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
 node_modules/bcryptjs/src/bcrypt/prng/accum.js(67,22): error TS2339: Property 'detachEvent' does not exist on type 'Document'.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(103,59): error TS2565: Property 'last' is used before being assigned.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(103,88): error TS2565: Property 'last' is used before being assigned.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(119,58): error TS2565: Property 'last' is used before being assigned.
+node_modules/bcryptjs/src/bcrypt/prng/accum.js(119,87): error TS2565: Property 'last' is used before being assigned.
 node_modules/bcryptjs/src/bcrypt/util.js(20,5): error TS2304: Cannot find name 'utfx'.
 node_modules/bcryptjs/src/bcrypt.js(25,13): error TS2322: Type 'Buffer' is not assignable to type 'number[]'.
   Property 'pop' is missing in type 'Buffer'.
