@@ -15620,6 +15620,10 @@ namespace ts {
             return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
         }
 
+        function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
+            return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
+        }
+
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES2015 ||
                 (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
@@ -15648,7 +15652,25 @@ namespace ts {
             if (containedInIterationStatement) {
                 if (usedInFunction) {
                     // mark iteration statement as containing block-scoped binding captured in some function
-                    getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    let capturesBlockScopeBindingInLoopBody = true;
+                    if (isForStatement(container) &&
+                        getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList)!.parent === container) {
+                        const part = getPartOfForStatementContainingNode(node.parent, container);
+                        if (part) {
+                            const links = getNodeLinks(part);
+                            links.flags |= NodeCheckFlags.ContainsCapturedBlockScopeBinding;
+
+                            const capturedBindings = links.capturedBlockScopeBindings || (links.capturedBlockScopeBindings = []);
+                            pushIfUnique(capturedBindings, symbol);
+
+                            if (part === container.initializer) {
+                                capturesBlockScopeBindingInLoopBody = false; // Initializer is outside of loop body
+                            }
+                        }
+                    }
+                    if (capturesBlockScopeBindingInLoopBody) {
+                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
                 }
 
                 // mark variables that are declared in loop initializer and reassigned inside the body of ForStatement.
@@ -15666,6 +15688,11 @@ namespace ts {
             if (usedInFunction) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
+        }
+
+        function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
+            const links = getNodeLinks(node);
+            return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfNode(decl));
         }
 
         function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
@@ -28498,7 +28525,12 @@ namespace ts {
                         getAccessor
                     };
                 },
-                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined)
+                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined),
+                isBindingCapturedByNode: (node, decl) => {
+                    const parseNode = getParseTreeNode(node);
+                    const parseDecl = getParseTreeNode(decl);
+                    return !!parseNode && !!parseDecl && (isVariableDeclaration(parseDecl) || isBindingElement(parseDecl)) && isBindingCapturedByNode(parseNode, parseDecl);
+                }
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
