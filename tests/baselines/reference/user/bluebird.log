@@ -54,6 +54,7 @@ node_modules/bluebird/js/release/nodeback.js(21,20): error TS2349: Cannot invoke
 node_modules/bluebird/js/release/nodeify.js(32,19): error TS2339: Property 'cause' does not exist on type 'Error'.
 node_modules/bluebird/js/release/promise.js(4,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(7,24): error TS2339: Property 'PromiseInspection' does not exist on type 'typeof Promise'.
+node_modules/bluebird/js/release/promise.js(10,20): error TS2565: Property 'reject' is used before being assigned.
 node_modules/bluebird/js/release/promise.js(10,27): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(20,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
 node_modules/bluebird/js/release/promise.js(33,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any, desc: any) => any)' has no compatible call signatures.
@@ -72,6 +73,7 @@ node_modules/bluebird/js/release/promise.js(238,63): error TS2339: Property '_bo
 node_modules/bluebird/js/release/promise.js(241,14): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(253,20): error TS2339: Property '_unsetRejectionIsUnhandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(257,20): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(261,15): error TS2565: Property 'invoke' is used before being assigned.
 node_modules/bluebird/js/release/promise.js(295,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(300,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(305,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
@@ -86,7 +88,9 @@ node_modules/bluebird/js/release/promise.js(483,18): error TS2339: Property '_ex
 node_modules/bluebird/js/release/promise.js(489,10): error TS2339: Property '_popContext' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(506,19): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/bluebird/js/release/promise.js(630,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(640,19): error TS2565: Property 'settlePromises' is used before being assigned.
 node_modules/bluebird/js/release/promise.js(642,14): error TS2339: Property '_dereferenceTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(657,15): error TS2565: Property 'settlePromises' is used before being assigned.
 node_modules/bluebird/js/release/promise.js(659,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(699,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise_array.js(71,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.

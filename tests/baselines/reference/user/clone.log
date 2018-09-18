@@ -1,5 +1,8 @@
 Exit Code: 1
 Standard output:
+node_modules/clone/clone.js(99,22): error TS2565: Property '__isArray' is used before being assigned.
+node_modules/clone/clone.js(101,22): error TS2565: Property '__isRegExp' is used before being assigned.
+node_modules/clone/clone.js(104,22): error TS2565: Property '__isDate' is used before being assigned.
 node_modules/clone/clone.js(167,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
 node_modules/clone/clone.js(167,23): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
 node_modules/clone/clone.js(167,43): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.

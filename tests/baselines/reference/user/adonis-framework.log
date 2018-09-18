@@ -17,6 +17,8 @@ node_modules/adonis-framework/providers/StaticProvider.js(9,33): error TS2307: C
 node_modules/adonis-framework/providers/ViewProvider.js(9,33): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Config/index.js(48,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Config/index.js(50,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
@@ -33,8 +35,10 @@ node_modules/adonis-framework/src/Encryption/index.js(217,49): error TS2345: Arg
 node_modules/adonis-framework/src/Encryption/index.js(223,15): error TS2304: Cannot find name 'Integer'.
 node_modules/adonis-framework/src/Env/index.js(54,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Env/index.js(65,25): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Event/index.js(109,14): error TS2565: Property 'isGenerator' is used before being assigned.
 node_modules/adonis-framework/src/Event/index.js(128,12): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
   Property 'pop' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
@@ -63,22 +67,40 @@ node_modules/adonis-framework/src/Exceptions/index.js(205,12): error TS2554: Exp
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
   Type '""' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Helpers/index.js(65,11): error TS2565: Property 'reset' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(81,11): error TS2565: Property 'setProjectDirectory' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(105,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(106,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Helpers/index.js(164,10): error TS2554: Expected 3 arguments, but got 2.
+node_modules/adonis-framework/src/Helpers/index.js(164,18): error TS2565: Property '_makePath' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(178,18): error TS2565: Property '_makePath' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(178,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(206,32): error TS2565: Property 'appNameSpace' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(224,18): error TS2565: Property '_makePath' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(224,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(240,18): error TS2565: Property '_makePath' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(240,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(256,18): error TS2565: Property '_makePath' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(256,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Helpers/index.js(271,18): error TS2565: Property 'databasePath' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(286,18): error TS2565: Property 'databasePath' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(301,18): error TS2565: Property 'databasePath' is used before being assigned.
+node_modules/adonis-framework/src/Helpers/index.js(316,18): error TS2565: Property '_makePath' is used before being assigned.
 node_modules/adonis-framework/src/Helpers/index.js(330,23): error TS2532: Object is possibly 'undefined'.
+node_modules/adonis-framework/src/Helpers/index.js(344,18): error TS2565: Property 'resourcesPath' is used before being assigned.
 node_modules/adonis-framework/src/Middleware/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
+node_modules/adonis-framework/src/Middleware/index.js(124,58): error TS2565: Property 'register' is used before being assigned.
+node_modules/adonis-framework/src/Middleware/index.js(193,50): error TS2565: Property 'fetchParams' is used before being assigned.
+node_modules/adonis-framework/src/Middleware/index.js(216,47): error TS2565: Property 'getGlobal' is used before being assigned.
 node_modules/adonis-framework/src/Middleware/index.js(230,20): error TS8024: JSDoc '@param' tag has name 'Middleware', but there is no parameter with that name.
 node_modules/adonis-framework/src/Request/index.js(64,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(66,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Request/index.js(75,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Request/index.js(78,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Request/index.js(95,14): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(95,21): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(112,14): error TS2304: Cannot find name 'Mixed'.
@@ -87,12 +109,20 @@ node_modules/adonis-framework/src/Request/index.js(131,14): error TS2304: Cannot
 node_modules/adonis-framework/src/Request/index.js(131,21): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/adonis-framework/src/Request/index.js(188,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(190,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Request/index.js(198,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Request/index.js(200,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Request/index.js(415,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(417,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Request/index.js(422,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Request/index.js(424,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Request/index.js(466,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(468,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Request/index.js(471,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Request/index.js(473,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Request/index.js(480,14): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Request/index.js(482,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Request/index.js(487,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Request/index.js(488,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Request/index.js(499,17): error TS2551: Property '_params' does not exist on type 'Request'. Did you mean 'param'?
 node_modules/adonis-framework/src/Request/index.js(523,15): error TS2304: Cannot find name 'Objecr'.
 node_modules/adonis-framework/src/Request/index.js(572,23): error TS8029: JSDoc '@param' tag has name 'pattern', but there is no parameter with that name. It would match 'arguments' if it had an array type.
@@ -107,23 +137,54 @@ node_modules/adonis-framework/src/Response/index.js(95,16): error TS2304: Cannot
 node_modules/adonis-framework/src/Response/index.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/ResourceCollection.js(54,13): error TS2565: Property 'appendMiddleware' is used before being assigned.
+node_modules/adonis-framework/src/Route/ResourceCollection.js(56,12): error TS2565: Property 'spread' is used before being assigned.
+node_modules/adonis-framework/src/Route/ResourceMember.js(54,13): error TS2565: Property 'appendMiddleware' is used before being assigned.
+node_modules/adonis-framework/src/Route/ResourceMember.js(56,12): error TS2565: Property 'spread' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(32,13): error TS2565: Property 'appendMiddleware' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(34,12): error TS2565: Property 'spread' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(59,13): error TS2565: Property 'prefixRoute' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(76,13): error TS2565: Property 'add' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(76,25): error TS2565: Property 'makeRoutePattern' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(77,13): error TS2565: Property 'addDomain' is used before being assigned.
+node_modules/adonis-framework/src/Route/group.js(84,13): error TS2565: Property 'addFormats' is used before being assigned.
 node_modules/adonis-framework/src/Route/helpers.js(22,13): error TS2304: Cannot find name 'Any'.
+node_modules/adonis-framework/src/Route/helpers.js(29,32): error TS2565: Property 'makeRoutePattern' is used before being assigned.
 node_modules/adonis-framework/src/Route/helpers.js(34,3): error TS2322: Type 'string | string[]' is not assignable to type 'string'.
   Type 'string[]' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/helpers.js(42,13): error TS2304: Cannot find name 'Regex'.
 node_modules/adonis-framework/src/Route/helpers.js(54,21): error TS8024: JSDoc '@param' tag has name 'url', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/helpers.js(63,36): error TS2565: Property 'makeRoutePattern' is used before being assigned.
 node_modules/adonis-framework/src/Route/helpers.js(131,21): error TS8024: JSDoc '@param' tag has name 'format', but there is no parameter with that name.
+node_modules/adonis-framework/src/Route/helpers.js(140,36): error TS2565: Property 'makeRoutePattern' is used before being assigned.
+node_modules/adonis-framework/src/Route/helpers.js(144,35): error TS2565: Property 'makeRoutePattern' is used before being assigned.
+node_modules/adonis-framework/src/Route/helpers.js(161,34): error TS2565: Property 'makeRoutePattern' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(30,5): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(58,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(80,34): error TS2565: Property 'construct' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(101,21): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
+node_modules/adonis-framework/src/Route/index.js(118,9): error TS2565: Property 'get' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(134,23): error TS2565: Property '_lastRoute' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(259,21): error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/index.js(280,21): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
+node_modules/adonis-framework/src/Route/index.js(297,25): error TS2565: Property '_lastRoute' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(321,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/index.js(321,20): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/index.js(331,11): error TS2565: Property 'appendMiddleware' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(332,11): error TS2565: Property '_lastRoute' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(333,10): error TS2565: Property 'spread' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(343,9): error TS2565: Property 'middleware' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
+node_modules/adonis-framework/src/Route/index.js(389,15): error TS2565: Property 'match' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(392,31): error TS2565: Property 'returnMatchingRouteToUrl' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(396,10): error TS2554: Expected 2 arguments, but got 3.
+node_modules/adonis-framework/src/Route/index.js(396,18): error TS2565: Property 'returnRouteArguments' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(407,20): error TS2694: Namespace 'Route' has no exported member 'resources'.
+node_modules/adonis-framework/src/Route/index.js(445,20): error TS2565: Property 'compileRouteToUrl' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(447,18): error TS2565: Property 'compileRouteToUrl' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(500,27): error TS2565: Property '_lastRoute' is used before being assigned.
+node_modules/adonis-framework/src/Route/index.js(501,11): error TS2565: Property 'addFormats' is used before being assigned.
 node_modules/adonis-framework/src/Route/index.js(501,42): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Route/resource.js(92,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
@@ -131,16 +192,23 @@ node_modules/adonis-framework/src/Route/resource.js(93,25): error TS2345: Argume
 node_modules/adonis-framework/src/Route/resource.js(95,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(96,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(97,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
+node_modules/adonis-framework/src/Route/resource.js(149,15): error TS2565: Property 'appendMiddleware' is used before being assigned.
 node_modules/adonis-framework/src/Route/resource.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(172,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/resource.js(183,26): error TS2565: Property 'spread' is used before being assigned.
 node_modules/adonis-framework/src/Route/resource.js(198,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(198,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/resource.js(209,26): error TS2565: Property 'spread' is used before being assigned.
+node_modules/adonis-framework/src/Route/resource.js(225,13): error TS2565: Property 'addFormats' is used before being assigned.
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/resource.js(314,43): error TS2565: Property 'spread' is used before being assigned.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.
 node_modules/adonis-framework/src/Server/index.js(17,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Server/index.js(54,21): error TS2554: Expected 4 arguments, but got 3.
+node_modules/adonis-framework/src/Server/index.js(54,29): error TS2565: Property 'makeMiddlewareChain' is used before being assigned.
+node_modules/adonis-framework/src/Server/index.js(76,27): error TS2565: Property 'makeMiddlewareChain' is used before being assigned.
 node_modules/adonis-framework/src/Server/index.js(137,25): error TS8024: JSDoc '@param' tag has name 'handlers', but there is no parameter with that name.
 node_modules/adonis-framework/src/Server/index.js(252,15): error TS2304: Cannot find name 'instance'.
 node_modules/adonis-framework/src/Server/index.js(252,24): error TS1005: '}' expected.
@@ -161,6 +229,8 @@ node_modules/adonis-framework/src/Session/SessionManager.js(69,49): error TS2339
 node_modules/adonis-framework/src/Session/SessionManager.js(71,76): error TS2339: Property 'drivers' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/Store.js(28,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/Store.js(80,13): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/Store.js(125,24): error TS2565: Property 'guardPair' is used before being assigned.
+node_modules/adonis-framework/src/Session/Store.js(142,27): error TS2565: Property 'unGuardPair' is used before being assigned.
 node_modules/adonis-framework/src/Session/index.js(10,14): error TS2304: Cannot find name 'SessionDriver'.
 node_modules/adonis-framework/src/Session/index.js(11,11): error TS2304: Cannot find name 'Class'.
 node_modules/adonis-framework/src/Session/index.js(46,15): error TS2304: Cannot find name 'SessionDriver'.
@@ -177,13 +247,17 @@ node_modules/adonis-framework/src/Session/index.js(107,92): error TS2339: Proper
 node_modules/adonis-framework/src/Session/index.js(107,126): error TS2339: Property 'driver' does not exist on type 'Function'.
 node_modules/adonis-framework/src/Session/index.js(123,23): error TS2532: Object is possibly 'undefined'.
 node_modules/adonis-framework/src/Session/index.js(137,5): error TS2532: Object is possibly 'undefined'.
+node_modules/adonis-framework/src/Session/index.js(155,33): error TS2565: Property 'unPackValues' is used before being assigned.
 node_modules/adonis-framework/src/Session/index.js(168,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
+node_modules/adonis-framework/src/Session/index.js(180,53): error TS2565: Property 'packValues' is used before being assigned.
 node_modules/adonis-framework/src/Session/index.js(199,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(201,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(204,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(234,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(247,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(249,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Session/index.js(257,25): error TS2565: Property 'existy' is used before being assigned.
+node_modules/adonis-framework/src/Session/index.js(259,17): error TS2565: Property 'existy' is used before being assigned.
 node_modules/adonis-framework/src/Session/index.js(267,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Session/index.js(287,15): error TS2322: Type 'IterableIterator<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Session/index.js(293,12): error TS2532: Object is possibly 'undefined'.
