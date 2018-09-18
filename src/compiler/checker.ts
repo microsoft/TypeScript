@@ -15268,7 +15268,7 @@ namespace ts {
                         case "object":
                             return type.flags & TypeFlags.Unknown ? getUnionType([nonPrimitiveType, nullType]) : type;
                         default:
-                            return typeofTypesByName.get(text) || unknownType;
+                            return typeofTypesByName.get(text) || type;
                     }
                 };
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
