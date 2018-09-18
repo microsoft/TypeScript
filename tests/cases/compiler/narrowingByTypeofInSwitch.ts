@@ -29,6 +29,10 @@ function assertObject(x: object) {
     return x;
 }
 
+function assertObjectOrNull(x: object | null) {
+    return x;
+}
+
 function assertUndefined(x: undefined) {
     return x;
 }
@@ -210,5 +214,30 @@ function fallThroughTest(x: string | number | boolean | object) {
         case 'boolean':
             assertBooleanOrObject(x);
             break;
+    }
+}
+
+function unknownNarrowing(x: unknown) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertFunction(x); return;
+        case 'symbol': assertSymbol(x); return;
+        case 'object': assertObjectOrNull(x); return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+    }
+}
+
+function keyofNarrowing<T>(k: keyof T) {
+    function assertKeyofT(k1: keyof T) { }
+    switch (typeof k) {
+        case 'number': assertNumber(k); assertKeyofT(k); return;
+        case 'symbol': assertSymbol(k); assertKeyofT(k); return;
+        case 'string': assertString(k); assertKeyofT(k); return;
+        case 'boolean': assertNever(k);
+        case 'function': assertNever(k);
+        case 'object': assertNever(k);
+        case 'undefined': assertNever(k); return;
     }
 }

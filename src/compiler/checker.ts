@@ -15261,14 +15261,19 @@ namespace ts {
                   boolean. We know that number cannot be selected
                   because it is caught in the first clause.
                 */
+                const isTypeUnknown = type.flags & TypeFlags.Unknown;
+                const getTypeFromName = (text: string) => text === "function" ? globalFunctionType :
+                    (isTypeUnknown && text === "object") ? getUnionType([nonPrimitiveType, nullType]) :
+                        (typeofTypesByName.get(text) || neverType);
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
-                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
+                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(getTypeFromName)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
                         impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
                     }
                     if (!(impliedType.flags & TypeFlags.Never)) {
                         if (isTypeSubtypeOf(impliedType, type)) {
-                            return impliedType;
+                            // Intersection to handle `string` being a subtype of `keyof T`
+                            return isTypeAny(type) ? impliedType : getIntersectionType([type, impliedType]);
                         }
                         if (type.flags & TypeFlags.Instantiable) {
                             const constraint = getBaseConstraintOfType(type) || anyType;
