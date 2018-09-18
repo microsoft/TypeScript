@@ -28,5 +28,5 @@ verify.codeFix({
     foo1(arg0: () => number, arg1: () => string, arg2: () => boolean): any {
         throw new Error("Method not implemented.");
     }
-    `
+    `,
 });

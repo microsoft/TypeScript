@@ -211,8 +211,8 @@ namespace ts.textChanges {
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
-        private readonly newFiles: { readonly oldFile: SourceFile, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
-        private readonly classesWithNodesInsertedAtStart = createMap<ClassDeclaration>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
+        private readonly classesWithNodesInsertedAtStart = createMap<{ readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -410,25 +410,33 @@ namespace ts.textChanges {
         }
 
         public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
+            this.insertNodeAtStartWorker(sourceFile, cls, newElement);
+        }
+        public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
+            this.insertNodeAtStartWorker(sourceFile, obj, newElement);
+        }
+
+        private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
             const clsStart = cls.getStart(sourceFile);
             const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
                 + this.formatContext.options.indentSize!;
-            this.insertNodeAt(sourceFile, cls.members.pos, newElement, { indentation, ...this.getInsertNodeAtClassStartPrefixSuffix(sourceFile, cls) });
+            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, { indentation, ...this.getInsertNodeAtStartPrefixSuffix(sourceFile, cls) });
         }
 
-        private getInsertNodeAtClassStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration): { prefix: string, suffix: string } {
-            if (cls.members.length === 0) {
-                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), cls)) {
+        private getInsertNodeAtStartPrefixSuffix(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): { prefix: string, suffix: string } {
+            const comma = isObjectLiteralExpression(cls) ? "," : "";
+            if (getMembersOrProperties(cls).length === 0) {
+                if (addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile })) {
                     // For `class C {\n}`, don't add the trailing "\n"
-                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
-                    return { prefix: this.newLineCharacter, suffix: shouldSuffix ? this.newLineCharacter : "" };
+                    const shouldSuffix = (positionsAreOnSameLine as any)(...getClassOrObjectBraceEnds(cls, sourceFile), sourceFile); // TODO: GH#4130 remove 'as any'
+                    return { prefix: this.newLineCharacter, suffix: comma + (shouldSuffix ? this.newLineCharacter : "") };
                 }
                 else {
-                    return { prefix: "", suffix: this.newLineCharacter };
+                    return { prefix: "", suffix: comma + this.newLineCharacter };
                 }
             }
             else {
-                return { prefix: this.newLineCharacter, suffix: "" };
+                return { prefix: this.newLineCharacter, suffix: comma };
             }
         }
 
@@ -647,9 +655,8 @@ namespace ts.textChanges {
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
-            this.classesWithNodesInsertedAtStart.forEach(cls => {
-                const sourceFile = cls.getSourceFile();
-                const [openBraceEnd, closeBraceEnd] = getClassBraceEnds(cls, sourceFile);
+            this.classesWithNodesInsertedAtStart.forEach(({ node, sourceFile }) => {
+                const [openBraceEnd, closeBraceEnd] = getClassOrObjectBraceEnds(node, sourceFile);
                 // For `class C { }` remove the whitespace inside the braces.
                 if (positionsAreOnSameLine(openBraceEnd, closeBraceEnd, sourceFile) && openBraceEnd !== closeBraceEnd - 1) {
                     this.deleteRange(sourceFile, createRange(openBraceEnd, closeBraceEnd - 1));
@@ -698,7 +705,7 @@ namespace ts.textChanges {
             return changes;
         }
 
-        public createNewFile(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>) {
+        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>) {
             this.newFiles.push({ oldFile, fileName, statements });
         }
     }
@@ -708,11 +715,18 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function getClassBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration, sourceFile: SourceFile): [number, number] {
+    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number, number] {
         return [findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile)!.end, findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)!.end];
+    }
+    function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
+        return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
+
+    export function getNewFileText(statements: ReadonlyArray<Statement>, scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+        return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
+    }
 
     namespace changesToText {
         export function getTextChangesFromChanges(changes: ReadonlyArray<Change>, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
@@ -732,13 +746,17 @@ namespace ts.textChanges {
             });
         }
 
-        export function newFileChanges(oldFile: SourceFile, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+        export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+            const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
+            return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
+        }
+
+        export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: ReadonlyArray<Statement>, newLineCharacter: string, formatContext: formatting.FormatContext): string {
             // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
-            const sourceFile = createSourceFile(fileName, nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true);
+            const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
-            const text = applyChanges(nonFormattedText, changes);
-            return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
+            return applyChanges(nonFormattedText, changes);
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {

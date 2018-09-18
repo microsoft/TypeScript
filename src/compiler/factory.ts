@@ -235,7 +235,7 @@ namespace ts {
 
     // Modifiers
 
-    export function createModifier<T extends Modifier["kind"]>(kind: T) {
+    export function createModifier<T extends Modifier["kind"]>(kind: T): Token<T> {
         return createToken(kind);
     }
 
