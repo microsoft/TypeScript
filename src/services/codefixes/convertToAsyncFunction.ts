@@ -372,7 +372,7 @@ namespace ts.codefix {
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
         const originalNodeParent = node.original ? node.original.parent : node.parent;
         if (prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
-            return createTransformedStatement(prevArgName, createAwait(node), transformer).concat(); // hack to make the types match
+            return createTransformedStatement(prevArgName, createAwait(node), transformer);
         }
         else if (!prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
@@ -381,7 +381,7 @@ namespace ts.codefix {
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createTransformedStatement(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
+    function createTransformedStatement(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): MutableNodeArray<Statement> {
         if (!prevArgName || prevArgName.identifier.text.length === 0) {
             // if there's no argName to assign to, there still might be side effects
             return createNodeArray([createStatement(rightHandSide)]);
@@ -405,7 +405,10 @@ namespace ts.codefix {
                 // do not produce a transformed statement for a null argument
                 break;
             case SyntaxKind.Identifier: // identifier includes undefined
-                if (!argName) break;
+                if (!argName) {
+                    // undefined was argument passed to promise handler
+                    break;
+                }
 
                 const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, argName ? [argName.identifier] : []);
                 if (shouldReturn) {
@@ -533,7 +536,7 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier | undefined {
+    function getArgName(funcNode: Expression, transformer: Transformer): SynthIdentifier | undefined {
 
         const numberOfAssignmentsOriginal = 0;
         const types: Type[] = [];
@@ -543,20 +546,21 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(funcNode)) {
             if (funcNode.parameters.length > 0) {
                 const param = funcNode.parameters[0].name as Identifier;
-                name = getMapEntryIfExists(param);
+                name = getMapEntryOrDefault(param);
             }
         }
         else if (isIdentifier(funcNode)) {
-            name = getMapEntryIfExists(funcNode);
+            name = getMapEntryOrDefault(funcNode);
         }
 
-        if (!name || name.identifier === undefined || name.identifier.text === "undefined") {
+        // return undefined argName when arg is null or undefined
+        if (!name || name.identifier.text === "undefined") {
             return undefined;
         }
 
         return name;
 
-        function getMapEntryIfExists(identifier: Identifier): SynthIdentifier {
+        function getMapEntryOrDefault(identifier: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(identifier);
             const symbol = getSymbol(originalNode);
 

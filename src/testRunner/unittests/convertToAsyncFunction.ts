@@ -489,6 +489,12 @@ function [#|f|]() {
 }
 `
         );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoCatch", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(x => x.statusText).catch(undefined);
+}
+`
+        );
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestion", `
 function [#|f|]():Promise<Response> {
     return fetch('https://typescriptlang.org');
