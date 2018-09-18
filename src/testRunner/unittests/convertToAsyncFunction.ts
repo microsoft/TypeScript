@@ -489,7 +489,7 @@ function [#|f|]() {
 }
 `
         );
-        _testConvertToAsyncFunction("convertToAsyncFunction_NoCatch", `
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoCatchHandler", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(x => x.statusText).catch(undefined);
 }
