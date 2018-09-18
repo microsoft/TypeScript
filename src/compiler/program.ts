@@ -2532,7 +2532,7 @@ namespace ts {
             }
 
             if (options.declarationDir) {
-                if (!options.declaration) {
+                if (!getEmitDeclarations(options)) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration");
                 }
                 if (options.out || options.outFile) {
