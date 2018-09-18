@@ -228,11 +228,11 @@ function unknownNarrowing(x: unknown) {
 }
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
-    function assertKeyofT(k1: keyof S) { }
+    function assertKeyofS(k1: keyof S) { }
     switch (typeof k) {
-        case 'number': assertNumber(k); assertKeyofT(k); return;
-        case 'symbol': assertSymbol(k); assertKeyofT(k); return;
-        case 'string': assertString(k); assertKeyofT(k); return;
+        case 'number': assertNumber(k); assertKeyofS(k); return;
+        case 'symbol': assertSymbol(k); assertKeyofS(k); return;
+        case 'string': assertString(k); assertKeyofS(k); return;
     }
 }
 
@@ -524,19 +524,19 @@ function unknownNarrowing(x) {
     }
 }
 function keyofNarrowing(k) {
-    function assertKeyofT(k1) { }
+    function assertKeyofS(k1) { }
     switch (typeof k) {
         case 'number':
             assertNumber(k);
-            assertKeyofT(k);
+            assertKeyofS(k);
             return;
         case 'symbol':
             assertSymbol(k);
-            assertKeyofT(k);
+            assertKeyofS(k);
             return;
         case 'string':
             assertString(k);
-            assertKeyofT(k);
+            assertKeyofS(k);
             return;
     }
 }

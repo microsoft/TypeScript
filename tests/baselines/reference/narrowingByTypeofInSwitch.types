@@ -235,7 +235,7 @@ function testAny(x: any) {
 >'function' : "function"
 >assertFunction(x) : Function
 >assertFunction : (x: Function) => Function
->x : Function
+>x : any
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
@@ -771,39 +771,39 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
 >k : keyof S
 
-    function assertKeyofT(k1: keyof S) { }
->assertKeyofT : (k1: keyof S) => void
+    function assertKeyofS(k1: keyof S) { }
+>assertKeyofS : (k1: keyof S) => void
 >k1 : keyof S
 
     switch (typeof k) {
 >typeof k : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >k : keyof S
 
-        case 'number': assertNumber(k); assertKeyofT(k); return;
+        case 'number': assertNumber(k); assertKeyofS(k); return;
 >'number' : "number"
 >assertNumber(k) : number
 >assertNumber : (x: number) => number
 >k : keyof S & number
->assertKeyofT(k) : void
->assertKeyofT : (k1: keyof S) => void
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
 >k : keyof S & number
 
-        case 'symbol': assertSymbol(k); assertKeyofT(k); return;
+        case 'symbol': assertSymbol(k); assertKeyofS(k); return;
 >'symbol' : "symbol"
 >assertSymbol(k) : symbol
 >assertSymbol : (x: symbol) => symbol
 >k : keyof S & symbol
->assertKeyofT(k) : void
->assertKeyofT : (k1: keyof S) => void
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
 >k : keyof S & symbol
 
-        case 'string': assertString(k); assertKeyofT(k); return;
+        case 'string': assertString(k); assertKeyofS(k); return;
 >'string' : "string"
 >assertString(k) : string
 >assertString : (x: string) => string
 >k : keyof S & string
->assertKeyofT(k) : void
->assertKeyofT : (k1: keyof S) => void
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
 >k : keyof S & string
     }
 }
