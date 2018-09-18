@@ -23,6 +23,42 @@ namespace ts {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
             });
+
+            it("builds correctly when outDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/", "/logic/outDir/"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
+
+            it("builds correctly when declarationDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/index.d.ts", "/logic/out/decls/index.d.ts"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
         });
 
         describe("tsbuild - dry builds", () => {

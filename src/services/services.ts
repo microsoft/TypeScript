@@ -541,6 +541,7 @@ namespace ts {
         public fileName: string;
         public path: Path;
         public resolvedPath: Path;
+        public originalFileName: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;
