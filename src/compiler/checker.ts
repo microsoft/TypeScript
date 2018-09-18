@@ -15277,8 +15277,7 @@ namespace ts {
                         impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
                     }
                     if (isTypeSubtypeOf(impliedType, type)) {
-                        // Intersection to handle `string` being a subtype of `keyof T`
-                        return type.flags & TypeFlags.Any ? impliedType : getIntersectionType([type, impliedType]);
+                        return impliedType;
                     }
                     if (type.flags & TypeFlags.Instantiable) {
                         const constraint = getBaseConstraintOfType(type) || anyType;
