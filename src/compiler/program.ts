@@ -2609,7 +2609,7 @@ namespace ts {
                 }
             }
 
-            if (!options.noEmit && options.allowJs && (options.declaration || options.composite)) {
+            if (!options.noEmit && options.allowJs && getEmitDeclarations(options)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", options.declaration ? "declaration" : "composite");
             }
 
