@@ -4644,7 +4644,7 @@
         "category": "Message",
         "code": 95062
     },
-    
+
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4658,7 +4658,15 @@
          "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
-         "code": 95066
+        "category": "Message",
+        "code": 95066
+    },
+    "Generate types for '{0}'": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Generate types for all packages without types": {
+        "category": "Message",
+        "code": 95068
     }
 }
