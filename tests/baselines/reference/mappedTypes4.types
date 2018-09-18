@@ -45,7 +45,7 @@ function boxify<T>(obj: T): Boxified<T> {
     }
     return <any>obj;
 ><any>obj : any
->obj : never
+>obj : T
 }
 
 type A = { a: string };

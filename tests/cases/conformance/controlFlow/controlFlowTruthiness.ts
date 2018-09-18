@@ -68,3 +68,30 @@ function f6() {
         y; // string | undefined
     }
 }
+
+function f7(x: {}) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+
+function f8<T>(x: T) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+
+function f9<T extends object>(x: T) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // never
+    }
+}
