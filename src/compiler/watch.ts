@@ -546,7 +546,8 @@ namespace ts {
             },
             maxNumberOfFilesToIterateForInvalidation: host.maxNumberOfFilesToIterateForInvalidation,
             getCurrentProgram,
-            writeLog
+            writeLog,
+            readDirectory: (path, extensions, exclude, include, depth?) => directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth),
         };
         // Cache for the module resolution
         const resolutionCache = createResolutionCache(compilerHost, configFileName ?

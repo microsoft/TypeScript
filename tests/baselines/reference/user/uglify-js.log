@@ -33,7 +33,7 @@ node_modules/uglify-js/lib/compress.js(3464,62): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(3690,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3711,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(3721,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(3880,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'defs' must be of type 'Dictionary & { set: (key: any, val: any) => any; add: (key: any, val: any) => any; get: (key: any) => any; del: (key: any) => any; has: (key: any) => boolean; each: (f: any) => void; size: () => any; map: (f: any) => any[]; clone: () => Dictionary & any; toObject: () => any; }', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(3880,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'defs' must be of type 'Dictionary & { set: (key: any, val: any) => Dictionary & any; add: (key: any, val: any) => Dictionary & any; get: (key: any) => any; del: (key: any) => Dictionary & any; has: (key: any) => boolean; ... 4 more ...; toObject: () => any; }', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(3932,17): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
 node_modules/uglify-js/lib/compress.js(3988,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4097,18): error TS2554: Expected 0 arguments, but got 1.
