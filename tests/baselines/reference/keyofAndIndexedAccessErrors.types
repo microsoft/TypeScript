@@ -396,3 +396,19 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >tk : T[K]
 }
 
+// The constraint of 'keyof T' is 'keyof T'
+function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+>f4 : <T extends { [K in keyof T]: string; }>(k: keyof T) => void
+>k : keyof T
+
+    k = 42; // error
+>k = 42 : 42
+>k : keyof T
+>42 : 42
+
+    k = "hello"; // error
+>k = "hello" : "hello"
+>k : keyof T
+>"hello" : "hello"
+}
+
