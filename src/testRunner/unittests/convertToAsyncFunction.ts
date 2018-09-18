@@ -292,7 +292,7 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions)
+                formatContext: formatting.getFormatContext(testFormatSettings)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
