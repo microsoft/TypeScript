@@ -15261,27 +15261,29 @@ namespace ts {
                   boolean. We know that number cannot be selected
                   because it is caught in the first clause.
                 */
-                const isTypeUnknown = type.flags & TypeFlags.Unknown;
-                const isTypeAny = type.flags & TypeFlags.Any;
-                const getTypeFromName = (text: string) =>
-                    (text === "function" && !isTypeAny) ? globalFunctionType :
-                        (text === "object" && isTypeUnknown) ? getUnionType([nonPrimitiveType, nullType]) :
-                            (typeofTypesByName.get(text) || neverType);
+                const getTypeFromName = (text: string) => {
+                    switch (text) {
+                        case "function":
+                            return type.flags & TypeFlags.Any ? type : globalFunctionType;
+                        case "object":
+                            return type.flags & TypeFlags.Unknown ? getUnionType([nonPrimitiveType, nullType]) : type;
+                        default:
+                            return typeofTypesByName.get(text) || unknownType;
+                    }
+                };
                 if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
                     let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(getTypeFromName)), switchFacts);
                     if (impliedType.flags & TypeFlags.Union) {
                         impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
                     }
-                    if (!(impliedType.flags & TypeFlags.Never)) {
-                        if (isTypeSubtypeOf(impliedType, type)) {
-                            // Intersection to handle `string` being a subtype of `keyof T`
-                            return isTypeAny ? impliedType : getIntersectionType([type, impliedType]);
-                        }
-                        if (type.flags & TypeFlags.Instantiable) {
-                            const constraint = getBaseConstraintOfType(type) || anyType;
-                            if (isTypeSubtypeOf(impliedType, constraint)) {
-                                return getIntersectionType([type, impliedType]);
-                            }
+                    if (isTypeSubtypeOf(impliedType, type)) {
+                        // Intersection to handle `string` being a subtype of `keyof T`
+                        return type.flags & TypeFlags.Any ? impliedType : getIntersectionType([type, impliedType]);
+                    }
+                    if (type.flags & TypeFlags.Instantiable) {
+                        const constraint = getBaseConstraintOfType(type) || anyType;
+                        if (isTypeSubtypeOf(impliedType, constraint)) {
+                            return getIntersectionType([type, impliedType]);
                         }
                     }
                 }
