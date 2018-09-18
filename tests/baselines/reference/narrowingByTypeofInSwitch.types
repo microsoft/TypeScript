@@ -80,7 +80,7 @@ function assertAll(x: Basic) {
 >x : Basic
 }
 
-function assertStringOrNumber(x: string | number)  {
+function assertStringOrNumber(x: string | number) {
 >assertStringOrNumber : (x: string | number) => string | number
 >x : string | number
 
@@ -88,7 +88,7 @@ function assertStringOrNumber(x: string | number)  {
 >x : string | number
 }
 
-function assertBooleanOrObject(x: boolean | object)  {
+function assertBooleanOrObject(x: boolean | object) {
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
 >x : boolean | object
 
@@ -767,68 +767,44 @@ function unknownNarrowing(x: unknown) {
     }
 }
 
-function keyofNarrowing<T>(k: keyof T) {
->keyofNarrowing : <T>(k: keyof T) => void
->k : keyof T
+function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
+>keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
+>k : keyof S
 
-    function assertKeyofT(k1: keyof T) { }
->assertKeyofT : (k1: keyof T) => void
->k1 : keyof T
+    function assertKeyofT(k1: keyof S) { }
+>assertKeyofT : (k1: keyof S) => void
+>k1 : keyof S
 
     switch (typeof k) {
 >typeof k : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->k : keyof T
+>k : keyof S
 
         case 'number': assertNumber(k); assertKeyofT(k); return;
 >'number' : "number"
 >assertNumber(k) : number
 >assertNumber : (x: number) => number
->k : keyof T & number
+>k : keyof S & number
 >assertKeyofT(k) : void
->assertKeyofT : (k1: keyof T) => void
->k : keyof T & number
+>assertKeyofT : (k1: keyof S) => void
+>k : keyof S & number
 
         case 'symbol': assertSymbol(k); assertKeyofT(k); return;
 >'symbol' : "symbol"
 >assertSymbol(k) : symbol
 >assertSymbol : (x: symbol) => symbol
->k : keyof T & symbol
+>k : keyof S & symbol
 >assertKeyofT(k) : void
->assertKeyofT : (k1: keyof T) => void
->k : keyof T & symbol
+>assertKeyofT : (k1: keyof S) => void
+>k : keyof S & symbol
 
         case 'string': assertString(k); assertKeyofT(k); return;
 >'string' : "string"
 >assertString(k) : string
 >assertString : (x: string) => string
->k : keyof T & string
+>k : keyof S & string
 >assertKeyofT(k) : void
->assertKeyofT : (k1: keyof T) => void
->k : keyof T & string
-
-        case 'boolean': assertNever(k);
->'boolean' : "boolean"
->assertNever(k) : never
->assertNever : (x: never) => never
->k : never
-
-        case 'function': assertNever(k);
->'function' : "function"
->assertNever(k) : never
->assertNever : (x: never) => never
->k : never
-
-        case 'object': assertNever(k);
->'object' : "object"
->assertNever(k) : never
->assertNever : (x: never) => never
->k : never
-
-        case 'undefined': assertNever(k); return;
->'undefined' : "undefined"
->assertNever(k) : never
->assertNever : (x: never) => never
->k : never
+>assertKeyofT : (k1: keyof S) => void
+>k : keyof S & string
     }
 }
 

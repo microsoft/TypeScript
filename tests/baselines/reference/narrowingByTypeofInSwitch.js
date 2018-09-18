@@ -39,11 +39,11 @@ function assertAll(x: Basic) {
     return x;
 }
 
-function assertStringOrNumber(x: string | number)  {
+function assertStringOrNumber(x: string | number) {
     return x;
 }
 
-function assertBooleanOrObject(x: boolean | object)  {
+function assertBooleanOrObject(x: boolean | object) {
     return x;
 }
 
@@ -227,16 +227,12 @@ function unknownNarrowing(x: unknown) {
     }
 }
 
-function keyofNarrowing<T>(k: keyof T) {
-    function assertKeyofT(k1: keyof T) { }
+function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
+    function assertKeyofT(k1: keyof S) { }
     switch (typeof k) {
         case 'number': assertNumber(k); assertKeyofT(k); return;
         case 'symbol': assertSymbol(k); assertKeyofT(k); return;
         case 'string': assertString(k); assertKeyofT(k); return;
-        case 'boolean': assertNever(k);
-        case 'function': assertNever(k);
-        case 'object': assertNever(k);
-        case 'undefined': assertNever(k); return;
     }
 }
 
@@ -541,12 +537,6 @@ function keyofNarrowing(k) {
         case 'string':
             assertString(k);
             assertKeyofT(k);
-            return;
-        case 'boolean': assertNever(k);
-        case 'function': assertNever(k);
-        case 'object': assertNever(k);
-        case 'undefined':
-            assertNever(k);
             return;
     }
 }
