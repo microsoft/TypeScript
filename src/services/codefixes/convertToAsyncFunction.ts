@@ -405,7 +405,10 @@ namespace ts.codefix {
                 // do not produce a transformed statement for a null argument
                 break;
             case SyntaxKind.Identifier: // identifier includes undefined
-                if (!argName) break;
+                if (!argName) {
+                    // undefined was argument passed to promise handler
+                    break;
+                }
 
                 const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, argName ? [argName.identifier] : emptyArray);
                 if (shouldReturn) {
@@ -533,7 +536,7 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier | undefined {
+    function getArgName(funcNode: Expression, transformer: Transformer): SynthIdentifier | undefined {
 
         const numberOfAssignmentsOriginal = 0;
         const types: Type[] = [];
@@ -543,20 +546,21 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(funcNode)) {
             if (funcNode.parameters.length > 0) {
                 const param = funcNode.parameters[0].name as Identifier;
-                name = getMapEntryIfExists(param);
+                name = getMapEntryOrDefault(param);
             }
         }
         else if (isIdentifier(funcNode)) {
-            name = getMapEntryIfExists(funcNode);
+            name = getMapEntryOrDefault(funcNode);
         }
 
-        if (!name || name.identifier === undefined || name.identifier.text === "undefined") {
+        // return undefined argName when arg is null or undefined
+        if (!name || name.identifier.text === "undefined") {
             return undefined;
         }
 
         return name;
 
-        function getMapEntryIfExists(identifier: Identifier): SynthIdentifier {
+        function getMapEntryOrDefault(identifier: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(identifier);
             const symbol = getSymbol(originalNode);
 
