@@ -305,10 +305,10 @@ namespace ts {
             assert.equal(program1.structureIsReused, StructureIsReused.Not);
         });
 
-        it("fails if rootdir changes", () => {
+        it("succeeds if rootdir changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
             updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if config path changes", () => {
@@ -914,7 +914,8 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false
+                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*projectReferences*/ undefined
             );
             assert.isTrue(actual);
         }

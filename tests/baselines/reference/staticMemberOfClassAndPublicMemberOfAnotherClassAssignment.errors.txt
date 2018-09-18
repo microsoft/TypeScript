@@ -28,7 +28,7 @@ tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.
         ~
 !!! error TS2322: Type 'typeof B' is not assignable to type 'A'.
 !!! error TS2322:   Property 'prop' is missing in type 'typeof B'.
-!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:13:5: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:13:5: Did you mean to use 'new' with this expression?
     a = C;
     
     var b: B = new C(); // error prop is missing
@@ -39,7 +39,7 @@ tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.
         ~
 !!! error TS2322: Type 'typeof B' is not assignable to type 'B'.
 !!! error TS2322:   Property 'prop' is missing in type 'typeof B'.
-!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:17:5: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts:17:5: Did you mean to use 'new' with this expression?
     b = C;
     b = a;
     

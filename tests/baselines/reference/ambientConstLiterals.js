@@ -63,7 +63,7 @@ declare const c3 = "abc";
 declare const c4 = 123;
 declare const c5 = 123;
 declare const c6 = -123;
-declare const c7: boolean;
+declare const c7 = true;
 declare const c8 = E.A;
 declare const c8b = E["non identifier"];
 declare const c9: {

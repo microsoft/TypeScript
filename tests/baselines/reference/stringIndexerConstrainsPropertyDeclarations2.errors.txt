@@ -63,10 +63,10 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
            ~
 !!! error TS2322: Type 'typeof A' is not assignable to type 'A'.
 !!! error TS2322:   Property 'foo' is missing in type 'typeof A'.
-!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:37:8: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:37:8: Did you mean to use 'new' with this expression?
         b: B
            ~
 !!! error TS2322: Type 'typeof B' is not assignable to type 'A'.
 !!! error TS2322:   Property 'foo' is missing in type 'typeof B'.
-!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:38:8: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations2.ts:38:8: Did you mean to use 'new' with this expression?
     }

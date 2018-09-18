@@ -2502,9 +2502,7 @@ Actual: ${stringify(fullActual)}`);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
             assert.deepEqual<ReadonlyArray<{}> | undefined>(commands, expectedCommands);
-            assert(changes.every(c => c.fileName === this.activeFile.fileName), "TODO: support testing codefixes that touch multiple files");
-            this.applyChanges(changes);
-            this.verifyCurrentFileContent(newFileContent);
+            this.verifyNewContent({ newFileContent }, changes);
         }
 
         /**
@@ -3389,6 +3387,19 @@ Actual: ${stringify(fullActual)}`);
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions): ReadonlyArray<ts.ApplicableRefactorInfo> {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
         }
+
+        public generateTypes(examples: ReadonlyArray<FourSlashInterface.GenerateTypesOptions>): void {
+            for (const { name = "example", value, output, outputBaseline } of examples) {
+                const actual = ts.generateTypesForModule(name, value, this.formatCodeSettings);
+                if (outputBaseline) {
+                    if (actual === undefined) throw ts.Debug.fail();
+                    Harness.Baseline.runBaseline(ts.combinePaths("generateTypes", outputBaseline + ts.Extension.Dts), actual);
+                }
+                else {
+                    assert.equal(actual, output, `generateTypes output for ${name} does not match`);
+                }
+            }
+        }
     }
 
     function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: ReadonlyArray<ts.TextChange>): ts.TextRange {
@@ -3442,7 +3453,7 @@ Actual: ${stringify(fullActual)}`);
         // Parse out the files and their metadata
         const testData = parseTestData(absoluteBasePath, content, absoluteFileName);
         const state = new TestState(absoluteBasePath, testType, testData);
-        const output = ts.transpileModule(content, { reportDiagnostics: true });
+        const output = ts.transpileModule(content, { reportDiagnostics: true, compilerOptions: { target: ts.ScriptTarget.ES2015 } });
         if (output.diagnostics!.length > 0) {
             throw new Error(`Syntax error in ${absoluteBasePath}: ${output.diagnostics![0].messageText}`);
         }
@@ -4512,6 +4523,18 @@ namespace FourSlashInterface {
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
+
+        public generateTypes(...options: GenerateTypesOptions[]): void {
+            this.state.generateTypes(options);
+        }
+    }
+
+    export interface GenerateTypesOptions {
+        readonly name?: string;
+        readonly value: unknown;
+        // Exactly one of these should be set:
+        readonly output?: string;
+        readonly outputBaseline?: string;
     }
 
     export class Edit {
@@ -4901,7 +4924,7 @@ namespace FourSlashInterface {
     export interface VerifyCodeFixAllOptions {
         fixId: string;
         fixAllDescription: string;
-        newFileContent: string;
+        newFileContent: NewFileContent;
         commands: ReadonlyArray<{}>;
     }
 

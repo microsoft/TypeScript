@@ -2465,7 +2465,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2522,7 +2522,7 @@ namespace ts {
             const isToplevel = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
+            if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
@@ -2532,7 +2532,9 @@ namespace ts {
                         return symbol;
                     }
                     else {
-                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
+                        const table = parent ? parent.exports! :
+                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                        return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
             }
@@ -2900,6 +2902,9 @@ namespace ts {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
+        }
+        if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
+            return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }

@@ -244,6 +244,20 @@ namespace ts {
                 }, [
                     combinePaths(basePath, "main.ts")
                 ]);
+
+                it("adds extendedSourceFiles only once", () => {
+                    const sourceFile = readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
+                    const dir = combinePaths(basePath, "configs");
+                    const expected = [
+                        combinePaths(dir, "third.json"),
+                        combinePaths(dir, "second.json"),
+                        combinePaths(dir, "base.json"),
+                    ];
+                    parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                    parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                });
             });
         });
     });
