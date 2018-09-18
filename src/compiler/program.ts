@@ -2609,8 +2609,8 @@ namespace ts {
                 }
             }
 
-            if (!options.noEmit && options.allowJs && options.declaration) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration");
+            if (!options.noEmit && options.allowJs && getEmitDeclarations(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", options.declaration ? "declaration" : "composite");
             }
 
             if (options.checkJs && !options.allowJs) {
