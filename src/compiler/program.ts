@@ -485,11 +485,11 @@ namespace ts {
 
         function sourceFileNotUptoDate(sourceFile: SourceFile) {
             return !sourceFileVersionUptoDate(sourceFile) ||
-                hasInvalidatedResolution(sourceFile.resolvedPath || sourceFile.path);
+                hasInvalidatedResolution(sourceFile.resolvedPath);
         }
 
         function sourceFileVersionUptoDate(sourceFile: SourceFile) {
-            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath || sourceFile.path);
+            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath);
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
@@ -1079,7 +1079,7 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath || oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
@@ -1110,7 +1110,11 @@ namespace ts {
                     fileChanged = newSourceFile !== oldSourceFile;
                 }
 
+                // Since the project references havent changed, its right to set originalFileName and resolvedPath here
                 newSourceFile.path = oldSourceFile.path;
+                newSourceFile.originalFileName = oldSourceFile.originalFileName;
+                newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
+                newSourceFile.fileName = oldSourceFile.fileName;
                 filePaths.push(newSourceFile.path);
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
@@ -1187,7 +1191,7 @@ namespace ts {
             modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
-                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
+                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.originalFileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = getModuleNames(newSourceFile);
                     const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
@@ -2040,6 +2044,7 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
+            const originalFileName = fileName;
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -2136,6 +2141,7 @@ namespace ts {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
+                file.originalFileName = originalFileName;
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
@@ -2191,7 +2197,7 @@ namespace ts {
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
-                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                const referencedFileName = resolveTripleslashReference(ref.fileName, file.originalFileName);
                 processSourceFile(referencedFileName, isDefaultLib, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined, file, ref.pos, ref.end);
             });
         }
@@ -2203,7 +2209,7 @@ namespace ts {
                 return;
             }
 
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName);
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
@@ -2299,7 +2305,7 @@ namespace ts {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
                 const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile: oldProgram && oldProgram.getSourceFile(file.fileName), modifiedFilePaths };
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.originalFileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
