@@ -1382,7 +1382,7 @@ namespace ts {
             // Therefore only get diagnostics for given file.
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
-            if (!program.getCompilerOptions().declaration) {
+            if (!getEmitDeclarations(program.getCompilerOptions())) {
                 return semanticDiagnostics.slice();
             }
 
