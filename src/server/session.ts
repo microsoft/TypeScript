@@ -1161,13 +1161,12 @@ namespace ts.server {
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo = Session.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position), Debug.assertDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
-        // strips 'triggerSpan'
-        private static mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers }: RenameInfo): protocol.RenameInfo {
-            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers };
+        private mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan }: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
+            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) };
         }
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {

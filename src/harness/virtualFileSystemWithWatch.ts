@@ -187,9 +187,10 @@ interface Array<T> {}`
     }
 
     export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        checkMapKeys(caption, arrayToMap(actual, identity), expected);
         assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
         for (const f of expected) {
-            assert.equal(true, contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
+            assert.isTrue(contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
         }
     }
 
@@ -934,7 +935,12 @@ interface Array<T> {}`
             const folder = this.fs.get(base) as FsFolder;
             Debug.assert(isFsFolder(folder));
 
-            this.addFileOrFolderInFolder(folder, file);
+            if (!this.fs.has(file.path)) {
+                this.addFileOrFolderInFolder(folder, file);
+            }
+            else {
+                this.modifyFile(path, content);
+            }
         }
 
         write(message: string) {

@@ -7077,9 +7077,8 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : compilerOptions.esModuleInterop
-                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
-                : moduleKind === ModuleKind.System;
+            : compilerOptions.esModuleInterop ||
+            moduleKind === ModuleKind.System;
     }
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {

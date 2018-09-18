@@ -456,7 +456,7 @@ namespace ts.projectSystem {
     function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
         return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
     }
-    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions) {
+    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileSpan {
         return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring, options) };
     }
     function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
@@ -8287,7 +8287,8 @@ namespace ts.projectSystem {
                 protocolTextSpanFromSubstring(aFile.content, "C"),
                 protocolTextSpanFromSubstring(aFile.content, "C", { index: 1 }),
             ];
-            const cLocs: protocol.TextSpan[] = [protocolTextSpanFromSubstring(cFile.content, "C")];
+            const span = protocolTextSpanFromSubstring(cFile.content, "C");
+            const cLocs: protocol.TextSpan[] = [span];
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
                     canRename: true,
@@ -8296,6 +8297,7 @@ namespace ts.projectSystem {
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
                     localizedErrorMessage: undefined,
+                    triggerSpan: span,
                 },
                 locs: [
                     { file: aFc, locs: cLocs },
@@ -10063,6 +10065,7 @@ declare class TestLib {
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
                     localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
             });
@@ -10081,6 +10084,7 @@ declare class TestLib {
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
                     localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "fnA"),
                 },
                 locs: [renameATs(aTs), renameUserTs(userTs)],
             });
@@ -10109,6 +10113,7 @@ declare class TestLib {
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
                     localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                 },
                 locs: [
                     {
