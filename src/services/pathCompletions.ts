@@ -213,7 +213,9 @@ namespace ts.Completions.PathCompletions {
             result.push(nameAndKind(ambientName, ScriptElementKind.externalModuleName));
         }
 
-        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
+        if (fragmentDirectory === undefined) {
+            getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
+        }
 
         if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
