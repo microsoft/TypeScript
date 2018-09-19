@@ -8158,7 +8158,7 @@ namespace ts {
                 const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
-                    const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
+                    const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
                     const diag = minTypeArgumentCount === typeParameters.length
                         ? missingAugmentsTag
                         ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
