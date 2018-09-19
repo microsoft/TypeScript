@@ -13620,14 +13620,13 @@ namespace ts {
                         if (apparentSource !== source && allowComplexConstraintInference && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
                             // TODO: The `allowComplexConstraintInference` flag is a hack! This forbids inference from complex constraints within constraints!
                             // This isn't required algorithmically, but rather is used to lower the memory burden caused by performing inference
-                            // that is _too gooisTopLevelInExternalModuleAugmentationd_ in projects with complicated constraints (eg, fp-ts). In such cases, if we did not limit ourselves
+                            // that is _too good_ in projects with complicated constraints (eg, fp-ts). In such cases, if we did not limit ourselves
                             // here, we might produce more valid inferences for types, causing us to do more checks and perform more instantiations
                             // (in addition to the extra stack depth here) which, in turn, can push the already close process over its limit.
                             // TL;DR: If we ever become generally more memory efficienct (or our resource budget ever increases), we should just
                             // remove this `allowComplexConstraintInference` flag.
                             allowComplexConstraintInference = false;
-                            inferFromTypes(apparentSource, target);
-                            return;
+                            return inferFromTypes(apparentSource, target);
                         }
                         source = apparentSource;
                     }
