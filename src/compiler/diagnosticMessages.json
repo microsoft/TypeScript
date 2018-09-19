@@ -2489,6 +2489,10 @@
         "category": "Error",
         "code": 2734
     },
+    "'Object' key type must be 'string' or 'number'.": {
+        "category": "Error",
+        "code": 2735
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

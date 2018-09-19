@@ -1,0 +1,22 @@
+/a.js(4,12): error TS2735: 'Object' key type must be 'string' or 'number'.
+/a.js(7,12): error TS8026: Expected Array<T> type arguments; provide these with an '@extends' tag.
+/a.js(7,19): error TS8024: JSDoc '@param' tag has name 'f', but there is no parameter with that name.
+
+
+==== /a.js (3 errors) ====
+    /**
+     * @param {Object<string, boolean>} a
+     * @param {Object<number, boolean>} b
+     * @param {Object<boolean, boolean>} c
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2735: 'Object' key type must be 'string' or 'number'.
+     * @param {Object} d
+     * @param {object} e
+     * @param {Array} f
+               ~~~~~
+!!! error TS8026: Expected Array<T> type arguments; provide these with an '@extends' tag.
+                      ~
+!!! error TS8024: JSDoc '@param' tag has name 'f', but there is no parameter with that name.
+     */
+    function f(a, b, c, d, e) {}
+    

@@ -1,0 +1,17 @@
+=== /a.js ===
+/**
+ * @param {Object<string, boolean>} a
+ * @param {Object<number, boolean>} b
+ * @param {Object<boolean, boolean>} c
+ * @param {Object} d
+ * @param {object} e
+ * @param {Array} f
+ */
+function f(a, b, c, d, e) {}
+>f : Symbol(f, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 8, 11))
+>b : Symbol(b, Decl(a.js, 8, 13))
+>c : Symbol(c, Decl(a.js, 8, 16))
+>d : Symbol(d, Decl(a.js, 8, 19))
+>e : Symbol(e, Decl(a.js, 8, 22))
+

@@ -8402,22 +8402,28 @@ namespace ts {
                         return globalFunctionType;
                     case "Array":
                     case "array":
-                        return !typeArgs || !typeArgs.length ? anyArrayType : undefined;
+                        return !noImplicitAny && (!typeArgs || !typeArgs.length) ? anyArrayType : undefined;
                     case "Promise":
                     case "promise":
                         return !typeArgs || !typeArgs.length ? createPromiseType(anyType) : undefined;
                     case "Object":
                         if (typeArgs && typeArgs.length === 2) {
-                            if (isJSDocIndexSignature(node)) {
-                                const indexed = getTypeFromTypeNode(typeArgs[0]);
-                                const target = getTypeFromTypeNode(typeArgs[1]);
-                                const index = createIndexInfo(target, /*isReadonly*/ false);
+                            const indexed = getTypeFromTypeNode(typeArgs[0]);
+                            const target = getTypeFromTypeNode(typeArgs[1]);
+                            const index = createIndexInfo(target, /*isReadonly*/ false);
+                            if (indexed === stringType || indexed === numberType) {
                                 return createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, indexed === stringType ? index : undefined, indexed === numberType ? index : undefined);
                             }
+                            else {
+                                error(node, Diagnostics.Object_key_type_must_be_string_or_number);
+                                return anyType;
+                            }
+                        }
+                        if (!noImplicitAny) {
+                            checkNoTypeArguments(node);
                             return anyType;
                         }
-                        checkNoTypeArguments(node);
-                        return anyType;
+                        return undefined;
                 }
             }
         }
@@ -9941,7 +9947,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
-                    return node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
+                    return !noImplicitAny && node.flags & NodeFlags.JavaScriptFile ? anyType : nonPrimitiveType;
                 case SyntaxKind.ThisType:
                 case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node as ThisExpression | ThisTypeNode);

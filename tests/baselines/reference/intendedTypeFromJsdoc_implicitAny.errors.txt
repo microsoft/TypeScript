@@ -1,0 +1,19 @@
+/a.js(4,12): error TS2735: 'Object' key type must be 'string' or 'number'.
+/a.js(7,19): error TS8024: JSDoc '@param' tag has name 'f', but there is no parameter with that name.
+
+
+==== /a.js (2 errors) ====
+    /**
+     * @param {Object<string, boolean>} a
+     * @param {Object<number, boolean>} b
+     * @param {Object<boolean, boolean>} c
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2735: 'Object' key type must be 'string' or 'number'.
+     * @param {Object} d
+     * @param {object} e
+     * @param {Array} f
+                      ~
+!!! error TS8024: JSDoc '@param' tag has name 'f', but there is no parameter with that name.
+     */
+    function f(a, b, c, d, e) {}
+    

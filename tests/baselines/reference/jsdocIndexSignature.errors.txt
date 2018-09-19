@@ -1,12 +1,15 @@
+tests/cases/conformance/jsdoc/indices.js(5,12): error TS2735: 'Object' key type must be 'string' or 'number'.
 tests/cases/conformance/jsdoc/indices.js(9,5): error TS2322: Type '1' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/jsdoc/indices.js (1 errors) ====
+==== tests/cases/conformance/jsdoc/indices.js (2 errors) ====
     /** @type {Object.<string, number>} */
     var o1;
     /** @type {Object.<number, boolean>} */
     var o2;
     /** @type {Object.<boolean, string>} */
+               ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2735: 'Object' key type must be 'string' or 'number'.
     var o3;
     /** @param {Object.<string, boolean>} o */
     function f(o) {

@@ -1690,14 +1690,6 @@ namespace ts {
         return !!node && !!(node.flags & NodeFlags.JSDoc);
     }
 
-    export function isJSDocIndexSignature(node: TypeReferenceNode | ExpressionWithTypeArguments) {
-        return isTypeReferenceNode(node) &&
-            isIdentifier(node.typeName) &&
-            node.typeName.escapedText === "Object" &&
-            node.typeArguments && node.typeArguments.length === 2 &&
-            (node.typeArguments[0].kind === SyntaxKind.StringKeyword || node.typeArguments[0].kind === SyntaxKind.NumberKeyword);
-    }
-
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
      * exactly one argument (of the form 'require("name")').
