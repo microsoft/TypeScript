@@ -525,7 +525,7 @@ declare namespace ts {
     }
     type EntityName = Identifier | QualifiedName;
     type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
-    type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
+    type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
     }

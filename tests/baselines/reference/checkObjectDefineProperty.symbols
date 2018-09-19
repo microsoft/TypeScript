@@ -1,0 +1,180 @@
+=== tests/cases/conformance/jsdoc/validate.ts ===
+// Validate in TS as simple validations would usually be interpreted as more special assignments
+import x = require("./");
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+
+x.name;
+>x.name : Symbol(x["name"], Decl(index.js, 0, 13))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>name : Symbol(x["name"], Decl(index.js, 0, 13))
+
+x.lastName;
+>x.lastName : Symbol(x["lastName"], Decl(index.js, 1, 71))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>lastName : Symbol(x["lastName"], Decl(index.js, 1, 71))
+
+x.zip;
+>x.zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+
+x.houseNumber;
+>x.houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+
+x.zipStr;
+>x.zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+
+x.name = "Another"; 
+>x.name : Symbol(x["name"], Decl(index.js, 0, 13))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>name : Symbol(x["name"], Decl(index.js, 0, 13))
+
+x.zip = 98123;
+>x.zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+
+x.zipStr = "OK";
+>x.zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+
+x.lastName = "should fail";
+>x.lastName : Symbol(x["lastName"], Decl(index.js, 1, 71))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>lastName : Symbol(x["lastName"], Decl(index.js, 1, 71))
+
+x.houseNumber = 12; // should also fail
+>x.houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+
+x.zipStr = 12; // should fail
+>x.zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+>x : Symbol(x, Decl(validate.ts, 0, 0))
+>zipStr : Symbol(x["zipStr"], Decl(index.js, 4, 68))
+
+=== tests/cases/conformance/jsdoc/index.js ===
+const x = {};
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+
+Object.defineProperty(x, "name", { value: "Charles", writable: true });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>value : Symbol(value, Decl(index.js, 1, 34))
+>writable : Symbol(writable, Decl(index.js, 1, 52))
+
+Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>value : Symbol(value, Decl(index.js, 2, 38))
+>writable : Symbol(writable, Decl(index.js, 2, 54))
+
+Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>get : Symbol(get, Decl(index.js, 3, 33))
+>set : Symbol(set, Decl(index.js, 3, 57))
+>_ : Symbol(_, Decl(index.js, 3, 62))
+
+Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>get : Symbol(get, Decl(index.js, 4, 41))
+
+Object.defineProperty(x, "zipStr", {
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+
+    /** @param {string} str */
+    set(str) {
+>set : Symbol(set, Decl(index.js, 5, 36))
+>str : Symbol(str, Decl(index.js, 7, 8))
+
+        this.zip = Number(str) 
+>zip : Symbol(zip, Decl(index.js, 7, 14))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(index.js, 7, 8))
+    }
+});
+
+/**
+ * @param {{name: string}} named
+ */
+function takeName(named) { return named.name; }
+>takeName : Symbol(takeName, Decl(index.js, 10, 3))
+>named : Symbol(named, Decl(index.js, 15, 18))
+>named.name : Symbol(name, Decl(index.js, 13, 12))
+>named : Symbol(named, Decl(index.js, 15, 18))
+>name : Symbol(name, Decl(index.js, 13, 12))
+
+takeName(x);
+>takeName : Symbol(takeName, Decl(index.js, 10, 3))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+
+/**
+ * @type {number}
+ */
+var a = x.zip;
+>a : Symbol(a, Decl(index.js, 21, 3))
+>x.zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>zip : Symbol(x["zip"], Decl(index.js, 2, 74))
+
+/**
+ * @type {number}
+ */
+var b = x.houseNumber;
+>b : Symbol(b, Decl(index.js, 26, 3))
+>x.houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+>houseNumber : Symbol(x["houseNumber"], Decl(index.js, 3, 83))
+
+const returnExemplar = () => x;
+>returnExemplar : Symbol(returnExemplar, Decl(index.js, 28, 5))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+
+const needsExemplar = (_ = x) => void 0;
+>needsExemplar : Symbol(needsExemplar, Decl(index.js, 29, 5))
+>_ : Symbol(_, Decl(index.js, 29, 23))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+
+const expected = /** @type {{name: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
+>expected : Symbol(expected, Decl(index.js, 31, 5))
+
+/**
+ * 
+ * @param {typeof returnExemplar} a 
+ * @param {typeof needsExemplar} b 
+ */
+function match(a, b) {}
+>match : Symbol(match, Decl(index.js, 31, 157))
+>a : Symbol(a, Decl(index.js, 38, 15))
+>b : Symbol(b, Decl(index.js, 38, 17))
+
+match(() => expected, (x = expected) => void 0);
+>match : Symbol(match, Decl(index.js, 31, 157))
+>expected : Symbol(expected, Decl(index.js, 31, 5))
+>x : Symbol(x, Decl(index.js, 40, 23))
+>expected : Symbol(expected, Decl(index.js, 31, 5))
+
+module.exports = x;
+>module.exports : Symbol("tests/cases/conformance/jsdoc/index", Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 40, 48))
+>exports : Symbol(export=, Decl(index.js, 40, 48))
+>x : Symbol(x, Decl(index.js, 0, 5), Decl(index.js, 1, 22))
+

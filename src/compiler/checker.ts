@@ -4841,7 +4841,7 @@ namespace ts {
             let jsdocType: Type | undefined;
             let types: Type[] | undefined;
             for (const declaration of symbol.declarations) {
-                const expression = isBinaryExpression(declaration) ? declaration :
+                const expression = (isBinaryExpression(declaration) || isCallExpression(declaration)) ? declaration :
                     isPropertyAccessExpression(declaration) ? isBinaryExpression(declaration.parent) ? declaration.parent : declaration :
                         undefined;
                 if (!expression) {
@@ -4857,9 +4857,11 @@ namespace ts {
                         definedInMethod = true;
                     }
                 }
-                jsdocType = getJSDocTypeFromAssignmentDeclaration(jsdocType, expression, symbol, declaration);
+                if (!isCallExpression(expression)) {
+                    jsdocType = getJSDocTypeFromAssignmentDeclaration(jsdocType, expression, symbol, declaration);
+                }
                 if (!jsdocType) {
-                    (types || (types = [])).push(isBinaryExpression(expression) ? getInitializerTypeFromAssignmentDeclaration(symbol, resolvedSymbol, expression, kind) : neverType);
+                    (types || (types = [])).push((isBinaryExpression(expression) || isCallExpression(expression)) ? getInitializerTypeFromAssignmentDeclaration(symbol, resolvedSymbol, expression, kind) : neverType);
                 }
             }
             let type = jsdocType;
@@ -4922,7 +4924,32 @@ namespace ts {
         }
 
         /** If we don't have an explicit JSDoc type, get the type from the initializer. */
-        function getInitializerTypeFromAssignmentDeclaration(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: BinaryExpression, kind: AssignmentDeclarationKind) {
+        function getInitializerTypeFromAssignmentDeclaration(symbol: Symbol, resolvedSymbol: Symbol | undefined, expression: BinaryExpression | CallExpression, kind: AssignmentDeclarationKind) {
+            if (isCallExpression(expression)) {
+                if (resolvedSymbol) {
+                    return getTypeOfSymbol(resolvedSymbol); // This shouldn't happen except under some hopefully forbidden merges of export assignments and object define assignments
+                }
+                const objectLitType = checkExpressionCached((expression as BindableObjectDefinePropertyCall).arguments[2]);
+                const valueType = getTypeOfPropertyOfType(objectLitType, "value" as __String);
+                if (valueType) {
+                    return valueType;
+                }
+                const getFunc = getTypeOfPropertyOfType(objectLitType, "get" as __String);
+                if (getFunc) {
+                    const getSig = getSingleCallSignature(getFunc);
+                    if (getSig) {
+                        return getReturnTypeOfSignature(getSig);
+                    }
+                }
+                const setFunc = getTypeOfPropertyOfType(objectLitType, "set" as __String);
+                if (setFunc) {
+                    const setSig = getSingleCallSignature(setFunc);
+                    if (setSig) {
+                        return getTypeOfFirstParameterOfSignature(setSig);
+                    }
+                }
+                return anyType;
+            }
             const type = resolvedSymbol ? getTypeOfSymbol(resolvedSymbol) : getWidenedLiteralType(checkExpressionCached(expression.right));
             if (type.flags & TypeFlags.Object &&
                 kind === AssignmentDeclarationKind.ModuleExports &&
@@ -5176,7 +5203,7 @@ namespace ts {
             }
             let type: Type | undefined;
             if (isInJSFile(declaration) &&
-                (isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
+                (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
                 type = getWidenedTypeFromAssignmentDeclaration(symbol);
             }
             else if (isJSDocPropertyLikeTag(declaration)
@@ -16535,6 +16562,9 @@ namespace ts {
                     }
                     const thisType = checkThisExpression(thisAccess.expression);
                     return thisType && getTypeOfPropertyOfContextualType(thisType, thisAccess.name.escapedText) || false;
+                case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    return Debug.fail("Unimplemented");
                 default:
                     return Debug.assertNever(kind);
             }
@@ -21206,18 +21236,52 @@ namespace ts {
             return true;
         }
 
+        function isReadonlyAssignmentDeclaration(d: Declaration) {
+            if (!isCallExpression(d)) {
+                return false;
+            }
+            if (!isBindableObjectDefinePropertyCall(d)) {
+                return false;
+            }
+            const objectLitType = checkExpressionCached(d.arguments[2]);
+            const valueType = getTypeOfPropertyOfType(objectLitType, "value" as __String);
+            if (valueType) {
+                const writableType = getTypeOfPropertyOfType(objectLitType, "writable" as __String);
+                if (!writableType || writableType === falseType || writableType === regularFalseType) {
+                    return true;
+                }
+                // We include this definition whereupon we walk back and check the type at the declaration because
+                // The usual definition of `Object.defineProperty` will _not_ cause literal type to be preserved in the
+                // argument types, should the type be contextualized by the call itself.
+                const writableProp = getPropertyOfType(objectLitType, "writable" as __String);
+                if (writableProp!.valueDeclaration && isPropertyAssignment(writableProp!.valueDeclaration)) {
+                    const initializer = (writableProp!.valueDeclaration as PropertyAssignment).initializer;
+                    const rawOriginalType = checkExpression(initializer);
+                    if (rawOriginalType === falseType || rawOriginalType === regularFalseType) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            const setProp = getPropertyOfType(objectLitType, "set" as __String);
+            return !setProp;
+        }
+
         function isReadonlySymbol(symbol: Symbol): boolean {
             // The following symbols are considered read-only:
             // Properties with a 'readonly' modifier
             // Variables declared with 'const'
             // Get accessors without matching set accessors
             // Enum members
+            // JS Assignments with writable false or no setter
             // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
             return !!(getCheckFlags(symbol) & CheckFlags.Readonly ||
                 symbol.flags & SymbolFlags.Property && getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly ||
                 symbol.flags & SymbolFlags.Variable && getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const ||
                 symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
-                symbol.flags & SymbolFlags.EnumMember);
+                symbol.flags & SymbolFlags.EnumMember ||
+                some(symbol.declarations, isReadonlyAssignmentDeclaration)
+            );
         }
 
         function isReferenceToReadonlyEntity(expr: Expression, symbol: Symbol): boolean {

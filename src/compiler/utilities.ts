@@ -765,12 +765,13 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): __String {
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
@@ -1769,7 +1770,7 @@ namespace ts {
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
+        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
@@ -1786,6 +1787,25 @@ namespace ts {
     export function getDeclaredExpandoInitializer(node: HasExpressionInitializer) {
         const init = getEffectiveInitializer(node);
         return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
+    }
+
+    export function getDescriptorInitializerOfKind(props: NodeArray<ObjectLiteralElementLike>, kind: "value" | "get" | "set") {
+        const init = find(props, p => !!p.name && getTextOfPropertyName(p.name) === kind);
+        if (init) {
+            switch (init.kind) {
+                case SyntaxKind.PropertyAssignment:
+                    return init.initializer;
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                    return init;
+                case SyntaxKind.SetAccessor:
+                    return undefined;
+                default:
+                    return Debug.fail("Spread assignments could never have the name 'value'");
+            }
+        }
+        return undefined;
     }
 
     /**
@@ -1904,12 +1924,32 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getAssignmentDeclarationKind(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         const special = getAssignmentDeclarationKindWorker(expr);
         return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
-    function getAssignmentDeclarationKindWorker(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
+            return !(length(expr.arguments) !== 3 ||
+                !isPropertyAccessExpression(expr.expression) ||
+                !isIdentifier(expr.expression.expression) ||
+                idText(expr.expression.expression) !== "Object" ||
+                idText(expr.expression.name) !== "defineProperty" ||
+                !isStringOrNumericLiteralLike(expr.arguments[1]) ||
+                !isEntityNameExpression(expr.arguments[0]));
+    }
+
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
+        if (isCallExpression(expr)) {
+            if (!isBindableObjectDefinePropertyCall(expr)) {
+                return AssignmentDeclarationKind.None;
+            }
+            const entityName = expr.arguments[0];
+            if ((isIdentifier(entityName) && entityName.escapedText === "exports") || (isPropertyAccessExpression(entityName) && isIdentifier(entityName.expression) && entityName.expression.escapedText === "module" && entityName.name.escapedText === "exports")) {
+                return AssignmentDeclarationKind.ObjectDefinePropertyExports;
+            }
+            return AssignmentDeclarationKind.ObjectDefinePropertyValue;
+        }
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
@@ -4976,14 +5016,18 @@ namespace ts {
                 }
                 break;
             }
+            case SyntaxKind.CallExpression:
             case SyntaxKind.BinaryExpression: {
-                const expr = declaration as BinaryExpression;
+                const expr = declaration as BinaryExpression | CallExpression;
                 switch (getAssignmentDeclarationKind(expr)) {
                     case AssignmentDeclarationKind.ExportsProperty:
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return (expr.left as PropertyAccessExpression).name;
+                        return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                        return (expr as BindableObjectDefinePropertyCall).arguments[1];
                     default:
                         return undefined;
                 }

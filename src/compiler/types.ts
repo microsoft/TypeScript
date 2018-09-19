@@ -713,7 +713,7 @@ namespace ts {
 
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
 
-    export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
+    export type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -1696,6 +1696,10 @@ namespace ts {
         typeArguments?: NodeArray<TypeNode>;
         arguments: NodeArray<Expression>;
     }
+
+    /** @internal */
+    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
+
 
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
@@ -4252,6 +4256,13 @@ namespace ts {
         Property,
         // F.prototype = { ... }
         Prototype,
+        // Object.defineProperty(x, 'name', { value: any, writable?: boolean (false by default) });
+        // Object.defineProperty(x, 'name', { get: Function, set: Function });
+        // Object.defineProperty(x, 'name', { get: Function });
+        // Object.defineProperty(x, 'name', { set: Function });
+        ObjectDefinePropertyValue,
+        // Object.defineProperty(exports || module.exports, 'name', ...);
+        ObjectDefinePropertyExports,
     }
 
     /** @deprecated Use FileExtensionInfo instead. */
