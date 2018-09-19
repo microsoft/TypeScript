@@ -21955,7 +21955,20 @@ namespace ts {
                 const leftStr = typeToString(leftType);
                 const rightStr = typeToString(rightType);
                 const errNode = errorNode || operatorToken;
-                if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
+                const equalsInfo = getEqualsInfo(operatorToken.kind);
+                if (equalsInfo !== undefined) {
+                    const explicitConversion = getExplicitConversion(leftType, rightType);
+                    if (explicitConversion) {
+                        const diag = explicitConversion.side === "left"
+                            ? Diagnostics.Types_0_and_1_have_no_overlap_Consider_explicitly_converting_the_left_side_using_2_x
+                            : Diagnostics.Types_0_and_1_have_no_overlap_Consider_explicitly_converting_the_right_side_using_2_x;
+                        error(errNode, diag, leftStr, rightStr, explicitConversion.conversionFunctionName);
+                    }
+                    else {
+                        error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, String(!equalsInfo), leftStr, rightStr);
+                    }
+                }
+                else {
                     error(
                         errNode,
                         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -21965,18 +21978,40 @@ namespace ts {
                     );
                 }
             }
+        }
 
-            function tryGiveBetterPrimaryError(errNode: Node, leftStr: string, rightStr: string) {
-                switch (operatorToken.kind) {
-                    case SyntaxKind.EqualsEqualsEqualsToken:
-                    case SyntaxKind.EqualsEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
-                    case SyntaxKind.ExclamationEqualsEqualsToken:
-                    case SyntaxKind.ExclamationEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
-                    }
-                return undefined;
+        function getEqualsInfo(operatorToken: SyntaxKind): boolean | undefined {
+            switch (operatorToken) {
+                case SyntaxKind.EqualsEqualsEqualsToken:
+                case SyntaxKind.EqualsEqualsToken:
+                    return true;
+                case SyntaxKind.ExclamationEqualsEqualsToken:
+                case SyntaxKind.ExclamationEqualsToken:
+                    return false;
+                default:
+                    return undefined;
             }
+        }
+
+        interface ExplicitConversion {
+            readonly side: "left" | "right";
+            readonly conversionFunctionName: string;
+        }
+        function getExplicitConversion(left: Type, right: Type): ExplicitConversion | undefined {
+            const convertLeft = getFunctionNameToConvertToType(right);
+            if (convertLeft) return { side: "left", conversionFunctionName: convertLeft };
+            const convertRight = getFunctionNameToConvertToType(left);
+            if (convertRight) return { side: "right", conversionFunctionName: convertRight };
+            return undefined;
+        }
+        function getFunctionNameToConvertToType(type: Type): string | undefined {
+            return type.flags & TypeFlags.String
+                ? "String"
+                : type.flags & TypeFlags.Number
+                ? "Number"
+                : type.flags & TypeFlags.Boolean
+                ? "Boolean"
+                : undefined;
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {

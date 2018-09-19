@@ -2116,6 +2116,14 @@
         "category": "Error",
         "code": 2586
     },
+    "Types '{0}' and '{1}' have no overlap. Consider explicitly converting the left side using `{2}(x)`.": {
+        "category": "Error",
+        "code": 2587
+    },
+    "Types '{0}' and '{1}' have no overlap. Consider explicitly converting the right side using `{2}(x)`.": {
+        "category": "Error",
+        "code": 2588
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
