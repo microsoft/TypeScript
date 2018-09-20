@@ -1,0 +1,19 @@
+=== tests/cases/compiler/letDeclarations-useBeforeDefinition.ts ===
+{
+    l1;
+>l1 : Symbol(l1, Decl(letDeclarations-useBeforeDefinition.ts, 2, 7))
+
+    let l1;
+>l1 : Symbol(l1, Decl(letDeclarations-useBeforeDefinition.ts, 2, 7))
+}
+
+var v1;
+>v1 : Symbol(v1, Decl(letDeclarations-useBeforeDefinition.ts, 5, 3))
+{
+    v1;
+>v1 : Symbol(v1, Decl(letDeclarations-useBeforeDefinition.ts, 8, 7))
+
+    let v1 = 0;
+>v1 : Symbol(v1, Decl(letDeclarations-useBeforeDefinition.ts, 8, 7))
+}
+

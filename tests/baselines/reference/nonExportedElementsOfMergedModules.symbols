@@ -1,0 +1,38 @@
+=== tests/cases/compiler/nonExportedElementsOfMergedModules.ts ===
+module One {
+>One : Symbol(One, Decl(nonExportedElementsOfMergedModules.ts, 0, 0), Decl(nonExportedElementsOfMergedModules.ts, 5, 1))
+
+    enum A { X }
+>A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 0, 12))
+>X : Symbol(A.X, Decl(nonExportedElementsOfMergedModules.ts, 1, 12))
+
+    module B {
+>B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 1, 16))
+
+        export var x;
+>x : Symbol(x, Decl(nonExportedElementsOfMergedModules.ts, 3, 18))
+    }
+}
+
+module One {
+>One : Symbol(One, Decl(nonExportedElementsOfMergedModules.ts, 0, 0), Decl(nonExportedElementsOfMergedModules.ts, 5, 1))
+
+    enum A { Y }
+>A : Symbol(A, Decl(nonExportedElementsOfMergedModules.ts, 7, 12))
+>Y : Symbol(A.Y, Decl(nonExportedElementsOfMergedModules.ts, 8, 12))
+
+    module B {
+>B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+
+        export var y;
+>y : Symbol(y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+    }
+    B.x;
+>B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+
+    B.y;
+>B.y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+>B : Symbol(B, Decl(nonExportedElementsOfMergedModules.ts, 8, 16))
+>y : Symbol(B.y, Decl(nonExportedElementsOfMergedModules.ts, 10, 18))
+}
+

@@ -20,14 +20,9 @@
 ////var /*3*/r4 = b['1'];
 ////var /*4*/r5 = b[1];
 
-goTo.marker('1');
-verify.quickInfoIs('var r: string');
-
-goTo.marker('2');
-verify.quickInfoIs('var r2: number');
-
-goTo.marker('3');
-verify.quickInfoIs('var r4: string');
-
-goTo.marker('4');
-verify.quickInfoIs('var r5: string');
+verify.quickInfos({
+    1: "var r: string",
+    2: "var r2: number",
+    3: "var r4: string",
+    4: "var r5: string"
+});

@@ -30,11 +30,10 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 
 
 //// [destructuringParameterProperties2.js]
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1(k, _a) {
         var a = _a[0], b = _a[1], c = _a[2];
         this.k = k;
-        this.[a, b, c] = [a, b, c];
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;
         }

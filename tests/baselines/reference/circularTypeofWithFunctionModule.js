@@ -14,12 +14,20 @@ namespace maker {
 
 //// [circularTypeofWithFunctionModule.js]
 // Repro from #6072
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Foo = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
@@ -27,12 +35,11 @@ var Foo = (function () {
 function maker(value) {
     return maker.Bar;
 }
-var maker;
 (function (maker) {
-    var Bar = (function (_super) {
+    var Bar = /** @class */ (function (_super) {
         __extends(Bar, _super);
         function Bar() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Foo));

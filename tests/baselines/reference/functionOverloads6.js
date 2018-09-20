@@ -7,7 +7,7 @@ class foo {
 
 
 //// [functionOverloads6.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.fnOverload = function (foo) { };

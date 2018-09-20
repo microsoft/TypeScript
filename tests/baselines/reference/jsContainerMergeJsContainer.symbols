@@ -1,0 +1,18 @@
+=== tests/cases/conformance/salsa/a.js ===
+// #24131
+const a = {};
+>a : Symbol(a, Decl(a.js, 1, 5), Decl(a.js, 1, 13), Decl(b.js, 0, 0))
+
+a.d = function() {};
+>a.d : Symbol(a.d, Decl(a.js, 1, 13), Decl(b.js, 0, 2))
+>a : Symbol(a, Decl(a.js, 1, 5), Decl(a.js, 1, 13), Decl(b.js, 0, 0))
+>d : Symbol(a.d, Decl(a.js, 1, 13), Decl(b.js, 0, 2))
+
+=== tests/cases/conformance/salsa/b.js ===
+a.d.prototype = {};
+>a.d.prototype : Symbol(a.d.prototype, Decl(b.js, 0, 0))
+>a.d : Symbol(a.d, Decl(a.js, 1, 13), Decl(b.js, 0, 2))
+>a : Symbol(a, Decl(a.js, 1, 5), Decl(a.js, 1, 13), Decl(b.js, 0, 0))
+>d : Symbol(a.d, Decl(a.js, 1, 13), Decl(b.js, 0, 2))
+>prototype : Symbol(a.d.prototype, Decl(b.js, 0, 0))
+

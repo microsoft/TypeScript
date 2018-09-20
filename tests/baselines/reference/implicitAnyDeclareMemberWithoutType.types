@@ -1,0 +1,24 @@
+=== tests/cases/compiler/implicitAnyDeclareMemberWithoutType.ts ===
+// this should be an error
+interface IFace {
+    member1;  // error at "member1"
+>member1 : any
+
+    member2: string;
+>member2 : string
+
+    constructor(c1, c2: string, c3);  // error at "c1, c3, "constructor"
+>constructor : (c1: any, c2: string, c3: any) => any
+>c1 : any
+>c2 : string
+>c3 : any
+
+    funcOfIFace(f1, f2, f3: number);   // error at "f1, f2, funcOfIFace"
+>funcOfIFace : (f1: any, f2: any, f3: number) => any
+>f1 : any
+>f2 : any
+>f3 : number
+
+    new ();
+}
+

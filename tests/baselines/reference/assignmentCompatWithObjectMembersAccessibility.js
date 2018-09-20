@@ -114,7 +114,7 @@ module TargetIsPublic {
 var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base() {
         }
         return Base;
@@ -123,12 +123,12 @@ var TargetIsPublic;
     var b;
     var i;
     // sources
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;
     }());
-    var E = (function () {
+    var E = /** @class */ (function () {
         function E() {
         }
         return E;
@@ -157,10 +157,9 @@ var TargetIsPublic;
     e = d; // errror
     e = e;
 })(TargetIsPublic || (TargetIsPublic = {}));
-var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base() {
         }
         return Base;
@@ -169,12 +168,12 @@ var TargetIsPublic;
     var b;
     var i;
     // sources
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;
     }());
-    var E = (function () {
+    var E = /** @class */ (function () {
         function E() {
         }
         return E;

@@ -1,0 +1,318 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts ===
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 0, 9))
+>value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 0, 9))
+
+declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
+>wrap : Symbol(wrap, Decl(genericContextualTypes1.ts, 0, 27))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 2, 22))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 2, 24))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 2, 28))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 2, 32))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 2, 22))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 2, 24))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 2, 46))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 2, 22))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 2, 24))
+
+declare function compose<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C;
+>compose : Symbol(compose, Decl(genericContextualTypes1.ts, 2, 57))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 4, 25))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 4, 27))
+>C : Symbol(C, Decl(genericContextualTypes1.ts, 4, 30))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 4, 34))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 4, 38))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 4, 25))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 4, 27))
+>g : Symbol(g, Decl(genericContextualTypes1.ts, 4, 49))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 4, 54))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 4, 27))
+>C : Symbol(C, Decl(genericContextualTypes1.ts, 4, 30))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 4, 68))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 4, 25))
+>C : Symbol(C, Decl(genericContextualTypes1.ts, 4, 30))
+
+declare function list<T>(a: T): T[];
+>list : Symbol(list, Decl(genericContextualTypes1.ts, 4, 79))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 6, 22))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 6, 25))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 6, 22))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 6, 22))
+
+declare function unlist<T>(a: T[]): T;
+>unlist : Symbol(unlist, Decl(genericContextualTypes1.ts, 6, 36))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 8, 24))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 8, 27))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 8, 24))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 8, 24))
+
+declare function box<V>(x: V): Box<V>;
+>box : Symbol(box, Decl(genericContextualTypes1.ts, 8, 38))
+>V : Symbol(V, Decl(genericContextualTypes1.ts, 10, 21))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 10, 24))
+>V : Symbol(V, Decl(genericContextualTypes1.ts, 10, 21))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>V : Symbol(V, Decl(genericContextualTypes1.ts, 10, 21))
+
+declare function unbox<W>(x: Box<W>): W;
+>unbox : Symbol(unbox, Decl(genericContextualTypes1.ts, 10, 38))
+>W : Symbol(W, Decl(genericContextualTypes1.ts, 12, 23))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 12, 26))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>W : Symbol(W, Decl(genericContextualTypes1.ts, 12, 23))
+>W : Symbol(W, Decl(genericContextualTypes1.ts, 12, 23))
+
+declare function map<T, U>(a: T[], f: (x: T) => U): U[];
+>map : Symbol(map, Decl(genericContextualTypes1.ts, 12, 40))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 14, 21))
+>U : Symbol(U, Decl(genericContextualTypes1.ts, 14, 23))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 14, 27))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 14, 21))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 14, 34))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 14, 39))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 14, 21))
+>U : Symbol(U, Decl(genericContextualTypes1.ts, 14, 23))
+>U : Symbol(U, Decl(genericContextualTypes1.ts, 14, 23))
+
+declare function identity<T>(x: T): T;
+>identity : Symbol(identity, Decl(genericContextualTypes1.ts, 14, 56))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 16, 26))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 16, 29))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 16, 26))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 16, 26))
+
+declare function zip<A, B>(a: A, b: B): [A, B];
+>zip : Symbol(zip, Decl(genericContextualTypes1.ts, 16, 38))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 18, 21))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 18, 23))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 18, 27))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 18, 21))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 18, 32))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 18, 23))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 18, 21))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 18, 23))
+
+declare function flip<X, Y, Z>(f: (x: X, y: Y) => Z): (y: Y, x: X) => Z;
+>flip : Symbol(flip, Decl(genericContextualTypes1.ts, 18, 47))
+>X : Symbol(X, Decl(genericContextualTypes1.ts, 20, 22))
+>Y : Symbol(Y, Decl(genericContextualTypes1.ts, 20, 24))
+>Z : Symbol(Z, Decl(genericContextualTypes1.ts, 20, 27))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 20, 31))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 20, 35))
+>X : Symbol(X, Decl(genericContextualTypes1.ts, 20, 22))
+>y : Symbol(y, Decl(genericContextualTypes1.ts, 20, 40))
+>Y : Symbol(Y, Decl(genericContextualTypes1.ts, 20, 24))
+>Z : Symbol(Z, Decl(genericContextualTypes1.ts, 20, 27))
+>y : Symbol(y, Decl(genericContextualTypes1.ts, 20, 55))
+>Y : Symbol(Y, Decl(genericContextualTypes1.ts, 20, 24))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 20, 60))
+>X : Symbol(X, Decl(genericContextualTypes1.ts, 20, 22))
+>Z : Symbol(Z, Decl(genericContextualTypes1.ts, 20, 27))
+
+const f00: <A>(x: A) => A[] = list;
+>f00 : Symbol(f00, Decl(genericContextualTypes1.ts, 22, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 22, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 22, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 22, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 22, 12))
+>list : Symbol(list, Decl(genericContextualTypes1.ts, 4, 79))
+
+const f01: <A>(x: A) => A[] = x => [x];
+>f01 : Symbol(f01, Decl(genericContextualTypes1.ts, 23, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 23, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 23, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 23, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 23, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 23, 29))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 23, 29))
+
+const f02: <A>(x: A) => A[] = wrap(list);
+>f02 : Symbol(f02, Decl(genericContextualTypes1.ts, 24, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 24, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 24, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 24, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 24, 12))
+>wrap : Symbol(wrap, Decl(genericContextualTypes1.ts, 0, 27))
+>list : Symbol(list, Decl(genericContextualTypes1.ts, 4, 79))
+
+const f03: <A>(x: A) => A[] = wrap(x => [x]);
+>f03 : Symbol(f03, Decl(genericContextualTypes1.ts, 25, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 25, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 25, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 25, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 25, 12))
+>wrap : Symbol(wrap, Decl(genericContextualTypes1.ts, 0, 27))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 25, 35))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 25, 35))
+
+const f10: <T>(x: T) => Box<T[]> = compose(a => list(a), b => box(b));
+>f10 : Symbol(f10, Decl(genericContextualTypes1.ts, 27, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 27, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 27, 15))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 27, 12))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 27, 12))
+>compose : Symbol(compose, Decl(genericContextualTypes1.ts, 2, 57))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 27, 43))
+>list : Symbol(list, Decl(genericContextualTypes1.ts, 4, 79))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 27, 43))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 27, 56))
+>box : Symbol(box, Decl(genericContextualTypes1.ts, 8, 38))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 27, 56))
+
+const f11: <T>(x: T) => Box<T[]> = compose(list, box);
+>f11 : Symbol(f11, Decl(genericContextualTypes1.ts, 28, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 28, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 28, 15))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 28, 12))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 28, 12))
+>compose : Symbol(compose, Decl(genericContextualTypes1.ts, 2, 57))
+>list : Symbol(list, Decl(genericContextualTypes1.ts, 4, 79))
+>box : Symbol(box, Decl(genericContextualTypes1.ts, 8, 38))
+
+const f12: <T>(x: Box<T[]>) => T = compose(a => unbox(a), b => unlist(b));
+>f12 : Symbol(f12, Decl(genericContextualTypes1.ts, 29, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 29, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 29, 15))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 29, 12))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 29, 12))
+>compose : Symbol(compose, Decl(genericContextualTypes1.ts, 2, 57))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 29, 43))
+>unbox : Symbol(unbox, Decl(genericContextualTypes1.ts, 10, 38))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 29, 43))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 29, 57))
+>unlist : Symbol(unlist, Decl(genericContextualTypes1.ts, 6, 36))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 29, 57))
+
+const f13: <T>(x: Box<T[]>) => T = compose(unbox, unlist);
+>f13 : Symbol(f13, Decl(genericContextualTypes1.ts, 30, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 30, 12))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 30, 15))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 30, 12))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 30, 12))
+>compose : Symbol(compose, Decl(genericContextualTypes1.ts, 2, 57))
+>unbox : Symbol(unbox, Decl(genericContextualTypes1.ts, 10, 38))
+>unlist : Symbol(unlist, Decl(genericContextualTypes1.ts, 6, 36))
+
+const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
+>arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 32, 18))
+>U : Symbol(U, Decl(genericContextualTypes1.ts, 32, 20))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 32, 24))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 32, 28))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 32, 18))
+>U : Symbol(U, Decl(genericContextualTypes1.ts, 32, 20))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 32, 44))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 32, 18))
+>a.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 32, 44))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 32, 24))
+
+const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
+>arrayFilter : Symbol(arrayFilter, Decl(genericContextualTypes1.ts, 33, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 33, 21))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 33, 24))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 33, 28))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 33, 21))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 33, 50))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 33, 21))
+>a.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 33, 50))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(genericContextualTypes1.ts, 33, 24))
+
+const f20: (a: string[]) => number[] = arrayMap(x => x.length);
+>f20 : Symbol(f20, Decl(genericContextualTypes1.ts, 35, 5))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 35, 12))
+>arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 35, 48))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 35, 48))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const f21: <A>(a: A[]) => A[][] = arrayMap(x => [x]);
+>f21 : Symbol(f21, Decl(genericContextualTypes1.ts, 36, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 36, 12))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 36, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 36, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 36, 12))
+>arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 36, 43))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 36, 43))
+
+const f22: <A>(a: A[]) => A[] = arrayMap(identity);
+>f22 : Symbol(f22, Decl(genericContextualTypes1.ts, 37, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 37, 12))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 37, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 37, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 37, 12))
+>arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
+>identity : Symbol(identity, Decl(genericContextualTypes1.ts, 14, 56))
+
+const f23: <A>(a: A[]) => Box<A>[] = arrayMap(value => ({ value }));
+>f23 : Symbol(f23, Decl(genericContextualTypes1.ts, 38, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 38, 12))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 38, 15))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 38, 12))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 38, 12))
+>arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
+>value : Symbol(value, Decl(genericContextualTypes1.ts, 38, 46))
+>value : Symbol(value, Decl(genericContextualTypes1.ts, 38, 57))
+
+const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
+>f30 : Symbol(f30, Decl(genericContextualTypes1.ts, 40, 5))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 40, 12))
+>arrayFilter : Symbol(arrayFilter, Decl(genericContextualTypes1.ts, 33, 5))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 40, 51))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 40, 51))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 10);
+>f31 : Symbol(f31, Decl(genericContextualTypes1.ts, 41, 5))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 41, 12))
+>Box : Symbol(Box, Decl(genericContextualTypes1.ts, 0, 0))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 41, 35))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 41, 12))
+>T : Symbol(T, Decl(genericContextualTypes1.ts, 41, 12))
+>arrayFilter : Symbol(arrayFilter, Decl(genericContextualTypes1.ts, 33, 5))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 41, 64))
+>x.value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+>x : Symbol(x, Decl(genericContextualTypes1.ts, 41, 64))
+>value : Symbol(value, Decl(genericContextualTypes1.ts, 0, 15))
+
+const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
+>f40 : Symbol(f40, Decl(genericContextualTypes1.ts, 43, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 43, 12))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 43, 14))
+>b : Symbol(b, Decl(genericContextualTypes1.ts, 43, 18))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 43, 14))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 43, 23))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 43, 12))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 43, 12))
+>B : Symbol(B, Decl(genericContextualTypes1.ts, 43, 14))
+>flip : Symbol(flip, Decl(genericContextualTypes1.ts, 18, 47))
+>zip : Symbol(zip, Decl(genericContextualTypes1.ts, 16, 38))
+
+// Repro from #16293
+
+type fn = <A>(a: A) => A;
+>fn : Symbol(fn, Decl(genericContextualTypes1.ts, 43, 52), Decl(genericContextualTypes1.ts, 48, 5))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 47, 11))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 47, 14))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 47, 11))
+>A : Symbol(A, Decl(genericContextualTypes1.ts, 47, 11))
+
+const fn: fn = a => a;
+>fn : Symbol(fn, Decl(genericContextualTypes1.ts, 43, 52), Decl(genericContextualTypes1.ts, 48, 5))
+>fn : Symbol(fn, Decl(genericContextualTypes1.ts, 43, 52), Decl(genericContextualTypes1.ts, 48, 5))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 48, 14))
+>a : Symbol(a, Decl(genericContextualTypes1.ts, 48, 14))
+

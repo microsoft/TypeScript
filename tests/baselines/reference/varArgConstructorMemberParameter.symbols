@@ -1,0 +1,22 @@
+=== tests/cases/compiler/varArgConstructorMemberParameter.ts ===
+class Foo1 {
+>Foo1 : Symbol(Foo1, Decl(varArgConstructorMemberParameter.ts, 0, 0))
+
+    constructor (...args: string[]) { }
+>args : Symbol(args, Decl(varArgConstructorMemberParameter.ts, 1, 17))
+}
+
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(varArgConstructorMemberParameter.ts, 2, 1))
+
+    constructor (public args: string[]) { }
+>args : Symbol(Foo2.args, Decl(varArgConstructorMemberParameter.ts, 5, 17))
+}
+
+class Foo3 {
+>Foo3 : Symbol(Foo3, Decl(varArgConstructorMemberParameter.ts, 6, 1))
+
+    constructor (public ...args: string[]) { }
+>args : Symbol(Foo3.args, Decl(varArgConstructorMemberParameter.ts, 9, 17))
+}
+

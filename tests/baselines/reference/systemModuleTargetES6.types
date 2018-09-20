@@ -7,7 +7,7 @@ export class MyClass2 {
 
     static value = 42;
 >value : number
->42 : number
+>42 : 42
 
     static getInstance() { return MyClass2.value; }
 >getInstance : () => number

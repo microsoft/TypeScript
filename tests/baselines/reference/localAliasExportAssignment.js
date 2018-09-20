@@ -22,6 +22,7 @@ var server;
 module.exports = server;
 //// [localAliasExportAssignment_1.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='localAliasExportAssignment_0.ts'/>
-var connect = require('./localAliasExportAssignment_0');
+var connect = require("./localAliasExportAssignment_0");
 connect();

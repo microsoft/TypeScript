@@ -1,5 +1,4 @@
 //// [stringLiteralTypesAndTuples01.ts]
-
 // Should all be strings.
 let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 
@@ -39,4 +38,4 @@ function rawr(dino) {
 declare let hello: string, brave: string, newish: string, world: string;
 declare type RexOrRaptor = "t-rex" | "raptor";
 declare let im: "I'm", a: "a", dinosaur: RexOrRaptor;
-declare function rawr(dino: RexOrRaptor): string;
+declare function rawr(dino: RexOrRaptor): "ROAAAAR!" | "yip yip!";

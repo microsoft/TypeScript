@@ -12,7 +12,7 @@
 ////        2/*7*/
 ////]
 goTo.marker("0");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(4);
 goTo.marker("2");
 verify.currentLineContentIs("    b,");
@@ -21,7 +21,7 @@ verify.currentLineContentIs("             //comment");
 goTo.marker("4");
 verify.currentLineContentIs("    c");
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(4);
 goTo.marker("5");
 verify.currentLineContentIs("    //comment");

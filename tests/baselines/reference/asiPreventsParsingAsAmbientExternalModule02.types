@@ -1,5 +1,4 @@
 === tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule02.ts ===
-
 var declare: number;
 >declare : number
 
@@ -16,7 +15,7 @@ module container {
 >module : string
 
     "my external module"   // this is just a string
->"my external module" : string
+>"my external module" : "my external module"
 
     { }                    // this is a block body
 }

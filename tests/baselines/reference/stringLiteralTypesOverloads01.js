@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloads01.ts]
-
 type PrimitiveName = 'string' | 'number' | 'boolean';
 
 function getFalsyPrimitive(x: "string"): string;

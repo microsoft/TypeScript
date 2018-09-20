@@ -1,5 +1,4 @@
 //// [tsxDynamicTagName2.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {

@@ -1,5 +1,4 @@
 === tests/cases/compiler/bestChoiceType.ts ===
-
 // Repro from #10041
 
 (''.match(/ /) || []).map(s => s.toLowerCase());
@@ -8,9 +7,9 @@
 >(''.match(/ /) || []) : RegExpMatchArray
 >''.match(/ /) || [] : RegExpMatchArray
 >''.match(/ /) : RegExpMatchArray | null
->''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
->match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
+>''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>'' : ""
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/ / : RegExp
 >[] : never[]
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
@@ -29,9 +28,9 @@ function f1() {
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
->''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
->match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
+>''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>'' : ""
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/ / : RegExp
 
     let y = x || [];
@@ -60,9 +59,9 @@ function f2() {
     let x = ''.match(/ /);
 >x : RegExpMatchArray | null
 >''.match(/ /) : RegExpMatchArray | null
->''.match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
->'' : string
->match : { (regexp: string): RegExpMatchArray | null; (regexp: RegExp): RegExpMatchArray | null; }
+>''.match : (regexp: string | RegExp) => RegExpMatchArray | null
+>'' : ""
+>match : (regexp: string | RegExp) => RegExpMatchArray | null
 >/ / : RegExp
 
     let y = x ? x : [];

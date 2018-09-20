@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment5.ts ===
+var greet = "hello";
+>greet : string
+>"hello" : "hello"
+
+var obj = { greet? }; 
+>obj : { greet: string; }
+>{ greet? } : { greet: string; }
+>greet : string
+

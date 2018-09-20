@@ -18,6 +18,77 @@
 ////    emptyMethod() { } // Non child functions method should not be duplicated
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Class",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor",
+                    "childItems": [
+                        {
+                            "text": "LocalEnumInConstructor",
+                            "kind": "enum",
+                            "childItems": [
+                                {
+                                    "text": "LocalEnumMemberInConstructor",
+                                    "kind": "enum member"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalFunctionInConstructor",
+                            "kind": "function"
+                        },
+                        {
+                            "text": "LocalInterfaceInConstrcutor",
+                            "kind": "interface"
+                        }
+                    ]
+                },
+                {
+                    "text": "emptyMethod",
+                    "kind": "method"
+                },
+                {
+                    "text": "method",
+                    "kind": "method",
+                    "childItems": [
+                        {
+                            "text": "LocalEnumInMethod",
+                            "kind": "enum",
+                            "childItems": [
+                                {
+                                    "text": "LocalEnumMemberInMethod",
+                                    "kind": "enum member"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalFunctionInMethod",
+                            "kind": "function",
+                            "childItems": [
+                                {
+                                    "text": "LocalFunctionInLocalFunctionInMethod",
+                                    "kind": "function"
+                                }
+                            ]
+                        },
+                        {
+                            "text": "LocalInterfaceInMethod",
+                            "kind": "interface"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",
@@ -73,7 +144,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInConstructor",
-                "kind": "const"
+                "kind": "enum member"
             }
         ],
         "indent": 3
@@ -113,7 +184,7 @@ verify.navigationBar([
         "childItems": [
             {
                 "text": "LocalEnumMemberInMethod",
-                "kind": "const"
+                "kind": "enum member"
             }
         ],
         "indent": 3

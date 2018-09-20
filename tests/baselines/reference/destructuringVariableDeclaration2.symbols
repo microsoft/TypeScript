@@ -1,0 +1,55 @@
+=== tests/cases/conformance/es6/destructuring/destructuringVariableDeclaration2.ts ===
+// The type T associated with a destructuring variable declaration is determined as follows:
+//      If the declaration includes a type annotation, T is that type.
+var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
+>a1 : Symbol(a1, Decl(destructuringVariableDeclaration2.ts, 2, 5))
+>a2 : Symbol(a2, Decl(destructuringVariableDeclaration2.ts, 2, 8))
+>a1 : Symbol(a1, Decl(destructuringVariableDeclaration2.ts, 2, 15))
+>a2 : Symbol(a2, Decl(destructuringVariableDeclaration2.ts, 2, 27))
+>a1 : Symbol(a1, Decl(destructuringVariableDeclaration2.ts, 2, 44))
+>a2 : Symbol(a2, Decl(destructuringVariableDeclaration2.ts, 2, 54))
+
+var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error
+>a3 : Symbol(a3, Decl(destructuringVariableDeclaration2.ts, 3, 5))
+>a4 : Symbol(a4, Decl(destructuringVariableDeclaration2.ts, 3, 11))
+>a5 : Symbol(a5, Decl(destructuringVariableDeclaration2.ts, 3, 16))
+
+// The type T associated with a destructuring variable declaration is determined as follows:
+//      Otherwise, if the declaration includes an initializer expression, T is the type of that initializer expression.
+var temp = { t1: true, t2: "false" };
+>temp : Symbol(temp, Decl(destructuringVariableDeclaration2.ts, 7, 3))
+>t1 : Symbol(t1, Decl(destructuringVariableDeclaration2.ts, 7, 12))
+>t2 : Symbol(t2, Decl(destructuringVariableDeclaration2.ts, 7, 22))
+
+var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
+>b0 : Symbol(b0, Decl(destructuringVariableDeclaration2.ts, 8, 5))
+>b1 : Symbol(b1, Decl(destructuringVariableDeclaration2.ts, 8, 12))
+>b2 : Symbol(b2, Decl(destructuringVariableDeclaration2.ts, 8, 23))
+>temp : Symbol(temp, Decl(destructuringVariableDeclaration2.ts, 7, 3))
+>t1 : Symbol(t1, Decl(destructuringVariableDeclaration2.ts, 8, 49))
+>t2 : Symbol(t2, Decl(destructuringVariableDeclaration2.ts, 8, 60))
+
+// The type T associated with a binding element is determined as follows:
+//      If the binding element is a rest element, T is an array type with
+//          an element type E, where E is the type of the numeric index signature of S.
+var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
+>c1 : Symbol(c1, Decl(destructuringVariableDeclaration2.ts, 13, 5))
+>c2 : Symbol(c2, Decl(destructuringVariableDeclaration2.ts, 13, 8))
+>c3 : Symbol(c3, Decl(destructuringVariableDeclaration2.ts, 13, 48))
+>c4 : Symbol(c4, Decl(destructuringVariableDeclaration2.ts, 13, 14))
+>c5 : Symbol(c5, Decl(destructuringVariableDeclaration2.ts, 13, 22))
+>c6 : Symbol(c6, Decl(destructuringVariableDeclaration2.ts, 13, 30))
+>c3 : Symbol(c3, Decl(destructuringVariableDeclaration2.ts, 13, 48))
+>c5 : Symbol(c5, Decl(destructuringVariableDeclaration2.ts, 13, 55))
+
+// When a destructuring variable declaration, binding property, or binding element specifies
+// an initializer expression, the type of the initializer expression is required to be assignable
+// to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
+var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
+>d : Symbol(d, Decl(destructuringVariableDeclaration2.ts, 18, 35))
+>d1 : Symbol(d1, Decl(destructuringVariableDeclaration2.ts, 18, 9))
+>d : Symbol(d, Decl(destructuringVariableDeclaration2.ts, 18, 35))
+>d1 : Symbol(d1, Decl(destructuringVariableDeclaration2.ts, 18, 40))
+>d : Symbol(d, Decl(destructuringVariableDeclaration2.ts, 18, 61))
+>d1 : Symbol(d1, Decl(destructuringVariableDeclaration2.ts, 18, 66))
+

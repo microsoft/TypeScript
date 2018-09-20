@@ -1,5 +1,4 @@
 //// [commentsClassMembers.ts]
-
 /** This is comment for c1*/
 class c1 {
     /** p1 is property of c1*/
@@ -220,7 +219,7 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 //// [commentsClassMembers.js]
 /** This is comment for c1*/
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     /** Constructor method*/
     function c1() {
     }
@@ -436,7 +435,7 @@ var i1_s_ncr = c1.nc_s2(20);
 var i1_s_ncprop = c1.nc_s3;
 c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
-var cProperties = (function () {
+var cProperties = /** @class */ (function () {
     function cProperties() {
         this.x = 10; /*trailing comment for property*/
         this.y = 10; // trailing comment of // style
@@ -492,7 +491,7 @@ declare class c1 {
     /** pp1 is property of c1*/
     private pp1;
     /** sum with property*/
-    private pp2(/** number to add*/ b);
+    private pp2;
     /** getter property*/
     /** setter property*/
     private pp3;
@@ -509,7 +508,7 @@ declare class c1 {
     nc_p2(b: number): number;
     nc_p3: number;
     private nc_pp1;
-    private nc_pp2(b);
+    private nc_pp2;
     private nc_pp3;
     static nc_s1: number;
     static nc_s2(b: number): number;
@@ -518,7 +517,7 @@ declare class c1 {
     a_p2(b: number): number;
     a_p3: number;
     private a_pp1;
-    private a_pp2(b);
+    private a_pp2;
     private a_pp3;
     static a_s1: number;
     static a_s2(b: number): number;
@@ -533,7 +532,7 @@ declare class c1 {
     /** pp1 is property of c1 */
     private b_pp1;
     /** sum with property */
-    private b_pp2(b);
+    private b_pp2;
     /** getter property */
     /** setter property */
     private b_pp3;

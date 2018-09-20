@@ -14,5 +14,5 @@ function foo(foo:{a:string; b?:number;}):any { return "" }
 >foo : { a: string; b?: number; }
 >a : string
 >b : number
->"" : string
+>"" : ""
 

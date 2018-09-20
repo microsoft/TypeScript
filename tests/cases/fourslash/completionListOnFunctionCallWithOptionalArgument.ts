@@ -4,4 +4,4 @@
 //// Foo(function () { } )./**/;
 
 goTo.marker();
-verify.memberListContains('q');
+verify.completionListContains('q');

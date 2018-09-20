@@ -1,5 +1,4 @@
 //// [typeofOperatorWithEnumType.ts]
-
 // typeof  operator on enum type
 
 enum ENUM { };

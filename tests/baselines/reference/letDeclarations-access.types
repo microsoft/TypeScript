@@ -1,70 +1,69 @@
 === tests/cases/compiler/letDeclarations-access.ts ===
-
 let x = 0
 >x : number
->0 : number
+>0 : 0
 
 // No errors
 
 x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : number
->1 : number
+>1 : 1
 
 x += 2;
 >x += 2 : number
 >x : number
->2 : number
+>2 : 2
 
 x -= 3;
 >x -= 3 : number
 >x : number
->3 : number
+>3 : 3
 
 x *= 4;
 >x *= 4 : number
 >x : number
->4 : number
+>4 : 4
 
 x /= 5;
 >x /= 5 : number
 >x : number
->5 : number
+>5 : 5
 
 x %= 6;
 >x %= 6 : number
 >x : number
->6 : number
+>6 : 6
 
 x <<= 7;
 >x <<= 7 : number
 >x : number
->7 : number
+>7 : 7
 
 x >>= 8;
 >x >>= 8 : number
 >x : number
->8 : number
+>8 : 8
 
 x >>>= 9;
 >x >>>= 9 : number
 >x : number
->9 : number
+>9 : 9
 
 x &= 10;
 >x &= 10 : number
 >x : number
->10 : number
+>10 : 10
 
 x |= 11;
 >x |= 11 : number
 >x : number
->11 : number
+>11 : 11
 
 x ^= 12;
 >x ^= 12 : number
 >x : number
->12 : number
+>12 : 12
 
 x++;
 >x++ : number
@@ -86,7 +85,7 @@ var a = x + 1;
 >a : number
 >x + 1 : number
 >x : number
->1 : number
+>1 : 1
 
 function f(v: number) { }
 >f : (v: number) => void

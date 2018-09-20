@@ -1,0 +1,7 @@
+=== tests/cases/compiler/undeclaredBase.ts ===
+module M { export class C extends M.I { } }
+>M : Symbol(M, Decl(undeclaredBase.ts, 0, 0))
+>C : Symbol(C, Decl(undeclaredBase.ts, 0, 10))
+>M : Symbol(M, Decl(undeclaredBase.ts, 0, 0))
+
+

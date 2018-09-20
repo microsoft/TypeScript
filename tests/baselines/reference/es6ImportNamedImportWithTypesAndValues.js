@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportWithTypesAndValues.ts] ////
 
 //// [server.ts]
-
 export interface I {
     prop: string;
 }
@@ -22,14 +21,15 @@ export var cVal = new C();
 
 //// [server.js]
 "use strict";
-var C = (function () {
+exports.__esModule = true;
+var C = /** @class */ (function () {
     function C() {
         this.prop = "hello";
     }
     return C;
 }());
 exports.C = C;
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
         this.prop2 = "world";
     }
@@ -38,6 +38,7 @@ var C2 = (function () {
 exports.C2 = C2;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var server_1 = require("./server"); // Shouldnt emit I and C2 into the js file and emit C and I in .d.ts file
 exports.cVal = new server_1.C();
 

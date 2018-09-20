@@ -1,0 +1,42 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames3_ES6.ts ===
+var id;
+>id : any
+
+class C {
+>C : C
+
+    [0 + 1]() { }
+>[0 + 1] : () => void
+>0 + 1 : number
+>0 : 0
+>1 : 1
+
+    static [() => { }]() { }
+>[() => { }] : () => void
+>() => { } : () => void
+
+    get [delete id]() { }
+>[delete id] : void
+>delete id : boolean
+>id : any
+
+    set [[0, 1]](v) { }
+>[[0, 1]] : any
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+>v : any
+
+    static get [<String>""]() { }
+>[<String>""] : void
+><String>"" : String
+>"" : ""
+
+    static set [id.toString()](v) { }
+>[id.toString()] : any
+>id.toString() : any
+>id.toString : any
+>id : any
+>toString : any
+>v : any
+}

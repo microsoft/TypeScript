@@ -1,0 +1,68 @@
+=== tests/cases/compiler/genericReduce.ts ===
+var a = ["An", "array", "of", "strings"];
+>a : Symbol(a, Decl(genericReduce.ts, 0, 3))
+
+var b = a.map(s => s.length);
+>b : Symbol(b, Decl(genericReduce.ts, 1, 3))
+>a.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(genericReduce.ts, 0, 3))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(genericReduce.ts, 1, 14))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(genericReduce.ts, 1, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+var n1 = b.reduce((x, y) => x + y);
+>n1 : Symbol(n1, Decl(genericReduce.ts, 2, 3))
+>b.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(genericReduce.ts, 1, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericReduce.ts, 2, 19))
+>y : Symbol(y, Decl(genericReduce.ts, 2, 21))
+>x : Symbol(x, Decl(genericReduce.ts, 2, 19))
+>y : Symbol(y, Decl(genericReduce.ts, 2, 21))
+
+var n2 = b.reduceRight((x, y) => x + y);
+>n2 : Symbol(n2, Decl(genericReduce.ts, 3, 3))
+>b.reduceRight : Symbol(Array.reduceRight, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(genericReduce.ts, 1, 3))
+>reduceRight : Symbol(Array.reduceRight, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericReduce.ts, 3, 24))
+>y : Symbol(y, Decl(genericReduce.ts, 3, 26))
+>x : Symbol(x, Decl(genericReduce.ts, 3, 24))
+>y : Symbol(y, Decl(genericReduce.ts, 3, 26))
+
+n1.x = "fail";       // should error, as 'n1' should be type 'number', not 'any'.
+>n1 : Symbol(n1, Decl(genericReduce.ts, 2, 3))
+
+n1.toExponential(2); // should not error if 'n1' is correctly number.
+>n1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>n1 : Symbol(n1, Decl(genericReduce.ts, 2, 3))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+n2.x = "fail";       // should error, as 'n2' should be type 'number', not 'any'.
+>n2 : Symbol(n2, Decl(genericReduce.ts, 3, 3))
+
+n2.toExponential(2); // should not error if 'n2' is correctly number.
+>n2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>n2 : Symbol(n2, Decl(genericReduce.ts, 3, 3))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type string
+>n3 : Symbol(n3, Decl(genericReduce.ts, 10, 3))
+>b.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(genericReduce.ts, 1, 3))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericReduce.ts, 10, 28))
+>y : Symbol(y, Decl(genericReduce.ts, 10, 30))
+>x : Symbol(x, Decl(genericReduce.ts, 10, 28))
+>y : Symbol(y, Decl(genericReduce.ts, 10, 30))
+
+n3.toExponential(2); // should error if 'n3' is correctly type 'string'
+>n3 : Symbol(n3, Decl(genericReduce.ts, 10, 3))
+
+n3.charAt(0);        // should not error if 'n3' is correctly type 'string'
+>n3.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>n3 : Symbol(n3, Decl(genericReduce.ts, 10, 3))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+

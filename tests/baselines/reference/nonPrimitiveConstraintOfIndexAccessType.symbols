@@ -1,0 +1,145 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveConstraintOfIndexAccessType.ts ===
+// test for #15371
+function f<T extends object, P extends keyof T>(s: string, tp: T[P]): void {
+>f : Symbol(f, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 0, 0))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 28))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 48))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 58))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 28))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 58))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 1, 48))
+}
+function g<T extends null, P extends keyof T>(s: string, tp: T[P]): void {
+>g : Symbol(g, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 3, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 26))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 46))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 56))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 26))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 56))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 4, 46))
+}
+function h<T extends undefined, P extends keyof T>(s: string, tp: T[P]): void {
+>h : Symbol(h, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 6, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 31))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 51))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 61))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 31))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 61))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 7, 51))
+}
+function i<T extends void, P extends keyof T>(s: string, tp: T[P]): void {
+>i : Symbol(i, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 9, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 26))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 46))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 56))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 26))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 56))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 10, 46))
+}
+function j<T extends never, P extends keyof T>(s: string, tp: T[P]): void {
+>j : Symbol(j, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 12, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 27))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 47))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 57))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 27))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 57))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 13, 47))
+}
+function k<T extends number, P extends keyof T>(s: string, tp: T[P]): void {
+>k : Symbol(k, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 15, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 28))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 48))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 58))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 28))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 58))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 16, 48))
+}
+function o<T extends string, P extends keyof T>(s: string, tp: T[P]): void {
+>o : Symbol(o, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 18, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 28))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 48))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 58))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 28))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 58))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 19, 48))
+}
+function l<T extends {}, P extends keyof T>(s: string, tp: T[P]): void {
+>l : Symbol(l, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 21, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 24))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 44))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 54))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 24))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 54))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 22, 44))
+}
+function m<T extends { a: number }, P extends keyof T>(s: string, tp: T[P]): void {
+>m : Symbol(m, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 24, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 11))
+>a : Symbol(a, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 22))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 35))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 55))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 65))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 35))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 65))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 25, 55))
+}
+function n<T extends { [s: string]: number }, P extends keyof T>(s: string, tp: T[P]): void {
+>n : Symbol(n, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 27, 1))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 24))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 45))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 11))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 65))
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 75))
+>T : Symbol(T, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 11))
+>P : Symbol(P, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 45))
+
+    tp = s;
+>tp : Symbol(tp, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 75))
+>s : Symbol(s, Decl(nonPrimitiveConstraintOfIndexAccessType.ts, 28, 65))
+}
+

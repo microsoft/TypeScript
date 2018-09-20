@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/localTypes/localTypes1.ts ===
-
 function f1() {
 >f1 : () => I[]
 
@@ -7,31 +6,25 @@ function f1() {
 >E : E
 
         A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
     }
     class C {
 >C : C
 
         x: E;
 >x : E
->E : E
     }
     interface I {
->I : I
-
         x: E;
 >x : E
->E : E
     }
     type A = I[];
 >A : I[]
->I : I
 
     let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -41,7 +34,7 @@ function f1() {
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
 >E.B : E.B
 >E : typeof E
@@ -61,31 +54,25 @@ function f2() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
         interface I {
->I : I
-
             x: E;
 >x : E
->E : E
         }
         type A = I[];
 >A : I[]
->I : I
 
         let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -95,7 +82,7 @@ function f2() {
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
 >E.B : E.B
 >E : typeof E
@@ -114,15 +101,15 @@ function f3(b: boolean) {
 >b : boolean
 
     if (true) {
->true : boolean
+>true : true
 
         enum E {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         if (b) {
 >b : boolean
@@ -132,22 +119,16 @@ function f3(b: boolean) {
 
                 x: E;
 >x : E
->E : E
             }
             interface I {
->I : I
-
                 x: E;
 >x : E
->E : E
             }
             type A = I[];
 >A : I[]
->I : I
 
             let a: A = [new C()];
 >a : I[]
->A : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -157,7 +138,7 @@ function f3(b: boolean) {
 >a[0].x : E
 >a[0] : I
 >a : I[]
->0 : number
+>0 : 0
 >x : E
 >E.B : E.B
 >E : typeof E
@@ -172,22 +153,16 @@ function f3(b: boolean) {
 
                 x: E;
 >x : E
->E : E
             }
             interface J {
->J : J
-
                 x: E;
 >x : E
->E : E
             }
             type C = J[];
 >C : J[]
->J : J
 
             let c: C = [new A()];
 >c : J[]
->C : J[]
 >[new A()] : A[]
 >new A() : A
 >A : typeof A
@@ -197,7 +172,7 @@ function f3(b: boolean) {
 >c[0].x : E
 >c[0] : J
 >c : J[]
->0 : number
+>0 : 0
 >x : E
 >E.B : E.B
 >E : typeof E
@@ -220,16 +195,15 @@ function f5() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -243,16 +217,15 @@ function f5() {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -268,16 +241,15 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
     }
     m() {
@@ -287,16 +259,15 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -309,16 +280,15 @@ class A {
 >E : E
 
             A, B, C
->A : E
->B : E
->C : E
+>A : E.A
+>B : E.B
+>C : E.C
         }
         class C {
 >C : C
 
             x: E;
 >x : E
->E : E
         }
         return new C();
 >new C() : C
@@ -361,25 +331,25 @@ function f6() {
 >C : typeof C
 
             x.a = "a";
->x.a = "a" : string
+>x.a = "a" : "a"
 >x.a : string
 >x : C
 >a : string
->"a" : string
+>"a" : "a"
 
             x.b = "b";
->x.b = "b" : string
+>x.b = "b" : "b"
 >x.b : string
 >x : C
 >b : string
->"b" : string
+>"b" : "b"
 
             x.c = "c";
->x.c = "c" : string
+>x.c = "c" : "c"
 >x.c : string
 >x : C
 >c : string
->"c" : string
+>"c" : "c"
 
             return x;
 >x : C

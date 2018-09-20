@@ -8,8 +8,8 @@ function foo(a = v[1 + 1]) { }
 >v[1 + 1] : any
 >v : any[]
 >1 + 1 : number
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 function bar(a = v[1 + 1]) {
 >bar : (a?: any) => void
@@ -17,6 +17,6 @@ function bar(a = v[1 + 1]) {
 >v[1 + 1] : any
 >v : any[]
 >1 + 1 : number
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }

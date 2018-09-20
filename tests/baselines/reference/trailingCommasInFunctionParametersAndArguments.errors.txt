@@ -1,0 +1,37 @@
+tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts(5,20): error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+
+
+==== tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts (1 errors) ====
+    function f1(x,) {}
+    
+    f1(1,);
+    
+    function f2(...args,) {}
+                       ~
+!!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
+    
+    // Allowed for ambient declarations
+    declare function f25(...args,): void;
+    
+    f2(...[],);
+    
+    // Not confused by overloads
+    declare function f3(x, ): number;
+    declare function f3(x, y,): string;
+    
+    <number>f3(1,);
+    <string>f3(1, 2,);
+    
+    // Works for constructors too
+    class X {
+        constructor(a,) { }
+        // See trailingCommasInGetter.ts
+        set x(value,) { }
+    }
+    interface Y {
+        new(x,);
+        (x,);
+    }
+    
+    new X(1,);
+    

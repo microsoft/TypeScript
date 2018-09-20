@@ -1,0 +1,69 @@
+=== tests/cases/conformance/types/members/objectTypeWithDuplicateNumericProperty.ts ===
+// numeric properties must be distinct after a ToNumber operation
+// so the below are all errors
+
+class C {
+>C : Symbol(C, Decl(objectTypeWithDuplicateNumericProperty.ts, 0, 0))
+
+    1;
+>1 : Symbol(C[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 3, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 4, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 5, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 6, 7))
+
+    1.0;
+>1.0 : Symbol(C[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 3, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 4, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 5, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 6, 7))
+
+    1.;
+>1. : Symbol(C[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 3, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 4, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 5, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 6, 7))
+
+    1.00;
+>1.00 : Symbol(C[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 3, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 4, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 5, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 6, 7))
+}
+
+interface I {
+>I : Symbol(I, Decl(objectTypeWithDuplicateNumericProperty.ts, 8, 1))
+
+    1;
+>1 : Symbol(I[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 10, 13), Decl(objectTypeWithDuplicateNumericProperty.ts, 11, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 12, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 13, 7))
+
+    1.0;
+>1.0 : Symbol(I[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 10, 13), Decl(objectTypeWithDuplicateNumericProperty.ts, 11, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 12, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 13, 7))
+
+    1.;
+>1. : Symbol(I[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 10, 13), Decl(objectTypeWithDuplicateNumericProperty.ts, 11, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 12, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 13, 7))
+
+    1.00;
+>1.00 : Symbol(I[1], Decl(objectTypeWithDuplicateNumericProperty.ts, 10, 13), Decl(objectTypeWithDuplicateNumericProperty.ts, 11, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 12, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 13, 7))
+}
+
+var a: {
+>a : Symbol(a, Decl(objectTypeWithDuplicateNumericProperty.ts, 17, 3))
+
+    1;
+>1 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 17, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 18, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 19, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 20, 7))
+
+    1.0;
+>1.0 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 17, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 18, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 19, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 20, 7))
+
+    1.;
+>1. : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 17, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 18, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 19, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 20, 7))
+
+    1.00;
+>1.00 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 17, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 18, 6), Decl(objectTypeWithDuplicateNumericProperty.ts, 19, 8), Decl(objectTypeWithDuplicateNumericProperty.ts, 20, 7))
+}
+
+var b = {
+>b : Symbol(b, Decl(objectTypeWithDuplicateNumericProperty.ts, 24, 3))
+
+    1: 1,
+>1 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 24, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 25, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 26, 11), Decl(objectTypeWithDuplicateNumericProperty.ts, 27, 10))
+
+    1.0: 1,
+>1.0 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 24, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 25, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 26, 11), Decl(objectTypeWithDuplicateNumericProperty.ts, 27, 10))
+
+    1.: 1,
+>1. : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 24, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 25, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 26, 11), Decl(objectTypeWithDuplicateNumericProperty.ts, 27, 10))
+
+    1.00: 1
+>1.00 : Symbol(1, Decl(objectTypeWithDuplicateNumericProperty.ts, 24, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 25, 9), Decl(objectTypeWithDuplicateNumericProperty.ts, 26, 11), Decl(objectTypeWithDuplicateNumericProperty.ts, 27, 10))
+}
+
+

@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator01.ts ===
-
 let x: (a: string) => string;
 >x : (a: string) => string
 >a : string
@@ -9,7 +8,7 @@ x = (100, a => a);
 >x : (a: string) => string
 >(100, a => a) : (a: string) => string
 >100, a => a : (a: string) => string
->100 : number
+>100 : 100
 >a => a : (a: string) => string
 >a : string
 >a : string

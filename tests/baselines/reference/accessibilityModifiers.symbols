@@ -1,0 +1,107 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessibilityModifiers.ts ===
+// No errors
+class C {
+>C : Symbol(C, Decl(accessibilityModifiers.ts, 0, 0))
+
+    private static privateProperty;
+>privateProperty : Symbol(C.privateProperty, Decl(accessibilityModifiers.ts, 1, 9))
+
+    private static privateMethod() { }
+>privateMethod : Symbol(C.privateMethod, Decl(accessibilityModifiers.ts, 2, 35))
+
+    private static get privateGetter() { return 0; }
+>privateGetter : Symbol(C.privateGetter, Decl(accessibilityModifiers.ts, 3, 38))
+
+    private static set privateSetter(a: number) { }
+>privateSetter : Symbol(C.privateSetter, Decl(accessibilityModifiers.ts, 4, 52))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 5, 37))
+
+    protected static protectedProperty;
+>protectedProperty : Symbol(C.protectedProperty, Decl(accessibilityModifiers.ts, 5, 51))
+
+    protected static protectedMethod() { }
+>protectedMethod : Symbol(C.protectedMethod, Decl(accessibilityModifiers.ts, 7, 39))
+
+    protected static get protectedGetter() { return 0; }
+>protectedGetter : Symbol(C.protectedGetter, Decl(accessibilityModifiers.ts, 8, 42))
+
+    protected static set protectedSetter(a: number) { }
+>protectedSetter : Symbol(C.protectedSetter, Decl(accessibilityModifiers.ts, 9, 56))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 10, 41))
+
+    public static publicProperty;
+>publicProperty : Symbol(C.publicProperty, Decl(accessibilityModifiers.ts, 10, 55))
+
+    public static publicMethod() { }
+>publicMethod : Symbol(C.publicMethod, Decl(accessibilityModifiers.ts, 12, 33))
+
+    public static get publicGetter() { return 0; }
+>publicGetter : Symbol(C.publicGetter, Decl(accessibilityModifiers.ts, 13, 36))
+
+    public static set publicSetter(a: number) { }
+>publicSetter : Symbol(C.publicSetter, Decl(accessibilityModifiers.ts, 14, 50))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 15, 35))
+}
+
+// Errors, accessibility modifiers must precede static
+class D {
+>D : Symbol(D, Decl(accessibilityModifiers.ts, 16, 1))
+
+    static private privateProperty;
+>privateProperty : Symbol(D.privateProperty, Decl(accessibilityModifiers.ts, 19, 9))
+
+    static private privateMethod() { }
+>privateMethod : Symbol(D.privateMethod, Decl(accessibilityModifiers.ts, 20, 35))
+
+    static private get privateGetter() { return 0; }
+>privateGetter : Symbol(D.privateGetter, Decl(accessibilityModifiers.ts, 21, 38))
+
+    static private set privateSetter(a: number) { }
+>privateSetter : Symbol(D.privateSetter, Decl(accessibilityModifiers.ts, 22, 52))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 23, 37))
+
+    static protected protectedProperty;
+>protectedProperty : Symbol(D.protectedProperty, Decl(accessibilityModifiers.ts, 23, 51))
+
+    static protected protectedMethod() { }
+>protectedMethod : Symbol(D.protectedMethod, Decl(accessibilityModifiers.ts, 25, 39))
+
+    static protected get protectedGetter() { return 0; }
+>protectedGetter : Symbol(D.protectedGetter, Decl(accessibilityModifiers.ts, 26, 42))
+
+    static protected set protectedSetter(a: number) { }
+>protectedSetter : Symbol(D.protectedSetter, Decl(accessibilityModifiers.ts, 27, 56))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 28, 41))
+
+    static public publicProperty;
+>publicProperty : Symbol(D.publicProperty, Decl(accessibilityModifiers.ts, 28, 55))
+
+    static public publicMethod() { }
+>publicMethod : Symbol(D.publicMethod, Decl(accessibilityModifiers.ts, 30, 33))
+
+    static public get publicGetter() { return 0; }
+>publicGetter : Symbol(D.publicGetter, Decl(accessibilityModifiers.ts, 31, 36))
+
+    static public set publicSetter(a: number) { }
+>publicSetter : Symbol(D.publicSetter, Decl(accessibilityModifiers.ts, 32, 50))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 33, 35))
+}
+
+// Errors, multiple accessibility modifier
+class E {
+>E : Symbol(E, Decl(accessibilityModifiers.ts, 34, 1))
+
+    private public protected property;
+>property : Symbol(E.property, Decl(accessibilityModifiers.ts, 37, 9))
+
+    public protected method() { }
+>method : Symbol(E.method, Decl(accessibilityModifiers.ts, 38, 38))
+
+    private protected get getter() { return 0; }
+>getter : Symbol(E.getter, Decl(accessibilityModifiers.ts, 39, 33))
+
+    public public set setter(a: number) { }
+>setter : Symbol(E.setter, Decl(accessibilityModifiers.ts, 40, 48))
+>a : Symbol(a, Decl(accessibilityModifiers.ts, 41, 29))
+}
+

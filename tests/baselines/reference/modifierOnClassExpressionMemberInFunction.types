@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/classExpressions/modifierOnClassExpressionMemberInFunction.ts ===
-
 function g() {
 >g : () => void
 
@@ -10,13 +9,13 @@ function g() {
 
         public prop1 = 1;
 >prop1 : number
->1 : number
+>1 : 1
 
         private foo() { }
 >foo : () => void
 
         static prop2 = 43;
 >prop2 : number
->43 : number
+>43 : 43
     }
 }

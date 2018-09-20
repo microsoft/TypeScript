@@ -21,11 +21,9 @@ if (numTypedVariableCount + strTypedVariableCount !== test.markers().length) {
 }
 
 for (var i = 0; i < numTypedVariableCount; i++) {
-    goTo.marker("" + i);
-    verify.quickInfoIs("(parameter) x: number");
+    verify.quickInfoAt("" + i, "(parameter) x: number");
 }
 
 for (var i = 0; i < strTypedVariableCount; i++) {
-    goTo.marker("" + (i + numTypedVariableCount));
-    verify.quickInfoIs("(parameter) x: string");
+    verify.quickInfoAt("" + (i + numTypedVariableCount), "(parameter) x: string");
 }

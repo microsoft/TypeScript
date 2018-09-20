@@ -1,12 +1,13 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames46_ES5.ts ===
 var o = {
->o : { [x: string]: number; }
->{    ["" || 0]: 0} : { [x: string]: number; }
+>o : { ["" || 0]: number; }
+>{    ["" || 0]: 0} : { ["" || 0]: number; }
 
     ["" || 0]: 0
->"" || 0 : string | number
->"" : string
->0 : number
->0 : number
+>["" || 0] : number
+>"" || 0 : 0
+>"" : ""
+>0 : 0
+>0 : 0
 
 };

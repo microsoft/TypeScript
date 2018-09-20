@@ -1,5 +1,4 @@
 //// [es6-umd.ts]
-
 class A
 {
     constructor ()

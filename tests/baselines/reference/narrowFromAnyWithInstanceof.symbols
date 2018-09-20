@@ -1,0 +1,58 @@
+=== tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts ===
+declare var x: any;
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+
+if (x instanceof Function) { // 'any' is not narrowed when target type is 'Function'
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x();
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+
+    x(1, 2, 3);
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+
+    x("hello!");
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+
+    x.prop;
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+}
+
+if (x instanceof Object) { // 'any' is not narrowed when target type is 'Object'
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x.method();
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+
+    x();
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+}
+
+if (x instanceof Error) { // 'any' is narrowed to types other than 'Function'/'Object'
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x.message;
+>x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+
+    x.mesage;
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+}
+
+if (x instanceof Date) {
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    x.getDate();
+>x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+>getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
+
+    x.getHuors();
+>x : Symbol(x, Decl(narrowFromAnyWithInstanceof.ts, 0, 11))
+}
+

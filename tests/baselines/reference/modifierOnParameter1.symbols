@@ -1,0 +1,7 @@
+=== tests/cases/compiler/modifierOnParameter1.ts ===
+class C {
+>C : Symbol(C, Decl(modifierOnParameter1.ts, 0, 0))
+
+   constructor(declare p) { }
+>p : Symbol(p, Decl(modifierOnParameter1.ts, 1, 15))
+}

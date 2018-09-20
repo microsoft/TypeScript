@@ -1,29 +1,17 @@
 === tests/cases/compiler/extendedInterfaceGenericType.ts ===
 interface Alpha<T> {
->Alpha : Alpha<T>
->T : T
-
     takesArgOfT(arg: T): Alpha<T>;
 >takesArgOfT : (arg: T) => Alpha<T>
 >arg : T
->T : T
->Alpha : Alpha<T>
->T : T
 
     makeBetaOfNumber(): Beta<number>;
 >makeBetaOfNumber : () => Beta<number>
->Beta : Beta<T>
 }
 interface Beta<T> extends Alpha<T> {
->Beta : Beta<T>
->T : T
->Alpha : Alpha<T>
->T : T
 }
 
 var alpha: Alpha<number>;
 >alpha : Alpha<number>
->Alpha : Alpha<T>
 
 var betaOfNumber = alpha.makeBetaOfNumber();
 >betaOfNumber : Beta<number>
@@ -37,5 +25,5 @@ betaOfNumber.takesArgOfT(5);
 >betaOfNumber.takesArgOfT : (arg: number) => Alpha<number>
 >betaOfNumber : Beta<number>
 >takesArgOfT : (arg: number) => Alpha<number>
->5 : number
+>5 : 5
 

@@ -26,3 +26,9 @@ let a: string[];
 for (x of a) {
     x; // string
 }
+
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+arr.push({ x: "ok" });

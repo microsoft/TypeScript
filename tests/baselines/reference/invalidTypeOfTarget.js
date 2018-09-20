@@ -9,11 +9,16 @@ var x7: typeof function f() { };
 var x8: typeof /123/;
 
 //// [invalidTypeOfTarget.js]
-var x1 = {};
-var x2 = ;
-var x3 = 1;
-var x4 = '';
+var x1, _a = void 0;
+var x2;
+(function () { return ; });
+var x3;
+1;
+var x4;
+'';
 var x5;
-var x6 = null;
-var x7 = function f() { };
-var x8 = /123/;
+var x6;
+var x7, f;
+(function () { });
+var x8;
+/123/;

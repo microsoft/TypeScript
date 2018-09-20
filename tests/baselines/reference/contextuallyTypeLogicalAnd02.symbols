@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd02.ts ===
+let x: (a: string) => string;
+>x : Symbol(x, Decl(contextuallyTypeLogicalAnd02.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd02.ts, 0, 8))
+
+let y = true;
+>y : Symbol(y, Decl(contextuallyTypeLogicalAnd02.ts, 1, 3))
+
+x = y && (a => {
+>x : Symbol(x, Decl(contextuallyTypeLogicalAnd02.ts, 0, 3))
+>y : Symbol(y, Decl(contextuallyTypeLogicalAnd02.ts, 1, 3))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd02.ts, 3, 10))
+
+    const b: number = a;
+>b : Symbol(b, Decl(contextuallyTypeLogicalAnd02.ts, 4, 9))
+>a : Symbol(a, Decl(contextuallyTypeLogicalAnd02.ts, 3, 10))
+
+    return b;
+>b : Symbol(b, Decl(contextuallyTypeLogicalAnd02.ts, 4, 9))
+
+});

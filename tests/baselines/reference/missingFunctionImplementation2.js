@@ -2,7 +2,7 @@
 
 //// [missingFunctionImplementation2_a.ts]
 export {};
-declare module "./missingFunctionImplementation2_b.ts" {
+declare module "./missingFunctionImplementation2_b" {
   export function f(a, b): void;
 }
 
@@ -11,5 +11,7 @@ export function f(a?, b?);
 
 //// [missingFunctionImplementation2_a.js]
 "use strict";
+exports.__esModule = true;
 //// [missingFunctionImplementation2_b.js]
 "use strict";
+exports.__esModule = true;

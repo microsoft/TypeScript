@@ -1,0 +1,15 @@
+=== tests/cases/compiler/moduleAugmentationGlobal8_1.ts ===
+namespace A {
+>A : Symbol(A, Decl(moduleAugmentationGlobal8_1.ts, 0, 0))
+
+    global {
+>global : Symbol(global, Decl(moduleAugmentationGlobal8_1.ts, 0, 13))
+
+        interface Array<T> { x }
+>Array : Symbol(Array, Decl(moduleAugmentationGlobal8_1.ts, 1, 12))
+>T : Symbol(T, Decl(moduleAugmentationGlobal8_1.ts, 2, 24))
+>x : Symbol(Array.x, Decl(moduleAugmentationGlobal8_1.ts, 2, 28))
+    }
+}
+export {}
+

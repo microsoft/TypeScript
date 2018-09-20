@@ -1,44 +1,25 @@
-tests/cases/conformance/functions/functionImplementationErrors.ts(3,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(7,19): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(11,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(17,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(26,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/functions/functionImplementationErrors.ts(31,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(36,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
-tests/cases/conformance/functions/functionImplementationErrors.ts(50,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(54,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(58,11): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(62,10): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(66,11): error TS2354: No best common type exists among return expressions.
-tests/cases/conformance/functions/functionImplementationErrors.ts(70,11): error TS2354: No best common type exists among return expressions.
+tests/cases/conformance/functions/functionImplementationErrors.ts(25,16): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/conformance/functions/functionImplementationErrors.ts(30,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
+tests/cases/conformance/functions/functionImplementationErrors.ts(35,17): error TS2373: Initializer of parameter 'n' cannot reference identifier 'm' declared after it.
 
 
-==== tests/cases/conformance/functions/functionImplementationErrors.ts (13 errors) ====
-    
+==== tests/cases/conformance/functions/functionImplementationErrors.ts (3 errors) ====
     // FunctionExpression with no return type annotation with multiple return statements with unrelated types
     var f1 = function () {
-             ~~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return '';
         return 3;
     };
     var f2 = function x() {
-                      ~
-!!! error TS2354: No best common type exists among return expressions.
         return '';
         return 3;
     };
     var f3 = () => {
-             ~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return '';
         return 3;
     };
     
     // FunctionExpression with no return type annotation with return branch of number[] and other of string[]
     var f4 = function () {
-             ~~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         if (true) {
             return [''];
         } else {
@@ -78,38 +59,26 @@ tests/cases/conformance/functions/functionImplementationErrors.ts(70,11): error 
     class Derived1 extends Base { private m; }
     class Derived2 extends Base { private n; }
     function f8() {
-             ~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Derived1();
         return new Derived2();    
     }
     var f9 = function () {
-             ~~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Derived1();
         return new Derived2();
     };
     var f10 = () => {
-              ~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Derived1();
         return new Derived2();
     };
     function f11() {
-             ~~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Base();
         return new AnotherClass();
     }
     var f12 = function () {
-              ~~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Base();
         return new AnotherClass();
     };
     var f13 = () => {
-              ~~~~~~~
-!!! error TS2354: No best common type exists among return expressions.
         return new Base();
         return new AnotherClass();
     };

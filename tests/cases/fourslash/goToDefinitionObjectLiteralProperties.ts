@@ -2,8 +2,8 @@
 
 ////var o = {
 ////    /*valueDefinition*/value: 0,
-////    /*getterDefinition*/get getter() {return 0 },
-////    /*setterDefinition*/set setter(v: number) { },
+////    get /*getterDefinition*/getter() {return 0 },
+////    set /*setterDefinition*/setter(v: number) { },
 ////    /*methodDefinition*/method: () => { },
 ////    /*es6StyleMethodDefinition*/es6StyleMethod() { }
 ////};
@@ -14,16 +14,4 @@
 ////o./*methodReference*/method;
 ////o./*es6StyleMethodReference*/es6StyleMethod;
 
-var markerList = [
-    "value",
-    "getter",
-    "setter",
-    "method",
-    "es6StyleMethod",
-];
-
-markerList.forEach((marker) => {
-    goTo.marker(marker + 'Reference');
-    goTo.definition();
-    verify.caretAtMarker(marker + 'Definition');
-});
+verify.goToDefinitionForMarkers("value", "getter", "setter", "method", "es6StyleMethod");

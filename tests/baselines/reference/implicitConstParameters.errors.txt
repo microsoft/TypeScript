@@ -1,0 +1,64 @@
+tests/cases/compiler/implicitConstParameters.ts(38,27): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/implicitConstParameters.ts(44,27): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/compiler/implicitConstParameters.ts (2 errors) ====
+    function doSomething(cb: () => void) {
+        cb();
+    }
+    
+    function fn(x: number | string) {
+      if (typeof x === 'number') {
+          doSomething(() => x.toFixed());
+      }
+    }
+    
+    function f1(x: string | undefined) {
+        if (!x) {
+            return;
+        }
+        doSomething(() => x.length);
+    }
+    
+    function f2(x: string | undefined) {
+        if (x) {
+            doSomething(() => {
+                doSomething(() => x.length);
+            });
+        }
+    }
+    
+    function f3(x: string | undefined) {
+        inner();
+        function inner() {
+            if (x) {
+                doSomething(() => x.length);
+            }
+        }
+    }
+    
+    function f4(x: string | undefined) {
+        x = "abc";  // causes x to be considered non-const
+        if (x) {
+            doSomething(() => x.length);
+                              ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }
+    
+    function f5(x: string | undefined) {
+        if (x) {
+            doSomething(() => x.length);
+                              ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+        x = "abc";  // causes x to be considered non-const
+    }
+    
+    
+    function f6(x: string | undefined) {
+        const y = x || "";
+        if (x) {
+            doSomething(() => y.length);
+        }
+    }

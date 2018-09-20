@@ -1,0 +1,13 @@
+=== tests/cases/conformance/types/primitives/boolean/boolInsteadOfBoolean.ts ===
+var x: bool;
+>x : any
+
+var a: boolean = x;
+>a : boolean
+>x : any
+
+x = a;
+>x = a : boolean
+>x : any
+>a : boolean
+

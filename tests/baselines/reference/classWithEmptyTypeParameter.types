@@ -1,0 +1,4 @@
+=== tests/cases/compiler/classWithEmptyTypeParameter.ts ===
+class C<> {
+>C : C
+}

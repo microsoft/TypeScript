@@ -19,23 +19,15 @@
 ////c.x1(1, (x/*9*/x: 'bye') => { return 1; } );
 ////c.x1(1, (x/*10*/x) => { return 1; } );
 
-goTo.marker('1');
-verify.quickInfoIs("(method) I.x1(a: number, callback: (x: \"hi\") => number): any");
-goTo.marker('2');
-verify.quickInfoIs("(method) C.x1(a: number, callback: (x: \"hi\") => number): any");
-goTo.marker('3');
-verify.quickInfoIs("(parameter) callback: (x: \"hi\") => number");
-goTo.marker('4');
-verify.quickInfoIs("(method) C.x1(a: number, callback: (x: \"hi\") => number): any");
-goTo.marker('5');
-verify.quickInfoIs('(parameter) callback: (x: string) => number');
-goTo.marker('6');
-verify.quickInfoIs('(parameter) callback: (x: string) => number');
-goTo.marker('7');
-verify.quickInfoIs("(method) C.x1(a: number, callback: (x: \"hi\") => number): any");
-goTo.marker('8');
-verify.quickInfoIs("(parameter) xx: \"hi\"");
-goTo.marker('9');
-verify.quickInfoIs("(parameter) xx: \"bye\"");
-goTo.marker('10');
-verify.quickInfoIs("(parameter) xx: \"hi\"");
+verify.quickInfos({
+    1: "(method) I.x1(a: number, callback: (x: \"hi\") => number): any",
+    2: "(method) C.x1(a: number, callback: (x: \"hi\") => number): any",
+    3: "(parameter) callback: (x: \"hi\") => number",
+    4: "(method) C.x1(a: number, callback: (x: \"hi\") => number): any",
+    5: "(parameter) callback: (x: string) => number",
+    6: "(parameter) callback: (x: string) => number",
+    7: "(method) C.x1(a: number, callback: (x: \"hi\") => number): any",
+    8: "(parameter) xx: \"hi\"",
+    9: "(parameter) xx: \"bye\"",
+    10: "(parameter) xx: \"hi\""
+});

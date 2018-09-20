@@ -1,0 +1,11 @@
+=== tests/cases/compiler/a.ts ===
+var a = 10;
+>a : Symbol(a, Decl(a.ts, 0, 3))
+
+export = a;  // Error: export = not allowed in ES6
+>a : Symbol(a, Decl(a.ts, 0, 3))
+
+=== tests/cases/compiler/b.ts ===
+import * as a from "a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+

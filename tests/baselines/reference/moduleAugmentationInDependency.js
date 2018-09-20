@@ -10,4 +10,5 @@ import "A"
 
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 require("A");

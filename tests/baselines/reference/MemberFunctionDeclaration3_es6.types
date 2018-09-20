@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts ===
+class C {
+>C : C
+
+   *[foo]() { }
+>[foo] : () => IterableIterator<any>
+>foo : any
+}

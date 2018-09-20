@@ -18,6 +18,7 @@ extractIndexer({
 }); // Should return any (widened form of undefined)
 
 //// [computedPropertyNames48_ES5.js]
+var _a, _b, _c;
 var E;
 (function (E) {
     E[E["x"] = 0] = "x";
@@ -25,14 +26,10 @@ var E;
 var a;
 extractIndexer((_a = {},
     _a[a] = "",
-    _a
-)); // Should return string
+    _a)); // Should return string
 extractIndexer((_b = {},
     _b[E.x] = "",
-    _b
-)); // Should return string
+    _b)); // Should return string
 extractIndexer((_c = {},
     _c["" || 0] = "",
-    _c
-)); // Should return any (widened form of undefined)
-var _a, _b, _c;
+    _c)); // Should return any (widened form of undefined)

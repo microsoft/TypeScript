@@ -1,0 +1,15 @@
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts(5,36): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
+
+
+==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclarationCapturesArguments_es5.ts (1 errors) ====
+    class C {
+       method() {
+          function other() {}
+          async function fn () {
+               await other.apply(this, arguments);
+                                       ~~~~~~~~~
+!!! error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.
+          }
+       }
+    }
+    

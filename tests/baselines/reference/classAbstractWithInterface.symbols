@@ -1,0 +1,4 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractWithInterface.ts ===
+abstract interface I {}
+>I : Symbol(I, Decl(classAbstractWithInterface.ts, 0, 0))
+

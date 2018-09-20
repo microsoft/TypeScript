@@ -24,28 +24,32 @@
 ////extMod./*6*/m1./*7*/fooEx/*8q*/port(/*8*/);
 ////var new/*9*/Var = new extMod.m1.m2./*10*/c();
 
-goTo.marker('2');
-verify.quickInfoIs("namespace m1", "NamespaceComment");
+verify.quickInfos({
+    2: ["namespace m1", "NamespaceComment"],
+    3: ['import extMod = require("./commentsImportDeclaration_file0")', "Import declaration"]
+});
 
-goTo.marker('3');
-verify.quickInfoIs('import extMod = require("./commentsImportDeclaration_file0")', "Import declaration");
+verify.completions({ marker: "6", exact: [{ name: "m1", text: "namespace extMod.m1", documentation: "NamespaceComment" }] });
 
-goTo.marker('6');
-verify.memberListContains("m1", "namespace extMod.m1");
+verify.completions({
+    marker: "7",
+    exact: [
+        { name: "fooExport", text: "function extMod.m1.fooExport(): number", documentation: "exported function" },
+        { name: "b", text: "var extMod.m1.b: number", documentation: "b's comment" },
+        { name: "m2", text: "namespace extMod.m1.m2", documentation: "m2 comments" },
+    ]
+})
 
-goTo.marker('7');
-verify.memberListContains("b", "var extMod.m1.b: number", "b's comment");
-verify.memberListContains("fooExport", "function extMod.m1.fooExport(): number", "exported function");
-verify.memberListContains("m2", "namespace extMod.m1.m2");
+verify.signatureHelp({ marker: "8", docComment: "exported function" });
+verify.quickInfos({
+    "8q": ["function extMod.m1.fooExport(): number", "exported function"],
+    9: "var newVar: extMod.m1.m2.c"
+});
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("exported function");
-goTo.marker('8q');
-verify.quickInfoIs("function extMod.m1.fooExport(): number", "exported function");
-
-goTo.marker('9');
-verify.quickInfoIs("var newVar: extMod.m1.m2.c", "");
-
-goTo.marker('10');
-verify.memberListContains("c", "constructor extMod.m1.m2.c(): extMod.m1.m2.c", "");
-verify.memberListContains("i", "var extMod.m1.m2.i: extMod.m1.m2.c", "i");
+verify.completions({
+    marker: "10",
+    exact:  [
+        { name: "c", text: "constructor extMod.m1.m2.c(): extMod.m1.m2.c", documentation: "class comment;" },
+        { name: "i", text: "var extMod.m1.m2.i: extMod.m1.m2.c", documentation: "i" },
+    ],
+});

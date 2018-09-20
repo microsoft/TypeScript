@@ -1,5 +1,4 @@
 //// [argumentsObjectIterator03_ES6.ts]
-
 function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, number] {
     let [x, y, z] = arguments;
     

@@ -10,6 +10,8 @@ import "A"
 
 //// [index.js]
 "use strict";
+exports.__esModule = true;
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 require("A");

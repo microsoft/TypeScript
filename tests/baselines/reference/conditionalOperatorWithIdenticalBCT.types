@@ -18,85 +18,80 @@ class B extends X { propertyB: string };
 
 var x: X;
 >x : X
->X : X
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 //Cond ? Expr1 : Expr2,  Expr1 is supertype
 //Be Not contextually typed
 true ? x : a;
 >true ? x : a : X
->true : boolean
+>true : true
 >x : X
 >a : A
 
 var result1 = true ? x : a;
 >result1 : X
 >true ? x : a : X
->true : boolean
+>true : true
 >x : X
 >a : A
 
 //Expr1 and Expr2 are literals
 true ? {} : 1;
->true ? {} : 1 : {}
->true : boolean
+>true ? {} : 1 : 1 | {}
+>true : true
 >{} : {}
->1 : number
+>1 : 1
 
 true ? { a: 1 } : { a: 2, b: 'string' };
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
->true : boolean
+>true : true
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
->2 : number
+>2 : 2
 >b : string
->'string' : string
+>'string' : "string"
 
 var result2 = true ? {} : 1;
 >result2 : {}
->true ? {} : 1 : {}
->true : boolean
+>true ? {} : 1 : 1 | {}
+>true : true
 >{} : {}
->1 : number
+>1 : 1
 
 var result3 = true ? { a: 1 } : { a: 2, b: 'string' };
->result3 : { a: number; } | { a: number; b: string; }
+>result3 : { a: number; b?: undefined; } | { a: number; b: string; }
 >true ? { a: 1 } : { a: 2, b: 'string' } : { a: number; } | { a: number; b: string; }
->true : boolean
+>true : true
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
->2 : number
+>2 : 2
 >b : string
->'string' : string
+>'string' : "string"
 
 //Contextually typed
 var resultIsX1: X = true ? x : a;
 >resultIsX1 : X
->X : X
 >true ? x : a : X
->true : boolean
+>true : true
 >x : X
 >a : A
 
 var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >result4 : (t: A) => any
 >t : A
->A : A
 >true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
->true : boolean
+>true : true
 >(m) => m.propertyX : (m: A) => any
 >m : A
 >m.propertyX : any
@@ -112,71 +107,69 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 //Be Not contextually typed
 true ? a : x;
 >true ? a : x : X
->true : boolean
+>true : true
 >a : A
 >x : X
 
 var result5 = true ? a : x;
 >result5 : X
 >true ? a : x : X
->true : boolean
+>true : true
 >a : A
 >x : X
 
 //Expr1 and Expr2 are literals
 true ? 1 : {};
->true ? 1 : {} : {}
->true : boolean
->1 : number
+>true ? 1 : {} : 1 | {}
+>true : true
+>1 : 1
 >{} : {}
 
 true ? { a: 2, b: 'string' } : { a: 1 };
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
->true : boolean
+>true : true
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
->2 : number
+>2 : 2
 >b : string
->'string' : string
+>'string' : "string"
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
 var result6 = true ? 1 : {};
 >result6 : {}
->true ? 1 : {} : {}
->true : boolean
->1 : number
+>true ? 1 : {} : 1 | {}
+>true : true
+>1 : 1
 >{} : {}
 
 var result7 = true ? { a: 2, b: 'string' } : { a: 1 };
->result7 : { a: number; b: string; } | { a: number; }
+>result7 : { a: number; b: string; } | { a: number; b?: undefined; }
 >true ? { a: 2, b: 'string' } : { a: 1 } : { a: number; b: string; } | { a: number; }
->true : boolean
+>true : true
 >{ a: 2, b: 'string' } : { a: number; b: string; }
 >a : number
->2 : number
+>2 : 2
 >b : string
->'string' : string
+>'string' : "string"
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
 //Contextually typed
 var resultIsX2: X = true ? x : a;
 >resultIsX2 : X
->X : X
 >true ? x : a : X
->true : boolean
+>true : true
 >x : X
 >a : A
 
 var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >result8 : (t: A) => any
 >t : A
->A : A
 >true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
->true : boolean
+>true : true
 >(m) => m.propertyA : (m: A) => number
 >m : A
 >m.propertyA : number
@@ -192,18 +185,16 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 //Contextually typed
 var resultIsX3: X = true ? a : b;
 >resultIsX3 : X
->X : X
 >true ? a : b : A | B
->true : boolean
+>true : true
 >a : A
 >b : B
 
 var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >result10 : (t: X) => any
 >t : X
->X : X
 >true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->true : boolean
+>true : true
 >(m) => m.propertyX1 : (m: X) => number
 >m : X
 >m.propertyX1 : number
@@ -218,8 +209,8 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : string | number
->true : boolean
->1 : number
->'string' : string
+>true ? 1 : 'string' : "string" | 1
+>true : true
+>1 : 1
+>'string' : "string"
 

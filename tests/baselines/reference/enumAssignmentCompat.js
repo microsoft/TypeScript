@@ -41,14 +41,13 @@ var p: W.D;
 //// [enumAssignmentCompat.js]
 var W;
 (function (W) {
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;
     }());
     W.D = D;
 })(W || (W = {}));
-var W;
 (function (W) {
     W[W["a"] = 0] = "a";
     W[W["b"] = 1] = "b";

@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 //The second operand type is any
 ANY, ANY;
@@ -83,7 +82,7 @@ var x: any;
 
 1, ANY;
 >1, ANY : any
->1 : number
+>1 : 1
 >ANY : any
 
 ++NUMBER, ANY;
@@ -94,28 +93,28 @@ var x: any;
 
 "string", [null, 1];
 >"string", [null, 1] : number[]
->"string" : string
+>"string" : "string"
 >[null, 1] : number[]
 >null : null
->1 : number
+>1 : 1
 
 "string".charAt(0), [null, 1];
 >"string".charAt(0), [null, 1] : number[]
 >"string".charAt(0) : string
 >"string".charAt : (pos: number) => string
->"string" : string
+>"string" : "string"
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 >[null, 1] : number[]
 >null : null
->1 : number
+>1 : 1
 
 true, x("any");
 >true, x("any") : any
->true : boolean
+>true : true
 >x("any") : any
 >x : any
->"any" : string
+>"any" : "any"
 
 !BOOLEAN, x.doSomeThing();
 >!BOOLEAN, x.doSomeThing() : any
@@ -130,7 +129,7 @@ var resultIsAny6 = (1, ANY);
 >resultIsAny6 : any
 >(1, ANY) : any
 >1, ANY : any
->1 : number
+>1 : 1
 >ANY : any
 
 var resultIsAny7 = (++NUMBER, ANY);
@@ -145,7 +144,7 @@ var resultIsAny8 = ("string", null);
 >resultIsAny8 : any
 >("string", null) : null
 >"string", null : null
->"string" : string
+>"string" : "string"
 >null : null
 
 var resultIsAny9 = ("string".charAt(0), undefined);
@@ -154,19 +153,19 @@ var resultIsAny9 = ("string".charAt(0), undefined);
 >"string".charAt(0), undefined : undefined
 >"string".charAt(0) : string
 >"string".charAt : (pos: number) => string
->"string" : string
+>"string" : "string"
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 >undefined : undefined
 
 var resultIsAny10 = (true, x("any"));
 >resultIsAny10 : any
 >(true, x("any")) : any
 >true, x("any") : any
->true : boolean
+>true : true
 >x("any") : any
 >x : any
->"any" : string
+>"any" : "any"
 
 var resultIsAny11 = (!BOOLEAN, x.doSomeThing());
 >resultIsAny11 : any

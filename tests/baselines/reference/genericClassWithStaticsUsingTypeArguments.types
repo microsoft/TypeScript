@@ -1,0 +1,48 @@
+=== tests/cases/compiler/genericClassWithStaticsUsingTypeArguments.ts ===
+// Should be error to use 'T' in all declarations within Foo.
+class Foo<T> {
+>Foo : Foo<T>
+
+    static a = (n: T) => { };
+>a : (n: any) => void
+>(n: T) => { } : (n: any) => void
+>n : any
+
+    static b: T;
+>b : any
+
+    static c: T[] = [];
+>c : any[]
+>[] : undefined[]
+
+    static d = false || ((x: T) => x || undefined)(null)
+>d : any
+>false || ((x: T) => x || undefined)(null) : any
+>false : false
+>((x: T) => x || undefined)(null) : any
+>((x: T) => x || undefined) : (x: any) => any
+>(x: T) => x || undefined : (x: any) => any
+>x : any
+>x || undefined : any
+>x : any
+>undefined : undefined
+>null : null
+
+    static e = function (x: T) { return null; }
+>e : (x: any) => any
+>function (x: T) { return null; } : (x: any) => any
+>x : any
+>null : null
+
+    static f(xs: T[]): T[] {
+>f : (xs: any[]) => any[]
+>xs : any[]
+
+        return xs.reverse();
+>xs.reverse() : any[]
+>xs.reverse : () => any[]
+>xs : any[]
+>reverse : () => any[]
+    }
+}
+

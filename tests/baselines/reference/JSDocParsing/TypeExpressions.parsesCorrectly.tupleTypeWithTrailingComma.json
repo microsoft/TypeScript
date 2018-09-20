@@ -1,0 +1,18 @@
+{
+    "kind": "TupleType",
+    "pos": 1,
+    "end": 10,
+    "flags": "JSDoc",
+    "elementTypes": {
+        "0": {
+            "kind": "NumberKeyword",
+            "pos": 2,
+            "end": 8,
+            "flags": "JSDoc"
+        },
+        "length": 1,
+        "pos": 2,
+        "end": 9,
+        "hasTrailingComma": true
+    }
+}

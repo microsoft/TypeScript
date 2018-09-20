@@ -1,5 +1,4 @@
 //// [constDeclarations-ambient-errors.ts]
-
 // error: no intialization expected in ambient declarations
 declare const c1: boolean = true;
 declare const c2: number = 0;

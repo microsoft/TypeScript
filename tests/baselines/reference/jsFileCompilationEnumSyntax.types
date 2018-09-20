@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.js ===
+enum E { }
+>E : E
+

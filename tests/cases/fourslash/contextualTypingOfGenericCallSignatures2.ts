@@ -7,6 +7,5 @@
 ////// x should not be contextually typed so this should be an error
 ////f6(/**/x => x<number>())
 
-goTo.marker();
-verify.quickInfoIs('(parameter) x: any');
+verify.quickInfoAt("", "(parameter) x: T extends I");
 verify.numberOfErrorsInCurrentFile(1);

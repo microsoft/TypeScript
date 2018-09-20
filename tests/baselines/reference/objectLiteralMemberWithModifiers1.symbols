@@ -1,0 +1,5 @@
+=== tests/cases/compiler/objectLiteralMemberWithModifiers1.ts ===
+var v = { public foo() { } }
+>v : Symbol(v, Decl(objectLiteralMemberWithModifiers1.ts, 0, 3))
+>foo : Symbol(foo, Decl(objectLiteralMemberWithModifiers1.ts, 0, 9))
+

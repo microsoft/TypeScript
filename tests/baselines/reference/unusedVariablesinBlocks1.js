@@ -1,5 +1,4 @@
 //// [unusedVariablesinBlocks1.ts]
-
 function f1 () {
     let x = 10;
     {

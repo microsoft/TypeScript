@@ -17,27 +17,27 @@ declare function use(a: any): void;
 
 use(x.toExponential());
 >use : Symbol(use, Decl(file1.ts, 3, 24))
->x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file1.ts, 0, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 use(y.toExponential());
 >use : Symbol(use, Decl(file1.ts, 3, 24))
->y.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>y.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(file1.ts, 1, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 use(z.toExponential());
 >use : Symbol(use, Decl(file1.ts, 3, 24))
->z.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(file1.ts, 2, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 use(z1.toExponential());
 >use : Symbol(use, Decl(file1.ts, 3, 24))
->z1.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>z1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >z1 : Symbol(z1, Decl(file1.ts, 3, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 === c:/root/folder2/file1.ts ===
 export var x = 1;

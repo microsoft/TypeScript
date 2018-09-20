@@ -1,4 +1,4 @@
-tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(4,34): error TS2305: Module 'X' has no exported member 'bar'.
+tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(4,34): error TS2694: Namespace 'X' has no exported member 'bar'.
 
 
 ==== tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_A.ts (0 errors) ====
@@ -10,4 +10,4 @@ tests/cases/compiler/exportSpecifierReferencingOuterDeclaration2_B.ts(4,34): err
     export declare function foo(): X.foo;
     export declare function bar(): X.bar; // error
                                      ~~~
-!!! error TS2305: Module 'X' has no exported member 'bar'.
+!!! error TS2694: Namespace 'X' has no exported member 'bar'.

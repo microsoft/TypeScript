@@ -1,0 +1,24 @@
+=== tests/cases/compiler/trailingCommaInHeterogenousArrayLiteral1.ts ===
+class arrTest {
+>arrTest : Symbol(arrTest, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 0))
+
+    test(arg1: number[]) {    }
+>test : Symbol(arrTest.test, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 15))
+>arg1 : Symbol(arg1, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 1, 9))
+
+    callTest() {
+>callTest : Symbol(arrTest.callTest, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 1, 31))
+
+        // these two should give the same error
+        this.test([1, 2, "hi", 5, ]);
+>this.test : Symbol(arrTest.test, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 15))
+>this : Symbol(arrTest, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 0))
+>test : Symbol(arrTest.test, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 15))
+
+        this.test([1, 2, "hi", 5]); 
+>this.test : Symbol(arrTest.test, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 15))
+>this : Symbol(arrTest, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 0))
+>test : Symbol(arrTest.test, Decl(trailingCommaInHeterogenousArrayLiteral1.ts, 0, 15))
+    }
+}
+

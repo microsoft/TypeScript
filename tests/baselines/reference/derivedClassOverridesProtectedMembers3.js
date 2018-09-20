@@ -1,5 +1,4 @@
 //// [derivedClassOverridesProtectedMembers3.ts]
-
 var x: { foo: string; }
 var y: { foo: string; bar: string; }
 
@@ -72,14 +71,22 @@ class Derived10 extends Base {
 }
 
 //// [derivedClassOverridesProtectedMembers3.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var x;
 var y;
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(a) {
     }
     Base.prototype.b = function (a) { };
@@ -100,25 +107,25 @@ var Base = (function () {
 }());
 // Errors
 // decrease visibility of all public members to protected
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     return Derived1;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Derived2.prototype.b = function (a) { };
     return Derived2;
 }(Base));
-var Derived3 = (function (_super) {
+var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Object.defineProperty(Derived3.prototype, "c", {
         get: function () { return x; },
@@ -127,10 +134,10 @@ var Derived3 = (function (_super) {
     });
     return Derived3;
 }(Base));
-var Derived4 = (function (_super) {
+var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Object.defineProperty(Derived4.prototype, "c", {
         set: function (v) { },
@@ -139,32 +146,32 @@ var Derived4 = (function (_super) {
     });
     return Derived4;
 }(Base));
-var Derived5 = (function (_super) {
+var Derived5 = /** @class */ (function (_super) {
     __extends(Derived5, _super);
     function Derived5(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     return Derived5;
 }(Base));
-var Derived6 = (function (_super) {
+var Derived6 = /** @class */ (function (_super) {
     __extends(Derived6, _super);
     function Derived6(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     return Derived6;
 }(Base));
-var Derived7 = (function (_super) {
+var Derived7 = /** @class */ (function (_super) {
     __extends(Derived7, _super);
     function Derived7(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Derived7.s = function (a) { };
     return Derived7;
 }(Base));
-var Derived8 = (function (_super) {
+var Derived8 = /** @class */ (function (_super) {
     __extends(Derived8, _super);
     function Derived8(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Object.defineProperty(Derived8, "t", {
         get: function () { return x; },
@@ -173,10 +180,10 @@ var Derived8 = (function (_super) {
     });
     return Derived8;
 }(Base));
-var Derived9 = (function (_super) {
+var Derived9 = /** @class */ (function (_super) {
     __extends(Derived9, _super);
     function Derived9(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     Object.defineProperty(Derived9, "t", {
         set: function (v) { },
@@ -185,10 +192,10 @@ var Derived9 = (function (_super) {
     });
     return Derived9;
 }(Base));
-var Derived10 = (function (_super) {
+var Derived10 = /** @class */ (function (_super) {
     __extends(Derived10, _super);
     function Derived10(a) {
-        _super.call(this, a);
+        return _super.call(this, a) || this;
     }
     return Derived10;
 }(Base));

@@ -1,8 +1,7 @@
-tests/cases/conformance/jsx/file.tsx(11,22): error TS2339: Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+tests/cases/conformance/jsx/file.tsx(11,10): error TS2559: Type '{ bar: string; }' has no properties in common with type 'IntrinsicAttributes & { ref?: string; }'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -27,7 +26,7 @@ tests/cases/conformance/jsx/file.tsx(11,22): error TS2339: Property 'bar' does n
     
     // Should be an OK
     var x = <MyComponent bar='world' />;
-                         ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+             ~~~~~~~~~~~
+!!! error TS2559: Type '{ bar: string; }' has no properties in common with type 'IntrinsicAttributes & { ref?: string; }'.
     
     

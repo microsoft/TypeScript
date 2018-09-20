@@ -4,7 +4,7 @@ module M {
 
     export var x = 3;
 >x : number
->3 : number
+>3 : 3
 
     function fn(M, p = x) { }
 >fn : (M: any, p?: number) => void

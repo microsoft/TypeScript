@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts ===
+function f() => 4;
+>f : Symbol(f, Decl(parserErrantEqualsGreaterThanAfterFunction1.ts, 0, 0))
+

@@ -1,5 +1,4 @@
 //// [tsxNoJsx.tsx]
-
 <nope />;
 
 

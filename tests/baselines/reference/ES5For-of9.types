@@ -5,7 +5,7 @@ function foo() {
     return { x: 0 };
 >{ x: 0 } : { x: number; }
 >x : number
->0 : number
+>0 : 0
 }
 for (foo().x of []) {
 >foo().x : number

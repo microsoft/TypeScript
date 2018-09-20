@@ -1,5 +1,4 @@
 //// [literals.ts]
-
 //typeof null is Null
 //typeof true is Boolean
 //typeof false is Boolean

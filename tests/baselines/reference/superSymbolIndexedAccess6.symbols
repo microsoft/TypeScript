@@ -6,6 +6,7 @@ class Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess6.ts, 0, 16))
 
     static [symbol]() {
+>[symbol] : Symbol(Foo[symbol], Decl(superSymbolIndexedAccess6.ts, 2, 11))
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess6.ts, 0, 3))
 
         return 0;
@@ -17,6 +18,7 @@ class Bar extends Foo {
 >Foo : Symbol(Foo, Decl(superSymbolIndexedAccess6.ts, 0, 16))
 
     static [symbol]() {
+>[symbol] : Symbol(Bar[symbol], Decl(superSymbolIndexedAccess6.ts, 8, 23))
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess6.ts, 0, 3))
 
         return super[symbol]();

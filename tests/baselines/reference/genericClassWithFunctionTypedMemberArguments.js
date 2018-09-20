@@ -69,7 +69,7 @@ module WithCandidates {
 // Using function arguments, no errors expected
 var ImmediatelyFix;
 (function (ImmediatelyFix) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo = function (x) {
@@ -81,7 +81,7 @@ var ImmediatelyFix;
     var r = c.foo(function (x) { return ''; }); // {}
     var r2 = c.foo(function (x) { return ''; }); // string 
     var r3 = c.foo(function (x) { return ''; }); // {}
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         C2.prototype.foo = function (x) {
@@ -95,7 +95,7 @@ var ImmediatelyFix;
 })(ImmediatelyFix || (ImmediatelyFix = {}));
 var WithCandidates;
 (function (WithCandidates) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo2 = function (x, cb) {
@@ -107,7 +107,7 @@ var WithCandidates;
     var r4 = c.foo2(1, function (a) { return ''; }); // string, contextual signature instantiation is applied to generic functions
     var r5 = c.foo2(1, function (a) { return ''; }); // string
     var r6 = c.foo2('', function (a) { return 1; }); // number
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         C2.prototype.foo3 = function (x, cb, y) {
@@ -118,7 +118,7 @@ var WithCandidates;
     var c2;
     var r7 = c2.foo3(1, function (a) { return ''; }, ''); // string
     var r8 = c2.foo3(1, function (a) { return ''; }, ''); // string
-    var C3 = (function () {
+    var C3 = /** @class */ (function () {
         function C3() {
         }
         C3.prototype.foo3 = function (x, cb, y) {

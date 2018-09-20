@@ -1,0 +1,9 @@
+[
+    "======== Resolving module '@see/saw' from '/a.ts'. ========",
+    "Explicitly specified module resolution kind: 'Classic'.",
+    "Scoped package detected, looking in 'see__saw'",
+    "File '/node_modules/@types/see__saw/package.json' does not exist.",
+    "File '/node_modules/@types/see__saw.d.ts' does not exist.",
+    "File '/node_modules/@types/see__saw/index.d.ts' exist - use it as a name resolution result.",
+    "======== Module name '@see/saw' was successfully resolved to '/node_modules/@types/see__saw/index.d.ts'. ========"
+]

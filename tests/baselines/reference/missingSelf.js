@@ -19,14 +19,14 @@ c2.b();
 
 
 //// [missingSelf.js]
-var CalcButton = (function () {
+var CalcButton = /** @class */ (function () {
     function CalcButton() {
     }
     CalcButton.prototype.a = function () { this.onClick(); };
     CalcButton.prototype.onClick = function () { };
     return CalcButton;
 }());
-var CalcButton2 = (function () {
+var CalcButton2 = /** @class */ (function () {
     function CalcButton2() {
     }
     CalcButton2.prototype.b = function () {

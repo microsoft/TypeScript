@@ -1,0 +1,50 @@
+tests/cases/compiler/typeUsedAsValueError.ts(16,11): error TS2693: 'Interface' only refers to a type, but is being used as a value here.
+tests/cases/compiler/typeUsedAsValueError.ts(17,11): error TS2304: Cannot find name 'InterfaceNotFound'.
+tests/cases/compiler/typeUsedAsValueError.ts(18,13): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+tests/cases/compiler/typeUsedAsValueError.ts(19,16): error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+tests/cases/compiler/typeUsedAsValueError.ts(20,16): error TS2304: Cannot find name 'TypeAliasForSomeClassNotFound'.
+tests/cases/compiler/typeUsedAsValueError.ts(21,11): error TS2693: 'someType' only refers to a type, but is being used as a value here.
+tests/cases/compiler/typeUsedAsValueError.ts(22,17): error TS2693: 'someType' only refers to a type, but is being used as a value here.
+tests/cases/compiler/typeUsedAsValueError.ts(23,17): error TS2304: Cannot find name 'someTypeNotFound'.
+
+
+==== tests/cases/compiler/typeUsedAsValueError.ts (8 errors) ====
+    interface Interface {
+    
+    }
+    
+    class SomeClass {
+    
+    }
+    
+    type TypeAliasForSomeClass = SomeClass;
+    type someType = { x: number };
+    
+    function acceptsSomeType(a: someType) {
+    
+    }
+    
+    let one = Interface;
+              ~~~~~~~~~
+!!! error TS2693: 'Interface' only refers to a type, but is being used as a value here.
+    let two = InterfaceNotFound;
+              ~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'InterfaceNotFound'.
+    let three = TypeAliasForSomeClass;
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+    let four = new TypeAliasForSomeClass();
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2693: 'TypeAliasForSomeClass' only refers to a type, but is being used as a value here.
+    let five = new TypeAliasForSomeClassNotFound();
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TypeAliasForSomeClassNotFound'.
+    let six = someType;
+              ~~~~~~~~
+!!! error TS2693: 'someType' only refers to a type, but is being used as a value here.
+    acceptsSomeType(someType);
+                    ~~~~~~~~
+!!! error TS2693: 'someType' only refers to a type, but is being used as a value here.
+    acceptsSomeType(someTypeNotFound);
+                    ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'someTypeNotFound'.

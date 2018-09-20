@@ -3,17 +3,19 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     Type '() => number' is not assignable to type '() => string'.
       Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(8,1): error TS2322: Type 'Object' is not assignable to type 'I'.
-  Types of property 'toString' are incompatible.
-    Type '() => string' is not assignable to type '() => number'.
-      Type 'string' is not assignable to type 'number'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+    Types of property 'toString' are incompatible.
+      Type '() => string' is not assignable to type '() => number'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(14,1): error TS2322: Type 'C' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type '() => number' is not assignable to type '() => string'.
       Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(15,1): error TS2322: Type 'Object' is not assignable to type 'C'.
-  Types of property 'toString' are incompatible.
-    Type '() => string' is not assignable to type '() => number'.
-      Type 'string' is not assignable to type 'number'.
+  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+    Types of property 'toString' are incompatible.
+      Type '() => string' is not assignable to type '() => number'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts(20,1): error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
   Types of property 'toString' are incompatible.
     Type '() => void' is not assignable to type '() => string'.
@@ -36,9 +38,10 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     i = o; // error
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'I'.
-!!! error TS2322:   Types of property 'toString' are incompatible.
-!!! error TS2322:     Type '() => string' is not assignable to type '() => number'.
-!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:     Types of property 'toString' are incompatible.
+!!! error TS2322:       Type '() => string' is not assignable to type '() => number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     
     class C {
         toString(): number { return 1; }
@@ -53,9 +56,10 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     c = o; // error
     ~
 !!! error TS2322: Type 'Object' is not assignable to type 'C'.
-!!! error TS2322:   Types of property 'toString' are incompatible.
-!!! error TS2322:     Type '() => string' is not assignable to type '() => number'.
-!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2322:     Types of property 'toString' are incompatible.
+!!! error TS2322:       Type '() => string' is not assignable to type '() => number'.
+!!! error TS2322:         Type 'string' is not assignable to type 'number'.
     
     var a = {
         toString: () => { }

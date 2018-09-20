@@ -1,5 +1,4 @@
 //// [optionsSourcemapInlineSources.ts]
-
 var a = 10;
 
 //// [optionsSourcemapInlineSources.js]

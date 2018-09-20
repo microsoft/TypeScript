@@ -29,12 +29,12 @@ export var m1;
 (function (m1) {
     m1.a = 10;
     var b = 10;
-    var innerExportedModule;
+    let innerExportedModule;
     (function (innerExportedModule) {
         innerExportedModule.k = 10;
         var l = 10;
     })(innerExportedModule = m1.innerExportedModule || (m1.innerExportedModule = {}));
-    var innerNonExportedModule;
+    let innerNonExportedModule;
     (function (innerNonExportedModule) {
         innerNonExportedModule.x = 10;
         var y = 10;
@@ -44,12 +44,12 @@ var m2;
 (function (m2) {
     m2.a = 10;
     var b = 10;
-    var innerExportedModule;
+    let innerExportedModule;
     (function (innerExportedModule) {
         innerExportedModule.k = 10;
         var l = 10;
     })(innerExportedModule = m2.innerExportedModule || (m2.innerExportedModule = {}));
-    var innerNonExportedModule;
+    let innerNonExportedModule;
     (function (innerNonExportedModule) {
         innerNonExportedModule.x = 10;
         var y = 10;

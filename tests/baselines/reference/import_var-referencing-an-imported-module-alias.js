@@ -4,7 +4,6 @@
 export class Host { }
 
 //// [consumer.ts]
-
 import host = require("host");
 var hostVar = host;
 var v = new hostVar.Host();
@@ -13,7 +12,8 @@ var v = new hostVar.Host();
 //// [host.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Host = (function () {
+    exports.__esModule = true;
+    var Host = /** @class */ (function () {
         function Host() {
         }
         return Host;
@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
 //// [consumer.js]
 define(["require", "exports", "host"], function (require, exports, host) {
     "use strict";
+    exports.__esModule = true;
     var hostVar = host;
     var v = new hostVar.Host();
 });

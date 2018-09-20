@@ -1,0 +1,9 @@
+=== tests/cases/compiler/constructorArgsErrors4.ts ===
+class foo {
+>foo : foo
+
+    constructor (private public a: number) {
+>a : number
+    }
+}
+

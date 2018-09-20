@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyInConstructorParameters.ts ===
+class C {
+>C : C
+
+    constructor(readonly x: number) {}
+>x : number
+}
+new C(1).x = 2;
+>new C(1).x = 2 : 2
+>new C(1).x : any
+>new C(1) : C
+>C : typeof C
+>1 : 1
+>x : any
+>2 : 2
+
+class E {
+>E : E
+
+    constructor(readonly public x: number) {}
+>x : number
+}
+
+class F {
+>F : F
+
+    constructor(private readonly x: number) {}
+>x : number
+}
+new F(1).x;
+>new F(1).x : number
+>new F(1) : F
+>F : typeof F
+>1 : 1
+>x : number
+

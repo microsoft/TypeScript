@@ -1,0 +1,104 @@
+=== tests/cases/conformance/enums/enumErrors.ts ===
+// Enum named with PredefinedTypes
+enum any { }
+>any : any
+
+enum number { }
+>number : number
+
+enum string { }
+>string : string
+
+enum boolean { }
+>boolean : boolean
+
+// Enum with computed member initializer of type Number
+enum E5 {
+>E5 : E5
+
+    C = new Number(30)
+>C : E5
+>new Number(30) : Number
+>Number : NumberConstructor
+>30 : 30
+}
+
+enum E9 {
+>E9 : E9
+
+    A,
+>A : E9.A
+
+    B = A
+>B : E9.A
+>A : E9
+}
+
+//Enum with computed member intializer of different enum type
+// Bug 707850: This should be allowed
+enum E10 {
+>E10 : E10
+
+    A = E9.A,
+>A : E10
+>E9.A : E9
+>E9 : typeof E9
+>A : E9
+
+    B = E9.B
+>B : E10
+>E9.B : E9
+>E9 : typeof E9
+>B : E9
+}
+
+// Enum with computed member intializer of other types
+enum E11 {
+>E11 : E11
+
+    A = true,
+>A : E11
+>true : true
+
+    B = new Date(),
+>B : E11
+>new Date() : Date
+>Date : DateConstructor
+
+    C = window,
+>C : E11
+>window : Window
+
+    D = {}
+>D : E11
+>{} : {}
+}
+
+// Enum with string valued member and computed member initializers
+enum E12 {
+>E12 : E12
+
+    A = '',
+>A : E12.A
+>'' : ""
+
+    B = new Date(),
+>B : E12.B
+>new Date() : Date
+>Date : DateConstructor
+
+    C = window,
+>C : E12.B
+>window : Window
+
+    D = {},
+>D : E12.B
+>{} : {}
+
+    E = 1 + 1,
+>E : E12.B
+>1 + 1 : number
+>1 : 1
+>1 : 1
+}
+

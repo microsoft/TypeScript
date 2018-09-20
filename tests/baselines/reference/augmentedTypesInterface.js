@@ -35,7 +35,7 @@ interface i4 {
 
 //// [augmentedTypesInterface.js]
 // interface then interface
-var i2 = (function () {
+var i2 = /** @class */ (function () {
     function i2() {
     }
     i2.prototype.bar = function () {
@@ -48,4 +48,4 @@ var i3;
     i3[i3["One"] = 0] = "One";
 })(i3 || (i3 = {}));
 ; // error
-//import i4 = require('');  // error 
+//import i4 = require('');  // error

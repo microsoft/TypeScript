@@ -1,0 +1,103 @@
+=== tests/cases/compiler/noImplicitAnyParametersInInterface.ts ===
+interface I {
+>I : Symbol(I, Decl(noImplicitAnyParametersInInterface.ts, 0, 0))
+
+    // Implicit-'any' errors for first two call signatures, x1, x2, z2.
+    ();
+    (x1);
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInInterface.ts, 3, 5))
+
+    (x2, y2: string, z2): any;
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInInterface.ts, 4, 5))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInInterface.ts, 4, 8))
+>z2 : Symbol(z2, Decl(noImplicitAnyParametersInInterface.ts, 4, 20))
+
+    // No implicit-'any' errors.
+    f1(): void;
+>f1 : Symbol(I.f1, Decl(noImplicitAnyParametersInInterface.ts, 4, 30))
+
+    // Implicit-'any' errors for x.
+    f2(x): void;
+>f2 : Symbol(I.f2, Decl(noImplicitAnyParametersInInterface.ts, 7, 15))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 10, 7))
+
+    // No implicit-'any' errors.
+    f3(x: any): void;
+>f3 : Symbol(I.f3, Decl(noImplicitAnyParametersInInterface.ts, 10, 16))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 13, 7))
+
+    // Implicit-'any' errors for x, y, and z.
+    f4(x, y, z): void;
+>f4 : Symbol(I.f4, Decl(noImplicitAnyParametersInInterface.ts, 13, 21))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 16, 7))
+>y : Symbol(y, Decl(noImplicitAnyParametersInInterface.ts, 16, 9))
+>z : Symbol(z, Decl(noImplicitAnyParametersInInterface.ts, 16, 12))
+
+    // Implicit-'any' errors for x, and z.
+    f5(x, y: any, z): void;
+>f5 : Symbol(I.f5, Decl(noImplicitAnyParametersInInterface.ts, 16, 22))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 19, 7))
+>y : Symbol(y, Decl(noImplicitAnyParametersInInterface.ts, 19, 9))
+>z : Symbol(z, Decl(noImplicitAnyParametersInInterface.ts, 19, 17))
+
+    // Implicit-'any[]' errors for r.
+    f6(...r): void;
+>f6 : Symbol(I.f6, Decl(noImplicitAnyParametersInInterface.ts, 19, 27))
+>r : Symbol(r, Decl(noImplicitAnyParametersInInterface.ts, 22, 7))
+
+    // Implicit-'any'/'any[]' errors for x, r.
+    f7(x, ...r): void;
+>f7 : Symbol(I.f7, Decl(noImplicitAnyParametersInInterface.ts, 22, 19))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 25, 7))
+>r : Symbol(r, Decl(noImplicitAnyParametersInInterface.ts, 25, 9))
+
+    // Implicit-'any' errors for x1, y2, x3, and y3.
+    f8(x1, y1: number): any;
+>f8 : Symbol(I.f8, Decl(noImplicitAnyParametersInInterface.ts, 25, 22), Decl(noImplicitAnyParametersInInterface.ts, 28, 28), Decl(noImplicitAnyParametersInInterface.ts, 29, 28))
+>x1 : Symbol(x1, Decl(noImplicitAnyParametersInInterface.ts, 28, 7))
+>y1 : Symbol(y1, Decl(noImplicitAnyParametersInInterface.ts, 28, 10))
+
+    f8(x2: string, y2): any;
+>f8 : Symbol(I.f8, Decl(noImplicitAnyParametersInInterface.ts, 25, 22), Decl(noImplicitAnyParametersInInterface.ts, 28, 28), Decl(noImplicitAnyParametersInInterface.ts, 29, 28))
+>x2 : Symbol(x2, Decl(noImplicitAnyParametersInInterface.ts, 29, 7))
+>y2 : Symbol(y2, Decl(noImplicitAnyParametersInInterface.ts, 29, 18))
+
+    f8(x3, y3): any;
+>f8 : Symbol(I.f8, Decl(noImplicitAnyParametersInInterface.ts, 25, 22), Decl(noImplicitAnyParametersInInterface.ts, 28, 28), Decl(noImplicitAnyParametersInInterface.ts, 29, 28))
+>x3 : Symbol(x3, Decl(noImplicitAnyParametersInInterface.ts, 30, 7))
+>y3 : Symbol(y3, Decl(noImplicitAnyParametersInInterface.ts, 30, 10))
+
+    // No implicit-'any' errors.
+    f9: () => string;
+>f9 : Symbol(I.f9, Decl(noImplicitAnyParametersInInterface.ts, 30, 20))
+
+    // Implicit-'any' errors for x.
+    f10: (x) => string;
+>f10 : Symbol(I.f10, Decl(noImplicitAnyParametersInInterface.ts, 33, 21))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 36, 10))
+
+    // Implicit-'any' errors for x, y, and z.
+    f11: (x, y, z) => string;
+>f11 : Symbol(I.f11, Decl(noImplicitAnyParametersInInterface.ts, 36, 23))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 39, 10))
+>y : Symbol(y, Decl(noImplicitAnyParametersInInterface.ts, 39, 12))
+>z : Symbol(z, Decl(noImplicitAnyParametersInInterface.ts, 39, 15))
+
+    // Implicit-'any' errors for x and z.
+    f12: (x, y: any, z) => string;
+>f12 : Symbol(I.f12, Decl(noImplicitAnyParametersInInterface.ts, 39, 29))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 42, 10))
+>y : Symbol(y, Decl(noImplicitAnyParametersInInterface.ts, 42, 12))
+>z : Symbol(z, Decl(noImplicitAnyParametersInInterface.ts, 42, 20))
+
+    // Implicit-'any[]' error for r.
+    f13: (...r) => string;
+>f13 : Symbol(I.f13, Decl(noImplicitAnyParametersInInterface.ts, 42, 34))
+>r : Symbol(r, Decl(noImplicitAnyParametersInInterface.ts, 45, 10))
+
+    // Implicit-'any'/'any[]' errors for x, r.
+    f14: (x, ...r) => string;
+>f14 : Symbol(I.f14, Decl(noImplicitAnyParametersInInterface.ts, 45, 26))
+>x : Symbol(x, Decl(noImplicitAnyParametersInInterface.ts, 48, 10))
+>r : Symbol(r, Decl(noImplicitAnyParametersInInterface.ts, 48, 12))
+}

@@ -1,0 +1,91 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts ===
+// If one operand is the null or undefined value, it is treated as having the type of the other operand.
+
+function foo(): void { return undefined }
+>foo : () => void
+>undefined : undefined
+
+var a: boolean;
+>a : boolean
+
+var b: Object;
+>b : Object
+
+var c: void;
+>c : void
+
+var d: Number;
+>d : Number
+
+// null + boolean/Object
+var r1 = null + a;
+>r1 : any
+>null + a : any
+>null : null
+>a : boolean
+
+var r2 = null + b;
+>r2 : any
+>null + b : any
+>null : null
+>b : Object
+
+var r3 = null + c;
+>r3 : any
+>null + c : any
+>null : null
+>c : void
+
+var r4 = a + null;
+>r4 : any
+>a + null : any
+>a : boolean
+>null : null
+
+var r5 = b + null;
+>r5 : any
+>b + null : any
+>b : Object
+>null : null
+
+var r6 = null + c;
+>r6 : any
+>null + c : any
+>null : null
+>c : void
+
+// other cases
+var r7 = null + d;
+>r7 : any
+>null + d : any
+>null : null
+>d : Number
+
+var r8 = null + true;
+>r8 : any
+>null + true : any
+>null : null
+>true : true
+
+var r9 = null + { a: '' };
+>r9 : any
+>null + { a: '' } : any
+>null : null
+>{ a: '' } : { a: string; }
+>a : string
+>'' : ""
+
+var r10 = null + foo();
+>r10 : any
+>null + foo() : any
+>null : null
+>foo() : void
+>foo : () => void
+
+var r11 = null + (() => { });
+>r11 : any
+>null + (() => { }) : any
+>null : null
+>(() => { }) : () => void
+>() => { } : () => void
+

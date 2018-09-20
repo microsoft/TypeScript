@@ -12,8 +12,7 @@ function createGuid() {
 
     return "21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid;
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid : Guid
->"21EC2020-3AEA-4069-A2DD-08002B30309D" : string
->Guid : Guid
+>"21EC2020-3AEA-4069-A2DD-08002B30309D" : "21EC2020-3AEA-4069-A2DD-08002B30309D"
 }
 
 function createSerialNo() {
@@ -21,8 +20,7 @@ function createSerialNo() {
 
     return 12345 as SerialNo;
 >12345 as SerialNo : SerialNo
->12345 : number
->SerialNo : SerialNo
+>12345 : 12345
 }
 
 let map1: { [x: string]: number } = {};
@@ -36,11 +34,11 @@ let guid = createGuid();
 >createGuid : () => Guid
 
 map1[guid] = 123;  // Can with tagged string
->map1[guid] = 123 : number
+>map1[guid] = 123 : 123
 >map1[guid] : number
 >map1 : { [x: string]: number; }
 >guid : Guid
->123 : number
+>123 : 123
 
 let map2: { [x: number]: string } = {};
 >map2 : { [x: number]: string; }
@@ -53,19 +51,19 @@ let serialNo = createSerialNo();
 >createSerialNo : () => SerialNo
 
 map2[serialNo] = "hello";  // Can index with tagged number
->map2[serialNo] = "hello" : string
+>map2[serialNo] = "hello" : "hello"
 >map2[serialNo] : string
 >map2 : { [x: number]: string; }
 >serialNo : SerialNo
->"hello" : string
+>"hello" : "hello"
 
 const s1 = "{" + guid + "}";
 >s1 : string
 >"{" + guid + "}" : string
 >"{" + guid : string
->"{" : string
+>"{" : "{"
 >guid : Guid
->"}" : string
+>"}" : "}"
 
 const s2 = guid.toLowerCase();
 >s2 : string
@@ -92,13 +90,13 @@ const s5 = serialNo.toPrecision(0);
 >serialNo.toPrecision : (precision?: number) => string
 >serialNo : SerialNo
 >toPrecision : (precision?: number) => string
->0 : number
+>0 : 0
 
 const n1 = serialNo * 3;
 >n1 : number
 >serialNo * 3 : number
 >serialNo : SerialNo
->3 : number
+>3 : 3
 
 const n2 = serialNo + serialNo;
 >n2 : number

@@ -1,8 +1,14 @@
-//// [APISample_watcher.ts]
+//// [tests/cases/compiler/APISample_watcher.ts] ////
 
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
+//// [APISample_watcher.ts]
 /*
- * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -12,7 +18,7 @@ declare var fs: {
     existsSync(path: string): boolean;
     readdirSync(path: string): string[];
     readFileSync(filename: string, encoding?: string): string;
-    writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; }): void;
+    writeFileSync(filename: string, data: any, options?: { encoding?: string; mode?: number; flag?: string; } | string): void;
     watchFile(filename: string, options: { persistent?: boolean; interval?: number; }, listener: (curr: { mtime: Date }, prev: { mtime: Date }) => void): void;
 };
 declare var path: any;
@@ -92,7 +98,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         allDiagnostics.forEach(diagnostic => {
             let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             if (diagnostic.file) {
-                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
                 console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
             }
             else {
@@ -109,13 +115,15 @@ const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
 
+
 //// [APISample_watcher.js]
+"use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-"use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function watch(rootFileNames, options) {
     var files = {};

@@ -94,9 +94,10 @@ module m4 {
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var require;
     (function (require) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -109,7 +110,7 @@ define(["require", "exports"], function (require, exports) {
     exports.foo = foo;
     var exports;
     (function (exports) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -124,7 +125,7 @@ define(["require", "exports"], function (require, exports) {
     (function (m1) {
         var require;
         (function (require) {
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -133,7 +134,7 @@ define(["require", "exports"], function (require, exports) {
         })(require || (require = {}));
         var exports;
         (function (exports) {
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -145,7 +146,7 @@ define(["require", "exports"], function (require, exports) {
     (function (m2) {
         var require;
         (function (require) {
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -154,7 +155,7 @@ define(["require", "exports"], function (require, exports) {
         })(require = m2.require || (m2.require = {}));
         var exports;
         (function (exports) {
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -166,7 +167,7 @@ define(["require", "exports"], function (require, exports) {
 //// [collisionExportsRequireAndModule_globalFile.js]
 var require;
 (function (require) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -175,7 +176,7 @@ var require;
 })(require || (require = {}));
 var exports;
 (function (exports) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -186,7 +187,7 @@ var m3;
 (function (m3) {
     var require;
     (function (require) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -195,7 +196,7 @@ var m3;
     })(require || (require = {}));
     var exports;
     (function (exports) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -207,7 +208,7 @@ var m4;
 (function (m4) {
     var require;
     (function (require) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -216,7 +217,7 @@ var m4;
     })(require = m4.require || (m4.require = {}));
     var exports;
     (function (exports) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;

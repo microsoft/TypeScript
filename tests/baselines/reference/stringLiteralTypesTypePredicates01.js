@@ -1,5 +1,4 @@
 //// [stringLiteralTypesTypePredicates01.ts]
-
 type Kind = "A" | "B"
 
 function kindIs(kind: Kind, is: "A"): kind is "A";

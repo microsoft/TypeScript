@@ -14,7 +14,7 @@
 ////}
 ////let contextualInterface2: ContextualInterface2 = function (th/*2*/is, n) { }
 
-goTo.marker('1');
-verify.quickInfoIs('this: ContextualInterface');
-goTo.marker('2');
-verify.quickInfoIs('(parameter) this: void');
+verify.quickInfos({
+    1: "this: ContextualInterface",
+    2: "(parameter) this: void"
+});

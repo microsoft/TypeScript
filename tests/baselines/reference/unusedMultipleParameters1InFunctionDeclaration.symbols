@@ -1,0 +1,12 @@
+=== tests/cases/compiler/unusedMultipleParameters1InFunctionDeclaration.ts ===
+function greeter(person: string, person2: string) {
+>greeter : Symbol(greeter, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 0))
+>person : Symbol(person, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 17))
+>person2 : Symbol(person2, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 32))
+
+    var unused = 20;
+>unused : Symbol(unused, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 1, 7))
+
+    person2 = "dummy value";
+>person2 : Symbol(person2, Decl(unusedMultipleParameters1InFunctionDeclaration.ts, 0, 32))
+}

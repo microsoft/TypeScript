@@ -1,10 +1,12 @@
 //// [trailingCommasInFunctionParametersAndArguments.ts]
-
 function f1(x,) {}
 
 f1(1,);
 
 function f2(...args,) {}
+
+// Allowed for ambient declarations
+declare function f25(...args,): void;
 
 f2(...[],);
 
@@ -35,14 +37,14 @@ f1(1);
 function f2() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
 }
 f2.apply(void 0, []);
 f3(1);
 f3(1, 2);
 // Works for constructors too
-var X = (function () {
+var X = /** @class */ (function () {
     function X(a) {
     }
     Object.defineProperty(X.prototype, "x", {

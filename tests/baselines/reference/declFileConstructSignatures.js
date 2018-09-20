@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructSignatures.ts] ////
 
 //// [declFileConstructSignatures_0.ts]
-
 export interface IConstructSignature {
     /** This comment should appear for foo*/
     new (): string;
@@ -67,6 +66,7 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 
 //// [declFileConstructSignatures_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructSignatures_1.js]
 
 
@@ -78,8 +78,8 @@ export interface IConstructSignature {
 export interface IConstructSignatureWithParameters {
     /** This is comment for function signature*/
     new (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): any;
+    /** this is comment for b*/
+    b: number): any;
 }
 export interface IConstructSignatureWithRestParameters {
     new (a: string, ...rests: string[]): string;
@@ -103,8 +103,8 @@ interface IGlobalConstructSignature {
 interface IGlobalConstructSignatureWithParameters {
     /** This is comment for function signature*/
     new (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): any;
+    /** this is comment for b*/
+    b: number): any;
 }
 interface IGlobalConstructSignatureWithRestParameters {
     new (a: string, ...rests: string[]): string;

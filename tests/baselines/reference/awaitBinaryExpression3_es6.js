@@ -1,17 +1,19 @@
 //// [awaitBinaryExpression3_es6.ts]
 declare var a: number;
 declare var p: Promise<number>;
+declare function before(): void;
+declare function after(): void;
 async function func(): Promise<void> {
-    "before";
+    before();
     var b = await p + a;
-    "after";
+    after();
 }
 
 //// [awaitBinaryExpression3_es6.js]
 function func() {
     return __awaiter(this, void 0, void 0, function* () {
-        "before";
+        before();
         var b = (yield p) + a;
-        "after";
+        after();
     });
 }

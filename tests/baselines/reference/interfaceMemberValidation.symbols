@@ -1,0 +1,28 @@
+=== tests/cases/compiler/interfaceMemberValidation.ts ===
+interface i1 { name: string; }
+>i1 : Symbol(i1, Decl(interfaceMemberValidation.ts, 0, 0))
+>name : Symbol(i1.name, Decl(interfaceMemberValidation.ts, 0, 14))
+
+interface i2 extends i1 { name: number; yo: string; }
+>i2 : Symbol(i2, Decl(interfaceMemberValidation.ts, 0, 30))
+>i1 : Symbol(i1, Decl(interfaceMemberValidation.ts, 0, 0))
+>name : Symbol(i2.name, Decl(interfaceMemberValidation.ts, 1, 25))
+>yo : Symbol(i2.yo, Decl(interfaceMemberValidation.ts, 1, 39))
+
+interface foo {
+>foo : Symbol(foo, Decl(interfaceMemberValidation.ts, 1, 53))
+
+ bar():any;
+>bar : Symbol(foo.bar, Decl(interfaceMemberValidation.ts, 3, 15), Decl(interfaceMemberValidation.ts, 4, 11))
+
+ bar():any;
+>bar : Symbol(foo.bar, Decl(interfaceMemberValidation.ts, 3, 15), Decl(interfaceMemberValidation.ts, 4, 11))
+
+ new():void;
+ new():void;
+ [s:string]:number;
+>s : Symbol(s, Decl(interfaceMemberValidation.ts, 8, 2))
+
+ [s:string]:number;
+>s : Symbol(s, Decl(interfaceMemberValidation.ts, 9, 2))
+}

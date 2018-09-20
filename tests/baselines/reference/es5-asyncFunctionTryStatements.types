@@ -1,0 +1,239 @@
+=== tests/cases/compiler/es5-asyncFunctionTryStatements.ts ===
+declare var x: any, y: any, z: any, a: any, b: any, c: any;
+>x : any
+>y : any
+>z : any
+>a : any
+>b : any
+>c : any
+
+async function tryCatch0() {
+>tryCatch0 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        x;
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        y;
+>y : any
+    }
+}
+
+async function tryCatch1() {
+>tryCatch1 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        await x;
+>await x : any
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        y;
+>y : any
+    }
+}
+
+async function tryCatch2() {
+>tryCatch2 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        x;
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        await y;
+>await y : any
+>y : any
+    }
+}
+
+async function tryCatch3(): Promise<Function> {
+>tryCatch3 : () => Promise<Function>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        await x;
+>await x : any
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        return () => e;
+>() => e : () => any
+>e : any
+    }
+}
+async function tryFinally0() {
+>tryFinally0 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        x;
+>x : any
+    }
+    finally {
+        y;
+>y : any
+    }
+}
+
+async function tryFinally1() {
+>tryFinally1 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        await x;
+>await x : any
+>x : any
+    }
+    finally {
+        y;
+>y : any
+    }
+}
+
+async function tryFinally2() {
+>tryFinally2 : () => Promise<void>
+
+    var x: any, y: any;
+>x : any
+>y : any
+
+    try {
+        x;
+>x : any
+    }
+    finally {
+        await y;
+>await y : any
+>y : any
+    }
+}
+
+async function tryCatchFinally0() {
+>tryCatchFinally0 : () => Promise<void>
+
+    var x: any, y: any, z: any;
+>x : any
+>y : any
+>z : any
+
+    try {
+        x;
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        y;
+>y : any
+    }
+    finally {
+        z;
+>z : any
+    }
+}
+
+async function tryCatchFinally1() {
+>tryCatchFinally1 : () => Promise<void>
+
+    var x: any, y: any, z: any;
+>x : any
+>y : any
+>z : any
+
+    try {
+        await x;
+>await x : any
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        y;
+>y : any
+    }
+    finally {
+        z;
+>z : any
+    }
+}
+
+async function tryCatchFinally2() {
+>tryCatchFinally2 : () => Promise<void>
+
+    var x: any, y: any, z: any;
+>x : any
+>y : any
+>z : any
+
+    try {
+        x;
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        await y;
+>await y : any
+>y : any
+    }
+    finally {
+        z;
+>z : any
+    }
+}
+
+async function tryCatchFinally3() {
+>tryCatchFinally3 : () => Promise<void>
+
+    var x: any, y: any, z: any;
+>x : any
+>y : any
+>z : any
+
+    try {
+        x;
+>x : any
+    }
+    catch (e) {
+>e : any
+
+        y;
+>y : any
+    }
+    finally {
+        await z;
+>await z : any
+>z : any
+    }
+}

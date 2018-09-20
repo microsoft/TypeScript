@@ -32,7 +32,7 @@ var foo2 = new m2.m2();
 //// [collisionCodeGenModuleWithModuleReopening.js]
 var m1;
 (function (m1_1) {
-    var m1 = (function () {
+    var m1 = /** @class */ (function () {
         function m1() {
         }
         return m1;
@@ -40,9 +40,8 @@ var m1;
     m1_1.m1 = m1;
 })(m1 || (m1 = {}));
 var foo = new m1.m1();
-var m1;
 (function (m1) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;
@@ -54,7 +53,7 @@ var m1;
 var foo2 = new m1.c1();
 var m2;
 (function (m2) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;
@@ -64,9 +63,8 @@ var m2;
     var x = new c1();
 })(m2 || (m2 = {}));
 var foo3 = new m2.c1();
-var m2;
 (function (m2_1) {
-    var m2 = (function () {
+    var m2 = /** @class */ (function () {
         function m2() {
         }
         return m2;

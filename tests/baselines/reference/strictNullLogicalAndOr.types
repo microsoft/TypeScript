@@ -1,5 +1,4 @@
 === tests/cases/compiler/strictNullLogicalAndOr.ts ===
-
 // Repro from #9113
 
 let sinOrCos = Math.random() < .5;
@@ -9,7 +8,7 @@ let sinOrCos = Math.random() < .5;
 >Math.random : () => number
 >Math : Math
 >random : () => number
->.5 : number
+>.5 : 0.5
 
 let choice = sinOrCos && Math.sin || Math.cos;
 >choice : (x: number) => number
@@ -44,7 +43,7 @@ function sq(n?: number): number {
 >n*n : number
 >n : number
 >n : number
->0 : number
+>0 : 0
 
   return r;
 >r : number
@@ -53,5 +52,5 @@ function sq(n?: number): number {
 sq(3);
 >sq(3) : number
 >sq : (n?: number | undefined) => number
->3 : number
+>3 : 3
 

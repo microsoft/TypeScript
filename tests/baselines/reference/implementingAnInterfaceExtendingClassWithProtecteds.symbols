@@ -1,0 +1,87 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+
+    protected x: string;
+>x : Symbol(Foo.x, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 11))
+}
+
+interface I extends Foo {
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+
+    y: number;
+>y : Symbol(I.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 4, 25))
+}
+
+class Bar implements I { // error
+>Bar : Symbol(Bar, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 6, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+}
+
+class Bar2 implements I { // error
+>Bar2 : Symbol(Bar2, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 9, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    y: number;
+>y : Symbol(Bar2.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 11, 25))
+}
+
+class Bar3 implements I { // error
+>Bar3 : Symbol(Bar3, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 13, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    x: string;
+>x : Symbol(Bar3.x, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 15, 25))
+
+    y: number;
+>y : Symbol(Bar3.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 16, 14))
+}
+
+class Bar4 implements I { // error
+>Bar4 : Symbol(Bar4, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 18, 1))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    protected x: string;
+>x : Symbol(Bar4.x, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 20, 25))
+
+    y: number;
+>y : Symbol(Bar4.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 21, 24))
+}
+
+class Bar5 extends Foo implements I { // error
+>Bar5 : Symbol(Bar5, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 23, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+}
+
+class Bar6 extends Foo implements I { // error
+>Bar6 : Symbol(Bar6, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 26, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    protected y: number;
+>y : Symbol(Bar6.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 28, 37))
+}
+
+class Bar7 extends Foo implements I {
+>Bar7 : Symbol(Bar7, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 30, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    y: number;
+>y : Symbol(Bar7.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 32, 37))
+}
+
+class Bar8 extends Foo implements I {
+>Bar8 : Symbol(Bar8, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 34, 1))
+>Foo : Symbol(Foo, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 0, 0))
+>I : Symbol(I, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 2, 1))
+
+    x: string;
+>x : Symbol(Bar8.x, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 36, 37))
+
+    y: number;
+>y : Symbol(Bar8.y, Decl(implementingAnInterfaceExtendingClassWithProtecteds.ts, 37, 14))
+}
+

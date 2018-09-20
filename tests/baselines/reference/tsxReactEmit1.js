@@ -44,18 +44,18 @@ var whitespace3 = <div>
 //// [file.js]
 var p;
 var selfClosed1 = React.createElement("div", null);
-var selfClosed2 = React.createElement("div", {x: "1"});
-var selfClosed3 = React.createElement("div", {x: '1'});
-var selfClosed4 = React.createElement("div", {x: "1", y: '0'});
-var selfClosed5 = React.createElement("div", {x: 0, y: '0'});
-var selfClosed6 = React.createElement("div", {x: "1", y: '0'});
-var selfClosed7 = React.createElement("div", {x: p, y: 'p', b: true});
+var selfClosed2 = React.createElement("div", { x: "1" });
+var selfClosed3 = React.createElement("div", { x: '1' });
+var selfClosed4 = React.createElement("div", { x: "1", y: '0' });
+var selfClosed5 = React.createElement("div", { x: 0, y: '0' });
+var selfClosed6 = React.createElement("div", { x: "1", y: '0' });
+var selfClosed7 = React.createElement("div", { x: p, y: 'p', b: true });
 var openClosed1 = React.createElement("div", null);
-var openClosed2 = React.createElement("div", {n: 'm'}, "foo");
-var openClosed3 = React.createElement("div", {n: 'm'}, p);
-var openClosed4 = React.createElement("div", {n: 'm'}, p < p);
-var openClosed5 = React.createElement("div", {n: 'm', b: true}, p > p);
-var SomeClass = (function () {
+var openClosed2 = React.createElement("div", { n: 'm' }, "foo");
+var openClosed3 = React.createElement("div", { n: 'm' }, p);
+var openClosed4 = React.createElement("div", { n: 'm' }, p < p);
+var openClosed5 = React.createElement("div", { n: 'm', b: true }, p > p);
+var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     SomeClass.prototype.f = function () {
@@ -63,15 +63,15 @@ var SomeClass = (function () {
         var rewrites1 = React.createElement("div", null, function () { return _this; });
         var rewrites2 = React.createElement("div", null, [p].concat(p, [p]));
         var rewrites3 = React.createElement("div", null, { p: p });
-        var rewrites4 = React.createElement("div", {a: function () { return _this; }});
-        var rewrites5 = React.createElement("div", {a: [p].concat(p, [p])});
-        var rewrites6 = React.createElement("div", {a: { p: p }});
+        var rewrites4 = React.createElement("div", { a: function () { return _this; } });
+        var rewrites5 = React.createElement("div", { a: [p].concat(p, [p]) });
+        var rewrites6 = React.createElement("div", { a: { p: p } });
     };
     return SomeClass;
 }());
 var whitespace1 = React.createElement("div", null, "      ");
-var whitespace2 = React.createElement("div", null, 
-    "  ", 
-    p, 
+var whitespace2 = React.createElement("div", null,
+    "  ",
+    p,
     "    ");
 var whitespace3 = React.createElement("div", null, p);

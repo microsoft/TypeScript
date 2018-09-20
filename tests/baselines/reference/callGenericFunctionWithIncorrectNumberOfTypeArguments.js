@@ -56,7 +56,7 @@ var r2b = f2(1, '');
 var f3;
 var r3 = f3(1, '');
 var r3b = f3(1, '');
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function (x, y) {
@@ -69,7 +69,7 @@ var r4b = (new C()).f(1, '');
 var i;
 var r5 = i.f(1, '');
 var r5b = i.f(1, '');
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.f = function (x, y) {

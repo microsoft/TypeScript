@@ -11,21 +11,31 @@ class H extends E {
 }
 
 //// [superCallAssignResult.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var E = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var E = /** @class */ (function () {
     function E(arg) {
     }
     return E;
 }());
-var H = (function (_super) {
+var H = /** @class */ (function (_super) {
     __extends(H, _super);
     function H() {
-        var x = _super.call(this, 5); // Should be of type void, not E.
+        var _this = this;
+        var x = _this = _super.call(this, 5) || this; // Should be of type void, not E.
         x = 5;
+        return _this;
     }
     return H;
 }(E));

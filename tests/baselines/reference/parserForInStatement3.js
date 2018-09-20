@@ -3,5 +3,5 @@ for (var a, b in X) {
 }
 
 //// [parserForInStatement3.js]
-for (var a in X) {
+for (var a, b in X) {
 }

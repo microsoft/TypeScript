@@ -1,0 +1,125 @@
+=== tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
+interface StrNum extends Array<string|number> {
+>StrNum : Symbol(StrNum, Decl(arityAndOrderCompatibility01.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    0: string;
+>0 : Symbol(StrNum[0], Decl(arityAndOrderCompatibility01.ts, 0, 47))
+
+    1: number;
+>1 : Symbol(StrNum[1], Decl(arityAndOrderCompatibility01.ts, 1, 14))
+
+    length: 2;
+>length : Symbol(StrNum.length, Decl(arityAndOrderCompatibility01.ts, 2, 14))
+}
+
+var x: [string, number];
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var y: StrNum
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+>StrNum : Symbol(StrNum, Decl(arityAndOrderCompatibility01.ts, 0, 0))
+
+var z: {
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+    0: string;
+>0 : Symbol(0, Decl(arityAndOrderCompatibility01.ts, 8, 8))
+
+    1: number;
+>1 : Symbol(1, Decl(arityAndOrderCompatibility01.ts, 9, 14))
+
+    length: 2;
+>length : Symbol(length, Decl(arityAndOrderCompatibility01.ts, 10, 14))
+}
+
+var [a, b, c] = x;
+>a : Symbol(a, Decl(arityAndOrderCompatibility01.ts, 14, 5))
+>b : Symbol(b, Decl(arityAndOrderCompatibility01.ts, 14, 7))
+>c : Symbol(c, Decl(arityAndOrderCompatibility01.ts, 14, 10))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var [d, e, f] = y;
+>d : Symbol(d, Decl(arityAndOrderCompatibility01.ts, 15, 5))
+>e : Symbol(e, Decl(arityAndOrderCompatibility01.ts, 15, 7))
+>f : Symbol(f, Decl(arityAndOrderCompatibility01.ts, 15, 10))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var [g, h, i] = z;
+>g : Symbol(g, Decl(arityAndOrderCompatibility01.ts, 16, 5))
+>h : Symbol(h, Decl(arityAndOrderCompatibility01.ts, 16, 7))
+>i : Symbol(i, Decl(arityAndOrderCompatibility01.ts, 16, 10))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var j1: [number, number, number] = x;
+>j1 : Symbol(j1, Decl(arityAndOrderCompatibility01.ts, 17, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var j2: [number, number, number] = y;
+>j2 : Symbol(j2, Decl(arityAndOrderCompatibility01.ts, 18, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var j3: [number, number, number] = z;
+>j3 : Symbol(j3, Decl(arityAndOrderCompatibility01.ts, 19, 3))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var k1: [string, number, number] = x;
+>k1 : Symbol(k1, Decl(arityAndOrderCompatibility01.ts, 20, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var k2: [string, number, number] = y;
+>k2 : Symbol(k2, Decl(arityAndOrderCompatibility01.ts, 21, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var k3: [string, number, number] = z;
+>k3 : Symbol(k3, Decl(arityAndOrderCompatibility01.ts, 22, 3))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var l1: [number] = x;
+>l1 : Symbol(l1, Decl(arityAndOrderCompatibility01.ts, 23, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var l2: [number] = y;
+>l2 : Symbol(l2, Decl(arityAndOrderCompatibility01.ts, 24, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var l3: [number] = z;
+>l3 : Symbol(l3, Decl(arityAndOrderCompatibility01.ts, 25, 3))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var m1: [string] = x;
+>m1 : Symbol(m1, Decl(arityAndOrderCompatibility01.ts, 26, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var m2: [string] = y;
+>m2 : Symbol(m2, Decl(arityAndOrderCompatibility01.ts, 27, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var m3: [string] = z;
+>m3 : Symbol(m3, Decl(arityAndOrderCompatibility01.ts, 28, 3))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var n1: [number, string] = x;
+>n1 : Symbol(n1, Decl(arityAndOrderCompatibility01.ts, 29, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var n2: [number, string] = y;
+>n2 : Symbol(n2, Decl(arityAndOrderCompatibility01.ts, 30, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var n3: [number, string] = z;
+>n3 : Symbol(n3, Decl(arityAndOrderCompatibility01.ts, 31, 3))
+>z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
+
+var o1: [string, number] = x;
+>o1 : Symbol(o1, Decl(arityAndOrderCompatibility01.ts, 32, 3))
+>x : Symbol(x, Decl(arityAndOrderCompatibility01.ts, 6, 3))
+
+var o2: [string, number] = y;
+>o2 : Symbol(o2, Decl(arityAndOrderCompatibility01.ts, 33, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+
+var o3: [string, number] = y;
+>o3 : Symbol(o3, Decl(arityAndOrderCompatibility01.ts, 34, 3))
+>y : Symbol(y, Decl(arityAndOrderCompatibility01.ts, 7, 3))
+

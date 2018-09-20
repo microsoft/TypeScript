@@ -17,6 +17,7 @@ var v = {
 }
 
 //// [computedPropertyNames10_ES5.js]
+var _a;
 var s;
 var n;
 var a;
@@ -32,6 +33,4 @@ var v = (_a = {},
     _a[true] = function () { },
     _a["hello bye"] = function () { },
     _a["hello " + a + " bye"] = function () { },
-    _a
-);
-var _a;
+    _a);

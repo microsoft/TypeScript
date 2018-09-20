@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsdoc/dtsEquivalent.js ===
+/** @typedef {{[k: string]: any}} AnyEffect */
+No type information for this code./** @typedef {number} Third */
+No type information for this code.=== tests/cases/conformance/jsdoc/index.js ===
+/** @type {AnyEffect} */
+let b;
+>b : Symbol(b, Decl(index.js, 1, 3))
+
+/** @type {Third} */
+let c;
+>c : Symbol(c, Decl(index.js, 3, 3))
+

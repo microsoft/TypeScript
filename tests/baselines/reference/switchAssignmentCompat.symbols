@@ -1,0 +1,9 @@
+=== tests/cases/compiler/switchAssignmentCompat.ts ===
+class Foo { }
+>Foo : Symbol(Foo, Decl(switchAssignmentCompat.ts, 0, 0))
+
+switch (0) {
+    case Foo: break; // Error expected
+>Foo : Symbol(Foo, Decl(switchAssignmentCompat.ts, 0, 0))
+}
+

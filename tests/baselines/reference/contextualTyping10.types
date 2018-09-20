@@ -6,8 +6,8 @@ class foo { public bar:{id:number;}[] = [{id:1}, {id:2}]; }
 >[{id:1}, {id:2}] : { id: number; }[]
 >{id:1} : { id: number; }
 >id : number
->1 : number
+>1 : 1
 >{id:2} : { id: number; }
 >id : number
->2 : number
+>2 : 2
 

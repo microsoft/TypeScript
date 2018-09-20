@@ -1,0 +1,105 @@
+=== tests/cases/compiler/unionPropertyExistence.ts ===
+interface A {
+    inAll: string;
+>inAll : string
+
+    notInB: string;
+>notInB : string
+
+    notInC: string;
+>notInC : string
+}
+
+interface B {
+    inAll: boolean;
+>inAll : boolean
+
+    onlyInB: number;
+>onlyInB : number
+
+    notInC: string;
+>notInC : string
+}
+
+interface C {
+    inAll: number;
+>inAll : number
+
+    notInB: string;
+>notInB : string
+}
+
+type AB = A | B;
+>AB : AB
+
+type ABC = C | AB;
+>ABC : ABC
+
+var ab: AB;
+>ab : AB
+
+var abc: ABC;
+>abc : ABC
+
+declare const x: "foo" | "bar";
+>x : "foo" | "bar"
+
+declare const bFoo: B | "foo";
+>bFoo : B | "foo"
+
+x.nope();
+>x.nope() : any
+>x.nope : any
+>x : "foo" | "bar"
+>nope : any
+
+bFoo.onlyInB;
+>bFoo.onlyInB : any
+>bFoo : B | "foo"
+>onlyInB : any
+
+x.length; // Ok
+>x.length : number
+>x : "foo" | "bar"
+>length : number
+
+bFoo.length;
+>bFoo.length : any
+>bFoo : B | "foo"
+>length : any
+
+ab.onlyInB;
+>ab.onlyInB : any
+>ab : AB
+>onlyInB : any
+
+ab.notInC; // Ok
+>ab.notInC : string
+>ab : AB
+>notInC : string
+
+abc.notInC;
+>abc.notInC : any
+>abc : ABC
+>notInC : any
+
+ab.notInB;
+>ab.notInB : any
+>ab : AB
+>notInB : any
+
+abc.notInB;
+>abc.notInB : any
+>abc : ABC
+>notInB : any
+
+abc.inAll; // Ok
+>abc.inAll : string | number | boolean
+>abc : ABC
+>inAll : string | number | boolean
+
+abc.inNone;
+>abc.inNone : any
+>abc : ABC
+>inNone : any
+

@@ -23,44 +23,53 @@ var e51 = t5[2]; // {}
 
 
 //// [bestCommonTypeOfTuple2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     return E;
 }());
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
 }(C));
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
         this.i = "foo";
     }
     return C1;
 }());
-var D1 = (function (_super) {
+var D1 = /** @class */ (function (_super) {
     __extends(D1, _super);
     function D1() {
-        _super.apply(this, arguments);
-        this.i = "bar";
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.i = "bar";
+        return _this;
     }
     return D1;
 }(C1));

@@ -1,0 +1,111 @@
+=== tests/cases/conformance/types/intersection/intersectionOfUnionOfUnitTypes.ts ===
+// @strict
+
+const enum E { A, B, C, D, E, F }
+>E : E
+>A : E.A
+>B : E.B
+>C : E.C
+>D : E.D
+>E : E.E
+>F : E.F
+
+let x0: ('a' | 'b' | 'c') & ('a' | 'b' | 'c');  // 'a' | 'b' | 'c'
+>x0 : "a" | "b" | "c"
+
+let x1: ('a' | 'b' | 'c') & ('b' | 'c' | 'd');  // 'b' | 'c'
+>x1 : "b" | "c"
+
+let x2: ('a' | 'b' | 'c') & ('c' | 'd' | 'e');  // 'c'
+>x2 : "c"
+
+let x3: ('a' | 'b' | 'c') & ('d' | 'e' | 'f');  // never
+>x3 : never
+
+let x4: ('a' | 'b' | 'c') & ('b' | 'c' | 'd') & ('c' | 'd' | 'e');  // 'c'
+>x4 : "c"
+
+let x5: ('a' | 'b' | 'c') & ('b' | 'c' | 'd') & ('c' | 'd' | 'e') & ('d' | 'e' | 'f');  // never
+>x5 : never
+
+let y0: (0 | 1 | 2) & (0 | 1 | 2);  // 0 | 1 | 2
+>y0 : 0 | 1 | 2
+
+let y1: (0 | 1 | 2) & (1 | 2 | 3);  // 1 | 2
+>y1 : 1 | 2
+
+let y2: (0 | 1 | 2) & (2 | 3 | 4);  // 2
+>y2 : 2
+
+let y3: (0 | 1 | 2) & (3 | 4 | 5);  // never
+>y3 : never
+
+let y4: (0 | 1 | 2) & (1 | 2 | 3) & (2 | 3 | 4);  // 2
+>y4 : 2
+
+let y5: (0 | 1 | 2) & (1 | 2 | 3) & (2 | 3 | 4) & (3 | 4 | 5);  // never
+>y5 : never
+
+let z0: (E.A | E.B | E.C) & (E.A | E.B | E.C);  // E.A | E.B | E.C
+>z0 : E.A | E.B | E.C
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+
+let z1: (E.A | E.B | E.C) & (E.B | E.C | E.D);  // E.B | E.C
+>z1 : E.B | E.C
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+
+let z2: (E.A | E.B | E.C) & (E.C | E.D | E.E);  // E.C
+>z2 : E.C
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+
+let z3: (E.A | E.B | E.C) & (E.D | E.E | E.F);  // never
+>z3 : never
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+
+let z4: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E);  // E.C
+>z4 : E.C
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+
+let z5: (E.A | E.B | E.C) & (E.B | E.C | E.D) & (E.C | E.D | E.E) & (E.D | E.E | E.F);  // never
+>z5 : never
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+>E : any
+

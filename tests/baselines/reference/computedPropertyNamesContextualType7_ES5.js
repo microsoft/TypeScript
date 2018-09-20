@@ -20,13 +20,12 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES5.js]
+var _a;
 foo((_a = {
         0: function () { }
     },
     _a["hi" + "bye"] = true,
     _a[0 + 1] = 0,
     _a[+"hi"] = [0],
-    _a
-));
+    _a));
 g({ p: "" });
-var _a;

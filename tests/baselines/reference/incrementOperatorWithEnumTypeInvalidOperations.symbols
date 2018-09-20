@@ -1,0 +1,53 @@
+=== tests/cases/conformance/expressions/unaryOperators/incrementOperator/incrementOperatorWithEnumTypeInvalidOperations.ts ===
+// ++ operator on enum type
+
+enum ENUM { };
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+enum ENUM1 { A, B, "" };
+>ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
+>A : Symbol(ENUM1.A, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 12))
+>B : Symbol(ENUM1.B, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 15))
+>"" : Symbol(ENUM1[""], Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 3, 18))
+
+// enum type var
+var ResultIsNumber1 = ++ENUM;
+>ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 6, 3))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+var ResultIsNumber2 = ++ENUM1;
+>ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 7, 3))
+>ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
+
+var ResultIsNumber3 = ENUM++;
+>ResultIsNumber3 : Symbol(ResultIsNumber3, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 9, 3))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+var ResultIsNumber4 = ENUM1++;
+>ResultIsNumber4 : Symbol(ResultIsNumber4, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 10, 3))
+>ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
+
+// enum type expressions
+var ResultIsNumber5 = ++(ENUM[1] + ENUM[2]);
+>ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 13, 3))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+var ResultIsNumber6 = (ENUM[1] + ENUM[2])++;
+>ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 14, 3))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+// miss assignment operator
+++ENUM;
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+++ENUM1;
+>ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
+
+ENUM++;
+>ENUM : Symbol(ENUM, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
+
+ENUM1++;
+>ENUM1 : Symbol(ENUM1, Decl(incrementOperatorWithEnumTypeInvalidOperations.ts, 2, 14))
+

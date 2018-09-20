@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileObjectLiteralWithAccessors.ts ===
-
 function /*1*/makePoint(x: number) { 
 >makePoint : (x: number) => { b: number; x: number; }
 >x : number
@@ -9,7 +8,7 @@ function /*1*/makePoint(x: number) {
 
         b: 10,
 >b : number
->10 : number
+>10 : 10
 
         get x() { return x; },
 >x : number
@@ -30,7 +29,7 @@ var /*4*/point = makePoint(2);
 >point : { b: number; x: number; }
 >makePoint(2) : { b: number; x: number; }
 >makePoint : (x: number) => { b: number; x: number; }
->2 : number
+>2 : 2
 
 var /*2*/x = point.x;
 >x : number
@@ -39,9 +38,9 @@ var /*2*/x = point.x;
 >x : number
 
 point./*3*/x = 30;
->point./*3*/x = 30 : number
+>point./*3*/x = 30 : 30
 >point./*3*/x : number
 >point : { b: number; x: number; }
 >x : number
->30 : number
+>30 : 30
 

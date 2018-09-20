@@ -1,0 +1,30 @@
+=== tests/cases/compiler/assignToEnum.ts ===
+enum A { foo, bar }
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))
+>bar : Symbol(A.bar, Decl(assignToEnum.ts, 0, 13))
+
+A = undefined;  // invalid LHS
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+A = A.bar;      // invalid LHS
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>A.bar : Symbol(A.bar, Decl(assignToEnum.ts, 0, 13))
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>bar : Symbol(A.bar, Decl(assignToEnum.ts, 0, 13))
+
+A.foo = 1;      // invalid LHS
+>A.foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))
+
+A.foo = A.bar;  // invalid LHS
+>A.foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>foo : Symbol(A.foo, Decl(assignToEnum.ts, 0, 8))
+>A.bar : Symbol(A.bar, Decl(assignToEnum.ts, 0, 13))
+>A : Symbol(A, Decl(assignToEnum.ts, 0, 0))
+>bar : Symbol(A.bar, Decl(assignToEnum.ts, 0, 13))
+
+

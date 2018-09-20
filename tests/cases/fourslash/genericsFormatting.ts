@@ -15,7 +15,7 @@
 ////foo()<number, string, T >();
 ////(a + b)<number, string, T >();
 ////
-////function bar<T>() {
+/////*inFunctionDeclaration*/function bar <T> () {
 /////*inClassExpression*/    return class  <  T2 > {
 ////    }
 ////}
@@ -41,6 +41,9 @@ verify.currentLineContentIs("    new <T>(a: T);");
 
 goTo.marker("inOptionalMethodSignature");
 verify.currentLineContentIs("    op?<T, M>(a: T, b: M);");
+
+goTo.marker("inFunctionDeclaration");
+verify.currentLineContentIs("function bar<T>() {");
 
 goTo.marker("inClassExpression");
 verify.currentLineContentIs("    return class <T2> {");

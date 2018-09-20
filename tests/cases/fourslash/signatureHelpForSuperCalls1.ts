@@ -17,12 +17,7 @@
 ////    }
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('1');
-verify.signatureHelpPresent();
-verify.currentSignatureHelpIs('B(): B');
-
-goTo.marker('2');
-verify.currentSignatureHelpIs('B2(x: number): B2');
+verify.signatureHelp(
+    { marker: "1", text: "B(): B" },
+    { marker: "2", text: "B2(x: number): B2" },
+);

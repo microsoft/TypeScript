@@ -1,0 +1,12 @@
+=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunction7_es5.ts ===
+var bar = async (): Promise<void> => {
+>bar : Symbol(bar, Decl(asyncArrowFunction7_es5.ts, 0, 3))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+  // 'await' here is an identifier, and not an await expression.
+  var foo = async (a = await): Promise<void> => {
+>foo : Symbol(foo, Decl(asyncArrowFunction7_es5.ts, 2, 5))
+>a : Symbol(a, Decl(asyncArrowFunction7_es5.ts, 2, 19))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+  }
+}

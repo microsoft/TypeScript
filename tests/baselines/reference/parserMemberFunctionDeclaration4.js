@@ -4,10 +4,9 @@ class C {
 }
 
 //// [parserMemberFunctionDeclaration4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
-    C.prototype.Foo = function () { }
-    exports.Foo = Foo;;
+    C.prototype.Foo = function () { };
     return C;
 }());

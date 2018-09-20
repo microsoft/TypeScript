@@ -4,14 +4,5 @@
 ////    function bar(a: number, b: string = /*1*/, c: typeof x = "hello"
 ////}
 
-goTo.marker("1");
-
-verify.memberListContains("foo");
-verify.memberListContains("x");
-verify.memberListContains("y");
-verify.memberListContains("z");
-
-verify.memberListContains("bar");
-verify.memberListContains("a");
-verify.memberListContains("b");
-verify.memberListContains("c"); // definitely questionable
+// Note: Ideally `c` wouldn't be included since it hasn't been initialized yet.
+verify.completions({ marker: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c"]})

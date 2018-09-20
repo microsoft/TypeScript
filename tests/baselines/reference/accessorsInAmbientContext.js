@@ -1,5 +1,4 @@
 //// [accessorsInAmbientContext.ts]
-
 declare module M {
     class C {
         get X() { return 1; }

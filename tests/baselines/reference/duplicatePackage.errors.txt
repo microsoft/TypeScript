@@ -1,0 +1,48 @@
+/src/a.ts(5,3): error TS2345: Argument of type 'import("/node_modules/c/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
+  Types have separate declarations of a private property 'x'.
+
+
+==== /src/a.ts (1 errors) ====
+    import { a } from "a";
+    import { b } from "b";
+    import { c } from "c";
+    a(b); // Works
+    a(c); // Error, these are from different versions of the library.
+      ~
+!!! error TS2345: Argument of type 'import("/node_modules/c/node_modules/x/index").default' is not assignable to parameter of type 'import("/node_modules/a/node_modules/x/index").default'.
+!!! error TS2345:   Types have separate declarations of a private property 'x'.
+    
+==== /node_modules/a/index.d.ts (0 errors) ====
+    import X from "x";
+    export function a(x: X): void;
+    
+==== /node_modules/a/node_modules/x/index.d.ts (0 errors) ====
+    export default class X {
+        private x: number;
+    }
+    
+==== /node_modules/a/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.3" }
+    
+==== /node_modules/b/index.d.ts (0 errors) ====
+    import X from "x";
+    export const b: X;
+    
+==== /node_modules/b/node_modules/x/index.d.ts (0 errors) ====
+    content not parsed
+    
+==== /node_modules/b/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.3" }
+    
+==== /node_modules/c/index.d.ts (0 errors) ====
+    import X from "x";
+    export const c: X;
+    
+==== /node_modules/c/node_modules/x/index.d.ts (0 errors) ====
+    export default class X {
+        private x: number;
+    }
+    
+==== /node_modules/c/node_modules/x/package.json (0 errors) ====
+    { "name": "x", "version": "1.2.4" }
+    

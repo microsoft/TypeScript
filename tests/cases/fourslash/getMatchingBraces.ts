@@ -36,8 +36,9 @@
 ////        return [|<any>|] a;
 ////    }
 ////}
+////const x: Array[|<() => void>|] = [];
 
-test.ranges().forEach((range) => {
-    verify.matchingBracePositionInCurrentFile(range.start, range.end - 1);
-    verify.matchingBracePositionInCurrentFile(range.end - 1, range.start);
-});
+for (const range of test.ranges()) {
+    verify.matchingBracePositionInCurrentFile(range.pos, range.end - 1);
+    verify.matchingBracePositionInCurrentFile(range.end - 1, range.pos);
+}

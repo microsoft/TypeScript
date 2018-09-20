@@ -1,5 +1,4 @@
 //// [constDeclarations-useBeforeDefinition.ts]
-
 {
     c1;
     const c1 = 0;

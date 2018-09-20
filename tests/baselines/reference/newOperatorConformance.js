@@ -1,5 +1,4 @@
 //// [newOperatorConformance.ts]
-
 class C0 {
 
 }
@@ -64,17 +63,17 @@ var n = new nested();
 
 
 //// [newOperatorConformance.js]
-var C0 = (function () {
+var C0 = /** @class */ (function () {
     function C0() {
     }
     return C0;
 }());
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1(n, s) {
     }
     return C1;
 }());
-var T = (function () {
+var T = /** @class */ (function () {
     function T(n) {
     }
     return T;

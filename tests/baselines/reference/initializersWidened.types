@@ -12,7 +12,7 @@ var y1 = undefined;
 var z1 = void 0;
 >z1 : any
 >void 0 : undefined
->0 : number
+>0 : 0
 
 // these are not widened
 
@@ -35,7 +35,7 @@ var y3: undefined = undefined;
 var z3: undefined = void 0;
 >z3 : undefined
 >void 0 : undefined
->0 : number
+>0 : 0
 
 // widen only when all constituents of union are widening
 
@@ -55,9 +55,9 @@ var z4 = void 0 || void 0;
 >z4 : any
 >void 0 || void 0 : undefined
 >void 0 : undefined
->0 : number
+>0 : 0
 >void 0 : undefined
->0 : number
+>0 : 0
 
 var x5 = null || x2;
 >x5 : null
@@ -75,6 +75,6 @@ var z5 = void 0 || y2;
 >z5 : undefined
 >void 0 || y2 : undefined
 >void 0 : undefined
->0 : number
+>0 : 0
 >y2 : undefined
 

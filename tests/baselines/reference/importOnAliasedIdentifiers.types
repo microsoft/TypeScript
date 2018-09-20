@@ -3,18 +3,15 @@ module A {
 >A : typeof A
 
     export interface X { s: string }
->X : X
 >s : string
 
     export var X: X;
->X : X
 >X : X
 }
 module B {
 >B : typeof B
 
     interface A { n: number }
->A : A
 >n : number
 
     import Y = A; // Alias only for module A
@@ -28,6 +25,5 @@ module B {
 
     var v: Z = Z;
 >v : Y.X
->Z : Y.X
 >Z : Y.X
 }

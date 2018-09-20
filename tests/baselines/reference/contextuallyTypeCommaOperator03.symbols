@@ -1,0 +1,12 @@
+=== tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts ===
+let x: (a: string) => string;
+>x : Symbol(x, Decl(contextuallyTypeCommaOperator03.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator03.ts, 0, 8))
+
+x = (a => a, b => b);
+>x : Symbol(x, Decl(contextuallyTypeCommaOperator03.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator03.ts, 2, 5))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator03.ts, 2, 5))
+>b : Symbol(b, Decl(contextuallyTypeCommaOperator03.ts, 2, 12))
+>b : Symbol(b, Decl(contextuallyTypeCommaOperator03.ts, 2, 12))
+

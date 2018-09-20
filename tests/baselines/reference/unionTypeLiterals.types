@@ -1,0 +1,33 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts ===
+// basic valid forms of union literals
+
+var simpleUnion: string | number;
+>simpleUnion : string | number
+
+var unionOfUnion: string | number | boolean;
+>unionOfUnion : string | number | boolean
+
+var arrayOfUnions: (string | number)[];
+>arrayOfUnions : (string | number)[]
+
+var arrayOfUnions: Array<string | number>;
+>arrayOfUnions : (string | number)[]
+
+var unionOfFunctionType: (() => string) | (() => number);
+>unionOfFunctionType : (() => string) | (() => number)
+
+var unionOfFunctionType: { (): string } | { (): number };
+>unionOfFunctionType : (() => string) | (() => number)
+
+var unionOfFunctionType: () => string | number;
+>unionOfFunctionType : (() => string) | (() => number)
+
+var unionOfConstructorType: (new () => string) | (new () => number);
+>unionOfConstructorType : (new () => string) | (new () => number)
+
+var unionOfConstructorType: { new (): string } | { new (): number };
+>unionOfConstructorType : (new () => string) | (new () => number)
+
+var unionOfConstructorType: new () => string | number;
+>unionOfConstructorType : (new () => string) | (new () => number)
+

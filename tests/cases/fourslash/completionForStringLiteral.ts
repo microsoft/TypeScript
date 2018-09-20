@@ -8,8 +8,8 @@
 
 goTo.marker('1');
 verify.completionListContains("Option 1");
-verify.memberListCount(3);
+verify.completionListCount(3);
 
 goTo.marker('2');
 verify.completionListContains("Option 2");
-verify.memberListCount(3);
+verify.completionListCount(3);

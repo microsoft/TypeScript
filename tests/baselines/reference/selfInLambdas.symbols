@@ -37,8 +37,15 @@ var o = {
 >onmousemove : Symbol(Window.onmousemove, Decl(selfInLambdas.ts, 6, 18))
 
             this.counter++
+>this.counter : Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
+>this : Symbol(o, Decl(selfInLambdas.ts, 10, 7))
+>counter : Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
+
             var f = () => this.counter;
 >f : Symbol(f, Decl(selfInLambdas.ts, 18, 15))
+>this.counter : Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
+>this : Symbol(o, Decl(selfInLambdas.ts, 10, 7))
+>counter : Symbol(counter, Decl(selfInLambdas.ts, 10, 9))
 
         }
 

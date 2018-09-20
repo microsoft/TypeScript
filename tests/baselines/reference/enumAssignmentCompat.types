@@ -1,0 +1,117 @@
+=== tests/cases/compiler/enumAssignmentCompat.ts ===
+module W {
+>W : typeof W
+
+    export class D { }
+>D : D
+}
+
+enum W {
+>W : W
+
+    a, b, c,
+>a : W.a
+>b : W.b
+>c : W.c
+
+}
+
+
+interface WStatic {
+
+    a: W;
+>a : W
+
+    b: W;
+>b : W
+
+    c: W;
+>c : W
+
+}
+
+
+
+var x: WStatic = W;
+>x : WStatic
+>W : typeof W
+
+var y: typeof W = W;
+>y : typeof W
+>W : typeof W
+>W : typeof W
+
+var z: number = W; // error
+>z : number
+>W : typeof W
+
+var a: number = W.a;
+>a : number
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+var b: typeof W = W.a; // error
+>b : typeof W
+>W : typeof W
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+var c: typeof W.a = W.a;
+>c : W.a
+>W.a : W.a
+>W : typeof W
+>a : W.a
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+var d: typeof W = 3; // error
+>d : typeof W
+>W : typeof W
+>3 : 3
+
+var e: typeof W.a = 4;
+>e : W.a
+>W.a : W.a
+>W : typeof W
+>a : W.a
+>4 : 4
+
+var f: WStatic = W.a; // error
+>f : WStatic
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+var g: WStatic = 5; // error
+>g : WStatic
+>5 : 5
+
+var h: W = 3;
+>h : W
+>3 : 3
+
+var i: W = W.a;
+>i : W
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+i = W.a;
+>i = W.a : W.a
+>i : W
+>W.a : W.a
+>W : typeof W
+>a : W.a
+
+W.D;
+>W.D : typeof W.D
+>W : typeof W
+>D : typeof W.D
+
+var p: W.D;
+>p : W.D
+>W : any
+

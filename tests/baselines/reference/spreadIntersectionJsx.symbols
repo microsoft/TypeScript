@@ -1,0 +1,21 @@
+=== tests/cases/compiler/spreadIntersectionJsx.tsx ===
+const React: any = null;
+>React : Symbol(React, Decl(spreadIntersectionJsx.tsx, 0, 5))
+
+class A { a; }
+>A : Symbol(A, Decl(spreadIntersectionJsx.tsx, 0, 24))
+>a : Symbol(A.a, Decl(spreadIntersectionJsx.tsx, 1, 9))
+
+class C { c; }
+>C : Symbol(C, Decl(spreadIntersectionJsx.tsx, 1, 14))
+>c : Symbol(C.c, Decl(spreadIntersectionJsx.tsx, 2, 9))
+
+let intersected: A & C;
+>intersected : Symbol(intersected, Decl(spreadIntersectionJsx.tsx, 3, 3))
+>A : Symbol(A, Decl(spreadIntersectionJsx.tsx, 0, 24))
+>C : Symbol(C, Decl(spreadIntersectionJsx.tsx, 1, 14))
+
+let element = <div { ...intersected } />;
+>element : Symbol(element, Decl(spreadIntersectionJsx.tsx, 4, 3))
+>intersected : Symbol(intersected, Decl(spreadIntersectionJsx.tsx, 3, 3))
+

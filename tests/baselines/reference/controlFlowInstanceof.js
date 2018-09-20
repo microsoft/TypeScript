@@ -1,5 +1,4 @@
 //// [controlFlowInstanceof.ts]
-
 // Repros from #10167
 
 function f1(s: Set<string> | Set<number>) {

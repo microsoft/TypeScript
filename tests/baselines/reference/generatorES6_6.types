@@ -3,6 +3,7 @@ class C {
 >C : C
 
   *[Symbol.iterator]() {
+>[Symbol.iterator] : () => IterableIterator<number>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -10,6 +11,6 @@ class C {
     let a = yield 1;
 >a : any
 >yield 1 : any
->1 : number
+>1 : 1
   }
 }

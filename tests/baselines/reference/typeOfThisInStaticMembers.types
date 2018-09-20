@@ -35,7 +35,7 @@ var r2 = t.foo + 1;
 >t.foo : number
 >t : typeof C
 >foo : number
->1 : number
+>1 : 1
 
 var r3 = t.bar();
 >r3 : typeof C
@@ -48,11 +48,10 @@ var r4 = new t(1);
 >r4 : C
 >new t(1) : C
 >t : typeof C
->1 : number
+>1 : 1
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     static test: number;
 >test : number
@@ -90,7 +89,7 @@ var r5 = t2.foo + 1;
 >t2.foo : string
 >t2 : typeof C2
 >foo : string
->1 : number
+>1 : 1
 
 var r6 = t2.bar();
 >r6 : typeof C2
@@ -103,6 +102,6 @@ var r7 = new t2('');
 >r7 : C2<{}>
 >new t2('') : C2<{}>
 >t2 : typeof C2
->'' : string
+>'' : ""
 
 

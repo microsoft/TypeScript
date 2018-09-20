@@ -10,6 +10,7 @@ class C {
 >{            [this.bar()]() { }        } : { [x: number]: () => void; }
 
             [this.bar()]() { }
+>[this.bar()] : () => void
 >this.bar() : number
 >this.bar : () => number
 >this : this
@@ -17,6 +18,6 @@ class C {
 
         };
         return 0;
->0 : number
+>0 : 0
     }
 }

@@ -8,7 +8,7 @@ for (let y; false;) {
 }
 
 //// [nestedBlockScopedBindings7.js]
-var _loop_1 = function(x) {
+var _loop_1 = function (x) {
     (function () { return x; });
 };
 for (var x = void 0; false;) {

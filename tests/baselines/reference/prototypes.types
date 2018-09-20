@@ -1,0 +1,20 @@
+=== tests/cases/compiler/prototypes.ts ===
+Object.prototype; // ok
+>Object.prototype : Object
+>Object : ObjectConstructor
+>prototype : Object
+
+new Object().prototype; // error
+>new Object().prototype : any
+>new Object() : Object
+>Object : ObjectConstructor
+>prototype : any
+
+function f() {}
+>f : () => void
+
+f.prototype;
+>f.prototype : any
+>f : () => void
+>prototype : any
+

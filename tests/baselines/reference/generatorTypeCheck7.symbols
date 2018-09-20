@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts ===
+interface WeirdIter extends IterableIterator<number> {
+>WeirdIter : Symbol(WeirdIter, Decl(generatorTypeCheck7.ts, 0, 0))
+>IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    hello: string;
+>hello : Symbol(WeirdIter.hello, Decl(generatorTypeCheck7.ts, 0, 54))
+}
+function* g1(): WeirdIter { }
+>g1 : Symbol(g1, Decl(generatorTypeCheck7.ts, 2, 1))
+>WeirdIter : Symbol(WeirdIter, Decl(generatorTypeCheck7.ts, 0, 0))
+

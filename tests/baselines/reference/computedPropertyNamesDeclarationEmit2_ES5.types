@@ -3,19 +3,22 @@ class C {
 >C : C
 
     static ["" + ""]() { }
+>["" + ""] : () => void
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
     static get ["" + ""]() { return 0; }
+>["" + ""] : number
 >"" + "" : string
->"" : string
->"" : string
->0 : number
+>"" : ""
+>"" : ""
+>0 : 0
 
     static set ["" + ""](x) { }
+>["" + ""] : any
 >"" + "" : string
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 >x : any
 }

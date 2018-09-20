@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////// interface 
+////// interface
 ////interface IFoo[| {
 ////    getDist(): number;
 ////}|]
@@ -63,9 +63,9 @@
 ////}|])
 ////
 ////// trivia handeling
-////class ClassFooWithTrivia[| /*  some comments */ 
+////class ClassFooWithTrivia[| /*  some comments */
 ////   /* more trivia */ {
-////    
+////
 ////
 ////    /*some trailing trivia */
 ////}|] /* even more */
@@ -79,35 +79,22 @@
 ////  }|]
 ////}|]
 //////outline with deep nesting
-////module m1[|{
-////    module m2[| {
-////        module m3[| {
-////            module m4[| {
-////                module m5[| {
-////                    module m6[| {
-////                        module m7[| {
-////                            module m8[| {
-////                                module m9[| {
-////                                    module m10[| {
-////                                        module m11 {
-////                                            module m12 {
-////                                                export interface IFoo {
-////                                                }
-////                                            }
-////                                        }
-////                                    }|]
-////                                }|]
-////                            }|]
-////                        }|]
-////                    }|]
-////                }|]
-////            }|]
-////        }|]
-////    }|]
-////}|]
+////var nest =[| [[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[[|[
+////  [|[
+////      [
+////        [
+////          [
+////            [
+////              1,2,3
+////            ]
+////          ]
+////        ]
+////      ]
+////  ]|]
+////]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|]]|];
 ////
 //////outline after a deeply nested node
 ////class AfterNestedNodes[| {
 ////}|]
 
-verify.outliningSpansInCurrentFile(test.ranges());
+verify.outliningSpansInCurrentFile(test.ranges(), "code");

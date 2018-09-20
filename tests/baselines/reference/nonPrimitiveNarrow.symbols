@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts ===
+class Narrow {
+>Narrow : Symbol(Narrow, Decl(nonPrimitiveNarrow.ts, 0, 0))
+
+    narrowed: boolean
+>narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+}
+
+var a: object
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+
+if (a instanceof Narrow) {
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+>Narrow : Symbol(Narrow, Decl(nonPrimitiveNarrow.ts, 0, 0))
+
+    a.narrowed; // ok
+>a.narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+>narrowed : Symbol(Narrow.narrowed, Decl(nonPrimitiveNarrow.ts, 0, 14))
+
+    a = 123; // error
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+}
+
+if (typeof a === 'number') {
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+
+    a.toFixed(); // error, never
+>a : Symbol(a, Decl(nonPrimitiveNarrow.ts, 4, 3))
+}
+
+var b: object | null
+>b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+
+if (typeof b === 'object') {
+>b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+
+   b.toString(); // ok, object | null
+>b.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+} else {
+   b.toString(); // error, never
+>b : Symbol(b, Decl(nonPrimitiveNarrow.ts, 15, 3))
+}
+

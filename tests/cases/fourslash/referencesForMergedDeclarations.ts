@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-////interface [|Foo|] {
+////interface [|{| "isWriteAccess": true, "isDefinition": true |}Foo|] {
 ////}
 ////
-////module [|Foo|] {
+////module [|{| "isWriteAccess": true, "isDefinition": true |}Foo|] {
 ////    export interface Bar { }
 ////}
 ////
-////function [|Foo|](): void {
+////function [|{| "isWriteAccess": true, "isDefinition": true |}Foo|](): void {
 ////}
 ////
 ////var f1: [|Foo|].Bar;
@@ -15,6 +15,6 @@
 ////[|Foo|].bind(this);
 
 const [type1, namespace1, value1, namespace2, type2, value2] = test.ranges();
-verify.rangesReferenceEachOther([type1, type2]);
-verify.rangesReferenceEachOther([namespace1, namespace2]);
-verify.rangesReferenceEachOther([value1, value2]);
+verify.singleReferenceGroup("interface Foo\nnamespace Foo", [type1, type2]);
+verify.singleReferenceGroup("namespace Foo", [namespace1, namespace2]);
+verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [value1, value2]);

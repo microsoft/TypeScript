@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 module M {
@@ -77,7 +71,7 @@ module M {
 
 	var M = 100;
 >M : number
->100 : number
+>100 : 100
 
 	// Emit M_1.Foo
 	Foo, <Foo />;

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/concatClassAndString.ts ===
+// Shouldn't compile (the long form f = f + ""; doesn't):
+class f { }
+>f : f
+
+f += '';
+>f += '' : string
+>f : any
+>'' : ""
+

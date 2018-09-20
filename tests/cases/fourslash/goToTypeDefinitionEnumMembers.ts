@@ -1,13 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-/////*definition*/enum E {
+////enum E {
 ////    value1,
-////    value2
+////    /*definition*/value2
 ////}
 ////var x = E.value2;
 ////
 /////*reference*/x;
 
-goTo.marker('reference');
-goTo.type();
-verify.caretAtMarker('definition');
+verify.goToType("reference", "definition");

@@ -2,7 +2,7 @@
 // ++ operator on any type
 
 var ANY: any;
-var ANY1;
+var ANY1: any;
 var ANY2: any[] = ["", ""];
 var obj = {x:1,y:null};
 class A {
@@ -54,7 +54,7 @@ var ANY;
 var ANY1;
 var ANY2 = ["", ""];
 var obj = { x: 1, y: null };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

@@ -1,0 +1,18 @@
+tests/cases/compiler/test.tsx(9,17): error TS2304: Cannot find name 'createElement'.
+
+
+==== tests/cases/compiler/test.tsx (1 errors) ====
+    declare module JSX {
+        interface IntrinsicElements {
+            [s: string]: any;
+        }
+    }
+    
+    export class AppComponent {
+        render() {
+            return <div />;
+                    ~~~
+!!! error TS2304: Cannot find name 'createElement'.
+        }
+    }
+    

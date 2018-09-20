@@ -14,37 +14,40 @@ import x from './a';
 
 //// [a.js]
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
+    else if (typeof define === "function" && define.amd) {
         define(["require", "exports"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    const x = new Promise((resolve, reject) => { resolve({}); });
     Object.defineProperty(exports, "__esModule", { value: true });
+    const x = new Promise((resolve, reject) => { resolve({}); });
     exports.default = x;
 });
 //// [b.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 (function (factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
-        define(["require", "exports", './a'], factory);
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "./a"], factory);
     }
 })(function (require, exports) {
     "use strict";
-    const a_1 = require('./a');
+    Object.defineProperty(exports, "__esModule", { value: true });
+    const a_1 = require("./a");
     (function () {
         return __awaiter(this, void 0, void 0, function* () {
             const value = yield a_1.default;

@@ -1,5 +1,4 @@
 //// [commentsemitComments.ts]
-
 /** Variable comments*/
 var myVariable = 10;
 
@@ -99,7 +98,7 @@ var fooVar;
 foo(50);
 fooVar();
 /**class comment*/
-var c = (function () {
+var c = /** @class */ (function () {
     /** constructor comment*/
     function c() {
         /** property comment */
@@ -135,7 +134,7 @@ var i1_i;
 var m1;
 (function (m1) {
     /** class b */
-    var b = (function () {
+    var b = /** @class */ (function () {
         function b(x) {
             this.x = x;
         }
@@ -179,7 +178,7 @@ interface i1 {
     /**indexer property*/
     [a: number]: string;
     /** function property;*/
-    myFoo(a: number): string;
+    myFoo(/*param prop*/ a: number): string;
     /** prop*/
     prop: string;
 }

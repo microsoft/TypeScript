@@ -13,12 +13,11 @@ module C {
 
 //// [protectedStaticNotAccessibleInClodule.js]
 // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var C;
 (function (C) {
     C.f = C.foo; // OK
     C.b = C.bar; // error

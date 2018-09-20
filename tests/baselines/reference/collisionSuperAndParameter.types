@@ -1,0 +1,164 @@
+=== tests/cases/compiler/collisionSuperAndParameter.ts ===
+class Foo {
+>Foo : Foo
+
+    a() {
+>a : () => void
+
+        var lamda = (_super: number) => { // No Error 
+>lamda : (_super: number) => (x: any) => this
+>(_super: number) => { // No Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
+>_super : number
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+    b(_super: number) { // No Error 
+>b : (_super: number) => void
+>_super : number
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+    set c(_super: number) { // No error
+>c : number
+>_super : number
+    }
+}
+class Foo2 extends Foo {
+>Foo2 : Foo2
+>Foo : Foo
+
+    x() {
+>x : () => void
+
+        var lamda = (_super: number) => { // Error 
+>lamda : (_super: number) => (x: any) => this
+>(_super: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_super: number) => (x: any) => this
+>_super : number
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+    y(_super: number) { // Error 
+>y : (_super: number) => void
+>_super : number
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+    set z(_super: number) { // Error
+>z : number
+>_super : number
+    }
+    public prop3: {
+>prop3 : { doStuff: (_super: number) => void; }
+
+        doStuff: (_super: number) => void; // no error - no code gen
+>doStuff : (_super: number) => void
+>_super : number
+    }
+    public prop4 = {
+>prop4 : { doStuff: (_super: number) => void; }
+>{        doStuff: (_super: number) => { // should be error        }    } : { doStuff: (_super: number) => void; }
+
+        doStuff: (_super: number) => { // should be error
+>doStuff : (_super: number) => void
+>(_super: number) => { // should be error        } : (_super: number) => void
+>_super : number
+        }
+    }
+    constructor(_super: number) { // should be error
+>_super : number
+
+        super();
+>super() : void
+>super : typeof Foo
+    }
+}
+declare class Foo3 extends Foo {
+>Foo3 : Foo3
+>Foo : Foo
+
+    x();
+>x : () => any
+
+    y(_super: number); // No error - no code gen
+>y : (_super: number) => any
+>_super : number
+
+    constructor(_super: number); // No error - no code gen
+>_super : number
+
+    public prop2: {
+>prop2 : { doStuff: (_super: number) => void; }
+
+        doStuff: (_super: number) => void; // no error - no code gen
+>doStuff : (_super: number) => void
+>_super : number
+
+    };
+    public _super: number; // No error
+>_super : number
+}
+
+class Foo4 extends Foo {
+>Foo4 : Foo4
+>Foo : Foo
+
+    constructor(_super: number); // no code gen - no error
+>_super : number
+
+    constructor(_super: string);// no code gen - no error
+>_super : string
+
+    constructor(_super: any) { // should be error
+>_super : any
+
+        super();
+>super() : void
+>super : typeof Foo
+    }
+    y(_super: number); // no code gen - no error
+>y : { (_super: number): any; (_super: string): any; }
+>_super : number
+
+    y(_super: string); // no code gen - no error
+>y : { (_super: number): any; (_super: string): any; }
+>_super : string
+
+    y(_super: any) { // Error 
+>y : { (_super: number): any; (_super: string): any; }
+>_super : any
+
+        var lambda = () => {
+>lambda : () => (x: any) => this
+>() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
+
+            return x => this;   // New scope.  So should inject new _this capture
+>x => this : (x: any) => this
+>x : any
+>this : this
+        }
+    }
+}

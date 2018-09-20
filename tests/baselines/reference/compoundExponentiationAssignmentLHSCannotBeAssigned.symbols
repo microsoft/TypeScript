@@ -1,0 +1,189 @@
+=== tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSCannotBeAssigned.ts ===
+enum E { a, b }
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+>a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+>b : Symbol(E.b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 11))
+
+var a: any;
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+
+var b: void;
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+var x1: boolean;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= a;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+
+x1 **= b;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x1 **= true;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= 0;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= ''
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= E.a;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+>E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+>a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+
+x1 **= {};
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= null;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+
+x1 **= undefined;
+>x1 : Symbol(x1, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 5, 3))
+>undefined : Symbol(undefined)
+
+var x2: string;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= a;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+
+x2 **= b;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x2 **= true;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= 0;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= ''
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= E.a;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+>E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+>a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+
+x2 **= {};
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= null;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+
+x2 **= undefined;
+>x2 : Symbol(x2, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 16, 3))
+>undefined : Symbol(undefined)
+
+var x3: {};
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= a;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+
+x3 **= b;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x3 **= true;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= 0;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= ''
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= E.a;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+>E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+>a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+
+x3 **= {};
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= null;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+
+x3 **= undefined;
+>x3 : Symbol(x3, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 27, 3))
+>undefined : Symbol(undefined)
+
+var x4: void;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= a;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 2, 3))
+
+x4 **= b;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x4 **= true;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= 0;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= ''
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= E.a;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+>E.a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+>a : Symbol(E.a, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 8))
+
+x4 **= {};
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= null;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+
+x4 **= undefined;
+>x4 : Symbol(x4, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 38, 3))
+>undefined : Symbol(undefined)
+
+var x5: number;
+>x5 : Symbol(x5, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 49, 3))
+
+x5 **= b;
+>x5 : Symbol(x5, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 49, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x5 **= true;
+>x5 : Symbol(x5, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 49, 3))
+
+x5 **= ''
+>x5 : Symbol(x5, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 49, 3))
+
+x5 **= {};
+>x5 : Symbol(x5, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 49, 3))
+
+var x6: E;
+>x6 : Symbol(x6, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 55, 3))
+>E : Symbol(E, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 0, 0))
+
+x6 **= b;
+>x6 : Symbol(x6, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 55, 3))
+>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 3, 3))
+
+x6 **= true;
+>x6 : Symbol(x6, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 55, 3))
+
+x6 **= ''
+>x6 : Symbol(x6, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 55, 3))
+
+x6 **= {};
+>x6 : Symbol(x6, Decl(compoundExponentiationAssignmentLHSCannotBeAssigned.ts, 55, 3))
+

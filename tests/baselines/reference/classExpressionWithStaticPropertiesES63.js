@@ -1,5 +1,4 @@
 //// [classExpressionWithStaticPropertiesES63.ts]
-
 declare var console: any;
 const arr: {y(): number}[] = [];
 for (let i = 0; i < 3; i++) {
@@ -11,13 +10,13 @@ for (let i = 0; i < 3; i++) {
 arr.forEach(C => console.log(C.y()));
 
 //// [classExpressionWithStaticPropertiesES63.js]
+var _a;
 const arr = [];
 for (let i = 0; i < 3; i++) {
-    arr.push((C_1 = class C {
+    arr.push((_a = class C {
         },
-        C_1.x = i,
-        C_1.y = () => C_1.x * 2,
-        C_1));
+        _a.x = i,
+        _a.y = () => _a.x * 2,
+        _a));
 }
 arr.forEach(C => console.log(C.y()));
-var C_1;

@@ -5,13 +5,12 @@ export = D;
 
 //// [exportAssignmentWithExports.js]
 "use strict";
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-exports.C = C;
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

@@ -1,17 +1,19 @@
 EmitSkipped: false
+
 FileName : declSingleFile.js
 var x = 5;
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
 }());
 var x1 = "hello world";
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
+
 FileName : declSingleFile.d.ts
 declare var x: number;
 declare class Bar {
@@ -22,9 +24,5 @@ declare var x1: string;
 declare class Foo {
     x: string;
     y: number;
-}
-declare module "inputFile3" {
-    export var foo: number;
-    export var bar: string;
 }
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedPrivateMembers.ts ===
-
 class Test1 {
 >Test1 : Test1
 
@@ -28,7 +27,7 @@ class Test2 {
 
     private p = 0;
 >p : number
->0 : number
+>0 : 0
 
     public test() {
 >test : () => void
@@ -52,7 +51,7 @@ class Test3 {
 >x : number
 
         return 0;
->0 : number
+>0 : 0
     }
 
     public test() {
@@ -98,11 +97,9 @@ class Test4 {
 
 class Test5<T> {
 >Test5 : Test5<T>
->T : T
 
     private p: T;
 >p : T
->T : T
 
     public test() {
 >test : () => void

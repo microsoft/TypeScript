@@ -1,0 +1,1010 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource4.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : Symbol(TypeScript, Decl(parserRealSource4.ts, 0, 0))
+
+    export class BlockIntrinsics {
+>BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+
+        public prototype = undefined;
+>prototype : Symbol(BlockIntrinsics.prototype, Decl(parserRealSource4.ts, 7, 34))
+>undefined : Symbol(undefined)
+
+        public toString = undefined;
+>toString : Symbol(BlockIntrinsics.toString, Decl(parserRealSource4.ts, 8, 37))
+>undefined : Symbol(undefined)
+
+        public toLocaleString = undefined;
+>toLocaleString : Symbol(BlockIntrinsics.toLocaleString, Decl(parserRealSource4.ts, 9, 36))
+>undefined : Symbol(undefined)
+
+        public valueOf = undefined;
+>valueOf : Symbol(BlockIntrinsics.valueOf, Decl(parserRealSource4.ts, 10, 42))
+>undefined : Symbol(undefined)
+
+        public hasOwnProperty = undefined;
+>hasOwnProperty : Symbol(BlockIntrinsics.hasOwnProperty, Decl(parserRealSource4.ts, 11, 35))
+>undefined : Symbol(undefined)
+
+        public propertyIsEnumerable = undefined;
+>propertyIsEnumerable : Symbol(BlockIntrinsics.propertyIsEnumerable, Decl(parserRealSource4.ts, 12, 42))
+>undefined : Symbol(undefined)
+
+        public isPrototypeOf = undefined;
+>isPrototypeOf : Symbol(BlockIntrinsics.isPrototypeOf, Decl(parserRealSource4.ts, 13, 48))
+>undefined : Symbol(undefined)
+
+        constructor () {
+            // initialize the 'constructor' field
+            this["constructor"] = undefined;
+>this : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+        }
+    }
+
+    export interface IHashTable {
+>IHashTable : Symbol(IHashTable, Decl(parserRealSource4.ts, 20, 5))
+
+        getAllKeys(): string[];
+>getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
+
+        add(key: string, data): boolean;
+>add : Symbol(IHashTable.add, Decl(parserRealSource4.ts, 23, 31))
+>key : Symbol(key, Decl(parserRealSource4.ts, 24, 12))
+>data : Symbol(data, Decl(parserRealSource4.ts, 24, 24))
+
+        addOrUpdate(key: string, data): boolean;
+>addOrUpdate : Symbol(IHashTable.addOrUpdate, Decl(parserRealSource4.ts, 24, 40))
+>key : Symbol(key, Decl(parserRealSource4.ts, 25, 20))
+>data : Symbol(data, Decl(parserRealSource4.ts, 25, 32))
+
+        map(fn: (k: string, v, c) => void , context): void;
+>map : Symbol(IHashTable.map, Decl(parserRealSource4.ts, 25, 48))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 26, 12))
+>k : Symbol(k, Decl(parserRealSource4.ts, 26, 17))
+>v : Symbol(v, Decl(parserRealSource4.ts, 26, 27))
+>c : Symbol(c, Decl(parserRealSource4.ts, 26, 30))
+>context : Symbol(context, Decl(parserRealSource4.ts, 26, 43))
+
+        every(fn: (k: string, v, c) => boolean, context): boolean;
+>every : Symbol(IHashTable.every, Decl(parserRealSource4.ts, 26, 59))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 27, 14))
+>k : Symbol(k, Decl(parserRealSource4.ts, 27, 19))
+>v : Symbol(v, Decl(parserRealSource4.ts, 27, 29))
+>c : Symbol(c, Decl(parserRealSource4.ts, 27, 32))
+>context : Symbol(context, Decl(parserRealSource4.ts, 27, 47))
+
+        some(fn: (k: string, v, c) => boolean, context): boolean;
+>some : Symbol(IHashTable.some, Decl(parserRealSource4.ts, 27, 66))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 28, 13))
+>k : Symbol(k, Decl(parserRealSource4.ts, 28, 18))
+>v : Symbol(v, Decl(parserRealSource4.ts, 28, 28))
+>c : Symbol(c, Decl(parserRealSource4.ts, 28, 31))
+>context : Symbol(context, Decl(parserRealSource4.ts, 28, 46))
+
+        count(): number;
+>count : Symbol(IHashTable.count, Decl(parserRealSource4.ts, 28, 65))
+
+        lookup(key: string): any;
+>lookup : Symbol(IHashTable.lookup, Decl(parserRealSource4.ts, 29, 24))
+>key : Symbol(key, Decl(parserRealSource4.ts, 30, 15))
+    }
+
+    export class StringHashTable implements IHashTable {
+>StringHashTable : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>IHashTable : Symbol(IHashTable, Decl(parserRealSource4.ts, 20, 5))
+
+        public itemCount = 0;
+>itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+
+        public table = <any>(<any> new BlockIntrinsics());
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>BlockIntrinsics : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
+
+        public getAllKeys(): string[]{
+>getAllKeys : Symbol(StringHashTable.getAllKeys, Decl(parserRealSource4.ts, 35, 58))
+
+            var result: string[] = [];
+>result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
+
+            for (var k in this.table) {
+>k : Symbol(k, Decl(parserRealSource4.ts, 39, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+
+                if (this.table[k] != undefined) {
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 39, 20))
+>undefined : Symbol(undefined)
+
+                    result[result.length] = k;
+>result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
+>result.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(parserRealSource4.ts, 39, 20))
+                }
+            }
+            return result;
+>result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
+        }
+
+        public add(key: string, data): boolean {
+>add : Symbol(StringHashTable.add, Decl(parserRealSource4.ts, 45, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 47, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 47, 31))
+
+            if (this.table[key] != undefined) {
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 47, 19))
+>undefined : Symbol(undefined)
+
+                return false;
+            }
+            this.table[key] = data;
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 47, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 47, 31))
+
+            this.itemCount++;
+>this.itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+
+            return true;
+        }
+
+        public addOrUpdate(key: string, data): boolean {
+>addOrUpdate : Symbol(StringHashTable.addOrUpdate, Decl(parserRealSource4.ts, 54, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 56, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 56, 39))
+
+            if (this.table[key] != undefined) {
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 56, 27))
+>undefined : Symbol(undefined)
+
+                this.table[key] = data;
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 56, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 56, 39))
+
+                return false;
+            }
+            this.table[key] = data;
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 56, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 56, 39))
+
+            this.itemCount++;
+>this.itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+
+            return true;
+        }
+
+        public map(fn: (k: string, v, c) => void , context) {
+>map : Symbol(StringHashTable.map, Decl(parserRealSource4.ts, 64, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 66, 19))
+>k : Symbol(k, Decl(parserRealSource4.ts, 66, 24))
+>v : Symbol(v, Decl(parserRealSource4.ts, 66, 34))
+>c : Symbol(c, Decl(parserRealSource4.ts, 66, 37))
+>context : Symbol(context, Decl(parserRealSource4.ts, 66, 50))
+
+            for (var k in this.table) {
+>k : Symbol(k, Decl(parserRealSource4.ts, 67, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+
+                var data = this.table[k];
+>data : Symbol(data, Decl(parserRealSource4.ts, 68, 19))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 67, 20))
+
+                if (data != undefined) {
+>data : Symbol(data, Decl(parserRealSource4.ts, 68, 19))
+>undefined : Symbol(undefined)
+
+                    fn(k, this.table[k], context);
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 66, 19))
+>k : Symbol(k, Decl(parserRealSource4.ts, 67, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 67, 20))
+>context : Symbol(context, Decl(parserRealSource4.ts, 66, 50))
+                }
+            }
+        }
+
+        public every(fn: (k: string, v, c) => boolean, context) {
+>every : Symbol(StringHashTable.every, Decl(parserRealSource4.ts, 73, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 75, 21))
+>k : Symbol(k, Decl(parserRealSource4.ts, 75, 26))
+>v : Symbol(v, Decl(parserRealSource4.ts, 75, 36))
+>c : Symbol(c, Decl(parserRealSource4.ts, 75, 39))
+>context : Symbol(context, Decl(parserRealSource4.ts, 75, 54))
+
+            for (var k in this.table) {
+>k : Symbol(k, Decl(parserRealSource4.ts, 76, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+
+                var data = this.table[k];
+>data : Symbol(data, Decl(parserRealSource4.ts, 77, 19))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 76, 20))
+
+                if (data != undefined) {
+>data : Symbol(data, Decl(parserRealSource4.ts, 77, 19))
+>undefined : Symbol(undefined)
+
+                    if (!fn(k, this.table[k], context)) {
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 75, 21))
+>k : Symbol(k, Decl(parserRealSource4.ts, 76, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 76, 20))
+>context : Symbol(context, Decl(parserRealSource4.ts, 75, 54))
+
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public some(fn: (k: string, v, c) => boolean, context) {
+>some : Symbol(StringHashTable.some, Decl(parserRealSource4.ts, 85, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 87, 20))
+>k : Symbol(k, Decl(parserRealSource4.ts, 87, 25))
+>v : Symbol(v, Decl(parserRealSource4.ts, 87, 35))
+>c : Symbol(c, Decl(parserRealSource4.ts, 87, 38))
+>context : Symbol(context, Decl(parserRealSource4.ts, 87, 53))
+
+            for (var k in this.table) {
+>k : Symbol(k, Decl(parserRealSource4.ts, 88, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+
+                var data = this.table[k];
+>data : Symbol(data, Decl(parserRealSource4.ts, 89, 19))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 88, 20))
+
+                if (data != undefined) {
+>data : Symbol(data, Decl(parserRealSource4.ts, 89, 19))
+>undefined : Symbol(undefined)
+
+                    if (fn(k, this.table[k], context)) {
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 87, 20))
+>k : Symbol(k, Decl(parserRealSource4.ts, 88, 20))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>k : Symbol(k, Decl(parserRealSource4.ts, 88, 20))
+>context : Symbol(context, Decl(parserRealSource4.ts, 87, 53))
+
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public count(): number { return this.itemCount; }
+>count : Symbol(StringHashTable.count, Decl(parserRealSource4.ts, 97, 9))
+>this.itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>itemCount : Symbol(StringHashTable.itemCount, Decl(parserRealSource4.ts, 33, 56))
+
+        public lookup(key: string) {
+>lookup : Symbol(StringHashTable.lookup, Decl(parserRealSource4.ts, 99, 57))
+>key : Symbol(key, Decl(parserRealSource4.ts, 101, 22))
+
+            var data = this.table[key];
+>data : Symbol(data, Decl(parserRealSource4.ts, 102, 15))
+>this.table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>this : Symbol(StringHashTable, Decl(parserRealSource4.ts, 31, 5))
+>table : Symbol(StringHashTable.table, Decl(parserRealSource4.ts, 34, 29))
+>key : Symbol(key, Decl(parserRealSource4.ts, 101, 22))
+
+            if (data != undefined) {
+>data : Symbol(data, Decl(parserRealSource4.ts, 102, 15))
+>undefined : Symbol(undefined)
+
+                return data;
+>data : Symbol(data, Decl(parserRealSource4.ts, 102, 15))
+            }
+            else {
+                return (null);
+            }
+        }
+    }
+
+    // The resident table is expected to reference the same table object, whereas the 
+    // transientTable may reference different objects over time
+    // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
+    export class DualStringHashTable implements IHashTable {
+>DualStringHashTable : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>IHashTable : Symbol(IHashTable, Decl(parserRealSource4.ts, 20, 5))
+
+        public insertPrimary = true;
+>insertPrimary : Symbol(DualStringHashTable.insertPrimary, Decl(parserRealSource4.ts, 115, 60))
+
+        constructor (public primaryTable: IHashTable,
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>IHashTable : Symbol(IHashTable, Decl(parserRealSource4.ts, 20, 5))
+
+                                        public secondaryTable: IHashTable) { }
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>IHashTable : Symbol(IHashTable, Decl(parserRealSource4.ts, 20, 5))
+
+        public getAllKeys(): string[]{
+>getAllKeys : Symbol(DualStringHashTable.getAllKeys, Decl(parserRealSource4.ts, 120, 78))
+
+            return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
+>this.primaryTable.getAllKeys().concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.primaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.secondaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
+        }
+
+        public add(key: string, data): boolean {
+>add : Symbol(DualStringHashTable.add, Decl(parserRealSource4.ts, 124, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 126, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 126, 31))
+
+            if (this.insertPrimary) {
+>this.insertPrimary : Symbol(DualStringHashTable.insertPrimary, Decl(parserRealSource4.ts, 115, 60))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>insertPrimary : Symbol(DualStringHashTable.insertPrimary, Decl(parserRealSource4.ts, 115, 60))
+
+                return this.primaryTable.add(key, data);
+>this.primaryTable.add : Symbol(IHashTable.add, Decl(parserRealSource4.ts, 23, 31))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>add : Symbol(IHashTable.add, Decl(parserRealSource4.ts, 23, 31))
+>key : Symbol(key, Decl(parserRealSource4.ts, 126, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 126, 31))
+            }
+            else {
+                return this.secondaryTable.add(key, data);
+>this.secondaryTable.add : Symbol(IHashTable.add, Decl(parserRealSource4.ts, 23, 31))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>add : Symbol(IHashTable.add, Decl(parserRealSource4.ts, 23, 31))
+>key : Symbol(key, Decl(parserRealSource4.ts, 126, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 126, 31))
+            }
+        }
+
+        public addOrUpdate(key: string, data): boolean {
+>addOrUpdate : Symbol(DualStringHashTable.addOrUpdate, Decl(parserRealSource4.ts, 133, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 135, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 135, 39))
+
+            if (this.insertPrimary) {
+>this.insertPrimary : Symbol(DualStringHashTable.insertPrimary, Decl(parserRealSource4.ts, 115, 60))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>insertPrimary : Symbol(DualStringHashTable.insertPrimary, Decl(parserRealSource4.ts, 115, 60))
+
+                return this.primaryTable.addOrUpdate(key, data);
+>this.primaryTable.addOrUpdate : Symbol(IHashTable.addOrUpdate, Decl(parserRealSource4.ts, 24, 40))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>addOrUpdate : Symbol(IHashTable.addOrUpdate, Decl(parserRealSource4.ts, 24, 40))
+>key : Symbol(key, Decl(parserRealSource4.ts, 135, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 135, 39))
+            }
+            else {
+                return this.secondaryTable.addOrUpdate(key, data);
+>this.secondaryTable.addOrUpdate : Symbol(IHashTable.addOrUpdate, Decl(parserRealSource4.ts, 24, 40))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>addOrUpdate : Symbol(IHashTable.addOrUpdate, Decl(parserRealSource4.ts, 24, 40))
+>key : Symbol(key, Decl(parserRealSource4.ts, 135, 27))
+>data : Symbol(data, Decl(parserRealSource4.ts, 135, 39))
+            }
+        }
+
+        public map(fn: (k: string, v, c) => void , context) {
+>map : Symbol(DualStringHashTable.map, Decl(parserRealSource4.ts, 142, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 144, 19))
+>k : Symbol(k, Decl(parserRealSource4.ts, 144, 24))
+>v : Symbol(v, Decl(parserRealSource4.ts, 144, 34))
+>c : Symbol(c, Decl(parserRealSource4.ts, 144, 37))
+>context : Symbol(context, Decl(parserRealSource4.ts, 144, 50))
+
+            this.primaryTable.map(fn, context);
+>this.primaryTable.map : Symbol(IHashTable.map, Decl(parserRealSource4.ts, 25, 48))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>map : Symbol(IHashTable.map, Decl(parserRealSource4.ts, 25, 48))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 144, 19))
+>context : Symbol(context, Decl(parserRealSource4.ts, 144, 50))
+
+            this.secondaryTable.map(fn, context);
+>this.secondaryTable.map : Symbol(IHashTable.map, Decl(parserRealSource4.ts, 25, 48))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>map : Symbol(IHashTable.map, Decl(parserRealSource4.ts, 25, 48))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 144, 19))
+>context : Symbol(context, Decl(parserRealSource4.ts, 144, 50))
+        }
+
+        public every(fn: (k: string, v, c) => boolean, context) {
+>every : Symbol(DualStringHashTable.every, Decl(parserRealSource4.ts, 147, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 149, 21))
+>k : Symbol(k, Decl(parserRealSource4.ts, 149, 26))
+>v : Symbol(v, Decl(parserRealSource4.ts, 149, 36))
+>c : Symbol(c, Decl(parserRealSource4.ts, 149, 39))
+>context : Symbol(context, Decl(parserRealSource4.ts, 149, 54))
+
+            return this.primaryTable.every(fn, context) && this.secondaryTable.every(fn, context);
+>this.primaryTable.every : Symbol(IHashTable.every, Decl(parserRealSource4.ts, 26, 59))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>every : Symbol(IHashTable.every, Decl(parserRealSource4.ts, 26, 59))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 149, 21))
+>context : Symbol(context, Decl(parserRealSource4.ts, 149, 54))
+>this.secondaryTable.every : Symbol(IHashTable.every, Decl(parserRealSource4.ts, 26, 59))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>every : Symbol(IHashTable.every, Decl(parserRealSource4.ts, 26, 59))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 149, 21))
+>context : Symbol(context, Decl(parserRealSource4.ts, 149, 54))
+        }
+
+        public some(fn: (k: string, v, c) => boolean, context) {
+>some : Symbol(DualStringHashTable.some, Decl(parserRealSource4.ts, 151, 9))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 153, 20))
+>k : Symbol(k, Decl(parserRealSource4.ts, 153, 25))
+>v : Symbol(v, Decl(parserRealSource4.ts, 153, 35))
+>c : Symbol(c, Decl(parserRealSource4.ts, 153, 38))
+>context : Symbol(context, Decl(parserRealSource4.ts, 153, 53))
+
+            return this.primaryTable.some(fn, context) || this.secondaryTable.some(fn, context);
+>this.primaryTable.some : Symbol(IHashTable.some, Decl(parserRealSource4.ts, 27, 66))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>some : Symbol(IHashTable.some, Decl(parserRealSource4.ts, 27, 66))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 153, 20))
+>context : Symbol(context, Decl(parserRealSource4.ts, 153, 53))
+>this.secondaryTable.some : Symbol(IHashTable.some, Decl(parserRealSource4.ts, 27, 66))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>some : Symbol(IHashTable.some, Decl(parserRealSource4.ts, 27, 66))
+>fn : Symbol(fn, Decl(parserRealSource4.ts, 153, 20))
+>context : Symbol(context, Decl(parserRealSource4.ts, 153, 53))
+        }
+
+        public count() {
+>count : Symbol(DualStringHashTable.count, Decl(parserRealSource4.ts, 155, 9))
+
+            return this.primaryTable.count() + this.secondaryTable.count();
+>this.primaryTable.count : Symbol(IHashTable.count, Decl(parserRealSource4.ts, 28, 65))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>count : Symbol(IHashTable.count, Decl(parserRealSource4.ts, 28, 65))
+>this.secondaryTable.count : Symbol(IHashTable.count, Decl(parserRealSource4.ts, 28, 65))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>count : Symbol(IHashTable.count, Decl(parserRealSource4.ts, 28, 65))
+        }
+
+        public lookup(key: string) {
+>lookup : Symbol(DualStringHashTable.lookup, Decl(parserRealSource4.ts, 159, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 161, 22))
+
+            var data = this.primaryTable.lookup(key);
+>data : Symbol(data, Decl(parserRealSource4.ts, 162, 15))
+>this.primaryTable.lookup : Symbol(IHashTable.lookup, Decl(parserRealSource4.ts, 29, 24))
+>this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
+>lookup : Symbol(IHashTable.lookup, Decl(parserRealSource4.ts, 29, 24))
+>key : Symbol(key, Decl(parserRealSource4.ts, 161, 22))
+
+            if (data != undefined) {
+>data : Symbol(data, Decl(parserRealSource4.ts, 162, 15))
+>undefined : Symbol(undefined)
+
+                return data;
+>data : Symbol(data, Decl(parserRealSource4.ts, 162, 15))
+            }
+            else {
+                return this.secondaryTable.lookup(key);
+>this.secondaryTable.lookup : Symbol(IHashTable.lookup, Decl(parserRealSource4.ts, 29, 24))
+>this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
+>secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
+>lookup : Symbol(IHashTable.lookup, Decl(parserRealSource4.ts, 29, 24))
+>key : Symbol(key, Decl(parserRealSource4.ts, 161, 22))
+            }
+        }
+    }
+
+    export function numberHashFn(key: number): number {
+>numberHashFn : Symbol(numberHashFn, Decl(parserRealSource4.ts, 170, 5))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+
+        var c2 = 0x27d4eb2d; // a prime or an odd constant
+>c2 : Symbol(c2, Decl(parserRealSource4.ts, 173, 11))
+
+        key = (key ^ 61) ^ (key >>> 16);
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+
+        key = key + (key << 3);
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+
+        key = key ^ (key >>> 4);
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+
+        key = key * c2;
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>c2 : Symbol(c2, Decl(parserRealSource4.ts, 173, 11))
+
+        key = key ^ (key >>> 15);
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+
+        return key;
+>key : Symbol(key, Decl(parserRealSource4.ts, 172, 33))
+    }
+
+    export function combineHashes(key1: number, key2: number) {
+>combineHashes : Symbol(combineHashes, Decl(parserRealSource4.ts, 180, 5))
+>key1 : Symbol(key1, Decl(parserRealSource4.ts, 182, 34))
+>key2 : Symbol(key2, Decl(parserRealSource4.ts, 182, 47))
+
+        return key2 ^ ((key1 >> 5) + key1);
+>key2 : Symbol(key2, Decl(parserRealSource4.ts, 182, 47))
+>key1 : Symbol(key1, Decl(parserRealSource4.ts, 182, 34))
+>key1 : Symbol(key1, Decl(parserRealSource4.ts, 182, 34))
+    }
+
+    export class HashEntry {
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+        public next: HashEntry;
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+        constructor (public key, public data) { }
+>key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+>data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
+    }
+
+    export class HashTable {
+>HashTable : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+
+        public itemCount: number = 0;
+>itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+
+        public table = new HashEntry[];
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+        constructor (public size: number, public hashFn: (key) =>number,
+>size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>key : Symbol(key, Decl(parserRealSource4.ts, 196, 58))
+
+                    public equalsFn: (key1, key2) =>boolean) {
+>equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>key1 : Symbol(key1, Decl(parserRealSource4.ts, 197, 38))
+>key2 : Symbol(key2, Decl(parserRealSource4.ts, 197, 43))
+
+            for (var i: number = 0; i < this.size; i++) {
+>i : Symbol(i, Decl(parserRealSource4.ts, 198, 20))
+>i : Symbol(i, Decl(parserRealSource4.ts, 198, 20))
+>this.size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>i : Symbol(i, Decl(parserRealSource4.ts, 198, 20))
+
+                this.table[i] = null;
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>i : Symbol(i, Decl(parserRealSource4.ts, 198, 20))
+            }
+        }
+
+        public add(key, data): boolean {
+>add : Symbol(HashTable.add, Decl(parserRealSource4.ts, 201, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 203, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 203, 23))
+
+            var current: HashEntry;
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+            var entry: HashEntry = new HashEntry(key, data);
+>entry : Symbol(entry, Decl(parserRealSource4.ts, 205, 15))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+>key : Symbol(key, Decl(parserRealSource4.ts, 203, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 203, 23))
+
+            var val: number = this.hashFn(key);
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+>this.hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>key : Symbol(key, Decl(parserRealSource4.ts, 203, 19))
+
+            val = val % this.size;
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+>this.size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+
+            for (current = this.table[val]; current != null ; current = current.next) {
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>current.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+
+                if (this.equalsFn(key, current.key)) {
+>this.equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>key : Symbol(key, Decl(parserRealSource4.ts, 203, 19))
+>current.key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+>current : Symbol(current, Decl(parserRealSource4.ts, 204, 15))
+>key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+
+                    return false;
+                }
+            }
+            entry.next = this.table[val];
+>entry.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>entry : Symbol(entry, Decl(parserRealSource4.ts, 205, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+
+            this.table[val] = entry;
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 206, 15))
+>entry : Symbol(entry, Decl(parserRealSource4.ts, 205, 15))
+
+            this.itemCount++;
+>this.itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+
+            return true;
+        }
+
+        public remove(key) {
+>remove : Symbol(HashTable.remove, Decl(parserRealSource4.ts, 218, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 220, 22))
+
+            var current: HashEntry;
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+            var val: number = this.hashFn(key);
+>val : Symbol(val, Decl(parserRealSource4.ts, 222, 15))
+>this.hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>key : Symbol(key, Decl(parserRealSource4.ts, 220, 22))
+
+            val = val % this.size;
+>val : Symbol(val, Decl(parserRealSource4.ts, 222, 15))
+>val : Symbol(val, Decl(parserRealSource4.ts, 222, 15))
+>this.size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+
+            var result = null;
+>result : Symbol(result, Decl(parserRealSource4.ts, 224, 15))
+
+            var prevEntry: HashEntry = null;
+>prevEntry : Symbol(prevEntry, Decl(parserRealSource4.ts, 225, 15))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+            for (current = this.table[val]; current != null ; current = current.next) {
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 222, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>current.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+
+                if (this.equalsFn(key, current.key)) {
+>this.equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>key : Symbol(key, Decl(parserRealSource4.ts, 220, 22))
+>current.key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+
+                    result = current.data;
+>result : Symbol(result, Decl(parserRealSource4.ts, 224, 15))
+>current.data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
+
+                    this.itemCount--;
+>this.itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+
+                    if (prevEntry) {
+>prevEntry : Symbol(prevEntry, Decl(parserRealSource4.ts, 225, 15))
+
+                        prevEntry.next = current.next;
+>prevEntry.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>prevEntry : Symbol(prevEntry, Decl(parserRealSource4.ts, 225, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+                    }
+                    else {
+                        this.table[val] = current.next;
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 222, 15))
+>current.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+                    }
+                    break;
+                }
+                prevEntry = current;
+>prevEntry : Symbol(prevEntry, Decl(parserRealSource4.ts, 225, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 221, 15))
+            }
+            return result;
+>result : Symbol(result, Decl(parserRealSource4.ts, 224, 15))
+        }
+
+        public count(): number { return this.itemCount; }
+>count : Symbol(HashTable.count, Decl(parserRealSource4.ts, 242, 9))
+>this.itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>itemCount : Symbol(HashTable.itemCount, Decl(parserRealSource4.ts, 192, 28))
+
+        public lookup(key) {
+>lookup : Symbol(HashTable.lookup, Decl(parserRealSource4.ts, 244, 57))
+>key : Symbol(key, Decl(parserRealSource4.ts, 246, 22))
+
+            var current: HashEntry;
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>HashEntry : Symbol(HashEntry, Decl(parserRealSource4.ts, 184, 5))
+
+            var val: number = this.hashFn(key);
+>val : Symbol(val, Decl(parserRealSource4.ts, 248, 15))
+>this.hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>hashFn : Symbol(HashTable.hashFn, Decl(parserRealSource4.ts, 196, 41))
+>key : Symbol(key, Decl(parserRealSource4.ts, 246, 22))
+
+            val = val % this.size;
+>val : Symbol(val, Decl(parserRealSource4.ts, 248, 15))
+>val : Symbol(val, Decl(parserRealSource4.ts, 248, 15))
+>this.size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>size : Symbol(HashTable.size, Decl(parserRealSource4.ts, 196, 21))
+
+            for (current = this.table[val]; current != null ; current = current.next) {
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>this.table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>table : Symbol(HashTable.table, Decl(parserRealSource4.ts, 193, 37))
+>val : Symbol(val, Decl(parserRealSource4.ts, 248, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>current.next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>next : Symbol(HashEntry.next, Decl(parserRealSource4.ts, 186, 28))
+
+                if (this.equalsFn(key, current.key)) {
+>this.equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>this : Symbol(HashTable, Decl(parserRealSource4.ts, 190, 5))
+>equalsFn : Symbol(HashTable.equalsFn, Decl(parserRealSource4.ts, 196, 72))
+>key : Symbol(key, Decl(parserRealSource4.ts, 246, 22))
+>current.key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>key : Symbol(HashEntry.key, Decl(parserRealSource4.ts, 189, 21))
+
+                    return (current.data);
+>current.data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
+>current : Symbol(current, Decl(parserRealSource4.ts, 247, 15))
+>data : Symbol(HashEntry.data, Decl(parserRealSource4.ts, 189, 32))
+                }
+            }
+            return (null);
+        }
+    }
+
+    // Simple Hash table with list of keys and values matching each other at the given index
+    export class SimpleHashTable {
+>SimpleHashTable : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+
+        private keys = [];
+>keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+
+        private values = [];
+>values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+
+        public lookup(key, findValue?: boolean) {
+>lookup : Symbol(SimpleHashTable.lookup, Decl(parserRealSource4.ts, 262, 28))
+>key : Symbol(key, Decl(parserRealSource4.ts, 264, 22))
+>findValue : Symbol(findValue, Decl(parserRealSource4.ts, 264, 26))
+
+            var searchArray = this.keys;
+>searchArray : Symbol(searchArray, Decl(parserRealSource4.ts, 265, 15))
+>this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+
+            if (findValue) {
+>findValue : Symbol(findValue, Decl(parserRealSource4.ts, 264, 26))
+
+                searchArray = this.values;
+>searchArray : Symbol(searchArray, Decl(parserRealSource4.ts, 265, 15))
+>this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+            }
+
+            for (var i = 0; i < searchArray.length; i++) {
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+>searchArray.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>searchArray : Symbol(searchArray, Decl(parserRealSource4.ts, 265, 15))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+
+                if (searchArray[i] == key) {
+>searchArray : Symbol(searchArray, Decl(parserRealSource4.ts, 265, 15))
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+>key : Symbol(key, Decl(parserRealSource4.ts, 264, 22))
+
+                    return {
+                        key: this.keys[i],
+>key : Symbol(key, Decl(parserRealSource4.ts, 272, 28))
+>this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+
+                        data: this.values[i],
+>data : Symbol(data, Decl(parserRealSource4.ts, 273, 42))
+>this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
+
+                    };
+                }
+            }
+            return null;
+        }
+
+        public add(key, data): boolean {
+>add : Symbol(SimpleHashTable.add, Decl(parserRealSource4.ts, 279, 9))
+>key : Symbol(key, Decl(parserRealSource4.ts, 281, 19))
+>data : Symbol(data, Decl(parserRealSource4.ts, 281, 23))
+
+            var lookupData = this.lookup(key);
+>lookupData : Symbol(lookupData, Decl(parserRealSource4.ts, 282, 15))
+>this.lookup : Symbol(SimpleHashTable.lookup, Decl(parserRealSource4.ts, 262, 28))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>lookup : Symbol(SimpleHashTable.lookup, Decl(parserRealSource4.ts, 262, 28))
+>key : Symbol(key, Decl(parserRealSource4.ts, 281, 19))
+
+            if (lookupData) {
+>lookupData : Symbol(lookupData, Decl(parserRealSource4.ts, 282, 15))
+
+                return false;
+            }
+
+            this.keys[this.keys.length] = key;
+>this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>this.keys.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(parserRealSource4.ts, 281, 19))
+
+            this.values[this.values.length] = data;
+>this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>this.values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
+>values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>data : Symbol(data, Decl(parserRealSource4.ts, 281, 23))
+
+            return true;
+        }
+    }
+
+}

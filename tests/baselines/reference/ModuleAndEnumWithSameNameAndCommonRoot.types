@@ -15,19 +15,18 @@ enum enumdule {
 >enumdule : enumdule
 
     Red, Blue
->Red : enumdule
->Blue : enumdule
+>Red : enumdule.Red
+>Blue : enumdule.Blue
 }
 
 var x: enumdule;
 >x : enumdule
->enumdule : enumdule
 
 var x = enumdule.Red;
 >x : enumdule
->enumdule.Red : enumdule
+>enumdule.Red : enumdule.Red
 >enumdule : typeof enumdule
->Red : enumdule
+>Red : enumdule.Red
 
 var y: { x: number; y: number };
 >y : { x: number; y: number; }
@@ -40,6 +39,6 @@ var y = new enumdule.Point(0, 0);
 >enumdule.Point : typeof enumdule.Point
 >enumdule : typeof enumdule
 >Point : typeof enumdule.Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 

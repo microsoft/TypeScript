@@ -1,0 +1,40 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames49_ES6.ts ===
+var x = {
+>x : Symbol(x, Decl(computedPropertyNames49_ES6.ts, 0, 3))
+
+    p1: 10,
+>p1 : Symbol(p1, Decl(computedPropertyNames49_ES6.ts, 0, 9))
+
+    get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 1, 11))
+
+        throw 10;
+    },
+    get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 4, 6))
+
+        return 10;
+    },
+    set [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 7, 6))
+
+        // just throw
+        throw 10;
+    },
+    get foo() {
+>foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 11, 6))
+
+        if (1 == 1) {
+            return 10;
+        }
+    },
+    get foo() {
+>foo : Symbol(foo, Decl(computedPropertyNames49_ES6.ts, 16, 6))
+
+        if (2 == 2) {
+            return 20;
+        }
+    },
+    p2: 20
+>p2 : Symbol(p2, Decl(computedPropertyNames49_ES6.ts, 21, 6))
+}

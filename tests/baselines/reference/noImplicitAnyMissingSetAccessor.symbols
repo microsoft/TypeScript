@@ -1,0 +1,18 @@
+=== tests/cases/compiler/noImplicitAnyMissingSetAccessor.ts ===
+abstract class Parent
+>Parent : Symbol(Parent, Decl(noImplicitAnyMissingSetAccessor.ts, 0, 0))
+{
+    public abstract get message();
+>message : Symbol(Parent.message, Decl(noImplicitAnyMissingSetAccessor.ts, 1, 1))
+}
+
+class Child extends Parent {
+>Child : Symbol(Child, Decl(noImplicitAnyMissingSetAccessor.ts, 3, 1))
+>Parent : Symbol(Parent, Decl(noImplicitAnyMissingSetAccessor.ts, 0, 0))
+
+    public get message() {
+>message : Symbol(Child.message, Decl(noImplicitAnyMissingSetAccessor.ts, 5, 28))
+
+        return "";
+    }
+}

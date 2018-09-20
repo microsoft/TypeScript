@@ -1,0 +1,12 @@
+=== tests/cases/compiler/alwaysStrictNoImplicitUseStrict.ts ===
+module M {
+>M : typeof M
+
+    export function f() {
+>f : () => void
+
+        var arguments = [];
+>arguments : any[]
+>[] : undefined[]
+    }
+}

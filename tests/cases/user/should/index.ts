@@ -1,0 +1,1 @@
+import should = require("should");

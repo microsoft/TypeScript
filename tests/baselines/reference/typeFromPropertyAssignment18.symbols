@@ -1,0 +1,46 @@
+=== tests/cases/conformance/salsa/a.js ===
+var GLOBSTAR = m.GLOBSTAR = {}
+>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>m.GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
+>GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+
+function m() {
+>m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
+}
+GLOBSTAR.p = 1
+>GLOBSTAR.p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+
+m.GLOBSTAR.q = 2
+>m.GLOBSTAR.q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+>m.GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
+>GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+
+GLOBSTAR.p
+>GLOBSTAR.p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+
+GLOBSTAR.q
+>GLOBSTAR.q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+
+m.GLOBSTAR.p
+>m.GLOBSTAR.p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+>m.GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
+>GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
+
+m.GLOBSTAR.q
+>m.GLOBSTAR.q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+>m.GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
+>GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
+>q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
+

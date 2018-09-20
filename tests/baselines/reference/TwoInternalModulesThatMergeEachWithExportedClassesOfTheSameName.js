@@ -35,17 +35,16 @@ module X {
 //// [TwoInternalModulesThatMergeEachWithExportedClassesOfTheSameName.js]
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         return Point;
     }());
     A.Point = Point;
 })(A || (A = {}));
-var A;
 (function (A) {
     // expected error
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         return Point;
@@ -58,7 +57,7 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;
@@ -67,14 +66,13 @@ var X;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
-var X;
 (function (X) {
     var Y;
     (function (Y) {
         var Z;
         (function (Z) {
             // expected error
-            var Line = (function () {
+            var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;

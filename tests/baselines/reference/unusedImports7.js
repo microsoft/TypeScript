@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports7.ts] ////
 
 //// [file1.ts]
-
 export class Calculator {
     handleChar() {}
 }
@@ -21,7 +20,8 @@ import * as n from "./file1"
 
 //// [file1.js]
 "use strict";
-var Calculator = (function () {
+exports.__esModule = true;
+var Calculator = /** @class */ (function () {
     function Calculator() {
     }
     Calculator.prototype.handleChar = function () { };
@@ -33,7 +33,7 @@ function test() {
 exports.test = test;
 function test2() {
 }
-exports.__esModule = true;
 exports["default"] = test2;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

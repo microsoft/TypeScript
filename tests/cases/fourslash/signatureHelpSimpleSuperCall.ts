@@ -10,11 +10,9 @@
 ////    }
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('superCall');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("SuperCallBase(b: boolean): SuperCallBase");
-verify.currentParameterHelpArgumentNameIs("b");
-verify.currentParameterSpanIs("b: boolean");
+verify.signatureHelp({
+    marker: "superCall",
+    text: "SuperCallBase(b: boolean): SuperCallBase",
+    parameterName: "b",
+    parameterSpan: "b: boolean",
+});

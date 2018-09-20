@@ -11,26 +11,24 @@ type Robot = [string, string[]];
 
 var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >robotA : [string, string[]]
->Robot : [string, string[]]
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
->"trimmer" : string
+>"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
->"trimming" : string
->"edging" : string
+>"trimming" : "trimming"
+>"edging" : "edging"
 
 function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]) {
 >foo1 : ([, skillA]?: [string, string[]]) => void
 > : undefined
 >skillA : string[]
 >["noSkill", "noSkill"] : string[]
->"noSkill" : string
->"noSkill" : string
->Robot : [string, string[]]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
 >["name", ["skill1", "skill2"]] : [string, string[]]
->"name" : string
+>"name" : "name"
 >["skill1", "skill2"] : string[]
->"skill1" : string
->"skill2" : string
+>"skill1" : "skill1"
+>"skill2" : "skill2"
 
     console.log(skillA);
 >console.log(skillA) : void
@@ -43,13 +41,12 @@ function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "s
 function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
 >foo2 : ([nameMB]?: [string, string[]]) => void
 >nameMB : string
->"noName" : string
->Robot : [string, string[]]
+>"noName" : "noName"
 >["name", ["skill1", "skill2"]] : [string, string[]]
->"name" : string
+>"name" : "name"
 >["skill1", "skill2"] : string[]
->"skill1" : string
->"skill2" : string
+>"skill1" : "skill1"
+>"skill2" : "skill2"
 
     console.log(nameMB);
 >console.log(nameMB) : void
@@ -62,21 +59,20 @@ function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
 function foo3([nameMA = "noName", [
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, string[]]) => void
 >nameMA : string
->"noName" : string
+>"noName" : "noName"
 
     primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
 ] = ["noSkill", "noSkill"]]: Robot) {
 >["noSkill", "noSkill"] : [string, string]
->"noSkill" : string
->"noSkill" : string
->Robot : [string, string[]]
+>"noSkill" : "noSkill"
+>"noSkill" : "noSkill"
 
     console.log(nameMA);
 >console.log(nameMA) : void
@@ -95,10 +91,10 @@ foo1(["roomba", ["vaccum", "mopping"]]);
 >foo1(["roomba", ["vaccum", "mopping"]]) : void
 >foo1 : ([, skillA]?: [string, string[]]) => void
 >["roomba", ["vaccum", "mopping"]] : [string, string[]]
->"roomba" : string
+>"roomba" : "roomba"
 >["vaccum", "mopping"] : string[]
->"vaccum" : string
->"mopping" : string
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
 
 foo2(robotA);
 >foo2(robotA) : void
@@ -109,10 +105,10 @@ foo2(["roomba", ["vaccum", "mopping"]]);
 >foo2(["roomba", ["vaccum", "mopping"]]) : void
 >foo2 : ([nameMB]?: [string, string[]]) => void
 >["roomba", ["vaccum", "mopping"]] : [string, string[]]
->"roomba" : string
+>"roomba" : "roomba"
 >["vaccum", "mopping"] : string[]
->"vaccum" : string
->"mopping" : string
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
 
 foo3(robotA);
 >foo3(robotA) : void
@@ -123,8 +119,8 @@ foo3(["roomba", ["vaccum", "mopping"]]);
 >foo3(["roomba", ["vaccum", "mopping"]]) : void
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, string[]]) => void
 >["roomba", ["vaccum", "mopping"]] : [string, string[]]
->"roomba" : string
+>"roomba" : "roomba"
 >["vaccum", "mopping"] : string[]
->"vaccum" : string
->"mopping" : string
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
 

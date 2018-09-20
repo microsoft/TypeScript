@@ -1,0 +1,160 @@
+=== tests/cases/compiler/restInvalidArgumentType.ts ===
+enum E { v1, v2 };
+>E : Symbol(E, Decl(restInvalidArgumentType.ts, 0, 0))
+>v1 : Symbol(E.v1, Decl(restInvalidArgumentType.ts, 0, 8))
+>v2 : Symbol(E.v2, Decl(restInvalidArgumentType.ts, 0, 12))
+
+function f<T extends { b: string }>(p1: T, p2: T[]) {
+>f : Symbol(f, Decl(restInvalidArgumentType.ts, 0, 18))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>b : Symbol(b, Decl(restInvalidArgumentType.ts, 2, 22))
+>p1 : Symbol(p1, Decl(restInvalidArgumentType.ts, 2, 36))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>p2 : Symbol(p2, Decl(restInvalidArgumentType.ts, 2, 42))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+
+    var t: T;
+>t : Symbol(t, Decl(restInvalidArgumentType.ts, 3, 7))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+
+    var i: T["b"];
+>i : Symbol(i, Decl(restInvalidArgumentType.ts, 5, 7))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+
+    var k: keyof T;
+>k : Symbol(k, Decl(restInvalidArgumentType.ts, 6, 7))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+
+    var mapped_generic: {[P in keyof T]: T[P]};
+>mapped_generic : Symbol(mapped_generic, Decl(restInvalidArgumentType.ts, 8, 7))
+>P : Symbol(P, Decl(restInvalidArgumentType.ts, 8, 26))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>P : Symbol(P, Decl(restInvalidArgumentType.ts, 8, 26))
+
+    var mapped: {[P in "b"]: T[P]};
+>mapped : Symbol(mapped, Decl(restInvalidArgumentType.ts, 9, 7))
+>P : Symbol(P, Decl(restInvalidArgumentType.ts, 9, 18))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>P : Symbol(P, Decl(restInvalidArgumentType.ts, 9, 18))
+
+    var union_generic: T | { a: number };
+>union_generic : Symbol(union_generic, Decl(restInvalidArgumentType.ts, 11, 7))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 11, 28))
+
+    var union_primitive: { a: number } | number;
+>union_primitive : Symbol(union_primitive, Decl(restInvalidArgumentType.ts, 12, 7))
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 12, 26))
+
+    var intersection_generic: T & { a: number };
+>intersection_generic : Symbol(intersection_generic, Decl(restInvalidArgumentType.ts, 13, 7))
+>T : Symbol(T, Decl(restInvalidArgumentType.ts, 2, 11))
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 13, 35))
+
+    var intersection_primitive: { a: number } & string;
+>intersection_primitive : Symbol(intersection_primitive, Decl(restInvalidArgumentType.ts, 14, 7))
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 14, 33))
+
+    var num: number;
+>num : Symbol(num, Decl(restInvalidArgumentType.ts, 15, 7))
+
+    var str: string;
+>str : Symbol(str, Decl(restInvalidArgumentType.ts, 16, 7))
+
+    var literal_string: "string";
+>literal_string : Symbol(literal_string, Decl(restInvalidArgumentType.ts, 17, 7))
+
+    var literal_number: 42;
+>literal_number : Symbol(literal_number, Decl(restInvalidArgumentType.ts, 18, 7))
+
+    var e: E;
+>e : Symbol(e, Decl(restInvalidArgumentType.ts, 19, 7))
+>E : Symbol(E, Decl(restInvalidArgumentType.ts, 0, 0))
+
+    var u: undefined;
+>u : Symbol(u, Decl(restInvalidArgumentType.ts, 21, 7))
+
+    var n: null;
+>n : Symbol(n, Decl(restInvalidArgumentType.ts, 22, 7))
+
+    var a: any;
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 24, 7))
+
+    var {...r1} = p1;   // Error, generic type paramterre
+>r1 : Symbol(r1, Decl(restInvalidArgumentType.ts, 26, 9))
+>p1 : Symbol(p1, Decl(restInvalidArgumentType.ts, 2, 36))
+
+    var {...r2} = p2;   // OK
+>r2 : Symbol(r2, Decl(restInvalidArgumentType.ts, 27, 9))
+>p2 : Symbol(p2, Decl(restInvalidArgumentType.ts, 2, 42))
+
+    var {...r3} = t;   // Error, generic type paramter
+>r3 : Symbol(r3, Decl(restInvalidArgumentType.ts, 28, 9))
+>t : Symbol(t, Decl(restInvalidArgumentType.ts, 3, 7))
+
+    var {...r4} = i;   // Error, index access
+>r4 : Symbol(r4, Decl(restInvalidArgumentType.ts, 29, 9))
+>i : Symbol(i, Decl(restInvalidArgumentType.ts, 5, 7))
+
+    var {...r5} = k;   // Error, index
+>r5 : Symbol(r5, Decl(restInvalidArgumentType.ts, 30, 9))
+>k : Symbol(k, Decl(restInvalidArgumentType.ts, 6, 7))
+
+    var {...r6} = mapped_generic; // Error, generic mapped object type
+>r6 : Symbol(r6, Decl(restInvalidArgumentType.ts, 32, 9))
+>mapped_generic : Symbol(mapped_generic, Decl(restInvalidArgumentType.ts, 8, 7))
+
+    var {...r7} = mapped;  // OK, non-generic mapped type
+>r7 : Symbol(r7, Decl(restInvalidArgumentType.ts, 33, 9))
+>mapped : Symbol(mapped, Decl(restInvalidArgumentType.ts, 9, 7))
+
+    var {...r8} = union_generic;  // Error, union with generic type parameter
+>r8 : Symbol(r8, Decl(restInvalidArgumentType.ts, 35, 9))
+>union_generic : Symbol(union_generic, Decl(restInvalidArgumentType.ts, 11, 7))
+
+    var {...r9} = union_primitive;  // Error, union with generic type parameter
+>r9 : Symbol(r9, Decl(restInvalidArgumentType.ts, 36, 9))
+>union_primitive : Symbol(union_primitive, Decl(restInvalidArgumentType.ts, 12, 7))
+
+    var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
+>r10 : Symbol(r10, Decl(restInvalidArgumentType.ts, 38, 9))
+>intersection_generic : Symbol(intersection_generic, Decl(restInvalidArgumentType.ts, 13, 7))
+
+    var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter
+>r11 : Symbol(r11, Decl(restInvalidArgumentType.ts, 39, 9))
+>intersection_primitive : Symbol(intersection_primitive, Decl(restInvalidArgumentType.ts, 14, 7))
+
+    var {...r12} = num;  // Error
+>r12 : Symbol(r12, Decl(restInvalidArgumentType.ts, 41, 9))
+>num : Symbol(num, Decl(restInvalidArgumentType.ts, 15, 7))
+
+    var {...r13} = str;  // Error
+>r13 : Symbol(r13, Decl(restInvalidArgumentType.ts, 42, 9))
+>str : Symbol(str, Decl(restInvalidArgumentType.ts, 16, 7))
+
+    var {...r14} = u;  // error, undefined-only not allowed
+>r14 : Symbol(r14, Decl(restInvalidArgumentType.ts, 44, 9))
+>u : Symbol(u, Decl(restInvalidArgumentType.ts, 21, 7))
+
+    var {...r15} = n;  // error, null-only not allowed
+>r15 : Symbol(r15, Decl(restInvalidArgumentType.ts, 45, 9))
+>n : Symbol(n, Decl(restInvalidArgumentType.ts, 22, 7))
+
+    var {...r16} = a;  // OK
+>r16 : Symbol(r16, Decl(restInvalidArgumentType.ts, 47, 9))
+>a : Symbol(a, Decl(restInvalidArgumentType.ts, 24, 7))
+
+    var {...r17} = literal_string;  // Error
+>r17 : Symbol(r17, Decl(restInvalidArgumentType.ts, 49, 9))
+>literal_string : Symbol(literal_string, Decl(restInvalidArgumentType.ts, 17, 7))
+
+    var {...r18} = literal_number;  // Error
+>r18 : Symbol(r18, Decl(restInvalidArgumentType.ts, 50, 9))
+>literal_number : Symbol(literal_number, Decl(restInvalidArgumentType.ts, 18, 7))
+
+    var {...r19} = e;  // Error, enum
+>r19 : Symbol(r19, Decl(restInvalidArgumentType.ts, 52, 9))
+>e : Symbol(e, Decl(restInvalidArgumentType.ts, 19, 7))
+}
+

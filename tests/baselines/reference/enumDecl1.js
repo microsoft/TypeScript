@@ -1,5 +1,4 @@
 //// [enumDecl1.ts]
-
 declare module mAmbient {
     enum e {
         x,
@@ -17,6 +16,6 @@ declare module mAmbient {
     enum e {
         x,
         y,
-        z,
+        z
     }
 }

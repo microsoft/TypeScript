@@ -6,4 +6,4 @@
 goTo.marker();
 edit.insert('.');
 edit.insert('.');
-//verify.not.memberListContains('charAt');
+//verify.not.completionListContains('charAt');

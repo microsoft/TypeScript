@@ -7,5 +7,4 @@
 ////function MyFn() { return <MyInt>MyFn; }
 ////var My/**/Var = MyFn();
 
-goTo.marker();
-verify.quickInfoIs('var MyVar: MyInt');
+verify.quickInfoAt("", "var MyVar: MyInt");

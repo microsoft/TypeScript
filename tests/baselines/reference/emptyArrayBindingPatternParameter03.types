@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/destructuring/emptyArrayBindingPatternParameter03.ts ===
-
 function f(a, []) {
 >f : (a: any, []: any[]) => void
 >a : any

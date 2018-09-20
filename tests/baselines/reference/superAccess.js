@@ -14,12 +14,20 @@ class MyDerived extends MyBase {
 }
 
 //// [superAccess.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var MyBase = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var MyBase = /** @class */ (function () {
     function MyBase() {
         this.S2 = "test";
         this.f = function () { return 5; };
@@ -27,10 +35,10 @@ var MyBase = (function () {
     MyBase.S1 = 5;
     return MyBase;
 }());
-var MyDerived = (function (_super) {
+var MyDerived = /** @class */ (function (_super) {
     __extends(MyDerived, _super);
     function MyDerived() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MyDerived.prototype.foo = function () {
         var l3 = _super.prototype.S1; // Expected => Error: Only public instance methods of the base class are accessible via the 'super' keyword

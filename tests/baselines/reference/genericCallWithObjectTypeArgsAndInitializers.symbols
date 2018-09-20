@@ -1,0 +1,75 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts ===
+// Generic typed parameters with initializers
+
+function foo<T>(x: T = null) { return x; } // ok
+>foo : Symbol(foo, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 2, 13))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 2, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 2, 13))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 2, 16))
+
+function foo2<T>(x: T = undefined) { return x; } // ok
+>foo2 : Symbol(foo2, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 2, 42))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 3, 14))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 3, 17))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 3, 14))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 3, 17))
+
+function foo3<T extends Number>(x: T = 1) { } // error
+>foo3 : Symbol(foo3, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 3, 48))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 4, 14))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 4, 32))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 4, 14))
+
+function foo4<T, U extends T>(x: T, y: U = x) { } // error
+>foo4 : Symbol(foo4, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 4, 45))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 14))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 14))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 30))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 14))
+>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 35))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 16))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 30))
+
+function foo5<T, U extends T>(x: U, y: T = x) { } // ok
+>foo5 : Symbol(foo5, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 5, 49))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 14))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 14))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 30))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 16))
+>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 35))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 14))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 30))
+
+function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
+>foo6 : Symbol(foo6, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 6, 49))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 14))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 14))
+>V : Symbol(V, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 29))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 16))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 43))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 14))
+>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 48))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 16))
+>z : Symbol(z, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 54))
+>V : Symbol(V, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 29))
+>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 48))
+
+function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
+>foo7 : Symbol(foo7, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 7, 68))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 14))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 16))
+>T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 14))
+>V : Symbol(V, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 29))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 16))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 43))
+>V : Symbol(V, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 29))
+>y : Symbol(y, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 48))
+>U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 16))
+>x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndInitializers.ts, 8, 43))
+

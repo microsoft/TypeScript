@@ -23,7 +23,8 @@ class Bug {
 
 //// [interfaceContextualType.js]
 "use strict";
-var Bug = (function () {
+exports.__esModule = true;
+var Bug = /** @class */ (function () {
     function Bug() {
     }
     Bug.prototype.ok = function () {

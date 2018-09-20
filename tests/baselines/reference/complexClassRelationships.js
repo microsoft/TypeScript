@@ -48,16 +48,24 @@ class FooBase {
 }
 
 //// [complexClassRelationships.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // There should be no errors in this file
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived.createEmpty = function () {
         var item = new Derived();
@@ -65,18 +73,18 @@ var Derived = (function (_super) {
     };
     return Derived;
 }(Base));
-var BaseCollection = (function () {
+var BaseCollection = /** @class */ (function () {
     function BaseCollection(f) {
         (function (item) { return [item.Components]; });
     }
     return BaseCollection;
 }());
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Thing = (function () {
+var Thing = /** @class */ (function () {
     function Thing() {
     }
     Object.defineProperty(Thing.prototype, "Components", {
@@ -86,7 +94,7 @@ var Thing = (function () {
     });
     return Thing;
 }());
-var ComponentCollection = (function () {
+var ComponentCollection = /** @class */ (function () {
     function ComponentCollection() {
     }
     ComponentCollection.sortComponents = function (p) {
@@ -94,7 +102,7 @@ var ComponentCollection = (function () {
     };
     return ComponentCollection;
 }());
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Object.defineProperty(Foo.prototype, "prop1", {
@@ -116,12 +124,12 @@ var Foo = (function () {
     });
     return Foo;
 }());
-var GenericType = (function () {
+var GenericType = /** @class */ (function () {
     function GenericType(parent) {
     }
     return GenericType;
 }());
-var FooBase = (function () {
+var FooBase = /** @class */ (function () {
     function FooBase() {
     }
     FooBase.prototype.populate = function () {

@@ -4,14 +4,19 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Promise<boolean>
->Promise : Promise<T>
+
+declare function before(): void;
+>before : () => void
+
+declare function after(): void;
+>after : () => void
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
->Promise : Promise<T>
 
-    "before";
->"before" : string
+    before();
+>before() : void
+>before : () => void
 
     var o: { a: boolean; };
 >o : { a: boolean; }
@@ -25,6 +30,7 @@ async function func(): Promise<void> {
 >await p : boolean
 >p : Promise<boolean>
 
-    "after";
->"after" : string
+    after();
+>after() : void
+>after : () => void
 }

@@ -1,5 +1,4 @@
 //// [emptyVariableDeclarationBindingPatterns01_ES5.ts]
-
 (function () {
     var a: any;
 
@@ -67,12 +66,12 @@
     for (var _u = {}, _v = {}; false; void 0) {
     }
     function f(_a, _b, _c) {
-        var _a = a;
-        var _b = a;
+        _a = a;
+        _b = a;
         var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
         return function (_a, _b, _c) {
-            var _a = a;
-            var _b = a;
+            _a = a;
+            _b = a;
             var _d = (_c === void 0 ? a : _c).p, _e = _d === void 0 ? a : _d;
             return a;
         };

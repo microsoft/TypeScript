@@ -5,6 +5,25 @@
 /////** @typedef {(string|number)} */
 ////const x = 0;
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "NumberLike",
+            "kind": "type"
+        },
+        {
+            "text": "x",
+            "kind": "const"
+        },
+        {
+            "text": "x",
+            "kind": "type"
+        }
+    ]
+});
+
 verify.navigationBar([
   {
     "text": "<global>",

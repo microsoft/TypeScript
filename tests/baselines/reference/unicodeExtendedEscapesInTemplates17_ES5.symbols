@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInTemplates17_ES5.ts ===
+var x = `\u{r}\u{n}\u{t}`;
+>x : Symbol(x, Decl(unicodeExtendedEscapesInTemplates17_ES5.ts, 0, 3))
+

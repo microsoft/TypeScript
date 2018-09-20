@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithOutDir.ts] ////
 
 //// [a.ts]
-
 class c {
 }
 
@@ -14,7 +13,7 @@ function bar() {
 }
 
 //// [a.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

@@ -1,0 +1,68 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+type TextProps = { editable: false }
+>TextProps : TextProps
+>editable : false
+>false : false
+
+               | { editable: true, onEdit: (newText: string) => void };
+>editable : true
+>true : true
+>onEdit : (newText: string) => void
+>newText : string
+
+class TextComponent extends React.Component<TextProps, {}> {
+>TextComponent : TextComponent
+>React.Component : React.Component<TextProps, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return <span>Some Text..</span>;
+><span>Some Text..</span> : JSX.Element
+>span : any
+>span : any
+    }
+}
+
+// OK
+const textPropsFalse: TextProps = {
+>textPropsFalse : TextProps
+>{    editable: false} : { editable: false; }
+
+    editable: false
+>editable : false
+>false : false
+
+};
+
+let y1 = <TextComponent {...textPropsFalse} />
+>y1 : JSX.Element
+><TextComponent {...textPropsFalse} /> : JSX.Element
+>TextComponent : typeof TextComponent
+>textPropsFalse : { editable: false; }
+
+const textPropsTrue: TextProps = {
+>textPropsTrue : TextProps
+>{    editable: true,    onEdit: () => {}} : { editable: true; onEdit: () => void; }
+
+    editable: true,
+>editable : true
+>true : true
+
+    onEdit: () => {}
+>onEdit : () => void
+>() => {} : () => void
+
+};
+
+let y2 = <TextComponent {...textPropsTrue} />
+>y2 : JSX.Element
+><TextComponent {...textPropsTrue} /> : JSX.Element
+>TextComponent : typeof TextComponent
+>textPropsTrue : { editable: true; onEdit: (newText: string) => void; }
+

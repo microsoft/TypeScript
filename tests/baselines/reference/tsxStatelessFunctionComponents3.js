@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 const Foo = (props: any) => <div/>;
@@ -19,15 +18,16 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 );
 
 //// [file.jsx]
-define(["require", "exports", 'react'], function (require, exports, React) {
+define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
+    exports.__esModule = true;
     var Foo = function (props) { return <div />; };
     // Should be OK
     var foo = <Foo />;
     // Should be OK
     var MainMenu = function (props) { return (<div>
     <h3>Main Menu</h3>
-</div>); };
+    </div>); };
     var App = function (_a) {
         var children = _a.children;
         return (<div>

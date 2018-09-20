@@ -32,7 +32,7 @@
 ////var f_/*a1*/r4 = f.ofFooT;
 ////var f_/*a2*/r7 = f.ofFooFooNum;
 ////var f_/*a3*/r9 = f.ofIG;
-////var f_/*a5*/r13 = f.ofIG5; 
+////var f_/*a5*/r13 = f.ofIG5;
 ////var f_/*a7*/r17 = f.ofC1;
 ////
 ////// T is number
@@ -60,62 +60,39 @@
 ////var f5_/*e1*/r4 = f5.ofFooT;
 ////var f5_/*e2*/r7 = f5.ofFooFooNum;
 ////var f5_/*e3*/r9 = f5.ofIG;
-////var f5_/*e5*/r13 = f5.ofIG5; 
+////var f5_/*e5*/r13 = f5.ofIG5;
 ////var f5_/*e7*/r17 = f5.ofC1;
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
-goTo.marker('a1');
-verify.quickInfoIs('var f_r4: Foo<any>');
-goTo.marker('a2');
-verify.quickInfoIs('var f_r7: Foo<Foo<number>>');
-goTo.marker('a3');
-verify.quickInfoIs('var f_r9: IG<any>');
-goTo.marker('a5');
-verify.quickInfoIs('var f_r13: {\n    x: Foo<any>;\n}');
-goTo.marker('a7');
-verify.quickInfoIs('var f_r17: C<any>');
+verify.quickInfos({
+    a1: "var f_r4: Foo<any>",
+    a2: "var f_r7: Foo<Foo<number>>",
+    a3: "var f_r9: IG<any>",
+    a5: "var f_r13: {\n    x: Foo<any>;\n}",
+    a7: "var f_r17: C<any>",
 
-goTo.marker('b1');
-verify.quickInfoIs('var f2_r4: Foo<number>');
-goTo.marker('b2');
-verify.quickInfoIs('var f2_r7: Foo<Foo<number>>'); 
-goTo.marker('b3');
-verify.quickInfoIs('var f2_r9: IG<number>');
-goTo.marker('b5');
-verify.quickInfoIs('var f2_r13: {\n    x: Foo<number>;\n}');
-goTo.marker('b7');
-verify.quickInfoIs('var f2_r17: C<number>');
+    b1: "var f2_r4: Foo<number>",
+    b2: "var f2_r7: Foo<Foo<number>>",
+    b3: "var f2_r9: IG<number>",
+    b5: "var f2_r13: {\n    x: Foo<number>;\n}",
+    b7: "var f2_r17: C<number>",
 
-goTo.marker('c1');
-verify.quickInfoIs('var f3_r4: Foo<I>');
-goTo.marker('c2');
-verify.quickInfoIs('var f3_r7: Foo<Foo<number>>');
-goTo.marker('c3');
-verify.quickInfoIs('var f3_r9: IG<I>');
-goTo.marker('c5');
-verify.quickInfoIs('var f3_r13: {\n    x: Foo<I>;\n}');
-goTo.marker('c7');
-verify.quickInfoIs('var f3_r17: C<I>');
+    c1: "var f3_r4: Foo<I>",
+    c2: "var f3_r7: Foo<Foo<number>>",
+    c3: "var f3_r9: IG<I>",
+    c5: "var f3_r13: {\n    x: Foo<I>;\n}",
+    c7: "var f3_r17: C<I>",
 
-goTo.marker('d1');
-verify.quickInfoIs('var f4_r4: Foo<{\n    x: number;\n}>');
-goTo.marker('d2');
-verify.quickInfoIs('var f4_r7: Foo<Foo<number>>');
-goTo.marker('d3');
-verify.quickInfoIs('var f4_r9: IG<{\n    x: number;\n}>');
-goTo.marker('d5');
-verify.quickInfoIs('var f4_r13: {\n    x: Foo<{\n        x: number;\n    }>;\n}');
-goTo.marker('d7');
-verify.quickInfoIs('var f4_r17: C<{\n    x: number;\n}>');
+    d1: "var f4_r4: Foo<{\n    x: number;\n}>",
+    d2: "var f4_r7: Foo<Foo<number>>",
+    d3: "var f4_r9: IG<{\n    x: number;\n}>",
+    d5: "var f4_r13: {\n    x: Foo<{\n        x: number;\n    }>;\n}",
+    d7: "var f4_r17: C<{\n    x: number;\n}>",
 
-goTo.marker('e1');
-verify.quickInfoIs('var f5_r4: Foo<Foo<number>>');
-goTo.marker('e2');
-verify.quickInfoIs('var f5_r7: Foo<Foo<number>>');
-goTo.marker('e3');
-verify.quickInfoIs('var f5_r9: IG<Foo<number>>');
-goTo.marker('e5');
-verify.quickInfoIs('var f5_r13: {\n    x: Foo<Foo<number>>;\n}');
-goTo.marker('e7');
-verify.quickInfoIs('var f5_r17: C<Foo<number>>');
+    e1: "var f5_r4: Foo<Foo<number>>",
+    e2: "var f5_r7: Foo<Foo<number>>",
+    e3: "var f5_r9: IG<Foo<number>>",
+    e5: "var f5_r13: {\n    x: Foo<Foo<number>>;\n}",
+    e7: "var f5_r17: C<Foo<number>>",
+});

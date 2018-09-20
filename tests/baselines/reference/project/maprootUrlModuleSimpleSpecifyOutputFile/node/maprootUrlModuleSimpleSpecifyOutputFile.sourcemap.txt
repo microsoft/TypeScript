@@ -1,7 +1,0 @@
-===================================================================
-JsFile: test.js
-mapUrl: http://www.typescriptlang.org/test.js.map
-sourceRoot: 
-sources: file:///tests/cases/projects/outputdir_module_simple/m1.ts,file:///tests/cases/projects/outputdir_module_simple/test.ts
-===================================================================
->>>//# sourceMappingURL=http://www.typescriptlang.org/test.js.map

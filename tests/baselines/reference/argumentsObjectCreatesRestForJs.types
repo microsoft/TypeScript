@@ -1,0 +1,60 @@
+=== tests/cases/compiler/main.js ===
+function allRest() { arguments; }
+>allRest : (...args: any[]) => void
+>arguments : IArguments
+
+allRest();
+>allRest() : void
+>allRest : (...args: any[]) => void
+
+allRest(1, 2, 3);
+>allRest(1, 2, 3) : void
+>allRest : (...args: any[]) => void
+>1 : 1
+>2 : 2
+>3 : 3
+
+function someRest(x, y) { arguments; }
+>someRest : (x: any, y: any, ...args: any[]) => void
+>x : any
+>y : any
+>arguments : IArguments
+
+someRest(); // x and y are still optional because they are in a JS file
+>someRest() : void
+>someRest : (x: any, y: any, ...args: any[]) => void
+
+someRest(1, 2, 3);
+>someRest(1, 2, 3) : void
+>someRest : (x: any, y: any, ...args: any[]) => void
+>1 : 1
+>2 : 2
+>3 : 3
+
+/**
+ * @param {number} x - a thing
+ */
+function jsdocced(x) { arguments; }
+>jsdocced : (x: number, ...args: any[]) => void
+>x : number
+>arguments : IArguments
+
+jsdocced(1);
+>jsdocced(1) : void
+>jsdocced : (x: number, ...args: any[]) => void
+>1 : 1
+
+function dontDoubleRest(x, ...y) { arguments; }
+>dontDoubleRest : (x: any, ...y: any[]) => void
+>x : any
+>y : any[]
+>arguments : IArguments
+
+dontDoubleRest(1, 2, 3);
+>dontDoubleRest(1, 2, 3) : void
+>dontDoubleRest : (x: any, ...y: any[]) => void
+>1 : 1
+>2 : 2
+>3 : 3
+
+

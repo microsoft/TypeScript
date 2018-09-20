@@ -1,0 +1,52 @@
+=== tests/cases/conformance/expressions/commaOperator/commaOperatorWithoutOperand.ts ===
+var ANY: any;
+>ANY : Symbol(ANY, Decl(commaOperatorWithoutOperand.ts, 0, 3))
+
+var BOOLEAN: boolean;
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithoutOperand.ts, 1, 3))
+
+var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithoutOperand.ts, 2, 3))
+
+var STRING: string;
+>STRING : Symbol(STRING, Decl(commaOperatorWithoutOperand.ts, 3, 3))
+
+var OBJECT: Object;
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithoutOperand.ts, 4, 3))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+// Expect to have compiler errors
+// Missing the second operand
+(ANY, );
+>ANY : Symbol(ANY, Decl(commaOperatorWithoutOperand.ts, 0, 3))
+
+(BOOLEAN, );
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithoutOperand.ts, 1, 3))
+
+(NUMBER, );
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithoutOperand.ts, 2, 3))
+
+(STRING, );
+>STRING : Symbol(STRING, Decl(commaOperatorWithoutOperand.ts, 3, 3))
+
+(OBJECT, );
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithoutOperand.ts, 4, 3))
+
+// Missing the first operand
+(, ANY);
+>ANY : Symbol(ANY, Decl(commaOperatorWithoutOperand.ts, 0, 3))
+
+(, BOOLEAN);
+>BOOLEAN : Symbol(BOOLEAN, Decl(commaOperatorWithoutOperand.ts, 1, 3))
+
+(, NUMBER);
+>NUMBER : Symbol(NUMBER, Decl(commaOperatorWithoutOperand.ts, 2, 3))
+
+(, STRING);
+>STRING : Symbol(STRING, Decl(commaOperatorWithoutOperand.ts, 3, 3))
+
+(, OBJECT);
+>OBJECT : Symbol(OBJECT, Decl(commaOperatorWithoutOperand.ts, 4, 3))
+
+// Missing all operands
+( , );

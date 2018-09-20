@@ -1,5 +1,4 @@
 //// [readonlyInDeclarationFile.ts]
-
 interface Foo {
     readonly x: number;
     readonly [x: string]: Object;
@@ -55,7 +54,7 @@ function g() {
 }
 
 //// [readonlyInDeclarationFile.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "b1", {

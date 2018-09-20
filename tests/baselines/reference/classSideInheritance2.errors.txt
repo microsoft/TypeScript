@@ -1,4 +1,4 @@
-tests/cases/compiler/classSideInheritance2.ts(7,23): error TS2690: A class must be declared after its base class.
+tests/cases/compiler/classSideInheritance2.ts(7,23): error TS2449: Class 'TextBase' used before its declaration.
 
 
 ==== tests/cases/compiler/classSideInheritance2.ts (1 errors) ====
@@ -10,7 +10,8 @@ tests/cases/compiler/classSideInheritance2.ts(7,23): error TS2690: A class must 
     
     class SubText extends TextBase {
                           ~~~~~~~~
-!!! error TS2690: A class must be declared after its base class.
+!!! error TS2449: Class 'TextBase' used before its declaration.
+!!! related TS2728 tests/cases/compiler/classSideInheritance2.ts:14:7: 'TextBase' is declared here.
     
             constructor(text: IText, span: TextSpan) {
                 super();

@@ -29,45 +29,56 @@ class Derived4 extends Base {
 }
 
 //// [derivedClassSuperCallsWithThisArg.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Base = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Base = /** @class */ (function () {
     function Base(a) {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.call(this, this); // ok
+        var _this = _super.call(this, _this) || this;
+        return _this;
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2(a) {
-        _super.call(this, this); // error
-        this.a = a;
+        var _this = _super.call(this, _this) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived2;
 }(Base));
-var Derived3 = (function (_super) {
+var Derived3 = /** @class */ (function (_super) {
     __extends(Derived3, _super);
     function Derived3(a) {
-        var _this = this;
-        _super.call(this, function () { return _this; }); // error
-        this.a = a;
+        var _this = _super.call(this, function () { return _this; }) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived3;
 }(Base));
-var Derived4 = (function (_super) {
+var Derived4 = /** @class */ (function (_super) {
     __extends(Derived4, _super);
     function Derived4(a) {
-        _super.call(this, function () { return this; }); // ok
-        this.a = a;
+        var _this = _super.call(this, function () { return this; }) || this;
+        _this.a = a;
+        return _this;
     }
     return Derived4;
 }(Base));

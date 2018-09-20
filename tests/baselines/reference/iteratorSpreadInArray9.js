@@ -1,6 +1,4 @@
 //// [iteratorSpreadInArray9.ts]
-var array = [...new SymbolIterator];
-
 class SymbolIterator {
     next() {
         return {
@@ -12,9 +10,10 @@ class SymbolIterator {
         return this;
     }
 }
+
+var array = [...new SymbolIterator];
 
 //// [iteratorSpreadInArray9.js]
-var array = [...new SymbolIterator];
 class SymbolIterator {
     next() {
         return {
@@ -25,3 +24,4 @@ class SymbolIterator {
         return this;
     }
 }
+var array = [...new SymbolIterator];

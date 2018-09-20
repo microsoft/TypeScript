@@ -41,9 +41,9 @@ var complicatedArrayVar: { x: number; y: string; }[] ;
 >y : Symbol(y, Decl(vardecl.ts, 18, 37))
 
 complicatedArrayVar.push({ x: 30, y : 'hello world' });
->complicatedArrayVar.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>complicatedArrayVar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >complicatedArrayVar : Symbol(complicatedArrayVar, Decl(vardecl.ts, 18, 3))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(vardecl.ts, 19, 26))
 >y : Symbol(y, Decl(vardecl.ts, 19, 33))
 

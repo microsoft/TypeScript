@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes01.ts ===
-
 type T = "foo" | "bar" | "baz";
 >T : "foo" | "bar" | "baz"
 
@@ -9,7 +8,6 @@ var x: "foo" | "bar" | "baz" = undefined;
 
 var y: T = undefined;
 >y : "foo" | "bar" | "baz"
->T : "foo" | "bar" | "baz"
 >undefined : undefined
 
 if (x === "foo") {

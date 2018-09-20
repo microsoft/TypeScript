@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/noErrorUsingImportExportModuleAugmentationInDeclarationFile2.ts] ////
 
 //// [1.ts]
-
 export var j = "hello"; // error
 
 //// [0.d.ts]
@@ -10,4 +9,5 @@ declare var a: number;
 
 //// [1.js]
 "use strict";
+exports.__esModule = true;
 exports.j = "hello"; // error

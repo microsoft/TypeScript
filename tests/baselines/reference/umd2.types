@@ -1,0 +1,17 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+Foo.fn();
+>Foo.fn() : any
+>Foo.fn : any
+>Foo : any
+>fn : any
+
+let x: Foo.Thing;
+>x : any
+>Foo : any
+
+let y: number = x.n;
+>y : number
+>x.n : any
+>x : any
+>n : any
+

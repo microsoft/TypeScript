@@ -59,40 +59,48 @@ module Y {
 
 
 //// [moduleWithStatementsOfEveryKind.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A;
 (function (A_1) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
-    var AA = (function () {
+    var AA = /** @class */ (function () {
         function AA() {
         }
         return AA;
     }());
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
-    var BB = (function (_super) {
+    var BB = /** @class */ (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
     }(A));
     var Module;
     (function (Module) {
-        var A = (function () {
+        var A = /** @class */ (function () {
             function A() {
             }
             return A;
@@ -115,47 +123,47 @@ var A;
 })(A || (A = {}));
 var Y;
 (function (Y) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
     Y.A = A;
-    var AA = (function () {
+    var AA = /** @class */ (function () {
         function AA() {
         }
         return AA;
     }());
     Y.AA = AA;
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(AA));
     Y.B = B;
-    var BB = (function (_super) {
+    var BB = /** @class */ (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
     }(A));
     Y.BB = BB;
     var Module;
     (function (Module) {
-        var A = (function () {
+        var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
     })(Module = Y.Module || (Y.Module = {}));
+    var Color;
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Y.Color || (Y.Color = {}));
-    var Color = Y.Color;
+    })(Color = Y.Color || (Y.Color = {}));
     Y.x = 12;
     function F(s) {
         return 2;

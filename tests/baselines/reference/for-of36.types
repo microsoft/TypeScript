@@ -1,9 +1,9 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of36.ts ===
 var tuple: [string, boolean] = ["", true];
 >tuple : [string, boolean]
->["", true] : [string, boolean]
->"" : string
->true : boolean
+>["", true] : [string, true]
+>"" : ""
+>true : true
 
 for (var v of tuple) {
 >v : string | boolean

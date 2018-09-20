@@ -11,10 +11,9 @@ var y: {
 
 //// [privateIndexer2.js]
 // private indexers not allowed
+var _a;
 var x = (_a = {},
     _a[x] = string,
     _a.string = ,
-    _a
-);
+    _a);
 var y;
-var _a;

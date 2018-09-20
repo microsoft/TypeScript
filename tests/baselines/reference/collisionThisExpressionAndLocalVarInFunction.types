@@ -1,0 +1,26 @@
+=== tests/cases/compiler/collisionThisExpressionAndLocalVarInFunction.ts ===
+var console: {
+>console : { log(val: any): any; }
+
+    log(val: any);
+>log : (val: any) => any
+>val : any
+}
+function x() {
+>x : () => void
+
+    var _this = 5;
+>_this : number
+>5 : 5
+
+    x => { console.log(this.x); };
+>x => { console.log(this.x); } : (x: any) => void
+>x : any
+>console.log(this.x) : any
+>console.log : (val: any) => any
+>console : { log(val: any): any; }
+>log : (val: any) => any
+>this.x : any
+>this : any
+>x : any
+}

@@ -12,18 +12,18 @@ export var x = new Foo();
 
 
 //// [a.js]
-System.register(["./b"], function(exports_1, context_1) {
+System.register(["./b"], function (exports_1, context_1) {
     "use strict";
+    var b_1, x;
     var __moduleName = context_1 && context_1.id;
-    var b_1;
-    var x;
     return {
-        setters:[
+        setters: [
             function (b_1_1) {
                 b_1 = b_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             exports_1("x", x = new b_1["default"]());
         }
-    }
+    };
 });

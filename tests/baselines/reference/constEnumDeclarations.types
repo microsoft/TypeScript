@@ -1,15 +1,14 @@
 === tests/cases/compiler/constEnumDeclarations.ts ===
-
 const enum E {
 >E : E
 
     A = 1,
 >A : E
->1 : number
+>1 : 1
 
     B = 2,
 >B : E
->2 : number
+>2 : 2
 
     C = A | B
 >C : E
@@ -22,12 +21,12 @@ const enum E2 {
 >E2 : E2
 
     A = 1,
->A : E2
->1 : number
+>A : E2.A
+>1 : 1
 
     B,
->B : E2
+>B : E2.B
 
     C
->C : E2
+>C : E2.C
 }

@@ -1,0 +1,434 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts ===
+// checking whether other types are subtypes of type parameters with constraints
+
+class Foo<T> { foo: T; }
+>Foo : Foo<T>
+>foo : T
+
+function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) {
+>f : <T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: V) => void
+>t : T
+>u : U
+>v : V
+
+    // ok
+    var r1 = true ? t : u;
+>r1 : U | T
+>true ? t : u : U | T
+>true : true
+>t : T
+>u : U
+
+    var r1 = true ? u : t;
+>r1 : U | T
+>true ? u : t : U | T
+>true : true
+>u : U
+>t : T
+
+    // ok
+    var r2 = true ? t : v;
+>r2 : T | V
+>true ? t : v : T | V
+>true : true
+>t : T
+>v : V
+
+    var r2 = true ? v : t;
+>r2 : T | V
+>true ? v : t : T | V
+>true : true
+>v : V
+>t : T
+
+    // ok
+    var r3 = true ? v : u;
+>r3 : U | V
+>true ? v : u : U | V
+>true : true
+>v : V
+>u : U
+
+    var r3 = true ? u : v;
+>r3 : U | V
+>true ? u : v : U | V
+>true : true
+>u : U
+>v : V
+
+    // ok
+    var r4 = true ? t : new Foo<T>();
+>r4 : T | Foo<T>
+>true ? t : new Foo<T>() : T | Foo<T>
+>true : true
+>t : T
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+
+    var r4 = true ? new Foo<T>() : t;
+>r4 : T | Foo<T>
+>true ? new Foo<T>() : t : T | Foo<T>
+>true : true
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+>t : T
+
+    // ok
+    var r5 = true ? u : new Foo<T>();
+>r5 : Foo<T>
+>true ? u : new Foo<T>() : Foo<T>
+>true : true
+>u : U
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+
+    var r5 = true ? new Foo<T>() : u;
+>r5 : Foo<T>
+>true ? new Foo<T>() : u : Foo<T>
+>true : true
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+>u : U
+
+    // ok
+    var r6 = true ? v : new Foo<T>();
+>r6 : Foo<T> | V
+>true ? v : new Foo<T>() : Foo<T> | V
+>true : true
+>v : V
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+
+    var r6 = true ? new Foo<T>() : v;
+>r6 : Foo<T> | V
+>true ? new Foo<T>() : v : Foo<T> | V
+>true : true
+>new Foo<T>() : Foo<T>
+>Foo : typeof Foo
+>v : V
+
+
+    // ok
+    var r7 = true ? t : new Foo<U>();
+>r7 : Foo<U>
+>true ? t : new Foo<U>() : Foo<U>
+>true : true
+>t : T
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+
+    var r7 = true ? new Foo<U>() : t;
+>r7 : Foo<U>
+>true ? new Foo<U>() : t : Foo<U>
+>true : true
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+>t : T
+
+    // ok
+    var r8 = true ? u : new Foo<U>();
+>r8 : U | Foo<U>
+>true ? u : new Foo<U>() : U | Foo<U>
+>true : true
+>u : U
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+
+    var r8 = true ? new Foo<U>() : u;
+>r8 : U | Foo<U>
+>true ? new Foo<U>() : u : U | Foo<U>
+>true : true
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+>u : U
+
+    // ok
+    var r9 = true ? v : new Foo<U>();
+>r9 : Foo<U> | V
+>true ? v : new Foo<U>() : Foo<U> | V
+>true : true
+>v : V
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+
+    var r9 = true ? new Foo<U>() : v;
+>r9 : Foo<U> | V
+>true ? new Foo<U>() : v : Foo<U> | V
+>true : true
+>new Foo<U>() : Foo<U>
+>Foo : typeof Foo
+>v : V
+
+
+    // ok
+    var r10 = true ? t : new Foo<V>();
+>r10 : T | Foo<V>
+>true ? t : new Foo<V>() : T | Foo<V>
+>true : true
+>t : T
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+
+    var r10 = true ? new Foo<V>() : t;
+>r10 : T | Foo<V>
+>true ? new Foo<V>() : t : T | Foo<V>
+>true : true
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+>t : T
+
+    // ok
+    var r11 = true ? u : new Foo<V>();
+>r11 : U | Foo<V>
+>true ? u : new Foo<V>() : U | Foo<V>
+>true : true
+>u : U
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+
+    var r11 = true ? new Foo<V>() : u;
+>r11 : U | Foo<V>
+>true ? new Foo<V>() : u : U | Foo<V>
+>true : true
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+>u : U
+
+    // ok
+    var r12 = true ? v : new Foo<V>();
+>r12 : Foo<V>
+>true ? v : new Foo<V>() : Foo<V>
+>true : true
+>v : V
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+
+    var r12 = true ? new Foo<V>() : v;
+>r12 : Foo<V>
+>true ? new Foo<V>() : v : Foo<V>
+>true : true
+>new Foo<V>() : Foo<V>
+>Foo : typeof Foo
+>v : V
+}
+
+module M1 {
+>M1 : typeof M1
+
+    class Base<T> {
+>Base : Base<T>
+
+        foo: T;
+>foo : T
+    }
+
+    class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+>D1 : D1<T, U, V>
+>Base : Base<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+>D2 : D2<T, U, V>
+>Base : Base<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
+>D3 : D3<T, U, V>
+>Base : Base<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: V
+>foo : V
+    }
+
+    class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+>D4 : D4<T, U, V>
+>Base : Base<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+>D5 : D5<T, U, V>
+>Base : Base<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
+>D6 : D6<T, U, V>
+>Base : Base<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: V
+>foo : V
+    }
+
+    class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+>D7 : D7<T, U, V>
+>Base : Base<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+>D8 : D8<T, U, V>
+>Base : Base<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
+>D9 : D9<T, U, V>
+>Base : Base<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: V
+>foo : V
+    }
+}
+
+
+module M2 {
+>M2 : typeof M2
+
+    class Base2<T> {
+>Base2 : Base2<T>
+
+        foo: Foo<T>;
+>foo : Foo<T>
+    }
+
+    class D1<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+>D1 : D1<T, U, V>
+>Base2 : Base2<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+>D2 : D2<T, U, V>
+>Base2 : Base2<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
+>D3 : D3<T, U, V>
+>Base2 : Base2<T>
+
+        [x: string]: T;
+>x : string
+
+        foo: V
+>foo : V
+    }
+
+    class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+>D4 : D4<T, U, V>
+>Base2 : Base2<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+>D5 : D5<T, U, V>
+>Base2 : Base2<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
+>D6 : D6<T, U, V>
+>Base2 : Base2<U>
+
+        [x: string]: U;
+>x : string
+
+        foo: V
+>foo : V
+    }
+
+    class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+>D7 : D7<T, U, V>
+>Base2 : Base2<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: T
+>foo : T
+    }
+
+    class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+>D8 : D8<T, U, V>
+>Base2 : Base2<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: U
+>foo : U
+    }
+
+    class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
+>D9 : D9<T, U, V>
+>Base2 : Base2<V>
+
+        [x: string]: V;
+>x : string
+
+        foo: V
+>foo : V
+    }
+}

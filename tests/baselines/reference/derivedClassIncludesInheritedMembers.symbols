@@ -1,0 +1,120 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassIncludesInheritedMembers.ts ===
+class Base {
+>Base : Symbol(Base, Decl(derivedClassIncludesInheritedMembers.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Base.a, Decl(derivedClassIncludesInheritedMembers.ts, 0, 12))
+
+    b() { }
+>b : Symbol(Base.b, Decl(derivedClassIncludesInheritedMembers.ts, 1, 14))
+
+    get c() { return ''; }
+>c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+
+    set c(v) { }
+>c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+>v : Symbol(v, Decl(derivedClassIncludesInheritedMembers.ts, 4, 10))
+
+    static r: string;
+>r : Symbol(Base.r, Decl(derivedClassIncludesInheritedMembers.ts, 4, 16))
+
+    static s() { }
+>s : Symbol(Base.s, Decl(derivedClassIncludesInheritedMembers.ts, 6, 21))
+
+    static get t() { return ''; }
+>t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+
+    static set t(v) { }
+>t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+>v : Symbol(v, Decl(derivedClassIncludesInheritedMembers.ts, 9, 17))
+
+    constructor(x) { }
+>x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 11, 16))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>Base : Symbol(Base, Decl(derivedClassIncludesInheritedMembers.ts, 0, 0))
+}
+
+var d: Derived = new Derived(1);
+>d : Symbol(d, Decl(derivedClassIncludesInheritedMembers.ts, 17, 3))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+
+var r1 = d.a;
+>r1 : Symbol(r1, Decl(derivedClassIncludesInheritedMembers.ts, 18, 3))
+>d.a : Symbol(Base.a, Decl(derivedClassIncludesInheritedMembers.ts, 0, 12))
+>d : Symbol(d, Decl(derivedClassIncludesInheritedMembers.ts, 17, 3))
+>a : Symbol(Base.a, Decl(derivedClassIncludesInheritedMembers.ts, 0, 12))
+
+var r2 = d.b();
+>r2 : Symbol(r2, Decl(derivedClassIncludesInheritedMembers.ts, 19, 3))
+>d.b : Symbol(Base.b, Decl(derivedClassIncludesInheritedMembers.ts, 1, 14))
+>d : Symbol(d, Decl(derivedClassIncludesInheritedMembers.ts, 17, 3))
+>b : Symbol(Base.b, Decl(derivedClassIncludesInheritedMembers.ts, 1, 14))
+
+var r3 = d.c;
+>r3 : Symbol(r3, Decl(derivedClassIncludesInheritedMembers.ts, 20, 3))
+>d.c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+>d : Symbol(d, Decl(derivedClassIncludesInheritedMembers.ts, 17, 3))
+>c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+
+d.c = '';
+>d.c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+>d : Symbol(d, Decl(derivedClassIncludesInheritedMembers.ts, 17, 3))
+>c : Symbol(Base.c, Decl(derivedClassIncludesInheritedMembers.ts, 2, 11), Decl(derivedClassIncludesInheritedMembers.ts, 3, 26))
+
+var r4 = Derived.r;
+>r4 : Symbol(r4, Decl(derivedClassIncludesInheritedMembers.ts, 22, 3))
+>Derived.r : Symbol(Base.r, Decl(derivedClassIncludesInheritedMembers.ts, 4, 16))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>r : Symbol(Base.r, Decl(derivedClassIncludesInheritedMembers.ts, 4, 16))
+
+var r5 = Derived.s();
+>r5 : Symbol(r5, Decl(derivedClassIncludesInheritedMembers.ts, 23, 3))
+>Derived.s : Symbol(Base.s, Decl(derivedClassIncludesInheritedMembers.ts, 6, 21))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>s : Symbol(Base.s, Decl(derivedClassIncludesInheritedMembers.ts, 6, 21))
+
+var r6 = Derived.t;
+>r6 : Symbol(r6, Decl(derivedClassIncludesInheritedMembers.ts, 24, 3))
+>Derived.t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+
+Derived.t = '';
+>Derived.t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+>Derived : Symbol(Derived, Decl(derivedClassIncludesInheritedMembers.ts, 12, 1))
+>t : Symbol(Base.t, Decl(derivedClassIncludesInheritedMembers.ts, 7, 18), Decl(derivedClassIncludesInheritedMembers.ts, 8, 33))
+
+class Base2 {
+>Base2 : Symbol(Base2, Decl(derivedClassIncludesInheritedMembers.ts, 25, 15))
+
+    [x: string]: Object;
+>x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 28, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [x: number]: Date;
+>x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 29, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Symbol(Derived2, Decl(derivedClassIncludesInheritedMembers.ts, 30, 1))
+>Base2 : Symbol(Base2, Decl(derivedClassIncludesInheritedMembers.ts, 25, 15))
+}
+
+var d2: Derived2;
+>d2 : Symbol(d2, Decl(derivedClassIncludesInheritedMembers.ts, 35, 3))
+>Derived2 : Symbol(Derived2, Decl(derivedClassIncludesInheritedMembers.ts, 30, 1))
+
+var r7 = d2[''];
+>r7 : Symbol(r7, Decl(derivedClassIncludesInheritedMembers.ts, 36, 3))
+>d2 : Symbol(d2, Decl(derivedClassIncludesInheritedMembers.ts, 35, 3))
+
+var r8 = d2[1];
+>r8 : Symbol(r8, Decl(derivedClassIncludesInheritedMembers.ts, 37, 3))
+>d2 : Symbol(d2, Decl(derivedClassIncludesInheritedMembers.ts, 35, 3))
+
+

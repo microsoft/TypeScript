@@ -1,0 +1,46 @@
+=== tests/cases/conformance/async/es6/await_unaryExpression_es6_3.ts ===
+async function bar1() {
+>bar1 : () => Promise<void>
+
+    ++await 42; // Error
+>++ : number
+> : any
+>await 42 : 42
+>42 : 42
+}
+
+async function bar2() {
+>bar2 : () => Promise<void>
+
+    --await 42; // Error
+>-- : number
+> : any
+>await 42 : 42
+>42 : 42
+}
+
+async function bar3() {
+>bar3 : () => Promise<void>
+
+    var x = 42;
+>x : number
+>42 : 42
+
+    await x++; // OK but shouldn't need parenthesis
+>await x++ : number
+>x++ : number
+>x : number
+}
+
+async function bar4() {
+>bar4 : () => Promise<void>
+
+    var x = 42;
+>x : number
+>42 : 42
+
+    await x--; // OK but shouldn't need parenthesis
+>await x-- : number
+>x-- : number
+>x : number
+}

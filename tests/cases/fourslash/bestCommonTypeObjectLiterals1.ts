@@ -20,23 +20,18 @@
 ////var i: I;
 ////var /*4*/c3 = [i, a];
 
-goTo.marker('1');
-verify.quickInfoIs('var c: {\n    name: string;\n    age: number;\n}[]');
-
-goTo.marker('2');
-verify.quickInfoIs('var c1: {\n    name: string;\n    age: number;\n}[]');
-
-goTo.marker('3');
-verify.quickInfoIs('var c2: ({\n\
-    name: string;\n\
-    age: number;\n\
-    address: string;\n\
-} | {\n\
-    name: string;\n\
-    age: number;\n\
-    dob: Date;\n\
-})[]');
-
-goTo.marker('4');
-verify.quickInfoIs('var c3: I[]');
-
+verify.quickInfos({
+    1: "var c: {\n    name: string;\n    age: number;\n}[]",
+    2: "var c1: {\n    name: string;\n    age: number;\n}[]",
+    3:
+`var c2: ({
+    name: string;
+    age: number;
+    address: string;
+} | {
+    name: string;
+    age: number;
+    dob: Date;
+})[]`,
+    4: "var c3: I[]"
+});

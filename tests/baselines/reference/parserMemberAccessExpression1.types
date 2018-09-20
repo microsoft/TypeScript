@@ -1,0 +1,23 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts ===
+Foo<T>();
+>Foo<T>() : any
+>Foo : any
+
+Foo.Bar<T>();
+>Foo.Bar<T>() : any
+>Foo.Bar : any
+>Foo : any
+>Bar : any
+
+Foo<T>.Bar();
+>Foo<T>.Bar() : any
+>Foo : any
+>Bar() : any
+>Bar : any
+
+Foo<T>.Bar<T>();
+>Foo<T>.Bar<T>() : any
+>Foo : any
+>Bar<T>() : any
+>Bar : any
+

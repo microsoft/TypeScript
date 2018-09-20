@@ -1,5 +1,4 @@
 //// [switchBreakStatements.ts]
-
 switch ('') {
     case 'a':
         break;

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives3.ts] ////
 
 //// [ref.d.ts]
-
 // $ comes from d.ts file - no need to add type reference directive
 
 interface $ { x }
@@ -17,6 +16,7 @@ interface A {
 }
 
 //// [app.js]
+/// <reference types="lib"/>
 /// <reference path="ref.d.ts" />
 
 

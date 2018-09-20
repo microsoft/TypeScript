@@ -1,0 +1,48 @@
+=== tests/cases/compiler/augmentedTypesClass2.ts ===
+// Checking class with other things in type space not value space
+
+// class then interface
+class c11 {
+>c11 : Symbol(c11, Decl(augmentedTypesClass2.ts, 0, 0), Decl(augmentedTypesClass2.ts, 7, 1))
+
+    foo() {
+>foo : Symbol(c11.foo, Decl(augmentedTypesClass2.ts, 3, 11))
+
+        return 1;
+    }
+}
+
+interface c11 {
+>c11 : Symbol(c11, Decl(augmentedTypesClass2.ts, 0, 0), Decl(augmentedTypesClass2.ts, 7, 1))
+
+    bar(): void;
+>bar : Symbol(c11.bar, Decl(augmentedTypesClass2.ts, 9, 15))
+}
+
+// class then class - covered
+// class then enum 
+class c33 {
+>c33 : Symbol(c33, Decl(augmentedTypesClass2.ts, 11, 1))
+
+    foo() {
+>foo : Symbol(c33.foo, Decl(augmentedTypesClass2.ts, 15, 11))
+
+        return 1;
+    }
+}
+enum c33 { One };
+>c33 : Symbol(c33, Decl(augmentedTypesClass2.ts, 19, 1))
+>One : Symbol(c33.One, Decl(augmentedTypesClass2.ts, 20, 10))
+
+// class then import
+class c44 {
+>c44 : Symbol(c44, Decl(augmentedTypesClass2.ts, 20, 17))
+
+    foo() {
+>foo : Symbol(c44.foo, Decl(augmentedTypesClass2.ts, 23, 11))
+
+        return 1;
+    }
+}
+
+

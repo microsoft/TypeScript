@@ -1,0 +1,126 @@
+=== tests/cases/conformance/types/thisType/declarationFiles.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(declarationFiles.ts, 0, 0))
+
+    x: this;
+>x : Symbol(C1.x, Decl(declarationFiles.ts, 0, 10))
+
+    f(x: this): this { return undefined; }
+>f : Symbol(C1.f, Decl(declarationFiles.ts, 1, 12))
+>x : Symbol(x, Decl(declarationFiles.ts, 2, 6))
+>undefined : Symbol(undefined)
+
+    constructor(x: this) { }
+>x : Symbol(x, Decl(declarationFiles.ts, 3, 16))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(declarationFiles.ts, 4, 1))
+
+    [x: string]: this;
+>x : Symbol(x, Decl(declarationFiles.ts, 7, 5))
+}
+
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(declarationFiles.ts, 8, 1))
+>T : Symbol(T, Decl(declarationFiles.ts, 10, 14))
+
+    x: T;
+>x : Symbol(Foo.x, Decl(declarationFiles.ts, 10, 18))
+>T : Symbol(T, Decl(declarationFiles.ts, 10, 14))
+
+    y: this;
+>y : Symbol(Foo.y, Decl(declarationFiles.ts, 11, 9))
+}
+
+class C3 {
+>C3 : Symbol(C3, Decl(declarationFiles.ts, 13, 1))
+
+    a: this[];
+>a : Symbol(C3.a, Decl(declarationFiles.ts, 15, 10))
+
+    b: [this, this];
+>b : Symbol(C3.b, Decl(declarationFiles.ts, 16, 14))
+
+    c: this | Date;
+>c : Symbol(C3.c, Decl(declarationFiles.ts, 17, 20))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    d: this & Date;
+>d : Symbol(C3.d, Decl(declarationFiles.ts, 18, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    e: (((this)));
+>e : Symbol(C3.e, Decl(declarationFiles.ts, 19, 19))
+
+    f: (x: this) => this;
+>f : Symbol(C3.f, Decl(declarationFiles.ts, 20, 18))
+>x : Symbol(x, Decl(declarationFiles.ts, 21, 8))
+
+    g: new (x: this) => this;
+>g : Symbol(C3.g, Decl(declarationFiles.ts, 21, 25))
+>x : Symbol(x, Decl(declarationFiles.ts, 22, 12))
+
+    h: Foo<this>;
+>h : Symbol(C3.h, Decl(declarationFiles.ts, 22, 29))
+>Foo : Symbol(Foo, Decl(declarationFiles.ts, 8, 1))
+
+    i: Foo<this | (() => this)>;
+>i : Symbol(C3.i, Decl(declarationFiles.ts, 23, 17))
+>Foo : Symbol(Foo, Decl(declarationFiles.ts, 8, 1))
+
+    j: (x: any) => x is this;
+>j : Symbol(C3.j, Decl(declarationFiles.ts, 24, 32))
+>x : Symbol(x, Decl(declarationFiles.ts, 25, 8))
+>x : Symbol(x, Decl(declarationFiles.ts, 25, 8))
+}
+
+class C4 {
+>C4 : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+
+    x1 = { a: this };
+>x1 : Symbol(C4.x1, Decl(declarationFiles.ts, 28, 10))
+>a : Symbol(a, Decl(declarationFiles.ts, 29, 10))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+
+    x2 = [this];
+>x2 : Symbol(C4.x2, Decl(declarationFiles.ts, 29, 21))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+
+    x3 = [{ a: this }];
+>x3 : Symbol(C4.x3, Decl(declarationFiles.ts, 30, 16))
+>a : Symbol(a, Decl(declarationFiles.ts, 31, 11))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+
+    x4 = () => this;
+>x4 : Symbol(C4.x4, Decl(declarationFiles.ts, 31, 23))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+
+    f1() {
+>f1 : Symbol(C4.f1, Decl(declarationFiles.ts, 32, 20))
+
+        return { a: this };
+>a : Symbol(a, Decl(declarationFiles.ts, 34, 16))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+    }
+    f2() {
+>f2 : Symbol(C4.f2, Decl(declarationFiles.ts, 35, 5))
+
+        return [this];
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+    }
+    f3() {
+>f3 : Symbol(C4.f3, Decl(declarationFiles.ts, 38, 5))
+
+        return [{ a: this }];
+>a : Symbol(a, Decl(declarationFiles.ts, 40, 17))
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+    }
+    f4() {
+>f4 : Symbol(C4.f4, Decl(declarationFiles.ts, 41, 5))
+
+        return () => this;
+>this : Symbol(C4, Decl(declarationFiles.ts, 26, 1))
+    }
+}
+

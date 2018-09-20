@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/forStatements/forStatementsMultipleValidDecl.ts ===
-
 // all expected to be valid
 
 for (var x: number; ;) { }
@@ -7,7 +6,7 @@ for (var x: number; ;) { }
 
 for (var x = 2; ;) { }
 >x : number
->2 : number
+>2 : 2
 
 for (var x = <number>undefined; ;) { }
 >x : number
@@ -20,31 +19,28 @@ function declSpace() {
 
     for (var x = 'this is a string'; ;) { }
 >x : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 }
 interface Point { x: number; y: number; }
->Point : Point
 >x : number
 >y : number
 
 for (var p: Point; ;) { }
 >p : Point
->Point : Point
 
 for (var p = { x: 1, y: 2 }; ;) { }
 >p : Point
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 for (var p: Point = { x: 0, y: undefined }; ;) { }
 >p : Point
->Point : Point
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->0 : number
+>0 : 0
 >y : undefined
 >undefined : undefined
 
@@ -52,7 +48,7 @@ for (var p = { x: 1, y: <number>undefined }; ;) { }
 >p : Point
 >{ x: 1, y: <number>undefined } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
 ><number>undefined : number
 >undefined : undefined
@@ -63,9 +59,9 @@ for (var p: { x: number; y: number; } = { x: 1, y: 2 }; ;) { }
 >y : number
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
 for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
 >p : Point
@@ -74,7 +70,7 @@ for (var p = <{ x: number; y: number; }>{ x: 0, y: undefined }; ;) { }
 >y : number
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
->0 : number
+>0 : 0
 >y : undefined
 >undefined : undefined
 
@@ -86,13 +82,13 @@ for (var fn = function (s: string) { return 42; }; ;) { }
 >fn : (s: string) => number
 >function (s: string) { return 42; } : (s: string) => number
 >s : string
->42 : number
+>42 : 42
 
 for (var fn = (s: string) => 3; ;) { }
 >fn : (s: string) => number
 >(s: string) => 3 : (s: string) => number
 >s : string
->3 : number
+>3 : 3
 
 for (var fn: (s: string) => number; ;) { }
 >fn : (s: string) => number
@@ -118,8 +114,8 @@ for (var a: string[]; ;) { }
 for (var a = ['a', 'b']; ;) { }
 >a : string[]
 >['a', 'b'] : string[]
->'a' : string
->'b' : string
+>'a' : "a"
+>'b' : "b"
 
 for (var a = <string[]>[]; ;) { }
 >a : string[]

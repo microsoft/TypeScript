@@ -1,0 +1,25 @@
+{
+    "kind": "ArrayType",
+    "pos": 1,
+    "end": 6,
+    "flags": "JSDoc",
+    "elementType": {
+        "kind": "ArrayType",
+        "pos": 1,
+        "end": 4,
+        "flags": "JSDoc",
+        "elementType": {
+            "kind": "TypeReference",
+            "pos": 1,
+            "end": 2,
+            "flags": "JSDoc",
+            "typeName": {
+                "kind": "Identifier",
+                "pos": 1,
+                "end": 2,
+                "flags": "JSDoc",
+                "escapedText": "a"
+            }
+        }
+    }
+}

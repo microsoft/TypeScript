@@ -1,0 +1,23 @@
+=== tests/cases/compiler/superCallFromClassThatHasNoBaseType1.ts ===
+class A {
+>A : A
+
+    constructor(private map: (value: number) => string) {
+>map : (value: number) => string
+>value : number
+
+    }
+}
+
+class B {
+>B : B
+
+    constructor() { super(value => String(value)); }
+>super(value => String(value)) : void
+>super : any
+>value => String(value) : (value: any) => string
+>value : any
+>String(value) : string
+>String : StringConstructor
+>value : any
+}

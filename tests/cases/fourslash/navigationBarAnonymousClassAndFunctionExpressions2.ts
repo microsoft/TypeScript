@@ -3,6 +3,39 @@
 ////console.log(console.log(class Y {}, class X {}), console.log(class B {}, class A {}));
 ////console.log(class Cls { meth() {} });
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "A",
+            "kind": "class"
+        },
+        {
+            "text": "B",
+            "kind": "class"
+        },
+        {
+            "text": "Cls",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "meth",
+                    "kind": "method"
+                }
+            ]
+        },
+        {
+            "text": "X",
+            "kind": "class"
+        },
+        {
+            "text": "Y",
+            "kind": "class"
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

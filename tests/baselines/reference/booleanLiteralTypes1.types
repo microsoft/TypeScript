@@ -14,11 +14,9 @@ function f1() {
 
     var a: A1;
 >a : boolean
->A1 : boolean
 
     var a: A2;
 >a : boolean
->A2 : boolean
 
     var a: true | false;
 >a : boolean
@@ -113,7 +111,7 @@ function f4(t: true, f: false) {
 >t : true
 
     var x6 = !f;
->x6 : true
+>x6 : boolean
 >!f : true
 >f : false
 }
@@ -162,11 +160,11 @@ function assertNever(x: never): never {
     throw new Error("Unexpected value");
 >new Error("Unexpected value") : Error
 >Error : ErrorConstructor
->"Unexpected value" : string
+>"Unexpected value" : "Unexpected value"
 }
 
 function f10(x: true | false) {
->f10 : (x: boolean) => string
+>f10 : (x: boolean) => "true" | "false"
 >x : boolean
 >true : true
 >false : false
@@ -176,16 +174,16 @@ function f10(x: true | false) {
 
         case true: return "true";
 >true : true
->"true" : string
+>"true" : "true"
 
         case false: return "false";
 >false : false
->"false" : string
+>"false" : "false"
     }
 }
 
 function f11(x: true | false) {
->f11 : (x: boolean) => string
+>f11 : (x: boolean) => "true" | "false"
 >x : boolean
 >true : true
 >false : false
@@ -195,11 +193,11 @@ function f11(x: true | false) {
 
         case true: return "true";
 >true : true
->"true" : string
+>"true" : "true"
 
         case false: return "false";
 >false : false
->"false" : string
+>"false" : "false"
     }
     return assertNever(x);
 >assertNever(x) : never
@@ -261,7 +259,6 @@ type Item =
 function f20(x: Item) {
 >f20 : (x: Item) => string
 >x : Item
->Item : Item
 
     switch (x.kind) {
 >x.kind : boolean
@@ -285,7 +282,6 @@ function f20(x: Item) {
 function f21(x: Item) {
 >f21 : (x: Item) => string
 >x : Item
->Item : Item
 
     switch (x.kind) {
 >x.kind : boolean

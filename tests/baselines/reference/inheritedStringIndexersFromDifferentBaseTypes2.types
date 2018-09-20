@@ -1,0 +1,40 @@
+=== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts ===
+// indexer in B is a subtype of indexer in A
+interface A {
+    [s: string]: {
+>s : string
+
+        a;
+>a : any
+
+    };
+}
+interface B {
+    [s: number]: {
+>s : number
+
+        a;
+>a : any
+
+        b;
+>b : any
+
+    };
+}
+interface C extends A, B { } // ok
+
+interface D {
+    [s: number]: {};
+>s : number
+}
+interface E extends A, D { } // error
+
+interface F extends A, D {
+    [s: number]: {
+>s : number
+
+        a;
+>a : any
+
+    };
+} // ok because we overrode D's number index signature

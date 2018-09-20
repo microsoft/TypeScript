@@ -1,5 +1,4 @@
 //// [superSymbolIndexedAccess2.ts]
-
 class Foo {
     [Symbol.isConcatSpreadable]() {
         return 0;

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/forwardRefInClassProperties.ts ===
+class Test
+>Test : Test
+{
+    _b = this._a; // undefined, no error/warning
+>_b : number
+>this._a : number
+>this : this
+>_a : number
+
+    _a = 3;
+>_a : number
+>3 : 3
+
+    static _B = Test._A; // undefined, no error/warning
+>_B : number
+>Test._A : number
+>Test : typeof Test
+>_A : number
+
+    static _A = 3;
+>_A : number
+>3 : 3
+
+    method()
+>method : () => void
+    {
+        let a = b; // Property 'b' is used before its initialization.
+>a : number
+>b : number
+
+        let b = 3;
+>b : number
+>3 : 3
+    }
+}
+

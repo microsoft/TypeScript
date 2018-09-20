@@ -1,0 +1,14 @@
+=== tests/cases/compiler/a.ts ===
+export default function () {
+    return true;
+}
+export type X = typeof default;  // expect error
+>X : Symbol(X, Decl(a.ts, 2, 1))
+
+=== tests/cases/compiler/b.ts ===
+export default { a: true }
+>a : Symbol(a, Decl(b.ts, 0, 16))
+
+export type X = typeof default; // expect error
+>X : Symbol(X, Decl(b.ts, 0, 26))
+

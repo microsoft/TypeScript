@@ -10,15 +10,15 @@ export default function foo() {}
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     class Foo {
     }
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = Foo;
 });
 //// [b.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    function foo() { }
     Object.defineProperty(exports, "__esModule", { value: true });
+    function foo() { }
     exports.default = foo;
 });

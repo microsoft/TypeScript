@@ -7,4 +7,4 @@
 
 goTo.eof();
 edit.insertLine('');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

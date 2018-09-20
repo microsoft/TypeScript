@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 var BOOLEAN: boolean;
 var NUMBER: number;
 var STRING: string;

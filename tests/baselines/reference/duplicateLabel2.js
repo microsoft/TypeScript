@@ -1,5 +1,4 @@
 //// [duplicateLabel2.ts]
-
 target:
 while (true) {
   target:

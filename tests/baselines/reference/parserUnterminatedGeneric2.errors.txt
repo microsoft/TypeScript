@@ -4,12 +4,12 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,9): error TS2304: Cannot find name 'assign'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,16): error TS2304: Cannot find name 'context'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,23): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,25): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,25): error TS2693: 'any' only refers to a type, but is being used as a value here.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,30): error TS2304: Cannot find name 'value'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,35): error TS1005: ',' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,37): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,37): error TS2693: 'any' only refers to a type, but is being used as a value here.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,41): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,43): error TS2304: Cannot find name 'any'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,43): error TS2693: 'any' only refers to a type, but is being used as a value here.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,23): error TS2304: Cannot find name 'IPromise'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,45): error TS2304: Cannot find name 'IPromise'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
@@ -33,17 +33,17 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
                           ~
 !!! error TS1005: ',' expected.
                             ~~~
-!!! error TS2304: Cannot find name 'any'.
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
                                  ~~~~~
 !!! error TS2304: Cannot find name 'value'.
                                       ~
 !!! error TS1005: ',' expected.
                                         ~~~
-!!! error TS2304: Cannot find name 'any'.
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
                                             ~
 !!! error TS1005: ';' expected.
                                               ~~~
-!!! error TS2304: Cannot find name 'any'.
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
         }
     
         interface IQService {

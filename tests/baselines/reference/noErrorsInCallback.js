@@ -9,7 +9,7 @@ var one = new Bar({}); // Error
  
 
 //// [noErrorsInCallback.js]
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar(foo) {
         this.foo = foo;
     }

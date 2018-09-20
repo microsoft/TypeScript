@@ -31,7 +31,7 @@ module Test {
 "use strict";
 var Test;
 (function (Test) {
-    var Gar = (function () {
+    var Gar = /** @class */ (function () {
         function Gar() {
             this.moo = 0;
         }

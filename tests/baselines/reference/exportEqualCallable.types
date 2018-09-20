@@ -8,7 +8,6 @@ connect();
 >connect : () => any
 
 === tests/cases/compiler/exportEqualCallable_0.ts ===
-
 var server: {
 >server : () => any
 

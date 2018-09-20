@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration10.ts ===
+var a,;
+>a : Symbol(a, Decl(parserVariableDeclaration10.ts, 0, 3))
+

@@ -8,7 +8,7 @@ let x = (new C).foo();
 
 
 //// [classExpression4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function class_1() {
     }
     class_1.prototype.foo = function () {

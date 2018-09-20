@@ -1,6 +1,4 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithTagNamedDeclare.ts ===
-
-
 function declare(x: any, ...ys: any[]) {
 >declare : (x: any, ...ys: any[]) => void
 >x : any
@@ -11,5 +9,5 @@ declare `Hello ${0} world!`;
 >declare `Hello ${0} world!` : void
 >declare : (x: any, ...ys: any[]) => void
 >`Hello ${0} world!` : string
->0 : number
+>0 : 0
 

@@ -3,8 +3,9 @@ class C {
 >C : C
 
     [Symbol.toPrimitive] = "";
+>[Symbol.toPrimitive] : string
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
->"" : string
+>"" : ""
 }

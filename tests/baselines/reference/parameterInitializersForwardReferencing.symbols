@@ -1,0 +1,121 @@
+=== tests/cases/conformance/functions/parameterInitializersForwardReferencing.ts ===
+function left(a, b = a, c = b) {
+>left : Symbol(left, Decl(parameterInitializersForwardReferencing.ts, 0, 0))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 0, 14))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 0, 16))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 0, 14))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 0, 23))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 0, 16))
+
+    a;
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 0, 14))
+
+    b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 0, 16))
+}
+
+function right(a = b, b = a) {
+>right : Symbol(right, Decl(parameterInitializersForwardReferencing.ts, 3, 1))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 5, 15))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 5, 21))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 5, 21))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 5, 15))
+
+    a;
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 5, 15))
+
+    b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 5, 21))
+}
+
+function right2(a = b, b = c, c = a) {
+>right2 : Symbol(right2, Decl(parameterInitializersForwardReferencing.ts, 8, 1))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 10, 16))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 10, 22))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 10, 22))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 10, 29))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 10, 29))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 10, 16))
+
+    a;
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 10, 16))
+
+    b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 10, 22))
+
+    c;
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 10, 29))
+}
+
+function inside(a = b) {
+>inside : Symbol(inside, Decl(parameterInitializersForwardReferencing.ts, 14, 1))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 16, 16))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 17, 7))
+
+    var b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 17, 7))
+}
+
+function outside() {
+>outside : Symbol(outside, Decl(parameterInitializersForwardReferencing.ts, 18, 1))
+
+    var b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 21, 7))
+
+    function inside(a = b) { // Still an error because b is declared inside the function
+>inside : Symbol(inside, Decl(parameterInitializersForwardReferencing.ts, 21, 10))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 22, 20))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 23, 11))
+
+        var b;
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 23, 11))
+    }
+}
+
+function defaultArgFunction(a = function () { return b; }, b = 1) { }
+>defaultArgFunction : Symbol(defaultArgFunction, Decl(parameterInitializersForwardReferencing.ts, 25, 1))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 27, 28))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 27, 58))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 27, 58))
+
+function defaultArgArrow(a = () => () => b, b = 3) { }
+>defaultArgArrow : Symbol(defaultArgArrow, Decl(parameterInitializersForwardReferencing.ts, 27, 69))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 28, 25))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 28, 43))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 28, 43))
+
+class C {
+>C : Symbol(C, Decl(parameterInitializersForwardReferencing.ts, 28, 54))
+
+    constructor(a = b, b = 1) { }
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 31, 16))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 31, 22))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 31, 22))
+
+    method(a = b, b = 1) { }
+>method : Symbol(C.method, Decl(parameterInitializersForwardReferencing.ts, 31, 33))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 32, 11))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 32, 17))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 32, 17))
+}
+
+// Function expressions
+var x = (a = b, b = c, c = d) => { var d; };
+>x : Symbol(x, Decl(parameterInitializersForwardReferencing.ts, 36, 3))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 36, 9))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 36, 15))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 36, 15))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 36, 22))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 36, 22))
+>d : Symbol(d, Decl(parameterInitializersForwardReferencing.ts, 36, 38))
+>d : Symbol(d, Decl(parameterInitializersForwardReferencing.ts, 36, 38))
+
+// Should not produce errors - can reference later parameters if they occur within a function expression initializer.
+function f(a, b = function () { return c; }, c = b()) {
+>f : Symbol(f, Decl(parameterInitializersForwardReferencing.ts, 36, 44))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing.ts, 39, 11))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 39, 13))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 39, 44))
+>c : Symbol(c, Decl(parameterInitializersForwardReferencing.ts, 39, 44))
+>b : Symbol(b, Decl(parameterInitializersForwardReferencing.ts, 39, 13))
+}

@@ -67,52 +67,60 @@ class I extends G {
 
 
 //// [returnInConstructor1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var A = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
     function A() {
         return;
     }
     A.prototype.foo = function () { };
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         return 1; // error
     }
     B.prototype.foo = function () { };
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         return this;
     }
     C.prototype.foo = function () { };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
         return "test"; // error
     }
     D.prototype.foo = function () { };
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
         return { foo: 1 };
     }
     return E;
 }());
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
         return { foo: 1 }; //error
     }
     return F;
 }());
-var G = (function () {
+var G = /** @class */ (function () {
     function G() {
         this.test = 2;
     }
@@ -120,18 +128,18 @@ var G = (function () {
     G.prototype.foo = function () { };
     return G;
 }());
-var H = (function (_super) {
+var H = /** @class */ (function (_super) {
     __extends(H, _super);
     function H() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         return new G(); //error
     }
     return H;
 }(F));
-var I = (function (_super) {
+var I = /** @class */ (function (_super) {
     __extends(I, _super);
     function I() {
-        _super.call(this);
+        var _this = _super.call(this) || this;
         return new G();
     }
     return I;

@@ -11,4 +11,4 @@
 //// /*1*/
 
 goTo.marker('1');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

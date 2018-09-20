@@ -1,0 +1,43 @@
+=== tests/cases/compiler/shadowingViaLocalValueOrBindingElement.ts ===
+if (true) {
+>true : true
+
+    let x;
+>x : any
+
+    if (true) {
+>true : true
+
+        var x = 0; // Error
+>x : number
+>0 : 0
+
+        var { x = 0 } = { x: 0 }; // Error
+>x : number
+>0 : 0
+>{ x: 0 } : { x?: number; }
+>x : number
+>0 : 0
+
+        var { x: x = 0 } = { x: 0 }; // Error
+>x : any
+>x : number
+>0 : 0
+>{ x: 0 } : { x?: number; }
+>x : number
+>0 : 0
+
+        var { x } = { x: 0 }; // Error
+>x : number
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+
+        var { x: x } = { x: 0 }; // Error
+>x : any
+>x : number
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+    }
+}

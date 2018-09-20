@@ -6,9 +6,6 @@
 ////}
 ////
 ////var foo: I;
-////var { /*use*/property1: prop1 } = foo;
+////var { [|/*use*/property1|]: prop1 } = foo;
 
-goTo.marker("use");
-verify.definitionLocationExists();
-goTo.definition();
-verify.caretAtMarker("def");
+verify.goToDefinition("use", "def");

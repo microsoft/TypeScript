@@ -1,5 +1,4 @@
 //// [modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts]
-
 var s = Symbol();
 var t = {};
 var p = new Proxy(t, {});

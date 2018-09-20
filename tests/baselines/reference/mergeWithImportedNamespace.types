@@ -2,7 +2,7 @@
 export namespace N { export var x = 1; }
 >N : typeof N
 >x : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/f2.ts ===
 import {N} from "./f1";
@@ -10,9 +10,6 @@ import {N} from "./f1";
 
 // partial revert of https://github.com/Microsoft/TypeScript/pull/7583 to prevent breaking changes
 export namespace N {
->N : any
-
     export interface I {x: any}
->I : I
 >x : any
 }

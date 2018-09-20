@@ -1,0 +1,33 @@
+=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_1.ts ===
+///<reference path='exportAssignmentOfDeclaredExternalModule_0.ts'/>
+import Sammy = require('./exportAssignmentOfDeclaredExternalModule_0');
+>Sammy : Symbol(Sammy, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 0, 0))
+
+var x = new Sammy(); // error to use as constructor as there is not constructor symbol
+>x : Symbol(x, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 2, 3))
+
+var y = Sammy(); // error to use interface name as call target
+>y : Symbol(y, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 3, 3))
+
+var z: Sammy; // no error - z is of type interface Sammy from module 'M'
+>z : Symbol(z, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 4, 3))
+>Sammy : Symbol(Sammy, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 0, 0))
+
+var a = new z(); // constructor - no error
+>a : Symbol(a, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 5, 3))
+>z : Symbol(z, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 4, 3))
+
+var b = z(); // call signature - no error
+>b : Symbol(b, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 6, 3))
+>z : Symbol(z, Decl(exportAssignmentOfDeclaredExternalModule_1.ts, 4, 3))
+
+=== tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_0.ts ===
+interface Sammy {
+>Sammy : Symbol(Sammy, Decl(exportAssignmentOfDeclaredExternalModule_0.ts, 0, 0))
+
+    new (): any; // a constructor signature
+        (): number; // a 0 arg call signature
+    }
+export = Sammy;
+>Sammy : Symbol(Sammy, Decl(exportAssignmentOfDeclaredExternalModule_0.ts, 0, 0))
+

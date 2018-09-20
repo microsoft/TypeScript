@@ -4,5 +4,5 @@
 /////a/./**/
 
 goTo.marker();
-verify.not.memberListContains('v');
-verify.memberListContains('compile');
+verify.not.completionListContains('v');
+verify.completionListContains('compile');

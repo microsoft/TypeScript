@@ -1,9 +1,11 @@
 EmitSkipped: false
 
 EmitSkipped: false
-FileName : tests/cases/fourslash/inputFile2.js
+
+FileName : /tests/cases/fourslash/inputFile2.js
 "use strict";
-var Foo = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
@@ -11,6 +13,7 @@ var Foo = (function () {
 exports.Foo = Foo;
 
 EmitSkipped: false
-FileName : tests/cases/fourslash/inputFile3.js
+
+FileName : /tests/cases/fourslash/inputFile3.js
 var x = "hello";
 

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/scopeTests.ts ===
+class C { private v; public p; static s; }
+>C : Symbol(C, Decl(scopeTests.ts, 0, 0))
+>v : Symbol(C.v, Decl(scopeTests.ts, 0, 9))
+>p : Symbol(C.p, Decl(scopeTests.ts, 0, 20))
+>s : Symbol(C.s, Decl(scopeTests.ts, 0, 30))
+
+class D extends C {
+>D : Symbol(D, Decl(scopeTests.ts, 0, 42))
+>C : Symbol(C, Decl(scopeTests.ts, 0, 0))
+
+  public v: number;
+>v : Symbol(D.v, Decl(scopeTests.ts, 1, 19))
+
+  public p: number
+>p : Symbol(D.p, Decl(scopeTests.ts, 2, 19))
+
+  constructor() {
+   super()
+>super : Symbol(C, Decl(scopeTests.ts, 0, 0))
+
+   this.v = 1;
+>this.v : Symbol(D.v, Decl(scopeTests.ts, 1, 19))
+>this : Symbol(D, Decl(scopeTests.ts, 0, 42))
+>v : Symbol(D.v, Decl(scopeTests.ts, 1, 19))
+
+   this.p = 1;
+>this.p : Symbol(D.p, Decl(scopeTests.ts, 2, 19))
+>this : Symbol(D, Decl(scopeTests.ts, 0, 42))
+>p : Symbol(D.p, Decl(scopeTests.ts, 2, 19))
+
+   C.s = 1;
+>C.s : Symbol(C.s, Decl(scopeTests.ts, 0, 30))
+>C : Symbol(C, Decl(scopeTests.ts, 0, 0))
+>s : Symbol(C.s, Decl(scopeTests.ts, 0, 30))
+  }
+}

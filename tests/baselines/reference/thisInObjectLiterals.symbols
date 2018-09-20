@@ -1,0 +1,46 @@
+=== tests/cases/conformance/expressions/thisKeyword/thisInObjectLiterals.ts ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+
+    t: number;
+>t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
+
+    fn() {
+>fn : Symbol(MyClass.fn, Decl(thisInObjectLiterals.ts, 1, 14))
+
+        type ContainingThis = this;
+>ContainingThis : Symbol(ContainingThis, Decl(thisInObjectLiterals.ts, 3, 10))
+
+        //type of 'this' in an object literal is the containing scope's this
+        var t = { x: this, y: this.t };
+>t : Symbol(t, Decl(thisInObjectLiterals.ts, 6, 11), Decl(thisInObjectLiterals.ts, 7, 11))
+>x : Symbol(x, Decl(thisInObjectLiterals.ts, 6, 17))
+>this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+>y : Symbol(y, Decl(thisInObjectLiterals.ts, 6, 26))
+>this.t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
+>this : Symbol(MyClass, Decl(thisInObjectLiterals.ts, 0, 0))
+>t : Symbol(MyClass.t, Decl(thisInObjectLiterals.ts, 0, 15))
+
+        var t: { x: ContainingThis; y: number };
+>t : Symbol(t, Decl(thisInObjectLiterals.ts, 6, 11), Decl(thisInObjectLiterals.ts, 7, 11))
+>x : Symbol(x, Decl(thisInObjectLiterals.ts, 7, 16))
+>ContainingThis : Symbol(ContainingThis, Decl(thisInObjectLiterals.ts, 3, 10))
+>y : Symbol(y, Decl(thisInObjectLiterals.ts, 7, 35))
+    }
+}
+
+//type of 'this' in an object literal method is the type of the object literal
+var obj = {
+>obj : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 3), Decl(thisInObjectLiterals.ts, 17, 3))
+
+    f() {
+>f : Symbol(f, Decl(thisInObjectLiterals.ts, 12, 11))
+
+        return this.spaaace;
+>this : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 9))
+    }
+};
+var obj: { f: () => any; };
+>obj : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 3), Decl(thisInObjectLiterals.ts, 17, 3))
+>f : Symbol(f, Decl(thisInObjectLiterals.ts, 17, 10))
+

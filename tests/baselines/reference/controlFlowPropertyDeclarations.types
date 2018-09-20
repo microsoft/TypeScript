@@ -8,7 +8,7 @@ var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
 >HTMLDOMPropertyConfig : any
 >require('react/lib/HTMLDOMPropertyConfig') : any
 >require : any
->'react/lib/HTMLDOMPropertyConfig' : string
+>'react/lib/HTMLDOMPropertyConfig' : "react/lib/HTMLDOMPropertyConfig"
 
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr
@@ -70,13 +70,13 @@ function repeatString(string, times) {
   if (times < 0) { throw new Error(); }
 >times < 0 : boolean
 >times : any
->0 : number
+>0 : 0
 >new Error() : Error
 >Error : ErrorConstructor
 
   var repeated = '';
 >repeated : string
->'' : string
+>'' : ""
 
   while (times) {
 >times : any
@@ -84,7 +84,7 @@ function repeatString(string, times) {
     if (times & 1) {
 >times & 1 : number
 >times : any
->1 : number
+>1 : 1
 
       repeated += string;
 >repeated += string : string
@@ -94,7 +94,7 @@ function repeatString(string, times) {
     if (times >>= 1) {
 >times >>= 1 : number
 >times : any
->1 : number
+>1 : 1
 
       string += string;
 >string += string : any
@@ -156,7 +156,7 @@ function trimEnd(haystack, needle) {
 >haystack.slice : any
 >haystack : any
 >slice : any
->0 : number
+>0 : 0
 >-needle.length : number
 >needle.length : any
 >needle : any
@@ -281,7 +281,7 @@ export class HTMLtoJSX {
 
     var text = ''
 >text : string
->'' : string
+>'' : ""
 
     if (this._inPreTag) {
 >this._inPreTag : boolean
@@ -295,18 +295,18 @@ export class HTMLtoJSX {
 >text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >text : string
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
->text        .replace(/\r/g, '')        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text        .replace(/\r/g, '') : string
->text        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text : string
 
         .replace(/\r/g, '')
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/\r/g : RegExp
->'' : string
+>'' : ""
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/( {2,}|\n|\t|\{|\})/g : RegExp
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
 >whitespace : string
@@ -314,13 +314,13 @@ export class HTMLtoJSX {
           return '{' + JSON.stringify(whitespace) + '}';
 >'{' + JSON.stringify(whitespace) + '}' : string
 >'{' + JSON.stringify(whitespace) : string
->'{' : string
+>'{' : "{"
 >JSON.stringify(whitespace) : string
 >JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
 >stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >whitespace : string
->'}' : string
+>'}' : "}"
 
         });
     } else {
@@ -331,9 +331,9 @@ export class HTMLtoJSX {
 >text.indexOf : (searchString: string, position?: number) => number
 >text : string
 >indexOf : (searchString: string, position?: number) => number
->'\n' : string
->-1 : number
->1 : number
+>'\n' : "\n"
+>-1 : -1
+>1 : 1
       }
     }
     this.output += text;
@@ -371,11 +371,11 @@ export class StyleParser {
       if (!this.styles.hasOwnProperty(key)) {
 >!this.styles.hasOwnProperty(key) : boolean
 >this.styles.hasOwnProperty(key) : boolean
->this.styles.hasOwnProperty : (v: string) => boolean
+>this.styles.hasOwnProperty : (v: string | number | symbol) => boolean
 >this.styles : {}
 >this : this
 >styles : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >key : string
       }
     }

@@ -1,0 +1,76 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface PoisonedProp {
+>PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+
+    x: string;
+>x : Symbol(PoisonedProp.x, Decl(file.tsx, 2, 24))
+
+    y: 2;
+>y : Symbol(PoisonedProp.y, Decl(file.tsx, 3, 14))
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
+
+    render() {
+>render : Symbol(Poisoned.render, Decl(file.tsx, 7, 58))
+
+        return <div>Hello</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+    }
+}
+
+let obj = {
+>obj : Symbol(obj, Decl(file.tsx, 13, 3))
+
+    x: "hello world",
+>x : Symbol(x, Decl(file.tsx, 13, 11))
+
+    y: 2
+>y : Symbol(y, Decl(file.tsx, 14, 21))
+
+};
+
+// Error as "obj" has type { x: string; y: number }
+let p = <Poisoned {...obj} />;
+>p : Symbol(p, Decl(file.tsx, 19, 3))
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>obj : Symbol(obj, Decl(file.tsx, 13, 3))
+
+class EmptyProp extends React.Component<{}, {}> {
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+
+    render() {
+>render : Symbol(EmptyProp.render, Decl(file.tsx, 21, 49))
+
+        return <div>Default hi</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+    }
+    greeting: string;
+>greeting : Symbol(EmptyProp.greeting, Decl(file.tsx, 24, 5))
+}
+
+let o = {
+>o : Symbol(o, Decl(file.tsx, 28, 3))
+
+    prop1: false
+>prop1 : Symbol(prop1, Decl(file.tsx, 28, 9))
+}
+// Ok
+let e = <EmptyProp {...o} />;
+>e : Symbol(e, Decl(file.tsx, 32, 3))
+>EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>o : Symbol(o, Decl(file.tsx, 28, 3))
+

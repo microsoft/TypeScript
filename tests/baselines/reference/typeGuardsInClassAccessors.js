@@ -1,5 +1,4 @@
 //// [typeGuardsInClassAccessors.ts]
-
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
@@ -110,7 +109,7 @@ class ClassWithAccessors {
 var num;
 var strOrNum;
 var var1;
-var ClassWithAccessors = (function () {
+var ClassWithAccessors = /** @class */ (function () {
     function ClassWithAccessors() {
     }
     Object.defineProperty(ClassWithAccessors.prototype, "p1", {

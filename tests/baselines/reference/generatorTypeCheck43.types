@@ -7,8 +7,9 @@ function* g() {
 >{        *[yield 0]() {        }    } : { [x: number]: () => IterableIterator<any>; }
 
         *[yield 0]() {
+>[yield 0] : () => IterableIterator<any>
 >yield 0 : any
->0 : number
+>0 : 0
 
         }
     }

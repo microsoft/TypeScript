@@ -22,5 +22,5 @@ var x = foo([{a:'s'}]);
 >[{a:'s'}] : { a: string; }[]
 >{a:'s'} : { a: string; }
 >a : string
->'s' : string
+>'s' : "s"
 

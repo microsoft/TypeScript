@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target2.ts]
-
 export default class C {
     static s = 0;
     p = 1;
@@ -8,7 +7,7 @@ export default class C {
 
 
 //// [es6modulekindWithES5Target2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }

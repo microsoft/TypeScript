@@ -1,0 +1,50 @@
+=== tests/cases/compiler/global.ts ===
+namespace n {
+>n : Symbol(n, Decl(global.ts, 0, 0))
+
+    function id<T>(x: T): T {
+>id : Symbol(id, Decl(global.ts, 0, 13))
+>T : Symbol(T, Decl(global.ts, 1, 16))
+>x : Symbol(x, Decl(global.ts, 1, 19))
+>T : Symbol(T, Decl(global.ts, 1, 16))
+>T : Symbol(T, Decl(global.ts, 1, 16))
+
+        return x;
+>x : Symbol(x, Decl(global.ts, 1, 19))
+    }
+
+    function templateObjectFactory() {
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(global.ts, 3, 5))
+
+        return id`hello world`;
+>id : Symbol(id, Decl(global.ts, 0, 13))
+    }
+    let result = templateObjectFactory() === templateObjectFactory();
+>result : Symbol(result, Decl(global.ts, 8, 7))
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(global.ts, 3, 5))
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(global.ts, 3, 5))
+}
+=== tests/cases/compiler/module.ts ===
+export { }
+function id<T>(x: T): T {
+>id : Symbol(id, Decl(module.ts, 0, 10))
+>T : Symbol(T, Decl(module.ts, 1, 12))
+>x : Symbol(x, Decl(module.ts, 1, 15))
+>T : Symbol(T, Decl(module.ts, 1, 12))
+>T : Symbol(T, Decl(module.ts, 1, 12))
+
+    return x;
+>x : Symbol(x, Decl(module.ts, 1, 15))
+}
+
+function templateObjectFactory() {
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(module.ts, 3, 1))
+
+    return id`hello world`;
+>id : Symbol(id, Decl(module.ts, 0, 10))
+}
+let result = templateObjectFactory() === templateObjectFactory();
+>result : Symbol(result, Decl(module.ts, 8, 3))
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(module.ts, 3, 1))
+>templateObjectFactory : Symbol(templateObjectFactory, Decl(module.ts, 3, 1))
+

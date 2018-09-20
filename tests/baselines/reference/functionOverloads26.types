@@ -9,11 +9,11 @@ function foo(bar:string):number;
 function foo(bar?:any):any{ return '' }
 >foo : { (): string; (bar: string): number; }
 >bar : any
->'' : string
+>'' : ""
 
 var x = foo('baz');
 >x : number
 >foo('baz') : number
 >foo : { (): string; (bar: string): number; }
->'baz' : string
+>'baz' : "baz"
 

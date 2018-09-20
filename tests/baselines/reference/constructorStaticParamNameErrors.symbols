@@ -1,0 +1,9 @@
+=== tests/cases/compiler/constructorStaticParamNameErrors.ts ===
+'use strict'
+// static as constructor parameter name should give error if 'use strict'
+class test {
+>test : Symbol(test, Decl(constructorStaticParamNameErrors.ts, 0, 12))
+
+    constructor (static) { }
+>static : Symbol(static, Decl(constructorStaticParamNameErrors.ts, 3, 17))
+}

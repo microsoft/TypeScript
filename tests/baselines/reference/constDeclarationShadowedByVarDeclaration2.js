@@ -1,5 +1,4 @@
 //// [constDeclarationShadowedByVarDeclaration2.ts]
-
 // No errors, const declaration is not shadowed
 function outer() {
     const x = 0;

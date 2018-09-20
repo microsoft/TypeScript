@@ -77,17 +77,17 @@ declare var a: {
 
 
 //// [returnTypeTypeArguments.js]
-var One = (function () {
+var One = /** @class */ (function () {
     function One() {
     }
     return One;
 }());
-var Two = (function () {
+var Two = /** @class */ (function () {
     function Two() {
     }
     return Two;
 }());
-var Three = (function () {
+var Three = /** @class */ (function () {
     function Three() {
     }
     return Three;
@@ -98,7 +98,7 @@ function A3() { return null; }
 function B1() { return null; }
 function B2() { return null; }
 function B3() { return null; }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.A1 = function () { return null; };
@@ -109,7 +109,7 @@ var C = (function () {
     C.prototype.B3 = function () { return null; };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.A2 = function () { return null; };
@@ -119,12 +119,12 @@ var D = (function () {
     D.prototype.B3 = function () { return null; };
     return D;
 }());
-var Y = (function () {
+var Y = /** @class */ (function () {
     function Y() {
     }
     return Y;
 }());
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     return X;

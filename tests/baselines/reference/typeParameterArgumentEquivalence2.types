@@ -1,0 +1,23 @@
+=== tests/cases/compiler/typeParameterArgumentEquivalence2.ts ===
+function foo<T,U>() {
+>foo : <T, U>() => void
+
+    var x: (item: U) => boolean;
+>x : (item: U) => boolean
+>item : U
+
+    var y: (item: T) => boolean;
+>y : (item: T) => boolean
+>item : T
+
+    x = y;  // Should be an error
+>x = y : (item: T) => boolean
+>x : (item: U) => boolean
+>y : (item: T) => boolean
+
+    y = x;  // Shound be an error
+>y = x : (item: U) => boolean
+>y : (item: T) => boolean
+>x : (item: U) => boolean
+}
+

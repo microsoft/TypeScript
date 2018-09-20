@@ -24,6 +24,56 @@
 ////    }
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "\"Multiline\\\nMadness\"",
+            "kind": "module",
+            "kindModifiers": "declare"
+        },
+        {
+            "text": "\"Multiline\\r\\nMadness\"",
+            "kind": "module",
+            "kindModifiers": "declare"
+        },
+        {
+            "text": "\"MultilineMadness\"",
+            "kind": "module",
+            "kindModifiers": "declare"
+        },
+        {
+            "text": "Bar",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "'a1\\\\\\r\\nb'",
+                    "kind": "property"
+                },
+                {
+                    "text": "'a2\\\n    \\\n    b'",
+                    "kind": "method"
+                }
+            ]
+        },
+        {
+            "text": "Foo",
+            "kind": "interface",
+            "childItems": [
+                {
+                    "text": "\"a1\\\\\\r\\nb\"",
+                    "kind": "property"
+                },
+                {
+                    "text": "\"a2\\\n    \\\n    b\"",
+                    "kind": "method"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

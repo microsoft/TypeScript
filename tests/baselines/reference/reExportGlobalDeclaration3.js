@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportGlobalDeclaration3.ts] ////
 
 //// [file1.d.ts]
-
 declare namespace NS1 {
     export var foo: number;
 }
@@ -18,3 +17,4 @@ export {NS2 as NNNS2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

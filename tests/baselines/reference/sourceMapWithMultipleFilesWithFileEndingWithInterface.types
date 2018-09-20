@@ -4,13 +4,11 @@ module M {
 
     export var X = 1;
 >X : number
->1 : number
+>1 : 1
 }
 interface Navigator {
->Navigator : Navigator
-
     getGamepads(func?: any): any;
->getGamepads : (func?: any) => any
+>getGamepads : { (): Gamepad[]; (func?: any): any; }
 >func : any
 
     webkitGetGamepads(func?: any): any

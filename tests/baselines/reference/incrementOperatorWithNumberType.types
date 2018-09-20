@@ -6,8 +6,8 @@ var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 class A {
 >A : A
@@ -72,7 +72,7 @@ var ResultIsNumber7 = NUMBER1[0]++;
 >NUMBER1[0]++ : number
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 // miss assignment operators
 ++NUMBER;
@@ -83,7 +83,7 @@ var ResultIsNumber7 = NUMBER1[0]++;
 >++NUMBER1[0] : number
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 ++objA.a;
 >++objA.a : number
@@ -115,7 +115,7 @@ NUMBER1[0]++;
 >NUMBER1[0]++ : number
 >NUMBER1[0] : number
 >NUMBER1 : number[]
->0 : number
+>0 : 0
 
 objA.a++;
 >objA.a++ : number

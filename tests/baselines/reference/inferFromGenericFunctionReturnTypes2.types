@@ -1,0 +1,500 @@
+=== tests/cases/compiler/inferFromGenericFunctionReturnTypes2.ts ===
+type Mapper<T, U> = (x: T) => U;
+>Mapper : Mapper<T, U>
+>x : T
+
+declare function wrap<T, U>(cb: Mapper<T, U>): Mapper<T, U>;
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>cb : Mapper<T, U>
+
+declare function arrayize<T, U>(cb: Mapper<T, U>): Mapper<T, U[]>;
+>arrayize : <T, U>(cb: Mapper<T, U>) => Mapper<T, U[]>
+>cb : Mapper<T, U>
+
+declare function combine<A, B, C>(f: (x: A) => B, g: (x: B) => C): (x: A) => C;
+>combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
+>f : (x: A) => B
+>x : A
+>g : (x: B) => C
+>x : B
+>x : A
+
+declare function foo(f: Mapper<string, number>): void;
+>foo : (f: Mapper<string, number>) => void
+>f : Mapper<string, number>
+
+let f1: Mapper<string, number> = s => s.length;
+>f1 : Mapper<string, number>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let f2: Mapper<string, number> = wrap(s => s.length);
+>f2 : Mapper<string, number>
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let f3: Mapper<string, number[]> = arrayize(wrap(s => s.length));
+>f3 : Mapper<string, number[]>
+>arrayize(wrap(s => s.length)) : Mapper<string, number[]>
+>arrayize : <T, U>(cb: Mapper<T, U>) => Mapper<T, U[]>
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let f4: Mapper<string, boolean> = combine(wrap(s => s.length), wrap(n => n >= 10));
+>f4 : Mapper<string, boolean>
+>combine(wrap(s => s.length), wrap(n => n >= 10)) : (x: string) => boolean
+>combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+>wrap(n => n >= 10) : Mapper<number, boolean>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>n => n >= 10 : (n: number) => boolean
+>n : number
+>n >= 10 : boolean
+>n : number
+>10 : 10
+
+foo(wrap(s => s.length));
+>foo(wrap(s => s.length)) : void
+>foo : (f: Mapper<string, number>) => void
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let a1 = ["a", "b"].map(s => s.length);
+>a1 : number[]
+>["a", "b"].map(s => s.length) : number[]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let a2 = ["a", "b"].map(wrap(s => s.length));
+>a2 : number[]
+>["a", "b"].map(wrap(s => s.length)) : number[]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let a3 = ["a", "b"].map(wrap(arrayize(s => s.length)));
+>a3 : number[][]
+>["a", "b"].map(wrap(arrayize(s => s.length))) : number[][]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>wrap(arrayize(s => s.length)) : Mapper<string, number[]>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>arrayize(s => s.length) : Mapper<string, number[]>
+>arrayize : <T, U>(cb: Mapper<T, U>) => Mapper<T, U[]>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let a4 = ["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10)));
+>a4 : boolean[]
+>["a", "b"].map(combine(wrap(s => s.length), wrap(n => n > 10))) : boolean[]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>combine(wrap(s => s.length), wrap(n => n > 10)) : (x: string) => boolean
+>combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+>wrap(n => n > 10) : Mapper<number, boolean>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>n => n > 10 : (n: number) => boolean
+>n : number
+>n > 10 : boolean
+>n : number
+>10 : 10
+
+let a5 = ["a", "b"].map(combine(identity, wrap(s => s.length)));
+>a5 : number[]
+>["a", "b"].map(combine(identity, wrap(s => s.length))) : number[]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>combine(identity, wrap(s => s.length)) : (x: string) => number
+>combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
+>identity : <T>(x: T) => T
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+
+let a6 = ["a", "b"].map(combine(wrap(s => s.length), identity));
+>a6 : number[]
+>["a", "b"].map(combine(wrap(s => s.length), identity)) : number[]
+>["a", "b"].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+>map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
+>combine(wrap(s => s.length), identity) : (x: string) => number
+>combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
+>wrap(s => s.length) : Mapper<string, number>
+>wrap : <T, U>(cb: Mapper<T, U>) => Mapper<T, U>
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+>identity : <T>(x: T) => T
+
+// This is a contrived class. We could do the same thing with Observables, etc.
+class SetOf<A> {
+>SetOf : SetOf<A>
+
+  _store: A[];
+>_store : A[]
+
+  add(a: A) {
+>add : (a: A) => void
+>a : A
+
+    this._store.push(a);
+>this._store.push(a) : number
+>this._store.push : (...items: A[]) => number
+>this._store : A[]
+>this : this
+>_store : A[]
+>push : (...items: A[]) => number
+>a : A
+  }
+
+  transform<B>(transformer: (a: SetOf<A>) => SetOf<B>): SetOf<B> {
+>transform : <B>(transformer: (a: SetOf<A>) => SetOf<B>) => SetOf<B>
+>transformer : (a: SetOf<A>) => SetOf<B>
+>a : SetOf<A>
+
+    return transformer(this);
+>transformer(this) : SetOf<B>
+>transformer : (a: SetOf<A>) => SetOf<B>
+>this : this
+  }
+
+  forEach(fn: (a: A, index: number) => void) {
+>forEach : (fn: (a: A, index: number) => void) => void
+>fn : (a: A, index: number) => void
+>a : A
+>index : number
+
+      this._store.forEach((a, i) => fn(a, i));
+>this._store.forEach((a, i) => fn(a, i)) : void
+>this._store.forEach : (callbackfn: (value: A, index: number, array: A[]) => void, thisArg?: any) => void
+>this._store : A[]
+>this : this
+>_store : A[]
+>forEach : (callbackfn: (value: A, index: number, array: A[]) => void, thisArg?: any) => void
+>(a, i) => fn(a, i) : (a: A, i: number) => void
+>a : A
+>i : number
+>fn(a, i) : void
+>fn : (a: A, index: number) => void
+>a : A
+>i : number
+  }
+}
+
+function compose<A, B, C, D, E>(
+>compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
+
+  fnA: (a: SetOf<A>) => SetOf<B>, 
+>fnA : (a: SetOf<A>) => SetOf<B>
+>a : SetOf<A>
+
+  fnB: (b: SetOf<B>) => SetOf<C>, 
+>fnB : (b: SetOf<B>) => SetOf<C>
+>b : SetOf<B>
+
+  fnC: (c: SetOf<C>) => SetOf<D>,
+>fnC : (c: SetOf<C>) => SetOf<D>
+>c : SetOf<C>
+
+  fnD: (c: SetOf<D>) => SetOf<E>,
+>fnD : (c: SetOf<D>) => SetOf<E>
+>c : SetOf<D>
+
+):(x: SetOf<A>) => SetOf<E>;
+>x : SetOf<A>
+
+/* ... etc ... */
+function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
+>compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
+>fns : ((x: T) => T)[]
+>x : T
+>x : T
+
+  return (x: T) => fns.reduce((prev, fn) => fn(prev), x);
+>(x: T) => fns.reduce((prev, fn) => fn(prev), x) : (x: T) => T
+>x : T
+>fns.reduce((prev, fn) => fn(prev), x) : T
+>fns.reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
+>fns : ((x: T) => T)[]
+>reduce : { (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T): (x: T) => T; (callbackfn: (previousValue: (x: T) => T, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => (x: T) => T, initialValue: (x: T) => T): (x: T) => T; <U>(callbackfn: (previousValue: U, currentValue: (x: T) => T, currentIndex: number, array: ((x: T) => T)[]) => U, initialValue: U): U; }
+>(prev, fn) => fn(prev) : (prev: T, fn: (x: T) => T) => T
+>prev : T
+>fn : (x: T) => T
+>fn(prev) : T
+>fn : (x: T) => T
+>prev : T
+>x : T
+}
+
+function map<A, B>(fn: (a: A) => B): (s: SetOf<A>) => SetOf<B> {
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>fn : (a: A) => B
+>a : A
+>s : SetOf<A>
+
+  return (a: SetOf<A>) => {
+>(a: SetOf<A>) => {    const b: SetOf<B> = new SetOf();    a.forEach(x => b.add(fn(x)));    return b;  } : (a: SetOf<A>) => SetOf<B>
+>a : SetOf<A>
+
+    const b: SetOf<B> = new SetOf();
+>b : SetOf<B>
+>new SetOf() : SetOf<B>
+>SetOf : typeof SetOf
+
+    a.forEach(x => b.add(fn(x)));
+>a.forEach(x => b.add(fn(x))) : void
+>a.forEach : (fn: (a: A, index: number) => void) => void
+>a : SetOf<A>
+>forEach : (fn: (a: A, index: number) => void) => void
+>x => b.add(fn(x)) : (x: A) => void
+>x : A
+>b.add(fn(x)) : void
+>b.add : (a: B) => void
+>b : SetOf<B>
+>add : (a: B) => void
+>fn(x) : B
+>fn : (a: A) => B
+>x : A
+
+    return b;
+>b : SetOf<B>
+  }
+}
+
+function filter<A>(predicate: (a: A) => boolean): (s: SetOf<A>) => SetOf<A> {
+>filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
+>predicate : (a: A) => boolean
+>a : A
+>s : SetOf<A>
+
+  return (a: SetOf<A>) => {
+>(a: SetOf<A>) => {    const result = new SetOf<A>();    a.forEach(x => {      if (predicate(x)) result.add(x);    });   return result;  } : (a: SetOf<A>) => SetOf<A>
+>a : SetOf<A>
+
+    const result = new SetOf<A>();
+>result : SetOf<A>
+>new SetOf<A>() : SetOf<A>
+>SetOf : typeof SetOf
+
+    a.forEach(x => {
+>a.forEach(x => {      if (predicate(x)) result.add(x);    }) : void
+>a.forEach : (fn: (a: A, index: number) => void) => void
+>a : SetOf<A>
+>forEach : (fn: (a: A, index: number) => void) => void
+>x => {      if (predicate(x)) result.add(x);    } : (x: A) => void
+>x : A
+
+      if (predicate(x)) result.add(x);
+>predicate(x) : boolean
+>predicate : (a: A) => boolean
+>x : A
+>result.add(x) : void
+>result.add : (a: A) => void
+>result : SetOf<A>
+>add : (a: A) => void
+>x : A
+
+    });
+   return result;
+>result : SetOf<A>
+  }
+}
+
+const testSet = new SetOf<number>();
+>testSet : SetOf<number>
+>new SetOf<number>() : SetOf<number>
+>SetOf : typeof SetOf
+
+testSet.add(1);
+>testSet.add(1) : void
+>testSet.add : (a: number) => void
+>testSet : SetOf<number>
+>add : (a: number) => void
+>1 : 1
+
+testSet.add(2);
+>testSet.add(2) : void
+>testSet.add : (a: number) => void
+>testSet : SetOf<number>
+>add : (a: number) => void
+>2 : 2
+
+testSet.add(3);
+>testSet.add(3) : void
+>testSet.add : (a: number) => void
+>testSet : SetOf<number>
+>add : (a: number) => void
+>3 : 3
+
+const t1 = testSet.transform(
+>t1 : SetOf<string>
+>testSet.transform(  compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<string>
+>testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
+>testSet : SetOf<number>
+>transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
+
+  compose(
+>compose(    filter(x => x % 1 === 0),    map(x => x + x),    map(x => x + '!!!'),    map(x => x.toUpperCase())  ) : (x: SetOf<number>) => SetOf<string>
+>compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
+
+    filter(x => x % 1 === 0),
+>filter(x => x % 1 === 0) : (s: SetOf<number>) => SetOf<number>
+>filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
+>x => x % 1 === 0 : (x: number) => boolean
+>x : number
+>x % 1 === 0 : boolean
+>x % 1 : number
+>x : number
+>1 : 1
+>0 : 0
+
+    map(x => x + x),
+>map(x => x + x) : (s: SetOf<number>) => SetOf<number>
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>x => x + x : (x: number) => number
+>x : number
+>x + x : number
+>x : number
+>x : number
+
+    map(x => x + '!!!'),
+>map(x => x + '!!!') : (s: SetOf<number>) => SetOf<string>
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>x => x + '!!!' : (x: number) => string
+>x : number
+>x + '!!!' : string
+>x : number
+>'!!!' : "!!!"
+
+    map(x => x.toUpperCase())
+>map(x => x.toUpperCase()) : (s: SetOf<string>) => SetOf<string>
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>x => x.toUpperCase() : (x: string) => string
+>x : string
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+
+  )
+)
+
+declare function identity<T>(x: T): T;
+>identity : <T>(x: T) => T
+>x : T
+
+const t2 = testSet.transform(
+>t2 : SetOf<string>
+>testSet.transform(  compose(    filter(x => x % 1 === 0),    identity,    map(x => x + '!!!'),    map(x => x.toUpperCase())  )) : SetOf<string>
+>testSet.transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
+>testSet : SetOf<number>
+>transform : <B>(transformer: (a: SetOf<number>) => SetOf<B>) => SetOf<B>
+
+  compose(
+>compose(    filter(x => x % 1 === 0),    identity,    map(x => x + '!!!'),    map(x => x.toUpperCase())  ) : (x: SetOf<number>) => SetOf<string>
+>compose : <A, B, C, D, E>(fnA: (a: SetOf<A>) => SetOf<B>, fnB: (b: SetOf<B>) => SetOf<C>, fnC: (c: SetOf<C>) => SetOf<D>, fnD: (c: SetOf<D>) => SetOf<E>) => (x: SetOf<A>) => SetOf<E>
+
+    filter(x => x % 1 === 0),
+>filter(x => x % 1 === 0) : (s: SetOf<number>) => SetOf<number>
+>filter : <A>(predicate: (a: A) => boolean) => (s: SetOf<A>) => SetOf<A>
+>x => x % 1 === 0 : (x: number) => boolean
+>x : number
+>x % 1 === 0 : boolean
+>x % 1 : number
+>x : number
+>1 : 1
+>0 : 0
+
+    identity,
+>identity : <T>(x: T) => T
+
+    map(x => x + '!!!'),
+>map(x => x + '!!!') : (s: SetOf<number>) => SetOf<string>
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>x => x + '!!!' : (x: number) => string
+>x : number
+>x + '!!!' : string
+>x : number
+>'!!!' : "!!!"
+
+    map(x => x.toUpperCase())
+>map(x => x.toUpperCase()) : (s: SetOf<string>) => SetOf<string>
+>map : <A, B>(fn: (a: A) => B) => (s: SetOf<A>) => SetOf<B>
+>x => x.toUpperCase() : (x: string) => string
+>x : string
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+
+  )
+)
+

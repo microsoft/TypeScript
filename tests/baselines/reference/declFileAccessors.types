@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileAccessors_0.ts ===
-
 /** This is comment for c1*/
 export class c1 {
 >c1 : c1
@@ -9,7 +8,7 @@ export class c1 {
 >p3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
@@ -21,7 +20,7 @@ export class c1 {
 >pp3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** private setter property*/
     private set pp3(/** this is value*/value: number) {
@@ -33,7 +32,7 @@ export class c1 {
 >s3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
@@ -44,7 +43,7 @@ export class c1 {
 >nc_p3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     public set nc_p3(value: number) {
 >nc_p3 : number
@@ -54,7 +53,7 @@ export class c1 {
 >nc_pp3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     private set nc_pp3(value: number) {
 >nc_pp3 : number
@@ -64,7 +63,7 @@ export class c1 {
 >nc_s3 : string
 
         return "";
->"" : string
+>"" : ""
     }
     static set nc_s3(value: string) {
 >nc_s3 : string
@@ -76,7 +75,7 @@ export class c1 {
 >onlyGetter : number
 
         return 10;
->10 : number
+>10 : 10
     }
 
     // Only setter property
@@ -96,7 +95,7 @@ class c2 {
 >p3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** setter property*/
     public set p3(/** this is value*/value: number) {
@@ -108,7 +107,7 @@ class c2 {
 >pp3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** private setter property*/
     private set pp3(/** this is value*/value: number) {
@@ -120,7 +119,7 @@ class c2 {
 >s3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** setter property*/
     static set s3( /** this is value*/value: number) {
@@ -131,7 +130,7 @@ class c2 {
 >nc_p3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     public set nc_p3(value: number) {
 >nc_p3 : number
@@ -141,7 +140,7 @@ class c2 {
 >nc_pp3 : number
 
         return 10;
->10 : number
+>10 : 10
     }
     private set nc_pp3(value: number) {
 >nc_pp3 : number
@@ -151,7 +150,7 @@ class c2 {
 >nc_s3 : string
 
         return "";
->"" : string
+>"" : ""
     }
     static set nc_s3(value: string) {
 >nc_s3 : string
@@ -163,7 +162,7 @@ class c2 {
 >onlyGetter : number
 
         return 10;
->10 : number
+>10 : 10
     }
 
     // Only setter property

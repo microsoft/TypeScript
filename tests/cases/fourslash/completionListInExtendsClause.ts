@@ -27,4 +27,4 @@ goTo.marker("3");
 verify.completionListIsEmpty();
 
 goTo.marker("4");
-verify.not.completionListIsEmpty();
+verify.completionListIsEmpty();

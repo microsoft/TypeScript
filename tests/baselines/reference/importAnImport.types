@@ -1,0 +1,15 @@
+=== tests/cases/compiler/importAnImport.ts ===
+module c.a.b {
+    import ma = a;
+>ma : any
+>a : any
+}
+
+module m0 {
+    import m8 = c.a.b.ma;
+>m8 : any
+>c : any
+>a : any
+>b : any
+>ma : any
+}

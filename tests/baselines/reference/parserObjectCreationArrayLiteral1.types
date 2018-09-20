@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/parserObjectCreationArrayLiteral1.ts ===
+new Foo[];
+>new Foo[] : any
+>Foo[] : any
+>Foo : any
+> : any
+

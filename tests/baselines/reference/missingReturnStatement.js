@@ -10,7 +10,7 @@ module Test {
 //// [missingReturnStatement.js]
 var Test;
 (function (Test) {
-    var Bug = (function () {
+    var Bug = /** @class */ (function () {
         function Bug() {
         }
         Bug.prototype.foo = function () {

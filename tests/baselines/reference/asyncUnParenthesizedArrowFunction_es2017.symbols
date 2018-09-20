@@ -1,0 +1,18 @@
+=== tests/cases/conformance/async/es2017/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es2017.ts ===
+declare function someOtherFunction(i: any): Promise<void>;
+>someOtherFunction : Symbol(someOtherFunction, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 0, 0))
+>i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 0, 35))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+const x = async i => await someOtherFunction(i)
+>x : Symbol(x, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 1, 5))
+>i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 1, 15))
+>someOtherFunction : Symbol(someOtherFunction, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 0, 0))
+>i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 1, 15))
+
+const x1 = async (i) => await someOtherFunction(i);
+>x1 : Symbol(x1, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 2, 5))
+>i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 2, 18))
+>someOtherFunction : Symbol(someOtherFunction, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 0, 0))
+>i : Symbol(i, Decl(asyncUnParenthesizedArrowFunction_es2017.ts, 2, 18))
+

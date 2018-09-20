@@ -4,7 +4,7 @@ class C {
 
 	public p1 = 0;
 >p1 : number
->0 : number
+>0 : 0
 
 	public callback(cb:()=>void) {cb();}
 >callback : (cb: () => void) => void
@@ -25,6 +25,6 @@ class C {
 >this.p1 : number
 >this : this
 >p1 : number
->1 : number
+>1 : 1
 	}
 }

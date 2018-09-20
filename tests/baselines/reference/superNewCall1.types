@@ -1,0 +1,26 @@
+=== tests/cases/compiler/superNewCall1.ts ===
+class A<T1, T2> {
+>A : A<T1, T2>
+
+    constructor(private map: (value: T1) => T2) {
+>map : (value: T1) => T2
+>value : T1
+
+    }
+}
+
+class B extends A<number, string> {
+>B : B
+>A : A<number, string>
+
+    constructor() {
+        new super(value => String(value));
+>new super(value => String(value)) : void
+>super : A<number, string>
+>value => String(value) : (value: any) => string
+>value : any
+>String(value) : string
+>String : StringConstructor
+>value : any
+    }
+}

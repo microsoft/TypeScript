@@ -1,41 +1,23 @@
 === tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts ===
-
 function fun<T>(g: (x: T) => T, x: T): T;
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >h : (y: T) => T
 >y : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function fun<T>(g: (x: T) => T, x: T): T {
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
     return g(x);
 >g(x) : T
@@ -50,7 +32,7 @@ var a = fun(x => x, 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var b = fun((x => x), 10);
 >b : number
@@ -60,7 +42,7 @@ var b = fun((x => x), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var c = fun(((x => x)), 10);
 >c : number
@@ -71,7 +53,7 @@ var c = fun(((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var d = fun((((x => x))), 10);
 >d : number
@@ -83,7 +65,7 @@ var d = fun((((x => x))), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var e = fun(x => x, x => x, 10);
 >e : number
@@ -95,7 +77,7 @@ var e = fun(x => x, x => x, 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var f = fun((x => x), (x => x), 10);
 >f : number
@@ -109,7 +91,7 @@ var f = fun((x => x), (x => x), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var g = fun(((x => x)), ((x => x)), 10);
 >g : number
@@ -125,7 +107,7 @@ var g = fun(((x => x)), ((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var h = fun((((x => x))), ((x => x)), 10);
 >h : number
@@ -142,12 +124,12 @@ var h = fun((((x => x))), ((x => x)), 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 // Ternaries in parens
 var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
->i : number
->fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : number
+>i : any
+>fun((Math.random() < 0.5 ? x => x : x => undefined), 10) : any
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? x => x : x => undefined) : (x: number) => any
 >Math.random() < 0.5 ? x => x : x => undefined : (x: number) => any
@@ -156,18 +138,18 @@ var i = fun((Math.random() < 0.5 ? x => x : x => undefined), 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
+>0.5 : 0.5
 >x => x : (x: number) => number
 >x : number
 >x : number
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->10 : number
+>10 : 10
 
 var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
->j : number
->fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : number
+>j : any
+>fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10) : any
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
@@ -176,7 +158,7 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
+>0.5 : 0.5
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -185,11 +167,11 @@ var j = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), 10);
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->10 : number
+>10 : 10
 
 var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
->k : number
->fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : number
+>k : any
+>fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10) : any
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >(Math.random() < 0.5 ? (x => x) : (x => undefined)) : (x: number) => any
 >Math.random() < 0.5 ? (x => x) : (x => undefined) : (x: number) => any
@@ -198,7 +180,7 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
+>0.5 : 0.5
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
 >x : number
@@ -210,11 +192,11 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
->l : number
->fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : number
+>l : any
+>fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10) : any
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
 >((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))) : (x: number) => any
 >(Math.random() < 0.5 ? ((x => x)) : ((x => undefined))) : (x: number) => any
@@ -224,7 +206,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >Math.random : () => number
 >Math : Math
 >random : () => number
->0.5 : number
+>0.5 : 0.5
 >((x => x)) : (x: number) => number
 >(x => x) : (x: number) => number
 >x => x : (x: number) => number
@@ -240,7 +222,7 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => x : (x: number) => number
 >x : number
 >x : number
->10 : number
+>10 : 10
 
 var lambda1: (x: number) => number = x => x;
 >lambda1 : (x: number) => number
@@ -258,15 +240,14 @@ var lambda2: (x: number) => number = (x => x);
 >x : number
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
+>ObjType : ObjType
 >x : (p: number) => string
 >p : number
 >y : (p: string) => number
 >p : string
 
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
->obj1 : { x: (p: number) => string; y: (p: string) => number; }
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
+>obj1 : ObjType
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any
 >x => (x, undefined) : (x: number) => any
@@ -284,8 +265,7 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >undefined : undefined
 
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
->obj2 : { x: (p: number) => string; y: (p: string) => number; }
->ObjType : { x: (p: number) => string; y: (p: string) => number; }
+>obj2 : ObjType
 >({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any

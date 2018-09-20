@@ -1,5 +1,4 @@
 === tests/cases/compiler/circularObjectLiteralAccessors.ts ===
-
 // Repro from #6000
 
 const a = {
@@ -33,6 +32,6 @@ const a = {
     },
     foo: ''
 >foo : string
->'' : string
+>'' : ""
 
 };

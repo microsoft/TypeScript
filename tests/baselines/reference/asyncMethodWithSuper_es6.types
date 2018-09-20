@@ -27,7 +27,7 @@ class B extends A {
 >super["x"]() : void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
 
         // property access (read)
         const a = super.x;
@@ -41,7 +41,7 @@ class B extends A {
 >b : () => void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
     }
 
     // async method with assignment/destructuring on 'super' requires a binding
@@ -64,7 +64,7 @@ class B extends A {
 >super["x"]() : void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
 
         // property access (read)
         const a = super.x;
@@ -78,7 +78,7 @@ class B extends A {
 >b : () => void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
 
         // property access (assign)
         super.x = f;
@@ -93,7 +93,7 @@ class B extends A {
 >super["x"] = f : () => void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
 >f : () => void
 
         // destructuring assign with property access
@@ -116,7 +116,7 @@ class B extends A {
 >f : () => void
 >super["x"] : () => void
 >super : A
->"x" : string
+>"x" : "x"
 >{ f } : { f: () => void; }
 >f : () => void
     }

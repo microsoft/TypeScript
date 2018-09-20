@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/classDeclarations/classAndVariableWithSameName.ts ===
+class C { foo: string; } // error
+>C : Symbol(C, Decl(classAndVariableWithSameName.ts, 0, 0))
+>foo : Symbol(C.foo, Decl(classAndVariableWithSameName.ts, 0, 9))
+
+var C = ''; // error
+>C : Symbol(C, Decl(classAndVariableWithSameName.ts, 1, 3))
+
+module M {
+>M : Symbol(M, Decl(classAndVariableWithSameName.ts, 1, 11))
+
+    class D { // error
+>D : Symbol(D, Decl(classAndVariableWithSameName.ts, 3, 10))
+
+        bar: string;
+>bar : Symbol(D.bar, Decl(classAndVariableWithSameName.ts, 4, 13))
+    }
+
+    var D = 1; // error
+>D : Symbol(D, Decl(classAndVariableWithSameName.ts, 8, 7))
+}

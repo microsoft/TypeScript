@@ -1,5 +1,4 @@
 //// [accessorWithES3.ts]
-
 // error to use accessors in ES3 mode
 
 class C {
@@ -23,7 +22,7 @@ var y = {
 
 //// [accessorWithES3.js]
 // error to use accessors in ES3 mode
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
@@ -35,7 +34,7 @@ var C = (function () {
     });
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {

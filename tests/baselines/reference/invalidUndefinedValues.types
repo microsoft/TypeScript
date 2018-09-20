@@ -4,19 +4,19 @@ var x: typeof undefined;
 >undefined : undefined
 
 x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 
 x = '';
->x = '' : string
+>x = '' : ""
 >x : any
->'' : string
+>'' : ""
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : any
->true : boolean
+>true : true
 
 var a: void;
 >a : void
@@ -37,7 +37,6 @@ class C { foo: string }
 
 var b: C;
 >b : C
->C : C
 
 x = C;
 >x = C : typeof C
@@ -50,12 +49,10 @@ x = b;
 >b : C
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var c: I;
 >c : I
->I : I
 
 x = c;
 >x = c : I
@@ -65,7 +62,7 @@ x = c;
 module M { export var x = 1; }
 >M : typeof M
 >x : number
->1 : number
+>1 : 1
 
 x = M;
 >x = M : typeof M
@@ -80,9 +77,7 @@ x = { f() { } }
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     x = a;
 >x = a : T
@@ -96,7 +91,7 @@ x = f;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 x = E;
 >x = E : typeof E

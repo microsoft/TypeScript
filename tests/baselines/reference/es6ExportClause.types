@@ -1,24 +1,21 @@
 === tests/cases/compiler/server.ts ===
-
 class c {
 >c : c
 }
 interface i {
->i : i
 }
 module m {
 >m : typeof m
 
     export var x = 10;
 >x : number
->10 : number
+>10 : 10
 }
 var x = 10;
 >x : number
->10 : number
+>10 : 10
 
 module uninstantiated {
->uninstantiated : any
 }
 export { c };
 >c : typeof c

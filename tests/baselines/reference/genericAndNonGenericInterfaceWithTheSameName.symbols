@@ -1,0 +1,86 @@
+=== tests/cases/conformance/interfaces/declarationMerging/genericAndNonGenericInterfaceWithTheSameName.ts ===
+// generic and non-generic interfaces with the same name do not merge
+
+interface A {
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 0, 0), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 4, 1))
+
+    foo: string;
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 2, 13))
+}
+
+interface A<T> { // error
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 0, 0), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 4, 1))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 6, 12))
+
+    bar: T;
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 6, 16))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 6, 12))
+}
+
+module M {
+>M : Symbol(M, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 8, 1))
+
+    interface A<T> { 
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 10, 10), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 13, 5))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 11, 16))
+
+        bar: T;
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 11, 20))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 11, 16))
+    }
+
+    interface A { // error
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 10, 10), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 13, 5))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 15, 17))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 18, 1), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 24, 1))
+
+    interface A {
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 20, 11))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 21, 17))
+    }
+}
+
+module M2 {
+>M2 : Symbol(M2, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 18, 1), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 24, 1))
+
+    interface A<T> { // ok, different declaration space than other M2
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 26, 11))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 27, 16))
+
+        bar: T;
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 27, 20))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 27, 16))
+    }
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 30, 1), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 36, 1))
+
+    export interface A {
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 32, 11), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 38, 11))
+
+        foo: string;
+>foo : Symbol(A.foo, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 33, 24))
+    }
+}
+
+module M3 {
+>M3 : Symbol(M3, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 30, 1), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 36, 1))
+
+    export interface A<T> { // error
+>A : Symbol(A, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 32, 11), Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 38, 11))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 39, 23))
+
+        bar: T;
+>bar : Symbol(A.bar, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 39, 27))
+>T : Symbol(T, Decl(genericAndNonGenericInterfaceWithTheSameName.ts, 39, 23))
+    }
+}

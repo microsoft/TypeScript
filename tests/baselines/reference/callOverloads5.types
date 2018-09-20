@@ -1,0 +1,54 @@
+=== tests/cases/compiler/callOverloads5.ts ===
+function Foo():Foo; // error
+>Foo : { (): any; (s: string): any; }
+
+function Foo(s:string):Foo; // error
+>Foo : { (): any; (s: string): any; }
+>s : string
+
+class Foo { // error
+>Foo : Foo
+
+	bar1(s:string);
+>bar1 : { (s: string): any; (n: number): any; }
+>s : string
+
+	bar1(n:number);
+>bar1 : { (s: string): any; (n: number): any; }
+>n : number
+
+    bar1(a:any) { /*WScript.Echo(a);*/ }
+>bar1 : { (s: string): any; (n: number): any; }
+>a : any
+
+    constructor(x: any) {
+>x : any
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+//class Foo(s: String);
+
+var f1 = new Foo("hey");
+>f1 : any
+>new Foo("hey") : any
+>Foo : { (): any; (s: string): any; }
+>"hey" : "hey"
+
+
+f1.bar1("a");
+>f1.bar1("a") : any
+>f1.bar1 : any
+>f1 : any
+>bar1 : any
+>"a" : "a"
+
+Foo();
+>Foo() : any
+>Foo : { (): any; (s: string): any; }
+
+Foo("s");
+>Foo("s") : any
+>Foo : { (): any; (s: string): any; }
+>"s" : "s"
+

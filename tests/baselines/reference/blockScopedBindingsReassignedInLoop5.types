@@ -1,9 +1,9 @@
 === tests/cases/compiler/blockScopedBindingsReassignedInLoop5.ts ===
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 >x < y : boolean
 >x : number
 >y : number
@@ -30,8 +30,8 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         break;
     else 
         y = 5;
->y = 5 : number
+>y = 5 : 5
 >y : number
->5 : number
+>5 : 5
 }
 

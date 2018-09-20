@@ -38,7 +38,8 @@ export var tests: TestRunner = (function () {
 //// [duplicateLocalVariable2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var TestCase = (function () {
+    exports.__esModule = true;
+    var TestCase = /** @class */ (function () {
         function TestCase(name, test, errorMessageRegEx) {
             this.name = name;
             this.test = test;
@@ -47,7 +48,7 @@ define(["require", "exports"], function (require, exports) {
         return TestCase;
     }());
     exports.TestCase = TestCase;
-    var TestRunner = (function () {
+    var TestRunner = /** @class */ (function () {
         function TestRunner() {
         }
         TestRunner.arrayCompare = function (arg1, arg2) {

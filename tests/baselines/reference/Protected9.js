@@ -4,7 +4,7 @@ class C {
 }
 
 //// [Protected9.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(p) {
         this.p = p;
     }

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/a.d.ts ===
+declare class X { }
+>X : X
+
+=== tests/cases/compiler/b.ts ===
+export {X};
+>X : typeof X
+
+export function f() {
+>f : () => X
+
+    var x: X;
+>x : X
+
+    return x;
+>x : X
+} 
+

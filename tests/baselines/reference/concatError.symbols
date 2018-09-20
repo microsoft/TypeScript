@@ -1,7 +1,6 @@
 === tests/cases/compiler/concatError.ts ===
-
 var n1: number[];
->n1 : Symbol(n1, Decl(concatError.ts, 1, 3))
+>n1 : Symbol(n1, Decl(concatError.ts, 0, 3))
 
 /*
 interface Array<T> {
@@ -10,19 +9,19 @@ interface Array<T> {
 }
 */
 var fa: number[];
->fa : Symbol(fa, Decl(concatError.ts, 8, 3))
+>fa : Symbol(fa, Decl(concatError.ts, 7, 3))
 
 fa = fa.concat([0]);
->fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->fa.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>fa : Symbol(fa, Decl(concatError.ts, 7, 3))
+>fa.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fa : Symbol(fa, Decl(concatError.ts, 7, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 fa = fa.concat(0);
->fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->fa.concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->fa : Symbol(fa, Decl(concatError.ts, 8, 3))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>fa : Symbol(fa, Decl(concatError.ts, 7, 3))
+>fa.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fa : Symbol(fa, Decl(concatError.ts, 7, 3))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 
 

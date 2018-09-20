@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-// class and instanciated module
+// class and instantiated module
 
-////class [|testClass|] {
+////class [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
 ////}
 ////
-////module [|testClass|] {
+////module [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
 ////    export interface Bar {
 ////
 ////    }
@@ -22,4 +22,4 @@
 ////[|testClass|].s;
 ////new [|testClass|]();
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("class testClass\nnamespace testClass");

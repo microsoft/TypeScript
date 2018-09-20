@@ -1,0 +1,36 @@
+=== tests/cases/conformance/classes/classDeclarations/classAndInterfaceMergeConflictingMembers.ts ===
+declare class C1 {
+>C1 : C1
+
+    public x : number;
+>x : number
+}
+
+interface C1 {
+    x : number;
+>x : number
+}
+
+declare class C2 {
+>C2 : C2
+
+    protected x : number;
+>x : number
+}
+
+interface C2 {
+    x : number;
+>x : number
+}
+
+declare class C3 {
+>C3 : C3
+
+    private x : number;
+>x : number
+}
+
+interface C3 {
+    x : number;
+>x : number
+}

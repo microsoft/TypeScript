@@ -1,0 +1,43 @@
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(9,30): error TS2536: Type 'K' cannot be used to index type 'T1<K>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(13,30): error TS2536: Type 'K' cannot be used to index type 'T3'.
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(15,38): error TS2536: Type 'S' cannot be used to index type '{ [key in AB[S]]: true; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(15,47): error TS2322: Type 'AB[S]' is not assignable to type 'string | number | symbol'.
+  Type 'AB[S]' is not assignable to type 'symbol'.
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(15,47): error TS2536: Type 'S' cannot be used to index type 'AB'.
+tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(17,49): error TS2536: Type 'L' cannot be used to index type '{ [key in AB[S]]: true; }'.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeErrors2.ts (6 errors) ====
+    // Repros from #17238
+    
+    type AB = {
+        a: 'a'
+        b: 'a'
+    };
+    
+    type T1<K extends keyof AB> = { [key in AB[K]]: true };
+    type T2<K extends 'a'|'b'> = T1<K>[K]; // Error
+                                 ~~~~~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'T1<K>'.
+    
+    type R = AB[keyof AB]; // "a"
+    type T3 = { [key in R]: true };
+    type T4<K extends 'a'|'b'> = T3[K] // Error
+                                 ~~~~~
+!!! error TS2536: Type 'K' cannot be used to index type 'T3'.
+    
+    type T5<S extends 'a'|'b'|'extra'> = {[key in AB[S]]: true}[S]; // Error
+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'S' cannot be used to index type '{ [key in AB[S]]: true; }'.
+                                                  ~~~~~
+!!! error TS2322: Type 'AB[S]' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'AB[S]' is not assignable to type 'symbol'.
+                                                  ~~~~~
+!!! error TS2536: Type 'S' cannot be used to index type 'AB'.
+    
+    type T6<S extends 'a'|'b', L extends 'a'|'b'> = {[key in AB[S]]: true}[L]; // Error
+                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'L' cannot be used to index type '{ [key in AB[S]]: true; }'.
+    
+    type T7<S extends 'a'|'b', L extends 'a'> = {[key in AB[S]]: true}[L];
+    

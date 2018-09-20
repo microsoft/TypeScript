@@ -1,0 +1,98 @@
+=== tests/cases/compiler/knockout.ts ===
+  declare module ko {
+>ko : Symbol(ko, Decl(knockout.ts, 0, 0))
+
+   export interface Observable<T> {
+>Observable : Symbol(Observable, Decl(knockout.ts, 0, 21))
+>T : Symbol(T, Decl(knockout.ts, 1, 31))
+
+     (): T;
+>T : Symbol(T, Decl(knockout.ts, 1, 31))
+
+     (value: T): any;
+>value : Symbol(value, Decl(knockout.ts, 3, 6))
+>T : Symbol(T, Decl(knockout.ts, 1, 31))
+
+     N: number;
+>N : Symbol(Observable.N, Decl(knockout.ts, 3, 21))
+
+     g: boolean;
+>g : Symbol(Observable.g, Decl(knockout.ts, 4, 15))
+
+     r: T;
+>r : Symbol(Observable.r, Decl(knockout.ts, 5, 16))
+>T : Symbol(T, Decl(knockout.ts, 1, 31))
+   }
+   export function observable<T>(value: T): Observable<T>;
+>observable : Symbol(observable, Decl(knockout.ts, 7, 4))
+>T : Symbol(T, Decl(knockout.ts, 8, 30))
+>value : Symbol(value, Decl(knockout.ts, 8, 33))
+>T : Symbol(T, Decl(knockout.ts, 8, 30))
+>Observable : Symbol(Observable, Decl(knockout.ts, 0, 21))
+>T : Symbol(T, Decl(knockout.ts, 8, 30))
+ }
+ var o = {
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+
+     name: ko.observable("Bob"),
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+>ko.observable : Symbol(ko.observable, Decl(knockout.ts, 7, 4))
+>ko : Symbol(ko, Decl(knockout.ts, 0, 0))
+>observable : Symbol(ko.observable, Decl(knockout.ts, 7, 4))
+
+     age: ko.observable(37)
+>age : Symbol(age, Decl(knockout.ts, 11, 32))
+>ko.observable : Symbol(ko.observable, Decl(knockout.ts, 7, 4))
+>ko : Symbol(ko, Decl(knockout.ts, 0, 0))
+>observable : Symbol(ko.observable, Decl(knockout.ts, 7, 4))
+ }
+ var x_v = o.name().length
+>x_v : Symbol(x_v, Decl(knockout.ts, 14, 4))
+>o.name().length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+ var age_v = o.age();
+>age_v : Symbol(age_v, Decl(knockout.ts, 15, 4))
+>o.age : Symbol(age, Decl(knockout.ts, 11, 32))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>age : Symbol(age, Decl(knockout.ts, 11, 32))
+
+ var name_v = o.name("Robert");
+>name_v : Symbol(name_v, Decl(knockout.ts, 16, 4))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+
+ var zz_v = o.name.N;
+>zz_v : Symbol(zz_v, Decl(knockout.ts, 17, 4))
+>o.name.N : Symbol(ko.Observable.N, Decl(knockout.ts, 3, 21))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+>N : Symbol(ko.Observable.N, Decl(knockout.ts, 3, 21))
+
+ var yy_v = o.name.g;
+>yy_v : Symbol(yy_v, Decl(knockout.ts, 18, 4))
+>o.name.g : Symbol(ko.Observable.g, Decl(knockout.ts, 4, 15))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+>g : Symbol(ko.Observable.g, Decl(knockout.ts, 4, 15))
+
+ var rr_v = o.name.r;
+>rr_v : Symbol(rr_v, Decl(knockout.ts, 19, 4))
+>o.name.r : Symbol(ko.Observable.r, Decl(knockout.ts, 5, 16))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+>r : Symbol(ko.Observable.r, Decl(knockout.ts, 5, 16))
+
+ var dd_v = o.name.d;
+>dd_v : Symbol(dd_v, Decl(knockout.ts, 20, 4))
+>o.name : Symbol(name, Decl(knockout.ts, 10, 10))
+>o : Symbol(o, Decl(knockout.ts, 10, 4))
+>name : Symbol(name, Decl(knockout.ts, 10, 10))
+

@@ -32,7 +32,6 @@ var superContain;
                 })(data = buz.data || (buz.data = {}));
             })(buz = my.buz || (my.buz = {}));
         })(my = contain_1.my || (contain_1.my = {}));
-        var my;
         (function (my_1) {
             var buz;
             (function (buz_1) {

@@ -6,7 +6,7 @@ var a = new A();
 
 
 //// [fillInMissingTypeArgsOnConstructCalls.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

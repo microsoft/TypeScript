@@ -1,0 +1,15 @@
+=== tests/cases/compiler/letInConstDeclarations_ES5.ts ===
+// All use of let in const declaration should be an error
+const x = 50, let = 5;
+>x : 50
+>50 : 50
+>let : 5
+>5 : 5
+
+{
+    const x = 10, let = 20;
+>x : 10
+>10 : 10
+>let : 20
+>20 : 20
+}

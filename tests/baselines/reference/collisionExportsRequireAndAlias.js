@@ -20,6 +20,7 @@ export function foo2() {
 //// [collisionExportsRequireAndAlias_file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     function bar() {
     }
     exports.bar = bar;
@@ -27,13 +28,15 @@ define(["require", "exports"], function (require, exports) {
 //// [collisionExportsRequireAndAlias_file3333.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     function bar2() {
     }
     exports.bar2 = bar2;
 });
 //// [collisionExportsRequireAndAlias_file2.js]
-define(["require", "exports", 'collisionExportsRequireAndAlias_file1', 'collisionExportsRequireAndAlias_file3333'], function (require, exports, require, exports) {
+define(["require", "exports", "collisionExportsRequireAndAlias_file1", "collisionExportsRequireAndAlias_file3333"], function (require, exports, require, exports) {
     "use strict";
+    exports.__esModule = true;
     function foo() {
         require.bar();
     }

@@ -6,6 +6,6 @@
 ////    /**/
 
 goTo.marker()
-verify.memberListContains('xa');
-verify.memberListContains('xb');
-verify.memberListCount(2);
+verify.completionListContains('xa');
+verify.completionListContains('xb');
+verify.completionListCount(2);

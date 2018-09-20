@@ -1,0 +1,29 @@
+=== tests/cases/compiler/v1/index.d.ts ===
+export as namespace Alpha;
+>Alpha : typeof import("tests/cases/compiler/v1/index")
+
+export var x: string;
+>x : string
+
+=== tests/cases/compiler/v2/index.d.ts ===
+export as namespace Alpha;
+>Alpha : typeof import("tests/cases/compiler/v2/index")
+
+export var y: number;
+>y : number
+
+=== tests/cases/compiler/consumer.ts ===
+import * as v1 from './v1';
+>v1 : typeof v1
+
+import * as v2 from './v2';
+>v2 : typeof v2
+
+=== tests/cases/compiler/global.ts ===
+// Should be OK, first in wins
+const p: string = Alpha.x;
+>p : string
+>Alpha.x : string
+>Alpha : typeof Alpha
+>x : string
+

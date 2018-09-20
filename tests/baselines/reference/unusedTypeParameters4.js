@@ -1,5 +1,4 @@
 //// [unusedTypeParameters4.ts]
-
 var x: {
     new <T, U>(a: T): void;
 }

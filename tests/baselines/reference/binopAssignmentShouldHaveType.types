@@ -3,7 +3,7 @@ declare var console;
 >console : any
 
 "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
 module Test {
 >Test : typeof Test
@@ -15,7 +15,7 @@ module Test {
 >getName : () => string
 
    return "name";
->"name" : string
+>"name" : "name"
   }
   bug() {
 >bug : () => void
@@ -35,7 +35,7 @@ module Test {
 >this : this
 >getName : () => string
 >length : number
->0 : number
+>0 : 0
 
     console.log(name);
 >console.log(name) : any

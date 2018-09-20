@@ -3,6 +3,6 @@
 ////{}
 
 goTo.eof();
-edit.insert("\r\n");
+edit.insert("\n");
 goTo.bof();
 verify.currentLineContentIs("{ }");

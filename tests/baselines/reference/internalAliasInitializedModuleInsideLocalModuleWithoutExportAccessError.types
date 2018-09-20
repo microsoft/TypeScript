@@ -1,0 +1,39 @@
+=== tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts ===
+export module a {
+>a : typeof a
+
+    export module b {
+>b : typeof b
+
+        export class c {
+>c : c
+        }
+    }
+}
+
+export module c {
+>c : typeof c
+
+    import b = a.b;
+>b : typeof b
+>a : typeof a
+>b : typeof b
+
+    export var x: b.c = new b.c();
+>x : b.c
+>b : any
+>new b.c() : b.c
+>b.c : typeof b.c
+>b : typeof b
+>c : typeof b.c
+}
+
+export var d = new c.b.c();
+>d : any
+>new c.b.c() : any
+>c.b.c : any
+>c.b : any
+>c : typeof c
+>b : any
+>c : any
+

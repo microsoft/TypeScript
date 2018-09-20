@@ -6,45 +6,41 @@ let cond: boolean;
 >cond : boolean
 
 (x = "") || (x = 0);
->(x = "") || (x = 0) : string | number
->(x = "") : string
->x = "" : string
+>(x = "") || (x = 0) : 0
+>(x = "") : ""
+>x = "" : ""
 >x : string | number | boolean
->"" : string
->(x = 0) : number
->x = 0 : number
+>"" : ""
+>(x = 0) : 0
+>x = 0 : 0
 >x : string | number | boolean
->0 : number
+>0 : 0
 
 x; // string | number
 >x : string | number
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean
->"" : string
+>"" : ""
 
 cond || (x = 0);
->cond || (x = 0) : number | true
+>cond || (x = 0) : true | 0
 >cond : boolean
->(x = 0) : number
->x = 0 : number
+>(x = 0) : 0
+>x = 0 : 0
 >x : string | number | boolean
->0 : number
+>0 : 0
 
 x; // string | number
 >x : string | number
 
 export interface NodeList {
->NodeList : NodeList
-
     length: number;
 >length : number
 }
 
 export interface HTMLCollection {
->HTMLCollection : HTMLCollection
-
     length: number;
 >length : number
 }
@@ -52,24 +48,17 @@ export interface HTMLCollection {
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
 >sourceObj : any
->sourceObj : any
->NodeList : NodeList
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
 >sourceObj : any
->sourceObj : any
->HTMLCollection : HTMLCollection
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
 >EventTargetLike : EventTargetLike
 >a : string
->HTMLCollection : HTMLCollection
->NodeList : NodeList
 
 var sourceObj: EventTargetLike = <any>undefined;
 >sourceObj : EventTargetLike
->EventTargetLike : EventTargetLike
 ><any>undefined : any
 >undefined : undefined
 
@@ -80,7 +69,7 @@ if (isNodeList(sourceObj)) {
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList
+>sourceObj : NodeList | HTMLCollection
 >length : number
 }
 
@@ -91,7 +80,7 @@ if (isHTMLCollection(sourceObj)) {
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : HTMLCollection
+>sourceObj : NodeList | HTMLCollection
 >length : number
 }
 
@@ -102,11 +91,11 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >sourceObj : EventTargetLike
 >isHTMLCollection(sourceObj) : boolean
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->sourceObj : HTMLCollection | { a: string; }
+>sourceObj : { a: string; }
 
     sourceObj.length;
 >sourceObj.length : number
->sourceObj : NodeList | HTMLCollection
+>sourceObj : NodeList
 >length : number
 }
 

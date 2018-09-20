@@ -17,7 +17,8 @@ WinJS.Promise.timeout(10);
 //// [memberAccessMustUseModuleInstances_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Promise = (function () {
+    exports.__esModule = true;
+    var Promise = /** @class */ (function () {
         function Promise() {
         }
         Promise.timeout = function (delay) {
@@ -28,7 +29,8 @@ define(["require", "exports"], function (require, exports) {
     exports.Promise = Promise;
 });
 //// [memberAccessMustUseModuleInstances_1.js]
-define(["require", "exports", 'memberAccessMustUseModuleInstances_0'], function (require, exports, WinJS) {
+define(["require", "exports", "memberAccessMustUseModuleInstances_0"], function (require, exports, WinJS) {
     "use strict";
+    exports.__esModule = true;
     WinJS.Promise.timeout(10);
 });

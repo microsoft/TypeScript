@@ -1,0 +1,40 @@
+=== tests/cases/compiler/unusedLocalsAndObjectSpread2.ts ===
+declare let props: any;
+>props : any
+
+const {
+    children, // here!
+>children : any
+
+    active: _a, // here!
+>active : any
+>_a : any
+
+  ...rest
+>rest : any
+
+} = props;
+>props : any
+
+function foo() {
+>foo : () => void
+
+    const {
+        children,
+>children : any
+
+        active: _a,
+>active : any
+>_a : any
+
+        ...rest
+>rest : any
+
+    } = props;
+>props : any
+}
+
+export const asdf = 123;
+>asdf : 123
+>123 : 123
+

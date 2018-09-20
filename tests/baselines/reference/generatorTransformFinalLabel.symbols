@@ -1,0 +1,15 @@
+=== tests/cases/compiler/generatorTransformFinalLabel.ts ===
+async function test(skip: boolean) {
+>test : Symbol(test, Decl(generatorTransformFinalLabel.ts, 0, 0))
+>skip : Symbol(skip, Decl(generatorTransformFinalLabel.ts, 0, 20))
+
+    if (!skip) {
+>skip : Symbol(skip, Decl(generatorTransformFinalLabel.ts, 0, 20))
+
+        await 1
+    }
+    else {
+        throw Error('test')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}

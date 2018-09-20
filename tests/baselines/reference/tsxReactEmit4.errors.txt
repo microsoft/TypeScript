@@ -10,7 +10,7 @@ tests/cases/conformance/jsx/file.tsx(12,5): error TS2304: Cannot find name 'blah
     }
     declare var React: any;
     
-    var p;
+    var p: any;
     var openClosed1 = <div>
     
        {blah}

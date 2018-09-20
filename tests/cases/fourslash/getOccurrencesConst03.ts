@@ -1,16 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 ////module m {
-////    export [|const|] x;
+////    export /*1*/const x;
 ////    export [|const|] enum E {
 ////    }
 ////}
 ////
-////export [|const|] x;
+////export /*2*/const x;
 ////export [|const|] enum E {
 ////}
 
-test.ranges().forEach(range => {
-    goTo.position(range.start);
-    verify.occurrencesAtPositionCount(0);
-});
+goTo.eachRange(() => verify.occurrencesAtPositionCount(1)); // They are in different scopes, so not counted together.
+goTo.eachMarker(() => verify.occurrencesAtPositionCount(0));

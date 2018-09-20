@@ -1,0 +1,8 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateUntypedTagCall01.ts ===
+var tag: Function;
+>tag : Symbol(tag, Decl(taggedTemplateUntypedTagCall01.ts, 0, 3))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+tag `Hello world!`;
+>tag : Symbol(tag, Decl(taggedTemplateUntypedTagCall01.ts, 0, 3))
+

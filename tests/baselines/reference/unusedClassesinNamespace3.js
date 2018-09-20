@@ -1,5 +1,4 @@
 //// [unusedClassesinNamespace3.ts]
-
 namespace Validation {
     class c1 {
 
@@ -15,12 +14,12 @@ namespace Validation {
 //// [unusedClassesinNamespace3.js]
 var Validation;
 (function (Validation) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;
     }());
-    var c2 = (function () {
+    var c2 = /** @class */ (function () {
         function c2() {
         }
         return c2;

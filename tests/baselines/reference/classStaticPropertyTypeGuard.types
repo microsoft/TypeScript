@@ -1,5 +1,4 @@
 === tests/cases/compiler/classStaticPropertyTypeGuard.ts ===
-
 // Repro from #8923
 
 class A {
@@ -22,10 +21,10 @@ class A {
 >_a : string
         }
         return A._a = 'helloworld';
->A._a = 'helloworld' : string
+>A._a = 'helloworld' : "helloworld"
 >A._a : string | undefined
 >A : typeof A
 >_a : string | undefined
->'helloworld' : string
+>'helloworld' : "helloworld"
     }
 }

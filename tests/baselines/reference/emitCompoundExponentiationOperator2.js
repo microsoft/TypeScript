@@ -1,5 +1,4 @@
 //// [emitCompoundExponentiationOperator2.ts]
-
 var comp: number;
 
 comp **= 1;

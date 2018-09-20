@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////let A = class Foo {
-////    public static foo;
+////    public [|static|] foo;
 ////    [|static|] a;
 ////    constructor(public y: string, private x: string) {
 ////    }
@@ -19,11 +19,4 @@
 ////    public static test2() {}
 ////}
 
-const ranges = test.ranges();
-for (let r of ranges) {
-    goTo.position(r.start);
-
-    for (let range of ranges) {
-        verify.occurrencesAtPositionContains(range, false);
-    }
-}
+verify.rangesAreOccurrences(false);

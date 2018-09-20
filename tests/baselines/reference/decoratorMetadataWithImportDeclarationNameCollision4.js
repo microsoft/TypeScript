@@ -25,7 +25,8 @@ export {MyClass};
 
 //// [db.js]
 "use strict";
-var db = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var db = /** @class */ (function () {
     function db() {
     }
     db.prototype.doSomething = function () {
@@ -35,20 +36,21 @@ var db = (function () {
 exports.db = db;
 //// [service.js]
 "use strict";
-var db_1 = require('./db'); // error no default export
+Object.defineProperty(exports, "__esModule", { value: true });
+var db_1 = require("./db"); // error no default export
 function someDecorator(target) {
     return target;
 }
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass(db) {
         this.db = db;
         this.db.doSomething();
     }
+    var _a;
     MyClass = __decorate([
-        someDecorator, 
-        __metadata('design:paramtypes', [(typeof (_a = typeof db_1.default !== 'undefined' && db_1.default.db) === 'function' && _a) || Object])
+        someDecorator,
+        __metadata("design:paramtypes", [typeof (_a = typeof db_1.default !== "undefined" && db_1.default.db) === "function" ? _a : Object])
     ], MyClass);
     return MyClass;
-    var _a;
 }());
 exports.MyClass = MyClass;

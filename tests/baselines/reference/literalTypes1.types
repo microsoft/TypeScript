@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/literalTypes1.ts ===
-
 let zero: 0 = 0;
 >zero : 0
 >0 : 0
@@ -62,19 +61,19 @@ function f2(x: 0 | 1 | 2) {
 >zero : 0
 
             x;
->x : 0 | 1 | 2
+>x : 0
 
             break;
         case oneOrTwo:
 >oneOrTwo : 1 | 2
 
             x;
->x : 0 | 1 | 2
+>x : 1 | 2
 
             break;
         default:
             x;
->x : 0 | 1 | 2
+>x : 1 | 2
     }
 }
 
@@ -86,7 +85,6 @@ type Falsy = false | 0 | "" | null | undefined;
 function f3(x: Falsy) {
 >f3 : (x: Falsy) => void
 >x : Falsy
->Falsy : Falsy
 
     if (x) {
 >x : Falsy
@@ -129,7 +127,7 @@ function f4(x: 0 | 1 | true | string) {
 >"def" : "def"
 
             x;
->x : string
+>x : "abc" | "def"
 
             break;
         case null:
@@ -163,7 +161,7 @@ function f5(x: string | number | boolean) {
 >"abc" : "abc"
 
             x;
->x : string
+>x : "abc"
 
             break;
         case 0:
@@ -173,7 +171,7 @@ function f5(x: string | number | boolean) {
 >1 : 1
 
             x;
->x : number
+>x : 0 | 1
 
             break;
         case true:
@@ -190,7 +188,7 @@ function f5(x: string | number | boolean) {
 >123 : 123
 
             x;
->x : string | number
+>x : "hello" | 123
 
             break;
         default:

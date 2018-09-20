@@ -1,0 +1,16 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAccessor.ts(3,17): error TS1318: An abstract accessor cannot have an implementation.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAccessor.ts(5,17): error TS1318: An abstract accessor cannot have an implementation.
+
+
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAccessor.ts (2 errors) ====
+    abstract class A {
+       abstract get a();
+       abstract get aa() { return 1; } // error
+                    ~~
+!!! error TS1318: An abstract accessor cannot have an implementation.
+       abstract set b(x: string);
+       abstract set bb(x: string) {} // error
+                    ~~
+!!! error TS1318: An abstract accessor cannot have an implementation.
+    }
+    

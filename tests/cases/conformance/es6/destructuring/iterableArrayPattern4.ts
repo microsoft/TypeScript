@@ -1,6 +1,4 @@
 //@target: ES6
-var a: Bar, b: Bar[];
-[a, ...b] = new FooIterator;
 class Bar { x }
 class Foo extends Bar { y }
 class FooIterator {
@@ -15,3 +13,6 @@ class FooIterator {
         return this;
     }
 }
+
+var a: Bar, b: Bar[];
+[a, ...b] = new FooIterator

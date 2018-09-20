@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6ClassSuperCodegenBug.ts ===
-
 class A {
 >A : A
 
@@ -13,20 +12,20 @@ class B extends A {
 
     constructor() {
 	    if (true) {
->true : boolean
+>true : true
 
 	        super('a1', 'b1');
 >super('a1', 'b1') : void
 >super : typeof A
->'a1' : string
->'b1' : string
+>'a1' : "a1"
+>'b1' : "b1"
 
 	    } else {
 	        super('a2', 'b2');
 >super('a2', 'b2') : void
 >super : typeof A
->'a2' : string
->'b2' : string
+>'a2' : "a2"
+>'b2' : "b2"
 	    }
     }
 }

@@ -1,0 +1,355 @@
+=== tests/cases/compiler/es6ClassTest2.ts ===
+class BasicMonster {
+>BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
+
+    constructor(public name: string, public health: number) {
+>name : Symbol(BasicMonster.name, Decl(es6ClassTest2.ts, 1, 16))
+>health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
+
+    }
+
+    attack(target) {
+>attack : Symbol(BasicMonster.attack, Decl(es6ClassTest2.ts, 3, 5))
+>target : Symbol(target, Decl(es6ClassTest2.ts, 5, 11))
+
+      // WScript.Echo("Attacks " + target);
+    }
+
+    isAlive = true;
+>isAlive : Symbol(BasicMonster.isAlive, Decl(es6ClassTest2.ts, 7, 5))
+}
+
+var m1 = new BasicMonster("1", 100);
+>m1 : Symbol(m1, Decl(es6ClassTest2.ts, 12, 3))
+>BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
+
+var m2 = new BasicMonster("2", 100);
+>m2 : Symbol(m2, Decl(es6ClassTest2.ts, 13, 3))
+>BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
+
+m1.attack(m2);
+>m1.attack : Symbol(BasicMonster.attack, Decl(es6ClassTest2.ts, 3, 5))
+>m1 : Symbol(m1, Decl(es6ClassTest2.ts, 12, 3))
+>attack : Symbol(BasicMonster.attack, Decl(es6ClassTest2.ts, 3, 5))
+>m2 : Symbol(m2, Decl(es6ClassTest2.ts, 13, 3))
+
+m1.health = 0;
+>m1.health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
+>m1 : Symbol(m1, Decl(es6ClassTest2.ts, 12, 3))
+>health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
+
+console.log((<any>m5.isAlive).toString());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>m5.isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+
+class GetSetMonster {
+>GetSetMonster : Symbol(GetSetMonster, Decl(es6ClassTest2.ts, 16, 42))
+
+    constructor(public name: string, private _health: number) {
+>name : Symbol(GetSetMonster.name, Decl(es6ClassTest2.ts, 19, 16))
+>_health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))
+
+    }
+
+    attack(target) {
+>attack : Symbol(GetSetMonster.attack, Decl(es6ClassTest2.ts, 21, 5))
+>target : Symbol(target, Decl(es6ClassTest2.ts, 23, 11))
+
+      // WScript.Echo("Attacks " + target);
+    }
+  // The contextual keyword "get" followed by an identifier and
+  // a curly body defines a getter in the same way that "get"
+  // defines one in an object literal.
+    get isAlive() {
+>isAlive : Symbol(GetSetMonster.isAlive, Decl(es6ClassTest2.ts, 25, 5))
+
+        return this._health > 0;
+>this._health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))
+>this : Symbol(GetSetMonster, Decl(es6ClassTest2.ts, 16, 42))
+>_health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))
+    }
+
+  // Likewise, "set" can be used to define setters.
+    set health(value: number) {
+>health : Symbol(GetSetMonster.health, Decl(es6ClassTest2.ts, 31, 5))
+>value : Symbol(value, Decl(es6ClassTest2.ts, 34, 15))
+
+        if (value < 0) {
+>value : Symbol(value, Decl(es6ClassTest2.ts, 34, 15))
+
+            throw new Error('Health must be non-negative.')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+        this._health = value
+>this._health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))
+>this : Symbol(GetSetMonster, Decl(es6ClassTest2.ts, 16, 42))
+>_health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))
+>value : Symbol(value, Decl(es6ClassTest2.ts, 34, 15))
+  }
+}
+
+var m3 = new BasicMonster("1", 100);
+>m3 : Symbol(m3, Decl(es6ClassTest2.ts, 42, 3))
+>BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
+
+var m4 = new BasicMonster("2", 100);
+>m4 : Symbol(m4, Decl(es6ClassTest2.ts, 43, 3))
+>BasicMonster : Symbol(BasicMonster, Decl(es6ClassTest2.ts, 0, 0))
+
+m3.attack(m4);
+>m3.attack : Symbol(BasicMonster.attack, Decl(es6ClassTest2.ts, 3, 5))
+>m3 : Symbol(m3, Decl(es6ClassTest2.ts, 42, 3))
+>attack : Symbol(BasicMonster.attack, Decl(es6ClassTest2.ts, 3, 5))
+>m4 : Symbol(m4, Decl(es6ClassTest2.ts, 43, 3))
+
+m3.health = 0;
+>m3.health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
+>m3 : Symbol(m3, Decl(es6ClassTest2.ts, 42, 3))
+>health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
+
+var x = (<any>m5.isAlive).toString()
+>x : Symbol(x, Decl(es6ClassTest2.ts, 46, 3))
+>m5.isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+
+class OverloadedMonster {
+>OverloadedMonster : Symbol(OverloadedMonster, Decl(es6ClassTest2.ts, 46, 36))
+
+    constructor(name: string);
+>name : Symbol(name, Decl(es6ClassTest2.ts, 49, 16))
+
+    constructor(public name: string, public health?: number) {
+>name : Symbol(OverloadedMonster.name, Decl(es6ClassTest2.ts, 50, 16))
+>health : Symbol(OverloadedMonster.health, Decl(es6ClassTest2.ts, 50, 36))
+
+    }
+
+    attack();
+>attack : Symbol(OverloadedMonster.attack, Decl(es6ClassTest2.ts, 52, 5), Decl(es6ClassTest2.ts, 54, 13), Decl(es6ClassTest2.ts, 55, 19))
+
+    attack(a: any);
+>attack : Symbol(OverloadedMonster.attack, Decl(es6ClassTest2.ts, 52, 5), Decl(es6ClassTest2.ts, 54, 13), Decl(es6ClassTest2.ts, 55, 19))
+>a : Symbol(a, Decl(es6ClassTest2.ts, 55, 11))
+
+    attack(target?) {
+>attack : Symbol(OverloadedMonster.attack, Decl(es6ClassTest2.ts, 52, 5), Decl(es6ClassTest2.ts, 54, 13), Decl(es6ClassTest2.ts, 55, 19))
+>target : Symbol(target, Decl(es6ClassTest2.ts, 56, 11))
+
+        //WScript.Echo("Attacks " + target);
+    }
+
+    isAlive = true;
+>isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+}
+
+var m5 = new OverloadedMonster("1");
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>OverloadedMonster : Symbol(OverloadedMonster, Decl(es6ClassTest2.ts, 46, 36))
+
+var m6 = new OverloadedMonster("2");
+>m6 : Symbol(m6, Decl(es6ClassTest2.ts, 64, 3))
+>OverloadedMonster : Symbol(OverloadedMonster, Decl(es6ClassTest2.ts, 46, 36))
+
+m5.attack(m6);
+>m5.attack : Symbol(OverloadedMonster.attack, Decl(es6ClassTest2.ts, 52, 5), Decl(es6ClassTest2.ts, 54, 13), Decl(es6ClassTest2.ts, 55, 19))
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>attack : Symbol(OverloadedMonster.attack, Decl(es6ClassTest2.ts, 52, 5), Decl(es6ClassTest2.ts, 54, 13), Decl(es6ClassTest2.ts, 55, 19))
+>m6 : Symbol(m6, Decl(es6ClassTest2.ts, 64, 3))
+
+m5.health = 0;
+>m5.health : Symbol(OverloadedMonster.health, Decl(es6ClassTest2.ts, 50, 36))
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>health : Symbol(OverloadedMonster.health, Decl(es6ClassTest2.ts, 50, 36))
+
+var y = (<any>m5.isAlive).toString()
+>y : Symbol(y, Decl(es6ClassTest2.ts, 67, 3))
+>m5.isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+>m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
+>isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
+
+class SplatMonster {
+>SplatMonster : Symbol(SplatMonster, Decl(es6ClassTest2.ts, 67, 36))
+
+    constructor(...args: string[]) { }
+>args : Symbol(args, Decl(es6ClassTest2.ts, 70, 16))
+
+    roar(name: string, ...args: number[]) { }
+>roar : Symbol(SplatMonster.roar, Decl(es6ClassTest2.ts, 70, 38))
+>name : Symbol(name, Decl(es6ClassTest2.ts, 71, 9))
+>args : Symbol(args, Decl(es6ClassTest2.ts, 71, 22))
+}
+
+
+function foo() { return true; }
+>foo : Symbol(foo, Decl(es6ClassTest2.ts, 72, 1))
+
+class PrototypeMonster {
+>PrototypeMonster : Symbol(PrototypeMonster, Decl(es6ClassTest2.ts, 75, 31))
+
+    age: number = 1;
+>age : Symbol(PrototypeMonster.age, Decl(es6ClassTest2.ts, 76, 24))
+
+    name: string;
+>name : Symbol(PrototypeMonster.name, Decl(es6ClassTest2.ts, 77, 20))
+
+    b = foo();
+>b : Symbol(PrototypeMonster.b, Decl(es6ClassTest2.ts, 78, 17))
+>foo : Symbol(foo, Decl(es6ClassTest2.ts, 72, 1))
+}
+
+class SuperParent {
+>SuperParent : Symbol(SuperParent, Decl(es6ClassTest2.ts, 80, 1))
+
+    constructor(a: number) {
+>a : Symbol(a, Decl(es6ClassTest2.ts, 83, 16))
+
+    }
+
+    b(b: string) {
+>b : Symbol(SuperParent.b, Decl(es6ClassTest2.ts, 85, 5))
+>b : Symbol(b, Decl(es6ClassTest2.ts, 87, 6))
+
+    }
+
+    c() {
+>c : Symbol(SuperParent.c, Decl(es6ClassTest2.ts, 89, 5))
+
+    }
+}
+
+class SuperChild extends SuperParent {
+>SuperChild : Symbol(SuperChild, Decl(es6ClassTest2.ts, 94, 1))
+>SuperParent : Symbol(SuperParent, Decl(es6ClassTest2.ts, 80, 1))
+
+    constructor() {
+        super(1);
+>super : Symbol(SuperParent, Decl(es6ClassTest2.ts, 80, 1))
+    }
+
+    b() {
+>b : Symbol(SuperChild.b, Decl(es6ClassTest2.ts, 99, 5))
+
+        super.b('str');
+>super.b : Symbol(SuperParent.b, Decl(es6ClassTest2.ts, 85, 5))
+>super : Symbol(SuperParent, Decl(es6ClassTest2.ts, 80, 1))
+>b : Symbol(SuperParent.b, Decl(es6ClassTest2.ts, 85, 5))
+    }
+
+    c() {
+>c : Symbol(SuperChild.c, Decl(es6ClassTest2.ts, 103, 5))
+
+        super.c();
+>super.c : Symbol(SuperParent.c, Decl(es6ClassTest2.ts, 89, 5))
+>super : Symbol(SuperParent, Decl(es6ClassTest2.ts, 80, 1))
+>c : Symbol(SuperParent.c, Decl(es6ClassTest2.ts, 89, 5))
+    }
+}
+
+class Statics {
+>Statics : Symbol(Statics, Decl(es6ClassTest2.ts, 108, 1))
+
+    static foo = 1;
+>foo : Symbol(Statics.foo, Decl(es6ClassTest2.ts, 110, 15))
+
+    static bar: string;
+>bar : Symbol(Statics.bar, Decl(es6ClassTest2.ts, 111, 19))
+
+    static baz() {
+>baz : Symbol(Statics.baz, Decl(es6ClassTest2.ts, 112, 23))
+
+        return "";
+    }
+}
+
+var stat = new Statics();
+>stat : Symbol(stat, Decl(es6ClassTest2.ts, 119, 3))
+>Statics : Symbol(Statics, Decl(es6ClassTest2.ts, 108, 1))
+
+interface IFoo {
+>IFoo : Symbol(IFoo, Decl(es6ClassTest2.ts, 119, 25))
+
+    x: number;
+>x : Symbol(IFoo.x, Decl(es6ClassTest2.ts, 121, 16))
+
+    z: string;
+>z : Symbol(IFoo.z, Decl(es6ClassTest2.ts, 122, 14))
+}
+
+class ImplementsInterface implements IFoo {
+>ImplementsInterface : Symbol(ImplementsInterface, Decl(es6ClassTest2.ts, 124, 1))
+>IFoo : Symbol(IFoo, Decl(es6ClassTest2.ts, 119, 25))
+
+    public x: number;
+>x : Symbol(ImplementsInterface.x, Decl(es6ClassTest2.ts, 126, 43))
+
+    public z: string;
+>z : Symbol(ImplementsInterface.z, Decl(es6ClassTest2.ts, 127, 21))
+
+    constructor() {
+        this.x = 1;
+>this.x : Symbol(ImplementsInterface.x, Decl(es6ClassTest2.ts, 126, 43))
+>this : Symbol(ImplementsInterface, Decl(es6ClassTest2.ts, 124, 1))
+>x : Symbol(ImplementsInterface.x, Decl(es6ClassTest2.ts, 126, 43))
+
+        this.z = "foo";
+>this.z : Symbol(ImplementsInterface.z, Decl(es6ClassTest2.ts, 127, 21))
+>this : Symbol(ImplementsInterface, Decl(es6ClassTest2.ts, 124, 1))
+>z : Symbol(ImplementsInterface.z, Decl(es6ClassTest2.ts, 127, 21))
+    }
+}
+
+class Visibility {
+>Visibility : Symbol(Visibility, Decl(es6ClassTest2.ts, 133, 1))
+
+    public foo() { }
+>foo : Symbol(Visibility.foo, Decl(es6ClassTest2.ts, 135, 18))
+
+    private bar() { }
+>bar : Symbol(Visibility.bar, Decl(es6ClassTest2.ts, 136, 20))
+
+    private x: number;
+>x : Symbol(Visibility.x, Decl(es6ClassTest2.ts, 137, 21))
+
+    public y: number;
+>y : Symbol(Visibility.y, Decl(es6ClassTest2.ts, 138, 22))
+
+    public z: number;
+>z : Symbol(Visibility.z, Decl(es6ClassTest2.ts, 139, 21))
+
+    constructor() {
+        this.x = 1;
+>this.x : Symbol(Visibility.x, Decl(es6ClassTest2.ts, 137, 21))
+>this : Symbol(Visibility, Decl(es6ClassTest2.ts, 133, 1))
+>x : Symbol(Visibility.x, Decl(es6ClassTest2.ts, 137, 21))
+
+        this.y = 2;
+>this.y : Symbol(Visibility.y, Decl(es6ClassTest2.ts, 138, 22))
+>this : Symbol(Visibility, Decl(es6ClassTest2.ts, 133, 1))
+>y : Symbol(Visibility.y, Decl(es6ClassTest2.ts, 138, 22))
+    }
+}
+
+class BaseClassWithConstructor {
+>BaseClassWithConstructor : Symbol(BaseClassWithConstructor, Decl(es6ClassTest2.ts, 145, 1))
+
+    constructor(public x: number, public s: string) { }
+>x : Symbol(BaseClassWithConstructor.x, Decl(es6ClassTest2.ts, 148, 16))
+>s : Symbol(BaseClassWithConstructor.s, Decl(es6ClassTest2.ts, 148, 33))
+}
+
+// used to test codegen
+class ChildClassWithoutConstructor extends BaseClassWithConstructor { }
+>ChildClassWithoutConstructor : Symbol(ChildClassWithoutConstructor, Decl(es6ClassTest2.ts, 149, 1))
+>BaseClassWithConstructor : Symbol(BaseClassWithConstructor, Decl(es6ClassTest2.ts, 145, 1))
+
+
+var ccwc = new ChildClassWithoutConstructor(1, "s");
+>ccwc : Symbol(ccwc, Decl(es6ClassTest2.ts, 155, 3))
+>ChildClassWithoutConstructor : Symbol(ChildClassWithoutConstructor, Decl(es6ClassTest2.ts, 149, 1))
+
+

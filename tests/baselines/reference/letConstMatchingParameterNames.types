@@ -1,11 +1,11 @@
 === tests/cases/compiler/letConstMatchingParameterNames.ts ===
 let parent = true;
 >parent : boolean
->true : boolean
+>true : true
 
 const parent2 = true;
->parent2 : boolean
->true : boolean
+>parent2 : true
+>true : true
 
 declare function use(a: any);
 >use : (a: any) => any
@@ -16,11 +16,11 @@ function a() {
     
     let parent = 1;
 >parent : number
->1 : number
+>1 : 1
 
     const parent2 = 2;
->parent2 : number
->2 : number
+>parent2 : 2
+>2 : 2
 
     function b(parent: string, parent2: number) {
 >b : (parent: string, parent2: number) => void

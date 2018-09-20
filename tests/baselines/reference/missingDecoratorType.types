@@ -1,0 +1,28 @@
+=== tests/cases/conformance/decorators/a.ts ===
+interface Object { }
+No type information for this code.interface Array<T> { }
+No type information for this code.interface String { }
+No type information for this code.interface Boolean { }
+No type information for this code.interface Number { }
+No type information for this code.interface Function { }
+No type information for this code.interface RegExp { }
+No type information for this code.interface IArguments { }
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/decorators/b.ts ===
+declare function dec(t, k, d);
+>dec : (t: any, k: any, d: any) => any
+>t : any
+>k : any
+>d : any
+
+class C {
+>C : C
+
+    @dec
+>dec : (t: any, k: any, d: any) => any
+
+    method() {}
+>method : () => void
+}
+
+

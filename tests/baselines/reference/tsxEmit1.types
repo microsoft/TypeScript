@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -25,36 +19,36 @@ var selfClosed2 = <div x="1" />;
 >selfClosed2 : JSX.Element
 ><div x="1" /> : JSX.Element
 >div : any
->x : any
+>x : string
 
 var selfClosed3 = <div x='1' />;
 >selfClosed3 : JSX.Element
 ><div x='1' /> : JSX.Element
 >div : any
->x : any
+>x : string
 
 var selfClosed4 = <div x="1" y='0' />;
 >selfClosed4 : JSX.Element
 ><div x="1" y='0' /> : JSX.Element
 >div : any
->x : any
->y : any
+>x : string
+>y : string
 
 var selfClosed5 = <div x={0} y='0' />;
 >selfClosed5 : JSX.Element
 ><div x={0} y='0' /> : JSX.Element
 >div : any
->x : any
->0 : number
->y : any
+>x : number
+>0 : 0
+>y : string
 
 var selfClosed6 = <div x={"1"} y='0' />;
 >selfClosed6 : JSX.Element
 ><div x={"1"} y='0' /> : JSX.Element
 >div : any
->x : any
->"1" : string
->y : any
+>x : string
+>"1" : "1"
+>y : string
 
 var selfClosed7 = <div x={p} y='p' />;
 >selfClosed7 : JSX.Element
@@ -62,7 +56,7 @@ var selfClosed7 = <div x={p} y='p' />;
 >div : any
 >x : any
 >p : any
->y : any
+>y : string
 
 var openClosed1 = <div></div>;
 >openClosed1 : JSX.Element
@@ -74,14 +68,14 @@ var openClosed2 = <div n='m'>foo</div>;
 >openClosed2 : JSX.Element
 ><div n='m'>foo</div> : JSX.Element
 >div : any
->n : any
+>n : string
 >div : any
 
 var openClosed3 = <div n='m'>{p}</div>;
 >openClosed3 : JSX.Element
 ><div n='m'>{p}</div> : JSX.Element
 >div : any
->n : any
+>n : string
 >p : any
 >div : any
 
@@ -89,7 +83,7 @@ var openClosed4 = <div n='m'>{p < p}</div>;
 >openClosed4 : JSX.Element
 ><div n='m'>{p < p}</div> : JSX.Element
 >div : any
->n : any
+>n : string
 >p < p : boolean
 >p : any
 >p : any
@@ -99,7 +93,7 @@ var openClosed5 = <div n='m'>{p > p}</div>;
 >openClosed5 : JSX.Element
 ><div n='m'>{p > p}</div> : JSX.Element
 >div : any
->n : any
+>n : string
 >p > p : boolean
 >p : any
 >p : any
@@ -142,7 +136,7 @@ class SomeClass {
 >rewrites4 : JSX.Element
 ><div a={() => this}></div> : JSX.Element
 >div : any
->a : any
+>a : () => this
 >() => this : () => this
 >this : this
 >div : any
@@ -151,7 +145,7 @@ class SomeClass {
 >rewrites5 : JSX.Element
 ><div a={[p, ...p, p]}></div> : JSX.Element
 >div : any
->a : any
+>a : any[]
 >[p, ...p, p] : any[]
 >p : any
 >...p : any
@@ -163,7 +157,7 @@ class SomeClass {
 >rewrites6 : JSX.Element
 ><div a={{p}}></div> : JSX.Element
 >div : any
->a : any
+>a : { p: any; }
 >{p} : { p: any; }
 >p : any
 >div : any

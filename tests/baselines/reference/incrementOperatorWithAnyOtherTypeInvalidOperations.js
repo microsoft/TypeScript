@@ -1,6 +1,6 @@
 //// [incrementOperatorWithAnyOtherTypeInvalidOperations.ts]
 // ++ operator on any type
-var ANY1;
+var ANY1: any;
 var ANY2: any[] = [1, 2];
 
 var obj: () => {}
@@ -11,7 +11,7 @@ function foo(): any {
 }
 class A {
     public a: any;
-    static foo() {
+    static foo(): any {
         var a;
         return a;
     }
@@ -79,7 +79,7 @@ function foo() {
     var a;
     return a;
 }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.foo = function () {

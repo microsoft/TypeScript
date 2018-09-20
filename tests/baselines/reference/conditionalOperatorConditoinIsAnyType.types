@@ -20,7 +20,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -36,7 +35,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;
@@ -130,7 +128,7 @@ x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
 >x : any
->"x" : string
+>"x" : "x"
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -146,7 +144,7 @@ x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
 >x : any
->"x" : string
+>"x" : "x"
 >exprString1 : string
 >exprString2 : string
 
@@ -288,7 +286,7 @@ var resultIsBoolean3 = x("x") ? exprBoolean1 : exprBoolean2;
 >x("x") ? exprBoolean1 : exprBoolean2 : boolean
 >x("x") : any
 >x : any
->"x" : string
+>"x" : "x"
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -306,7 +304,7 @@ var resultIsString3 = x("x") ? exprString1 : exprString2;
 >x("x") ? exprString1 : exprString2 : string
 >x("x") : any
 >x : any
->"x" : string
+>"x" : "x"
 >exprString1 : string
 >exprString2 : string
 

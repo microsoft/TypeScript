@@ -28,38 +28,46 @@ class C<T1> extends CBase<T1> {
 
 
 //// [baseTypeWrappingInstantiationChain.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var CBaseBase = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var CBaseBase = /** @class */ (function () {
     function CBaseBase(x) {
     }
     return CBaseBase;
 }());
-var CBase = (function (_super) {
+var CBase = /** @class */ (function (_super) {
     __extends(CBase, _super);
     function CBase() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return CBase;
 }(CBaseBase));
-var Parameter = (function () {
+var Parameter = /** @class */ (function () {
     function Parameter() {
     }
     Parameter.prototype.method = function (t) { };
     return Parameter;
 }());
-var Wrapper = (function () {
+var Wrapper = /** @class */ (function () {
     function Wrapper() {
     }
     return Wrapper;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     C.prototype.works = function () {
         new CBaseBase(this);

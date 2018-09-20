@@ -18,12 +18,12 @@ x2(() => 1);
 >x2(() => 1) : any
 >x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
 >() => 1 : () => number
->1 : number
+>1 : 1
 
 x2((x) => 1 );
 >x2((x) => 1 ) : any
 >x2 : { (callback: (x?: number) => number): any; (callback: (x: string) => number): any; }
 >(x) => 1 : (x: number) => number
 >x : number
->1 : number
+>1 : 1
 

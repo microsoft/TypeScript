@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.js ===
+var a = 10;
+>a : number
+>10 : 10
+
+class a {
+>a : a
+}

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/capturedVarInLoop.ts ===
+for (var i = 0; i < 10; i++) {
+>i : Symbol(i, Decl(capturedVarInLoop.ts, 0, 8))
+>i : Symbol(i, Decl(capturedVarInLoop.ts, 0, 8))
+>i : Symbol(i, Decl(capturedVarInLoop.ts, 0, 8))
+
+    var str = 'x', len = str.length;
+>str : Symbol(str, Decl(capturedVarInLoop.ts, 1, 7))
+>len : Symbol(len, Decl(capturedVarInLoop.ts, 1, 18))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(capturedVarInLoop.ts, 1, 7))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    let lambda1 = (y) => { };
+>lambda1 : Symbol(lambda1, Decl(capturedVarInLoop.ts, 2, 7))
+>y : Symbol(y, Decl(capturedVarInLoop.ts, 2, 19))
+
+    let lambda2 = () => lambda1(len);
+>lambda2 : Symbol(lambda2, Decl(capturedVarInLoop.ts, 3, 7))
+>lambda1 : Symbol(lambda1, Decl(capturedVarInLoop.ts, 2, 7))
+>len : Symbol(len, Decl(capturedVarInLoop.ts, 1, 18))
+}

@@ -1,0 +1,73 @@
+=== tests/cases/compiler/typeInferenceWithExcessProperties.ts ===
+// Repro from #17041
+
+interface Named {
+    name: string;
+>name : string
+}
+
+function parrot<T extends Named>(obj: T): T {
+>parrot : <T extends Named>(obj: T) => T
+>obj : T
+
+    return obj;
+>obj : T
+}
+
+
+parrot({
+>parrot({    name: "TypeScript",}) : { name: string; }
+>parrot : <T extends Named>(obj: T) => T
+>{    name: "TypeScript",} : { name: string; }
+
+    name: "TypeScript",
+>name : string
+>"TypeScript" : "TypeScript"
+
+});
+
+parrot({
+>parrot({    name: "TypeScript",    age: 5,}) : { name: string; age: number; }
+>parrot : <T extends Named>(obj: T) => T
+>{    name: "TypeScript",    age: 5,} : { name: string; age: number; }
+
+    name: "TypeScript",
+>name : string
+>"TypeScript" : "TypeScript"
+
+    age: 5,
+>age : number
+>5 : 5
+
+});
+
+parrot({
+>parrot({    name: "TypeScript",    age: function () { },}) : { name: string; age: () => void; }
+>parrot : <T extends Named>(obj: T) => T
+>{    name: "TypeScript",    age: function () { },} : { name: string; age: () => void; }
+
+    name: "TypeScript",
+>name : string
+>"TypeScript" : "TypeScript"
+
+    age: function () { },
+>age : () => void
+>function () { } : () => void
+
+});
+
+parrot({
+>parrot({    name: "TypeScript",    sayHello() {    },}) : { name: string; sayHello(): void; }
+>parrot : <T extends Named>(obj: T) => T
+>{    name: "TypeScript",    sayHello() {    },} : { name: string; sayHello(): void; }
+
+    name: "TypeScript",
+>name : string
+>"TypeScript" : "TypeScript"
+
+    sayHello() {
+>sayHello : () => void
+
+    },
+});
+

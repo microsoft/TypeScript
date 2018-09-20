@@ -1,5 +1,4 @@
 === tests/cases/compiler/duplicateVariablesByScope.ts ===
-
 // duplicate local variables are only reported at global scope
 
 module M {
@@ -7,20 +6,20 @@ module M {
 
     for (var j = 0; j < 10; j++) {
 >j : number
->0 : number
+>0 : 0
 >j < 10 : boolean
 >j : number
->10 : number
+>10 : 10
 >j++ : number
 >j : number
     }
 
     for (var j = 0; j < 10; j++) {
 >j : number
->0 : number
+>0 : 0
 >j < 10 : boolean
 >j : number
->10 : number
+>10 : 10
 >j++ : number
 >j : number
     }
@@ -31,23 +30,23 @@ function foo() {
 
     var x = 2;
 >x : number
->2 : number
+>2 : 2
 
     var x = 1;
 >x : number
->1 : number
+>1 : 1
 
     if (true) {
->true : boolean
+>true : true
 
         var result = 1;
 >result : number
->1 : number
+>1 : 1
     }
     else {
         var result = 2;
 >result : number
->2 : number
+>2 : 2
     }
 }
 
@@ -60,14 +59,14 @@ class C {
         try {
             var x = 1;
 >x : number
->1 : number
+>1 : 1
         }
         catch (e) {
 >e : any
 
             var x = 2;
 >x : number
->2 : number
+>2 : 2
         }
     }
 }

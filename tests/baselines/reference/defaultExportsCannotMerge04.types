@@ -1,0 +1,17 @@
+=== tests/cases/conformance/es6/modules/defaultExportsCannotMerge04.ts ===
+export default function Foo() {
+>Foo : () => void
+}
+
+namespace Foo {
+>Foo : typeof Foo
+
+    export var x;
+>x : any
+}
+
+interface Foo {
+}
+
+export interface Foo {
+}

@@ -1,5 +1,4 @@
 //// [commentsdoNotEmitComments.ts]
-
 /** Variable comments*/
 var myVariable = 10;
 
@@ -170,6 +169,6 @@ declare var x: any;
 declare const enum color {
     red = 0,
     green = 1,
-    blue = 2,
+    blue = 2
 }
 declare var shade: color;

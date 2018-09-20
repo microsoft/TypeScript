@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unusedTypeParameterInMethod5.ts ===
+class A {
+>A : Symbol(A, Decl(unusedTypeParameterInMethod5.ts, 0, 0))
+
+    public f1 = function<X>() {
+>f1 : Symbol(A.f1, Decl(unusedTypeParameterInMethod5.ts, 0, 9))
+>X : Symbol(X, Decl(unusedTypeParameterInMethod5.ts, 1, 25))
+
+    }
+}

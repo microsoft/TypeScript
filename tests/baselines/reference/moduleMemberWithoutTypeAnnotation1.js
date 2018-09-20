@@ -51,7 +51,7 @@ var TypeScript;
 (function (TypeScript) {
     var Parser;
     (function (Parser) {
-        var SyntaxCursor = (function () {
+        var SyntaxCursor = /** @class */ (function () {
             function SyntaxCursor() {
             }
             SyntaxCursor.prototype.currentNode = function () {
@@ -61,11 +61,10 @@ var TypeScript;
         }());
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     ;
     ;
-    var PositionedElement = (function () {
+    var PositionedElement = /** @class */ (function () {
         function PositionedElement() {
         }
         PositionedElement.prototype.childIndex = function (child) {
@@ -74,16 +73,15 @@ var TypeScript;
         return PositionedElement;
     }());
     TypeScript.PositionedElement = PositionedElement;
-    var PositionedToken = (function () {
+    var PositionedToken = /** @class */ (function () {
         function PositionedToken(parent, token, fullStart) {
         }
         return PositionedToken;
     }());
     TypeScript.PositionedToken = PositionedToken;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
-    var SyntaxNode = (function () {
+    var SyntaxNode = /** @class */ (function () {
         function SyntaxNode() {
         }
         SyntaxNode.prototype.findToken = function (position, includeSkippedTokens) {
@@ -98,13 +96,12 @@ var TypeScript;
     }());
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var Syntax;
     (function (Syntax) {
         function childIndex() { }
         Syntax.childIndex = childIndex;
-        var VariableWidthTokenWithTrailingTrivia = (function () {
+        var VariableWidthTokenWithTrailingTrivia = /** @class */ (function () {
             function VariableWidthTokenWithTrailingTrivia() {
             }
             VariableWidthTokenWithTrailingTrivia.prototype.findTokenInternal = function (parent, position, fullStart) {

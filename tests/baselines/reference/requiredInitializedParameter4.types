@@ -5,6 +5,6 @@ class C1 {
     method(a = 0, b) { }
 >method : (a: number, b: any) => void
 >a : number
->0 : number
+>0 : 0
 >b : any
 }

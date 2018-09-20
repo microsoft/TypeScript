@@ -1,29 +1,29 @@
 === tests/cases/conformance/externalModules/file1.ts ===
 var v1 = "sausages"; // Global scope
 >v1 : string
->"sausages" : string
+>"sausages" : "sausages"
 
 === tests/cases/conformance/externalModules/file2.ts ===
 var v2 = 42; // Global scope
 >v2 : number
->42 : number
+>42 : 42
 
 var v4 = () => 5;
 >v4 : () => number
 >() => 5 : () => number
->5 : number
+>5 : 5
 
 === tests/cases/conformance/externalModules/file3.ts ===
 export var v3 = true;
 >v3 : boolean
->true : boolean
+>true : true
 
 var v2 = [1,2,3]; // Module scope. Should not appear in global scope
 >v2 : number[]
 >[1,2,3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 === tests/cases/conformance/externalModules/file4.ts ===
 import file3 = require('./file3');
@@ -47,7 +47,7 @@ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
 >v4 : { a: boolean; b: number; }
 >{a: true, b: NaN} : { a: boolean; b: number; }
 >a : boolean
->true : boolean
+>true : true
 >b : number
 >NaN : number
 

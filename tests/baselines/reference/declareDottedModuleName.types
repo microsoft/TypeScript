@@ -1,21 +1,12 @@
 === tests/cases/compiler/declareDottedModuleName.ts ===
 module M {
->M : any
-
-    module P.Q { } // This shouldnt be emitted
->P : any
->Q : any
-}
-
-module M {
->M : any
-
-    export module R.S { }  //This should be emitted
->R : any
->S : any
-}
-
-module T.U { // This needs to be emitted
->T : any
->U : any
-}
+No type information for this code.    module P.Q { } // This shouldnt be emitted
+No type information for this code.}
+No type information for this code.
+No type information for this code.module M {
+No type information for this code.    export module R.S { }  //This should be emitted
+No type information for this code.}
+No type information for this code.
+No type information for this code.module T.U { // This needs to be emitted
+No type information for this code.}
+No type information for this code.

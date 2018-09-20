@@ -6,11 +6,8 @@ class C {
 }
 
 //// [YieldExpression11_es6.js]
-var C = (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+class C {
+    *foo() {
         yield (foo);
-    };
-    return C;
-}());
+    }
+}

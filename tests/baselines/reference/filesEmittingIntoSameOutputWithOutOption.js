@@ -12,7 +12,8 @@ function foo() {
 //// [a.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    var c = (function () {
+    exports.__esModule = true;
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

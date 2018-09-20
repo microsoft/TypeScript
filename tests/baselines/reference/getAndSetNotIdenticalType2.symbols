@@ -1,0 +1,55 @@
+=== tests/cases/compiler/getAndSetNotIdenticalType2.ts ===
+class A<T> { foo: T; }
+>A : Symbol(A, Decl(getAndSetNotIdenticalType2.ts, 0, 0))
+>T : Symbol(T, Decl(getAndSetNotIdenticalType2.ts, 0, 8))
+>foo : Symbol(A.foo, Decl(getAndSetNotIdenticalType2.ts, 0, 12))
+>T : Symbol(T, Decl(getAndSetNotIdenticalType2.ts, 0, 8))
+
+class C<T> {
+>C : Symbol(C, Decl(getAndSetNotIdenticalType2.ts, 0, 22))
+>T : Symbol(T, Decl(getAndSetNotIdenticalType2.ts, 2, 8))
+
+    data: A<T>;
+>data : Symbol(C.data, Decl(getAndSetNotIdenticalType2.ts, 2, 12))
+>A : Symbol(A, Decl(getAndSetNotIdenticalType2.ts, 0, 0))
+>T : Symbol(T, Decl(getAndSetNotIdenticalType2.ts, 2, 8))
+
+    get x(): A<T> {
+>x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+>A : Symbol(A, Decl(getAndSetNotIdenticalType2.ts, 0, 0))
+>T : Symbol(T, Decl(getAndSetNotIdenticalType2.ts, 2, 8))
+
+        return this.data;
+>this.data : Symbol(C.data, Decl(getAndSetNotIdenticalType2.ts, 2, 12))
+>this : Symbol(C, Decl(getAndSetNotIdenticalType2.ts, 0, 22))
+>data : Symbol(C.data, Decl(getAndSetNotIdenticalType2.ts, 2, 12))
+    }
+    set x(v: A<string>) {
+>x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+>v : Symbol(v, Decl(getAndSetNotIdenticalType2.ts, 7, 10))
+>A : Symbol(A, Decl(getAndSetNotIdenticalType2.ts, 0, 0))
+
+        this.data = v;
+>this.data : Symbol(C.data, Decl(getAndSetNotIdenticalType2.ts, 2, 12))
+>this : Symbol(C, Decl(getAndSetNotIdenticalType2.ts, 0, 22))
+>data : Symbol(C.data, Decl(getAndSetNotIdenticalType2.ts, 2, 12))
+>v : Symbol(v, Decl(getAndSetNotIdenticalType2.ts, 7, 10))
+    }
+}
+
+var x = new C();
+>x : Symbol(x, Decl(getAndSetNotIdenticalType2.ts, 12, 3))
+>C : Symbol(C, Decl(getAndSetNotIdenticalType2.ts, 0, 22))
+
+var r = x.x;
+>r : Symbol(r, Decl(getAndSetNotIdenticalType2.ts, 13, 3))
+>x.x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+>x : Symbol(x, Decl(getAndSetNotIdenticalType2.ts, 12, 3))
+>x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+
+x.x = r;
+>x.x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+>x : Symbol(x, Decl(getAndSetNotIdenticalType2.ts, 12, 3))
+>x : Symbol(C.x, Decl(getAndSetNotIdenticalType2.ts, 3, 15), Decl(getAndSetNotIdenticalType2.ts, 6, 5))
+>r : Symbol(r, Decl(getAndSetNotIdenticalType2.ts, 13, 3))
+

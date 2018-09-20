@@ -1,11 +1,11 @@
-tests/cases/compiler/cloduleTest2.ts(4,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/cloduleTest2.ts(10,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/cloduleTest2.ts(18,7): error TS2339: Property 'bar' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(4,13): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/cloduleTest2.ts(10,13): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/cloduleTest2.ts(18,7): error TS2576: Property 'bar' is a static member of type 'm3d'
 tests/cases/compiler/cloduleTest2.ts(19,7): error TS2339: Property 'y' does not exist on type 'm3d'.
-tests/cases/compiler/cloduleTest2.ts(27,7): error TS2339: Property 'bar' does not exist on type 'm3d'.
+tests/cases/compiler/cloduleTest2.ts(27,7): error TS2576: Property 'bar' is a static member of type 'm3d'
 tests/cases/compiler/cloduleTest2.ts(28,7): error TS2339: Property 'y' does not exist on type 'm3d'.
-tests/cases/compiler/cloduleTest2.ts(33,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/cloduleTest2.ts(33,9): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/cloduleTest2.ts (8 errors) ====
@@ -14,7 +14,8 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters d
         declare class m3d { constructor(foo); foo(): void ; static bar(); }
         var r = new m3d(); // error
                 ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:3:37: An argument for 'foo' was not provided.
     }
     
     module T2 {
@@ -22,7 +23,8 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters d
         module m3d { export var y = 2; }
         var r = new m3d(); // error
                 ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:8:37: An argument for 'foo' was not provided.
     }
     
     module T3 {
@@ -32,7 +34,7 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters d
         r.foo();
         r.bar(); // error
           ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'm3d'.
+!!! error TS2576: Property 'bar' is a static member of type 'm3d'
         r.y; // error
           ~
 !!! error TS2339: Property 'y' does not exist on type 'm3d'.
@@ -45,7 +47,7 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters d
         r.foo();
         r.bar(); // error
           ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'm3d'.
+!!! error TS2576: Property 'bar' is a static member of type 'm3d'
         r.y; // error
           ~
 !!! error TS2339: Property 'y' does not exist on type 'm3d'.
@@ -55,9 +57,11 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2346: Supplied parameters d
     declare class m3d { constructor(foo); foo(): void; static bar(); }
     var r = new m3d(); // error
             ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:32:33: An argument for 'foo' was not provided.
     
     declare class m4d extends m3d { }
     var r2 = new m4d(); // error
              ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:32:33: An argument for 'foo' was not provided.

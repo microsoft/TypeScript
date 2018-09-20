@@ -16,5 +16,5 @@ var x = foo(5);
 >x : number
 >foo(5) : number
 >foo : { (bar: string): string; (bar: any): number; }
->5 : number
+>5 : 5
 

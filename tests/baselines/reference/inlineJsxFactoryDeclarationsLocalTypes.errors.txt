@@ -1,0 +1,126 @@
+tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+  Property '__predomBrand' is missing in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(21,21): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+  Property 'render' is missing in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ children?: Element[]; }'.
+  Types of property 'children' are incompatible.
+    Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
+      Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
+  Property '__domBrand' is missing in type 'MyClass'.
+tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
+tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
+  Types of property 'children' are incompatible.
+    Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]'.
+      Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+        Property '__domBrand' is missing in type 'Element'.
+
+
+==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+    export namespace dom {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: {};
+            }
+            interface Element {
+                __domBrand: void;
+                props: {
+                    children?: Element[];
+                };
+            }
+            interface ElementClass extends Element {
+                render(): Element;
+            }
+            interface ElementAttributesProperty { props: any; }
+            interface ElementChildrenAttribute { children: any; }
+        }
+    }
+    export function dom(): dom.JSX.Element;
+==== tests/cases/conformance/jsx/inline/renderer2.d.ts (0 errors) ====
+    export namespace predom {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: {};
+            }
+            interface Element {
+                __predomBrand: void;
+                props: {
+                    children?: Element[];
+                };
+            }
+            interface ElementClass extends Element {
+                render(): Element;
+            }
+            interface ElementAttributesProperty { props: any; }
+            interface ElementChildrenAttribute { children: any; }
+        }
+    }
+    export function predom(): predom.JSX.Element;
+==== tests/cases/conformance/jsx/inline/component.tsx (0 errors) ====
+    /** @jsx predom */
+    import { predom } from "./renderer2"
+    
+    export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
+    
+    export class MyClass implements predom.JSX.Element {
+        __predomBrand!: void;
+        constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
+        render() {
+            return <p>
+                {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
+                {...this.props.children}
+            </p>;
+        }
+    }
+    export const tree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
+    
+    export default <h></h>
+    
+==== tests/cases/conformance/jsx/inline/index.tsx (6 errors) ====
+    /** @jsx dom */
+    import { dom } from "./renderer"
+    import prerendered, {MySFC, MyClass, tree} from "./component";
+    let elem = prerendered;
+    elem = <h></h>; // Expect assignability error here
+    ~~~~
+!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+!!! error TS2322:   Property '__predomBrand' is missing in type 'Element'.
+    
+    const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
+    
+    class DOMClass implements dom.JSX.Element {
+        __domBrand!: void;
+        constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
+        render() {
+            return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
+        }
+    }
+    
+    // Should work, everything is a DOM element
+    const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} /></DOMSFC>
+    
+    // Should fail, no dom elements
+    const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+!!! error TS2605:   Property 'render' is missing in type 'Element'.
+                         ~~~~~
+!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ children?: Element[]; }'.
+!!! error TS2322:   Types of property 'children' are incompatible.
+!!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
+!!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+                                           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
+!!! error TS2605:   Property '__domBrand' is missing in type 'MyClass'.
+                                                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
+    
+    // Should fail, nondom isn't allowed as children of dom
+    const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
+                          ~~~~~~
+!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
+!!! error TS2322:   Types of property 'children' are incompatible.
+!!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]'.
+!!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
+!!! error TS2322:         Property '__domBrand' is missing in type 'Element'.
+    

@@ -1,7 +1,5 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatementDefaultValues.ts ===
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -17,53 +15,51 @@ declare var console: {
 }
 var hello = "hello";
 >hello : string
->"hello" : string
+>"hello" : "hello"
 
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 
 var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >robotB : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 
 var { name: nameA = "<NoName>" } = robotA;
 >name : any
 >nameA : string
->"<NoName>" : string
+>"<NoName>" : "<NoName>"
 >robotA : Robot
 
 var { name: nameB = "<NoName>", skill: skillB = "<skillUnspecified>" } = robotB;
 >name : any
 >nameB : string
->"<NoName>" : string
+>"<NoName>" : "<NoName>"
 >skill : any
 >skillB : string
->"<skillUnspecified>" : string
+>"<skillUnspecified>" : "<skillUnspecified>"
 >robotB : Robot
 
 var { name: nameC = "<NoName>", skill: skillC = "<skillUnspecified>" } = { name: "Edger", skill: "cutting edges" };
 >name : any
 >nameC : string
->"<NoName>" : string
+>"<NoName>" : "<NoName>"
 >skill : any
 >skillC : string
->"<skillUnspecified>" : string
+>"<skillUnspecified>" : "<skillUnspecified>"
 >{ name: "Edger", skill: "cutting edges" } : { name?: string; skill?: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 
 if (nameA == nameB) {
 >nameA == nameB : boolean

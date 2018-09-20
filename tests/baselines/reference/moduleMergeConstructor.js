@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleMergeConstructor.ts] ////
 
 //// [foo.d.ts]
-
 declare module "foo" {
     export class Foo {
         constructor();
@@ -30,7 +29,8 @@ class Test {
 //// [index.js]
 define(["require", "exports", "foo"], function (require, exports, foo) {
     "use strict";
-    var Test = (function () {
+    exports.__esModule = true;
+    var Test = /** @class */ (function () {
         function Test() {
             this.bar = new foo.Foo();
         }

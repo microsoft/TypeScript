@@ -1,0 +1,42 @@
+=== tests/cases/compiler/deferredLookupTypeResolution2.ts ===
+// Repro from #17456
+
+type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
+>StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
+>key : string
+
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
+>ObjectHasKey : ({ [K in Extract<keyof O, string>]: "true"; } & { [key: string]: "false"; })[L]
+
+type A<T> = ObjectHasKey<T, '0'>;
+>A : ({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["0"]
+
+type B = ObjectHasKey<[string, number], '1'>;  // "true"
+>B : "true"
+
+type C = ObjectHasKey<[string, number], '2'>;  // "false"
+>C : "false"
+
+type D = A<[string]>;  // "true"
+>D : "true"
+
+// Error, "false" not handled
+type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
+>E : { true: "true"; }[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
+>true : "true"
+
+type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
+>Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
+>true : "otherwise"
+>k : string
+
+// Error, "otherwise" is missing
+type DeepError<T> = { true: 'true' }[Juxtapose<T>];
+>DeepError : { true: "true"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
+>true : "true"
+
+type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
+>DeepOK : { true: "true"; otherwise: "false"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
+>true : "true"
+>otherwise : "false"
+

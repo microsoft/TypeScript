@@ -1,0 +1,4 @@
+=== tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction4_es2017.ts ===
+var await = () => {
+>await : Symbol(await, Decl(asyncArrowFunction4_es2017.ts, 0, 3))
+}

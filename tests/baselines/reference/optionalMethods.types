@@ -1,8 +1,5 @@
 === tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
-
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 
@@ -19,7 +16,6 @@ interface Foo {
 function test1(x: Foo) {
 >test1 : (x: Foo) => void
 >x : Foo
->Foo : Foo
 
     x.a;
 >x.a : number
@@ -69,7 +65,7 @@ function test1(x: Foo) {
 >x.g : () => number
 >x : Foo
 >g : () => number
->0 : number
+>0 : 0
 }
 
 class Bar {
@@ -83,18 +79,18 @@ class Bar {
 
     c? = 2;
 >c : number | undefined
->2 : number
+>2 : 2
 
     constructor(public d?: number, public e = 10) {}
 >d : number | undefined
 >e : number
->10 : number
+>10 : 10
 
     f() {
 >f : () => number
 
         return 1;
->1 : number
+>1 : 1
     }
     g?(): number;  // Body of optional method can be omitted
 >g : (() => number) | undefined
@@ -103,14 +99,13 @@ class Bar {
 >h : (() => number) | undefined
 
         return 2;
->2 : number
+>2 : 2
     }
 }
 
 function test2(x: Bar) {
 >test2 : (x: Bar) => void
 >x : Bar
->Bar : Bar
 
     x.a;
 >x.a : number
@@ -175,7 +170,7 @@ function test2(x: Bar) {
 >x.g : () => number
 >x : Bar
 >g : () => number
->0 : number
+>0 : 0
 
     let h1 = x.h && x.h();
 >h1 : number | undefined
@@ -198,7 +193,7 @@ function test2(x: Bar) {
 >x.h : () => number
 >x : Bar
 >h : () => number
->0 : number
+>0 : 0
 }
 
 class Base {
@@ -217,10 +212,10 @@ class Derived extends Base {
 
     a = 1;
 >a : number
->1 : number
+>1 : 1
 
     f(): number { return 1; }
 >f : () => number
->1 : number
+>1 : 1
 }
 

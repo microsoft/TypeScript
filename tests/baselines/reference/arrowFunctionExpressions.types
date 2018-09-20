@@ -21,13 +21,13 @@ var b = j => { return 0; }
 >b : (j: any) => number
 >j => { return 0; } : (j: any) => number
 >j : any
->0 : number
+>0 : 0
 
 var b = (j) => { return 0; }
 >b : (j: any) => number
 >(j) => { return 0; } : (j: any) => number
 >j : any
->0 : number
+>0 : 0
 
 // Identifier => AssignmentExpression is equivalent to(Identifier) => AssignmentExpression
 var c: number;
@@ -71,47 +71,47 @@ var p3 = ([, a]) => { };
 >a : any
 
 var p4 = ([, ...a]) => { };
->p4 : ([, ...a]: any[]) => void
->([, ...a]) => { } : ([, ...a]: any[]) => void
+>p4 : ([, ...a]: [any?, ...any[]]) => void
+>([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
 > : undefined
 >a : any[]
 
 var p5 = ([a = 1]) => { };
->p5 : ([a]: [number]) => void
->([a = 1]) => { } : ([a]: [number]) => void
+>p5 : ([a]: [number?]) => void
+>([a = 1]) => { } : ([a]: [number?]) => void
 >a : number
->1 : number
+>1 : 1
 
 var p6 = ({ a }) => { };
->p6 : ({a}: { a: any; }) => void
->({ a }) => { } : ({a}: { a: any; }) => void
+>p6 : ({ a }: { a: any; }) => void
+>({ a }) => { } : ({ a }: { a: any; }) => void
 >a : any
 
 var p7 = ({ a: { b } }) => { };
->p7 : ({a: {b}}: { a: { b: any; }; }) => void
->({ a: { b } }) => { } : ({a: {b}}: { a: { b: any; }; }) => void
+>p7 : ({ a: { b } }: { a: { b: any; }; }) => void
+>({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
 >a : any
 >b : any
 
 var p8 = ({ a = 1 }) => { };
->p8 : ({a}: { a?: number; }) => void
->({ a = 1 }) => { } : ({a}: { a?: number; }) => void
+>p8 : ({ a }: { a?: number; }) => void
+>({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
 >a : number
->1 : number
+>1 : 1
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
->p9 : ({a: {b}}: { a?: { b?: number; }; }) => void
->({ a: { b = 1 } = { b: 1 } }) => { } : ({a: {b}}: { a?: { b?: number; }; }) => void
+>p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
+>({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
 >a : any
 >b : number
->1 : number
+>1 : 1
 >{ b: 1 } : { b?: number; }
 >b : number
->1 : number
+>1 : 1
 
 var p10 = ([{ value, done }]) => { };
->p10 : ([{value, done}]: [{ value: any; done: any; }]) => void
->([{ value, done }]) => { } : ([{value, done}]: [{ value: any; done: any; }]) => void
+>p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
+>([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
 >value : any
 >done : any
 
@@ -126,7 +126,7 @@ class MyClass {
 >n : any
 >n + 1 : any
 >n : any
->1 : number
+>1 : 1
 
     p = (n) => n && this;
 >p : (n: any) => this
@@ -145,7 +145,7 @@ class MyClass {
 >n : any
 >n + 1 : any
 >n : any
->1 : number
+>1 : 1
 
         var p = (n) => n && this;
 >p : (n: any) => this
@@ -177,8 +177,8 @@ var e = arrrr()(3)()(4);
 >arrrr()(3) : () => (n: number) => number
 >arrrr() : (m: number) => () => (n: number) => number
 >arrrr : () => (m: number) => () => (n: number) => number
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 
 var e: number;
 >e : number
@@ -203,8 +203,8 @@ function someFn() {
 >arr(3)(4) : number
 >arr(3) : (p: number) => number
 >arr : (n: number) => (p: number) => number
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 >toExponential : (fractionDigits?: number) => string
 }
 
@@ -217,7 +217,7 @@ function someOtherFn() {
 >(n: number) => '' + n : (n: number) => string
 >n : number
 >'' + n : string
->'' : string
+>'' : ""
 >n : number
 
     arr(4).charAt(0);
@@ -225,9 +225,9 @@ function someOtherFn() {
 >arr(4).charAt : (pos: number) => string
 >arr(4) : string
 >arr : (n: number) => string
->4 : number
+>4 : 4
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 }
 
 // Arrow function used in nested function in function
@@ -270,14 +270,14 @@ var f = (n: string) => {
     return fn(4);
 >fn(4) : () => string
 >fn : (x: number) => () => string
->4 : number
+>4 : 4
 }
 var g = f('')();
 >g : string
 >f('')() : string
 >f('') : () => string
 >f : (n: string) => () => string
->'' : string
+>'' : ""
 
 var g: string;
 >g : string
@@ -314,7 +314,7 @@ var h = someOuterFn()('')()();
 >someOuterFn()('') : () => () => number
 >someOuterFn() : (n: string) => () => () => number
 >someOuterFn : () => (n: string) => () => () => number
->'' : string
+>'' : ""
 
 h.toExponential();
 >h.toExponential() : string
@@ -348,7 +348,7 @@ function tryCatchFn() {
 >() => this + '' : () => string
 >this + '' : string
 >this : any
->'' : string
+>'' : ""
     }
 }
 

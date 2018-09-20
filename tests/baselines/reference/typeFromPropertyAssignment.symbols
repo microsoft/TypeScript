@@ -1,0 +1,41 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = class O {
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>O : Symbol(O, Decl(a.js, 0, 11))
+
+    m(x, y) { }
+>m : Symbol(O.m, Decl(a.js, 0, 21))
+>x : Symbol(x, Decl(a.js, 1, 6))
+>y : Symbol(y, Decl(a.js, 1, 8))
+}
+Outer.Inner = class I {
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
+>I : Symbol(I, Decl(a.js, 3, 13))
+
+    n(a, b) { }
+>n : Symbol(I.n, Decl(a.js, 3, 23))
+>a : Symbol(a, Decl(a.js, 4, 6))
+>b : Symbol(b, Decl(a.js, 4, 8))
+
+}
+/** @type {Outer} */
+var si
+>si : Symbol(si, Decl(a.js, 8, 3))
+
+si.m
+>si.m : Symbol(O.m, Decl(a.js, 0, 21))
+>si : Symbol(si, Decl(a.js, 8, 3))
+>m : Symbol(O.m, Decl(a.js, 0, 21))
+
+/** @type {Outer.Inner} */
+var oi
+>oi : Symbol(oi, Decl(a.js, 11, 3))
+
+oi.n
+>oi.n : Symbol(I.n, Decl(a.js, 3, 23))
+>oi : Symbol(oi, Decl(a.js, 11, 3))
+>n : Symbol(I.n, Decl(a.js, 3, 23))
+
+

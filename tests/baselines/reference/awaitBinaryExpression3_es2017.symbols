@@ -1,0 +1,29 @@
+=== tests/cases/conformance/async/es2017/awaitBinaryExpression/awaitBinaryExpression3_es2017.ts ===
+declare var a: number;
+>a : Symbol(a, Decl(awaitBinaryExpression3_es2017.ts, 0, 11))
+
+declare var p: Promise<number>;
+>p : Symbol(p, Decl(awaitBinaryExpression3_es2017.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+declare function before(): void;
+>before : Symbol(before, Decl(awaitBinaryExpression3_es2017.ts, 1, 31))
+
+declare function after(): void;
+>after : Symbol(after, Decl(awaitBinaryExpression3_es2017.ts, 2, 32))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(awaitBinaryExpression3_es2017.ts, 3, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    before();
+>before : Symbol(before, Decl(awaitBinaryExpression3_es2017.ts, 1, 31))
+
+    var b = await p + a;
+>b : Symbol(b, Decl(awaitBinaryExpression3_es2017.ts, 6, 7))
+>p : Symbol(p, Decl(awaitBinaryExpression3_es2017.ts, 1, 11))
+>a : Symbol(a, Decl(awaitBinaryExpression3_es2017.ts, 0, 11))
+
+    after();
+>after : Symbol(after, Decl(awaitBinaryExpression3_es2017.ts, 2, 32))
+}

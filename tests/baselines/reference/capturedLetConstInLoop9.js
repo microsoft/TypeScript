@@ -139,7 +139,7 @@ function foo3 () {
 }
 
 //// [capturedLetConstInLoop9.js]
-var _loop_1 = function(x) {
+var _loop_1 = function (x) {
     var x_1;
     (function () { return x_1; });
     {
@@ -157,14 +157,14 @@ var _loop_1 = function(x) {
             (function () { return x_4; });
             break;
     }
-    var _loop_2 = function() {
+    var _loop_2 = function () {
         var x_5;
         (function () { return x_5; });
     };
     while (1 == 1) {
         _loop_2();
     }
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.m = function () {
@@ -177,16 +177,17 @@ for (var x = 0; x < 1; ++x) {
     _loop_1(x);
 }
 function foo() {
-    var _loop_3 = function(a) {
+    var _loop_3 = function (a) {
+        var _a;
         if (a === 1) {
             return "break";
         }
         if (a === 2) {
             return "break-l0";
         }
-        for (var _i = 0, _a = []; _i < _a.length; _i++) {
-            var b = _a[_i];
-            _b = [{ x: 1, y: 2 }][0], x = _b.x, z = _b.y;
+        for (var _i = 0, _b = []; _i < _b.length; _i++) {
+            var b = _b[_i];
+            _a = [{ x: 1, y: 2 }][0], x = _a.x, z = _a.y;
             if (b === 1) {
                 break;
             }
@@ -198,8 +199,9 @@ function foo() {
             }
             return { value: 50 };
         }
-        var _loop_4 = function(b) {
-            _c = [{ x1: 1, y: arguments_1.length }][0], x1 = _c.x1, z1 = _c.y;
+        var _loop_4 = function (b) {
+            var _a;
+            _a = [{ x1: 1, y: arguments_1.length }][0], x1 = _a.x1, z1 = _a.y;
             if (b === 1) {
                 return "break";
             }
@@ -209,25 +211,28 @@ function foo() {
             (function () { return b; });
             return { value: 100 };
         };
-        for (var _d = 0, _e = []; _d < _e.length; _d++) {
-            var b = _e[_d];
-            var state_3 = _loop_4(b);
-            if (typeof state_3 === "object") return state_3;
-            if (state_3 === "break") break;
-            switch(state_3) {
-                case "break-l0": return state_3;
+        for (var _c = 0, _d = []; _c < _d.length; _c++) {
+            var b = _d[_c];
+            var state_2 = _loop_4(b);
+            if (typeof state_2 === "object")
+                return state_2;
+            if (state_2 === "break")
+                break;
+            switch (state_2) {
+                case "break-l0": return state_2;
             }
         }
         (function () { return a; });
     };
-    var arguments_1 = arguments;
-    var x, z, x1, z1;
-    l0: for (var _f = 0, _g = []; _f < _g.length; _f++) {
-        var a = _g[_f];
-        var state_4 = _loop_3(a);
-        if (typeof state_4 === "object") return state_4.value;
-        if (state_4 === "break") break;
-        switch(state_4) {
+    var arguments_1 = arguments, x, z, x1, z1;
+    l0: for (var _i = 0, _a = []; _i < _a.length; _i++) {
+        var a = _a[_i];
+        var state_1 = _loop_3(a);
+        if (typeof state_1 === "object")
+            return state_1.value;
+        if (state_1 === "break")
+            break;
+        switch (state_1) {
             case "break-l0": break l0;
         }
     }
@@ -266,13 +271,13 @@ function foo2() {
         }
     }
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C(N) {
         this.N = N;
     }
     C.prototype.foo = function () {
         var _this = this;
-        var _loop_5 = function(i) {
+        var _loop_5 = function (i) {
             var f = function () { return _this.N * i; };
         };
         for (var i = 0; i < 100; i++) {
@@ -283,7 +288,7 @@ var C = (function () {
 }());
 function foo3() {
     var x = arguments.length;
-    var _loop_6 = function(y) {
+    var _loop_6 = function (y) {
         var z = arguments_2.length;
         (function () { return y + z + arguments.length; });
     };

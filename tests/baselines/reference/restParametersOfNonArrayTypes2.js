@@ -62,28 +62,28 @@ var b2 = {
 function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
 var f = function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 };
-var f2 = function (x) {
+var f2 = function () {
     var y = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         y[_i - 1] = arguments[_i];
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     };
     return C;
@@ -93,10 +93,10 @@ var b = {
     foo: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     },
-    a: function foo(x) {
+    a: function foo() {
         var y = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             y[_i - 1] = arguments[_i];
@@ -105,35 +105,35 @@ var b = {
     b: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     }
 };
 function foo2() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
 var f3 = function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 };
-var f4 = function (x) {
+var f4 = function () {
     var y = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         y[_i - 1] = arguments[_i];
     }
 };
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.foo = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     };
     return C2;
@@ -143,10 +143,10 @@ var b2 = {
     foo: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     },
-    a: function foo(x) {
+    a: function foo() {
         var y = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             y[_i - 1] = arguments[_i];
@@ -155,7 +155,7 @@ var b2 = {
     b: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     }
 };

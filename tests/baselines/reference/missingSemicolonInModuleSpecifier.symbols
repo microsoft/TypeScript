@@ -1,7 +1,6 @@
 === tests/cases/compiler/a.ts ===
-
 export const x = 1;
->x : Symbol(x, Decl(a.ts, 1, 12))
+>x : Symbol(x, Decl(a.ts, 0, 12))
 
 === tests/cases/compiler/b.ts ===
 import {x} from "./a"

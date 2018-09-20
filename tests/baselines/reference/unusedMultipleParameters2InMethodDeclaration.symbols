@@ -1,0 +1,17 @@
+=== tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts ===
+class Dummy {
+>Dummy : Symbol(Dummy, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 0, 0))
+
+    public greeter(person: string, person2: string, person3: string) {
+>greeter : Symbol(Dummy.greeter, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 0, 13))
+>person : Symbol(person, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 1, 19))
+>person2 : Symbol(person2, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 1, 34))
+>person3 : Symbol(person3, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 1, 51))
+
+        var unused = 20;
+>unused : Symbol(unused, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 2, 11))
+
+        person2 = "dummy value";
+>person2 : Symbol(person2, Decl(unusedMultipleParameters2InMethodDeclaration.ts, 1, 34))
+    }
+}

@@ -5,7 +5,6 @@ import e = require('./exporter');
 export function w(): e.w { // Should be OK
 >w : () => e.w
 >e : any
->w : e.w
 
     return new e.w();
 >new e.w() : e.w
@@ -14,14 +13,13 @@ export function w(): e.w { // Should be OK
 >w : typeof e.w
 }
 === tests/cases/compiler/w1.ts ===
-
 export = Widget1
 >Widget1 : Widget1
 
 class Widget1 { name = 'one'; }
 >Widget1 : Widget1
 >name : string
->'one' : string
+>'one' : "one"
 
 === tests/cases/compiler/exporter.ts ===
 export import w = require('./w1');

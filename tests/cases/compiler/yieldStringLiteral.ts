@@ -1,0 +1,3 @@
+function yieldString() {
+    yield 'literal';
+}

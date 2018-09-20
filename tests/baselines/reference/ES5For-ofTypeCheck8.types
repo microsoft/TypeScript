@@ -1,0 +1,11 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck8.ts ===
+var union: string | string[]| number[]| symbol[];
+>union : string | string[] | number[] | symbol[]
+
+var v: symbol;
+>v : symbol
+
+for (v of union) { }
+>v : symbol
+>union : string | string[] | number[] | symbol[]
+

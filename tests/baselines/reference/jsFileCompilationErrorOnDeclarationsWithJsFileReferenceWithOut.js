@@ -15,7 +15,7 @@ function bar() {
 }
 
 //// [out.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
@@ -29,6 +29,7 @@ function foo() {
 
 
 //// [out.d.ts]
+/// <reference path="tests/cases/compiler/c.js" />
 declare class c {
 }
 declare function foo(): void;

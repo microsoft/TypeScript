@@ -1,0 +1,35 @@
+=== tests/cases/compiler/typeParameterWithInvalidConstraintType.ts ===
+class A<T extends T> {
+>A : A<T>
+
+    foo() {
+>foo : () => void
+
+        var x: T;
+>x : T
+
+        var a = x.foo();
+>a : any
+>x.foo() : any
+>x.foo : any
+>x : T
+>foo : any
+
+        var b = new x(123);
+>b : any
+>new x(123) : any
+>x : T
+>123 : 123
+
+        var c = x[1];
+>c : any
+>x[1] : any
+>x : T
+>1 : 1
+
+        var d = x();
+>d : any
+>x() : any
+>x : T
+    }
+}

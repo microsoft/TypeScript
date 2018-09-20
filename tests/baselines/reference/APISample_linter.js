@@ -1,8 +1,14 @@
-//// [APISample_linter.ts]
+//// [tests/cases/compiler/APISample_linter.ts] ////
 
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
+//// [APISample_linter.ts]
 /*
- * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -58,19 +64,20 @@ export function delint(sourceFile: ts.SourceFile) {
 const fileNames: string[] = process.argv.slice(2);
 fileNames.forEach(fileName => {
     // Parse a file
-    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
 
     // delint it
     delint(sourceFile);
 });
 
 //// [APISample_linter.js]
+"use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-"use strict";
+exports.__esModule = true;
 var ts = require("typescript");
 function delint(sourceFile) {
     delintNode(sourceFile);
@@ -113,7 +120,7 @@ exports.delint = delint;
 var fileNames = process.argv.slice(2);
 fileNames.forEach(function (fileName) {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

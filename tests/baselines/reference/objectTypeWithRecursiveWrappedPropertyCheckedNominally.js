@@ -54,12 +54,12 @@ function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 
 //// [objectTypeWithRecursiveWrappedPropertyCheckedNominally.js]
 // Types with infinitely expanding recursive types are type checked nominally
-var List = (function () {
+var List = /** @class */ (function () {
     function List() {
     }
     return List;
 }());
-var MyList = (function () {
+var MyList = /** @class */ (function () {
     function MyList() {
     }
     return MyList;

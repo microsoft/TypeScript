@@ -1,0 +1,18 @@
+=== tests/cases/conformance/async/es5/asyncUseStrict_es5.ts ===
+declare var a: boolean;
+>a : Symbol(a, Decl(asyncUseStrict_es5.ts, 0, 11))
+
+declare var p: Promise<boolean>;
+>p : Symbol(p, Decl(asyncUseStrict_es5.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(asyncUseStrict_es5.ts, 1, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    "use strict";
+    var b = await p || a;
+>b : Symbol(b, Decl(asyncUseStrict_es5.ts, 4, 7))
+>p : Symbol(p, Decl(asyncUseStrict_es5.ts, 1, 11))
+>a : Symbol(a, Decl(asyncUseStrict_es5.ts, 0, 11))
+}

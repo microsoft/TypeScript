@@ -3,7 +3,7 @@
 // and all the comments.
 // Then it adds explicit `this` arguments to the static members.
 // Tests by: Bart van der Schoor <https://github.com/Bartvds>
-declare class Promise<R> implements Promise.Thenable<R> {
+export declare class Promise<R> implements Promise.Thenable<R> {
 	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
     static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
     static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;
@@ -109,7 +109,7 @@ declare class Promise<R> implements Promise.Thenable<R> {
     static filter<R>(dit: typeof Promise, values: R[], filterer: (item: R, index: number, arrayLength: number) => boolean): Promise<R[]>;
 }
 
-declare module Promise {
+export declare module Promise {
 	export interface Thenable<R> {
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected: (error: any) => Thenable<U>): Thenable<U>;
 		then<U>(onFulfilled: (value: R) => Thenable<U>, onRejected?: (error: any) => U): Thenable<U>;
@@ -119,9 +119,6 @@ declare module Promise {
 
 }
 
-declare module 'bluebird' {
-	export = Promise;
-}
 interface Foo {
     a: number;
     b: string;
@@ -142,16 +139,18 @@ fooProm = Promise.try(Promise, () => {
 }, arr, x);
 
 //// [bluebirdStaticThis.js]
+"use strict";
+exports.__esModule = true;
 var x;
 var arr;
 var foo;
 var fooProm;
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 });
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 }, arr);
-fooProm = Promise.try(Promise, function () {
+fooProm = Promise["try"](Promise, function () {
     return foo;
 }, arr, x);

@@ -14,12 +14,11 @@ module B {
 
 
 //// [internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var A;
 (function (A) {
     A.a = 10;
 })(A || (A = {}));

@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationStringLiteral.ts]
-
 function foo(a: "hello"): number;
 function foo(a: "name"): string;
 function foo(a: string): string | number;

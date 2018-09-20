@@ -2,7 +2,6 @@
 //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
 var condObject: Object;
 >condObject : Object
->Object : Object
 
 var exprAny1: any;
 >exprAny1 : any
@@ -18,7 +17,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -34,7 +32,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 function foo() { };
 >foo : () => void
@@ -115,9 +112,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
@@ -126,9 +123,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -137,9 +134,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -271,9 +268,9 @@ var resultIsString2 = ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprString2 : string
 
@@ -283,9 +280,9 @@ var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -295,9 +292,9 @@ var resultIsStringOrBoolean2 = ({ a: 1, b: "s" }) ? exprString1 : exprBoolean1; 
 >({ a: 1, b: "s" }) : { a: number; b: string; }
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 >exprString1 : string
 >exprBoolean1 : boolean
 

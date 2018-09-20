@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
+
+		test1: Attribs1;
+>test1 : Symbol(IntrinsicElements.test1, Decl(file.tsx, 2, 30))
+>Attribs1 : Symbol(Attribs1, Decl(file.tsx, 5, 1))
+	}
+}
+interface Attribs1 {
+>Attribs1 : Symbol(Attribs1, Decl(file.tsx, 5, 1))
+
+	c1?: (x: string) => void;
+>c1 : Symbol(Attribs1.c1, Decl(file.tsx, 6, 20))
+>x : Symbol(x, Decl(file.tsx, 7, 7))
+}
+
+// OK
+<test1 c1={(x) => x.length} />; // OK
+>test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
+>c1 : Symbol(c1, Decl(file.tsx, 11, 6))
+>x : Symbol(x, Decl(file.tsx, 11, 12))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(file.tsx, 11, 12))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+<test1 data-c1={(x) => x.leng} />; // OK
+>test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
+>data-c1 : Symbol(data-c1, Decl(file.tsx, 12, 6))
+>x : Symbol(x, Decl(file.tsx, 12, 17))
+>x : Symbol(x, Decl(file.tsx, 12, 17))
+
+
+// Errors
+<test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
+>test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
+>c1 : Symbol(c1, Decl(file.tsx, 16, 6))
+>x : Symbol(x, Decl(file.tsx, 16, 12))
+>x : Symbol(x, Decl(file.tsx, 16, 12))
+

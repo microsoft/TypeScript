@@ -1,0 +1,24 @@
+=== tests/cases/compiler/objectSpreadWithinMethodWithinObjectWithSpread.ts ===
+const obj = {};
+>obj : Symbol(obj, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 0, 5))
+
+const a = {
+>a : Symbol(a, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 1, 5))
+
+    ...obj,
+>obj : Symbol(obj, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 0, 5))
+
+    prop() {
+>prop : Symbol(prop, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 2, 11))
+
+        return {
+            ...obj,
+>obj : Symbol(obj, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 0, 5))
+
+            metadata: 213
+>metadata : Symbol(metadata, Decl(objectSpreadWithinMethodWithinObjectWithSpread.ts, 5, 19))
+
+        };
+    }
+};
+

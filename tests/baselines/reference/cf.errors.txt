@@ -14,7 +14,7 @@ tests/cases/compiler/cf.ts(36,13): error TS7027: Unreachable code detected.
             if (y==7) {
                 continue L1;
                 x=11;
-                ~
+                ~~~~~
 !!! error TS7027: Unreachable code detected.
             }
             if (y==3) {
@@ -28,7 +28,7 @@ tests/cases/compiler/cf.ts(36,13): error TS7027: Unreachable code detected.
                 if (y==20) {
                     break;
                     x=12;
-                    ~
+                    ~~~~~
 !!! error TS7027: Unreachable code detected.
                 }
             } while (y<41);
@@ -41,19 +41,19 @@ tests/cases/compiler/cf.ts(36,13): error TS7027: Unreachable code detected.
             L3: if (x<y) {
                 break L2;
                 x=13;
-                ~
+                ~~~~~
 !!! error TS7027: Unreachable code detected.
             }
             else {
                 break L3;
                 x=14;
-                ~
+                ~~~~~
 !!! error TS7027: Unreachable code detected.
             }
         }
         catch (e) {
             x++;
-        }    
+        }
         finally {
             x+=3;
         }

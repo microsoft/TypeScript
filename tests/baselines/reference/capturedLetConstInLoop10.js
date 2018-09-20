@@ -46,11 +46,11 @@ class B {
 }
 
 //// [capturedLetConstInLoop10.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () {
-        var _loop_1 = function(x) {
+        var _loop_1 = function (x) {
             var f = function () { return x; };
             this_1.bar(f());
         };
@@ -63,9 +63,9 @@ var A = (function () {
     A.prototype.bar = function (a) {
     };
     A.prototype.baz = function () {
-        var _loop_2 = function(x) {
+        var _loop_2 = function (x) {
             var a = function () { return x; };
-            var _loop_3 = function(y) {
+            var _loop_3 = function (y) {
                 var b = function () { return y; };
                 this_2.bar(b());
             };
@@ -76,16 +76,16 @@ var A = (function () {
             this_2.bar(a());
         };
         var this_2 = this;
-        for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
-            var x = _c[_b];
+        for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
+            var x = _a[_i];
             _loop_2(x);
         }
     };
     A.prototype.baz2 = function () {
-        var _loop_4 = function(x) {
+        var _loop_4 = function (x) {
             var a = function () { return x; };
             this_3.bar(a());
-            var _loop_5 = function(y) {
+            var _loop_5 = function (y) {
                 var b = function () { return y; };
                 this_3.bar(b());
             };
@@ -95,20 +95,20 @@ var A = (function () {
             }
         };
         var this_3 = this;
-        for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
-            var x = _c[_b];
+        for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
+            var x = _a[_i];
             _loop_4(x);
         }
     };
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.foo = function () {
         var _this = this;
         var a = function () {
-            var _loop_6 = function(x) {
+            var _loop_6 = function (x) {
                 var f = function () { return x; };
                 _this.bar(f());
             };

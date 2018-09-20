@@ -12,5 +12,5 @@
 ////t.pos = { x: 4, y: 3 + t./**/ };
 
 goTo.marker();
-verify.not.memberListContains('x');
-verify.memberListContains('name');
+verify.not.completionListContains('x');
+verify.completionListContains('name');

@@ -1,6 +1,5 @@
 === tests/cases/compiler/es5-commonjs5.ts ===
-
-No type information for this code.export default function () {
+export default function () {
 No type information for this code.	return "test";
 No type information for this code.}
 No type information for this code.

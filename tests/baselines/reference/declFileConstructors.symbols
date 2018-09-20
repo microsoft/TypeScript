@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileConstructors_0.ts ===
-
 export class SimpleConstructor {
 >SimpleConstructor : Symbol(SimpleConstructor, Decl(declFileConstructors_0.ts, 0, 0))
 
@@ -8,80 +7,80 @@ export class SimpleConstructor {
     }
 }
 export class ConstructorWithParameters {
->ConstructorWithParameters : Symbol(ConstructorWithParameters, Decl(declFileConstructors_0.ts, 5, 1))
+>ConstructorWithParameters : Symbol(ConstructorWithParameters, Decl(declFileConstructors_0.ts, 4, 1))
 
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/a: string,
->a : Symbol(a, Decl(declFileConstructors_0.ts, 8, 16))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 7, 16))
 
         /** this is comment for b*/
         b: number) {
->b : Symbol(b, Decl(declFileConstructors_0.ts, 8, 55))
+>b : Symbol(b, Decl(declFileConstructors_0.ts, 7, 55))
 
         var d = a;
->d : Symbol(d, Decl(declFileConstructors_0.ts, 11, 11))
->a : Symbol(a, Decl(declFileConstructors_0.ts, 8, 16))
+>d : Symbol(d, Decl(declFileConstructors_0.ts, 10, 11))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 7, 16))
     }
 }
 
 export class ConstructorWithRestParamters {
->ConstructorWithRestParamters : Symbol(ConstructorWithRestParamters, Decl(declFileConstructors_0.ts, 13, 1))
+>ConstructorWithRestParamters : Symbol(ConstructorWithRestParamters, Decl(declFileConstructors_0.ts, 12, 1))
 
     constructor(a: string, ...rests: string[]) {
->a : Symbol(a, Decl(declFileConstructors_0.ts, 16, 16))
->rests : Symbol(rests, Decl(declFileConstructors_0.ts, 16, 26))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 15, 16))
+>rests : Symbol(rests, Decl(declFileConstructors_0.ts, 15, 26))
 
         return a + rests.join("");
->a : Symbol(a, Decl(declFileConstructors_0.ts, 16, 16))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
->rests : Symbol(rests, Decl(declFileConstructors_0.ts, 16, 26))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 15, 16))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>rests : Symbol(rests, Decl(declFileConstructors_0.ts, 15, 26))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 }
 
 export class ConstructorWithOverloads {
->ConstructorWithOverloads : Symbol(ConstructorWithOverloads, Decl(declFileConstructors_0.ts, 19, 1))
+>ConstructorWithOverloads : Symbol(ConstructorWithOverloads, Decl(declFileConstructors_0.ts, 18, 1))
 
     constructor(a: string);
->a : Symbol(a, Decl(declFileConstructors_0.ts, 22, 16))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 21, 16))
 
     constructor(a: number);
->a : Symbol(a, Decl(declFileConstructors_0.ts, 23, 16))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 22, 16))
 
     constructor(a: any) {
->a : Symbol(a, Decl(declFileConstructors_0.ts, 24, 16))
+>a : Symbol(a, Decl(declFileConstructors_0.ts, 23, 16))
     }
 }
 
 export class ConstructorWithPublicParameterProperty {
->ConstructorWithPublicParameterProperty : Symbol(ConstructorWithPublicParameterProperty, Decl(declFileConstructors_0.ts, 26, 1))
+>ConstructorWithPublicParameterProperty : Symbol(ConstructorWithPublicParameterProperty, Decl(declFileConstructors_0.ts, 25, 1))
 
     constructor(public x: string) {
->x : Symbol(ConstructorWithPublicParameterProperty.x, Decl(declFileConstructors_0.ts, 29, 16))
+>x : Symbol(ConstructorWithPublicParameterProperty.x, Decl(declFileConstructors_0.ts, 28, 16))
     }
 }
 
 export class ConstructorWithPrivateParameterProperty {
->ConstructorWithPrivateParameterProperty : Symbol(ConstructorWithPrivateParameterProperty, Decl(declFileConstructors_0.ts, 31, 1))
+>ConstructorWithPrivateParameterProperty : Symbol(ConstructorWithPrivateParameterProperty, Decl(declFileConstructors_0.ts, 30, 1))
 
     constructor(private x: string) {
->x : Symbol(ConstructorWithPrivateParameterProperty.x, Decl(declFileConstructors_0.ts, 34, 16))
+>x : Symbol(ConstructorWithPrivateParameterProperty.x, Decl(declFileConstructors_0.ts, 33, 16))
     }
 }
 
 export class ConstructorWithOptionalParameterProperty {
->ConstructorWithOptionalParameterProperty : Symbol(ConstructorWithOptionalParameterProperty, Decl(declFileConstructors_0.ts, 36, 1))
+>ConstructorWithOptionalParameterProperty : Symbol(ConstructorWithOptionalParameterProperty, Decl(declFileConstructors_0.ts, 35, 1))
 
     constructor(public x?: string) {
->x : Symbol(ConstructorWithOptionalParameterProperty.x, Decl(declFileConstructors_0.ts, 39, 16))
+>x : Symbol(ConstructorWithOptionalParameterProperty.x, Decl(declFileConstructors_0.ts, 38, 16))
     }
 }
 
 export class ConstructorWithParameterInitializer {
->ConstructorWithParameterInitializer : Symbol(ConstructorWithParameterInitializer, Decl(declFileConstructors_0.ts, 41, 1))
+>ConstructorWithParameterInitializer : Symbol(ConstructorWithParameterInitializer, Decl(declFileConstructors_0.ts, 40, 1))
 
     constructor(public x = "hello") {
->x : Symbol(ConstructorWithParameterInitializer.x, Decl(declFileConstructors_0.ts, 44, 16))
+>x : Symbol(ConstructorWithParameterInitializer.x, Decl(declFileConstructors_0.ts, 43, 16))
     }
 }
 
@@ -119,9 +118,9 @@ class GlobalConstructorWithRestParamters {
 
         return a + rests.join("");
 >a : Symbol(a, Decl(declFileConstructors_1.ts, 15, 16))
->rests.join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >rests : Symbol(rests, Decl(declFileConstructors_1.ts, 15, 26))
->join : Symbol(Array.join, Decl(lib.d.ts, --, --))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
     }
 }
 

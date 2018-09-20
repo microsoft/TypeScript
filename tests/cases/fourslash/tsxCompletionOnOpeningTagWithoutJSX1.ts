@@ -4,4 +4,4 @@
 //// var x = </**/;
 
 goTo.marker();
-verify.memberListCount(42);
+verify.completionListCount(44);

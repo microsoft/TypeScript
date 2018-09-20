@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility3.ts]
-
 class Foo {
      constructor(public x: number) { }
 }
@@ -35,25 +34,25 @@ c = Bar;
 c = Baz;
 
 //// [classConstructorAccessibility3.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x) {
         this.x = x;
     }
     return Foo;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar(x) {
         this.x = x;
     }
     return Bar;
 }());
-var Baz = (function () {
+var Baz = /** @class */ (function () {
     function Baz(x) {
         this.x = x;
     }
     return Baz;
 }());
-var Qux = (function () {
+var Qux = /** @class */ (function () {
     function Qux(x) {
         this.x = x;
     }
@@ -91,7 +90,7 @@ declare class Baz {
 }
 declare class Qux {
     x: number;
-    private constructor(x);
+    private constructor();
 }
 declare let a: typeof Foo;
 declare let b: typeof Baz;

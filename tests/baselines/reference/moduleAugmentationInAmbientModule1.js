@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationInAmbientModule1.ts] ////
 
 //// [O.d.ts]
-
-
 declare module "Observable" {
     class Observable {}
 }
@@ -29,11 +27,13 @@ x.foo().x;
 
 
 //// [main.js]
-/// <reference path="O.d.ts" />
 "use strict";
+/// <reference path="O.d.ts" />
+exports.__esModule = true;
 var x;
 x.foo().x;
 
 
 //// [main.d.ts]
 /// <reference path="O.d.ts" />
+export {};

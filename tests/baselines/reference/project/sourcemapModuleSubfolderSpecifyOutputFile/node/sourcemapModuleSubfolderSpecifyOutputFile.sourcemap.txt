@@ -1,7 +1,0 @@
-===================================================================
-JsFile: test.js
-mapUrl: test.js.map
-sourceRoot: 
-sources: ../ref/m1.ts,../test.ts
-===================================================================
->>>//# sourceMappingURL=test.js.map

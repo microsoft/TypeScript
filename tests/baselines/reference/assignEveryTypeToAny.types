@@ -5,13 +5,13 @@ var x: any;
 >x : any
 
 x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 
 var a = 2;
 >a : number
->2 : number
+>2 : 2
 
 x = a;
 >x = a : number
@@ -19,27 +19,27 @@ x = a;
 >a : number
 
 x = true;
->x = true : boolean
+>x = true : true
 >x : any
->true : boolean
+>true : true
 
 var b = true;
 >b : boolean
->true : boolean
+>true : true
 
 x = b;
->x = b : boolean
+>x = b : true
 >x : any
->b : boolean
+>b : true
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : any
->"" : string
+>"" : ""
 
 var c = "";
 >c : string
->"" : string
+>"" : ""
 
 x = c;
 >x = c : string
@@ -76,7 +76,7 @@ enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 
 x = E.A;
@@ -98,15 +98,12 @@ x = f;
 >f : E
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 
 var g: I;
 >g : I
->I : I
 
 x = g;
 >x = g : I
@@ -122,7 +119,6 @@ class C {
 
 var h: C;
 >h : C
->C : C
 
 x = h;
 >x = h : C
@@ -142,23 +138,19 @@ x = { f() { return 1; } }
 >x : any
 >{ f() { return 1; } } : { f(): number; }
 >f : () => number
->1 : number
+>1 : 1
 
 x = { f<T>(x: T) { return x; } }
 >x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 >x : any
 >{ f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 function j<T>(a: T) {
 >j : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     x = a;
 >x = a : T

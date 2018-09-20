@@ -44,33 +44,30 @@ abstract class AbstractAccessorMismatch {
 
 
 //// [abstractPropertyNegative.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var B = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var B = /** @class */ (function () {
     function B() {
     }
-    Object.defineProperty(B.prototype, "readonlyProp", {
-        get: function () { },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(B.prototype, "mismatch", {
-        get: function () { },
-        set: function (val) { } // error, not same type
-        ,
-        enumerable: true,
-        configurable: true
-    });
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
-        this.ro = "readonly please";
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.ro = "readonly please";
+        return _this;
     }
     Object.defineProperty(C.prototype, "concreteWithNoBody", {
         get: function () { },
@@ -81,33 +78,29 @@ var C = (function (_super) {
 }(B));
 var c = new C();
 c.ro = "error: lhs of assignment can't be readonly";
-var WrongTypeProperty = (function () {
+var WrongTypeProperty = /** @class */ (function () {
     function WrongTypeProperty() {
     }
     return WrongTypeProperty;
 }());
-var WrongTypePropertyImpl = (function (_super) {
+var WrongTypePropertyImpl = /** @class */ (function (_super) {
     __extends(WrongTypePropertyImpl, _super);
     function WrongTypePropertyImpl() {
-        _super.apply(this, arguments);
-        this.num = "nope, wrong";
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.num = "nope, wrong";
+        return _this;
     }
     return WrongTypePropertyImpl;
 }(WrongTypeProperty));
-var WrongTypeAccessor = (function () {
+var WrongTypeAccessor = /** @class */ (function () {
     function WrongTypeAccessor() {
     }
-    Object.defineProperty(WrongTypeAccessor.prototype, "num", {
-        get: function () { },
-        enumerable: true,
-        configurable: true
-    });
     return WrongTypeAccessor;
 }());
-var WrongTypeAccessorImpl = (function (_super) {
+var WrongTypeAccessorImpl = /** @class */ (function (_super) {
     __extends(WrongTypeAccessorImpl, _super);
     function WrongTypeAccessorImpl() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
         get: function () { return "nope, wrong"; },
@@ -116,19 +109,19 @@ var WrongTypeAccessorImpl = (function (_super) {
     });
     return WrongTypeAccessorImpl;
 }(WrongTypeAccessor));
-var WrongTypeAccessorImpl2 = (function (_super) {
+var WrongTypeAccessorImpl2 = /** @class */ (function (_super) {
     __extends(WrongTypeAccessorImpl2, _super);
     function WrongTypeAccessorImpl2() {
-        _super.apply(this, arguments);
-        this.num = "nope, wrong";
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.num = "nope, wrong";
+        return _this;
     }
     return WrongTypeAccessorImpl2;
 }(WrongTypeAccessor));
-var AbstractAccessorMismatch = (function () {
+var AbstractAccessorMismatch = /** @class */ (function () {
     function AbstractAccessorMismatch() {
     }
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {
-        get: function () { },
         set: function (val) { },
         enumerable: true,
         configurable: true
@@ -136,7 +129,6 @@ var AbstractAccessorMismatch = (function () {
     ;
     Object.defineProperty(AbstractAccessorMismatch.prototype, "p2", {
         get: function () { return "should work"; },
-        set: function (val) { },
         enumerable: true,
         configurable: true
     });

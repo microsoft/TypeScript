@@ -1,0 +1,58 @@
+=== tests/cases/compiler/superAccessCastedCall.ts ===
+class Foo {
+>Foo : Foo
+
+    bar(): void {}
+>bar : () => void
+}
+
+class Bar extends Foo {
+>Bar : Bar
+>Foo : Foo
+
+    x: Number;
+>x : Number
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Foo
+
+        this.x = 2;
+>this.x = 2 : 2
+>this.x : Number
+>this : this
+>x : Number
+>2 : 2
+    }
+
+    bar() {
+>bar : () => void
+
+        super.bar();
+>super.bar() : void
+>super.bar : () => void
+>super : Foo
+>bar : () => void
+
+        (super.bar as any)();
+>(super.bar as any)() : any
+>(super.bar as any) : any
+>super.bar as any : any
+>super.bar : () => void
+>super : Foo
+>bar : () => void
+    }
+} 
+
+let b = new Bar();
+>b : Bar
+>new Bar() : Bar
+>Bar : typeof Bar
+
+b.bar()
+>b.bar() : void
+>b.bar : () => void
+>b : Bar
+>bar : () => void
+

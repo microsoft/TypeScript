@@ -18,27 +18,10 @@
 ////var b: Base;
 ////f./*5*/
 
-goTo.marker("1");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.not.memberListContains("z");
-
-goTo.marker("2");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.memberListContains("z");
-
-goTo.marker("3");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.not.memberListContains("z");
-
-goTo.marker("4");
-verify.memberListContains("y");
-verify.memberListContains("x");
-verify.memberListContains("z");
-
-goTo.marker("5");
-verify.not.memberListContains("x");
-verify.not.memberListContains("y");
-verify.not.memberListContains("z");
+verify.completions(
+    { marker: "1", exact: ["y", "x", "method"] },
+    { marker: "2", exact: ["z", "method1", "y", "x", "method"] },
+    { marker: "3", exact: ["method2", "y", "x", "method"] },
+    { marker: "4", exact: ["method2", "z", "method1", "y", "x", "method"] },
+    { marker: "5", exact: undefined },
+);

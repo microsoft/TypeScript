@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target4.ts ===
+class E { }
+>E : E
+
+export default E;
+>E : E
+

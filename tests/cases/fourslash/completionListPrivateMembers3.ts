@@ -19,13 +19,13 @@
 ////}
 
 goTo.marker("1");
-verify.memberListContains("p");
-verify.memberListCount(1);
+verify.completionListContains("p");
+verify.completionListCount(1);
 
 goTo.marker("2");
-verify.memberListContains("p");
-verify.memberListCount(1);
+verify.completionListContains("p");
+verify.completionListCount(1);
 
 goTo.marker("2");
-verify.memberListContains("p");
-verify.memberListCount(1);
+verify.completionListContains("p");
+verify.completionListCount(1);

@@ -6,11 +6,11 @@ module A {
     // in the generated function call.
     var A = 12;
 >A : number
->12 : number
+>12 : 12
 
     var _A = '';
 >_A : string
->'' : string
+>'' : ""
 }
 
 module B {
@@ -18,7 +18,7 @@ module B {
 
     var A = 12;
 >A : number
->12 : number
+>12 : 12
 }
 
 module B {
@@ -39,29 +39,29 @@ module X {
 
     var X = 13;
 >X : number
->13 : number
+>13 : 13
 
     export module Y {
 >Y : typeof X.Y
 
         var Y = 13;
 >Y : number
->13 : number
+>13 : 13
 
         export module Z {
 >Z : typeof X.Y.Z
 
             var X = 12;
 >X : number
->12 : number
+>12 : 12
 
             var Y = 12;
 >Y : number
->12 : number
+>12 : 12
 
             var Z = 12;
 >Z : number
->12 : number
+>12 : 12
         }
     }
 }
@@ -74,8 +74,8 @@ module Y.Y {
 >Y : Y
 
         Red, Blue
->Red : Y
->Blue : Y
+>Red : Y.Red
+>Blue : Y.Blue
     }
 }
 
@@ -85,13 +85,11 @@ module D {
 >D : typeof D
 
     export interface D {
->D : D
-
         id: number;
 >id : number
     }
 
     export var E = 'hello';
 >E : string
->'hello' : string
+>'hello' : "hello"
 }

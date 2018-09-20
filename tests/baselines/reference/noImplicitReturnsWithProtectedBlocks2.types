@@ -1,0 +1,31 @@
+=== tests/cases/compiler/noImplicitReturnsWithProtectedBlocks2.ts ===
+declare function log(s: string): void;
+>log : (s: string) => void
+>s : string
+
+declare function get(): number;
+>get : () => number
+
+function main1() : number {
+>main1 : () => number
+
+    try {
+        return get();
+>get() : number
+>get : () => number
+    }
+    catch(e) {
+>e : any
+
+        log("in catch");
+>log("in catch") : void
+>log : (s: string) => void
+>"in catch" : "in catch"
+    }
+    finally {
+        log("in finally");
+>log("in finally") : void
+>log : (s: string) => void
+>"in finally" : "in finally"
+    }
+}

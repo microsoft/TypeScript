@@ -8,6 +8,6 @@ var v = {
 
        yield 0
 >yield 0 : any
->0 : number
+>0 : 0
    }
 }

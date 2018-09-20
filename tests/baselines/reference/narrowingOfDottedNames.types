@@ -20,8 +20,6 @@ class B {
 function isA(x: any): x is A {
 >isA : (x: any) => x is A
 >x : any
->x : any
->A : A
 
     return x instanceof A;
 >x instanceof A : boolean
@@ -32,8 +30,6 @@ function isA(x: any): x is A {
 function isB(x: any): x is B {
 >isB : (x: any) => x is B
 >x : any
->x : any
->B : B
 
     return x instanceof B;
 >x instanceof B : boolean
@@ -44,11 +40,9 @@ function isB(x: any): x is B {
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     while (true) {
->true : boolean
+>true : true
 
         if (x instanceof A) {
 >x instanceof A : boolean
@@ -80,11 +74,9 @@ function f1(x: A | B) {
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     while (true) {
->true : boolean
+>true : true
 
         if (isA(x)) {
 >isA(x) : boolean

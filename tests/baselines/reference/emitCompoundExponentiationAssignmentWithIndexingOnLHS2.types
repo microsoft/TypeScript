@@ -1,7 +1,7 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS2.ts ===
 var globalCounter = 0;
 >globalCounter : number
->0 : number
+>0 : 0
 
 function foo() {
 >foo : () => { 0: number; }
@@ -9,22 +9,23 @@ function foo() {
     globalCounter += 1;
 >globalCounter += 1 : number
 >globalCounter : number
->1 : number
+>1 : 1
 
     return { 0: 2 };
 >{ 0: 2 } : { 0: number; }
->2 : number
+>0 : number
+>2 : 2
 }
 foo()[0] **= foo()[0];
 >foo()[0] **= foo()[0] : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 
 var result_foo1 = foo()[0] **= foo()[0];
 >result_foo1 : number
@@ -32,24 +33,24 @@ var result_foo1 = foo()[0] **= foo()[0];
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 
 foo()[0] **= foo()[0] **= 2;
 >foo()[0] **= foo()[0] **= 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] **= 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 
 var result_foo2 = foo()[0] **= foo()[0] **= 2;
 >result_foo2 : number
@@ -57,26 +58,26 @@ var result_foo2 = foo()[0] **= foo()[0] **= 2;
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] **= 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 
 foo()[0] **= foo()[0] ** 2;
 >foo()[0] **= foo()[0] ** 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] ** 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 
 var result_foo3 = foo()[0] **= foo()[0] ** 2;
 >result_foo3 : number
@@ -84,11 +85,11 @@ var result_foo3 = foo()[0] **= foo()[0] ** 2;
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
+>0 : 0
 >foo()[0] ** 2 : number
 >foo()[0] : number
 >foo() : { 0: number; }
 >foo : () => { 0: number; }
->0 : number
->2 : number
+>0 : 0
+>2 : 2
 

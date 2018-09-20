@@ -195,12 +195,20 @@ var r8b6 = b5 !== a5;
 var r8b7 = b6 !== a6;
 
 //// [comparisonOperatorWithIdenticalObjects.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var A1 = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A1 = /** @class */ (function () {
     function A1() {
     }
     A1.prototype.fn = function (a) {
@@ -208,7 +216,7 @@ var A1 = (function () {
     };
     return A1;
 }());
-var B1 = (function () {
+var B1 = /** @class */ (function () {
     function B1() {
     }
     B1.prototype.fn = function (b) {
@@ -216,7 +224,7 @@ var B1 = (function () {
     };
     return B1;
 }());
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     Base.prototype.fn = function (b) {
@@ -224,17 +232,17 @@ var Base = (function () {
     };
     return Base;
 }());
-var A2 = (function (_super) {
+var A2 = /** @class */ (function (_super) {
     __extends(A2, _super);
     function A2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return A2;
 }(Base));
-var B2 = (function (_super) {
+var B2 = /** @class */ (function (_super) {
     __extends(B2, _super);
     function B2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B2;
 }(Base));

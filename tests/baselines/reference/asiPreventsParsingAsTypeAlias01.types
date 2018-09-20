@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts ===
-
 var type;
 >type : any
 

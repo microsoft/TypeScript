@@ -20,7 +20,7 @@ sourceFile:out-flag.ts
 >>>// my class comments
 1->
 2 >^^^^^^^^^^^^^^^^^^^^
-3 >                    ^^^^^^^^^->
+3 >                    ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -28,7 +28,7 @@ sourceFile:out-flag.ts
 1->Emitted(2, 1) Source(3, 1) + SourceIndex(0)
 2 >Emitted(2, 21) Source(3, 21) + SourceIndex(0)
 ---
->>>var MyClass = (function () {
+>>>var MyClass = /** @class */ (function () {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
@@ -85,22 +85,19 @@ sourceFile:out-flag.ts
 ---
 >>>        return 42;
 1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^
-5 >                 ^
+2 >        ^^^^^^^
+3 >               ^^
+4 >                 ^
 1 >public Count(): number
   >    {
   >        
-2 >        return
-3 >               
-4 >               42
-5 >                 ;
+2 >        return 
+3 >               42
+4 >                 ;
 1 >Emitted(8, 9) Source(9, 9) + SourceIndex(0)
-2 >Emitted(8, 15) Source(9, 15) + SourceIndex(0)
-3 >Emitted(8, 16) Source(9, 16) + SourceIndex(0)
-4 >Emitted(8, 18) Source(9, 18) + SourceIndex(0)
-5 >Emitted(8, 19) Source(9, 19) + SourceIndex(0)
+2 >Emitted(8, 16) Source(9, 16) + SourceIndex(0)
+3 >Emitted(8, 18) Source(9, 18) + SourceIndex(0)
+4 >Emitted(8, 19) Source(9, 19) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^

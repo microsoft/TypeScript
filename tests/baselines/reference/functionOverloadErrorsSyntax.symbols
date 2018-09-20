@@ -1,0 +1,29 @@
+=== tests/cases/conformance/functions/functionOverloadErrorsSyntax.ts ===
+//Function overload signature with optional parameter followed by non-optional parameter
+function fn4a(x?: number, y: string);
+>fn4a : Symbol(fn4a, Decl(functionOverloadErrorsSyntax.ts, 0, 0), Decl(functionOverloadErrorsSyntax.ts, 1, 37))
+>x : Symbol(x, Decl(functionOverloadErrorsSyntax.ts, 1, 14))
+>y : Symbol(y, Decl(functionOverloadErrorsSyntax.ts, 1, 25))
+
+function fn4a() { }
+>fn4a : Symbol(fn4a, Decl(functionOverloadErrorsSyntax.ts, 0, 0), Decl(functionOverloadErrorsSyntax.ts, 1, 37))
+
+function fn4b(n: string, x?: number, y: string);
+>fn4b : Symbol(fn4b, Decl(functionOverloadErrorsSyntax.ts, 2, 19), Decl(functionOverloadErrorsSyntax.ts, 4, 48))
+>n : Symbol(n, Decl(functionOverloadErrorsSyntax.ts, 4, 14))
+>x : Symbol(x, Decl(functionOverloadErrorsSyntax.ts, 4, 24))
+>y : Symbol(y, Decl(functionOverloadErrorsSyntax.ts, 4, 36))
+
+function fn4b() { }
+>fn4b : Symbol(fn4b, Decl(functionOverloadErrorsSyntax.ts, 2, 19), Decl(functionOverloadErrorsSyntax.ts, 4, 48))
+
+//Function overload signature with rest param followed by non-optional parameter
+function fn5(x: string, ...y: any[], z: string);
+>fn5 : Symbol(fn5, Decl(functionOverloadErrorsSyntax.ts, 5, 19), Decl(functionOverloadErrorsSyntax.ts, 8, 48))
+>x : Symbol(x, Decl(functionOverloadErrorsSyntax.ts, 8, 13))
+>y : Symbol(y, Decl(functionOverloadErrorsSyntax.ts, 8, 23))
+>z : Symbol(z, Decl(functionOverloadErrorsSyntax.ts, 8, 36))
+
+function fn5() { }
+>fn5 : Symbol(fn5, Decl(functionOverloadErrorsSyntax.ts, 5, 19), Decl(functionOverloadErrorsSyntax.ts, 8, 48))
+

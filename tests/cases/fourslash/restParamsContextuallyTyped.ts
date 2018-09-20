@@ -2,9 +2,8 @@
 
 ////var foo: Function = function (/*1*/a, /*2*/b, /*3*/c) { };
 
-goTo.marker('1');
-verify.quickInfoIs('(parameter) a: any', "");
-goTo.marker('2');
-verify.quickInfoIs('(parameter) b: any', "");
-goTo.marker('3');
-verify.quickInfoIs('(parameter) c: any', "");
+verify.quickInfos({
+    1: "(parameter) a: any",
+    2: "(parameter) b: any",
+    3: "(parameter) c: any"
+});

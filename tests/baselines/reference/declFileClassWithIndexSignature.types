@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileClassWithIndexSignature.ts ===
-
 class BlockIntrinsics {
 >BlockIntrinsics : BlockIntrinsics
 

@@ -5,19 +5,19 @@ function f(x: string | number | boolean) {
 
     let y: string | number | boolean = false;
 >y : string | number | boolean
->false : boolean
+>false : false
 
     let z: string | number | boolean = false;
 >z : string | number | boolean
->false : boolean
+>false : false
 
     if (y = "", typeof x === "string") {
 >y = "", typeof x === "string" : boolean
->y = "" : string
+>y = "" : ""
 >y : string | number | boolean
->"" : string
+>"" : ""
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -28,15 +28,15 @@ function f(x: string | number | boolean) {
 >y : string
 
         z; // boolean
->z : boolean
+>z : false
     }
     else if (z = 1, typeof x === "number") {
 >z = 1, typeof x === "number" : boolean
->z = 1 : number
+>z = 1 : 1
 >z : string | number | boolean
->1 : number
+>1 : 1
 >typeof x === "number" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 
@@ -66,6 +66,6 @@ function f(x: string | number | boolean) {
 >y : string
 
     z; // number | boolean
->z : number | boolean
+>z : number | false
 }
 

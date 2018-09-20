@@ -1,21 +1,16 @@
 === tests/cases/conformance/types/primitives/number/extendNumberInterface.ts ===
 interface Number {
->Number : Number
-
     doStuff(): string;
 >doStuff : () => string
 
     doOtherStuff<T>(x:T): T;
 >doOtherStuff : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 var a: string = x.doStuff();
 >a : string
@@ -26,24 +21,24 @@ var a: string = x.doStuff();
 
 var b: string = x.doOtherStuff('hm');
 >b : string
->x.doOtherStuff('hm') : string
+>x.doOtherStuff('hm') : "hm"
 >x.doOtherStuff : <T>(x: T) => T
 >x : number
 >doOtherStuff : <T>(x: T) => T
->'hm' : string
+>'hm' : "hm"
 
 var c: string = x['doStuff']();
 >c : string
 >x['doStuff']() : string
 >x['doStuff'] : () => string
 >x : number
->'doStuff' : string
+>'doStuff' : "doStuff"
 
 var d: string = x['doOtherStuff']('hm');
 >d : string
->x['doOtherStuff']('hm') : string
+>x['doOtherStuff']('hm') : "hm"
 >x['doOtherStuff'] : <T>(x: T) => T
 >x : number
->'doOtherStuff' : string
->'hm' : string
+>'doOtherStuff' : "doOtherStuff"
+>'hm' : "hm"
 

@@ -1,4 +1,4 @@
-tests/cases/compiler/reboundIdentifierOnImportAlias.ts(6,16): error TS2437: Module 'Foo' is hidden by a local declaration with the same name
+tests/cases/compiler/reboundIdentifierOnImportAlias.ts(6,16): error TS2437: Module 'Foo' is hidden by a local declaration with the same name.
 
 
 ==== tests/cases/compiler/reboundIdentifierOnImportAlias.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/compiler/reboundIdentifierOnImportAlias.ts(6,16): error TS2437: Modu
         var Foo = 1;
         import F = Foo;
                    ~~~
-!!! error TS2437: Module 'Foo' is hidden by a local declaration with the same name
+!!! error TS2437: Module 'Foo' is hidden by a local declaration with the same name.
     }

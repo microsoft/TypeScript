@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6-umd.ts ===
-
 class A
 >A : Symbol(A, Decl(es6-umd.ts, 0, 0))
 {
@@ -9,7 +8,7 @@ class A
     }
 
     public B()
->B : Symbol(A.B, Decl(es6-umd.ts, 6, 5))
+>B : Symbol(A.B, Decl(es6-umd.ts, 5, 5))
     {
         return 42;
     }

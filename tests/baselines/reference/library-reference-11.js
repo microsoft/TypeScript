@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/references/library-reference-11.ts] ////
 
 //// [package.json]
-
 // package.json in a secondary reference can refer to another file
 
 {

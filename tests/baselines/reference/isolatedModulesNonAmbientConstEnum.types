@@ -1,9 +1,8 @@
 === tests/cases/compiler/file1.ts ===
-
 const enum E { X = 100 };
 >E : E
->X : E
->100 : number
+>X : E.X
+>100 : 100
 
 var e = E.X;
 >e : E

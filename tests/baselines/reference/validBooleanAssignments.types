@@ -1,23 +1,21 @@
 === tests/cases/conformance/types/primitives/boolean/validBooleanAssignments.ts ===
 var x = true;
 >x : boolean
->true : boolean
+>true : true
 
 var a: any = x;
 >a : any
->x : boolean
+>x : true
 
 var b: Object = x;
 >b : Object
->Object : Object
->x : boolean
+>x : true
 
 var c: Boolean = x;
 >c : Boolean
->Boolean : Boolean
->x : boolean
+>x : true
 
 var d: boolean = x;
 >d : boolean
->x : boolean
+>x : true
 

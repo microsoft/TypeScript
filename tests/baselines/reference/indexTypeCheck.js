@@ -76,7 +76,7 @@ s[{}]; // ok
 yellow[blue]; // error
 var x;
 x[0];
-var Benchmark = (function () {
+var Benchmark = /** @class */ (function () {
     function Benchmark() {
         this.results = {};
     }

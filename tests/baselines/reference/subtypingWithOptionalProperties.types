@@ -4,9 +4,7 @@
 // returns { s?: number; }
 function f<T>(a: T) {
 >f : <T>(a: T) => { s?: number; }
->T : T
 >a : T
->T : T
 
     var b: { s?: number } = a;
 >b : { s?: number; }

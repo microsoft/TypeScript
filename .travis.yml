@@ -2,34 +2,29 @@ language: node_js
 
 node_js:
   - 'stable'
-  - '4'
-  - '0.10'
+  - '8'
+  - '6'
 
 sudo: false
 
 env:
-  - workerCount=3
+  - workerCount=3 timeout=600000
 
 matrix:
   fast_finish: true
-  include:
-  - os: osx
-    node_js: stable
-    osx_image: xcode7.3
-    env: workerCount=2
-  allow_failures:
-  - os: osx
 
 branches:
   only:
   - master
-  - transforms
+  - release-2.7
+  - release-2.8
+  - release-2.9
+  - release-3.0
 
 install:
-  - npm uninstall typescript
-  - npm uninstall tslint
+  - npm uninstall typescript --no-save
+  - npm uninstall tslint --no-save
   - npm install
-  - npm update
 
 cache:
   directories:

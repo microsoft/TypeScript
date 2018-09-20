@@ -1,0 +1,142 @@
+=== tests/cases/compiler/collisionExportsRequireAndModule_externalmodule.ts ===
+export module require {
+>require : typeof require
+
+    export interface I {
+    }
+    export class C {
+>C : C
+    }
+}
+export function foo(): require.I {
+>foo : () => require.I
+>require : any
+
+    return null;
+>null : null
+}
+export module exports {
+>exports : typeof exports
+
+    export interface I {
+    }
+    export class C {
+>C : C
+    }
+}
+export function foo2(): exports.I {
+>foo2 : () => exports.I
+>exports : any
+
+    return null;
+>null : null
+}
+module m1 {
+>m1 : typeof m1
+
+    module require {
+>require : typeof require
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+    module exports {
+>exports : typeof exports
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+}
+module m2 {
+>m2 : typeof m2
+
+    export module require {
+>require : typeof require
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+    export module exports {
+>exports : typeof exports
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+}
+
+=== tests/cases/compiler/collisionExportsRequireAndModule_globalFile.ts ===
+module require {
+>require : typeof require
+
+    export interface I {
+    }
+    export class C {
+>C : C
+    }
+}
+module exports {
+>exports : typeof exports
+
+    export interface I {
+    }
+    export class C {
+>C : C
+    }
+}
+module m3 {
+>m3 : typeof m3
+
+    module require {
+>require : typeof require
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+    module exports {
+>exports : typeof exports
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+}
+module m4 {
+>m4 : typeof m4
+
+    export module require {
+>require : typeof require
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+    export module exports {
+>exports : typeof exports
+
+        export interface I {
+        }
+        export class C {
+>C : C
+        }
+    }
+}
+

@@ -1,0 +1,30 @@
+tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2322: Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+  Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+    Types of property 'then' are incompatible.
+      Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+        Types of parameters 'success' and 'onfulfilled' are incompatible.
+          Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+            Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+
+
+==== tests/cases/compiler/promiseTypeInference.ts (1 errors) ====
+    declare class Promise<T> {
+        then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+    }
+    interface IPromise<T> {
+        then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
+    }
+    declare function load(name: string): Promise<string>;
+    declare function convert(s: string): IPromise<number>;
+    
+    var $$x = load("something").then(s => convert(s));
+                                          ~~~~~~~~~~
+!!! error TS2322: Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
+!!! error TS2322:   Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+!!! error TS2322:     Types of property 'then' are incompatible.
+!!! error TS2322:       Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:         Types of parameters 'success' and 'onfulfilled' are incompatible.
+!!! error TS2322:           Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2322:             Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! related TS6502 /.ts/lib.es5.d.ts:1336:57: The expected type comes from the return type of this signature.
+    

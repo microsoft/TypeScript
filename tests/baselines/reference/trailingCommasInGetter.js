@@ -5,7 +5,7 @@ class X {
 
 
 //// [trailingCommasInGetter.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     Object.defineProperty(X.prototype, "x", {

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/indexIntoArraySubclass.ts ===
+interface Foo2<T> extends Array<T> { }
+>Foo2 : Symbol(Foo2, Decl(indexIntoArraySubclass.ts, 0, 0))
+>T : Symbol(T, Decl(indexIntoArraySubclass.ts, 0, 15))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexIntoArraySubclass.ts, 0, 15))
+
+var x2: Foo2<string>;
+>x2 : Symbol(x2, Decl(indexIntoArraySubclass.ts, 1, 3))
+>Foo2 : Symbol(Foo2, Decl(indexIntoArraySubclass.ts, 0, 0))
+
+var r = x2[0]; // string
+>r : Symbol(r, Decl(indexIntoArraySubclass.ts, 2, 3))
+>x2 : Symbol(x2, Decl(indexIntoArraySubclass.ts, 1, 3))
+
+r = 0; //error
+>r : Symbol(r, Decl(indexIntoArraySubclass.ts, 2, 3))
+

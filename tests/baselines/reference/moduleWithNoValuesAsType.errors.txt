@@ -1,20 +1,20 @@
-tests/cases/compiler/moduleWithNoValuesAsType.ts(2,8): error TS2304: Cannot find name 'A'.
-tests/cases/compiler/moduleWithNoValuesAsType.ts(7,8): error TS2304: Cannot find name 'B'.
-tests/cases/compiler/moduleWithNoValuesAsType.ts(15,8): error TS2304: Cannot find name 'C'.
+tests/cases/compiler/moduleWithNoValuesAsType.ts(2,8): error TS2709: Cannot use namespace 'A' as a type.
+tests/cases/compiler/moduleWithNoValuesAsType.ts(7,8): error TS2709: Cannot use namespace 'B' as a type.
+tests/cases/compiler/moduleWithNoValuesAsType.ts(15,8): error TS2709: Cannot use namespace 'C' as a type.
 
 
 ==== tests/cases/compiler/moduleWithNoValuesAsType.ts (3 errors) ====
     module A { }
     var a: A; // error
            ~
-!!! error TS2304: Cannot find name 'A'.
+!!! error TS2709: Cannot use namespace 'A' as a type.
     
     module B {
         interface I {}
     }
     var b: B; // error
            ~
-!!! error TS2304: Cannot find name 'B'.
+!!! error TS2709: Cannot use namespace 'B' as a type.
     
     module C {
         module M {
@@ -24,4 +24,4 @@ tests/cases/compiler/moduleWithNoValuesAsType.ts(15,8): error TS2304: Cannot fin
     
     var c: C; // error
            ~
-!!! error TS2304: Cannot find name 'C'.
+!!! error TS2709: Cannot use namespace 'C' as a type.

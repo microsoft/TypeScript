@@ -10,9 +10,9 @@ var f = new foo();
 >foo : typeof foo
 
 f[0] = 4; // Shouldn't be allowed
->f[0] = 4 : number
->f[0] : any
+>f[0] = 4 : 4
+>f[0] : error
 >f : foo
->0 : number
->4 : number
+>0 : 0
+>4 : 4
 

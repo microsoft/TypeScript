@@ -4,15 +4,13 @@ var x: any;
 
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 function foo<T>(t: T) {
 >foo : <T>(t: T) => void
->T : T
 >t : T
->T : T
 
     var foo_r1 = t < x;
 >foo_r1 : boolean
@@ -125,7 +123,6 @@ var d: void;
 
 var e: E;
 >e : E
->E : E
 
 var f: {};
 >f : {}

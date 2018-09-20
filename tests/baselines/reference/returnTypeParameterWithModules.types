@@ -4,21 +4,18 @@ module M1 {
 
     export function reduce<A>(ar, f, e?): Array<A> {
 >reduce : <A>(ar: any, f: any, e?: any) => A[]
->A : A
 >ar : any
 >f : any
 >e : any
->Array : T[]
->A : A
 
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
 >Array.prototype.reduce.apply(ar, e ? [f, e] : [f]) : any
 >Array.prototype.reduce.apply : (this: Function, thisArg: any, argArray?: any) => any
->Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >Array.prototype : any[]
 >Array : ArrayConstructor
 >prototype : any[]
->reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue?: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
+>reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
 >apply : (this: Function, thisArg: any, argArray?: any) => any
 >ar : any
 >e ? [f, e] : [f] : any[]
@@ -52,20 +49,11 @@ module M2 {
     };
     export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
->B : B
->C : C
->D : D
 >g : (x: B) => C
 >x : B
->B : B
->C : C
 >f : (x: D) => B
 >x : D
->D : D
->B : B
 >x : D
->D : D
->C : C
 
     return function (x) { return g(f(x)); }
 >function (x) { return g(f(x)); } : (x: D) => C

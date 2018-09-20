@@ -1,9 +1,7 @@
 === tests/cases/compiler/inferTypeArgumentsInSignatureWithRestParameters.ts ===
 function f<T>(array: T[], ...args) { }
 >f : <T>(array: T[], ...args: any[]) => void
->T : T
 >array : T[]
->T : T
 >args : any[]
 
 function g(array: number[], ...args) { }
@@ -13,26 +11,22 @@ function g(array: number[], ...args) { }
 
 function h<T>(nonarray: T, ...args) { }
 >h : <T>(nonarray: T, ...args: any[]) => void
->T : T
 >nonarray : T
->T : T
 >args : any[]
 
 function i<T>(array: T[], opt?: any[]) { }
 >i : <T>(array: T[], opt?: any[]) => void
->T : T
 >array : T[]
->T : T
 >opt : any[]
 
 var a = [1, 2, 3, 4, 5];
 >a : number[]
 >[1, 2, 3, 4, 5] : number[]
->1 : number
->2 : number
->3 : number
->4 : number
->5 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
 
 f(a); // OK
 >f(a) : void

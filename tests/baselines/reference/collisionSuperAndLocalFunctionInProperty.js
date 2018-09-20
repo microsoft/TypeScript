@@ -19,14 +19,22 @@ class b extends Foo {
 }
 
 //// [collisionSuperAndLocalFunctionInProperty.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 function _super() {
 }
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.prop1 = {
             doStuff: function () {
@@ -37,16 +45,17 @@ var Foo = (function () {
     }
     return Foo;
 }());
-var b = (function (_super) {
-    __extends(b, _super);
+var b = /** @class */ (function (_super_1) {
+    __extends(b, _super_1);
     function b() {
-        _super.apply(this, arguments);
-        this.prop2 = {
+        var _this = _super_1 !== null && _super_1.apply(this, arguments) || this;
+        _this.prop2 = {
             doStuff: function () {
                 function _super() {
                 }
             }
         };
+        return _this;
     }
     return b;
 }(Foo));

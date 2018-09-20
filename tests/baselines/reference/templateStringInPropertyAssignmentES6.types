@@ -6,6 +6,6 @@ var x = {
     a: `abc${ 123 }def${ 456 }ghi`
 >a : string
 >`abc${ 123 }def${ 456 }ghi` : string
->123 : number
->456 : number
+>123 : 123
+>456 : 456
 }

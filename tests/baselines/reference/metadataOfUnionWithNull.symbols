@@ -1,0 +1,89 @@
+=== tests/cases/compiler/metadataOfUnionWithNull.ts ===
+function PropDeco(target: Object, propKey: string | symbol) { }
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+>target : Symbol(target, Decl(metadataOfUnionWithNull.ts, 0, 18))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propKey : Symbol(propKey, Decl(metadataOfUnionWithNull.ts, 0, 33))
+
+class A {
+>A : Symbol(A, Decl(metadataOfUnionWithNull.ts, 0, 63))
+}
+
+class B {
+>B : Symbol(B, Decl(metadataOfUnionWithNull.ts, 3, 1))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    x: "foo" | null;
+>x : Symbol(B.x, Decl(metadataOfUnionWithNull.ts, 5, 9))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    y: true | never;
+>y : Symbol(B.y, Decl(metadataOfUnionWithNull.ts, 7, 20))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    z: "foo" | undefined;
+>z : Symbol(B.z, Decl(metadataOfUnionWithNull.ts, 10, 20))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    a: null;
+>a : Symbol(B.a, Decl(metadataOfUnionWithNull.ts, 13, 25))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    b: never;
+>b : Symbol(B.b, Decl(metadataOfUnionWithNull.ts, 16, 12))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    c: undefined;
+>c : Symbol(B.c, Decl(metadataOfUnionWithNull.ts, 19, 13))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    d: undefined | null;
+>d : Symbol(B.d, Decl(metadataOfUnionWithNull.ts, 22, 17))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    e: symbol | null;
+>e : Symbol(B.e, Decl(metadataOfUnionWithNull.ts, 25, 24))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    f: symbol | A;
+>f : Symbol(B.f, Decl(metadataOfUnionWithNull.ts, 28, 21))
+>A : Symbol(A, Decl(metadataOfUnionWithNull.ts, 0, 63))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    g: A | null;
+>g : Symbol(B.g, Decl(metadataOfUnionWithNull.ts, 31, 18))
+>A : Symbol(A, Decl(metadataOfUnionWithNull.ts, 0, 63))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    h: null | B;
+>h : Symbol(B.h, Decl(metadataOfUnionWithNull.ts, 34, 16))
+>B : Symbol(B, Decl(metadataOfUnionWithNull.ts, 3, 1))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfUnionWithNull.ts, 0, 0))
+
+    j: null | symbol;
+>j : Symbol(B.j, Decl(metadataOfUnionWithNull.ts, 37, 16))
+}

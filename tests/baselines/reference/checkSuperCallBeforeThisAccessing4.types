@@ -43,11 +43,11 @@ class Derived extends Based {
 >super : typeof Based
 
         this.x = 10;
->this.x = 10 : number
+>this.x = 10 : 10
 >this.x : number
 >this : this
 >x : number
->10 : number
+>10 : 10
 
         var that = this;
 >that : this

@@ -1,0 +1,102 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+class RC1 extends React.Component<{x : number}, {}> {
+>RC1 : RC1
+>React.Component : React.Component<{ x: number; }, {}>
+>React : typeof React
+>Component : typeof React.Component
+>x : number
+
+    render() {
+>render : () => any
+
+        return null;
+>null : null
+    }
+}
+
+class RC2 extends React.Component<{ x: string }, {}> {
+>RC2 : RC2
+>React.Component : React.Component<{ x: string; }, {}>
+>React : typeof React
+>Component : typeof React.Component
+>x : string
+
+    render() {
+>render : () => any
+
+        return null;
+>null : null
+    }
+    private method() { }
+>method : () => void
+}
+
+class RC3 extends React.Component<{}, {}> {
+>RC3 : RC3
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => any
+
+        return null;
+>null : null
+    }
+}
+
+class RC4 extends React.Component<{}, {}> {
+>RC4 : RC4
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => any
+
+        return null;
+>null : null
+    }
+}
+
+var RCComp = RC1 || RC2;
+>RCComp : typeof RC1 | typeof RC2
+>RC1 || RC2 : typeof RC1 | typeof RC2
+>RC1 : typeof RC1
+>RC2 : typeof RC2
+
+var EmptyRCComp = RC3 || RC4;
+>EmptyRCComp : typeof RC3
+>RC3 || RC4 : typeof RC3
+>RC3 : typeof RC3
+>RC4 : typeof RC4
+
+var PartRCComp = RC1 || RC4;
+>PartRCComp : typeof RC4
+>RC1 || RC4 : typeof RC4
+>RC1 : typeof RC1
+>RC4 : typeof RC4
+
+// Error
+let a = <RCComp x />;
+>a : JSX.Element
+><RCComp x /> : JSX.Element
+>RCComp : typeof RC1 | typeof RC2
+>x : true
+
+let b = <PartRCComp x={10} />
+>b : JSX.Element
+><PartRCComp x={10} /> : JSX.Element
+>PartRCComp : typeof RC4
+>x : number
+>10 : 10
+
+let c = <EmptyRCComp prop />;
+>c : JSX.Element
+><EmptyRCComp prop /> : JSX.Element
+>EmptyRCComp : typeof RC3
+>prop : true
+

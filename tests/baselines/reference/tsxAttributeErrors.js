@@ -1,5 +1,4 @@
 //// [tsxAttributeErrors.tsx]
-
 declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {

@@ -1,0 +1,12 @@
+{
+    "kind": "JSDocVariadicType",
+    "pos": 1,
+    "end": 10,
+    "flags": "JSDoc",
+    "type": {
+        "kind": "NumberKeyword",
+        "pos": 4,
+        "end": 10,
+        "flags": "JSDoc"
+    }
+}

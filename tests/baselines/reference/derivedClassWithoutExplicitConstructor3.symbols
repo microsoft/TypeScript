@@ -1,0 +1,136 @@
+=== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor3.ts ===
+// automatic constructors with a class hieararchy of depth > 2
+
+class Base {
+>Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+
+    a = 1;
+>a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+
+    constructor(x: number) { this.a = x; }
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 4, 16))
+>this.a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+>this : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+>a : Symbol(Base.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 2, 12))
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 4, 16))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+>Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+
+    b = '';
+>b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+
+    constructor(y: string, z: string) {
+>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 9, 16))
+>z : Symbol(z, Decl(derivedClassWithoutExplicitConstructor3.ts, 9, 26))
+
+        super(2);
+>super : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+
+        this.b = y;
+>this.b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+>this : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+>b : Symbol(Derived.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 7, 28))
+>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 9, 16))
+    }
+}
+
+class Derived2 extends Derived {
+>Derived2 : Symbol(Derived2, Decl(derivedClassWithoutExplicitConstructor3.ts, 13, 1))
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+
+    x = 1
+>x : Symbol(Derived2.x, Decl(derivedClassWithoutExplicitConstructor3.ts, 15, 32))
+
+    y = 'hello';
+>y : Symbol(Derived2.y, Decl(derivedClassWithoutExplicitConstructor3.ts, 16, 9))
+}
+
+var r = new Derived(); // error
+>r : Symbol(r, Decl(derivedClassWithoutExplicitConstructor3.ts, 20, 3))
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+
+var r2 = new Derived2(1); // error
+>r2 : Symbol(r2, Decl(derivedClassWithoutExplicitConstructor3.ts, 21, 3))
+>Derived2 : Symbol(Derived2, Decl(derivedClassWithoutExplicitConstructor3.ts, 13, 1))
+
+var r3 = new Derived('', '');
+>r3 : Symbol(r3, Decl(derivedClassWithoutExplicitConstructor3.ts, 22, 3))
+>Derived : Symbol(Derived, Decl(derivedClassWithoutExplicitConstructor3.ts, 5, 1))
+
+class Base2<T> {
+>Base2 : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor3.ts, 22, 29))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+
+    a: T;
+>a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+
+    constructor(x: T) { this.a = x; }
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 26, 16))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 12))
+>this.a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+>this : Symbol(Base2, Decl(derivedClassWithoutExplicitConstructor3.ts, 22, 29))
+>a : Symbol(Base2.a, Decl(derivedClassWithoutExplicitConstructor3.ts, 24, 16))
+>x : Symbol(x, Decl(derivedClassWithoutExplicitConstructor3.ts, 26, 16))
+}
+
+class D<T> extends Base {
+>D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor3.ts, 27, 1))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 8))
+>Base : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+
+    b: T = null;
+>b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 8))
+
+    constructor(y: T, z: T) {
+>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 31, 16))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 8))
+>z : Symbol(z, Decl(derivedClassWithoutExplicitConstructor3.ts, 31, 21))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 8))
+
+        super(2);
+>super : Symbol(Base, Decl(derivedClassWithoutExplicitConstructor3.ts, 0, 0))
+
+        this.b = y;
+>this.b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+>this : Symbol(D, Decl(derivedClassWithoutExplicitConstructor3.ts, 27, 1))
+>b : Symbol(D.b, Decl(derivedClassWithoutExplicitConstructor3.ts, 29, 25))
+>y : Symbol(y, Decl(derivedClassWithoutExplicitConstructor3.ts, 31, 16))
+    }
+}
+
+
+class D2<T extends Date> extends D<T> {
+>D2 : Symbol(D2, Decl(derivedClassWithoutExplicitConstructor3.ts, 35, 1))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 9))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>D : Symbol(D, Decl(derivedClassWithoutExplicitConstructor3.ts, 27, 1))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 9))
+
+    x = 2
+>x : Symbol(D2.x, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 39))
+
+    y: T = null;
+>y : Symbol(D2.y, Decl(derivedClassWithoutExplicitConstructor3.ts, 39, 9))
+>T : Symbol(T, Decl(derivedClassWithoutExplicitConstructor3.ts, 38, 9))
+}
+
+var d = new D2(); // error
+>d : Symbol(d, Decl(derivedClassWithoutExplicitConstructor3.ts, 43, 3))
+>D2 : Symbol(D2, Decl(derivedClassWithoutExplicitConstructor3.ts, 35, 1))
+
+var d2 = new D2(new Date()); // error
+>d2 : Symbol(d2, Decl(derivedClassWithoutExplicitConstructor3.ts, 44, 3))
+>D2 : Symbol(D2, Decl(derivedClassWithoutExplicitConstructor3.ts, 35, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+var d3 = new D2(new Date(), new Date()); // ok
+>d3 : Symbol(d3, Decl(derivedClassWithoutExplicitConstructor3.ts, 45, 3))
+>D2 : Symbol(D2, Decl(derivedClassWithoutExplicitConstructor3.ts, 35, 1))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+

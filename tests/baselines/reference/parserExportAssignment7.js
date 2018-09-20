@@ -6,10 +6,9 @@ export = B;
 
 //// [parserExportAssignment7.js]
 "use strict";
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-exports.C = C;
 module.exports = B;

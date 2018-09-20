@@ -31,15 +31,23 @@ b.hue();
 
 
 //// [derivedClasses.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Red = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Red = /** @class */ (function (_super) {
     __extends(Red, _super);
     function Red() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Red.prototype.shade = function () {
         var _this = this;
@@ -48,17 +56,17 @@ var Red = (function (_super) {
     };
     return Red;
 }(Color));
-var Color = (function () {
+var Color = /** @class */ (function () {
     function Color() {
     }
     Color.prototype.shade = function () { return "some shade"; };
     Color.prototype.hue = function () { return "some hue"; };
     return Color;
 }());
-var Blue = (function (_super) {
+var Blue = /** @class */ (function (_super) {
     __extends(Blue, _super);
     function Blue() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Blue.prototype.shade = function () {
         var _this = this;

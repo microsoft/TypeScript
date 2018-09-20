@@ -9,13 +9,12 @@ module B {
 	export function f(): A.I { return null; }
 >f : Symbol(f, Decl(B.ts, 2, 10))
 >A : Symbol(A, Decl(A.ts, 0, 0), Decl(B.ts, 0, 0))
->I : Symbol(A.I, Decl(A.ts, 1, 10))
+>I : Symbol(A.I, Decl(A.ts, 0, 10))
 }
 
 
 === tests/cases/compiler/A.ts ===
-
 module A { export interface I {} }
 >A : Symbol(A, Decl(A.ts, 0, 0), Decl(B.ts, 0, 0))
->I : Symbol(I, Decl(A.ts, 1, 10))
+>I : Symbol(I, Decl(A.ts, 0, 10))
 

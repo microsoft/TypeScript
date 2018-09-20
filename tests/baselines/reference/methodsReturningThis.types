@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/input.js ===
 function Class()
->Class : () => void
+>Class : typeof Class
 {
 }
 
@@ -9,85 +9,85 @@ Class.prototype.containsError = function () { return this.notPresent; };
 >Class.prototype.containsError = function () { return this.notPresent; } : () => any
 >Class.prototype.containsError : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >containsError : any
 >function () { return this.notPresent; } : () => any
->this.notPresent : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this.notPresent : error
+>this : Class
 >notPresent : any
 
 // lots of methods that return this, which caused out-of-memory in #9527
 Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; };
->Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => { containsError: () => any; m1: any; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m1 = function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => Class
 >Class.prototype.m1 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m1 : any
->function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => { containsError: () => any; m1: any; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (a, b, c, d, tx, ty) { return this; } : (a: any, b: any, c: any, d: any, tx: any, ty: any) => Class
 >a : any
 >b : any
 >c : any
 >d : any
 >tx : any
 >ty : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m2 = function (x, y) { return this; };
->Class.prototype.m2 = function (x, y) { return this; } : (x: any, y: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: any; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m2 = function (x, y) { return this; } : (x: any, y: any) => Class
 >Class.prototype.m2 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m2 : any
->function (x, y) { return this; } : (x: any, y: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: any; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (x, y) { return this; } : (x: any, y: any) => Class
 >x : any
 >y : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m3 = function (x, y) { return this; };
->Class.prototype.m3 = function (x, y) { return this; } : (x: any, y: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: any; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m3 = function (x, y) { return this; } : (x: any, y: any) => Class
 >Class.prototype.m3 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m3 : any
->function (x, y) { return this; } : (x: any, y: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: any; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (x, y) { return this; } : (x: any, y: any) => Class
 >x : any
 >y : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m4 = function (angle) { return this; };
->Class.prototype.m4 = function (angle) { return this; } : (angle: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: any; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m4 = function (angle) { return this; } : (angle: any) => Class
 >Class.prototype.m4 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m4 : any
->function (angle) { return this; } : (angle: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: any; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (angle) { return this; } : (angle: any) => Class
 >angle : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m5 = function (matrix) { return this; };
->Class.prototype.m5 = function (matrix) { return this; } : (matrix: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: any; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m5 = function (matrix) { return this; } : (matrix: any) => Class
 >Class.prototype.m5 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m5 : any
->function (matrix) { return this; } : (matrix: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: any; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (matrix) { return this; } : (matrix: any) => Class
 >matrix : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; };
->Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: any; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => Class
 >Class.prototype.m6 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m6 : any
->function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: any; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, skewX, skewY) { return this; } : (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => Class
 >x : any
 >y : any
 >pivotX : any
@@ -97,37 +97,37 @@ Class.prototype.m6 = function (x, y, pivotX, pivotY, scaleX, scaleY, rotation, s
 >rotation : any
 >skewX : any
 >skewY : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m7 = function(matrix) { return this; };
->Class.prototype.m7 = function(matrix) { return this; } : (matrix: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: any; m8: () => typeof Class; m9: () => typeof Class; }
+>Class.prototype.m7 = function(matrix) { return this; } : (matrix: any) => Class
 >Class.prototype.m7 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m7 : any
->function(matrix) { return this; } : (matrix: any) => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: any; m8: () => typeof Class; m9: () => typeof Class; }
+>function(matrix) { return this; } : (matrix: any) => Class
 >matrix : any
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>this : Class
 
 Class.prototype.m8 = function() { return this; };
->Class.prototype.m8 = function() { return this; } : () => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: any; m9: () => typeof Class; }
+>Class.prototype.m8 = function() { return this; } : () => Class
 >Class.prototype.m8 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m8 : any
->function() { return this; } : () => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: any; m9: () => typeof Class; }
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function() { return this; } : () => Class
+>this : Class
 
 Class.prototype.m9 = function () { return this; };
->Class.prototype.m9 = function () { return this; } : () => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: any; }
+>Class.prototype.m9 = function () { return this; } : () => Class
 >Class.prototype.m9 : any
 >Class.prototype : any
->Class : () => void
+>Class : typeof Class
 >prototype : any
 >m9 : any
->function () { return this; } : () => { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: any; }
->this : { containsError: () => any; m1: (a: any, b: any, c: any, d: any, tx: any, ty: any) => typeof Class; m2: (x: any, y: any) => typeof Class; m3: (x: any, y: any) => typeof Class; m4: (angle: any) => typeof Class; m5: (matrix: any) => typeof Class; m6: (x: any, y: any, pivotX: any, pivotY: any, scaleX: any, scaleY: any, rotation: any, skewX: any, skewY: any) => typeof Class; m7: (matrix: any) => typeof Class; m8: () => typeof Class; m9: () => typeof Class; }
+>function () { return this; } : () => Class
+>this : Class
 
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsClass.ts ===
-
 /** This is class c2 without constuctor*/
 class c2 {
 >c2 : c2

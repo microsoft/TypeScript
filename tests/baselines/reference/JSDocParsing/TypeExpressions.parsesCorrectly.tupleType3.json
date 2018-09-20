@@ -1,0 +1,29 @@
+{
+    "kind": "TupleType",
+    "pos": 1,
+    "end": 24,
+    "flags": "JSDoc",
+    "elementTypes": {
+        "0": {
+            "kind": "NumberKeyword",
+            "pos": 2,
+            "end": 8,
+            "flags": "JSDoc"
+        },
+        "1": {
+            "kind": "StringKeyword",
+            "pos": 9,
+            "end": 15,
+            "flags": "JSDoc"
+        },
+        "2": {
+            "kind": "BooleanKeyword",
+            "pos": 16,
+            "end": 23,
+            "flags": "JSDoc"
+        },
+        "length": 3,
+        "pos": 2,
+        "end": 23
+    }
+}

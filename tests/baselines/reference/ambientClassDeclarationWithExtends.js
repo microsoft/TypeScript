@@ -13,14 +13,12 @@ declare class D extends C { }
 var d: C = new D();
 
 //// [ambientClassDeclarationExtends_file1.ts]
-
 declare class E {
     public bar;
 }
 namespace F { var y; }
 
 //// [ambientClassDeclarationExtends_file2.ts]
-
 declare class F extends E { }
 var f: E = new F();
 

@@ -1,0 +1,4 @@
+=== /a.ts ===
+import { x } from "foo/@bar";
+>x : any
+

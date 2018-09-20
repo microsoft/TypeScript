@@ -1,30 +1,20 @@
 === tests/cases/compiler/moduledecl.ts ===
-
 module a {
->a : any
 }
 
 module b.a {
->b : any
->a : any
 }
 
 module c.a.b {
->c : any
->a : any
->b : any
-
     import ma = a;
 >ma : any
->a : any
+>a : error
 }
 
 module mImport {
->mImport : any
-
     import d = a;
 >d : any
->a : any
+>a : error
 
     import e = b.a;
 >e : any
@@ -33,7 +23,7 @@ module mImport {
 
     import d1 = a;
 >d1 : any
->a : any
+>a : error
 
     import e1 = b.a;
 >e1 : any
@@ -78,23 +68,18 @@ module m0 {
     }
 
     interface i1 {
->i1 : i1
-
         () : Object;
->Object : Object
-
         [n: number]: c1;
 >n : number
->c1 : c1
     }
 
     import m2 = a;
 >m2 : any
->a : any
+>a : error
 
     import m3 = b;
 >m3 : any
->b : any
+>b : error
 
     import m4 = b.a;
 >m4 : any
@@ -103,7 +88,7 @@ module m0 {
 
     import m5 = c;
 >m5 : any
->c : any
+>c : error
 
     import m6 = c.a;
 >m6 : any
@@ -156,7 +141,7 @@ module m1 {
 >d : () => string
 
             return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
         }
 
         public e: { x: number; y: string; };
@@ -173,23 +158,18 @@ module m1 {
     }
 
     export interface i1 {
->i1 : i1
-
         () : Object;
->Object : Object
-
         [n: number]: c1;
 >n : number
->c1 : c1
     }
 
     import m2 = a;
 >m2 : any
->a : any
+>a : error
 
     import m3 = b;
 >m3 : any
->b : any
+>b : error
 
     import m4 = b.a;
 >m4 : any
@@ -198,7 +178,7 @@ module m1 {
 
     import m5 = c;
 >m5 : any
->c : any
+>c : error
 
     import m6 = c.a;
 >m6 : any
@@ -220,7 +200,7 @@ module m {
 
         var a = 10;
 >a : number
->10 : number
+>10 : 10
 
         export var b: number;
 >b : number
@@ -270,7 +250,7 @@ module m13 {
 >f : () => number
 
             return 20;
->20 : number
+>20 : 20
         }
     }
 }
@@ -304,6 +284,8 @@ declare module m55 {
 }
 
 declare module "m3" {
+>"m3" : typeof import("m3")
+
     export var b: number;
 >b : number
 }
@@ -318,14 +300,14 @@ module exportTests {
 >f2 : () => number
 
             return 30;
->30 : number
+>30 : 30
         }
 
         public f3() {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
     class C2_private {
@@ -335,14 +317,14 @@ module exportTests {
 >f2 : () => number
 
             return 30;
->30 : number
+>30 : 30
         }
 
         public f3() {
 >f3 : () => string
 
             return "string";
->"string" : string
+>"string" : "string"
         }
     }
 
@@ -359,7 +341,6 @@ module exportTests {
         private setC2_private(arg: C2_private) {
 >setC2_private : (arg: C2_private) => void
 >arg : C2_private
->C2_private : C2_private
         }
         private get c2() {
 >c2 : C2_private
@@ -378,7 +359,6 @@ module exportTests {
         public setC1_public(arg: C1_public) {
 >setC1_public : (arg: C1_public) => void
 >arg : C1_public
->C1_public : C1_public
         }
         public get c1() {
 >c1 : C1_public
@@ -402,21 +382,16 @@ declare module mAmbient {
 
     function foo() : C;
 >foo : () => C
->C : C
 
     var aVar: C;
 >aVar : C
->C : C
 
     interface B {
->B : B
-
         x: number;
 >x : number
 
         y: C;
 >y : C
->C : C
     }
     enum e {
 >e : e
@@ -443,21 +418,16 @@ declare module mAmbient {
 
         function foo(): C;
 >foo : () => C
->C : C
 
         var aVar: C;
 >aVar : C
->C : C
 
         interface B {
->B : B
-
             x: number;
 >x : number
 
             y: C;
 >y : C
->C : C
         }
         enum e {
 >e : e
@@ -500,12 +470,10 @@ var aVar = mAmbient.aVar;
 var bB: mAmbient.B;
 >bB : mAmbient.B
 >mAmbient : any
->B : mAmbient.B
 
 var eVar: mAmbient.e;
 >eVar : mAmbient.e
 >mAmbient : any
->e : mAmbient.e
 
 function m3foo() {
 >m3foo : () => mAmbient.m3.C
@@ -540,12 +508,10 @@ var m3bB: mAmbient.m3.B;
 >m3bB : mAmbient.m3.B
 >mAmbient : any
 >m3 : any
->B : mAmbient.m3.B
 
 var m3eVar: mAmbient.m3.e;
 >m3eVar : mAmbient.m3.e
 >mAmbient : any
 >m3 : any
->e : mAmbient.m3.e
 
 

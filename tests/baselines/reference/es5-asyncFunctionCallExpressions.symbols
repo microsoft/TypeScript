@@ -1,0 +1,204 @@
+=== tests/cases/compiler/es5-asyncFunctionCallExpressions.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionCallExpressions.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionCallExpressions.ts, 0, 26))
+
+async function callExpression0() {
+>callExpression0 : Symbol(callExpression0, Decl(es5-asyncFunctionCallExpressions.ts, 0, 29))
+
+    await x(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression1() {
+>callExpression1 : Symbol(callExpression1, Decl(es5-asyncFunctionCallExpressions.ts, 4, 1))
+
+    (await x)(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression2() {
+>callExpression2 : Symbol(callExpression2, Decl(es5-asyncFunctionCallExpressions.ts, 8, 1))
+
+    x(await y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression3() {
+>callExpression3 : Symbol(callExpression3, Decl(es5-asyncFunctionCallExpressions.ts, 12, 1))
+
+    x(y, await z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression4() {
+>callExpression4 : Symbol(callExpression4, Decl(es5-asyncFunctionCallExpressions.ts, 16, 1))
+
+    await x(...y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression5() {
+>callExpression5 : Symbol(callExpression5, Decl(es5-asyncFunctionCallExpressions.ts, 20, 1))
+
+    (await x)(...y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression6() {
+>callExpression6 : Symbol(callExpression6, Decl(es5-asyncFunctionCallExpressions.ts, 24, 1))
+
+    x(...(await y), z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression7() {
+>callExpression7 : Symbol(callExpression7, Decl(es5-asyncFunctionCallExpressions.ts, 28, 1))
+
+    x(...y, await z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression8() {
+>callExpression8 : Symbol(callExpression8, Decl(es5-asyncFunctionCallExpressions.ts, 32, 1))
+
+    x(await y, ...z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression9() {
+>callExpression9 : Symbol(callExpression9, Decl(es5-asyncFunctionCallExpressions.ts, 36, 1))
+
+    x(y, ...(await z));
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression10() {
+>callExpression10 : Symbol(callExpression10, Decl(es5-asyncFunctionCallExpressions.ts, 40, 1))
+
+    await x.a(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression11() {
+>callExpression11 : Symbol(callExpression11, Decl(es5-asyncFunctionCallExpressions.ts, 44, 1))
+
+    (await x.a)(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression12() {
+>callExpression12 : Symbol(callExpression12, Decl(es5-asyncFunctionCallExpressions.ts, 48, 1))
+
+    (await x).a(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression13() {
+>callExpression13 : Symbol(callExpression13, Decl(es5-asyncFunctionCallExpressions.ts, 52, 1))
+
+    x.a(await y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression14() {
+>callExpression14 : Symbol(callExpression14, Decl(es5-asyncFunctionCallExpressions.ts, 56, 1))
+
+    x.a(y, await z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression15() {
+>callExpression15 : Symbol(callExpression15, Decl(es5-asyncFunctionCallExpressions.ts, 60, 1))
+
+    await x[a](y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression16() {
+>callExpression16 : Symbol(callExpression16, Decl(es5-asyncFunctionCallExpressions.ts, 64, 1))
+
+    (await x[a])(y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression17() {
+>callExpression17 : Symbol(callExpression17, Decl(es5-asyncFunctionCallExpressions.ts, 68, 1))
+
+    (await x)[a](y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression18() {
+>callExpression18 : Symbol(callExpression18, Decl(es5-asyncFunctionCallExpressions.ts, 72, 1))
+
+    x[await a](y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression19() {
+>callExpression19 : Symbol(callExpression19, Decl(es5-asyncFunctionCallExpressions.ts, 76, 1))
+
+    x[a](await y, z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+
+async function callExpression20() {
+>callExpression20 : Symbol(callExpression20, Decl(es5-asyncFunctionCallExpressions.ts, 80, 1))
+
+    x[a](y, await z);
+>x : Symbol(x, Decl(es5-asyncFunctionCallExpressions.ts, 0, 11))
+>a : Symbol(a, Decl(es5-asyncFunctionCallExpressions.ts, 0, 20))
+>y : Symbol(y, Decl(es5-asyncFunctionCallExpressions.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionCallExpressions.ts, 0, 17))
+}
+

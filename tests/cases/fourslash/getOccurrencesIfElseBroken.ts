@@ -12,13 +12,7 @@
 // It would be nice if in the future,
 // We could include that last 'else'.
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-});
+verify.rangesAreOccurrences(false);
 
 goTo.marker();
 verify.occurrencesAtPositionCount(2);

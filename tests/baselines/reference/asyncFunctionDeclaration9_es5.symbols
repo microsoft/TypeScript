@@ -1,0 +1,10 @@
+=== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration9_es5.ts ===
+async function foo(): Promise<void> {
+>foo : Symbol(foo, Decl(asyncFunctionDeclaration9_es5.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+  var v = { [await]: foo }
+>v : Symbol(v, Decl(asyncFunctionDeclaration9_es5.ts, 1, 5))
+>[await] : Symbol([await], Decl(asyncFunctionDeclaration9_es5.ts, 1, 11))
+>foo : Symbol(foo, Decl(asyncFunctionDeclaration9_es5.ts, 0, 0))
+}

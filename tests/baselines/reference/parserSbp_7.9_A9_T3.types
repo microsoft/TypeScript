@@ -13,7 +13,7 @@
 do {
   ;
 } while (false) true
->false : boolean
->true : boolean
+>false : false
+>true : true
 
 

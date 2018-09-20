@@ -1,0 +1,23 @@
+=== tests/cases/compiler/inheritanceStaticPropertyOverridingAccessor.ts ===
+class a {
+>a : a
+
+    static get x(): () => string {
+>x : () => string
+
+        return null;;
+>null : null
+    }
+    static set x(aValue: () => string) {
+>x : () => string
+>aValue : () => string
+    }
+}
+
+class b extends a {
+>b : b
+>a : a
+
+    static x: () => string;
+>x : () => string
+}

@@ -37,6 +37,12 @@ if (typeof boolOrC === "Object") {
 else {
     var r4: boolean = boolOrC; // boolean
 }
+if (typeof strOrC === "Object" as string) { // comparison is OK with cast
+    c = strOrC; // error: but no narrowing to C
+}
+else {
+    var r5: string = strOrC; // error: no narrowing to string
+}
 
 if (typeof strOrNumOrBool === "Object") {
     let q1: {} = strOrNumOrBool; // {}
@@ -76,7 +82,7 @@ else {
 
 
 //// [typeGuardOfFormTypeOfOther.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -115,6 +121,12 @@ if (typeof boolOrC === "Object") {
 }
 else {
     var r4 = boolOrC; // boolean
+}
+if (typeof strOrC === "Object") { // comparison is OK with cast
+    c = strOrC; // error: but no narrowing to C
+}
+else {
+    var r5 = strOrC; // error: no narrowing to string
 }
 if (typeof strOrNumOrBool === "Object") {
     var q1 = strOrNumOrBool; // {}

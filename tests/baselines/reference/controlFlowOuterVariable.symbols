@@ -1,0 +1,33 @@
+=== tests/cases/compiler/controlFlowOuterVariable.ts ===
+// Repros from #10641
+
+const CONFIG = {
+>CONFIG : Symbol(CONFIG, Decl(controlFlowOuterVariable.ts, 2, 5))
+
+    foo: '',
+>foo : Symbol(foo, Decl(controlFlowOuterVariable.ts, 2, 16))
+
+    setFoo: function(foo: string) {
+>setFoo : Symbol(setFoo, Decl(controlFlowOuterVariable.ts, 3, 12))
+>foo : Symbol(foo, Decl(controlFlowOuterVariable.ts, 4, 21))
+
+        CONFIG.foo = foo;
+>CONFIG.foo : Symbol(foo, Decl(controlFlowOuterVariable.ts, 2, 16))
+>CONFIG : Symbol(CONFIG, Decl(controlFlowOuterVariable.ts, 2, 5))
+>foo : Symbol(foo, Decl(controlFlowOuterVariable.ts, 2, 16))
+>foo : Symbol(foo, Decl(controlFlowOuterVariable.ts, 4, 21))
+    }
+};
+
+const helper = function<T>(t: T[]) {
+>helper : Symbol(helper, Decl(controlFlowOuterVariable.ts, 9, 5))
+>T : Symbol(T, Decl(controlFlowOuterVariable.ts, 9, 24))
+>t : Symbol(t, Decl(controlFlowOuterVariable.ts, 9, 27))
+>T : Symbol(T, Decl(controlFlowOuterVariable.ts, 9, 24))
+
+    helper(t.slice(1));
+>helper : Symbol(helper, Decl(controlFlowOuterVariable.ts, 9, 5))
+>t.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(controlFlowOuterVariable.ts, 9, 27))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+}

@@ -1,0 +1,8 @@
+=== tests/cases/compiler/typeParameterAsBaseClass.ts ===
+class C<T> extends T {}
+>C : C<T>
+>T : any
+
+class C2<T> implements T {}
+>C2 : C2<T>
+

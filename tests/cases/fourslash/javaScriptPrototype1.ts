@@ -22,25 +22,25 @@
 // Members of the class instance
 goTo.marker('1');
 edit.insert('.');
-verify.memberListContains('foo', undefined, undefined, 'property');
-verify.memberListContains('bar', undefined, undefined, 'property');
+verify.completionListContains('foo', undefined, undefined, 'method');
+verify.completionListContains('bar', undefined, undefined, 'method');
 edit.backspace();
 
 // Members of a class method (1)
 goTo.marker('2');
 edit.insert('.');
-verify.memberListContains('length', undefined, undefined, 'property');
+verify.completionListContains('length', undefined, undefined, 'property');
 edit.backspace();
 
 // Members of the invocation of a class method (1)
 goTo.marker('3');
 edit.insert('.');
-verify.memberListContains('toFixed', undefined, undefined, 'method');
-verify.not.memberListContains('substr', undefined, undefined, 'method');
+verify.completionListContains('toFixed', undefined, undefined, 'method');
+verify.not.completionListContains('substr', undefined, undefined, 'method');
 edit.backspace();
 
 // Members of the invocation of a class method (2)
 goTo.marker('4');
 edit.insert('.');
-verify.memberListContains('substr', undefined, undefined, 'method');
-verify.not.memberListContains('toFixed', undefined, undefined, 'method');
+verify.completionListContains('substr', undefined, undefined, 'method');
+verify.not.completionListContains('toFixed', undefined, undefined, 'method');

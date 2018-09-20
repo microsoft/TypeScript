@@ -1,5 +1,4 @@
 //// [aliasesInSystemModule2.ts]
-
 import {alias} from "foo";
 import cls = alias.Class;
 export import cls2 = alias.Class;
@@ -16,17 +15,17 @@ module M {
 }
 
 //// [aliasesInSystemModule2.js]
-System.register(["foo"], function(exports_1, context_1) {
+System.register(["foo"], function (exports_1, context_1) {
     "use strict";
+    var foo_1, cls, cls2, x, y, z, M;
     var __moduleName = context_1 && context_1.id;
-    var foo_1;
-    var cls, cls2, x, y, z, M;
     return {
-        setters:[
+        setters: [
             function (foo_1_1) {
                 foo_1 = foo_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             cls = foo_1.alias.Class;
             exports_1("cls2", cls2 = foo_1.alias.Class);
             x = new foo_1.alias.Class();
@@ -39,5 +38,5 @@ System.register(["foo"], function(exports_1, context_1) {
                 var z = new cls2();
             })(M || (M = {}));
         }
-    }
+    };
 });

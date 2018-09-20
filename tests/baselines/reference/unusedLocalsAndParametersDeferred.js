@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersDeferred.ts]
-
 export { };
 
 function defered<T>(a: () => T): T {
@@ -162,6 +161,7 @@ N;
 
 //// [unusedLocalsAndParametersDeferred.js]
 "use strict";
+exports.__esModule = true;
 function defered(a) {
     return a();
 }
@@ -187,7 +187,7 @@ var farrow = function (a) {
 };
 farrow(2);
 var prop1;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         // in a property initalizer
         this.p = defered(function () {
@@ -214,7 +214,7 @@ var C = (function () {
 }());
 new C();
 var prop2;
-var E = (function () {
+var E = /** @class */ (function () {
     function class_1() {
         // in a property initalizer
         this.p = defered(function () {
@@ -259,31 +259,31 @@ var o = {
     })
 };
 o;
-// in a for..in statment
-var _loop_1 = function(i) {
+var _loop_1 = function (i) {
     defered(function () {
         i;
     });
 };
+// in a for..in statment
 for (var i in o) {
     _loop_1(i);
 }
-// in a for..of statment
-var _loop_2 = function(i) {
+var _loop_2 = function (i) {
     defered(function () {
         i;
     });
 };
+// in a for..of statment
 for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
     var i = _a[_i];
     _loop_2(i);
 }
-// in a for. statment
-var _loop_3 = function(i) {
+var _loop_3 = function (i) {
     defered(function () {
         i;
     });
 };
+// in a for. statment
 for (var i = 0; i < 10; i++) {
     _loop_3(i);
 }

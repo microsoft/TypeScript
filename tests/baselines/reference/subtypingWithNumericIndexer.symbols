@@ -1,0 +1,100 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer.ts ===
+// Derived type indexer must be subtype of base type indexer
+
+interface Base { foo: string; }
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+>foo : Symbol(Base.foo, Decl(subtypingWithNumericIndexer.ts, 2, 16))
+
+interface Derived extends Base { bar: string; }
+>Derived : Symbol(Derived, Decl(subtypingWithNumericIndexer.ts, 2, 31))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+>bar : Symbol(Derived.bar, Decl(subtypingWithNumericIndexer.ts, 3, 32))
+
+interface Derived2 extends Derived { baz: string; }
+>Derived2 : Symbol(Derived2, Decl(subtypingWithNumericIndexer.ts, 3, 47))
+>Derived : Symbol(Derived, Decl(subtypingWithNumericIndexer.ts, 2, 31))
+>baz : Symbol(Derived2.baz, Decl(subtypingWithNumericIndexer.ts, 4, 36))
+
+class A {
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 4, 51))
+
+    [x: number]: Base;
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 7, 5))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(subtypingWithNumericIndexer.ts, 8, 1))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 4, 51))
+
+    [x: number]: Derived; // ok
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 11, 5))
+>Derived : Symbol(Derived, Decl(subtypingWithNumericIndexer.ts, 2, 31))
+}
+
+class B2 extends A {
+>B2 : Symbol(B2, Decl(subtypingWithNumericIndexer.ts, 12, 1))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 4, 51))
+
+    [x: number]: Derived2; // ok
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 15, 5))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithNumericIndexer.ts, 3, 47))
+}
+
+module Generics {
+>Generics : Symbol(Generics, Decl(subtypingWithNumericIndexer.ts, 16, 1))
+
+    class A<T extends Base> {
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 19, 12))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+
+        [x: number]: T;
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 20, 9))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 19, 12))
+    }
+
+    class B extends A<Base> {
+>B : Symbol(B, Decl(subtypingWithNumericIndexer.ts, 21, 5))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+
+        [x: number]: Derived; // ok
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 24, 9))
+>Derived : Symbol(Derived, Decl(subtypingWithNumericIndexer.ts, 2, 31))
+    }
+
+    class B2 extends A<Base> {
+>B2 : Symbol(B2, Decl(subtypingWithNumericIndexer.ts, 25, 5))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+
+        [x: number]: Derived2; // ok
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 28, 9))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithNumericIndexer.ts, 3, 47))
+    }
+
+    class B3<T extends Base> extends A<T> {
+>B3 : Symbol(B3, Decl(subtypingWithNumericIndexer.ts, 29, 5))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 31, 13))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 31, 13))
+
+        [x: number]: Derived; // error, BUG?
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 32, 9))
+>Derived : Symbol(Derived, Decl(subtypingWithNumericIndexer.ts, 2, 31))
+    }
+
+    class B4<T extends Base> extends A<T> {
+>B4 : Symbol(B4, Decl(subtypingWithNumericIndexer.ts, 33, 5))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 35, 13))
+>Base : Symbol(Base, Decl(subtypingWithNumericIndexer.ts, 0, 0))
+>A : Symbol(A, Decl(subtypingWithNumericIndexer.ts, 18, 17))
+>T : Symbol(T, Decl(subtypingWithNumericIndexer.ts, 35, 13))
+
+        [x: number]: Derived2; // error, BUG?
+>x : Symbol(x, Decl(subtypingWithNumericIndexer.ts, 36, 9))
+>Derived2 : Symbol(Derived2, Decl(subtypingWithNumericIndexer.ts, 3, 47))
+    }
+}

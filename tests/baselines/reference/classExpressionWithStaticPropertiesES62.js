@@ -9,12 +9,12 @@ var v = class C {
  };
 
 //// [classExpressionWithStaticPropertiesES62.js]
-var v = (C_1 = class C {
+var _a;
+var v = (_a = class C {
     },
-    C_1.a = 1,
-    C_1.c = {
+    _a.a = 1,
+    _a.c = {
         x: "hi"
     },
-    C_1.d = C_1.c.x + " world",
-    C_1);
-var C_1;
+    _a.d = _a.c.x + " world",
+    _a);

@@ -1,0 +1,45 @@
+=== tests/cases/compiler/nativeToBoxedTypes.ts ===
+var N = new Number();
+>N : Symbol(N, Decl(nativeToBoxedTypes.ts, 0, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var n = 100;
+>n : Symbol(n, Decl(nativeToBoxedTypes.ts, 1, 3))
+
+n = N;
+>n : Symbol(n, Decl(nativeToBoxedTypes.ts, 1, 3))
+>N : Symbol(N, Decl(nativeToBoxedTypes.ts, 0, 3))
+
+var S = new String();
+>S : Symbol(S, Decl(nativeToBoxedTypes.ts, 4, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var s = "foge";
+>s : Symbol(s, Decl(nativeToBoxedTypes.ts, 5, 3))
+
+s = S;
+>s : Symbol(s, Decl(nativeToBoxedTypes.ts, 5, 3))
+>S : Symbol(S, Decl(nativeToBoxedTypes.ts, 4, 3))
+
+var B = new Boolean();
+>B : Symbol(B, Decl(nativeToBoxedTypes.ts, 8, 3))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var b = true;
+>b : Symbol(b, Decl(nativeToBoxedTypes.ts, 9, 3))
+
+b = B;
+>b : Symbol(b, Decl(nativeToBoxedTypes.ts, 9, 3))
+>B : Symbol(B, Decl(nativeToBoxedTypes.ts, 8, 3))
+
+var sym: symbol; 
+>sym : Symbol(sym, Decl(nativeToBoxedTypes.ts, 12, 3))
+
+var Sym: Symbol;
+>Sym : Symbol(Sym, Decl(nativeToBoxedTypes.ts, 13, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+
+sym = Sym;
+>sym : Symbol(sym, Decl(nativeToBoxedTypes.ts, 12, 3))
+>Sym : Symbol(Sym, Decl(nativeToBoxedTypes.ts, 13, 3))
+

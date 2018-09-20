@@ -2,16 +2,12 @@
 
 // @Filename: file1.ts
 //// interface interface1 extends interface1 {
-////    /*1*/doStuff(): void;
-////    /*2*/propName: string;
+////    [|doStuff|](): void;
+////    [|propName|]: string;
 //// }
 ////
 //// var v: interface1;
-//// v./*3*/propName;
-//// v./*4*/doStuff();
+//// v.[|propName|];
+//// v.[|doStuff|]();
 
-let markers = test.markers()
-for (let marker of markers) {
-    goTo.position(marker.position);
-    verify.documentHighlightsAtPositionCount(2, ["file1.ts"]);
-}
+verify.rangesWithSameTextAreDocumentHighlights();

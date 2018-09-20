@@ -1,0 +1,30 @@
+=== tests/cases/compiler/classMergedWithInterfaceMultipleBasesNoError.ts ===
+interface Bar { }
+>Bar : Symbol(Bar, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 0, 0))
+
+interface Baz { }
+>Baz : Symbol(Baz, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 0, 17))
+
+interface Q { }
+>Q : Symbol(Q, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 1, 17))
+
+interface Foo extends Bar, Baz { }
+>Foo : Symbol(Foo, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 2, 15), Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 3, 34))
+>Bar : Symbol(Bar, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 0, 0))
+>Baz : Symbol(Baz, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 0, 17))
+
+class Foo { }
+>Foo : Symbol(Foo, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 2, 15), Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 3, 34))
+
+export default class extends Foo {
+>Foo : Symbol(Foo, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 2, 15), Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 3, 34))
+
+    readonly observer = this.handleIntersection;
+>observer : Symbol(default.observer, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 6, 34))
+>this.handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+>this : Symbol(default, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 4, 13))
+>handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+
+    readonly handleIntersection = () => { }
+>handleIntersection : Symbol(default.handleIntersection, Decl(classMergedWithInterfaceMultipleBasesNoError.ts, 7, 48))
+}

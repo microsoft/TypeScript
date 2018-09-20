@@ -1,0 +1,146 @@
+=== tests/cases/compiler/a.d.ts ===
+export { };
+
+// Extends
+declare class C { }
+>C : Symbol(C, Decl(a.d.ts, 0, 11))
+
+declare class D extends C { }
+>D : Symbol(D, Decl(a.d.ts, 3, 19))
+>C : Symbol(C, Decl(a.d.ts, 0, 11))
+
+// Destructuring
+interface I {
+>I : Symbol(I, Decl(a.d.ts, 4, 29))
+
+    ({descendants, read}?: {
+>descendants : Symbol(descendants, Decl(a.d.ts, 8, 6))
+>read : Symbol(read, Decl(a.d.ts, 8, 18))
+
+        descendants?: boolean;
+>descendants : Symbol(descendants, Decl(a.d.ts, 8, 28))
+
+        read?: any;
+>read : Symbol(read, Decl(a.d.ts, 9, 30))
+
+    }): any;
+}
+
+
+// Object Rest
+interface Foo {
+>Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
+
+    a: number; b: string;
+>a : Symbol(Foo.a, Decl(a.d.ts, 16, 15))
+>b : Symbol(Foo.b, Decl(a.d.ts, 17, 14))
+}
+export var { a, ...x } : Foo;
+>a : Symbol(a, Decl(a.d.ts, 19, 12))
+>x : Symbol(x, Decl(a.d.ts, 19, 15))
+>Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
+
+=== tests/cases/compiler/b.ts ===
+export {};
+declare namespace N {
+>N : Symbol(N, Decl(b.ts, 0, 10))
+
+	// Extends
+	class C { }
+>C : Symbol(C, Decl(b.ts, 1, 21))
+
+	class D extends C { }
+>D : Symbol(D, Decl(b.ts, 3, 12))
+>C : Symbol(C, Decl(b.ts, 1, 21))
+
+	// Destructuring
+	interface I {
+>I : Symbol(I, Decl(b.ts, 4, 22))
+
+		({descendants, read}?: {
+>descendants : Symbol(descendants, Decl(b.ts, 8, 4))
+>read : Symbol(read, Decl(b.ts, 8, 16))
+
+			descendants?: boolean;
+>descendants : Symbol(descendants, Decl(b.ts, 8, 26))
+
+			read?: any;
+>read : Symbol(read, Decl(b.ts, 9, 25))
+
+		}): any;
+	}
+
+
+	// Object Rest
+	interface Foo {
+>Foo : Symbol(Foo, Decl(b.ts, 12, 2))
+
+		a: number; b: string;
+>a : Symbol(Foo.a, Decl(b.ts, 16, 16))
+>b : Symbol(Foo.b, Decl(b.ts, 17, 12))
+	}
+	export var { a, ...x } : Foo;
+>a : Symbol(a, Decl(b.ts, 19, 13))
+>x : Symbol(x, Decl(b.ts, 19, 16))
+>Foo : Symbol(Foo, Decl(b.ts, 12, 2))
+}
+
+=== tests/cases/compiler/tslib.d.ts ===
+export declare function __extends(d: Function, b: Function): void;
+>__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
+>d : Symbol(d, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export declare function __assign(t: any, ...sources: any[]): any;
+>__assign : Symbol(__assign, Decl(tslib.d.ts, --, --))
+>t : Symbol(t, Decl(tslib.d.ts, --, --))
+>sources : Symbol(sources, Decl(tslib.d.ts, --, --))
+
+export declare function __rest(t: any, propertyNames: string[]): any;
+>__rest : Symbol(__rest, Decl(tslib.d.ts, --, --))
+>t : Symbol(t, Decl(tslib.d.ts, --, --))
+>propertyNames : Symbol(propertyNames, Decl(tslib.d.ts, --, --))
+
+export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
+>__decorate : Symbol(__decorate, Decl(tslib.d.ts, --, --))
+>decorators : Symbol(decorators, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>target : Symbol(target, Decl(tslib.d.ts, --, --))
+>key : Symbol(key, Decl(tslib.d.ts, --, --))
+>desc : Symbol(desc, Decl(tslib.d.ts, --, --))
+
+export declare function __param(paramIndex: number, decorator: Function): Function;
+>__param : Symbol(__param, Decl(tslib.d.ts, --, --))
+>paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, --, --))
+>decorator : Symbol(decorator, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export declare function __metadata(metadataKey: any, metadataValue: any): Function;
+>__metadata : Symbol(__metadata, Decl(tslib.d.ts, --, --))
+>metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, --, --))
+>metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+>__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
+>_arguments : Symbol(_arguments, Decl(tslib.d.ts, --, --))
+>P : Symbol(P, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>generator : Symbol(generator, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export declare function __generator(thisArg: any, body: Function): any;
+>__generator : Symbol(__generator, Decl(tslib.d.ts, --, --))
+>thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
+>body : Symbol(body, Decl(tslib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+export declare function __exportStar(m: any, exports: any): void;
+>__exportStar : Symbol(__exportStar, Decl(tslib.d.ts, --, --))
+>m : Symbol(m, Decl(tslib.d.ts, --, --))
+>exports : Symbol(exports, Decl(tslib.d.ts, --, --))
+

@@ -24,7 +24,7 @@ module M {
 
 
 //// [lambdaPropSelf.js]
-var Person = (function () {
+var Person = /** @class */ (function () {
     function Person(name, children) {
         var _this = this;
         this.name = name;
@@ -33,7 +33,7 @@ var Person = (function () {
     }
     return Person;
 }());
-var T = (function () {
+var T = /** @class */ (function () {
     function T() {
     }
     T.prototype.fo = function () {

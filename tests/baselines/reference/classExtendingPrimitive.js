@@ -16,70 +16,77 @@ class C8 extends E { }
 
 //// [classExtendingPrimitive.js]
 // classes cannot extend primitives
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(number));
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
 }(string));
-var C3 = (function (_super) {
+var C3 = /** @class */ (function (_super) {
     __extends(C3, _super);
     function C3() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
 }(boolean));
-var C4 = (function (_super) {
+var C4 = /** @class */ (function (_super) {
     __extends(C4, _super);
     function C4() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
 }(Void));
-var C4a = (function () {
+var C4a = /** @class */ (function () {
     function C4a() {
     }
     return C4a;
 }());
 void {};
-var C5 = (function (_super) {
+var C5 = /** @class */ (function (_super) {
     __extends(C5, _super);
     function C5() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
 }(Null));
-var C5a = (function (_super) {
+var C5a = /** @class */ (function (_super) {
     __extends(C5a, _super);
     function C5a() {
-        _super.apply(this, arguments);
     }
     return C5a;
 }(null));
-var C6 = (function (_super) {
+var C6 = /** @class */ (function (_super) {
     __extends(C6, _super);
     function C6() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C6;
 }(undefined));
-var C7 = (function (_super) {
+var C7 = /** @class */ (function (_super) {
     __extends(C7, _super);
     function C7() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C7;
 }(Undefined));
@@ -87,10 +94,10 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-var C8 = (function (_super) {
+var C8 = /** @class */ (function (_super) {
     __extends(C8, _super);
     function C8() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C8;
 }(E));

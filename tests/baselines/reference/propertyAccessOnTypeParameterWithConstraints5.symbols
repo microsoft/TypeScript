@@ -1,0 +1,139 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts ===
+class A {
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+
+    foo(): string { return ''; }
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 2, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+
+    bar(): string {
+>bar : Symbol(B.bar, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 4, 19))
+
+        return '';
+    }
+}
+
+class C<U extends T, T extends A> {
+>C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 8, 1))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 8))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 20))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 20))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+
+    f() {
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 35))
+
+        var x: U;
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 12, 11))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 8))
+
+        var a = x['foo'](); // should be string
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 13, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 12, 11))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+
+        return a + x.foo() + x.notHere();
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 13, 11))
+>x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 12, 11))
+>foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 12, 11))
+    }
+}
+
+var r = (new C<B, A>()).f();
+>r : Symbol(r, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 18, 3))
+>(new C<B, A>()).f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 35))
+>C : Symbol(C, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 8, 1))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 2, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+>f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 10, 35))
+
+interface I<U extends T, T extends A> {
+>I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 18, 28))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 12))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 24))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 24))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+
+    foo: U;
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 12))
+}
+var i: I<B, A>;
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+>I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 18, 28))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 2, 1))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+
+var r2 = i.foo.notHere();
+>r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 24, 3))
+>i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
+
+var r2b = i.foo['foo']();
+>r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 25, 3))
+>i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
+>i : Symbol(i, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 23, 3))
+>foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 20, 39))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+
+var a: {
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+
+    <U extends T, T extends A>(): U;
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 28, 5))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 28, 17))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 28, 17))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 28, 5))
+}
+// BUG 794164
+var r3: string = a().notHere();
+>r3 : Symbol(r3, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 31, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+
+var r3b: string = a()['foo']();
+>r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 32, 3))
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 27, 3))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+
+var b = {
+>b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 34, 3))
+
+    foo: <U extends T, T extends A>(x: U): U => {
+>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 34, 9))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 10))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 22))
+>T : Symbol(T, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 22))
+>A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 0))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 36))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 10))
+>U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 10))
+
+        var a = x['foo'](); // should be string
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 36, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 36))
+>'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 0, 9))
+
+        return a + x.notHere();
+>a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 36, 11))
+>x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 35, 36))
+
+    },
+    // BUG 794164
+    bar: b.foo(1).notHere()
+>bar : Symbol(bar, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 38, 6))
+>b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 34, 3))
+}
+
+var r4 = b.foo(new B()); // error after constraints above made illegal, doesn't matter
+>r4 : Symbol(r4, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 43, 3))
+>b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 34, 3))
+>B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints5.ts, 2, 1))
+

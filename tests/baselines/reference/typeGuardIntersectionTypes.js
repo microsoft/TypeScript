@@ -1,5 +1,4 @@
 //// [typeGuardIntersectionTypes.ts]
-
 interface X {
     x: string;
 }
@@ -153,10 +152,12 @@ function identifyBeast(beast) {
                 log("unknown - " + beast.legs + " legs, wings");
             }
         }
+        // All non-winged beasts with legs
         else {
             log("manbearpig - " + beast.legs + " legs, no wings");
         }
     }
+    // All beasts without legs    
     else {
         if (hasWings(beast)) {
             log("quetzalcoatl - no legs, wings");

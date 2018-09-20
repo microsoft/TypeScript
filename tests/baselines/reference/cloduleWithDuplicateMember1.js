@@ -16,7 +16,7 @@ module C {
 }
 
 //// [cloduleWithDuplicateMember1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {
@@ -34,11 +34,9 @@ var C = (function () {
     C.foo = function () { };
     return C;
 }());
-var C;
 (function (C) {
     C.x = 1;
 })(C || (C = {}));
-var C;
 (function (C) {
     function foo() { }
     C.foo = foo;

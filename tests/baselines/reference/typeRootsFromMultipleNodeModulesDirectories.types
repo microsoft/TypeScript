@@ -1,0 +1,41 @@
+=== /foo/bar/a.ts ===
+import { x } from "xyz";
+>x : number
+
+import { y } from "pdq";
+>y : number
+
+import { z } from "abc";
+>z : number
+
+x + y + z;
+>x + y + z : number
+>x + y : number
+>x : number
+>y : number
+>z : number
+
+=== /node_modules/@types/dopey/index.d.ts ===
+declare module "xyz" {
+>"xyz" : typeof import("xyz")
+
+    export const x: number;
+>x : number
+}
+
+=== /foo/node_modules/@types/grumpy/index.d.ts ===
+declare module "pdq" {
+>"pdq" : typeof import("pdq")
+
+    export const y: number; 
+>y : number
+}
+
+=== /foo/node_modules/@types/sneezy/index.d.ts ===
+declare module "abc" {
+>"abc" : typeof import("abc")
+
+    export const z: number;
+>z : number
+}
+

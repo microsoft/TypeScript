@@ -18,9 +18,8 @@ class C {
 >C : C
 
     0: B;
->B : B
+>0 : B
 
     [x: number]: A;
 >x : number
->A : A
 }

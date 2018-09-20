@@ -1,15 +1,15 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface interface1 {
-////    [|doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////interface interface2  extends interface1{
-////    [|doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////class class1 implements interface2 {
-////    [|doStuff|]() {
+////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() {
 ////
 ////    }
 ////}
@@ -21,4 +21,10 @@
 ////var v: class2;
 ////v.[|doStuff|]();
 
-verify.rangesWithSameTextReferenceEachOther();
+const ranges = test.ranges();
+const [r0, r1, r2, r3] = ranges;
+verify.referenceGroups(ranges, [
+    { definition: "(method) interface1.doStuff(): void", ranges: [r0] },
+    { definition: "(method) interface2.doStuff(): void", ranges: [r1] },
+    { definition: "(method) class1.doStuff(): void", ranges: [r2, r3] }
+]);

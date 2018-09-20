@@ -1,49 +1,48 @@
 === tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean | RegExp
->"" : string
+>"" : ""
 
 x; // string
 >x : string
 
 [x] = [true];
->[x] = [true] : [boolean]
+>[x] = [true] : [true]
 >[x] : [string | number | boolean | RegExp]
 >x : string | number | boolean | RegExp
->[true] : [boolean]
->true : boolean
+>[true] : [true]
+>true : true
 
 x; // boolean
->x : boolean
+>x : true
 
 [x = ""] = [1];
 >[x = ""] = [1] : [number]
 >[x = ""] : [string]
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean | RegExp
->"" : string
+>"" : ""
 >[1] : [number]
->1 : number
+>1 : 1
 
 x; // string | number
 >x : string | number
 
 ({x} = {x: true});
->({x} = {x: true}) : { x: boolean; }
->{x} = {x: true} : { x: boolean; }
+>({x} = {x: true}) : { x: true; }
+>{x} = {x: true} : { x: true; }
 >{x} : { x: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
->{x: true} : { x: boolean; }
->x : boolean
->true : boolean
+>{x: true} : { x: true; }
+>x : true
+>true : true
 
 x; // boolean
->x : boolean
+>x : true
 
 ({y: x} = {y: 1});
 >({y: x} = {y: 1}) : { y: number; }
@@ -53,22 +52,23 @@ x; // boolean
 >x : string | number | boolean | RegExp
 >{y: 1} : { y: number; }
 >y : number
->1 : number
+>1 : 1
 
 x; // number
 >x : number
 
 ({x = ""} = {x: true});
->({x = ""} = {x: true}) : { x?: boolean; }
->{x = ""} = {x: true} : { x?: boolean; }
+>({x = ""} = {x: true}) : { x?: true; }
+>{x = ""} = {x: true} : { x?: true; }
 >{x = ""} : { x?: string | number | boolean | RegExp; }
 >x : string | number | boolean | RegExp
->{x: true} : { x?: boolean; }
->x : boolean
->true : boolean
+>"" : ""
+>{x: true} : { x?: true; }
+>x : true
+>true : true
 
 x; // string | boolean
->x : string | boolean
+>x : string | true
 
 ({y: x = /a/} = {y: 1});
 >({y: x = /a/} = {y: 1}) : { y?: number; }
@@ -80,7 +80,7 @@ x; // string | boolean
 >/a/ : RegExp
 >{y: 1} : { y?: number; }
 >y : number
->1 : number
+>1 : 1
 
 x; // number | RegExp
 >x : number | RegExp
@@ -95,4 +95,26 @@ for (x of a) {
     x; // string
 >x : string
 }
+
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+>AOrArrA : AOrArrA<T>
+
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+>arr : AOrArrA<{ x?: "ok"; }>
+>x : "ok"
+>[{ x: "ok" }] : { x: "ok"; }[]
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
+
+arr.push({ x: "ok" });
+>arr.push({ x: "ok" }) : number
+>arr.push : (...items: { x?: "ok"; }[]) => number
+>arr : { x?: "ok"; }[]
+>push : (...items: { x?: "ok"; }[]) => number
+>{ x: "ok" } : { x: "ok"; }
+>x : "ok"
+>"ok" : "ok"
 

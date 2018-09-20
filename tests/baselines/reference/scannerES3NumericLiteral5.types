@@ -1,4 +1,4 @@
 === tests/cases/conformance/scanner/ecmascript3/scannerES3NumericLiteral5.ts ===
 1e0
->1e0 : number
+>1e0 : 1
 

@@ -9,8 +9,8 @@ let v = new m.Vector(3, 2);
 >m.Vector : typeof m.Vector
 >m : typeof m
 >Vector : typeof m.Vector
->3 : number
->2 : number
+>3 : 3
+>2 : 2
 
 let magnitude = m.getLength(v);
 >magnitude : number
@@ -23,13 +23,12 @@ let magnitude = m.getLength(v);
 let p: m.Point = v.translate(5, 5);
 >p : m.Point
 >m : any
->Point : m.Point
 >v.translate(5, 5) : m.Vector
 >v.translate : (dx: number, dy: number) => m.Vector
 >v : m.Vector
 >translate : (dx: number, dy: number) => m.Vector
->5 : number
->5 : number
+>5 : 5
+>5 : 5
 
 p = v.reverse();
 >p = v.reverse() : m.Point
@@ -46,13 +45,10 @@ var t = p.x;
 >x : number
 
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
-
 export as namespace Math2d;
->Math2d : typeof Math2d
+>Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index")
 
 export interface Point {
->Point : Point
-
 	x: number;
 >x : number
 
@@ -62,7 +58,6 @@ export interface Point {
 
 export class Vector implements Point {
 >Vector : Vector
->Point : Point
 
 	x: number;
 >x : number
@@ -78,13 +73,11 @@ export class Vector implements Point {
 >translate : (dx: number, dy: number) => Vector
 >dx : number
 >dy : number
->Vector : Vector
 }
 
 export function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
 >p : Vector
->Vector : Vector
 
 === tests/cases/conformance/externalModules/math2d-augment.d.ts ===
 import * as Math2d from 'math2d';
@@ -92,14 +85,13 @@ import * as Math2d from 'math2d';
 
 // Augment the module
 declare module 'math2d' {
+>'math2d' : typeof Math2d
+
 	// Add a method to the class
 	interface Vector {
->Vector : Vector
-
 		reverse(): Math2d.Point;
 >reverse : () => Point
 >Math2d : any
->Point : Point
 	}
 }
 

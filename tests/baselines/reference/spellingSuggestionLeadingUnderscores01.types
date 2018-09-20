@@ -1,0 +1,33 @@
+=== tests/cases/compiler/spellingSuggestionLeadingUnderscores01.ts ===
+// @filename abc.ts
+export declare let a: {
+>a : { __foo: 10; }
+
+    __foo: 10,
+>__foo : 10
+}
+
+a.___foo
+>a.___foo : any
+>a : { __foo: 10; }
+>___foo : any
+
+// @filename def.ts
+export let b: {
+>b : { __foo: number; }
+
+    __foo: number
+>__foo : number
+}
+
+b = {
+>b = {    ___foo: 100,} : { ___foo: number; }
+>b : { __foo: number; }
+>{    ___foo: 100,} : { ___foo: number; }
+
+    ___foo: 100,
+>___foo : number
+>100 : 100
+}
+
+

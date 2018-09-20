@@ -1,0 +1,19 @@
+=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters1.ts ===
+export type Bar<X, Y> = () => [X, Y];
+>Bar : Symbol(Bar, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 0))
+>X : Symbol(X, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 16))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 18))
+>X : Symbol(X, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 16))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 18))
+
+export type Foo<Y> = Bar<any, Y>;
+>Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 37))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 1, 16))
+>Bar : Symbol(Bar, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 0))
+>Y : Symbol(Y, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 1, 16))
+
+export const y = (x: Foo<string>) => 1
+>y : Symbol(y, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 2, 12))
+>x : Symbol(x, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 2, 18))
+>Foo : Symbol(Foo, Decl(declarationEmitTypeAliasWithTypeParameters1.ts, 0, 37))
+

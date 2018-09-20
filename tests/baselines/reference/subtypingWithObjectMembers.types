@@ -1,0 +1,146 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers.ts ===
+class Base { foo: string; }
+>Base : Base
+>foo : string
+
+class Derived extends Base { bar: string; }
+>Derived : Derived
+>Base : Base
+>bar : string
+
+class Derived2 extends Derived { baz: string; }
+>Derived2 : Derived2
+>Derived : Derived
+>baz : string
+
+// N and M have the same name, same accessibility, same optionality, and N is a subtype of M
+// foo properties are valid, bar properties cause errors in the derived class declarations
+class A {
+>A : A
+
+    foo: Base;
+>foo : Base
+
+    bar: Base;
+>bar : Base
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    foo: Derived; // ok
+>foo : Derived
+
+    bar: string; // error
+>bar : string
+}
+
+class A2 {
+>A2 : A2
+
+    1: Base; 
+>1 : Base
+
+    2.0: Base;
+>2.0 : Base
+}
+
+class B2 extends A2 {
+>B2 : B2
+>A2 : A2
+
+    1: Derived; // ok
+>1 : Derived
+
+    2: string; // error
+>2 : string
+}
+
+class A3 {
+>A3 : A3
+
+    '1': Base;
+>'1' : Base
+
+    '2.0': Base;
+>'2.0' : Base
+}
+
+class B3 extends A3 {
+>B3 : B3
+>A3 : A3
+
+    '1': Derived; // ok
+>'1' : Derived
+
+    '2.0': string; // error
+>'2.0' : string
+}
+
+module TwoLevels {
+>TwoLevels : typeof TwoLevels
+
+    class A {
+>A : A
+
+        foo: Base;
+>foo : Base
+
+        bar: Base;
+>bar : Base
+    }
+
+    class B extends A {
+>B : B
+>A : A
+
+        foo: Derived2; // ok
+>foo : Derived2
+
+        bar: string; // error
+>bar : string
+    }
+
+    class A2 {
+>A2 : A2
+
+        1: Base;
+>1 : Base
+
+        2.0: Base;
+>2.0 : Base
+    }
+
+    class B2 extends A2 {
+>B2 : B2
+>A2 : A2
+
+        1: Derived2; // ok
+>1 : Derived2
+
+        2: string; // error
+>2 : string
+    }
+
+    class A3 {
+>A3 : A3
+
+        '1': Base;
+>'1' : Base
+
+        '2.0': Base;
+>'2.0' : Base
+    }
+
+    class B3 extends A3 {
+>B3 : B3
+>A3 : A3
+
+        '1': Derived2; // ok
+>'1' : Derived2
+
+        '2.0': string; // error
+>'2.0' : string
+    }
+}

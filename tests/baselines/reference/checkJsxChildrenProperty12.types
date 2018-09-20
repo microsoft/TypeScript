@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface ButtonProp {
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: Button;
+>children : Button
+}
+
+class Button extends React.Component<ButtonProp, any> {
+>Button : Button
+>React.Component : React.Component<ButtonProp, any>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+		let condition: boolean;
+>condition : boolean
+
+		if (condition) {
+>condition : boolean
+
+        	return <InnerButton {...this.props} />
+><InnerButton {...this.props} /> : JSX.Element
+>InnerButton : typeof InnerButton
+>this.props : ButtonProp & { children?: React.ReactNode; }
+>this : this
+>props : ButtonProp & { children?: React.ReactNode; }
+		}
+		else {
+			return (<InnerButton {...this.props} >
+>(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : JSX.Element
+><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : JSX.Element
+>InnerButton : typeof InnerButton
+>this.props : ButtonProp & { children?: React.ReactNode; }
+>this : this
+>props : ButtonProp & { children?: React.ReactNode; }
+
+				<div>Hello World</div>
+><div>Hello World</div> : JSX.Element
+>div : any
+>div : any
+
+				</InnerButton>);
+>InnerButton : typeof InnerButton
+		}
+    }
+}
+
+interface InnerButtonProp {
+	a: number
+>a : number
+}
+
+class InnerButton extends React.Component<InnerButtonProp, any> {
+>InnerButton : InnerButton
+>React.Component : React.Component<InnerButtonProp, any>
+>React : typeof React
+>Component : typeof React.Component
+
+	render() {
+>render : () => JSX.Element
+
+		return (<button>Hello</button>);
+>(<button>Hello</button>) : JSX.Element
+><button>Hello</button> : JSX.Element
+>button : any
+>button : any
+	}
+}
+

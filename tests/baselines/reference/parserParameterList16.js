@@ -5,7 +5,7 @@ class C {
 }
 
 //// [parserParameterList16.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (a, b) { };

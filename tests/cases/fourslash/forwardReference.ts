@@ -9,4 +9,4 @@
 ////}
 
 goTo.marker();
-verify.memberListContains('n');
+verify.completionListContains('n');

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/genericFunctionTypedArgumentsAreFixed.ts ===
+declare function map<T, U>(f: (x: T) => U, xs: T[]): U[];
+>map : Symbol(map, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 21))
+>U : Symbol(U, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 23))
+>f : Symbol(f, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 27))
+>x : Symbol(x, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 31))
+>T : Symbol(T, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 21))
+>U : Symbol(U, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 23))
+>xs : Symbol(xs, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 42))
+>T : Symbol(T, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 21))
+>U : Symbol(U, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 23))
+
+map((a) => a.length, [1]);
+>map : Symbol(map, Decl(genericFunctionTypedArgumentsAreFixed.ts, 0, 0))
+>a : Symbol(a, Decl(genericFunctionTypedArgumentsAreFixed.ts, 1, 5))
+>a : Symbol(a, Decl(genericFunctionTypedArgumentsAreFixed.ts, 1, 5))
+

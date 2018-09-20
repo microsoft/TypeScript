@@ -17,7 +17,7 @@ class E {
 
 
 //// [gettersAndSettersErrors.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed
     }
@@ -39,7 +39,7 @@ var C = (function () {
     });
     return C;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     Object.defineProperty(E.prototype, "Baz", {

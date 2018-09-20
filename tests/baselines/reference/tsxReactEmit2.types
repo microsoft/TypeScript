@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -15,7 +9,7 @@ declare module JSX {
 declare var React: any;
 >React : any
 
-var p1, p2, p3;
+var p1: any, p2: any, p3: any;
 >p1 : any
 >p2 : any
 >p3 : any

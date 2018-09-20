@@ -1,0 +1,10 @@
+=== tests/cases/compiler/inlineSourceMap.ts ===
+var x = 0;
+>x : Symbol(x, Decl(inlineSourceMap.ts, 0, 3))
+
+console.log(x);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(inlineSourceMap.ts, 0, 3))
+

@@ -1,2 +1,2 @@
 //// [out.js.map]
-{"version":3,"file":"out.js","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/b.ts"],"names":[],"mappings":"AACA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACFf,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC","sourcesContent":["\nvar a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]}
+{"version":3,"file":"out.js","sourceRoot":"","sources":["tests/cases/compiler/a.ts","tests/cases/compiler/b.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACDf,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC","sourcesContent":["var a = 0;\nconsole.log(a);\n","var b = 0;\nconsole.log(b);"]}

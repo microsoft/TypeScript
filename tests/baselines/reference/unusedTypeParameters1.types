@@ -1,0 +1,5 @@
+=== tests/cases/compiler/unusedTypeParameters1.ts ===
+class greeter<typeparameter1> {
+>greeter : greeter<typeparameter1>
+
+}

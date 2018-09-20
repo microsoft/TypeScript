@@ -1,11 +1,18 @@
 ﻿// @module: commonjs
-// @includebuiltfile: typescript_standalone.d.ts
+// @skipLibCheck: true
+// @includebuiltfile: typescriptServices.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
 
+// @filename: node_modules/typescript/index.d.ts
+declare module "typescript" {
+    export = ts;
+}
+
+// @filename: APISample_linter.ts
 /*
- * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -61,7 +68,7 @@ export function delint(sourceFile: ts.SourceFile) {
 const fileNames: string[] = process.argv.slice(2);
 fileNames.forEach(fileName => {
     // Parse a file
-    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES6, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
 
     // delint it
     delint(sourceFile);

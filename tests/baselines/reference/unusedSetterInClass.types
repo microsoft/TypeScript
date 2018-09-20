@@ -1,12 +1,11 @@
 === tests/cases/compiler/unusedSetterInClass.ts ===
-
 class Employee {
 >Employee : Employee
 
     private _fullName: string;
 >_fullName : string
 
-    set fullName(newName: string) {
+    private set fullName(newName: string) {
 >fullName : string
 >newName : string
 

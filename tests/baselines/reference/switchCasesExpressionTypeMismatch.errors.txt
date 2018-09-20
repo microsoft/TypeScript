@@ -1,9 +1,10 @@
 tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type 'number'.
-tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(5,10): error TS2678: Type '"sss"' is not comparable to type 'number'.
-tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: Type 'true' is not comparable to type 'number'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(5,10): error TS2678: Type '"sss"' is not comparable to type '0'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(6,10): error TS2678: Type '123' is not comparable to type '0'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: Type 'true' is not comparable to type '0'.
 
 
-==== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts (3 errors) ====
+==== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts (4 errors) ====
     class Foo { }
     
     switch (0) {
@@ -12,11 +13,13 @@ tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: T
 !!! error TS2678: Type 'typeof Foo' is not comparable to type 'number'.
         case "sss": break;  // Error
              ~~~~~
-!!! error TS2678: Type '"sss"' is not comparable to type 'number'.
-        case 123: break;    // No Error
+!!! error TS2678: Type '"sss"' is not comparable to type '0'.
+        case 123: break;    // Error
+             ~~~
+!!! error TS2678: Type '123' is not comparable to type '0'.
         case true: break;   // Error
              ~~~~
-!!! error TS2678: Type 'true' is not comparable to type 'number'.
+!!! error TS2678: Type 'true' is not comparable to type '0'.
     }
     
     var s: any = 0;
@@ -28,3 +31,4 @@ tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: T
         case 123: break;
         case true: break;
     }
+    

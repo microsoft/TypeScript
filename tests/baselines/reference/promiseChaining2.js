@@ -12,7 +12,7 @@ class Chain2<T extends { length: number }> {
 
 //// [promiseChaining2.js]
 // same example but with constraints on each type parameter
-var Chain2 = (function () {
+var Chain2 = /** @class */ (function () {
     function Chain2(value) {
         this.value = value;
     }

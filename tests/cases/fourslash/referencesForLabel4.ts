@@ -8,4 +8,4 @@
 ////    }
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("label");

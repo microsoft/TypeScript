@@ -4,15 +4,13 @@ module Outer {
 
     export var x = 1;
 >x : number
->1 : number
+>1 : 1
 }
 
 module Outer {
->Outer : typeof Outer
-
     export const enum A { X }
 >A : A
->X : A
+>X : A.X
 }
 
 module B {

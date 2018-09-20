@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/exportDeclaredModule.ts] ////
 
 //// [foo1.ts]
-
 declare module M1 {
 	export var a: string; 
 	export function b(): number;
@@ -17,5 +16,6 @@ var x: number = foo1.b();
 module.exports = M1;
 //// [foo2.js]
 "use strict";
-var foo1 = require('./foo1');
+exports.__esModule = true;
+var foo1 = require("./foo1");
 var x = foo1.b();

@@ -5,5 +5,6 @@
 import foo = require('./foo');
 
 //// [commentOnImportStatement3.js]
-/* copyright */
 "use strict";
+/* copyright */
+exports.__esModule = true;

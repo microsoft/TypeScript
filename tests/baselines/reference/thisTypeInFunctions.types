@@ -27,7 +27,6 @@ class C {
     explicitC(this: C, m: number): number {
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
         return this.n + m;
@@ -58,7 +57,7 @@ class C {
         return m + 1;
 >m + 1 : number
 >m : number
->1 : number
+>1 : 1
     }
 }
 class D extends C { }
@@ -66,8 +65,6 @@ class D extends C { }
 >C : C
 
 interface I {
->I : I
-
     a: number;
 >a : number
 
@@ -87,7 +84,6 @@ interface I {
     explicitInterface(this: I): number;
 >explicitInterface : (this: I) => number
 >this : I
->I : I
 
     explicitThis(this: this): number;
 >explicitThis : (this: this) => number
@@ -127,16 +123,15 @@ function implicitThis(n: number): number {
 >this : any
 >m : any
 >n : number
->12 : number
+>12 : 12
 }
 let impl: I = {
 >impl : I
->I : I
->{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(): number; explicitStructural(): number; explicitInterface(): number; explicitThis(): number; }
+>{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(this: void): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
 
     a: 12,
 >a : number
->12 : number
+>12 : 12
 
     explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
 >explicitVoid2 : () => any
@@ -146,11 +141,11 @@ let impl: I = {
 >a : any
 
     explicitVoid1() { return 12; },
->explicitVoid1 : () => number
->12 : number
+>explicitVoid1 : (this: void) => number
+>12 : 12
 
     explicitStructural() {
->explicitStructural : () => number
+>explicitStructural : (this: { a: number; }) => number
 
         return this.a;
 >this.a : number
@@ -159,7 +154,7 @@ let impl: I = {
 
     },
     explicitInterface() {
->explicitInterface : () => number
+>explicitInterface : (this: I) => number
 
         return this.a;
 >this.a : number
@@ -168,7 +163,7 @@ let impl: I = {
 
     },
     explicitThis() {
->explicitThis : () => number
+>explicitThis : (this: I) => number
 
         return this.a;
 >this.a : number
@@ -178,12 +173,12 @@ let impl: I = {
     },
 }
 impl.explicitVoid1 = function () { return 12; };
->impl.explicitVoid1 = function () { return 12; } : () => number
+>impl.explicitVoid1 = function () { return 12; } : (this: void) => number
 >impl.explicitVoid1 : (this: void) => number
 >impl : I
 >explicitVoid1 : (this: void) => number
->function () { return 12; } : () => number
->12 : number
+>function () { return 12; } : (this: void) => number
+>12 : 12
 
 impl.explicitVoid2 = () => 12;
 >impl.explicitVoid2 = () => 12 : () => number
@@ -191,24 +186,24 @@ impl.explicitVoid2 = () => 12;
 >impl : I
 >explicitVoid2 : (this: void) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitStructural = function() { return this.a; };
->impl.explicitStructural = function() { return this.a; } : () => number
+>impl.explicitStructural = function() { return this.a; } : (this: { a: number; }) => number
 >impl.explicitStructural : (this: { a: number; }) => number
 >impl : I
 >explicitStructural : (this: { a: number; }) => number
->function() { return this.a; } : () => number
+>function() { return this.a; } : (this: { a: number; }) => number
 >this.a : number
 >this : { a: number; }
 >a : number
 
 impl.explicitInterface = function() { return this.a; };
->impl.explicitInterface = function() { return this.a; } : () => number
+>impl.explicitInterface = function() { return this.a; } : (this: I) => number
 >impl.explicitInterface : (this: I) => number
 >impl : I
 >explicitInterface : (this: I) => number
->function() { return this.a; } : () => number
+>function() { return this.a; } : (this: I) => number
 >this.a : number
 >this : I
 >a : number
@@ -219,7 +214,7 @@ impl.explicitStructural = () => 12;
 >impl : I
 >explicitStructural : (this: { a: number; }) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitInterface = () => 12;
 >impl.explicitInterface = () => 12 : () => number
@@ -227,14 +222,14 @@ impl.explicitInterface = () => 12;
 >impl : I
 >explicitInterface : (this: I) => number
 >() => 12 : () => number
->12 : number
+>12 : 12
 
 impl.explicitThis = function () { return this.a; };
->impl.explicitThis = function () { return this.a; } : () => number
+>impl.explicitThis = function () { return this.a; } : (this: I) => number
 >impl.explicitThis : (this: I) => number
 >impl : I
 >explicitThis : (this: I) => number
->function () { return this.a; } : () => number
+>function () { return this.a; } : (this: I) => number
 >this.a : number
 >this : I
 >a : number
@@ -249,7 +244,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, f:
 >x : number
 >{ y: 12, f: explicitStructural } : { y: number; f: (this: { y: number; }, x: number) => number; }
 >y : number
->12 : number
+>12 : 12
 >f : (this: { y: number; }, x: number) => number
 >explicitStructural : (this: { y: number; }, x: number) => number
 
@@ -260,7 +255,7 @@ let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpeci
 >x : number
 >{ notSpecified: 12, f: implicitThis } : { notSpecified: number; f: (n: number) => number; }
 >notSpecified : number
->12 : number
+>12 : 12
 >f : (n: number) => number
 >implicitThis : (n: number) => number
 
@@ -269,19 +264,19 @@ ok.f(13);
 >ok.f : (this: { y: number; }, x: number) => number
 >ok : { y: number; f: (this: { y: number; }, x: number) => number; }
 >f : (this: { y: number; }, x: number) => number
->13 : number
+>13 : 13
 
 implicitThis(12);
 >implicitThis(12) : number
 >implicitThis : (n: number) => number
->12 : number
+>12 : 12
 
 implicitAnyOk.f(12);
 >implicitAnyOk.f(12) : number
 >implicitAnyOk.f : (x: number) => number
 >implicitAnyOk : { notSpecified: number; f: (x: number) => number; }
 >f : (x: number) => number
->12 : number
+>12 : 12
 
 let c = new C();
 >c : C
@@ -304,42 +299,42 @@ c.explicitC(12);
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 c.explicitProperty(12);
 >c.explicitProperty(12) : number
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->12 : number
+>12 : 12
 
 c.explicitThis(12);
 >c.explicitThis(12) : number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitC(12);
 >d.explicitC(12) : number
 >d.explicitC : (this: C, m: number) => number
 >d : D
 >explicitC : (this: C, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitProperty(12);
 >d.explicitProperty(12) : number
 >d.explicitProperty : (this: { n: number; }, m: number) => number
 >d : D
 >explicitProperty : (this: { n: number; }, m: number) => number
->12 : number
+>12 : 12
 
 d.explicitThis(12);
 >d.explicitThis(12) : number
 >d.explicitThis : (this: D, m: number) => number
 >d : D
 >explicitThis : (this: D, m: number) => number
->12 : number
+>12 : 12
 
 let reconstructed: { 
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
@@ -350,13 +345,11 @@ let reconstructed: {
     explicitThis(this: C, m: number): number, // note: this: this is not allowed in an object literal type.
 >explicitThis : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitC(this: C, m: number): number,
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitProperty: (this: {n : number}, m: number) => number,
@@ -375,7 +368,7 @@ let reconstructed: {
 
     n: 12,
 >n : number
->12 : number
+>12 : 12
 
     explicitThis: c.explicitThis,
 >explicitThis : (this: C, m: number) => number
@@ -407,14 +400,14 @@ reconstructed.explicitThis(10);
 >reconstructed.explicitThis : (this: C, m: number) => number
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
 >explicitThis : (this: C, m: number) => number
->10 : number
+>10 : 10
 
 reconstructed.explicitProperty(11);
 >reconstructed.explicitProperty(11) : number
 >reconstructed.explicitProperty : (this: { n: number; }, m: number) => number
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
 >explicitProperty : (this: { n: number; }, m: number) => number
->11 : number
+>11 : 11
 
 let explicitVoid = reconstructed.explicitVoid;
 >explicitVoid : (this: void, m: number) => number
@@ -425,7 +418,7 @@ let explicitVoid = reconstructed.explicitVoid;
 explicitVoid(12);
 >explicitVoid(12) : number
 >explicitVoid : (this: void, m: number) => number
->12 : number
+>12 : 12
 
 // assignment checking
 let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + this.y; // ok, this:any
@@ -433,7 +426,7 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >this : { y: number; }
 >y : number
 >x : number
->x => x + this.y : (x: number) => any
+>x => x + this.y : (this: { y: number; }, x: number) => any
 >x : number
 >x + this.y : any
 >x : number
@@ -453,11 +446,11 @@ let anyToSpecified: (this: { y: number }, x: number) => number = function(x: num
 >this : { y: number; }
 >y : number
 >x : number
->function(x: number): number { return x + 12; } : (x: number) => number
+>function(x: number): number { return x + 12; } : (this: { y: number; }, x: number) => number
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let unspecifiedLambda: (x: number) => number = x => x + 12;
 >unspecifiedLambda : (x: number) => number
@@ -466,17 +459,17 @@ let unspecifiedLambda: (x: number) => number = x => x + 12;
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let specifiedLambda: (this: void, x: number) => number = x => x + 12;
 >specifiedLambda : (this: void, x: number) => number
 >this : void
 >x : number
->x => x + 12 : (x: number) => number
+>x => x + 12 : (this: void, x: number) => number
 >x : number
 >x + 12 : number
 >x : number
->12 : number
+>12 : 12
 
 let unspecifiedLambdaToSpecified: (this: {y: number}, x: number) => number = unspecifiedLambda;
 >unspecifiedLambdaToSpecified : (this: { y: number; }, x: number) => number
@@ -496,7 +489,6 @@ let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = speci
 let explicitCFunction: (this: C, m: number) => number;
 >explicitCFunction : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
 let explicitPropertyFunction: (this: {n: number}, m: number) => number;
@@ -519,7 +511,6 @@ c.explicitC = function(this: C, m: number) { return this.n + m };
 >explicitC : (this: C, m: number) => number
 >function(this: C, m: number) { return this.n + m } : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 >this.n + m : number
 >this.n : number
@@ -560,40 +551,40 @@ c.explicitProperty = reconstructed.explicitProperty;
 
 // lambdas are assignable to anything
 c.explicitC = m => m;
->c.explicitC = m => m : (m: number) => number
+>c.explicitC = m => m : (this: C, m: number) => number
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->m => m : (m: number) => number
+>m => m : (this: C, m: number) => number
 >m : number
 >m : number
 
 c.explicitThis = m => m;
->c.explicitThis = m => m : (m: number) => number
+>c.explicitThis = m => m : (this: C, m: number) => number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->m => m : (m: number) => number
+>m => m : (this: C, m: number) => number
 >m : number
 >m : number
 
 c.explicitProperty = m => m;
->c.explicitProperty = m => m : (m: number) => number
+>c.explicitProperty = m => m : (this: { n: number; }, m: number) => number
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->m => m : (m: number) => number
+>m => m : (this: { n: number; }, m: number) => number
 >m : number
 >m : number
 
 // this inside lambdas refer to outer scope
 // the outer-scoped lambda at top-level is still just `any`
 c.explicitC = m => m + this.n;
->c.explicitC = m => m + this.n : (m: number) => any
+>c.explicitC = m => m + this.n : (this: C, m: number) => any
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->m => m + this.n : (m: number) => any
+>m => m + this.n : (this: C, m: number) => any
 >m : number
 >m + this.n : any
 >m : number
@@ -602,11 +593,11 @@ c.explicitC = m => m + this.n;
 >n : any
 
 c.explicitThis = m => m + this.n;
->c.explicitThis = m => m + this.n : (m: number) => any
+>c.explicitThis = m => m + this.n : (this: C, m: number) => any
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->m => m + this.n : (m: number) => any
+>m => m + this.n : (this: C, m: number) => any
 >m : number
 >m + this.n : any
 >m : number
@@ -615,11 +606,11 @@ c.explicitThis = m => m + this.n;
 >n : any
 
 c.explicitProperty = m => m + this.n;
->c.explicitProperty = m => m + this.n : (m: number) => any
+>c.explicitProperty = m => m + this.n : (this: { n: number; }, m: number) => any
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->m => m + this.n : (m: number) => any
+>m => m + this.n : (this: { n: number; }, m: number) => any
 >m : number
 >m + this.n : any
 >m : number
@@ -642,7 +633,6 @@ c.explicitThis = function(this: C, m: number) { return this.n + m };
 >explicitThis : (this: C, m: number) => number
 >function(this: C, m: number) { return this.n + m } : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 >this.n + m : number
 >this.n : number
@@ -652,11 +642,11 @@ c.explicitThis = function(this: C, m: number) { return this.n + m };
 
 // this:any compatibility
 c.explicitC = function(m) { return this.n + m };
->c.explicitC = function(m) { return this.n + m } : (m: number) => number
+>c.explicitC = function(m) { return this.n + m } : (this: C, m: number) => number
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->function(m) { return this.n + m } : (m: number) => number
+>function(m) { return this.n + m } : (this: C, m: number) => number
 >m : number
 >this.n + m : number
 >this.n : number
@@ -665,11 +655,11 @@ c.explicitC = function(m) { return this.n + m };
 >m : number
 
 c.explicitProperty = function(m) { return this.n + m };
->c.explicitProperty = function(m) { return this.n + m } : (m: number) => number
+>c.explicitProperty = function(m) { return this.n + m } : (this: { n: number; }, m: number) => number
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->function(m) { return this.n + m } : (m: number) => number
+>function(m) { return this.n + m } : (this: { n: number; }, m: number) => number
 >m : number
 >this.n + m : number
 >this.n : number
@@ -678,11 +668,11 @@ c.explicitProperty = function(m) { return this.n + m };
 >m : number
 
 c.explicitThis = function(m) { return this.n + m };
->c.explicitThis = function(m) { return this.n + m } : (m: number) => number
+>c.explicitThis = function(m) { return this.n + m } : (this: C, m: number) => number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->function(m) { return this.n + m } : (m: number) => number
+>function(m) { return this.n + m } : (this: C, m: number) => number
 >m : number
 >this.n + m : number
 >this.n : number
@@ -713,7 +703,6 @@ c.explicitC = function(this: B, m: number) { return this.n + m };
 >explicitC : (this: C, m: number) => number
 >function(this: B, m: number) { return this.n + m } : (this: B, m: number) => number
 >this : B
->B : B
 >m : number
 >this.n + m : number
 >this.n : number
@@ -723,11 +712,11 @@ c.explicitC = function(this: B, m: number) { return this.n + m };
 
 // this:void compatibility
 c.explicitVoid = n => n;
->c.explicitVoid = n => n : (n: number) => number
+>c.explicitVoid = n => n : (this: void, n: number) => number
 >c.explicitVoid : (this: void, m: number) => number
 >c : C
 >explicitVoid : (this: void, m: number) => number
->n => n : (n: number) => number
+>n => n : (this: void, n: number) => number
 >n : number
 >n : number
 
@@ -748,7 +737,6 @@ class Base1 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -787,7 +775,6 @@ class Base2 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -878,14 +865,13 @@ b1.explicit = d2.polymorphic // ok, 'x' and 'y' not in Base1: { x }
 function InterfaceThis(this: I) {
 >InterfaceThis : (this: I) => void
 >this : I
->I : I
 
     this.a = 12;
->this.a = 12 : number
+>this.a = 12 : 12
 >this.a : number
 >this : I
 >a : number
->12 : number
+>12 : 12
 }
 function LiteralTypeThis(this: {x: string}) {
 >LiteralTypeThis : (this: { x: string; }) => void
@@ -893,22 +879,22 @@ function LiteralTypeThis(this: {x: string}) {
 >x : string
 
     this.x = "ok";
->this.x = "ok" : string
+>this.x = "ok" : "ok"
 >this.x : string
 >this : { x: string; }
 >x : string
->"ok" : string
+>"ok" : "ok"
 }
 function AnyThis(this: any) {
 >AnyThis : (this: any) => void
 >this : any
 
     this.x = "ok";
->this.x = "ok" : string
+>this.x = "ok" : "ok"
 >this.x : any
 >this : any
 >x : any
->"ok" : string
+>"ok" : "ok"
 }
 let interfaceThis = new InterfaceThis();
 >interfaceThis : any
@@ -935,12 +921,9 @@ declare var f: {
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->U : U
 >this : (...argArray: any[]) => U
 >argArray : any[]
->U : U
 >argArray : any[]
->U : U
 
 };
 let n: number = f.call(12);
@@ -949,7 +932,7 @@ let n: number = f.call(12);
 >f.call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
 >f : { (this: void, x: number): number; call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U; }
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->12 : number
+>12 : 12
 
 function missingTypeIsImplicitAny(this, a: number) { return this.anything + a; } 
 >missingTypeIsImplicitAny : (this: any, a: number) => any

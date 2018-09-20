@@ -1,8 +1,7 @@
 === tests/cases/conformance/decorators/class/a.ts ===
-
 // from #3108
 export var test = 'abc';
->test : Symbol(test, Decl(a.ts, 2, 10))
+>test : Symbol(test, Decl(a.ts, 1, 10))
 
 === tests/cases/conformance/decorators/class/b.ts ===
 import { test } from './a';

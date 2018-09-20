@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity2.ts ===
+new Date<A
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+

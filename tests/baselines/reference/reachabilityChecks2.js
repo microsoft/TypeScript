@@ -1,5 +1,4 @@
 //// [reachabilityChecks2.ts]
-
 while (true) { }
 const enum E { X }
 

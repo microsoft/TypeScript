@@ -7,25 +7,20 @@ class C {
 }
 var ac: C;
 >ac : C
->C : C
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 var ai: I;
 >ai : I
->I : I
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var ae: E;
 >ae : E
->E : E
 
 var b: number = undefined;
 >b : number
@@ -41,7 +36,6 @@ var d: boolean = undefined;
 
 var e: Date = undefined;
 >e : Date
->Date : Date
 >undefined : undefined
 
 var f: any = undefined;
@@ -54,7 +48,6 @@ var g: void = undefined;
 
 var h: Object = undefined;
 >h : Object
->Object : Object
 >undefined : undefined
 
 var i: {} = undefined;
@@ -67,7 +60,6 @@ var j: () => {} = undefined;
 
 var k: Function = undefined;
 >k : Function
->Function : Function
 >undefined : undefined
 
 var l: (x: number) => string = undefined;
@@ -101,34 +93,22 @@ var n: { foo: string } = undefined;
 
 var o: <T>(x: T) => T = undefined;
 >o : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >undefined : undefined
 
 var p: Number = undefined;
 >p : Number
->Number : Number
 >undefined : undefined
 
 var q: String = undefined;
 >q : String
->String : String
 >undefined : undefined
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->T : T
->U : U
->V : V
->Date : Date
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
 
     x = undefined;
 >x = undefined : undefined

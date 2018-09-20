@@ -42,61 +42,69 @@ class Bar8 extends Foo implements I {
 
 
 //// [implementingAnInterfaceExtendingClassWithProtecteds.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Foo = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
 }());
-var Bar2 = (function () {
+var Bar2 = /** @class */ (function () {
     function Bar2() {
     }
     return Bar2;
 }());
-var Bar3 = (function () {
+var Bar3 = /** @class */ (function () {
     function Bar3() {
     }
     return Bar3;
 }());
-var Bar4 = (function () {
+var Bar4 = /** @class */ (function () {
     function Bar4() {
     }
     return Bar4;
 }());
-var Bar5 = (function (_super) {
+var Bar5 = /** @class */ (function (_super) {
     __extends(Bar5, _super);
     function Bar5() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar5;
 }(Foo));
-var Bar6 = (function (_super) {
+var Bar6 = /** @class */ (function (_super) {
     __extends(Bar6, _super);
     function Bar6() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar6;
 }(Foo));
-var Bar7 = (function (_super) {
+var Bar7 = /** @class */ (function (_super) {
     __extends(Bar7, _super);
     function Bar7() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar7;
 }(Foo));
-var Bar8 = (function (_super) {
+var Bar8 = /** @class */ (function (_super) {
     __extends(Bar8, _super);
     function Bar8() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Bar8;
 }(Foo));

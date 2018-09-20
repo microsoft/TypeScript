@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare module JSX {
+	interface Element { }
+	interface IntrinsicElements {
+		test1: Attribs1;
+>test1 : Attribs1
+	}
+}
+interface Attribs1 {
+	c1?: (x: string) => void;
+>c1 : (x: string) => void
+>x : string
+}
+
+// OK
+<test1 c1={(x) => x.length} />; // OK
+><test1 c1={(x) => x.length} /> : JSX.Element
+>test1 : any
+>c1 : (x: string) => number
+>(x) => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+<test1 data-c1={(x) => x.leng} />; // OK
+><test1 data-c1={(x) => x.leng} /> : JSX.Element
+>test1 : any
+>data-c1 : (x: any) => any
+>(x) => x.leng : (x: any) => any
+>x : any
+>x.leng : any
+>x : any
+>leng : any
+
+
+// Errors
+<test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
+><test1 c1={(x) => x.leng} /> : JSX.Element
+>test1 : any
+>c1 : (x: string) => any
+>(x) => x.leng : (x: string) => any
+>x : string
+>x.leng : any
+>x : string
+>leng : any
+

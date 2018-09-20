@@ -1,0 +1,14 @@
+=== tests/cases/compiler/mutuallyRecursiveInterfaceDeclaration.ts ===
+interface A {
+    b: B
+>b : B
+}
+
+interface B {
+    a: A
+>a : A
+}
+export {A, B}
+>A : any
+>B : any
+

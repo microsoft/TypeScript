@@ -1,0 +1,83 @@
+=== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts ===
+declare class Thenable { then(): void; }
+>Thenable : Symbol(Thenable, Decl(asyncFunctionDeclaration15_es5.ts, 0, 0))
+>then : Symbol(Thenable.then, Decl(asyncFunctionDeclaration15_es5.ts, 0, 24))
+
+declare let a: any;
+>a : Symbol(a, Decl(asyncFunctionDeclaration15_es5.ts, 1, 11))
+
+declare let obj: { then: string; };
+>obj : Symbol(obj, Decl(asyncFunctionDeclaration15_es5.ts, 2, 11))
+>then : Symbol(then, Decl(asyncFunctionDeclaration15_es5.ts, 2, 18))
+
+declare let thenable: Thenable;
+>thenable : Symbol(thenable, Decl(asyncFunctionDeclaration15_es5.ts, 3, 11))
+>Thenable : Symbol(Thenable, Decl(asyncFunctionDeclaration15_es5.ts, 0, 0))
+
+async function fn1() { } // valid: Promise<void>
+>fn1 : Symbol(fn1, Decl(asyncFunctionDeclaration15_es5.ts, 3, 31))
+
+async function fn2(): { } { } // error
+>fn2 : Symbol(fn2, Decl(asyncFunctionDeclaration15_es5.ts, 4, 24))
+
+async function fn3(): any { } // error
+>fn3 : Symbol(fn3, Decl(asyncFunctionDeclaration15_es5.ts, 5, 29))
+
+async function fn4(): number { } // error
+>fn4 : Symbol(fn4, Decl(asyncFunctionDeclaration15_es5.ts, 6, 29))
+
+async function fn5(): PromiseLike<void> { } // error
+>fn5 : Symbol(fn5, Decl(asyncFunctionDeclaration15_es5.ts, 7, 32))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+async function fn6(): Thenable { } // error
+>fn6 : Symbol(fn6, Decl(asyncFunctionDeclaration15_es5.ts, 8, 43))
+>Thenable : Symbol(Thenable, Decl(asyncFunctionDeclaration15_es5.ts, 0, 0))
+
+async function fn7() { return; } // valid: Promise<void>
+>fn7 : Symbol(fn7, Decl(asyncFunctionDeclaration15_es5.ts, 9, 34))
+
+async function fn8() { return 1; } // valid: Promise<number>
+>fn8 : Symbol(fn8, Decl(asyncFunctionDeclaration15_es5.ts, 10, 32))
+
+async function fn9() { return null; } // valid: Promise<any>
+>fn9 : Symbol(fn9, Decl(asyncFunctionDeclaration15_es5.ts, 11, 34))
+
+async function fn10() { return undefined; } // valid: Promise<any>
+>fn10 : Symbol(fn10, Decl(asyncFunctionDeclaration15_es5.ts, 12, 37))
+>undefined : Symbol(undefined)
+
+async function fn11() { return a; } // valid: Promise<any>
+>fn11 : Symbol(fn11, Decl(asyncFunctionDeclaration15_es5.ts, 13, 43))
+>a : Symbol(a, Decl(asyncFunctionDeclaration15_es5.ts, 1, 11))
+
+async function fn12() { return obj; } // valid: Promise<{ then: string; }>
+>fn12 : Symbol(fn12, Decl(asyncFunctionDeclaration15_es5.ts, 14, 35))
+>obj : Symbol(obj, Decl(asyncFunctionDeclaration15_es5.ts, 2, 11))
+
+async function fn13() { return thenable; } // error
+>fn13 : Symbol(fn13, Decl(asyncFunctionDeclaration15_es5.ts, 15, 37))
+>thenable : Symbol(thenable, Decl(asyncFunctionDeclaration15_es5.ts, 3, 11))
+
+async function fn14() { await 1; } // valid: Promise<void>
+>fn14 : Symbol(fn14, Decl(asyncFunctionDeclaration15_es5.ts, 16, 42))
+
+async function fn15() { await null; } // valid: Promise<void>
+>fn15 : Symbol(fn15, Decl(asyncFunctionDeclaration15_es5.ts, 17, 34))
+
+async function fn16() { await undefined; } // valid: Promise<void>
+>fn16 : Symbol(fn16, Decl(asyncFunctionDeclaration15_es5.ts, 18, 37))
+>undefined : Symbol(undefined)
+
+async function fn17() { await a; } // valid: Promise<void>
+>fn17 : Symbol(fn17, Decl(asyncFunctionDeclaration15_es5.ts, 19, 42))
+>a : Symbol(a, Decl(asyncFunctionDeclaration15_es5.ts, 1, 11))
+
+async function fn18() { await obj; } // valid: Promise<void>
+>fn18 : Symbol(fn18, Decl(asyncFunctionDeclaration15_es5.ts, 20, 34))
+>obj : Symbol(obj, Decl(asyncFunctionDeclaration15_es5.ts, 2, 11))
+
+async function fn19() { await thenable; } // error
+>fn19 : Symbol(fn19, Decl(asyncFunctionDeclaration15_es5.ts, 21, 36))
+>thenable : Symbol(thenable, Decl(asyncFunctionDeclaration15_es5.ts, 3, 11))
+

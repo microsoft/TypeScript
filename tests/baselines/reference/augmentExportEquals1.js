@@ -5,7 +5,6 @@ var x = 1;
 export = x;
 
 //// [file2.ts]
-
 import x = require("./file1"); 
 
 // augmentation for './file1'
@@ -28,9 +27,11 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "./file2"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a; // should not work
 });

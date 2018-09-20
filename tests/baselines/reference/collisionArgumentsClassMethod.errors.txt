@@ -20,20 +20,11 @@ tests/cases/compiler/collisionArgumentsClassMethod.ts(21,22): error TS1210: Inva
 tests/cases/compiler/collisionArgumentsClassMethod.ts(22,22): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassMethod.ts(23,22): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassMethod.ts(24,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(29,30): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(30,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(31,23): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(33,29): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(34,29): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(35,16): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(36,16): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(37,22): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassMethod.ts(38,22): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassMethod.ts(43,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassMethod.ts(46,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 
 
-==== tests/cases/compiler/collisionArgumentsClassMethod.ts (33 errors) ====
+==== tests/cases/compiler/collisionArgumentsClassMethod.ts (24 errors) ====
     class c1 {
         public foo(i: number, ...arguments) { //arguments is error
                               ~~~~~~~~~~~~
@@ -107,33 +98,15 @@ tests/cases/compiler/collisionArgumentsClassMethod.ts(46,13): error TS1210: Inva
     
     declare class c2 {
         public foo(i: number, ...arguments); // No error - no code gen
-                                 ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public foo1(arguments: number, ...rest); // No error - no code gen
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public fooNoError(arguments: number); // No error - no code gen
-                          ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     
         public f4(i: number, ...arguments); // no codegen no error
-                                ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public f4(i: string, ...arguments); // no codegen no error
-                                ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public f41(arguments: number, ...rest); // no codegen no error
-                   ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public f41(arguments: string, ...rest); // no codegen no error
-                   ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public f4NoError(arguments: number); // no error
-                         ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         public f4NoError(arguments: string); // no error
-                         ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     
     class c3 {

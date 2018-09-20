@@ -3,5 +3,6 @@ class Test1 {
 >Test1 : Test1
 
   static "prop1" = 0;
->0 : number
+>"prop1" : number
+>0 : 0
 }

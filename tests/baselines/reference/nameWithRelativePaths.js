@@ -25,24 +25,28 @@ if(foo2.M2.x){
 
 //// [foo_0.js]
 "use strict";
+exports.__esModule = true;
 exports.foo = 42;
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 function f() {
     return 42;
 }
 exports.f = f;
 //// [foo_2.js]
 "use strict";
+exports.__esModule = true;
 var M2;
 (function (M2) {
     M2.x = true;
 })(M2 = exports.M2 || (exports.M2 = {}));
 //// [foo_3.js]
 "use strict";
-var foo0 = require('../foo_0');
-var foo1 = require('./test/foo_1');
-var foo2 = require('./.././test/foo_2');
+exports.__esModule = true;
+var foo0 = require("../foo_0");
+var foo1 = require("./test/foo_1");
+var foo2 = require("./.././test/foo_2");
 if (foo2.M2.x) {
     var x = foo0.foo + foo1.f();
 }

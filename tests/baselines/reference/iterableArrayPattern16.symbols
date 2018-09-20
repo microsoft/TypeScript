@@ -1,0 +1,76 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts ===
+function fun(...[a, b]: [Bar, Bar][]) { }
+>fun : Symbol(fun, Decl(iterableArrayPattern16.ts, 0, 0))
+>a : Symbol(a, Decl(iterableArrayPattern16.ts, 0, 17))
+>b : Symbol(b, Decl(iterableArrayPattern16.ts, 0, 19))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern16.ts, 1, 32))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern16.ts, 1, 32))
+
+fun(...new FooIteratorIterator);
+>fun : Symbol(fun, Decl(iterableArrayPattern16.ts, 0, 0))
+>FooIteratorIterator : Symbol(FooIteratorIterator, Decl(iterableArrayPattern16.ts, 15, 1))
+
+class Bar { x }
+>Bar : Symbol(Bar, Decl(iterableArrayPattern16.ts, 1, 32))
+>x : Symbol(Bar.x, Decl(iterableArrayPattern16.ts, 2, 11))
+
+class Foo extends Bar { y }
+>Foo : Symbol(Foo, Decl(iterableArrayPattern16.ts, 2, 15))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern16.ts, 1, 32))
+>y : Symbol(Foo.y, Decl(iterableArrayPattern16.ts, 3, 23))
+
+class FooIterator {
+>FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern16.ts, 3, 27))
+
+    next() {
+>next : Symbol(FooIterator.next, Decl(iterableArrayPattern16.ts, 4, 19))
+
+        return {
+            value: new Foo,
+>value : Symbol(value, Decl(iterableArrayPattern16.ts, 6, 16))
+>Foo : Symbol(Foo, Decl(iterableArrayPattern16.ts, 2, 15))
+
+            done: false
+>done : Symbol(done, Decl(iterableArrayPattern16.ts, 7, 27))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(FooIterator[Symbol.iterator], Decl(iterableArrayPattern16.ts, 10, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(FooIterator, Decl(iterableArrayPattern16.ts, 3, 27))
+    }
+}
+
+class FooIteratorIterator {
+>FooIteratorIterator : Symbol(FooIteratorIterator, Decl(iterableArrayPattern16.ts, 15, 1))
+
+    next() {
+>next : Symbol(FooIteratorIterator.next, Decl(iterableArrayPattern16.ts, 17, 27))
+
+        return {
+            value: new FooIterator,
+>value : Symbol(value, Decl(iterableArrayPattern16.ts, 19, 16))
+>FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern16.ts, 3, 27))
+
+            done: false
+>done : Symbol(done, Decl(iterableArrayPattern16.ts, 20, 35))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(FooIteratorIterator[Symbol.iterator], Decl(iterableArrayPattern16.ts, 23, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(FooIteratorIterator, Decl(iterableArrayPattern16.ts, 15, 1))
+    }
+}

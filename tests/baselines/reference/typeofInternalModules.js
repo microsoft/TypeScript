@@ -29,7 +29,7 @@ var Outer;
 (function (Outer) {
     var instantiated;
     (function (instantiated) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;

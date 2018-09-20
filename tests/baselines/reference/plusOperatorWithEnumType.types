@@ -6,8 +6,9 @@ enum ENUM { };
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>A : ENUM1.A
+>B : ENUM1.B
+>"" : ENUM1.
 
 // enum type var
 var ResultIsNumber1 = +ENUM;
@@ -24,9 +25,9 @@ var ResultIsNumber2 = +ENUM1;
 var ResultIsNumber3 = +ENUM1["A"];
 >ResultIsNumber3 : number
 >+ENUM1["A"] : number
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 >ResultIsNumber4 : number
@@ -35,10 +36,10 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->0 : number
->ENUM1["B"] : ENUM1
+>0 : 0
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // miss assignment operators
 +ENUM;
@@ -51,9 +52,9 @@ var ResultIsNumber4 = +(ENUM[0] + ENUM1["B"]);
 
 +ENUM1.B;
 >+ENUM1.B : number
->ENUM1.B : ENUM1
+>ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
->B : ENUM1
+>B : ENUM1.B
 
 +ENUM, ENUM1;
 >+ENUM, ENUM1 : typeof ENUM1

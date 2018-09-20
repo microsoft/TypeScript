@@ -1,12 +1,11 @@
 //// [accessorParameterAccessibilityModifier.ts]
-
 class C {
     set X(public v) { }
     static set X(public v2) { }
 }
 
 //// [accessorParameterAccessibilityModifier.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "X", {

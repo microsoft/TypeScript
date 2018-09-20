@@ -1,0 +1,52 @@
+=== tests/cases/compiler/typeParametersShouldNotBeEqual2.ts ===
+function ff<T extends Date, U extends Date, V>(x: T, y: U, z: V) {
+>ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual2.ts, 0, 0))
+>T : Symbol(T, Decl(typeParametersShouldNotBeEqual2.ts, 0, 12))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>U : Symbol(U, Decl(typeParametersShouldNotBeEqual2.ts, 0, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>V : Symbol(V, Decl(typeParametersShouldNotBeEqual2.ts, 0, 43))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+>T : Symbol(T, Decl(typeParametersShouldNotBeEqual2.ts, 0, 12))
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual2.ts, 0, 52))
+>U : Symbol(U, Decl(typeParametersShouldNotBeEqual2.ts, 0, 27))
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
+>V : Symbol(V, Decl(typeParametersShouldNotBeEqual2.ts, 0, 43))
+
+    var zz: Object;
+>zz : Symbol(zz, Decl(typeParametersShouldNotBeEqual2.ts, 1, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x = x;  // Ok
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+
+    x = y;  // Ok
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual2.ts, 0, 52))
+
+    x = z;  // Error
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
+
+    z = x;  // Error
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+
+    y = z;  // Error
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual2.ts, 0, 52))
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
+
+    z = y;  // Error
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual2.ts, 0, 58))
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual2.ts, 0, 52))
+
+    x = zz;  // Error
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+>zz : Symbol(zz, Decl(typeParametersShouldNotBeEqual2.ts, 1, 7))
+
+    zz = x;  // Ok
+>zz : Symbol(zz, Decl(typeParametersShouldNotBeEqual2.ts, 1, 7))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual2.ts, 0, 47))
+}
+

@@ -1,0 +1,297 @@
+=== tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
+type T = { a: number, b: string };
+>T : T
+>a : number
+>b : string
+
+type TP = { a?: number, b?: string };
+>TP : TP
+>a : number | undefined
+>b : string | undefined
+
+type TR = { readonly a: number, readonly b: string };
+>TR : TR
+>a : number
+>b : string
+
+type TPR = { readonly a?: number, readonly b?: string };
+>TPR : TPR
+>a : number | undefined
+>b : string | undefined
+
+var v00: "a" | "b";
+>v00 : "a" | "b"
+
+var v00: keyof T;
+>v00 : "a" | "b"
+
+var v00: keyof TP;
+>v00 : "a" | "b"
+
+var v00: keyof TR;
+>v00 : "a" | "b"
+
+var v00: keyof TPR;
+>v00 : "a" | "b"
+
+var v01: T;
+>v01 : T
+
+var v01: { [P in keyof T]: T[P] };
+>v01 : T
+
+var v01: Pick<T, keyof T>;
+>v01 : T
+
+var v01: Pick<Pick<T, keyof T>, keyof T>;
+>v01 : T
+
+var v02: TP;
+>v02 : TP
+
+var v02: { [P in keyof T]?: T[P] };
+>v02 : TP
+
+var v02: Partial<T>;
+>v02 : TP
+
+var v02: { [P in keyof TP]: TP[P] }
+>v02 : TP
+
+var v02: Pick<TP, keyof TP>;
+>v02 : TP
+
+var v03: TR;
+>v03 : TR
+
+var v03: { readonly [P in keyof T]: T[P] };
+>v03 : TR
+
+var v03: Readonly<T>;
+>v03 : TR
+
+var v03: { [P in keyof TR]: TR[P] }
+>v03 : TR
+
+var v03: Pick<TR, keyof TR>;
+>v03 : TR
+
+var v04: TPR;
+>v04 : TPR
+
+var v04: { readonly [P in keyof T]?: T[P] };
+>v04 : TPR
+
+var v04: Partial<TR>;
+>v04 : TPR
+
+var v04: Readonly<TP>;
+>v04 : TPR
+
+var v04: Partial<Readonly<T>>;
+>v04 : TPR
+
+var v04: Readonly<Partial<T>>;
+>v04 : TPR
+
+var v04: { [P in keyof TPR]: TPR[P] }
+>v04 : TPR
+
+var v04: Pick<TPR, keyof T>;
+>v04 : TPR
+
+type Boxified<T> = { [P in keyof T]: { x: T[P] } };
+>Boxified : Boxified<T>
+>x : T[P]
+
+type B = { a: { x: number }, b: { x: string } };
+>B : B
+>a : { x: number; }
+>x : number
+>b : { x: string; }
+>x : string
+
+type BP = { a?: { x: number }, b?: { x: string } };
+>BP : BP
+>a : { x: number; } | undefined
+>x : number
+>b : { x: string; } | undefined
+>x : string
+
+type BR = { readonly a: { x: number }, readonly b: { x: string } };
+>BR : BR
+>a : { x: number; }
+>x : number
+>b : { x: string; }
+>x : string
+
+type BPR = { readonly a?: { x: number }, readonly b?: { x: string } };
+>BPR : BPR
+>a : { x: number; } | undefined
+>x : number
+>b : { x: string; } | undefined
+>x : string
+
+var b00: "a" | "b";
+>b00 : "a" | "b"
+
+var b00: keyof B;
+>b00 : "a" | "b"
+
+var b00: keyof BP;
+>b00 : "a" | "b"
+
+var b00: keyof BR;
+>b00 : "a" | "b"
+
+var b00: keyof BPR;
+>b00 : "a" | "b"
+
+var b01: B;
+>b01 : B
+
+var b01: { [P in keyof B]: B[P] };
+>b01 : B
+
+var b01: Pick<B, keyof B>;
+>b01 : B
+
+var b01: Pick<Pick<B, keyof B>, keyof B>;
+>b01 : B
+
+var b02: BP;
+>b02 : BP
+
+var b02: { [P in keyof B]?: B[P] };
+>b02 : BP
+
+var b02: Partial<B>;
+>b02 : BP
+
+var b02: { [P in keyof BP]: BP[P] }
+>b02 : BP
+
+var b02: Pick<BP, keyof BP>;
+>b02 : BP
+
+var b03: BR;
+>b03 : BR
+
+var b03: { readonly [P in keyof B]: B[P] };
+>b03 : BR
+
+var b03: Readonly<B>;
+>b03 : BR
+
+var b03: { [P in keyof BR]: BR[P] }
+>b03 : BR
+
+var b03: Pick<BR, keyof BR>;
+>b03 : BR
+
+var b04: BPR;
+>b04 : BPR
+
+var b04: { readonly [P in keyof B]?: B[P] };
+>b04 : BPR
+
+var b04: Partial<BR>;
+>b04 : BPR
+
+var b04: Readonly<BP>;
+>b04 : BPR
+
+var b04: Partial<Readonly<B>>;
+>b04 : BPR
+
+var b04: Readonly<Partial<B>>;
+>b04 : BPR
+
+var b04: { [P in keyof BPR]: BPR[P] }
+>b04 : BPR
+
+var b04: Pick<BPR, keyof BPR>;
+>b04 : BPR
+
+type Foo = { prop: number, [x: string]: number };
+>Foo : Foo
+>prop : number
+>x : string
+
+function f1(x: Partial<Foo>) {
+>f1 : (x: Partial<Foo>) => void
+>x : Partial<Foo>
+
+    x.prop; // ok
+>x.prop : number | undefined
+>x : Partial<Foo>
+>prop : number | undefined
+
+    (x["other"] || 0).toFixed();
+>(x["other"] || 0).toFixed() : string
+>(x["other"] || 0).toFixed : (fractionDigits?: number | undefined) => string
+>(x["other"] || 0) : number
+>x["other"] || 0 : number
+>x["other"] : number | undefined
+>x : Partial<Foo>
+>"other" : "other"
+>0 : 0
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f2(x: Readonly<Foo>) {
+>f2 : (x: Readonly<Foo>) => void
+>x : Readonly<Foo>
+
+    x.prop; // ok
+>x.prop : number
+>x : Readonly<Foo>
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : Readonly<Foo>
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f3(x: Boxified<Foo>) {
+>f3 : (x: Boxified<Foo>) => void
+>x : Boxified<Foo>
+
+    x.prop; // ok
+>x.prop : { x: number; }
+>x : Boxified<Foo>
+>prop : { x: number; }
+
+    x["other"].x.toFixed();
+>x["other"].x.toFixed() : string
+>x["other"].x.toFixed : (fractionDigits?: number | undefined) => string
+>x["other"].x : number
+>x["other"] : { x: number; }
+>x : Boxified<Foo>
+>"other" : "other"
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+
+function f4(x: { [P in keyof Foo]: Foo[P] }) {
+>f4 : (x: { [x: string]: number; prop: number; }) => void
+>x : { [x: string]: number; prop: number; }
+
+    x.prop; // ok
+>x.prop : number
+>x : { [x: string]: number; prop: number; }
+>prop : number
+
+    x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number | undefined) => string
+>x["other"] : number
+>x : { [x: string]: number; prop: number; }
+>"other" : "other"
+>toFixed : (fractionDigits?: number | undefined) => string
+}
+

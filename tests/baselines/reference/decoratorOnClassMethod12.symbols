@@ -1,0 +1,22 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod12.ts ===
+module M {
+>M : Symbol(M, Decl(decoratorOnClassMethod12.ts, 0, 0))
+
+    class S {
+>S : Symbol(S, Decl(decoratorOnClassMethod12.ts, 0, 10))
+
+        decorator(target: Object, key: string): void { }
+>decorator : Symbol(S.decorator, Decl(decoratorOnClassMethod12.ts, 1, 13))
+>target : Symbol(target, Decl(decoratorOnClassMethod12.ts, 2, 18))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(decoratorOnClassMethod12.ts, 2, 33))
+    }
+    class C extends S {
+>C : Symbol(C, Decl(decoratorOnClassMethod12.ts, 3, 5))
+>S : Symbol(S, Decl(decoratorOnClassMethod12.ts, 0, 10))
+
+        @super.decorator
+        method() { }
+>method : Symbol(C.method, Decl(decoratorOnClassMethod12.ts, 4, 23))
+    }
+}

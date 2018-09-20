@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsClassMembers.ts ===
-
 /** This is comment for c1*/
 class c1 {
 >c1 : c1
@@ -574,7 +573,7 @@ var i1_r = i1.p2(20);
 >i1.p2 : (b: number) => number
 >i1 : c1
 >p2 : (b: number) => number
->20 : number
+>20 : 20
 
 var i1_prop = i1.p3;
 >i1_prop : number
@@ -607,7 +606,7 @@ var i1_ncr = i1.nc_p2(20);
 >i1.nc_p2 : (b: number) => number
 >i1 : c1
 >nc_p2 : (b: number) => number
->20 : number
+>20 : 20
 
 var i1_ncprop = i1.nc_p3;
 >i1_ncprop : number
@@ -640,7 +639,7 @@ var i1_s_r = c1.s2(20);
 >c1.s2 : (b: number) => number
 >c1 : typeof c1
 >s2 : (b: number) => number
->20 : number
+>20 : 20
 
 var i1_s_prop = c1.s3;
 >i1_s_prop : number
@@ -673,7 +672,7 @@ var i1_s_ncr = c1.nc_s2(20);
 >c1.nc_s2 : (b: number) => number
 >c1 : typeof c1
 >nc_s2 : (b: number) => number
->20 : number
+>20 : 20
 
 var i1_s_ncprop = c1.nc_s3;
 >i1_s_ncprop : number
@@ -743,11 +742,11 @@ class cProperties {
 
     public x = 10; /*trailing comment for property*/
 >x : number
->10 : number
+>10 : 10
 
     private y = 10; // trailing comment of // style
 >y : number
->10 : number
+>10 : 10
 }
 var cProperties_i = new cProperties();
 >cProperties_i : cProperties

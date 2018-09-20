@@ -53,9 +53,10 @@ export var r13: typeof foo;
 
 //// [typeofANonExportedType.js]
 "use strict";
+exports.__esModule = true;
 var x = 1;
 var y = { foo: '' };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -65,7 +66,7 @@ var i2;
 var M;
 (function (M) {
     M.foo = '';
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
@@ -77,10 +78,9 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 function foo() { }
-var foo;
 (function (foo) {
     foo.y = 1;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

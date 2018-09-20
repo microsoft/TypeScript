@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsx/react.d.ts ===
+declare module JSX {
+>JSX : Symbol(JSX, Decl(react.d.ts, 0, 0))
+
+	interface Element { }
+>Element : Symbol(Element, Decl(react.d.ts, 0, 20))
+
+	interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(react.d.ts, 1, 22))
+	}
+	interface ElementAttributesProperty {
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(react.d.ts, 3, 2))
+
+		props;
+>props : Symbol(ElementAttributesProperty.props, Decl(react.d.ts, 4, 38))
+	}
+}
+
+interface Props {  
+>Props : Symbol(Props, Decl(react.d.ts, 7, 1))
+
+  foo: string;
+>foo : Symbol(Props.foo, Decl(react.d.ts, 9, 17))
+}
+
+=== tests/cases/conformance/jsx/file.tsx ===
+export class MyComponent {  
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+
+  render() {
+>render : Symbol(MyComponent.render, Decl(file.tsx, 0, 26))
+  }
+
+  props: { foo: string; }
+>props : Symbol(MyComponent.props, Decl(file.tsx, 2, 3))
+>foo : Symbol(foo, Decl(file.tsx, 4, 10))
+}
+
+<MyComponent foo="bar" />; // ok  
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>foo : Symbol(foo, Decl(file.tsx, 7, 12))
+
+<MyComponent foo={0} />; // should be an error
+>MyComponent : Symbol(MyComponent, Decl(file.tsx, 0, 0))
+>foo : Symbol(foo, Decl(file.tsx, 8, 12))
+

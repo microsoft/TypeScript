@@ -1,7 +1,5 @@
 === tests/cases/compiler/mergedDeclarations1.ts ===
 interface Point {
->Point : Point
-
     x: number;
 >x : number
 
@@ -12,7 +10,6 @@ function point(x: number, y: number): Point {
 >point : typeof point
 >x : number
 >y : number
->Point : Point
 
     return { x: x, y: y };
 >{ x: x, y: y } : { x: number; y: number; }
@@ -28,15 +25,13 @@ module point {
 >origin : Point
 >point(0, 0) : Point
 >point : typeof point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
     export function equals(p1: Point, p2: Point) {
 >equals : (p1: Point, p2: Point) => boolean
 >p1 : Point
->Point : Point
 >p2 : Point
->Point : Point
 
         return p1.x == p2.x && p1.y == p2.y;
 >p1.x == p2.x && p1.y == p2.y : boolean
@@ -60,8 +55,8 @@ var p1 = point(0, 0);
 >p1 : Point
 >point(0, 0) : Point
 >point : typeof point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 var p2 = point.origin;
 >p2 : Point

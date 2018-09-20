@@ -1,5 +1,4 @@
 //// [decoratorMetadataPromise.ts]
-
 declare const decorator: MethodDecorator;
 
 class A {
@@ -25,9 +24,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 class A {
@@ -40,20 +39,20 @@ class A {
     baz(n) { return n; }
 }
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', []), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "foo", null);
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', []), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "bar", null);
 __decorate([
-    decorator, 
-    __metadata('design:type', Function), 
-    __metadata('design:paramtypes', [Promise]), 
-    __metadata('design:returntype', Promise)
+    decorator,
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Promise]),
+    __metadata("design:returntype", Promise)
 ], A.prototype, "baz", null);

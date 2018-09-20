@@ -39,7 +39,7 @@ goTo.marker("3");
 VerifyGlobalCompletionList();
 
 goTo.marker("4");
-VerifyGlobalCompletionList();
+verify.completionListIsEmpty();
 
 // Literal member completion after member name with empty member expression.
 goTo.marker("5");

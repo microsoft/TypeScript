@@ -21,9 +21,9 @@
 
 goTo.marker('1');
 edit.insert('.');
-verify.memberListContains('toFixed', undefined, undefined, 'method');
+verify.completionListContains('toFixed', undefined, undefined, 'method');
 edit.backspace();
 
 goTo.marker('2');
 edit.insert('.');
-verify.memberListContains('substr', undefined, undefined, 'method');
+verify.completionListContains('substr', undefined, undefined, 'method');

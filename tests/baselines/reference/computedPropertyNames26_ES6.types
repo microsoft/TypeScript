@@ -1,0 +1,33 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames26_ES6.ts ===
+class Base {
+>Base : Base
+
+    bar() {
+>bar : () => number
+
+        return 0;
+>0 : 0
+    }
+}
+class C extends Base {
+>C : C
+>Base : Base
+
+    // Gets emitted as super, not _super, which is consistent with
+    // use of super in static properties initializers.
+    [
+>[        { [super.bar()]: 1 }[0]    ] : () => void
+
+        { [super.bar()]: 1 }[0]
+>{ [super.bar()]: 1 }[0] : number
+>{ [super.bar()]: 1 } : { [x: number]: number; }
+>[super.bar()] : number
+>super.bar() : any
+>super.bar : any
+>super : any
+>bar : any
+>1 : 1
+>0 : 0
+
+    ]() { }
+}

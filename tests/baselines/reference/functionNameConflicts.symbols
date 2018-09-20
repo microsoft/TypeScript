@@ -1,0 +1,50 @@
+=== tests/cases/conformance/functions/functionNameConflicts.ts ===
+//Function and variable of the same name in same declaration space
+//Function overload with different name from implementation signature 
+
+module M {
+>M : Symbol(M, Decl(functionNameConflicts.ts, 0, 0))
+
+    function fn1() { }
+>fn1 : Symbol(fn1, Decl(functionNameConflicts.ts, 3, 10))
+
+    var fn1;
+>fn1 : Symbol(fn1, Decl(functionNameConflicts.ts, 5, 7))
+
+    var fn2;
+>fn2 : Symbol(fn2, Decl(functionNameConflicts.ts, 7, 7))
+
+    function fn2() { }
+>fn2 : Symbol(fn2, Decl(functionNameConflicts.ts, 7, 12))
+}
+
+function fn3() { }
+>fn3 : Symbol(fn3, Decl(functionNameConflicts.ts, 9, 1))
+
+var fn3;
+>fn3 : Symbol(fn3, Decl(functionNameConflicts.ts, 12, 3))
+
+function func() {
+>func : Symbol(func, Decl(functionNameConflicts.ts, 12, 8))
+
+    var fn4;
+>fn4 : Symbol(fn4, Decl(functionNameConflicts.ts, 15, 7))
+
+    function fn4() { }
+>fn4 : Symbol(fn4, Decl(functionNameConflicts.ts, 15, 12))
+
+    function fn5() { }
+>fn5 : Symbol(fn5, Decl(functionNameConflicts.ts, 16, 22))
+
+    var fn5;
+>fn5 : Symbol(fn5, Decl(functionNameConflicts.ts, 19, 7))
+}
+
+function over();
+>over : Symbol(over, Decl(functionNameConflicts.ts, 20, 1))
+
+function overrr() {
+>overrr : Symbol(overrr, Decl(functionNameConflicts.ts, 22, 16))
+
+}
+

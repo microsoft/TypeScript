@@ -6,8 +6,9 @@ enum ENUM { };
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>A : ENUM1.A
+>B : ENUM1.B
+>"" : ENUM1.
 
 // enum type var
 var ResultIsAny1 = void ENUM;
@@ -24,9 +25,9 @@ var ResultIsAny2 = void ENUM1;
 var ResultIsAny3 = void ENUM1["A"];
 >ResultIsAny3 : any
 >void ENUM1["A"] : undefined
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 >ResultIsAny4 : any
@@ -35,10 +36,10 @@ var ResultIsAny4 = void (ENUM[0] + ENUM1["B"]);
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->0 : number
->ENUM1["B"] : ENUM1
+>0 : 0
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple void  operators
 var ResultIsAny5 = void void ENUM;
@@ -56,10 +57,10 @@ var ResultIsAny6 = void void void (ENUM[0] + ENUM1.B);
 >ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
 >ENUM : typeof ENUM
->0 : number
->ENUM1.B : ENUM1
+>0 : 0
+>ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
->B : ENUM1
+>B : ENUM1.B
 
 // miss assignment operators
 void ENUM;
@@ -72,9 +73,9 @@ void ENUM1;
 
 void ENUM1["B"];
 >void ENUM1["B"] : undefined
->ENUM1["B"] : ENUM1
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 void ENUM, ENUM1;
 >void ENUM, ENUM1 : typeof ENUM1

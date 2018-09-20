@@ -25,46 +25,46 @@
 
 
 goTo.marker("staticsInsideClassScope");
-verify.memberListContains("privateStaticProperty");
-verify.memberListContains("privateStaticMethod");
-verify.memberListContains("publicStaticProperty");
-verify.memberListContains("publicStaticMethod");
+verify.completionListContains("privateStaticProperty");
+verify.completionListContains("privateStaticMethod");
+verify.completionListContains("publicStaticProperty");
+verify.completionListContains("publicStaticMethod");
 // No instance properties
-verify.not.memberListContains("privateProperty");
-verify.not.memberListContains("privateInstanceMethod");
+verify.not.completionListContains("privateProperty");
+verify.not.completionListContains("privateInstanceMethod");
 // constructors should have a 'prototype' member
-verify.memberListContains("prototype");
+verify.completionListContains("prototype");
 
 goTo.marker("instanceMembersInsideClassScope");
-verify.memberListContains("privateProperty");
-verify.memberListContains("privateInstanceMethod");
-verify.memberListContains("publicProperty");
-verify.memberListContains("publicInstanceMethod");
+verify.completionListContains("privateProperty");
+verify.completionListContains("privateInstanceMethod");
+verify.completionListContains("publicProperty");
+verify.completionListContains("publicInstanceMethod");
 // No statics
-verify.not.memberListContains("privateStaticProperty");
-verify.not.memberListContains("privateStaticMethod");
+verify.not.completionListContains("privateStaticProperty");
+verify.not.completionListContains("privateStaticMethod");
 
 
 goTo.marker("staticsOutsideClassScope");
 // No privates
-verify.not.memberListContains("privateStaticProperty");
-verify.not.memberListContains("privateStaticMethod");
+verify.not.completionListContains("privateStaticProperty");
+verify.not.completionListContains("privateStaticMethod");
 // Only publics
-verify.memberListContains("publicStaticProperty");
-verify.memberListContains("publicStaticMethod");
+verify.completionListContains("publicStaticProperty");
+verify.completionListContains("publicStaticMethod");
 // No instance properties
-verify.not.memberListContains("publicProperty");
-verify.not.memberListContains("publicInstanceMethod");
+verify.not.completionListContains("publicProperty");
+verify.not.completionListContains("publicInstanceMethod");
 // constructors should have a 'prototype' member
-verify.memberListContains("prototype");
+verify.completionListContains("prototype");
 
 goTo.marker("instanceMembersOutsideClassScope");
 // No privates
-verify.not.memberListContains("privateProperty");
-verify.not.memberListContains("privateInstanceMethod");
+verify.not.completionListContains("privateProperty");
+verify.not.completionListContains("privateInstanceMethod");
 // Only publics
-verify.memberListContains("publicProperty");
-verify.memberListContains("publicInstanceMethod");
+verify.completionListContains("publicProperty");
+verify.completionListContains("publicInstanceMethod");
 // No statics
-verify.not.memberListContains("publicStaticProperty");
-verify.not.memberListContains("publicStaticMethod");
+verify.not.completionListContains("publicStaticProperty");
+verify.not.completionListContains("publicStaticMethod");

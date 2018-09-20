@@ -1,0 +1,587 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts ===
+// checking whether other types are subtypes of type parameters with constraints
+
+class C3<T> {
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 9))
+
+    foo: T;
+>foo : Symbol(C3.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 13))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 2, 9))
+}
+
+class D1<T extends U, U> extends C3<T> {
+>D1 : Symbol(D1, Decl(subtypesOfTypeParameterWithConstraints.ts, 4, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 21))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 7, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+
+    foo: T; // ok
+>foo : Symbol(D1.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 7, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 6, 9))
+}
+
+class D2<T extends U, U> extends C3<U> {
+>D2 : Symbol(D2, Decl(subtypesOfTypeParameterWithConstraints.ts, 9, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 21))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 21))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 12, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 21))
+
+    foo: T; // ok
+>foo : Symbol(D2.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 12, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 11, 9))
+}
+
+class D3<T extends U, U> extends C3<T> {
+>D3 : Symbol(D3, Decl(subtypesOfTypeParameterWithConstraints.ts, 14, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 21))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 9))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 17, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 9))
+
+    foo: U; // error
+>foo : Symbol(D3.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 17, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 16, 21))
+}
+
+class D4<T extends U, U> extends C3<U> {
+>D4 : Symbol(D4, Decl(subtypesOfTypeParameterWithConstraints.ts, 19, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 22, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+
+    foo: U; // ok
+>foo : Symbol(D4.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 22, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 21, 21))
+}
+
+
+// V > U > T
+// test if T is subtype of T, U, V
+// should all work
+class D5<T extends U, U extends V, V> extends C3<T> {
+>D5 : Symbol(D5, Decl(subtypesOfTypeParameterWithConstraints.ts, 24, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 21))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 34))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 34))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 31, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+
+    foo: T; // ok
+>foo : Symbol(D5.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 31, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 30, 9))
+}
+
+class D6<T extends U, U extends V, V> extends C3<U> {
+>D6 : Symbol(D6, Decl(subtypesOfTypeParameterWithConstraints.ts, 33, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 21))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 34))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 34))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 21))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 36, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 21))
+
+    foo: T;
+>foo : Symbol(D6.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 36, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 35, 9))
+}
+
+class D7<T extends U, U extends V, V> extends C3<V> {
+>D7 : Symbol(D7, Decl(subtypesOfTypeParameterWithConstraints.ts, 38, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 21))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 34))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 34))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 34))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 41, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 34))
+
+    foo: T; // ok
+>foo : Symbol(D7.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 41, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 40, 9))
+}
+
+// test if U is a subtype of T, U, V
+// only a subtype of V and itself
+class D8<T extends U, U extends V, V> extends C3<T> {
+>D8 : Symbol(D8, Decl(subtypesOfTypeParameterWithConstraints.ts, 43, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 21))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 34))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 34))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 9))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 48, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 9))
+
+    foo: U; // error
+>foo : Symbol(D8.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 48, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 47, 21))
+}
+
+class D9<T extends U, U extends V, V> extends C3<U> {
+>D9 : Symbol(D9, Decl(subtypesOfTypeParameterWithConstraints.ts, 50, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 9))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 34))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 34))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 53, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+
+    foo: U; // ok
+>foo : Symbol(D9.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 53, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 52, 21))
+}
+
+class D10<T extends U, U extends V, V> extends C3<V> {
+>D10 : Symbol(D10, Decl(subtypesOfTypeParameterWithConstraints.ts, 55, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 35))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 58, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 35))
+
+    foo: U; // ok
+>foo : Symbol(D10.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 58, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 57, 22))
+}
+
+// test if V is a subtype of T, U, V
+// only a subtype of itself
+class D11<T extends U, U extends V, V> extends C3<T> {
+>D11 : Symbol(D11, Decl(subtypesOfTypeParameterWithConstraints.ts, 60, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 35))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 10))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 65, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 10))
+
+    foo: V; // error
+>foo : Symbol(D11.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 65, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 64, 35))
+}
+
+class D12<T extends U, U extends V, V> extends C3<U> {
+>D12 : Symbol(D12, Decl(subtypesOfTypeParameterWithConstraints.ts, 67, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 35))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 22))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 70, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 22))
+
+    foo: V; // error
+>foo : Symbol(D12.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 70, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 69, 35))
+}
+
+class D13<T extends U, U extends V, V> extends C3<V> {
+>D13 : Symbol(D13, Decl(subtypesOfTypeParameterWithConstraints.ts, 72, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 75, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+
+    foo: V; // ok
+>foo : Symbol(D13.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 75, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 74, 35))
+}
+
+// Date > V > U > T
+// test if T is subtype of T, U, V, Date
+// should all work
+class D14<T extends U, U extends V, V extends Date> extends C3<Date> {
+>D14 : Symbol(D14, Decl(subtypesOfTypeParameterWithConstraints.ts, 77, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: T; // ok
+>foo : Symbol(D14.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 83, 22))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 82, 10))
+}
+
+class D15<T extends U, U extends V, V extends Date> extends C3<T> {
+>D15 : Symbol(D15, Decl(subtypesOfTypeParameterWithConstraints.ts, 85, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 88, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+
+    foo: T; // ok
+>foo : Symbol(D15.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 88, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 87, 10))
+}
+
+class D16<T extends U, U extends V, V extends Date> extends C3<U> {
+>D16 : Symbol(D16, Decl(subtypesOfTypeParameterWithConstraints.ts, 90, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 93, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 22))
+
+    foo: T;
+>foo : Symbol(D16.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 93, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 92, 10))
+}
+
+class D17<T extends U, U extends V, V extends Date> extends C3<V> {
+>D17 : Symbol(D17, Decl(subtypesOfTypeParameterWithConstraints.ts, 95, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 98, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 35))
+
+    foo: T;
+>foo : Symbol(D17.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 98, 19))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 97, 10))
+}
+
+// test if U is a subtype of T, U, V, Date
+// only a subtype of V, Date and itself
+class D18<T extends U, U extends V, V extends Date> extends C3<Date> {
+>D18 : Symbol(D18, Decl(subtypesOfTypeParameterWithConstraints.ts, 100, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: T; // ok
+>foo : Symbol(D18.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 105, 22))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 104, 10))
+}
+
+class D19<T extends U, U extends V, V extends Date> extends C3<T> {
+>D19 : Symbol(D19, Decl(subtypesOfTypeParameterWithConstraints.ts, 107, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 10))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 110, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 10))
+
+    foo: U; // error
+>foo : Symbol(D19.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 110, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 109, 22))
+}
+
+class D20<T extends U, U extends V, V extends Date> extends C3<U> {
+>D20 : Symbol(D20, Decl(subtypesOfTypeParameterWithConstraints.ts, 112, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 115, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+
+    foo: U; // ok
+>foo : Symbol(D20.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 115, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 114, 22))
+}
+
+class D21<T extends U, U extends V, V extends Date> extends C3<V> {
+>D21 : Symbol(D21, Decl(subtypesOfTypeParameterWithConstraints.ts, 117, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 120, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 35))
+
+    foo: U;
+>foo : Symbol(D21.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 120, 19))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 119, 22))
+}
+
+// test if V is a subtype of T, U, V, Date
+// only a subtype of itself and Date
+class D22<T extends U, U extends V, V extends Date> extends C3<Date> {
+>D22 : Symbol(D22, Decl(subtypesOfTypeParameterWithConstraints.ts, 122, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: T; // ok
+>foo : Symbol(D22.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 127, 22))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 126, 10))
+}
+
+class D23<T extends U, U extends V, V extends Date> extends C3<T> {
+>D23 : Symbol(D23, Decl(subtypesOfTypeParameterWithConstraints.ts, 129, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 10))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 132, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 10))
+
+    foo: V; // error
+>foo : Symbol(D23.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 132, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 131, 35))
+}
+
+class D24<T extends U, U extends V, V extends Date> extends C3<U> {
+>D24 : Symbol(D24, Decl(subtypesOfTypeParameterWithConstraints.ts, 134, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 137, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 22))
+
+    foo: V; // error
+>foo : Symbol(D24.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 137, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 136, 35))
+}
+
+class D25<T extends U, U extends V, V extends Date> extends C3<V> {
+>D25 : Symbol(D25, Decl(subtypesOfTypeParameterWithConstraints.ts, 139, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 142, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+
+    foo: V; // ok
+>foo : Symbol(D25.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 142, 19))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 141, 35))
+}
+
+// test if Date is a subtype of T, U, V, Date
+// only a subtype of itself
+class D26<T extends U, U extends V, V extends Date> extends C3<Date> {
+>D26 : Symbol(D26, Decl(subtypesOfTypeParameterWithConstraints.ts, 144, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 148, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    [x: string]: Date;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    foo: Date; // ok
+>foo : Symbol(D26.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 149, 22))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+class D27<T extends U, U extends V, V extends Date> extends C3<T> {
+>D27 : Symbol(D27, Decl(subtypesOfTypeParameterWithConstraints.ts, 151, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 10))
+
+    [x: string]: T;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 154, 5))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 153, 10))
+
+    foo: Date; // error
+>foo : Symbol(D27.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 154, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+class D28<T extends U, U extends V, V extends Date> extends C3<U> {
+>D28 : Symbol(D28, Decl(subtypesOfTypeParameterWithConstraints.ts, 156, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
+
+    [x: string]: U;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 159, 5))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 158, 22))
+
+    foo: Date; // error
+>foo : Symbol(D28.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 159, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+class D29<T extends U, U extends V, V extends Date> extends C3<V> {
+>D29 : Symbol(D29, Decl(subtypesOfTypeParameterWithConstraints.ts, 161, 1))
+>T : Symbol(T, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 10))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 22))
+>U : Symbol(U, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 22))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>C3 : Symbol(C3, Decl(subtypesOfTypeParameterWithConstraints.ts, 0, 0))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
+
+    [x: string]: V;
+>x : Symbol(x, Decl(subtypesOfTypeParameterWithConstraints.ts, 164, 5))
+>V : Symbol(V, Decl(subtypesOfTypeParameterWithConstraints.ts, 163, 35))
+
+    foo: Date; // error
+>foo : Symbol(D29.foo, Decl(subtypesOfTypeParameterWithConstraints.ts, 164, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}

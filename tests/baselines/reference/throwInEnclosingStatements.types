@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
-
 function fn(x) {
 >fn : (x: any) => void
 >x : any
@@ -10,9 +9,7 @@ function fn(x) {
 
 <T>(x: T) => { throw x; }
 ><T>(x: T) => { throw x; } : <T>(x: T) => never
->T : T
 >x : T
->T : T
 >x : T
 
 var y: string;
@@ -25,7 +22,7 @@ switch (y) {
 >'a' : "a"
 
         throw y;
->y : string
+>y : "a"
 
     default:
         throw y;
@@ -34,12 +31,12 @@ switch (y) {
 
 var z = 0;
 >z : number
->0 : number
+>0 : 0
 
 while (z < 10) {
 >z < 10 : boolean
 >z : number
->10 : number
+>10 : 10
 
     throw z;
 >z : number
@@ -47,7 +44,7 @@ while (z < 10) {
 
 for (var i = 0; ;) { throw i; }
 >i : number
->0 : number
+>0 : 0
 >i : number
 
 for (var idx in {}) { throw idx; }
@@ -57,25 +54,23 @@ for (var idx in {}) { throw idx; }
 
 do { throw null; }while(true)
 >null : null
->true : boolean
+>true : true
 
 var j = 0;
 >j : number
->0 : number
+>0 : 0
 
 while (j < 0) { throw j; }
 >j < 0 : boolean
 >j : number
->0 : number
+>0 : 0
 >j : number
 
 class C<T> {
 >C : C<T>
->T : T
 
     private value: T;
 >value : T
->T : T
 
     biz() {
 >biz : () => void
@@ -93,15 +88,15 @@ class C<T> {
 }
 
 var aa = {
->aa : { id: number; biz(): void; }
->{    id:12,    biz() {        throw this;    }} : { id: number; biz(): void; }
+>aa : { id: number; biz(): never; }
+>{    id:12,    biz() {        throw this;    }} : { id: number; biz(): never; }
 
     id:12,
 >id : number
->12 : number
+>12 : 12
 
     biz() {
->biz : () => void
+>biz : () => never
 
         throw this;
 >this : any

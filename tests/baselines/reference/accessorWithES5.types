@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES5.ts ===
-
 class C {
 >C : C
 
@@ -7,7 +6,7 @@ class C {
 >x : number
 
         return 1;
->1 : number
+>1 : 1
     }
 }
 
@@ -26,7 +25,7 @@ var x = {
 
     get a() { return 1 }
 >a : number
->1 : number
+>1 : 1
 }
 
 var y = {

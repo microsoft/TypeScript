@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/primitives/number/validNumberAssignments.ts ===
 var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 var a: any = x;
 >a : any
@@ -9,7 +9,6 @@ var a: any = x;
 
 var b: Object = x;
 >b : Object
->Object : Object
 >x : number
 
 var c: number = x;
@@ -18,11 +17,10 @@ var c: number = x;
 
 enum E { A };
 >E : E
->A : E
+>A : E.A
 
 var d: E = x;
 >d : E
->E : E
 >x : number
 
 var e = E.A;

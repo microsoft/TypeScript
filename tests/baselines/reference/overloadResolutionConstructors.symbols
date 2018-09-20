@@ -1,0 +1,259 @@
+=== tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts ===
+class SomeBase {
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+
+    private n;
+>n : Symbol(SomeBase.n, Decl(overloadResolutionConstructors.ts, 0, 16))
+
+    public s: string;
+>s : Symbol(SomeBase.s, Decl(overloadResolutionConstructors.ts, 1, 14))
+}
+class SomeDerived1 extends SomeBase {
+>SomeDerived1 : Symbol(SomeDerived1, Decl(overloadResolutionConstructors.ts, 4, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived1.m, Decl(overloadResolutionConstructors.ts, 5, 37))
+}
+class SomeDerived2 extends SomeBase {
+>SomeDerived2 : Symbol(SomeDerived2, Decl(overloadResolutionConstructors.ts, 7, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived2.m, Decl(overloadResolutionConstructors.ts, 8, 37))
+}
+class SomeDerived3 extends SomeBase {
+>SomeDerived3 : Symbol(SomeDerived3, Decl(overloadResolutionConstructors.ts, 10, 1))
+>SomeBase : Symbol(SomeBase, Decl(overloadResolutionConstructors.ts, 0, 0))
+
+    private m;
+>m : Symbol(SomeDerived3.m, Decl(overloadResolutionConstructors.ts, 11, 37))
+}
+
+interface fn1 {
+>fn1 : Symbol(fn1, Decl(overloadResolutionConstructors.ts, 13, 1), Decl(overloadResolutionConstructors.ts, 19, 3))
+
+    new (s: string): string;
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 16, 9))
+
+    new (s: number): number;
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 17, 9))
+}
+var fn1: fn1;
+>fn1 : Symbol(fn1, Decl(overloadResolutionConstructors.ts, 13, 1), Decl(overloadResolutionConstructors.ts, 19, 3))
+>fn1 : Symbol(fn1, Decl(overloadResolutionConstructors.ts, 13, 1), Decl(overloadResolutionConstructors.ts, 19, 3))
+
+// Ambiguous call picks the first overload in declaration order
+var s = new fn1(undefined);
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn1 : Symbol(fn1, Decl(overloadResolutionConstructors.ts, 13, 1), Decl(overloadResolutionConstructors.ts, 19, 3))
+>undefined : Symbol(undefined)
+
+var s: string;
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+
+// No candidate overloads found
+new fn1({}); // Error
+>fn1 : Symbol(fn1, Decl(overloadResolutionConstructors.ts, 13, 1), Decl(overloadResolutionConstructors.ts, 19, 3))
+
+// Generic and non - generic overload where generic overload is the only candidate when called with type arguments
+interface fn2 {
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+
+    new (s: string, n: number): number;
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 30, 9))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 30, 19))
+
+    new <T>(n: number, t: T): T;
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 31, 9))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 31, 12))
+>t : Symbol(t, Decl(overloadResolutionConstructors.ts, 31, 22))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 31, 9))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 31, 9))
+}
+var fn2: fn2;
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+
+var d = new fn2<Date>(0, undefined);
+>d : Symbol(d, Decl(overloadResolutionConstructors.ts, 35, 3), Decl(overloadResolutionConstructors.ts, 36, 3))
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+var d: Date;
+>d : Symbol(d, Decl(overloadResolutionConstructors.ts, 35, 3), Decl(overloadResolutionConstructors.ts, 36, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Generic and non - generic overload where generic overload is the only candidate when called without type arguments
+var s = new fn2(0, '');
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called with type arguments
+new fn2<Date>('', 0); // Error
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
+new fn2('', 0); // OK
+>fn2 : Symbol(fn2, Decl(overloadResolutionConstructors.ts, 26, 12), Decl(overloadResolutionConstructors.ts, 33, 3))
+
+// Generic overloads with differing arity called without type arguments
+interface fn3 {
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+    new<T>(n: T): string;
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 49, 8))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 49, 11))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 49, 8))
+
+    new<T, U>(s: string, t: T, u: U): U;
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 50, 8))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 50, 10))
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 50, 14))
+>t : Symbol(t, Decl(overloadResolutionConstructors.ts, 50, 24))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 50, 8))
+>u : Symbol(u, Decl(overloadResolutionConstructors.ts, 50, 30))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 50, 10))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 50, 10))
+
+    new<T, U, V>(v: V, u: U, t: T): number;
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 51, 8))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 51, 10))
+>V : Symbol(V, Decl(overloadResolutionConstructors.ts, 51, 13))
+>v : Symbol(v, Decl(overloadResolutionConstructors.ts, 51, 17))
+>V : Symbol(V, Decl(overloadResolutionConstructors.ts, 51, 13))
+>u : Symbol(u, Decl(overloadResolutionConstructors.ts, 51, 22))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 51, 10))
+>t : Symbol(t, Decl(overloadResolutionConstructors.ts, 51, 28))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 51, 8))
+}
+var fn3: fn3;
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var s = new fn3(3);
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var s = new fn3('', 3, '');
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var n = new fn3(5, 5, 5);
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 57, 3), Decl(overloadResolutionConstructors.ts, 58, 3), Decl(overloadResolutionConstructors.ts, 63, 3), Decl(overloadResolutionConstructors.ts, 99, 3))
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var n: number;
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 57, 3), Decl(overloadResolutionConstructors.ts, 58, 3), Decl(overloadResolutionConstructors.ts, 63, 3), Decl(overloadResolutionConstructors.ts, 99, 3))
+
+// Generic overloads with differing arity called with type arguments matching each overload type parameter count
+var s = new fn3<number>(4);
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var s = new fn3<string, string>('', '', '');
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+var n = new fn3<number, string, string>('', '', 3);
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 57, 3), Decl(overloadResolutionConstructors.ts, 58, 3), Decl(overloadResolutionConstructors.ts, 63, 3), Decl(overloadResolutionConstructors.ts, 99, 3))
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+// Generic overloads with differing arity called with type argument count that doesn't match any overload
+new fn3<number, number, number, number>(); // Error
+>fn3 : Symbol(fn3, Decl(overloadResolutionConstructors.ts, 45, 15), Decl(overloadResolutionConstructors.ts, 53, 3))
+
+// Generic overloads with constraints called with type arguments that satisfy the constraints
+interface fn4 {
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+    new<T extends string, U extends number>(n: T, m: U);
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 70, 8))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 70, 25))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 70, 44))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 70, 8))
+>m : Symbol(m, Decl(overloadResolutionConstructors.ts, 70, 49))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 70, 25))
+
+    new<T extends number, U extends string>(n: T, m: U);
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 71, 8))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 71, 25))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 71, 44))
+>T : Symbol(T, Decl(overloadResolutionConstructors.ts, 71, 8))
+>m : Symbol(m, Decl(overloadResolutionConstructors.ts, 71, 49))
+>U : Symbol(U, Decl(overloadResolutionConstructors.ts, 71, 25))
+}
+var fn4: fn4;
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4<string, number>('', 3);
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4<string, number>(3, ''); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4<number, string>('', 3); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4<number, string>(3, ''); 
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+// Generic overloads with constraints called without type arguments but with types that satisfy the constraints
+new fn4('', 3);
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4(3, '');
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4(3, undefined);
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+>undefined : Symbol(undefined)
+
+new fn4('', null);
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+// Generic overloads with constraints called with type arguments that do not satisfy the constraints
+new fn4<boolean, Date>(null, null); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+// Generic overloads with constraints called without type arguments but with types that do not satisfy the constraints
+new fn4(true, null); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+new fn4(null, true); // Error
+>fn4 : Symbol(fn4, Decl(overloadResolutionConstructors.ts, 66, 42), Decl(overloadResolutionConstructors.ts, 73, 3))
+
+// Non - generic overloads where contextual typing of function arguments has errors
+interface fn5 {
+>fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+
+    new(f: (n: string) => void): string;
+>f : Symbol(f, Decl(overloadResolutionConstructors.ts, 95, 8))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 95, 12))
+
+    new(f: (n: number) => void): number;
+>f : Symbol(f, Decl(overloadResolutionConstructors.ts, 96, 8))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 96, 12))
+}
+var fn5: fn5;
+>fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+>fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+
+var n = new fn5((n) => n.toFixed());
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 57, 3), Decl(overloadResolutionConstructors.ts, 58, 3), Decl(overloadResolutionConstructors.ts, 63, 3), Decl(overloadResolutionConstructors.ts, 99, 3))
+>fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 99, 17))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 99, 17))
+
+var s = new fn5((n) => n.substr(0));
+>s : Symbol(s, Decl(overloadResolutionConstructors.ts, 22, 3), Decl(overloadResolutionConstructors.ts, 23, 3), Decl(overloadResolutionConstructors.ts, 39, 3), Decl(overloadResolutionConstructors.ts, 55, 3), Decl(overloadResolutionConstructors.ts, 56, 3) ... and 3 more)
+>fn5 : Symbol(fn5, Decl(overloadResolutionConstructors.ts, 91, 20), Decl(overloadResolutionConstructors.ts, 98, 3))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 100, 17))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(overloadResolutionConstructors.ts, 100, 17))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+

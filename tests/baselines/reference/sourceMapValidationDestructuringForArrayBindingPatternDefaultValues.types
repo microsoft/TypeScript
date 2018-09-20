@@ -14,11 +14,10 @@ type MultiSkilledRobot = [string, string[]];
 
 let robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
->Robot : [number, string, string]
 >[1, "mower", "mowing"] : [number, string, string]
->1 : number
->"mower" : string
->"mowing" : string
+>1 : 1
+>"mower" : "mower"
+>"mowing" : "mowing"
 
 function getRobot() {
 >getRobot : () => [number, string, string]
@@ -29,21 +28,19 @@ function getRobot() {
 
 let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : [string, string[]]
->MultiSkilledRobot : [string, string[]]
 >["mower", ["mowing", ""]] : [string, string[]]
->"mower" : string
+>"mower" : "mower"
 >["mowing", ""] : string[]
->"mowing" : string
->"" : string
+>"mowing" : "mowing"
+>"" : ""
 
 let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : [string, string[]]
->MultiSkilledRobot : [string, string[]]
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
->"trimmer" : string
+>"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
->"trimming" : string
->"edging" : string
+>"trimming" : "trimming"
+>"edging" : "edging"
 
 function getMultiRobot() {
 >getMultiRobot : () => [string, string[]]
@@ -55,13 +52,13 @@ function getMultiRobot() {
 for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
 > : undefined
 >nameA : string
->"name" : string
+>"name" : "name"
 >robotA : [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -75,14 +72,14 @@ for (let [, nameA ="name"] = robotA, i = 0; i < 1; i++) {
 for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 > : undefined
 >nameA : string
->"name" : string
+>"name" : "name"
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -96,16 +93,16 @@ for (let [, nameA = "name"] = getRobot(), i = 0; i < 1; i++) {
 for (let [, nameA = "name"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 > : undefined
 >nameA : string
->"name" : string
+>"name" : "name"
 >[2, "trimmer", "trimming"] : [number, string, string]
->2 : number
->"trimmer" : string
->"trimming" : string
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -121,22 +118,22 @@ for (let [, [
 
     primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
 ] = ["none", "none"]] = multiRobotA, i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 >multiRobotA : [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -152,23 +149,23 @@ for (let [, [
 
     primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
 ] = ["none", "none"]] = getMultiRobot(), i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 >getMultiRobot() : [string, string[]]
 >getMultiRobot : () => [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -184,26 +181,26 @@ for (let [, [
 
     primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
     secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
 ] = ["none", "none"]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->"trimmer" : string
+>"trimmer" : "trimmer"
 >["trimming", "edging"] : [string, string]
->"trimming" : string
->"edging" : string
+>"trimming" : "trimming"
+>"edging" : "edging"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -217,14 +214,14 @@ for (let [, [
 
 for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
 >numberB : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >robotA : [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -237,15 +234,15 @@ for (let [numberB = -1] = robotA, i = 0; i < 1; i++) {
 }
 for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 >numberB : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -258,17 +255,17 @@ for (let [numberB = -1] = getRobot(), i = 0; i < 1; i++) {
 }
 for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >numberB : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >[2, "trimmer", "trimming"] : [number, string, string]
->2 : number
->"trimmer" : string
->"trimming" : string
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -281,13 +278,13 @@ for (let [numberB = -1] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 }
 for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 >nameB : string
->"name" : string
+>"name" : "name"
 >multiRobotA : [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -300,14 +297,14 @@ for (let [nameB = "name"] = multiRobotA, i = 0; i < 1; i++) {
 }
 for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 >nameB : string
->"name" : string
+>"name" : "name"
 >getMultiRobot() : [string, string[]]
 >getMultiRobot : () => [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -320,17 +317,17 @@ for (let [nameB = "name"] = getMultiRobot(), i = 0; i < 1; i++) {
 }
 for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >nameB : string
->"name" : string
+>"name" : "name"
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
->"trimmer" : string
+>"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
->"trimming" : string
->"edging" : string
+>"trimming" : "trimming"
+>"edging" : "edging"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -344,18 +341,18 @@ for (let [nameB = "name"] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i
 
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i < 1; i++) {
 >numberA2 : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >nameA2 : string
->"name" : string
+>"name" : "name"
 >skillA2 : string
->"skill" : string
+>"skill" : "skill"
 >robotA : [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -368,19 +365,19 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = robotA, i = 0; i 
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0; i < 1; i++) {
 >numberA2 : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >nameA2 : string
->"name" : string
+>"name" : "name"
 >skillA2 : string
->"skill" : string
+>"skill" : "skill"
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -393,21 +390,21 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = getRobot(), i = 0
 }
 for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >numberA2 : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 >nameA2 : string
->"name" : string
+>"name" : "name"
 >skillA2 : string
->"skill" : string
+>"skill" : "skill"
 >[2, "trimmer", "trimming"] : [number, string, string]
->2 : number
->"trimmer" : string
->"trimming" : string
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -421,29 +418,29 @@ for (let [numberA2 = -1, nameA2 = "name", skillA2 = "skill"] = [2, "trimmer", "t
 for (let
     [nameMA = "noName",
 >nameMA : string
->"noName" : string
+>"noName" : "noName"
 
         [
             primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
             secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
         ] = ["none", "none"]
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 
     ] = multiRobotA, i = 0; i < 1; i++) {
 >multiRobotA : [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -456,30 +453,30 @@ for (let
 }
 for (let [nameMA = "noName",
 >nameMA : string
->"noName" : string
+>"noName" : "noName"
 
     [
         primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
         secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 
 ]  = getMultiRobot(), i = 0; i < 1; i++) {
 >getMultiRobot() : [string, string[]]
 >getMultiRobot : () => [string, string[]]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -492,33 +489,33 @@ for (let [nameMA = "noName",
 }
 for (let [nameMA = "noName",
 >nameMA : string
->"noName" : string
+>"noName" : "noName"
 
     [
         primarySkillA = "primary",
 >primarySkillA : string
->"primary" : string
+>"primary" : "primary"
 
         secondarySkillA = "secondary"
 >secondarySkillA : string
->"secondary" : string
+>"secondary" : "secondary"
 
     ] = ["none", "none"]
 >["none", "none"] : [string, string]
->"none" : string
->"none" : string
+>"none" : "none"
+>"none" : "none"
 
 ]  = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->"trimmer" : string
+>"trimmer" : "trimmer"
 >["trimming", "edging"] : [string, string]
->"trimming" : string
->"edging" : string
+>"trimming" : "trimming"
+>"edging" : "edging"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -532,15 +529,15 @@ for (let [nameMA = "noName",
 
 for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >numberA3 : number
->-1 : number
->1 : number
->robotAInfo : (string | number)[]
+>-1 : -1
+>1 : 1
+>robotAInfo : string[]
 >robotA : [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -553,16 +550,16 @@ for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 }
 for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
->-1 : number
->1 : number
->robotAInfo : (string | number)[]
+>-1 : -1
+>1 : 1
+>robotAInfo : string[]
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -574,19 +571,19 @@ for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
 }
 for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
->numberA3 : string | number
->-1 : number
->1 : number
->robotAInfo : (string | number)[]
->[2, "trimmer", "trimming"] : (string | number)[]
->2 : number
->"trimmer" : string
->"trimming" : string
+>numberA3 : number
+>-1 : -1
+>1 : 1
+>robotAInfo : string[]
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 
@@ -595,5 +592,5 @@ for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i <
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : string | number
+>numberA3 : number
 }

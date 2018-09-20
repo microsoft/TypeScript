@@ -1,0 +1,9 @@
+=== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
+var x = {}["hello"];
+>x : Symbol(x, Decl(noImplicitAnyStringIndexerOnObject.ts, 0, 3))
+
+var y: string = { '': 'foo' }[''];
+>y : Symbol(y, Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 3))
+>'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+>'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+

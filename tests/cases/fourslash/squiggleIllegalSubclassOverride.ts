@@ -4,8 +4,8 @@
 ////    public x: number;
 ////}
 ////
-////class /*1*/Bar/*2*/ extends Foo {
-////    public x: string;
+////class Bar extends Foo {
+////    public /*1*/x/*2*/: string;
 ////}
 
 verify.errorExistsBetweenMarkers("1", "2");

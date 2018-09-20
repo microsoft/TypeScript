@@ -1,7 +1,7 @@
 === tests/cases/compiler/doNotEmitPinnedDetachedComments.ts ===
 var x = 10;
 >x : number
->10 : number
+>10 : 10
 
 /*! Single Line comment */
 
@@ -33,7 +33,7 @@ function foo() {
     /*! Remove this */
 
     return 0;
->0 : number
+>0 : 0
 }
 
 

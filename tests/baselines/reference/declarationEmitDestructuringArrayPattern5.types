@@ -4,18 +4,18 @@ var [, , z] = [1, 2, 4];
 > : undefined
 >z : number
 >[1, 2, 4] : [number, number, number]
->1 : number
->2 : number
->4 : number
+>1 : 1
+>2 : 2
+>4 : 4
 
 var [, a, , ] = [3, 4, 5];
 > : undefined
 >a : number
 > : undefined
 >[3, 4, 5] : [number, number, number]
->3 : number
->4 : number
->5 : number
+>3 : 3
+>4 : 4
+>5 : 5
 
 var [, , [, b, ]] = [3,5,[0, 1]];
 > : undefined
@@ -23,9 +23,9 @@ var [, , [, b, ]] = [3,5,[0, 1]];
 > : undefined
 >b : number
 >[3,5,[0, 1]] : [number, number, [number, number]]
->3 : number
->5 : number
+>3 : 3
+>5 : 5
 >[0, 1] : [number, number]
->0 : number
->1 : number
+>0 : 0
+>1 : 1
 

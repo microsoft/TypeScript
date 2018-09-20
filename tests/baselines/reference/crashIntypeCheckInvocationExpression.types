@@ -1,0 +1,41 @@
+=== tests/cases/compiler/crashIntypeCheckInvocationExpression.ts ===
+var nake;
+>nake : any
+
+function doCompile<P0, P1, P2>(fileset: P0, moduleType: P1) {
+>doCompile : <P0, P1, P2>(fileset: P0, moduleType: P1) => any
+>fileset : P0
+>moduleType : P1
+
+    return undefined;
+>undefined : undefined
+}
+export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
+>compileServer : any
+>task<number, number, any>(<P0, P1, P2>() => {    var folder = path.join(),        fileset = nake.fileSetSync<number, number, any>(folder)  return doCompile<number, number, any>(fileset, moduleType);}) : any
+>task : any
+><P0, P1, P2>() => {    var folder = path.join(),        fileset = nake.fileSetSync<number, number, any>(folder)  return doCompile<number, number, any>(fileset, moduleType);} : <P0, P1, P2>() => any
+
+    var folder = path.join(),
+>folder : any
+>path.join() : any
+>path.join : any
+>path : any
+>join : any
+
+        fileset = nake.fileSetSync<number, number, any>(folder)
+>fileset : any
+>nake.fileSetSync<number, number, any>(folder) : any
+>nake.fileSetSync : any
+>nake : any
+>fileSetSync : any
+>folder : any
+
+  return doCompile<number, number, any>(fileset, moduleType);
+>doCompile<number, number, any>(fileset, moduleType) : any
+>doCompile : <P0, P1, P2>(fileset: P0, moduleType: P1) => any
+>fileset : any
+>moduleType : any
+
+});
+

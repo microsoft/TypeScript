@@ -1,0 +1,19 @@
+=== tests/cases/compiler/a.d.ts ===
+declare class X { }
+>X : Symbol(X, Decl(a.d.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+export {X};
+>X : Symbol(X, Decl(b.ts, 0, 8))
+
+export function f() {
+>f : Symbol(f, Decl(b.ts, 0, 11))
+
+    var x: X;
+>x : Symbol(x, Decl(b.ts, 2, 7))
+>X : Symbol(X, Decl(a.d.ts, 0, 0))
+
+    return x;
+>x : Symbol(x, Decl(b.ts, 2, 7))
+} 
+

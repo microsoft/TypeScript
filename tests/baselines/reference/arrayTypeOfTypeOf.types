@@ -1,0 +1,28 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts ===
+// array type cannot use typeof.
+
+var x = 1;
+>x : number
+>1 : 1
+
+var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
+>xs : number[]
+>x : number
+
+var xs2: typeof Array;
+>xs2 : ArrayConstructor
+>Array : ArrayConstructor
+
+var xs3: typeof Array<number>;
+>xs3 : ArrayConstructor
+>Array : ArrayConstructor
+><number> : number
+> : any
+
+var xs4: typeof Array<typeof x>;
+>xs4 : ArrayConstructor
+>Array : ArrayConstructor
+><typeof x> : number
+>x : number
+> : any
+

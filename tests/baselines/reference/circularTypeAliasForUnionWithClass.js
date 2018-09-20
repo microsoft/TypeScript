@@ -20,19 +20,19 @@ class I4 {
 
 //// [circularTypeAliasForUnionWithClass.js]
 var v0;
-var I0 = (function () {
+var I0 = /** @class */ (function () {
     function I0() {
     }
     return I0;
 }());
 var v3;
-var I3 = (function () {
+var I3 = /** @class */ (function () {
     function I3() {
     }
     return I3;
 }());
 var v4;
-var I4 = (function () {
+var I4 = /** @class */ (function () {
     function I4() {
     }
     return I4;

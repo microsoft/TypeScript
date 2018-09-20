@@ -7,10 +7,6 @@ export default 0;
 // @Filename: /src/b.ts
 import a from './a';
 
-// Matching extension
-// @Filename: /src/c.ts
-import a from './a.ts';
-
 // '.js' extension: stripped and replaced with '.ts'
 // @Filename: /src/d.ts
 import a from './a.js';

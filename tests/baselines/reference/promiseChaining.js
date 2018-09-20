@@ -12,14 +12,14 @@ class Chain<T> {
 
 
 //// [promiseChaining.js]
-var Chain = (function () {
+var Chain = /** @class */ (function () {
     function Chain(value) {
         this.value = value;
     }
     Chain.prototype.then = function (cb) {
         var result = cb(this.value);
         // should get a fresh type parameter which each then call
-        var z = this.then(function (x) { return result; }) /*S*/.then(function (x) { return "abc"; }) /*string*/.then(function (x) { return x.length; }); // No error
+        var z = this.then(function (x) { return result; }) /*S*/.then(function (x) { return "abc"; }) /*string*/.then(function (x) { return x.length; }) /*number*/; // No error
         return new Chain(result);
     };
     return Chain;

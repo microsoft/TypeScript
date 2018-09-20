@@ -1,21 +1,17 @@
 === tests/cases/conformance/jsx/react.d.ts ===
+declare module "react" {
+>"react" : typeof import("react")
 
-No type information for this code.declare module "react" {
-No type information for this code.
-No type information for this code.}
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsx/file1.tsx ===
+}
+
+=== tests/cases/conformance/jsx/file1.tsx ===
 declare module JSX {
->JSX : any
-
     interface Element { }
->Element : Element
 }
 export class MyClass { }
 >MyClass : MyClass
 
 === tests/cases/conformance/jsx/file2.tsx ===
-
 // Should not elide React import
 import * as React from 'react';
 >React : typeof React
@@ -24,6 +20,6 @@ import {MyClass} from './file1';
 >MyClass : typeof MyClass
 
 <MyClass />;
-><MyClass /> : any
+><MyClass /> : error
 >MyClass : typeof MyClass
 

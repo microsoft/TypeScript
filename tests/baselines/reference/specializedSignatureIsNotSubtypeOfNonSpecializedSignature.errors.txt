@@ -1,8 +1,7 @@
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(2,10): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts(1,10): error TS2394: Overload signature is not compatible with function implementation.
 
 
 ==== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts (1 errors) ====
-    
     function foo(x: 'a');
              ~~~
 !!! error TS2394: Overload signature is not compatible with function implementation.

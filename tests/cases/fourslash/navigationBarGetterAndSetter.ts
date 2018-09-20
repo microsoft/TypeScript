@@ -8,6 +8,33 @@
 ////    }
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "X",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "x",
+                    "kind": "getter"
+                },
+                {
+                    "text": "x",
+                    "kind": "setter",
+                    "childItems": [
+                        {
+                            "text": "f",
+                            "kind": "function"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

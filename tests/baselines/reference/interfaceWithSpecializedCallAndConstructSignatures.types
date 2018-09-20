@@ -1,7 +1,5 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithSpecializedCallAndConstructSignatures.ts ===
 interface Foo {
->Foo : Foo
-
     (x: 'a'): number;
 >x : "a"
 
@@ -13,12 +11,10 @@ interface Foo {
 
     new (x: string): Object;
 >x : string
->Object : Object
 }
 
 var f: Foo;
 >f : Foo
->Foo : Foo
 
 var r = f('a');
 >r : number
@@ -30,7 +26,7 @@ var r2 = f('A');
 >r2 : any
 >f('A') : any
 >f : Foo
->'A' : string
+>'A' : "A"
 
 var r3 = new f('a');
 >r3 : any
@@ -42,5 +38,5 @@ var r4 = new f('A');
 >r4 : Object
 >new f('A') : Object
 >f : Foo
->'A' : string
+>'A' : "A"
 

@@ -24,8 +24,8 @@ function f1() {
 >v : C
 >new C(10, 20) : C
 >C : typeof C
->10 : number
->20 : number
+>10 : 10
+>20 : 20
 
     let x = v.x;
 >x : number
@@ -64,13 +64,13 @@ function f2() {
 >C : typeof C
 >f(10) : typeof C
 >f : (x: number) => typeof C
->10 : number
+>10 : 10
 
     let v = new C(20);
 >v : C
 >new C(20) : C
 >C : typeof C
->20 : number
+>20 : 20
 
     let x = v.x;
 >x : number
@@ -111,8 +111,8 @@ function f3() {
 >C : typeof C
 >f(10, 20) : typeof C
 >f : (x: number, y: number) => typeof C
->10 : number
->20 : number
+>10 : 10
+>20 : 20
 
     let v = new C();
 >v : C

@@ -20,12 +20,12 @@ class MyComponent {
 
 //// [service.js]
 "use strict";
-var Service = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Service = /** @class */ (function () {
     function Service() {
     }
     return Service;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Service;
 //// [component.js]
 "use strict";
@@ -38,22 +38,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = require("./service");
-var MyComponent = (function () {
+var MyComponent = /** @class */ (function () {
     function MyComponent(Service) {
         this.Service = Service;
     }
     MyComponent.prototype.method = function (x) {
     };
     __decorate([
-        decorator, 
-        __metadata('design:type', Function), 
-        __metadata('design:paramtypes', [Object]), 
-        __metadata('design:returntype', void 0)
+        decorator,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
     ], MyComponent.prototype, "method", null);
     MyComponent = __decorate([
-        decorator, 
-        __metadata('design:paramtypes', [service_1.default])
+        decorator,
+        __metadata("design:paramtypes", [service_1.default])
     ], MyComponent);
     return MyComponent;
 }());

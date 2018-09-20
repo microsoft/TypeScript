@@ -1,0 +1,46 @@
+=== /a.ts ===
+export default { a: 0 };
+>{ a: 0 } : { a: number; }
+>a : number
+>0 : 0
+
+=== /a/index.ts ===
+export default { aIndex: 0 };
+>{ aIndex: 0 } : { aIndex: number; }
+>aIndex : number
+>0 : 0
+
+=== /a/test.ts ===
+import a from ".";
+>a : { a: number; }
+
+import aIndex from "./";
+>aIndex : { aIndex: number; }
+
+a.a;
+>a.a : number
+>a : { a: number; }
+>a : number
+
+aIndex.aIndex;
+>aIndex.aIndex : number
+>aIndex : { aIndex: number; }
+>aIndex : number
+
+=== /a/b/test.ts ===
+import a from "..";
+>a : { a: number; }
+
+import aIndex from "../";
+>aIndex : { aIndex: number; }
+
+a.a;
+>a.a : number
+>a : { a: number; }
+>a : number
+
+aIndex.aIndex;
+>aIndex.aIndex : number
+>aIndex : { aIndex: number; }
+>aIndex : number
+

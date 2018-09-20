@@ -1,0 +1,50 @@
+=== tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithConflictingPropertyNames.ts ===
+interface A {
+    x: string; // error
+>x : string
+}
+
+interface A {
+    x: number;
+>x : string
+}
+
+module M {
+    interface A<T> {
+        x: T;
+>x : T
+    }
+
+    interface A<T> {
+        x: number;  // error
+>x : T
+    }
+}
+
+module M2 {
+    interface A<T> {
+        x: T;
+>x : T
+    }   
+}
+
+module M2 {
+    interface A<T> {
+        x: number;  // ok, different declaration space than other M2
+>x : number
+    }
+}
+
+module M3 {
+    export interface A<T> {
+        x: T;
+>x : T
+    }
+}
+
+module M3 {
+    export interface A<T> {
+        x: number;  // error
+>x : T
+    }
+}

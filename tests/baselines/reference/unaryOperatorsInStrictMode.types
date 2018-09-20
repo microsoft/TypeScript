@@ -1,0 +1,36 @@
+=== tests/cases/compiler/unaryOperatorsInStrictMode.ts ===
+"use strict"
+>"use strict" : "use strict"
+
+++eval;
+>++eval : number
+>eval : any
+
+--eval;
+>--eval : number
+>eval : any
+
+++arguments;
+>++arguments : number
+>arguments : any
+
+--arguments;
+>--arguments : number
+>arguments : any
+
+eval++;
+>eval++ : number
+>eval : any
+
+eval--;
+>eval-- : number
+>eval : any
+
+arguments++;
+>arguments++ : number
+>arguments : any
+
+arguments--;
+>arguments-- : number
+>arguments : any
+

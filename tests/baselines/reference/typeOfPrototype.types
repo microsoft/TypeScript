@@ -4,11 +4,11 @@ class Foo {
 
     bar = 3;
 >bar : number
->3 : number
+>3 : 3
 
     static bar = '';
 >bar : string
->'' : string
+>'' : ""
 }
 Foo.prototype.bar = undefined; // Should be OK
 >Foo.prototype.bar = undefined : undefined

@@ -1,5 +1,4 @@
 === tests/cases/compiler/capturedLetConstInLoop4_ES6.ts ===
-
 //======let
 export function exportedFoo() {
 >exportedFoo : () => string
@@ -70,10 +69,10 @@ for (let x in []) {
 
 for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -146,16 +145,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     var v4 = x;
 >v4 : number
@@ -176,12 +175,12 @@ for (let y = 0; y < 1; ++y) {
 
 for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >y : number
->1 : number
+>1 : 1
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -268,16 +267,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     var v8 = x;
 >v8 : number
@@ -369,27 +368,27 @@ for (const x in []) {
 }
 
 for (const x = 0; x < 1;) {
->x : number
->0 : number
+>x : 0
+>0 : 0
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     var v1_c = x;
 >v1_c : number
->x : number
+>x : 0
 
     (function() { return x + v1_c});
 >(function() { return x + v1_c}) : () => number
 >function() { return x + v1_c} : () => number
 >x + v1_c : number
->x : number
+>x : 0
 >v1_c : number
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 0
 }
 
 while (1 === 1) {
@@ -398,46 +397,46 @@ while (1 === 1) {
 >1 : 1
 
     const x =1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     var v2_c = x;
 >v2_c : number
->x : number
+>x : 1
 
     (function() { return x + v2_c});
 >(function() { return x + v2_c}) : () => number
 >function() { return x + v2_c} : () => number
 >x + v2_c : number
->x : number
+>x : 1
 >v2_c : number
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 }
 
 do {
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     var v3_c = x;
 >v3_c : number
->x : number
+>x : 1
 
     (function() { return x + v3_c});
 >(function() { return x + v3_c}) : () => number
 >function() { return x + v3_c} : () => number
 >x + v3_c : number
->x : number
+>x : 1
 >v3_c : number
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -445,61 +444,61 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     var v4_c = x;
 >v4_c : number
->x : number
+>x : 1
 
     (function() { return x + v4_c});
 >(function() { return x + v4_c}) : () => number
 >function() { return x + v4_c} : () => number
 >x + v4_c : number
->x : number
+>x : 1
 >v4_c : number
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 }
 
 for (const x = 0, y = 1; x < 1;) {
->x : number
->0 : number
->y : number
->1 : number
+>x : 0
+>0 : 0
+>y : 1
+>1 : 1
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     var v5_c = x;
 >v5_c : number
->x : number
+>x : 0
 
     (function() { return x + y + v5_c});
 >(function() { return x + y + v5_c}) : () => number
 >function() { return x + y + v5_c} : () => number
 >x + y + v5_c : number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 >v5_c : number
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 }
 
 while (1 === 1) {
@@ -508,58 +507,58 @@ while (1 === 1) {
 >1 : 1
 
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     var v6_c = x;
 >v6_c : number
->x : number
+>x : 1
 
     (function() { return x + y + v6_c});
 >(function() { return x + y + v6_c}) : () => number
 >function() { return x + y + v6_c} : () => number
 >x + y + v6_c : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >v6_c : number
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 }
 
 do {
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     var v7_c = x;
 >v7_c : number
->x : number
+>x : 1
 
     (function() { return x + y + v7_c});
 >(function() { return x + y + v7_c}) : () => number
 >function() { return x + y + v7_c} : () => number
 >x + y + v7_c : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >v7_c : number
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -567,34 +566,34 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     var v8_c = x;
 >v8_c : number
->x : number
+>x : 1
 
     (function() { return x + y + v8_c});
 >(function() { return x + y + v8_c}) : () => number
 >function() { return x + y + v8_c} : () => number
 >x + y + v8_c : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 >v8_c : number
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 }
 

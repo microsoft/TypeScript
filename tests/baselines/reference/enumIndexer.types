@@ -3,24 +3,24 @@ enum MyEnumType {
 >MyEnumType : MyEnumType
 
     foo, bar
->foo : MyEnumType
->bar : MyEnumType
+>foo : MyEnumType.foo
+>bar : MyEnumType.bar
 }
 var _arr = [{ key: 'foo' }, { key: 'bar' }]
 >_arr : { key: string; }[]
 >[{ key: 'foo' }, { key: 'bar' }] : { key: string; }[]
 >{ key: 'foo' } : { key: string; }
 >key : string
->'foo' : string
+>'foo' : "foo"
 >{ key: 'bar' } : { key: string; }
 >key : string
->'bar' : string
+>'bar' : "bar"
 
 var enumValue = MyEnumType.foo;
 >enumValue : MyEnumType
->MyEnumType.foo : MyEnumType
+>MyEnumType.foo : MyEnumType.foo
 >MyEnumType : typeof MyEnumType
->foo : MyEnumType
+>foo : MyEnumType.foo
 
 var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
 >x : boolean[]
@@ -31,7 +31,7 @@ var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same ty
 >o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
 >o : { key: string; }
 >MyEnumType[o.key] === enumValue : boolean
->MyEnumType[o.key] : any
+>MyEnumType[o.key] : error
 >MyEnumType : typeof MyEnumType
 >o.key : string
 >o : { key: string; }

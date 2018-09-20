@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////function [|f|]() {
+////function [|{| "isWriteAccess": true, "isDefinition": true |}f|]() {
 ////    return 100;
 ////}
 ////
@@ -10,8 +10,8 @@
 ////
 ////var y = [|f|]();
 ////
-////namespace [|f|] {
+////namespace [|{| "isWriteAccess": true, "isDefinition": true |}f|] {
 ////    var local = 100;
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("namespace f\nfunction f(): number");

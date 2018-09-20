@@ -1,20 +1,16 @@
 === tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts ===
 class C<T extends C<T>> { // error
 >C : C<T>
->T : T
->C : C<T>
->T : T
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 var c = new C(1);
 >c : C<number>
 >new C(1) : C<number>
 >C : typeof C
->1 : number
+>1 : 1
 
 var c = new C(new C('')); // error
 >c : C<number>
@@ -22,5 +18,5 @@ var c = new C(new C('')); // error
 >C : typeof C
 >new C('') : C<string>
 >C : typeof C
->'' : string
+>'' : ""
 

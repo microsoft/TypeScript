@@ -12,12 +12,11 @@ module A {
 
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
->Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 
     export var Unity = { start: new Point(0, 0), end: new Point(1, 0) };
 >Unity : { start: Point; end: Point; }
@@ -25,12 +24,12 @@ module A {
 >start : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 >end : Point
 >new Point(1, 0) : Point
 >Point : typeof Point
->1 : number
->0 : number
+>1 : 1
+>0 : 0
 }
 

@@ -4,7 +4,7 @@ class Base {
 
     foo() { return 1; }
 >foo : () => number
->1 : number
+>1 : 1
 
     static create() {
 >create : () => Base
@@ -21,7 +21,7 @@ class Derived extends Base {
 
     foo() { return 2; }
 >foo : () => number
->2 : number
+>2 : 2
 }
 var d = Derived.create(); 
 >d : Base

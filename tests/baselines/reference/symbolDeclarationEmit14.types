@@ -3,14 +3,16 @@ class C {
 >C : C
 
     get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : string
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
->"" : string
+>"" : ""
 
     get [Symbol.toStringTag]() { return ""; }
+>[Symbol.toStringTag] : string
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
->"" : string
+>"" : ""
 }

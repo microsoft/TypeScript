@@ -7,5 +7,4 @@
 /////** decorator documentation*/
 ////var decorator = t=> t;
 
-goTo.marker("1");
-verify.quickInfoIs("var decorator: (t: any) => any", "decorator documentation");
+verify.quickInfoAt("1", "var decorator: (t: any) => any", "decorator documentation");

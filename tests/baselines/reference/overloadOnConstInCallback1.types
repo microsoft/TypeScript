@@ -17,16 +17,16 @@ class C {
         callback('hi');
 >callback('hi') : number
 >callback : (x: any) => number
->'hi' : string
+>'hi' : "hi"
 
         callback('bye');
 >callback('bye') : number
 >callback : (x: any) => number
->'bye' : string
+>'bye' : "bye"
 
         var hm = "hm";
 >hm : string
->"hm" : string
+>"hm" : "hm"
 
         callback(hm);
 >callback(hm) : number

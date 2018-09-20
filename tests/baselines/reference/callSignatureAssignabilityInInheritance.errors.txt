@@ -2,9 +2,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
   Types of property 'a' are incompatible.
     Type '(x: number) => string' is not assignable to type '(x: number) => number'.
       Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts(63,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+  Types of property 'a2' are incompatible.
+    Type '<T>(x: T) => string' is not assignable to type '<T>(x: T) => T'.
+      Type 'string' is not assignable to type 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts (2 errors) ====
     module CallSignature {
         interface Base { // T
             // M's
@@ -73,6 +77,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
     
         // S's
         interface I3 extends Base2 {
+                  ~~
+!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type '<T>(x: T) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2430:       Type 'string' is not assignable to type 'T'.
             // N's
             a2: <T>(x: T) => string; // error because base returns non-void;
         }

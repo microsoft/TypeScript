@@ -1,14 +1,4 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of23.ts ===
-for (const v of new FooIterator) {
->v : Foo
->new FooIterator : FooIterator
->FooIterator : typeof FooIterator
-
-    const v = 0; // new scope
->v : number
->0 : number
-}
-
 class Foo { }
 >Foo : Foo
 
@@ -28,11 +18,12 @@ class FooIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -40,4 +31,14 @@ class FooIterator {
         return this;
 >this : this
     }
+}
+
+for (const v of new FooIterator) {
+>v : Foo
+>new FooIterator : FooIterator
+>FooIterator : typeof FooIterator
+
+    const v = 0; // new scope
+>v : 0
+>0 : 0
 }

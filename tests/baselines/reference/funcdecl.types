@@ -3,7 +3,7 @@ function simpleFunc() {
 >simpleFunc : () => string
 
     return "this is my simple func";
->"this is my simple func" : string
+>"this is my simple func" : "this is my simple func"
 }
 var simpleFuncVar = simpleFunc;
 >simpleFuncVar : () => string
@@ -20,7 +20,7 @@ function withReturn() : string{
 >withReturn : () => string
 
     return "Hello";
->"Hello" : string
+>"Hello" : "Hello"
 }
 var withReturnVar = withReturn;
 >withReturnVar : () => string
@@ -42,7 +42,6 @@ function withMultiParams(a : number, b, c: Object) {
 >a : number
 >b : any
 >c : Object
->Object : Object
 
     return a;
 >a : number
@@ -64,9 +63,9 @@ function withInitializedParams(a: string, b0, b = 30, c = "string value") {
 >a : string
 >b0 : any
 >b : number
->30 : number
+>30 : 30
 >c : string
->"string value" : string
+>"string value" : "string value"
 }
 var withInitializedParamsVar = withInitializedParams;
 >withInitializedParamsVar : (a: string, b0: any, b?: number, c?: string) => void
@@ -76,7 +75,7 @@ function withOptionalInitializedParams(a: string, c: string = "hello string") {
 >withOptionalInitializedParams : (a: string, c?: string) => void
 >a : string
 >c : string
->"hello string" : string
+>"hello string" : "hello string"
 }
 var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 >withOptionalInitializedParamsVar : (a: string, c?: string) => void
@@ -139,7 +138,7 @@ m2.foo(() =>  {
 
     var b = 30;
 >b : number
->30 : number
+>30 : 30
 
     return b;
 >b : number
@@ -164,5 +163,5 @@ var f2 = () => {
 >() => {    return "string";} : () => string
 
     return "string";
->"string" : string
+>"string" : "string"
 }

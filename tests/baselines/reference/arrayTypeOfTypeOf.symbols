@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/specifyingTypes/typeLiterals/arrayTypeOfTypeOf.ts ===
+// array type cannot use typeof.
+
+var x = 1;
+>x : Symbol(x, Decl(arrayTypeOfTypeOf.ts, 2, 3))
+
+var xs: typeof x[];  // Not an error.  This is equivalent to Array<typeof x>
+>xs : Symbol(xs, Decl(arrayTypeOfTypeOf.ts, 3, 3))
+>x : Symbol(x, Decl(arrayTypeOfTypeOf.ts, 2, 3))
+
+var xs2: typeof Array;
+>xs2 : Symbol(xs2, Decl(arrayTypeOfTypeOf.ts, 4, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var xs3: typeof Array<number>;
+>xs3 : Symbol(xs3, Decl(arrayTypeOfTypeOf.ts, 5, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var xs4: typeof Array<typeof x>;
+>xs4 : Symbol(xs4, Decl(arrayTypeOfTypeOf.ts, 6, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayTypeOfTypeOf.ts, 2, 3))
+

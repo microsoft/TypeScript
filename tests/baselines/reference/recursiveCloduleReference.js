@@ -13,13 +13,12 @@ module M
 //// [recursiveCloduleReference.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
     M.C = C;
-    var C;
     (function (C_1) {
         C_1.C = M.C;
     })(C = M.C || (M.C = {}));

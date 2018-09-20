@@ -1,6 +1,5 @@
 === tests/cases/compiler/emitCommentsOnlyFile.ts ===
-
-No type information for this code./**
+/**
 No type information for this code.* @name Foo
 No type information for this code.* @class
 No type information for this code.*/

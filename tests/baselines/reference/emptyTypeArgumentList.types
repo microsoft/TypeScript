@@ -1,0 +1,8 @@
+=== tests/cases/compiler/emptyTypeArgumentList.ts ===
+function foo<T>() { }
+>foo : <T>() => void
+
+foo<>();
+>foo<>() : any
+>foo : <T>() => void
+

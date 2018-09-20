@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target.ts]
-
 export class C {
     static s = 0;
     p = 1;
@@ -27,7 +26,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-export var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }
@@ -35,8 +34,9 @@ export var C = (function () {
     C.s = 0;
     return C;
 }());
+export { C };
 export { C as C2 };
-export var D = (function () {
+var D = /** @class */ (function () {
     function D() {
         this.p = 1;
     }
@@ -47,8 +47,9 @@ export var D = (function () {
     ], D);
     return D;
 }());
+export { D };
 export { D as D2 };
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     return E;

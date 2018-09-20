@@ -1,5 +1,4 @@
 === tests/cases/compiler/modularizeLibrary_TargetES5UsingES6Lib.ts ===
-
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any[]
@@ -9,18 +8,18 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >arguments : IArguments
 }
 
 f(1, 2, 3);  // no error
 >f(1, 2, 3) : any[]
 >f : (x: number, y: number, z: number) => any[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 // Using ES6 collection
 var m = new Map<string, number>();
@@ -56,12 +55,12 @@ function* gen() {
 
     let i = 0;
 >i : number
->0 : number
+>0 : 0
 
     while (i < 10) {
 >i < 10 : boolean
 >i : number
->10 : number
+>10 : 10
 
         yield i;
 >yield i : any
@@ -78,12 +77,12 @@ function* gen2() {
 
     let i = 0;
 >i : number
->0 : number
+>0 : 0
 
     while (i < 10) {
 >i < 10 : boolean
 >i : number
->10 : number
+>10 : 10
 
         yield i;
 >yield i : any
@@ -101,7 +100,7 @@ Math.sign(1);
 >Math.sign : (x: number) => number
 >Math : Math
 >sign : (x: number) => number
->1 : number
+>1 : 1
 
 // Using ES6 object
 var o = {
@@ -110,23 +109,24 @@ var o = {
 
     a: 2,
 >a : number
->2 : number
+>2 : 2
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : { (v: PropertyKey): boolean; (v: string): boolean; }
+>o.hasOwnProperty : (v: string | number | symbol) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : { (v: PropertyKey): boolean; (v: string): boolean; }
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : { <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<{}>; }
+>out().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >out() : Promise<{}>
 >out : () => Promise<{}>
->then : { <TResult1, TResult2>(onfulfilled: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: {}) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<{}>; }
+>then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");
@@ -159,7 +159,7 @@ out().then(() => {
 >console.log : any
 >console : any
 >log : any
->"Yea!" : string
+>"Yea!" : "Yea!"
 
 });
 
@@ -178,9 +178,9 @@ var p = new Proxy(t, {});
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible({}) : boolean
->Reflect.isExtensible : (target: any) => boolean
+>Reflect.isExtensible : (target: object) => boolean
 >Reflect : typeof Reflect
->isExtensible : (target: any) => boolean
+>isExtensible : (target: object) => boolean
 >{} : {}
 
 // Using Es6 regexp
@@ -188,7 +188,7 @@ var reg = new RegExp("/s");
 >reg : RegExp
 >new RegExp("/s") : RegExp
 >RegExp : RegExpConstructor
->"/s" : string
+>"/s" : "/s"
 
 reg.flags;
 >reg.flags : string
@@ -198,15 +198,15 @@ reg.flags;
 // Using ES6 string
 var str = "Hello world";
 >str : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
 >str.includes : (searchString: string, position?: number) => boolean
 >str : string
 >includes : (searchString: string, position?: number) => boolean
->"hello" : string
->0 : number
+>"hello" : "hello"
+>0 : 0
 
 // Using ES6 symbol
 var s = Symbol();
@@ -220,12 +220,13 @@ const o1 = {
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 }

@@ -1,5 +1,4 @@
 //// [declFileTypeofModule.ts]
-
 module m1 {
     export var c: string;
 }

@@ -1,5 +1,4 @@
 //// [newWithSpreadES6.ts]
-
 function f(x: number, y: number, ...z: string[]) {
 }
 
@@ -103,8 +102,7 @@ function f(x, y, ...z) {
 function f2(...x) {
 }
 class B {
-    constructor(x, y, ...z) {
-    }
+    constructor(x, y, ...z) { }
 }
 var a;
 var b;

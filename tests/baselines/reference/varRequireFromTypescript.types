@@ -1,0 +1,61 @@
+=== tests/cases/conformance/salsa/use.js ===
+var ex = require('./ex')
+>ex : typeof import("tests/cases/conformance/salsa/ex")
+>require('./ex') : typeof import("tests/cases/conformance/salsa/ex")
+>require : any
+>'./ex' : "./ex"
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : import("tests/cases/conformance/salsa/ex").Crunch
+>new ex.Crunch(1) : import("tests/cases/conformance/salsa/ex").Crunch
+>ex.Crunch : typeof import("tests/cases/conformance/salsa/ex").Crunch
+>ex : typeof import("tests/cases/conformance/salsa/ex")
+>Crunch : typeof import("tests/cases/conformance/salsa/ex").Crunch
+>1 : 1
+
+crunch.n
+>crunch.n : number
+>crunch : import("tests/cases/conformance/salsa/ex").Crunch
+>n : number
+
+
+// types work
+/**
+ * @param {ex.Greatest} greatest
+ * @param {ex.Crunch} wrap
+ */
+function f(greatest, wrap) {
+>f : (greatest: import("tests/cases/conformance/salsa/ex").Greatest, wrap: import("tests/cases/conformance/salsa/ex").Crunch) => void
+>greatest : import("tests/cases/conformance/salsa/ex").Greatest
+>wrap : import("tests/cases/conformance/salsa/ex").Crunch
+
+    greatest.day
+>greatest.day : 1
+>greatest : import("tests/cases/conformance/salsa/ex").Greatest
+>day : 1
+
+    wrap.n
+>wrap.n : number
+>wrap : import("tests/cases/conformance/salsa/ex").Crunch
+>n : number
+}
+
+=== tests/cases/conformance/salsa/ex.d.ts ===
+export type Greatest = { day: 1 }
+>Greatest : Greatest
+>day : 1
+
+export class Crunch {
+>Crunch : Crunch
+
+    n: number
+>n : number
+
+    m(): number
+>m : () => number
+
+    constructor(n: number)
+>n : number
+}
+

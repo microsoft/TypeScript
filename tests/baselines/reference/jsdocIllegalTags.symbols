@@ -1,0 +1,14 @@
+=== /a.js ===
+class C {
+>C : Symbol(C, Decl(a.js, 0, 0))
+
+    /** @template T */
+    constructor() { }
+}
+class D {
+>D : Symbol(D, Decl(a.js, 3, 1))
+
+    /** @return {number} */
+    constructor() {}
+}
+

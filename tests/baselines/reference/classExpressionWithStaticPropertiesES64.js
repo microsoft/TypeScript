@@ -3,8 +3,8 @@
 
 
 //// [classExpressionWithStaticPropertiesES64.js]
-((classExpression_1 = class {
+var _a;
+(_a = class {
     },
-    classExpression_1.x = 0,
-    classExpression_1));
-var classExpression_1;
+    _a.x = 0,
+    _a);

@@ -3,5 +3,4 @@
 ////function f<T>(a: T): T { return null; }
 ////f(/**/
 
-goTo.marker();
-verify.currentSignatureHelpIs('f<T>(a: T): T');
+verify.signatureHelp({ marker: "", text: "f(a: {}): {}" });

@@ -5,7 +5,7 @@ module A.B {
  
   export var x = 1;
 >x : number
->1 : number
+>1 : 1
  
 }
  
@@ -17,7 +17,7 @@ module AA { export module B {
  
   export var x = 1;
 >x : number
->1 : number
+>1 : 1
  
 } }
  
@@ -49,14 +49,13 @@ module A.B.C
  
     export var x = 1;
 >x : number
->1 : number
+>1 : 1
  
 }
  
  
  
 module M
->M : any
  
 {
  

@@ -1,5 +1,4 @@
 //// [decoratorChecksFunctionBodies.ts]
-
 // from #2971
 function func(s: string): void {
 }
@@ -25,7 +24,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 // from #2971
 function func(s) {
 }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.m = function () {

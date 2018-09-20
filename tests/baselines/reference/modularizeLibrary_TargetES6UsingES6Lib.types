@@ -1,5 +1,4 @@
 === tests/cases/compiler/modularizeLibrary_TargetES6UsingES6Lib.ts ===
-
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any[]
@@ -9,18 +8,18 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >arguments : IArguments
 }
 
 f(1, 2, 3);  // no error
 >f(1, 2, 3) : any[]
 >f : (x: number, y: number, z: number) => any[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 // Using ES6 collection
 var m = new Map<string, number>();
@@ -56,7 +55,7 @@ Math.sign(1);
 >Math.sign : (x: number) => number
 >Math : Math
 >sign : (x: number) => number
->1 : number
+>1 : 1
 
 // Using ES6 object
 var o = {
@@ -65,23 +64,24 @@ var o = {
 
     a: 2,
 >a : number
->2 : number
+>2 : 2
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
->o.hasOwnProperty : { (v: string): boolean; (v: PropertyKey): boolean; }
+>o.hasOwnProperty : (v: string | number | symbol) => boolean
 >o : { a: number; [Symbol.hasInstance](value: any): boolean; }
->hasOwnProperty : { (v: string): boolean; (v: PropertyKey): boolean; }
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
@@ -101,9 +101,9 @@ var p = new Proxy(t, {});
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible({}) : boolean
->Reflect.isExtensible : (target: any) => boolean
+>Reflect.isExtensible : (target: object) => boolean
 >Reflect : typeof Reflect
->isExtensible : (target: any) => boolean
+>isExtensible : (target: object) => boolean
 >{} : {}
 
 // Using Es6 regexp
@@ -111,7 +111,7 @@ var reg = new RegExp("/s");
 >reg : RegExp
 >new RegExp("/s") : RegExp
 >RegExp : RegExpConstructor
->"/s" : string
+>"/s" : "/s"
 
 reg.flags;
 >reg.flags : string
@@ -121,15 +121,15 @@ reg.flags;
 // Using ES6 string
 var str = "Hello world";
 >str : string
->"Hello world" : string
+>"Hello world" : "Hello world"
 
 str.includes("hello", 0);
 >str.includes("hello", 0) : boolean
 >str.includes : (searchString: string, position?: number) => boolean
 >str : string
 >includes : (searchString: string, position?: number) => boolean
->"hello" : string
->0 : number
+>"hello" : "hello"
+>0 : 0
 
 // Using ES6 symbol
 var s = Symbol();
@@ -143,12 +143,13 @@ const o1 = {
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : (value: any) => boolean
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
 >value : any
 
         return false;
->false : boolean
+>false : false
     }
 }

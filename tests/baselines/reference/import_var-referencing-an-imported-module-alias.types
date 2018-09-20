@@ -1,5 +1,4 @@
 === tests/cases/compiler/consumer.ts ===
-
 import host = require("host");
 >host : typeof host
 

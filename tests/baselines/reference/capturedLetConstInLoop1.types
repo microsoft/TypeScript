@@ -32,10 +32,10 @@ for (let x of []) {
 
 for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -90,16 +90,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
@@ -114,12 +114,12 @@ for (let y = 0; y < 1; ++y) {
 
 for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >y : number
->1 : number
+>1 : 1
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -188,16 +188,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
@@ -246,21 +246,21 @@ for (const x of []) {
 }
 
 for (const x = 0; x < 1;) {
->x : number
->0 : number
+>x : 0
+>0 : 0
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 0
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 0
 }
 
 while (1 === 1) {
@@ -269,34 +269,34 @@ while (1 === 1) {
 >1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 }
 
 do {
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -304,49 +304,49 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 }
 
 for (const x = 0, y = 1; x < 1;) {
->x : number
->0 : number
->y : number
->1 : number
+>x : 0
+>0 : 0
+>y : 1
+>1 : 1
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 }
 
 while (1 === 1) {
@@ -355,46 +355,46 @@ while (1 === 1) {
 >1 : 1
 
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 }
 
 do {
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
 } while (1 === 1)
 >1 === 1 : boolean
@@ -402,27 +402,59 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
+>x : 1
+>y : 0
+}
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+>sobj : { [x: string]: any; }
+>x : string
+
+for (let sx in sobj) {
+>sx : string
+>sobj : { [x: string]: any; }
+
+    (() => sobj[sx]);
+>(() => sobj[sx]) : () => any
+>() => sobj[sx] : () => any
+>sobj[sx] : any
+>sobj : { [x: string]: any; }
+>sx : string
+}
+declare const iobj: { [x: number]: any };
+>iobj : { [x: number]: any; }
 >x : number
->y : number
+
+for (let ix in iobj) {
+>ix : string
+>iobj : { [x: number]: any; }
+
+    (() => iobj[ix]);
+>(() => iobj[ix]) : () => any
+>() => iobj[ix] : () => any
+>iobj[ix] : any
+>iobj : { [x: number]: any; }
+>ix : string
 }

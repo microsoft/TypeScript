@@ -1,8 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInTuples.ts ===
 interface Array<T> {
->Array : T[]
->T : T
-
     slice(): this;
 >slice : { (start?: number, end?: number): T[]; (): this; }
 }
@@ -10,8 +7,8 @@ interface Array<T> {
 let t: [number, string] = [42, "hello"];
 >t : [number, string]
 >[42, "hello"] : [number, string]
->42 : number
->"hello" : string
+>42 : 42
+>"hello" : "hello"
 
 let a = t.slice();
 >a : [number, string]
@@ -26,7 +23,7 @@ let b = t.slice(1);
 >t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >t : [number, string]
 >slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
->1 : number
+>1 : 1
 
 let c = t.slice(0, 1);
 >c : (string | number)[]
@@ -34,6 +31,6 @@ let c = t.slice(0, 1);
 >t.slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
 >t : [number, string]
 >slice : { (start?: number, end?: number): (string | number)[]; (): [number, string]; }
->0 : number
->1 : number
+>0 : 0
+>1 : 1
 

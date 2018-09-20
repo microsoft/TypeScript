@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/constDeclarations-access.ts] ////
 
 //// [file1.ts]
-
 const x = 0
 
 //// [file2.ts]

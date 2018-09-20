@@ -1,0 +1,74 @@
+=== tests/cases/compiler/multipleInheritance.ts ===
+class B1 {
+>B1 : Symbol(B1, Decl(multipleInheritance.ts, 0, 0))
+
+    public x;
+>x : Symbol(B1.x, Decl(multipleInheritance.ts, 0, 10))
+}
+
+class B2 {
+>B2 : Symbol(B2, Decl(multipleInheritance.ts, 2, 1))
+
+    public x;
+>x : Symbol(B2.x, Decl(multipleInheritance.ts, 4, 10))
+}
+
+class C extends B1, B2 { // duplicate member
+>C : Symbol(C, Decl(multipleInheritance.ts, 6, 1))
+>B1 : Symbol(B1, Decl(multipleInheritance.ts, 0, 0))
+>B2 : Symbol(B2, Decl(multipleInheritance.ts, 2, 1))
+}
+
+class D1 extends B1 {
+>D1 : Symbol(D1, Decl(multipleInheritance.ts, 9, 1))
+>B1 : Symbol(B1, Decl(multipleInheritance.ts, 0, 0))
+}
+
+class D2 extends B2 {
+>D2 : Symbol(D2, Decl(multipleInheritance.ts, 12, 1))
+>B2 : Symbol(B2, Decl(multipleInheritance.ts, 2, 1))
+}
+
+class E extends D1, D2 { // nope, duplicate member
+>E : Symbol(E, Decl(multipleInheritance.ts, 15, 1))
+>D1 : Symbol(D1, Decl(multipleInheritance.ts, 9, 1))
+>D2 : Symbol(D2, Decl(multipleInheritance.ts, 12, 1))
+}
+
+class N {
+>N : Symbol(N, Decl(multipleInheritance.ts, 18, 1))
+
+    public y:number;
+>y : Symbol(N.y, Decl(multipleInheritance.ts, 20, 9))
+}
+
+class ND extends N { // any is assignable to number
+>ND : Symbol(ND, Decl(multipleInheritance.ts, 22, 1))
+>N : Symbol(N, Decl(multipleInheritance.ts, 18, 1))
+
+    public y;
+>y : Symbol(ND.y, Decl(multipleInheritance.ts, 24, 20))
+}
+
+class Good {
+>Good : Symbol(Good, Decl(multipleInheritance.ts, 26, 1))
+
+    public f:() => number = function() { return 0; }
+>f : Symbol(Good.f, Decl(multipleInheritance.ts, 28, 12))
+
+    public g() { return 0; }
+>g : Symbol(Good.g, Decl(multipleInheritance.ts, 29, 52))
+}
+
+class Baad extends Good {
+>Baad : Symbol(Baad, Decl(multipleInheritance.ts, 31, 1))
+>Good : Symbol(Good, Decl(multipleInheritance.ts, 26, 1))
+
+    public f(): number { return 0; }
+>f : Symbol(Baad.f, Decl(multipleInheritance.ts, 33, 25))
+
+    public g(n:number) { return 0; }
+>g : Symbol(Baad.g, Decl(multipleInheritance.ts, 34, 36))
+>n : Symbol(n, Decl(multipleInheritance.ts, 35, 13))
+}
+

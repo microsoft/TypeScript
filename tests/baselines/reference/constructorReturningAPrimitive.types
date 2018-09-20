@@ -7,7 +7,7 @@ class A {
 
     constructor() {
         return 1;
->1 : number
+>1 : 1
     }
 }
 
@@ -18,12 +18,10 @@ var a = new A();
 
 class B<T> {
 >B : B<T>
->T : T
 
     constructor() {
         var x: T;
 >x : T
->T : T
 
         return x;
 >x : T

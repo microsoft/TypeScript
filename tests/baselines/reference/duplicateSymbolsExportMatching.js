@@ -68,6 +68,7 @@ export interface D { }
 //// [duplicateSymbolsExportMatching.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // Should report error only once for instantiated module
     var M;
     (function (M) {
@@ -75,7 +76,6 @@ define(["require", "exports"], function (require, exports) {
         (function (inst) {
             var t;
         })(inst || (inst = {}));
-        var inst;
         (function (inst) {
             var t;
         })(inst = M.inst || (M.inst = {}));
@@ -86,23 +86,20 @@ define(["require", "exports"], function (require, exports) {
         var v;
         var w;
     })(M2 || (M2 = {}));
-    var M;
     (function (M) {
         var F;
         (function (F) {
             var t;
         })(F || (F = {}));
-        function F() { }
-        M.F = F; // Only one error for duplicate identifier (don't consider visibility)
+        function F() { } // Only one error for duplicate identifier (don't consider visibility)
+        M.F = F;
     })(M || (M = {}));
-    var M;
     (function (M) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
-        var C;
         (function (C) {
             var t;
         })(C = M.C || (M.C = {}));

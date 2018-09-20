@@ -3,7 +3,7 @@
 var x = null;                        // error at "x"
 var x1 = undefined;		             // error at "x1"
 var widenArray = [null, undefined];  // error at "widenArray"
-var emptyArray = [];		         // error at "emptyArray"
+var emptyArray = [];
 
 // these should not be error
 class AnimalObj {
@@ -32,9 +32,9 @@ var obj1 = anyReturnFunc();
 var x = null; // error at "x"
 var x1 = undefined; // error at "x1"
 var widenArray = [null, undefined]; // error at "widenArray"
-var emptyArray = []; // error at "emptyArray"
+var emptyArray = [];
 // these should not be error
-var AnimalObj = (function () {
+var AnimalObj = /** @class */ (function () {
     function AnimalObj() {
     }
     return AnimalObj;

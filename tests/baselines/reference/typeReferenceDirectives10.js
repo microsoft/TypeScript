@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives10.ts] ////
 
 //// [ref.d.ts]
-
 export interface $ { x }
 
 //// [index.d.ts]
@@ -17,6 +16,7 @@ export interface A {
 
 //// [app.js]
 "use strict";
+exports.__esModule = true;
 
 
 //// [app.d.ts]

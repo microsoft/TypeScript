@@ -9,11 +9,9 @@ import X2 = require("foobarx");
 const x: X = X;
 >x : number
 >X : number
->X : number
 
 const x2: X2 = X2;
 >x2 : number
->X2 : number
 >X2 : number
 
 import B = require("./a");
@@ -21,7 +19,6 @@ import B = require("./a");
 
 const b: B = new B(B.b);
 >b : B
->B : B
 >new B(B.b) : B
 >B : typeof B
 >B.b : number
@@ -34,7 +31,7 @@ import fooLength = require("./b");
 fooLength + 1;
 >fooLength + 1 : number
 >fooLength : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/declarations.d.ts ===
 // This test is just like exportDefaultProperty, but with `export =`.
@@ -51,6 +48,8 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
+>"foobar" : typeof import("foobar")
+
     export = foo.bar;
 >foo.bar : typeof foo.bar
 >foo : typeof foo
@@ -58,6 +57,8 @@ declare module "foobar" {
 }
 
 declare module "foobarx" {
+>"foobarx" : typeof import("foobarx")
+
     export = foo.bar.X;
 >foo.bar.X : number
 >foo.bar : typeof foo.bar
@@ -77,7 +78,7 @@ namespace A {
     export namespace B { export const b: number = 0; }
 >B : typeof B
 >b : number
->0 : number
+>0 : 0
 }
 export = A.B;
 >A.B : typeof A.B
@@ -87,6 +88,6 @@ export = A.B;
 === tests/cases/compiler/b.ts ===
 export = "foo".length;
 >"foo".length : number
->"foo" : string
+>"foo" : "foo"
 >length : number
 

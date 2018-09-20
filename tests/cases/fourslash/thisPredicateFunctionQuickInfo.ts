@@ -58,20 +58,12 @@
 //// }
 //// let checked/*14*/LeaderStatus = isLeader/*15*/Guard(a);
 
-
-goTo.marker("1");
-verify.quickInfoIs("(method) RoyalGuard.isLeader(): this is LeadGuard");
-goTo.marker("3");
-verify.quickInfoIs("(method) RoyalGuard.isFollower(): this is FollowerGuard");
-
-goTo.marker("5");
-verify.quickInfoIs("(method) GuardInterface.isLeader(): this is LeadGuard");
-goTo.marker("7");
-verify.quickInfoIs("(method) GuardInterface.isFollower(): this is FollowerGuard");
-
-goTo.marker("13");
-verify.quickInfoIs("let leaderStatus: boolean");
-goTo.marker("14");
-verify.quickInfoIs("let checkedLeaderStatus: boolean");
-goTo.marker("15");
-verify.quickInfoIs("function isLeaderGuard(g: RoyalGuard): boolean");
+verify.quickInfos({
+    1: "(method) RoyalGuard.isLeader(): this is LeadGuard",
+    3: "(method) RoyalGuard.isFollower(): this is FollowerGuard",
+    5: "(method) GuardInterface.isLeader(): this is LeadGuard",
+    7: "(method) GuardInterface.isFollower(): this is FollowerGuard",
+    13: "let leaderStatus: boolean",
+    14: "let checkedLeaderStatus: boolean",
+    15: "function isLeaderGuard(g: RoyalGuard): boolean"
+});

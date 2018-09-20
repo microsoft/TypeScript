@@ -1,0 +1,51 @@
+=== tests/cases/conformance/salsa/bug26877.js ===
+/** @param {Emu.D} x */
+function ollKorrect(x) {
+>ollKorrect : Symbol(ollKorrect, Decl(bug26877.js, 0, 0))
+>x : Symbol(x, Decl(bug26877.js, 1, 20))
+
+    x._model
+>x._model : Symbol(D._model, Decl(bug26877.js, 7, 19))
+>x : Symbol(x, Decl(bug26877.js, 1, 20))
+>_model : Symbol(D._model, Decl(bug26877.js, 7, 19))
+
+    const y = new Emu.D()
+>y : Symbol(y, Decl(bug26877.js, 3, 9))
+>Emu.D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
+>D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+
+    const z = Emu.D._wrapperInstance;
+>z : Symbol(z, Decl(bug26877.js, 4, 9))
+>Emu.D._wrapperInstance : Symbol(Emu.D._wrapperInstance, Decl(second.js, 0, 12))
+>Emu.D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
+>D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>_wrapperInstance : Symbol(Emu.D._wrapperInstance, Decl(second.js, 0, 12))
+}
+Emu.D = class {
+>Emu.D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
+>D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+
+    constructor() {
+        this._model = 1
+>this._model : Symbol(D._model, Decl(bug26877.js, 7, 19))
+>this : Symbol(D, Decl(bug26877.js, 6, 7))
+>_model : Symbol(D._model, Decl(bug26877.js, 7, 19))
+    }
+}
+
+=== tests/cases/conformance/salsa/second.js ===
+var Emu = {}
+>Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
+
+/** @type {string} */
+Emu.D._wrapperInstance;
+>Emu.D._wrapperInstance : Symbol(Emu.D._wrapperInstance, Decl(second.js, 0, 12))
+>Emu.D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>Emu : Symbol(Emu, Decl(bug26877.js, 5, 1), Decl(second.js, 0, 3), Decl(second.js, 0, 12))
+>D : Symbol(Emu.D, Decl(bug26877.js, 5, 1), Decl(second.js, 2, 4))
+>_wrapperInstance : Symbol(Emu.D._wrapperInstance, Decl(second.js, 0, 12))
+
+

@@ -1,13 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: b.ts
-////export {Foo, Bar} from 'e/*1*/';
+////export {Foo, Bar} from [|'e/*1*/'|];
 
 // @Filename: a.ts
-/////*2*/declare module "e" {
+////declare module /*2*/"e" {
 ////    class Foo { }
 ////}
 
-goTo.marker('1');
-goTo.definition();
-verify.caretAtMarker('2');
+verify.goToDefinition("1", "2");

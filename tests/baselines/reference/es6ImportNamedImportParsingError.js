@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportParsingError.ts] ////
 
 //// [es6ImportNamedImportParsingError_0.ts]
-
 export var a = 10;
 export var x = a;
 export var m = a;

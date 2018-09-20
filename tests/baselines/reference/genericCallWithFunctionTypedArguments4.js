@@ -24,12 +24,12 @@ var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates a
 
 //// [genericCallWithFunctionTypedArguments4.js]
 // No inference is made from function typed arguments which have multiple call signatures
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

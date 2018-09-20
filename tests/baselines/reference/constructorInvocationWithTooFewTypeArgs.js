@@ -11,7 +11,7 @@ var d = new D<number>();
 
 
 //// [constructorInvocationWithTooFewTypeArgs.js]
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

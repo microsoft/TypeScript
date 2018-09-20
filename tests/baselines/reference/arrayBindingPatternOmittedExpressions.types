@@ -1,5 +1,4 @@
 === tests/cases/compiler/arrayBindingPatternOmittedExpressions.ts ===
-
 var results: string[];
 >results : string[]
 
@@ -43,12 +42,12 @@ function f([, a, , b, , , , s, , , ] = results) {
 >a : string
 >s[1] : string
 >s : string
->1 : number
+>1 : 1
 
     b = s[2];
 >b = s[2] : string
 >b : string
 >s[2] : string
 >s : string
->2 : number
+>2 : 2
 }

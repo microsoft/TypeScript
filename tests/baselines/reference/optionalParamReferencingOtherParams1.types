@@ -5,7 +5,7 @@ function strange(x: number, y = x * 1, z = x + y) {
 >y : number
 >x * 1 : number
 >x : number
->1 : number
+>1 : 1
 >z : number
 >x + y : number
 >x : number

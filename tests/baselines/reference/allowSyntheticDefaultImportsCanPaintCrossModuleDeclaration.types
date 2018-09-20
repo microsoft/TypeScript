@@ -1,0 +1,24 @@
+=== tests/cases/compiler/color.ts ===
+interface Color {
+    c: string;
+>c : string
+}
+export default Color;
+>Color : Color
+
+=== tests/cases/compiler/file1.ts ===
+import Color from "./color";
+>Color : any
+
+export declare function styled(): Color;
+>styled : () => Color
+
+=== tests/cases/compiler/file2.ts ===
+import { styled }  from "./file1";
+>styled : () => import("tests/cases/compiler/color").default
+
+export const A = styled();
+>A : import("tests/cases/compiler/color").default
+>styled() : import("tests/cases/compiler/color").default
+>styled : () => import("tests/cases/compiler/color").default
+

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/noErrorTruncation.ts ===
+// @noErrorTruncation
+
+type SomeLongOptionA = { someLongOptionA: string }
+>SomeLongOptionA : SomeLongOptionA
+>someLongOptionA : string
+
+type SomeLongOptionB = { someLongOptionB: string }
+>SomeLongOptionB : SomeLongOptionB
+>someLongOptionB : string
+
+type SomeLongOptionC = { someLongOptionC: string }
+>SomeLongOptionC : SomeLongOptionC
+>someLongOptionC : string
+
+type SomeLongOptionD = { someLongOptionD: string }
+>SomeLongOptionD : SomeLongOptionD
+>someLongOptionD : string
+
+type SomeLongOptionE = { someLongOptionE: string }
+>SomeLongOptionE : SomeLongOptionE
+>someLongOptionE : string
+
+type SomeLongOptionF = { someLongOptionF: string }
+>SomeLongOptionF : SomeLongOptionF
+>someLongOptionF : string
+
+const x: SomeLongOptionA
+>x : SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF
+
+       | SomeLongOptionB
+       | SomeLongOptionC
+       | SomeLongOptionD
+       | SomeLongOptionE
+       | SomeLongOptionF = 42;
+>42 : 42
+

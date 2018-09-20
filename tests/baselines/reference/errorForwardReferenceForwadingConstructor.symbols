@@ -1,0 +1,23 @@
+=== tests/cases/compiler/errorForwardReferenceForwadingConstructor.ts ===
+// Error forward referencing derived class with forwarding constructor
+
+function f() {
+>f : Symbol(f, Decl(errorForwardReferenceForwadingConstructor.ts, 0, 0))
+
+    var d1 = new derived();
+>d1 : Symbol(d1, Decl(errorForwardReferenceForwadingConstructor.ts, 3, 7))
+>derived : Symbol(derived, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 48))
+
+    var d2 = new derived(4);
+>d2 : Symbol(d2, Decl(errorForwardReferenceForwadingConstructor.ts, 4, 7))
+>derived : Symbol(derived, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 48))
+}
+
+class base { constructor(public n: number) { } }
+>base : Symbol(base, Decl(errorForwardReferenceForwadingConstructor.ts, 5, 1))
+>n : Symbol(base.n, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 25))
+
+class derived extends base { }
+>derived : Symbol(derived, Decl(errorForwardReferenceForwadingConstructor.ts, 7, 48))
+>base : Symbol(base, Decl(errorForwardReferenceForwadingConstructor.ts, 5, 1))
+

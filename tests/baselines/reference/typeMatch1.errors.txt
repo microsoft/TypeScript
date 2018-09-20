@@ -1,8 +1,8 @@
 tests/cases/compiler/typeMatch1.ts(18,1): error TS2322: Type 'D' is not assignable to type 'C'.
   Types have separate declarations of a private property 'x'.
-tests/cases/compiler/typeMatch1.ts(19,1): error TS2322: Type 'typeof C' is not assignable to type 'C'.
+tests/cases/compiler/typeMatch1.ts(19,4): error TS2322: Type 'typeof C' is not assignable to type 'C'.
   Property 'x' is missing in type 'typeof C'.
-tests/cases/compiler/typeMatch1.ts(20,1): error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
+tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will always return 'false' since the types 'typeof C' and 'typeof D' have no overlap.
 
 
 ==== tests/cases/compiler/typeMatch1.ts (3 errors) ====
@@ -28,12 +28,13 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2365: Operator '==' cannot be 
 !!! error TS2322: Type 'D' is not assignable to type 'C'.
 !!! error TS2322:   Types have separate declarations of a private property 'x'.
     x6=C;
-    ~~
+       ~
 !!! error TS2322: Type 'typeof C' is not assignable to type 'C'.
 !!! error TS2322:   Property 'x' is missing in type 'typeof C'.
+!!! related TS6213 tests/cases/compiler/typeMatch1.ts:19:4: Did you mean to use 'new' with this expression?
     C==D;
     ~~~~
-!!! error TS2365: Operator '==' cannot be applied to types 'typeof C' and 'typeof D'.
+!!! error TS2367: This condition will always return 'false' since the types 'typeof C' and 'typeof D' have no overlap.
     C==C;
     
     

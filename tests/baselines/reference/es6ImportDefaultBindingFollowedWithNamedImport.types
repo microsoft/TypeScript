@@ -1,8 +1,7 @@
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_0.ts ===
-
 export var a = 10;
 >a : number
->10 : number
+>10 : 10
 
 export var x = a;
 >x : number

@@ -23,12 +23,12 @@ function baz(_a) {
 //// [declarationEmitDestructuring1.d.ts]
 declare function foo([a, b, c]: [string, string, string]): void;
 declare function far([a, [b], [[c]]]: [number, boolean[], string[][]]): void;
-declare function bar({a1, b1, c1}: {
+declare function bar({ a1, b1, c1 }: {
     a1: number;
     b1: boolean;
     c1: string;
 }): void;
-declare function baz({a2, b2: {b1, c1}}: {
+declare function baz({ a2, b2: { b1, c1 } }: {
     a2: number;
     b2: {
         b1: boolean;

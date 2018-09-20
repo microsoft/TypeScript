@@ -17,14 +17,14 @@ function baz4({} = { x: 10 }) { }
 // the similar binding pattern users' have written
 function baz(_a) { }
 function baz1(_a) {
-    var _a = [1, 2, 3];
+    _a = [1, 2, 3];
 }
 function baz2(_a) {
     var _b = (_a === void 0 ? [[1, 2, 3]] : _a)[0];
 }
 function baz3(_a) { }
 function baz4(_a) {
-    var _a = { x: 10 };
+    _a = { x: 10 };
 }
 
 

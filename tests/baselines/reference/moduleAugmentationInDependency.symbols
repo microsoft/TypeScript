@@ -1,8 +1,9 @@
 === /node_modules/A/index.d.ts ===
 declare module "ext" {
-No type information for this code.}
-No type information for this code.export {};
-No type information for this code.
-No type information for this code.=== /src/app.ts ===
+>"ext" : Symbol("ext", Decl(index.d.ts, 0, 0))
+}
+export {};
+
+=== /src/app.ts ===
 import "A"
 No type information for this code.

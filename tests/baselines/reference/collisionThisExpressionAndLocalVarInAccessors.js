@@ -44,26 +44,26 @@ class class2 {
 }
 
 //// [collisionThisExpressionAndLocalVarInAccessors.js]
-var class1 = (function () {
+var class1 = /** @class */ (function () {
     function class1() {
     }
     Object.defineProperty(class1.prototype, "a", {
         get: function () {
-            var _this = this;
+            var _this_1 = this;
             var x2 = {
                 doStuff: function (callback) { return function () {
                     var _this = 2;
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
             return 10;
         },
         set: function (val) {
-            var _this = this;
+            var _this_1 = this;
             var x2 = {
                 doStuff: function (callback) { return function () {
                     var _this = 2;
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
         },
@@ -72,26 +72,26 @@ var class1 = (function () {
     });
     return class1;
 }());
-var class2 = (function () {
+var class2 = /** @class */ (function () {
     function class2() {
     }
     Object.defineProperty(class2.prototype, "a", {
         get: function () {
-            var _this = this;
+            var _this_1 = this;
             var _this = 2;
             var x2 = {
                 doStuff: function (callback) { return function () {
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
             return 10;
         },
         set: function (val) {
-            var _this = this;
+            var _this_1 = this;
             var _this = 2;
             var x2 = {
                 doStuff: function (callback) { return function () {
-                    return callback(_this);
+                    return callback(_this_1);
                 }; }
             };
         },

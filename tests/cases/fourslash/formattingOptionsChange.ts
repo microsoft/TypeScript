@@ -1,29 +1,36 @@
 ///<reference path="fourslash.ts"/>
 
-/////*InsertSpaceAfterCommaDelimiter*/[1,2,   3];[ 72  ,    ];
-/////*InsertSpaceAfterSemicolonInForStatements*/for (i = 0;i;    i++);
-/////*InsertSpaceBeforeAndAfterBinaryOperators*/1+2-    3
-/////*InsertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
-/////*InsertSpaceAfterFunctionKeywordForAnonymousFunctions*/(function               () { })
-/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
-/////*InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
-/////*InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
-/////*PlaceOpenBraceOnNewLineForFunctions*/class   foo   { 
+/////*insertSpaceAfterCommaDelimiter*/[1,2,   3];[ 72  ,    ];
+/////*insertSpaceAfterSemicolonInForStatements*/for (i = 0;i;    i++);
+/////*insertSpaceBeforeAndAfterBinaryOperators*/1+2-    3
+/////*insertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
+/////*insertSpaceAfterFunctionKeywordForAnonymousFunctions*/(function               () { })
+/////*insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
+/////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
+/////*insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
+/////*insertSpaceAfterTypeAssertion*/const bar = <Bar>    Thing.getFoo();
+/////*insertSpaceBeforeTypeAnnotation*/const bar   :   number = 1;
+/////*placeOpenBraceOnNewLineForFunctions*/class   foo   { 
 ////}
-/////*PlaceOpenBraceOnNewLineForControlBlocks*/if (true)   {
+/////*placeOpenBraceOnNewLineForControlBlocks*/if (true)   {
 ////}
+/////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces*/{          var t = 1}; var  {a,b  }    = {   a: 'sw',  b:'r'   };function f(  {  a, b}) { }
 
-runTest("InsertSpaceAfterCommaDelimiter", "[1, 2, 3];[72,];", "[1,2,3];[72,];");
-runTest("InsertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for (i = 0;i;i++);");
-runTest("InsertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
-runTest("InsertSpaceAfterKeywordsInControlFlowStatements", "if (true) { }", "if(true) { }");
-runTest("InsertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { })", "(function() { })");
-runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
-runTest("InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
-runTest("InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
-runTest("PlaceOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
-runTest("PlaceOpenBraceOnNewLineForControlBlocks", "if ( true )", "if ( true ) {");
+const defaultFormatOption = format.copyFormatOptions();
 
+runTest("insertSpaceAfterCommaDelimiter", "[1, 2, 3];[72,];", "[1,2,3];[72,];");
+runTest("insertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for (i = 0;i;i++);");
+runTest("insertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
+runTest("insertSpaceAfterKeywordsInControlFlowStatements", "if (true) { }", "if(true) { }");
+runTest("insertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { })", "(function() { })");
+runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
+runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
+runTest("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
+runTest("insertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
+runTest("insertSpaceBeforeTypeAnnotation", "const bar : number = 1;", "const bar: number = 1;");
+runTest("placeOpenBraceOnNewLineForFunctions", "class foo", "class foo {");
+runTest("placeOpenBraceOnNewLineForControlBlocks", "if (true)", "if (true) {");
+runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces", "{ var t = 1 }; var { a, b } = { a: 'sw', b: 'r' }; function f({ a, b }) { }", "{var t = 1}; var {a, b} = {a: 'sw', b: 'r'}; function f({a, b}) {}");
 
 function runTest(propertyName: string, expectedStringWhenTrue: string, expectedStringWhenFalse: string) {
     // Go to the correct file
@@ -48,4 +55,6 @@ function runTest(propertyName: string, expectedStringWhenTrue: string, expectedS
     // Verify
     goTo.marker(propertyName);
     verify.currentLineContentIs(expectedStringWhenTrue);
+
+    format.setOption(propertyName, defaultFormatOption[propertyName])
 }

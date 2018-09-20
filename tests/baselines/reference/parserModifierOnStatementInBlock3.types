@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts ===
+export function foo() {
+>foo : () => void
+
+   export function bar() {
+>bar : () => void
+   }
+}
+

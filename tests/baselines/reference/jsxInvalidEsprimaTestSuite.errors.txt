@@ -1,75 +1,88 @@
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(3,1): error TS1128: Declaration or statement expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(3,3): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(3,4): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(4,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,1): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,2): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,3): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,6): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(5,7): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,6): error TS2304: Cannot find name 'd'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,9): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(6,10): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(7,1): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(8,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(9,13): error TS1002: Unterminated string literal.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,1): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(10,10): error TS2657: JSX expressions must have one parent element
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,5): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,11): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,12): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(11,16): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,5): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,10): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,13): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,14): error TS2304: Cannot find name 'c'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(12,16): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(13,8): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,1): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,2): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,5): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,7): error TS1128: Declaration or statement expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,8): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(14,10): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,2): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,4): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,7): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(15,9): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,4): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,9): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,11): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,13): error TS2304: Cannot find name 'foo'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(16,18): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,3): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,11): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,13): error TS2304: Cannot find name 'a'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(17,22): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(18,2): error TS17008: JSX element 'a' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(19,2): error TS17008: JSX element 'a' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(22,10): error TS1005: '}' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(23,20): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(24,15): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(25,7): error TS1005: '...' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(25,7): error TS2304: Cannot find name 'props'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(27,17): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,10): error TS2304: Cannot find name 'props'.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(28,28): error TS1005: '>' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,2): error TS17008: JSX element 'a' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(32,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,2): error TS17008: JSX element 'a' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(33,7): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,4): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005: '</' expected.
+tests/cases/conformance/jsx/1.tsx(3,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/jsx/1.tsx(3,3): error TS1109: Expression expected.
+tests/cases/conformance/jsx/1.tsx(3,4): error TS1109: Expression expected.
+tests/cases/conformance/jsx/10.tsx(1,2): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/10.tsx(1,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/10.tsx(1,10): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/10.tsx(1,13): error TS1005: '>' expected.
+tests/cases/conformance/jsx/10.tsx(1,14): error TS2304: Cannot find name 'c'.
+tests/cases/conformance/jsx/10.tsx(1,16): error TS1109: Expression expected.
+tests/cases/conformance/jsx/11.tsx(1,2): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/11.tsx(1,8): error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+tests/cases/conformance/jsx/12.tsx(1,1): error TS1109: Expression expected.
+tests/cases/conformance/jsx/12.tsx(1,2): error TS1109: Expression expected.
+tests/cases/conformance/jsx/12.tsx(1,5): error TS1109: Expression expected.
+tests/cases/conformance/jsx/12.tsx(1,7): error TS1128: Declaration or statement expected.
+tests/cases/conformance/jsx/12.tsx(1,8): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/12.tsx(1,10): error TS1109: Expression expected.
+tests/cases/conformance/jsx/13.tsx(1,2): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/13.tsx(1,4): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/13.tsx(1,7): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/13.tsx(1,9): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/14.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/14.tsx(1,4): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/jsx/14.tsx(1,9): error TS1109: Expression expected.
+tests/cases/conformance/jsx/14.tsx(1,11): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/14.tsx(1,13): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/jsx/14.tsx(1,18): error TS1109: Expression expected.
+tests/cases/conformance/jsx/15.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/15.tsx(1,11): error TS1109: Expression expected.
+tests/cases/conformance/jsx/15.tsx(1,13): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/15.tsx(1,22): error TS1109: Expression expected.
+tests/cases/conformance/jsx/16.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/16.tsx(1,10): error TS1005: '</' expected.
+tests/cases/conformance/jsx/17.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/17.tsx(1,10): error TS1005: '</' expected.
+tests/cases/conformance/jsx/18.tsx(1,9): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/18.tsx(1,37): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/19.tsx(1,9): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/19.tsx(1,64): error TS2657: JSX expressions must have one parent element.
+tests/cases/conformance/jsx/2.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/20.tsx(1,10): error TS1005: '}' expected.
+tests/cases/conformance/jsx/21.tsx(1,20): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/22.tsx(1,15): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/22.tsx(1,21): error TS1109: Expression expected.
+tests/cases/conformance/jsx/23.tsx(1,7): error TS1005: '...' expected.
+tests/cases/conformance/jsx/23.tsx(1,7): error TS2304: Cannot find name 'props'.
+tests/cases/conformance/jsx/24.tsx(1,17): error TS1005: '>' expected.
+tests/cases/conformance/jsx/24.tsx(1,18): error TS1128: Declaration or statement expected.
+tests/cases/conformance/jsx/24.tsx(1,21): error TS2304: Cannot find name 'props'.
+tests/cases/conformance/jsx/24.tsx(1,27): error TS1109: Expression expected.
+tests/cases/conformance/jsx/24.tsx(1,28): error TS1109: Expression expected.
+tests/cases/conformance/jsx/25.tsx(1,10): error TS2304: Cannot find name 'props'.
+tests/cases/conformance/jsx/25.tsx(1,28): error TS1005: '>' expected.
+tests/cases/conformance/jsx/25.tsx(1,29): error TS1128: Declaration or statement expected.
+tests/cases/conformance/jsx/25.tsx(1,32): error TS2304: Cannot find name 'props'.
+tests/cases/conformance/jsx/25.tsx(1,38): error TS1109: Expression expected.
+tests/cases/conformance/jsx/25.tsx(1,39): error TS1109: Expression expected.
+tests/cases/conformance/jsx/28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/28.tsx(1,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/28.tsx(2,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/29.tsx(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/jsx/29.tsx(1,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/29.tsx(1,7): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/29.tsx(2,1): error TS1005: '</' expected.
+tests/cases/conformance/jsx/3.tsx(1,1): error TS1109: Expression expected.
+tests/cases/conformance/jsx/3.tsx(1,2): error TS1109: Expression expected.
+tests/cases/conformance/jsx/3.tsx(1,3): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/jsx/3.tsx(1,6): error TS1109: Expression expected.
+tests/cases/conformance/jsx/3.tsx(1,7): error TS1109: Expression expected.
+tests/cases/conformance/jsx/31.tsx(1,4): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/4.tsx(1,6): error TS1005: '{' expected.
+tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
+tests/cases/conformance/jsx/6.tsx(1,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/7.tsx(1,13): error TS1002: Unterminated string literal.
+tests/cases/conformance/jsx/8.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/8.tsx(1,6): error TS17002: Expected corresponding JSX closing tag for 'a'.
+tests/cases/conformance/jsx/9.tsx(1,3): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/9.tsx(1,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/9.tsx(1,11): error TS1005: '>' expected.
+tests/cases/conformance/jsx/9.tsx(1,12): error TS2304: Cannot find name 'b'.
+tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx (69 errors) ====
+==== tests/cases/conformance/jsx/1.tsx (3 errors) ====
     declare var React: any;
     
     </>;
@@ -79,9 +92,11 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS1109: Expression expected.
        ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/2.tsx (1 errors) ====
     <a: />;
       ~
 !!! error TS1003: Identifier expected.
+==== tests/cases/conformance/jsx/3.tsx (5 errors) ====
     <:a />;
     ~
 !!! error TS1109: Expression expected.
@@ -93,31 +108,31 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS1109: Expression expected.
           ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/4.tsx (1 errors) ====
     <a b=d />;
          ~
 !!! error TS1005: '{' expected.
-         ~
-!!! error TS2304: Cannot find name 'd'.
-            ~
-!!! error TS1109: Expression expected.
-             ~
-!!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/5.tsx (2 errors) ====
     <a>;
-    ~
-!!! error TS1003: Identifier expected.
+     ~
+!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+        
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/6.tsx (1 errors) ====
     <a></b>;
        ~~~~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
+==== tests/cases/conformance/jsx/7.tsx (1 errors) ====
     <a foo="bar;
                 
 !!! error TS1002: Unterminated string literal.
+==== tests/cases/conformance/jsx/8.tsx (2 errors) ====
     <a:b></b>;
-    ~
+      ~
 !!! error TS1003: Identifier expected.
          ~~~~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a'.
-             ~
-!!! error TS2657: JSX expressions must have one parent element
+==== tests/cases/conformance/jsx/9.tsx (5 errors) ====
     <a:b.c></a:b.c>;
       ~
 !!! error TS1003: Identifier expected.
@@ -129,6 +144,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'b'.
                    ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/10.tsx (6 errors) ====
     <a.b:c></a.b:c>;
      ~
 !!! error TS2304: Cannot find name 'a'.
@@ -142,11 +158,13 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'c'.
                    ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/11.tsx (2 errors) ====
     <a.b.c></a>;
      ~
 !!! error TS2304: Cannot find name 'a'.
            ~~~~
 !!! error TS17002: Expected corresponding JSX closing tag for 'a.b.c'.
+==== tests/cases/conformance/jsx/12.tsx (6 errors) ====
     <.a></.a>;
     ~
 !!! error TS1109: Expression expected.
@@ -160,6 +178,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'a'.
              ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/13.tsx (4 errors) ====
     <a.></a.>;
      ~
 !!! error TS2304: Cannot find name 'a'.
@@ -169,6 +188,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'a'.
             ~
 !!! error TS1003: Identifier expected.
+==== tests/cases/conformance/jsx/14.tsx (6 errors) ====
     <a[foo]></a[foo]>;
       ~
 !!! error TS1003: Identifier expected.
@@ -182,6 +202,7 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'foo'.
                      ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/15.tsx (4 errors) ====
     <a['foo']></a['foo']>;
       ~
 !!! error TS1003: Identifier expected.
@@ -191,55 +212,110 @@ tests/cases/conformance/jsx/jsxInvalidEsprimaTestSuite.tsx(35,21): error TS1005:
 !!! error TS2304: Cannot find name 'a'.
                          ~
 !!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/16.tsx (2 errors) ====
     <a><a />;
      ~
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
+             
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/17.tsx (2 errors) ====
     <a b={}>;
      ~
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
+             
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/18.tsx (2 errors) ====
     var x = <div>one</div><div>two</div>;;
+            ~~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                                        ~
+!!! error TS2657: JSX expressions must have one parent element.
+==== tests/cases/conformance/jsx/19.tsx (2 errors) ====
     var x = <div>one</div> /* intervening comment */ <div>two</div>;;
+            ~~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+                                                                   ~
+!!! error TS2657: JSX expressions must have one parent element.
+==== tests/cases/conformance/jsx/20.tsx (1 errors) ====
     <a>{"str";}</a>;
              ~
 !!! error TS1005: '}' expected.
+==== tests/cases/conformance/jsx/21.tsx (1 errors) ====
     <span className="a", id="b" />;
                        ~
 !!! error TS1003: Identifier expected.
+==== tests/cases/conformance/jsx/22.tsx (2 errors) ====
     <div className"app">;
                   ~~~~~
 !!! error TS1003: Identifier expected.
+                        ~
+!!! error TS1109: Expression expected.
+==== tests/cases/conformance/jsx/23.tsx (2 errors) ====
     <div {props} />;
           ~~~~~
 !!! error TS1005: '...' expected.
           ~~~~~
 !!! error TS2304: Cannot find name 'props'.
     
+==== tests/cases/conformance/jsx/24.tsx (5 errors) ====
     <div>stuff</div {...props}>;
                     ~
 !!! error TS1005: '>' expected.
+                     ~~~
+!!! error TS1128: Declaration or statement expected.
+                        ~~~~~
+!!! error TS2304: Cannot find name 'props'.
+                              ~
+!!! error TS1109: Expression expected.
+                               ~
+!!! error TS1109: Expression expected.
+    
+==== tests/cases/conformance/jsx/25.tsx (6 errors) ====
     <div {...props}>stuff</div {...props}>;
              ~~~~~
 !!! error TS2304: Cannot find name 'props'.
                                ~
 !!! error TS1005: '>' expected.
+                                ~~~
+!!! error TS1128: Declaration or statement expected.
+                                   ~~~~~
+!!! error TS2304: Cannot find name 'props'.
+                                         ~
+!!! error TS1109: Expression expected.
+                                          ~
+!!! error TS1109: Expression expected.
     
+    
+==== tests/cases/conformance/jsx/26.tsx (0 errors) ====
     <a>></a>;
+    
+==== tests/cases/conformance/jsx/27.tsx (0 errors) ====
     <a> ></a>;
+    
+==== tests/cases/conformance/jsx/28.tsx (3 errors) ====
     <a b=}>;
      ~
 !!! error TS17008: JSX element 'a' has no corresponding closing tag.
          ~
 !!! error TS1005: '{' expected.
+    
+    
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/29.tsx (4 errors) ====
     <a b=<}>;
-     ~
-!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+    ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
          ~
 !!! error TS1005: '{' expected.
           ~
-!!! error TS1109: Expression expected.
+!!! error TS1003: Identifier expected.
+    
+    
+!!! error TS1005: '</' expected.
+==== tests/cases/conformance/jsx/30.tsx (0 errors) ====
     <a>}</a>;
+    
+==== tests/cases/conformance/jsx/31.tsx (1 errors) ====
     <a .../*hai*/asdf/>;
        ~~~
 !!! error TS1003: Identifier expected.
-                        
-!!! error TS1005: '</' expected.

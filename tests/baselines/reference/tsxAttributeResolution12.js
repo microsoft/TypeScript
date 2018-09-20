@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution12.tsx] ////
 
 //// [react.d.ts]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -15,7 +14,6 @@ declare module JSX {
 }
 
 //// [file.tsx]
-
 declare class Component<P, S>  {
 	constructor(props?: P, context?: any);
 	setState(f: (prevState: S, props: P) => S, callback?: () => any): void;

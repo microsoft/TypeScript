@@ -42,12 +42,12 @@ function f2(x: A | B) {
 
 //// [narrowingOfDottedNames.js]
 // Repro from #8383
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;

@@ -1,20 +1,20 @@
 interface A {
-    name();
+    prop();
 }
 class B {
-    public name() { }
+    public prop() { }
 }
 class C {
-    public static name() { }
+    public static prop() { }
 }
 
 var a: A = new B();
-a = new C(); // error name is missing
-a = B; // error name is missing
+a = new C(); // error prop is missing
+a = B; // error prop is missing
 a = C;
 
-var b: B = new C(); // error name is missing
-b = B; // error name is missing
+var b: B = new C(); // error prop is missing
+b = B; // error prop is missing
 b = C;
 b = a;
 

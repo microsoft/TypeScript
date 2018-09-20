@@ -1,0 +1,59 @@
+=== tests/cases/compiler/optionalPropertiesSyntax.ts ===
+interface fnSigs {
+    //functions signatures can be optional
+    fn(): void;
+>fn : { (): void; (): void; }
+
+    fn?(): void; //err
+>fn : { (): void; (): void; }
+
+    fn2?(): void;
+>fn2 : () => void
+}
+
+interface callSig {
+    //Call signatures can't be optional
+    (): any;
+    ()?: any; //err
+>any : any
+
+    ?(): any; //err
+}
+
+interface constructSig {
+    //Construct signatures can't be optional
+    new (): any;
+    new ()?: any; //err
+>any : any
+
+    new ?(): any; //err
+>new : () => any
+}
+
+interface propertySig {
+    //Property signatures can be optional
+    prop: any;
+>prop : any
+
+    prop?: any;
+>prop : any
+
+    prop2?: any;
+>prop2 : any
+}
+
+interface indexSig {
+    //Index signatures can't be optional
+    [idx: number]: any;
+>idx : number
+
+    [idx: number]?: any; //err
+>idx : number
+>any : any
+
+    ? [idx: number]: any; //err
+>idx : number
+
+    [idx?: number]: any; //err
+>idx : number
+}

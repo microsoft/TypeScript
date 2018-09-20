@@ -1,5 +1,4 @@
 === tests/cases/compiler/controlFlowCaching.ts ===
-
 // Repro for #8401
 
 function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
@@ -49,14 +48,14 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >o.rotation : any
 >o : any
 >rotation : any
->360 : number
+>360 : 360
 
         start, stop, titlePos, titleRotation = 0, titleOffset, axisVector, tickVector, anchorOffset, labelOffset, labelAlign,
 >start : any
 >stop : any
 >titlePos : any
 >titleRotation : number
->0 : number
+>0 : 0
 >titleOffset : any
 >axisVector : any
 >tickVector : any
@@ -151,7 +150,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >ta : any
 >tick : any
 >fontColor : any
->"black" : string
+>"black" : "black"
 
         taTitleFontColor = o.titleFontColor || (ta.title && ta.title.fontColor) || "black",
 >taTitleFontColor : any
@@ -170,7 +169,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >ta : any
 >title : any
 >fontColor : any
->"black" : string
+>"black" : "black"
 
         taTitleGap = (o.titleGap == 0) ? 0 : o.titleGap || (ta.title && ta.title.gap) || 15,
 >taTitleGap : any
@@ -181,7 +180,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >o : any
 >titleGap : any
 >0 : 0
->0 : number
+>0 : 0
 >o.titleGap || (ta.title && ta.title.gap) || 15 : any
 >o.titleGap || (ta.title && ta.title.gap) : any
 >o.titleGap : any
@@ -197,7 +196,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >ta : any
 >title : any
 >gap : any
->15 : number
+>15 : 15
 
         taTitleOrientation = o.titleOrientation || (ta.title && ta.title.orientation) || "axis",
 >taTitleOrientation : any
@@ -216,7 +215,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >ta : any
 >title : any
 >orientation : any
->"axis" : string
+>"axis" : "axis"
 
         taMajorTick = this.chart.theme.getTick("major", o),
 >taMajorTick : any
@@ -228,7 +227,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >chart : any
 >theme : any
 >getTick : any
->"major" : string
+>"major" : "major"
 >o : any
 
         taMinorTick = this.chart.theme.getTick("minor", o),
@@ -241,7 +240,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >chart : any
 >theme : any
 >getTick : any
->"minor" : string
+>"minor" : "minor"
 >o : any
 
         taMicroTick = this.chart.theme.getTick("micro", o),
@@ -254,14 +253,14 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >chart : any
 >theme : any
 >getTick : any
->"micro" : string
+>"micro" : "micro"
 >o : any
 
         taStroke = "stroke" in o ? o.stroke : ta.stroke,
 >taStroke : any
 >"stroke" in o ? o.stroke : ta.stroke : any
 >"stroke" in o : boolean
->"stroke" : string
+>"stroke" : "stroke"
 >o : any
 >o.stroke : any
 >o : any
@@ -285,7 +284,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >splitFontString : any
 >taFont : any
 >size : any
->0 : number
+>0 : 0
 
         cosr = Math.abs(Math.cos(rotation * Math.PI / 180)),
 >cosr : number
@@ -303,7 +302,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >Math.PI : number
 >Math : Math
 >PI : number
->180 : number
+>180 : 180
 
         sinr = Math.abs(Math.sin(rotation * Math.PI / 180)),
 >sinr : number
@@ -321,7 +320,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >Math.PI : number
 >Math : Math
 >PI : number
->180 : number
+>180 : 180
 
         tsize = taTitleFont ? g.normalizedLength(g.splitFontString(taTitleFont).size) : 0;
 >tsize : any
@@ -338,17 +337,17 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >splitFontString : any
 >taTitleFont : any
 >size : any
->0 : number
+>0 : 0
 
     if (rotation < 0) {
 >rotation < 0 : boolean
 >rotation : number
->0 : number
+>0 : 0
 
         rotation += 360;
 >rotation += 360 : number
 >rotation : number
->360 : number
+>360 : 360
     }
     var cachedLabelW = this._getMaxLabelSize();
 >cachedLabelW : any
@@ -381,7 +380,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >(cachedLabelW || 0) : any
 >cachedLabelW || 0 : any
 >cachedLabelW : any
->0 : number
+>0 : 0
 >sinr : number
 >labelGap : any
 >Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) : number
@@ -393,11 +392,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >taMajorTick.length : any
 >taMajorTick : any
 >length : any
->0 : number
+>0 : 0
 >taMajorTick.length : any
 >taMajorTick : any
 >length : any
->0 : number
+>0 : 0
 
         taMinorTick.length > 0 ? taMinorTick.length : 0) +
 >taMinorTick.length > 0 ? taMinorTick.length : 0 : any
@@ -405,11 +404,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >taMinorTick.length : any
 >taMinorTick : any
 >length : any
->0 : number
+>0 : 0
 >taMinorTick.length : any
 >taMinorTick : any
 >length : any
->0 : number
+>0 : 0
 
         tsize + taTitleGap;
 >tsize : any
@@ -420,13 +419,13 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >axisVector : any
 >{ x: isRtl ? -1 : 1, y: 0 } : { x: number; y: number; }
 >x : number
->isRtl ? -1 : 1 : number
+>isRtl ? -1 : 1 : 1 | -1
 >isRtl : any
->-1 : number
->1 : number
->1 : number
+>-1 : -1
+>1 : 1
+>1 : 1
 >y : number
->0 : number
+>0 : 0
 
     switch (rotation) {
 >rotation : number
@@ -437,7 +436,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >rotation : number
 >(90 - centerAnchorLimit) : number
 >90 - centerAnchorLimit : number
->90 : number
+>90 : 90
 >centerAnchorLimit : any
 
                 labelOffset.y = leftBottom ? size : 0;
@@ -448,14 +447,14 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >leftBottom ? size : 0 : any
 >leftBottom : boolean
 >size : any
->0 : number
+>0 : 0
 
             } else if (rotation < (90 + centerAnchorLimit)) {
 >rotation < (90 + centerAnchorLimit) : boolean
 >rotation : number
 >(90 + centerAnchorLimit) : any
 >90 + centerAnchorLimit : any
->90 : number
+>90 : 90
 >centerAnchorLimit : any
 
                 labelOffset.x = -size * 0.4;
@@ -466,12 +465,12 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >-size * 0.4 : number
 >-size : number
 >size : any
->0.4 : number
+>0.4 : 0.4
 
             } else if (rotation < 180) {
 >rotation < 180 : boolean
 >rotation : number
->180 : number
+>180 : 180
 
                 labelOffset.y = leftBottom ? 0 : -size;
 >labelOffset.y = leftBottom ? 0 : -size : number
@@ -480,7 +479,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >y : any
 >leftBottom ? 0 : -size : number
 >leftBottom : boolean
->0 : number
+>0 : 0
 >-size : number
 >size : any
 
@@ -489,7 +488,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >rotation : number
 >(270 - centerAnchorLimit) : number
 >270 - centerAnchorLimit : number
->270 : number
+>270 : 270
 >centerAnchorLimit : any
 
                 labelOffset.y = leftBottom ? 0 : -size;
@@ -499,7 +498,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >y : any
 >leftBottom ? 0 : -size : number
 >leftBottom : boolean
->0 : number
+>0 : 0
 >-size : number
 >size : any
 
@@ -508,7 +507,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >rotation : number
 >(270 + centerAnchorLimit) : any
 >270 + centerAnchorLimit : any
->270 : number
+>270 : 270
 >centerAnchorLimit : any
 
                 labelOffset.y = leftBottom ? size * 0.4 : 0;
@@ -520,8 +519,8 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >leftBottom : boolean
 >size * 0.4 : number
 >size : any
->0.4 : number
->0 : number
+>0.4 : 0.4
+>0 : 0
 
             } else {
                 labelOffset.y = leftBottom ? size : 0;
@@ -532,22 +531,22 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >leftBottom ? size : 0 : any
 >leftBottom : boolean
 >size : any
->0 : number
+>0 : 0
             }
     }
 
     titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0;
->titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : number
+>titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
 >titleRotation : number
->(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : number
+>(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
 >(taTitleOrientation && taTitleOrientation == "away") : boolean
 >taTitleOrientation && taTitleOrientation == "away" : boolean
 >taTitleOrientation : any
 >taTitleOrientation == "away" : boolean
 >taTitleOrientation : any
 >"away" : "away"
->180 : number
->0 : number
+>180 : 180
+>0 : 0
 
     titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize);
 >titlePos.y = offsets.t - titleOffset + (titleRotation ? 0 : tsize) : any
@@ -563,7 +562,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >(titleRotation ? 0 : tsize) : any
 >titleRotation ? 0 : tsize : any
 >titleRotation : number
->0 : number
+>0 : 0
 >tsize : any
 
     switch (labelAlign) {
@@ -573,18 +572,18 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >"start" : "start"
 
             labelAlign = "end";
->labelAlign = "end" : string
+>labelAlign = "end" : "end"
 >labelAlign : any
->"end" : string
+>"end" : "end"
 
             break;
         case "end":
 >"end" : "end"
 
             labelAlign = "start";
->labelAlign = "start" : string
+>labelAlign = "start" : "start"
 >labelAlign : any
->"start" : string
+>"start" : "start"
 
             break;
         case "middle":

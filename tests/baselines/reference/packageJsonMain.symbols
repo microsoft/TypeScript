@@ -1,0 +1,15 @@
+=== /a.ts ===
+import foo = require("foo");
+>foo : Symbol(foo, Decl(a.ts, 0, 0))
+
+import bar = require("bar");
+>bar : Symbol(bar, Decl(a.ts, 0, 28))
+
+import baz = require("baz");
+>baz : Symbol(baz, Decl(a.ts, 1, 28))
+
+foo + bar + baz;
+>foo : Symbol(foo, Decl(a.ts, 0, 0))
+>bar : Symbol(bar, Decl(a.ts, 0, 28))
+>baz : Symbol(baz, Decl(a.ts, 1, 28))
+

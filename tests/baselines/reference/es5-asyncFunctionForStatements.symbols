@@ -1,0 +1,79 @@
+=== tests/cases/compiler/es5-asyncFunctionForStatements.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionForStatements.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionForStatements.ts, 0, 26))
+
+async function forStatement0() {
+>forStatement0 : Symbol(forStatement0, Decl(es5-asyncFunctionForStatements.ts, 0, 29))
+
+    for (x; y; z) { a; }
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement1() {
+>forStatement1 : Symbol(forStatement1, Decl(es5-asyncFunctionForStatements.ts, 4, 1))
+
+    for (await x; y; z) { a; }
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement2() {
+>forStatement2 : Symbol(forStatement2, Decl(es5-asyncFunctionForStatements.ts, 8, 1))
+
+    for (x; await y; z) { a; }
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement3() {
+>forStatement3 : Symbol(forStatement3, Decl(es5-asyncFunctionForStatements.ts, 12, 1))
+
+    for (x; y; await z) { a; }
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement4() {
+>forStatement4 : Symbol(forStatement4, Decl(es5-asyncFunctionForStatements.ts, 16, 1))
+
+    for (x; y; z) { await a; }
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement5() {
+>forStatement5 : Symbol(forStatement5, Decl(es5-asyncFunctionForStatements.ts, 20, 1))
+
+    for (var b; y; z) { a; }
+>b : Symbol(b, Decl(es5-asyncFunctionForStatements.ts, 23, 12))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}
+
+async function forStatement6() {
+>forStatement6 : Symbol(forStatement6, Decl(es5-asyncFunctionForStatements.ts, 24, 1))
+
+    for (var c = x; y; z) { a; }
+>c : Symbol(c, Decl(es5-asyncFunctionForStatements.ts, 27, 12))
+>x : Symbol(x, Decl(es5-asyncFunctionForStatements.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionForStatements.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionForStatements.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionForStatements.ts, 0, 20))
+}

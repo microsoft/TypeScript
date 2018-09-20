@@ -1,0 +1,73 @@
+=== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts ===
+class C0 {
+>C0 : Symbol(C0, Decl(newOperatorErrorCases.ts, 0, 0))
+
+}
+class C1 {
+>C1 : Symbol(C1, Decl(newOperatorErrorCases.ts, 2, 1))
+
+    constructor(n: number, s: string) { }
+>n : Symbol(n, Decl(newOperatorErrorCases.ts, 4, 16))
+>s : Symbol(s, Decl(newOperatorErrorCases.ts, 4, 26))
+}
+
+class T<T> {
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 7, 8))
+
+    constructor(n?: T) { }
+>n : Symbol(n, Decl(newOperatorErrorCases.ts, 8, 16))
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 7, 8))
+}
+
+var anyCtor: {
+>anyCtor : Symbol(anyCtor, Decl(newOperatorErrorCases.ts, 11, 3))
+
+    new (): any;
+};
+
+var anyCtor1: {
+>anyCtor1 : Symbol(anyCtor1, Decl(newOperatorErrorCases.ts, 15, 3))
+
+    new (n): any;
+>n : Symbol(n, Decl(newOperatorErrorCases.ts, 16, 9))
+
+};
+
+interface nestedCtor {
+>nestedCtor : Symbol(nestedCtor, Decl(newOperatorErrorCases.ts, 17, 2), Decl(newOperatorErrorCases.ts, 22, 3))
+
+    new (): nestedCtor;
+>nestedCtor : Symbol(nestedCtor, Decl(newOperatorErrorCases.ts, 17, 2), Decl(newOperatorErrorCases.ts, 22, 3))
+}
+var nestedCtor: nestedCtor;
+>nestedCtor : Symbol(nestedCtor, Decl(newOperatorErrorCases.ts, 17, 2), Decl(newOperatorErrorCases.ts, 22, 3))
+>nestedCtor : Symbol(nestedCtor, Decl(newOperatorErrorCases.ts, 17, 2), Decl(newOperatorErrorCases.ts, 22, 3))
+
+// Construct expression with no parentheses for construct signature with > 0 parameters
+var b = new C0 32, ''; // Parse error
+>b : Symbol(b, Decl(newOperatorErrorCases.ts, 25, 3))
+>C0 : Symbol(C0, Decl(newOperatorErrorCases.ts, 0, 0))
+
+// Generic construct expression with no parentheses
+var c1 = new T;
+>c1 : Symbol(c1, Decl(newOperatorErrorCases.ts, 28, 3), Decl(newOperatorErrorCases.ts, 29, 3))
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
+
+var c1: T<{}>;
+>c1 : Symbol(c1, Decl(newOperatorErrorCases.ts, 28, 3), Decl(newOperatorErrorCases.ts, 29, 3))
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
+
+var c2 = new T<string>; // Parse error
+>c2 : Symbol(c2, Decl(newOperatorErrorCases.ts, 30, 3))
+>T : Symbol(T, Decl(newOperatorErrorCases.ts, 5, 1))
+
+
+// Construct expression of non-void returning function
+function fnNumber(): number { return 32; }
+>fnNumber : Symbol(fnNumber, Decl(newOperatorErrorCases.ts, 30, 23))
+
+var s = new fnNumber(); // Error
+>s : Symbol(s, Decl(newOperatorErrorCases.ts, 35, 3))
+>fnNumber : Symbol(fnNumber, Decl(newOperatorErrorCases.ts, 30, 23))
+

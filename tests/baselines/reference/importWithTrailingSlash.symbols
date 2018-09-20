@@ -1,0 +1,42 @@
+=== /a.ts ===
+export default { a: 0 };
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+=== /a/index.ts ===
+export default { aIndex: 0 };
+>aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
+
+=== /a/test.ts ===
+import a from ".";
+>a : Symbol(a, Decl(test.ts, 0, 6))
+
+import aIndex from "./";
+>aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
+
+a.a;
+>a.a : Symbol(a, Decl(a.ts, 0, 16))
+>a : Symbol(a, Decl(test.ts, 0, 6))
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+aIndex.aIndex;
+>aIndex.aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
+>aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
+>aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
+
+=== /a/b/test.ts ===
+import a from "..";
+>a : Symbol(a, Decl(test.ts, 0, 6))
+
+import aIndex from "../";
+>aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
+
+a.a;
+>a.a : Symbol(a, Decl(a.ts, 0, 16))
+>a : Symbol(a, Decl(test.ts, 0, 6))
+>a : Symbol(a, Decl(a.ts, 0, 16))
+
+aIndex.aIndex;
+>aIndex.aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
+>aIndex : Symbol(aIndex, Decl(test.ts, 1, 6))
+>aIndex : Symbol(aIndex, Decl(index.ts, 0, 16))
+

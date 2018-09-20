@@ -4,8 +4,6 @@ import a = require('declFileExportAssignmentOfGenericInterface_0');
 
 export var x: a<a<string>>;
 >x : a<a<string>>
->a : a<T>
->a : a<T>
 
 x.a;
 >x.a : string
@@ -13,11 +11,7 @@ x.a;
 >a : string
 
 === tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts ===
-
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     a: string;
 >a : string
 }

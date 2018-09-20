@@ -108,31 +108,39 @@ module NonEmptyTypes {
 
 
 //// [arrayBestCommonTypes.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var EmptyTypes;
 (function (EmptyTypes) {
-    var base = (function () {
+    var base = /** @class */ (function () {
         function base() {
         }
         return base;
     }());
-    var base2 = (function () {
+    var base2 = /** @class */ (function () {
         function base2() {
         }
         return base2;
     }());
-    var derived = (function (_super) {
+    var derived = /** @class */ (function (_super) {
         __extends(derived, _super);
         function derived() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         f.prototype.voidIfAny = function (x, y) {
@@ -174,24 +182,24 @@ var EmptyTypes;
 })(EmptyTypes || (EmptyTypes = {}));
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
-    var base = (function () {
+    var base = /** @class */ (function () {
         function base() {
         }
         return base;
     }());
-    var base2 = (function () {
+    var base2 = /** @class */ (function () {
         function base2() {
         }
         return base2;
     }());
-    var derived = (function (_super) {
+    var derived = /** @class */ (function (_super) {
         __extends(derived, _super);
         function derived() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return derived;
     }(base));
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         f.prototype.voidIfAny = function (x, y) {

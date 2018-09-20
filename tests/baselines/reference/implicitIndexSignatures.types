@@ -1,6 +1,6 @@
 === tests/cases/compiler/implicitIndexSignatures.ts ===
 type StringMap = { [x: string]: string };
->StringMap : { [x: string]: string; }
+>StringMap : StringMap
 >x : string
 
 const empty1 = {};
@@ -14,9 +14,9 @@ const names1 = { a: "foo", b: "bar" };
 >names1 : { a: string; b: string; }
 >{ a: "foo", b: "bar" } : { a: string; b: string; }
 >a : string
->"foo" : string
+>"foo" : "foo"
 >b : string
->"bar" : string
+>"bar" : "bar"
 
 let names2: { a: string, b: string };
 >names2 : { a: string; b: string; }
@@ -24,53 +24,46 @@ let names2: { a: string, b: string };
 >b : string
 
 let map: StringMap;
->map : { [x: string]: string; }
->StringMap : { [x: string]: string; }
+>map : StringMap
 
 map = { x: "xxx", y: "yyy" };
 >map = { x: "xxx", y: "yyy" } : { x: string; y: string; }
->map : { [x: string]: string; }
+>map : StringMap
 >{ x: "xxx", y: "yyy" } : { x: string; y: string; }
 >x : string
->"xxx" : string
+>"xxx" : "xxx"
 >y : string
->"yyy" : string
+>"yyy" : "yyy"
 
 map = empty1;
 >map = empty1 : {}
->map : { [x: string]: string; }
+>map : StringMap
 >empty1 : {}
 
 map = empty2;
 >map = empty2 : {}
->map : { [x: string]: string; }
+>map : StringMap
 >empty2 : {}
 
 map = names1;
 >map = names1 : { a: string; b: string; }
->map : { [x: string]: string; }
+>map : StringMap
 >names1 : { a: string; b: string; }
 
 map = names2;
 >map = names2 : { a: string; b: string; }
->map : { [x: string]: string; }
+>map : StringMap
 >names2 : { a: string; b: string; }
 
 declare function getStringIndexValue<T>(map: { [x: string]: T }): T;
 >getStringIndexValue : <T>(map: { [x: string]: T; }) => T
->T : T
 >map : { [x: string]: T; }
 >x : string
->T : T
->T : T
 
 declare function getNumberIndexValue<T>(map: { [x: number]: T }): T;
 >getNumberIndexValue : <T>(map: { [x: number]: T; }) => T
->T : T
 >map : { [x: number]: T; }
 >x : number
->T : T
->T : T
 
 function f1() {
 >f1 : () => void
@@ -79,9 +72,9 @@ function f1() {
 >o1 : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >a : number
->1 : number
+>1 : 1
 >b : number
->2 : number
+>2 : 2
 
     let o2: { a: number, b: number };
 >o2 : { a: number; b: number; }
@@ -108,9 +101,9 @@ function f2() {
 >o1 : { a: string; b: string; }
 >{ a: "1", b: "2" } : { a: string; b: string; }
 >a : string
->"1" : string
+>"1" : "1"
 >b : string
->"2" : string
+>"2" : "2"
 
     let o2: { a: string, b: string };
 >o2 : { a: string; b: string; }
@@ -137,9 +130,9 @@ function f3() {
 >o1 : { a: number; b: string; }
 >{ a: 1, b: "2" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"2" : string
+>"2" : "2"
 
     let o2: { a: number, b: string };
 >o2 : { a: number; b: string; }
@@ -165,13 +158,17 @@ function f4() {
     const o1 = { 0: "0", 1: "1", count: 2 };
 >o1 : { 0: string; 1: string; count: number; }
 >{ 0: "0", 1: "1", count: 2 } : { 0: string; 1: string; count: number; }
->"0" : string
->"1" : string
+>0 : string
+>"0" : "0"
+>1 : string
+>"1" : "1"
 >count : number
->2 : number
+>2 : 2
 
     let o2: { 0: string, 1: string, count: number };    
 >o2 : { 0: string; 1: string; count: number; }
+>0 : string
+>1 : string
 >count : number
 
     const v1 = getStringIndexValue(o1);

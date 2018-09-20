@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility2.ts]
-
 class BaseA {
     public constructor(public x: number) { }
     createInstance() { new BaseA(1); }
@@ -47,26 +46,34 @@ var dc = new DerivedC(1);
 
 
 //// [classConstructorAccessibility2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var BaseA = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var BaseA = /** @class */ (function () {
     function BaseA(x) {
         this.x = x;
     }
     BaseA.prototype.createInstance = function () { new BaseA(1); };
     return BaseA;
 }());
-var BaseB = (function () {
+var BaseB = /** @class */ (function () {
     function BaseB(x) {
         this.x = x;
     }
     BaseB.prototype.createInstance = function () { new BaseB(2); };
     return BaseB;
 }());
-var BaseC = (function () {
+var BaseC = /** @class */ (function () {
     function BaseC(x) {
         this.x = x;
     }
@@ -74,33 +81,36 @@ var BaseC = (function () {
     BaseC.staticInstance = function () { new BaseC(4); };
     return BaseC;
 }());
-var DerivedA = (function (_super) {
+var DerivedA = /** @class */ (function (_super) {
     __extends(DerivedA, _super);
     function DerivedA(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedA.prototype.createInstance = function () { new DerivedA(5); };
     DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
     DerivedA.staticBaseInstance = function () { new BaseA(7); };
     return DerivedA;
 }(BaseA));
-var DerivedB = (function (_super) {
+var DerivedB = /** @class */ (function (_super) {
     __extends(DerivedB, _super);
     function DerivedB(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedB.prototype.createInstance = function () { new DerivedB(7); };
     DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
     DerivedB.staticBaseInstance = function () { new BaseB(9); }; // ok
     return DerivedB;
 }(BaseB));
-var DerivedC = (function (_super) {
+var DerivedC = /** @class */ (function (_super) {
     __extends(DerivedC, _super);
     function DerivedC(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedC.prototype.createInstance = function () { new DerivedC(9); };
     DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error
@@ -128,7 +138,7 @@ declare class BaseB {
 }
 declare class BaseC {
     x: number;
-    private constructor(x);
+    private constructor();
     createInstance(): void;
     static staticInstance(): void;
 }

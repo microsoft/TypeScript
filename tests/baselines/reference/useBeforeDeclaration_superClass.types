@@ -1,0 +1,70 @@
+=== tests/cases/compiler/useBeforeDeclaration_superClass.ts ===
+class C {
+>C : C
+
+    x = 0;
+>x : number
+>0 : 0
+}
+class D extends C {
+>D : D
+>C : C
+
+    // Not an error -- this will access the parent's initialized value for `x`, not the one on the child.
+    old_x = this.x;
+>old_x : number
+>this.x : number
+>this : this
+>x : number
+
+    x = 1;
+>x : number
+>1 : 1
+}
+
+// Test that it works on chains of classes
+class X {
+>X : X
+
+    x = 0;
+>x : number
+>0 : 0
+}
+class Y extends X {}
+>Y : Y
+>X : X
+
+class Z extends Y {
+>Z : Z
+>Y : Y
+
+    old_x = this.x;
+>old_x : number
+>this.x : number
+>this : this
+>x : number
+
+    x = 1;
+>x : number
+>1 : 1
+}
+
+// Interface doesn't count
+interface I {
+    x: number;
+>x : number
+}
+class J implements I {
+>J : J
+
+    old_x = this.x;
+>old_x : number
+>this.x : number
+>this : this
+>x : number
+
+    x = 1;
+>x : number
+>1 : 1
+}
+

@@ -1,0 +1,77 @@
+=== tests/cases/compiler/autolift4.ts ===
+class Point {
+>Point : Symbol(Point, Decl(autolift4.ts, 0, 0))
+
+    constructor(public x: number, public y: number) {
+>x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+
+    }
+    getDist() { 
+>getDist : Symbol(Point.getDist, Decl(autolift4.ts, 4, 5))
+
+        return Math.sqrt(this.x*this.x + this.y*this.y); 
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>this.x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this : Symbol(Point, Decl(autolift4.ts, 0, 0))
+>x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this.x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this : Symbol(Point, Decl(autolift4.ts, 0, 0))
+>x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this.y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this : Symbol(Point, Decl(autolift4.ts, 0, 0))
+>y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this.y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this : Symbol(Point, Decl(autolift4.ts, 0, 0))
+>y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+    }
+    static origin = new Point(0,0);
+>origin : Symbol(Point.origin, Decl(autolift4.ts, 7, 5))
+>Point : Symbol(Point, Decl(autolift4.ts, 0, 0))
+}
+
+class Point3D extends Point {
+>Point3D : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>Point : Symbol(Point, Decl(autolift4.ts, 0, 0))
+
+    constructor(x: number, y: number, public z: number, m:number) {
+>x : Symbol(x, Decl(autolift4.ts, 13, 16))
+>y : Symbol(y, Decl(autolift4.ts, 13, 26))
+>z : Symbol(Point3D.z, Decl(autolift4.ts, 13, 37))
+>m : Symbol(m, Decl(autolift4.ts, 13, 55))
+
+        super(x, y);
+>super : Symbol(Point, Decl(autolift4.ts, 0, 0))
+>x : Symbol(x, Decl(autolift4.ts, 13, 16))
+>y : Symbol(y, Decl(autolift4.ts, 13, 26))
+    }
+    
+    getDist() {
+>getDist : Symbol(Point3D.getDist, Decl(autolift4.ts, 15, 5))
+
+        return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.m);
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>this.x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this.x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>x : Symbol(Point.x, Decl(autolift4.ts, 2, 16))
+>this.y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this.y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>y : Symbol(Point.y, Decl(autolift4.ts, 2, 33))
+>this.z : Symbol(Point3D.z, Decl(autolift4.ts, 13, 37))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+>z : Symbol(Point3D.z, Decl(autolift4.ts, 13, 37))
+>this : Symbol(Point3D, Decl(autolift4.ts, 9, 1))
+    }        
+}
+
+

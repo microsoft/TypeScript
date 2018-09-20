@@ -38,7 +38,6 @@ new r.Member();
 >Member : typeof Member
 
 === tests/cases/compiler/b.ts ===
-
 export class Member {}
 >Member : Member
 

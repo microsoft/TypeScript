@@ -1,5 +1,4 @@
 //// [sourceMap-FileWithComments.ts]
-
 // Interface
 interface IPoint {
     getDist(): number;
@@ -41,7 +40,7 @@ var dist = p.getDist();
 var Shapes;
 (function (Shapes) {
     // Class
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         // Constructor
         function Point(x, y) {
             this.x = x;

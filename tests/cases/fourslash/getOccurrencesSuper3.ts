@@ -14,7 +14,7 @@
 ////}
 
 function checkRange(r: FourSlashInterface.Range, expectedOccurences: FourSlashInterface.Range[]): void {
-    goTo.position(r.start);
+    goTo.rangeStart(r);
     if (expectedOccurences.length) {
         for (const expected of expectedOccurences) {
             verify.occurrencesAtPositionContains(expected);

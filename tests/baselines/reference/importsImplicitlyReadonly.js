@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/importsImplicitlyReadonly.ts] ////
 
 //// [a.ts]
-
 export var x = 1;
 var y = 1;
 export { y };
@@ -23,11 +22,13 @@ a3.y = 1;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 1;
 var y = 1;
 exports.y = y;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var a_1 = require("./a");
 var a1 = require("./a");
 var a2 = require("./a");

@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 class CLASS {
 >CLASS : CLASS
@@ -99,7 +98,7 @@ ANY = null, OBJECT
 
 true, {}
 >true, {} : {}
->true : boolean
+>true : true
 >{} : {}
 
 !BOOLEAN, []
@@ -110,7 +109,7 @@ true, {}
 
 "string", new Date()
 >"string", new Date() : Date
->"string" : string
+>"string" : "string"
 >new Date() : Date
 >Date : DateConstructor
 
@@ -143,7 +142,7 @@ var resultIsObject8 = (true, {});
 >resultIsObject8 : {}
 >(true, {}) : {}
 >true, {} : {}
->true : boolean
+>true : true
 >{} : {}
 
 var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
@@ -154,15 +153,15 @@ var resultIsObject9 = (!BOOLEAN, { a: 1, b: "s" });
 >BOOLEAN : boolean
 >{ a: 1, b: "s" } : { a: number; b: string; }
 >a : number
->1 : number
+>1 : 1
 >b : string
->"s" : string
+>"s" : "s"
 
 var resultIsObject10 = ("string", new Date());
 >resultIsObject10 : Date
 >("string", new Date()) : Date
 >"string", new Date() : Date
->"string" : string
+>"string" : "string"
 >new Date() : Date
 >Date : DateConstructor
 

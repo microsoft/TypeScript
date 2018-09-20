@@ -28,25 +28,10 @@
 ////d./*1*/
 ////D./*2*/
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
-goTo.marker('1');
-verify.completionListContains('foo');
-verify.completionListContains('foo2');
-verify.not.completionListContains('bar');
-verify.not.completionListContains('bar2');
-verify.not.completionListContains('baz');
-verify.not.completionListContains('x');
+verify.completions({ marker: "1", exact: ["foo2", "foo"] });
 edit.insert('foo()');
 
-goTo.marker('2');
-verify.not.completionListContains('foo');
-verify.not.completionListContains('foo2');
-verify.completionListContains('bar');
-verify.completionListContains('bar2');
-verify.completionListContains('baz');
-verify.completionListContains('x');
+verify.completions({ marker: "2", includes: ["bar", "bar2", "baz", "x"], excludes: ["foo", "foo2"] });
 edit.insert('bar()');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

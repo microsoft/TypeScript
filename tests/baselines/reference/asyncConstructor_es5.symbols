@@ -1,0 +1,7 @@
+=== tests/cases/conformance/async/es5/asyncConstructor_es5.ts ===
+class C {
+>C : Symbol(C, Decl(asyncConstructor_es5.ts, 0, 0))
+
+  async constructor() {
+  }
+}

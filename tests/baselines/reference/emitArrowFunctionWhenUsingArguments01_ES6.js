@@ -41,9 +41,9 @@ var b = function () {
     };
 };
 function baz() {
-    (() => {
+    () => {
         var arg = arguments[0];
-    });
+    };
 }
 function foo(inputFunc) { }
 foo(() => {
@@ -52,8 +52,8 @@ foo(() => {
 function bar() {
     var arg = arguments[0]; // no error
 }
-(() => {
+() => {
     function foo() {
         var arg = arguments[0]; // no error
     }
-});
+};

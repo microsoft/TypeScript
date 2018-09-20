@@ -1,0 +1,11 @@
+tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration13_es2017.ts(3,11): error TS2304: Cannot find name 'await'.
+
+
+==== tests/cases/conformance/async/es2017/functionDeclarations/asyncFunctionDeclaration13_es2017.ts (1 errors) ====
+    async function foo(): Promise<void> {
+       // Legal to use 'await' in a type context.
+       var v: await;
+              ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+    }
+    

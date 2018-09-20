@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames35_ES5.ts ===
+function foo<T>() { return '' }
+>foo : <T>() => string
+>'' : ""
+
+interface I<T> {
+    bar(): string;
+>bar : () => string
+
+    [foo<T>()](): void;
+>[foo<T>()] : () => void
+>foo<T>() : string
+>foo : <T>() => string
+}

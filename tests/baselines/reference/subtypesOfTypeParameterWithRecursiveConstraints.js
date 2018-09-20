@@ -159,12 +159,20 @@ module M2 {
 
 //// [subtypesOfTypeParameterWithRecursiveConstraints.js]
 // checking whether other types are subtypes of type parameters with constraints
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Foo = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
@@ -209,142 +217,142 @@ function f(t, u, v) {
 }
 var M1;
 (function (M1) {
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base() {
         }
         return Base;
     }());
-    var D1 = (function (_super) {
+    var D1 = /** @class */ (function (_super) {
         __extends(D1, _super);
         function D1() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D1;
     }(Base));
-    var D2 = (function (_super) {
+    var D2 = /** @class */ (function (_super) {
         __extends(D2, _super);
         function D2() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D2;
     }(Base));
-    var D3 = (function (_super) {
+    var D3 = /** @class */ (function (_super) {
         __extends(D3, _super);
         function D3() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D3;
     }(Base));
-    var D4 = (function (_super) {
+    var D4 = /** @class */ (function (_super) {
         __extends(D4, _super);
         function D4() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D4;
     }(Base));
-    var D5 = (function (_super) {
+    var D5 = /** @class */ (function (_super) {
         __extends(D5, _super);
         function D5() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D5;
     }(Base));
-    var D6 = (function (_super) {
+    var D6 = /** @class */ (function (_super) {
         __extends(D6, _super);
         function D6() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D6;
     }(Base));
-    var D7 = (function (_super) {
+    var D7 = /** @class */ (function (_super) {
         __extends(D7, _super);
         function D7() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D7;
     }(Base));
-    var D8 = (function (_super) {
+    var D8 = /** @class */ (function (_super) {
         __extends(D8, _super);
         function D8() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D8;
     }(Base));
-    var D9 = (function (_super) {
+    var D9 = /** @class */ (function (_super) {
         __extends(D9, _super);
         function D9() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D9;
     }(Base));
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
-    var Base2 = (function () {
+    var Base2 = /** @class */ (function () {
         function Base2() {
         }
         return Base2;
     }());
-    var D1 = (function (_super) {
+    var D1 = /** @class */ (function (_super) {
         __extends(D1, _super);
         function D1() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D1;
     }(Base2));
-    var D2 = (function (_super) {
+    var D2 = /** @class */ (function (_super) {
         __extends(D2, _super);
         function D2() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D2;
     }(Base2));
-    var D3 = (function (_super) {
+    var D3 = /** @class */ (function (_super) {
         __extends(D3, _super);
         function D3() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D3;
     }(Base2));
-    var D4 = (function (_super) {
+    var D4 = /** @class */ (function (_super) {
         __extends(D4, _super);
         function D4() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D4;
     }(Base2));
-    var D5 = (function (_super) {
+    var D5 = /** @class */ (function (_super) {
         __extends(D5, _super);
         function D5() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D5;
     }(Base2));
-    var D6 = (function (_super) {
+    var D6 = /** @class */ (function (_super) {
         __extends(D6, _super);
         function D6() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D6;
     }(Base2));
-    var D7 = (function (_super) {
+    var D7 = /** @class */ (function (_super) {
         __extends(D7, _super);
         function D7() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D7;
     }(Base2));
-    var D8 = (function (_super) {
+    var D8 = /** @class */ (function (_super) {
         __extends(D8, _super);
         function D8() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D8;
     }(Base2));
-    var D9 = (function (_super) {
+    var D9 = /** @class */ (function (_super) {
         __extends(D9, _super);
         function D9() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return D9;
     }(Base2));

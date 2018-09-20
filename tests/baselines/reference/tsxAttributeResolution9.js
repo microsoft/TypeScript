@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution9.tsx] ////
 
 //// [react.d.ts]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -30,7 +29,8 @@ export class MyComponent {
 //// [file.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var MyComponent = (function () {
+    exports.__esModule = true;
+    var MyComponent = /** @class */ (function () {
         function MyComponent() {
         }
         MyComponent.prototype.render = function () {
