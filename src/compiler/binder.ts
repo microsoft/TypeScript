@@ -3223,8 +3223,7 @@ namespace ts {
             // A ClassDeclaration is ES6 syntax.
             transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-            // A class with a parameter property assignment, property initializer, computed property name, or decorator is
-            // TypeScript syntax.
+            // A class with a parameter property assignment or decorator is TypeScript syntax.
             // An exported declaration may be TypeScript syntax, but is handled by the visitor
             // for a namespace declaration.
             if ((subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax)
@@ -3241,8 +3240,7 @@ namespace ts {
         // A ClassExpression is ES6 syntax.
         let transformFlags = subtreeFlags | TransformFlags.AssertES2015;
 
-        // A class with a parameter property assignment, property initializer, or decorator is
-        // TypeScript syntax.
+        // A class with a parameter property assignment or decorator is TypeScript syntax.
         if (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax
             || node.typeParameters) {
             transformFlags |= TransformFlags.AssertTypeScript;
@@ -3332,7 +3330,6 @@ namespace ts {
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.typeParameters
             || node.type
-            || (node.name && isComputedPropertyName(node.name)) // While computed method names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3363,7 +3360,6 @@ namespace ts {
         if (node.decorators
             || hasModifier(node, ModifierFlags.TypeScriptModifier)
             || node.type
-            || (node.name && isComputedPropertyName(node.name)) // While computed accessor names aren't typescript, the TS transform must visit them to emit property declarations correctly
             || !node.body) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3378,12 +3374,15 @@ namespace ts {
     }
 
     function computePropertyDeclaration(node: PropertyDeclaration, subtreeFlags: TransformFlags) {
-        // A PropertyDeclaration is TypeScript syntax.
-        let transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
+        let transformFlags = subtreeFlags | TransformFlags.ContainsClassFields;
 
-        // If the PropertyDeclaration has an initializer or a computed name, we need to inform its ancestor
-        // so that it handle the transformation.
-        if (node.initializer || isComputedPropertyName(node.name)) {
+        // Decorators, TypeScript-specific modifiers, and type annotations are TypeScript syntax.
+        if (some(node.decorators) || hasModifier(node, ModifierFlags.TypeScriptModifier) || node.type) {
+            transformFlags |= TransformFlags.AssertTypeScript;
+        }
+
+        // Hoisted variables related to class properties should live within the TypeScript class wrapper.
+        if (isComputedPropertyName(node.name) || (hasStaticModifier(node) && node.initializer)) {
             transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
