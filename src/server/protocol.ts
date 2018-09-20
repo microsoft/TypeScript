@@ -2739,6 +2739,7 @@ namespace ts.server.protocol {
 
 /* __GDPR__
    "typingsinstalled" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
         "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
         "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
         "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
