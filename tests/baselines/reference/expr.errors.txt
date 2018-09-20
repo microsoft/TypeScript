@@ -2,9 +2,9 @@ tests/cases/compiler/expr.ts(87,5): error TS2587: Types 'number' and 'string' ha
 tests/cases/compiler/expr.ts(88,5): error TS2587: Types 'number' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/compiler/expr.ts(94,5): error TS2587: Types 'string' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/compiler/expr.ts(95,5): error TS2587: Types 'string' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
-tests/cases/compiler/expr.ts(98,5): error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+tests/cases/compiler/expr.ts(98,5): error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/compiler/expr.ts(115,5): error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/compiler/expr.ts(116,5): error TS2367: This condition will always return 'false' since the types 'E' and 'false' have no overlap.
+tests/cases/compiler/expr.ts(116,5): error TS2587: Types 'E' and 'false' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/compiler/expr.ts(142,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'false'.
 tests/cases/compiler/expr.ts(143,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'I'.
 tests/cases/compiler/expr.ts(161,5): error TS2365: Operator '+' cannot be applied to types 'I' and 'number'.
@@ -177,7 +177,7 @@ tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an ari
         s==s;
         s==e;
         ~~~~
-!!! error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+!!! error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
         a==n;
         a==s;
@@ -199,7 +199,7 @@ tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an ari
 !!! error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
         e==b;
         ~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'E' and 'false' have no overlap.
+!!! error TS2587: Types 'E' and 'false' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
         e==a;
         e==i;
         e==e;

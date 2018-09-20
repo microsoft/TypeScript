@@ -76,72 +76,72 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(119,12): error TS2587: Types 'boolean' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(120,12): error TS2587: Types 'boolean' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(121,12): error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(122,12): error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(122,12): error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(124,12): error TS2587: Types 'string' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(125,12): error TS2587: Types 'string' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(126,12): error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(127,12): error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(127,12): error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(129,12): error TS2587: Types 'void' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(130,12): error TS2587: Types 'void' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(131,12): error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(132,12): error TS2367: This condition will always return 'false' since the types 'void' and 'E' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(132,12): error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(135,12): error TS2587: Types 'E' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(136,12): error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(137,12): error TS2367: This condition will always return 'false' since the types 'E' and 'void' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(137,12): error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(140,12): error TS2587: Types 'number' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(141,12): error TS2587: Types 'number' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(142,12): error TS2588: Types 'number' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(145,12): error TS2587: Types 'boolean' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(146,12): error TS2587: Types 'boolean' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(147,12): error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(148,12): error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(148,12): error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(150,12): error TS2587: Types 'string' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(151,12): error TS2587: Types 'string' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(152,12): error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(153,12): error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(153,12): error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(155,12): error TS2587: Types 'void' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(156,12): error TS2587: Types 'void' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(157,12): error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(158,12): error TS2367: This condition will always return 'true' since the types 'void' and 'E' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(158,12): error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(161,12): error TS2587: Types 'E' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(162,12): error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(163,12): error TS2367: This condition will always return 'true' since the types 'E' and 'void' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(163,12): error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(166,12): error TS2587: Types 'number' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(167,12): error TS2587: Types 'number' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(168,12): error TS2588: Types 'number' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(171,12): error TS2587: Types 'boolean' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(172,12): error TS2587: Types 'boolean' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(173,12): error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(174,12): error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(174,12): error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(176,12): error TS2587: Types 'string' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(177,12): error TS2587: Types 'string' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(178,12): error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(179,12): error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(179,12): error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(181,12): error TS2587: Types 'void' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(182,12): error TS2587: Types 'void' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(183,12): error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(184,12): error TS2367: This condition will always return 'false' since the types 'void' and 'E' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(184,12): error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(187,12): error TS2587: Types 'E' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(188,12): error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(189,12): error TS2367: This condition will always return 'false' since the types 'E' and 'void' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(189,12): error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(192,12): error TS2587: Types 'number' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(193,12): error TS2587: Types 'number' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(194,12): error TS2588: Types 'number' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(197,12): error TS2587: Types 'boolean' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(198,12): error TS2587: Types 'boolean' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(199,12): error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(200,12): error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(200,12): error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(202,12): error TS2587: Types 'string' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(203,12): error TS2587: Types 'string' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(204,12): error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(205,12): error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(205,12): error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(207,12): error TS2587: Types 'void' and 'number' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(208,12): error TS2587: Types 'void' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(209,12): error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(210,12): error TS2367: This condition will always return 'true' since the types 'void' and 'E' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(210,12): error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(213,12): error TS2587: Types 'E' and 'boolean' have no overlap. Consider explicitly converting the left side using `Boolean(x)`.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(214,12): error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(215,12): error TS2367: This condition will always return 'true' since the types 'E' and 'void' have no overlap.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts(215,12): error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
 
 
 ==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipPrimitiveType.ts (144 errors) ====
@@ -424,7 +424,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
     var r5b1 = b == e;
                ~~~~~~
-!!! error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+!!! error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r5c1 = c == a;
                ~~~~~~
@@ -437,7 +437,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
     var r5c1 = c == e;
                ~~~~~~
-!!! error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+!!! error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r5d1 = d == a;
                ~~~~~~
@@ -450,7 +450,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r5d1 = d == e;
                ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'void' and 'E' have no overlap.
+!!! error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r5e1 = e == a; // no error, expected
     var r5e1 = e == b;
@@ -461,7 +461,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r5e1 = e == d;
                ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'E' and 'void' have no overlap.
+!!! error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
     
     // operator !=
     var r6a1 = a != b;
@@ -486,7 +486,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
     var r6b1 = b != e;
                ~~~~~~
-!!! error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+!!! error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r6c1 = c != a;
                ~~~~~~
@@ -499,7 +499,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
     var r6c1 = c != e;
                ~~~~~~
-!!! error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+!!! error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r6d1 = d != a;
                ~~~~~~
@@ -512,7 +512,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r6d1 = d != e;
                ~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'void' and 'E' have no overlap.
+!!! error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r6e1 = e != a; // no error, expected
     var r6e1 = e != b;
@@ -523,7 +523,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r6e1 = e != d;
                ~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'E' and 'void' have no overlap.
+!!! error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
     
     // operator ===
     var r7a1 = a === b;
@@ -548,7 +548,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
     var r7b1 = b === e;
                ~~~~~~~
-!!! error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+!!! error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r7c1 = c === a;
                ~~~~~~~
@@ -561,7 +561,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
     var r7c1 = c === e;
                ~~~~~~~
-!!! error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+!!! error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r7d1 = d === a;
                ~~~~~~~
@@ -574,7 +574,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r7d1 = d === e;
                ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'void' and 'E' have no overlap.
+!!! error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r7e1 = e === a; // no error, expected
     var r7e1 = e === b;
@@ -585,7 +585,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r7e1 = e === d;
                ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'E' and 'void' have no overlap.
+!!! error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.
     
     // operator !==
     var r8a1 = a !== b;
@@ -610,7 +610,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'boolean' and 'void' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
     var r8b1 = b !== e;
                ~~~~~~~
-!!! error TS2588: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the right side using `Boolean(x)`.
+!!! error TS2587: Types 'boolean' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r8c1 = c !== a;
                ~~~~~~~
@@ -623,7 +623,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2588: Types 'string' and 'void' have no overlap. Consider explicitly converting the right side using `String(x)`.
     var r8c1 = c !== e;
                ~~~~~~~
-!!! error TS2588: Types 'string' and 'E' have no overlap. Consider explicitly converting the right side using `String(x)`.
+!!! error TS2587: Types 'string' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r8d1 = d !== a;
                ~~~~~~~
@@ -636,7 +636,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'void' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r8d1 = d !== e;
                ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'void' and 'E' have no overlap.
+!!! error TS2587: Types 'void' and 'E' have no overlap. Consider explicitly converting the left side using `Number(x)`.
     
     var r8e1 = e !== a; // no error, expected
     var r8e1 = e !== b;
@@ -647,4 +647,4 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2587: Types 'E' and 'string' have no overlap. Consider explicitly converting the left side using `String(x)`.
     var r8e1 = e !== d;
                ~~~~~~~
-!!! error TS2367: This condition will always return 'true' since the types 'E' and 'void' have no overlap.
+!!! error TS2588: Types 'E' and 'void' have no overlap. Consider explicitly converting the right side using `Number(x)`.

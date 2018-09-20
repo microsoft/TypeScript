@@ -21997,21 +21997,27 @@ namespace ts {
             readonly side: "left" | "right";
             readonly conversionFunctionName: string;
         }
+
         function getExplicitConversion(left: Type, right: Type): ExplicitConversion | undefined {
-            const convertLeft = getFunctionNameToConvertToType(right);
+            const convertLeft = getFunctionNameToConvertToType(right, left);
             if (convertLeft) return { side: "left", conversionFunctionName: convertLeft };
-            const convertRight = getFunctionNameToConvertToType(left);
+            const convertRight = getFunctionNameToConvertToType(left, right);
             if (convertRight) return { side: "right", conversionFunctionName: convertRight };
             return undefined;
         }
-        function getFunctionNameToConvertToType(type: Type): string | undefined {
-            return type.flags & TypeFlags.String
+
+        function getFunctionNameToConvertToType(to: Type, from: Type): string | undefined {
+            return typeOrTypesHaveFlags(to, TypeFlags.StringLike) && !typeOrTypesHaveFlags(from, TypeFlags.StringLike)
                 ? "String"
-                : type.flags & TypeFlags.Number
+                : typeOrTypesHaveFlags(to, TypeFlags.NumberLike) && !typeOrTypesHaveFlags(from, TypeFlags.NumberLike)
                 ? "Number"
-                : type.flags & TypeFlags.Boolean
+                : typeOrTypesHaveFlags(to, TypeFlags.BooleanLike) && !typeOrTypesHaveFlags(from, TypeFlags.BooleanLike)
                 ? "Boolean"
                 : undefined;
+        }
+
+        function typeOrTypesHaveFlags(type: Type, flags: TypeFlags): boolean {
+            return (type.flags & TypeFlags.Union ? (type as UnionType).types : [type]).every(t => !!(t.flags & flags));
         }
 
         function isYieldExpressionInClass(node: YieldExpression): boolean {
