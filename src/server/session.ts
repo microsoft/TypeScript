@@ -1167,8 +1167,8 @@ namespace ts.server {
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
-        private mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan }: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
-            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) };
+        private mapRenameInfo({ canRename, fileToRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan }: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
+            return { canRename, fileToRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) };
         }
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
