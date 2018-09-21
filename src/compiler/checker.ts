@@ -16388,6 +16388,15 @@ namespace ts {
             return undefined;
         }
 
+        function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
+            const contextualType = getContextualType(node);
+            if (contextualType) {
+                const contextualAwaitedType = getAwaitedType(contextualType);
+                return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+            }
+            return undefined;
+        }
+
         function getContextualTypeForYieldOperand(node: YieldExpression): Type | undefined {
             const func = getContainingFunction(node);
             if (func) {
@@ -16749,7 +16758,9 @@ namespace ts {
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.YieldExpression:
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
-                    case SyntaxKind.CallExpression:
+                case SyntaxKind.AwaitExpression:
+                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
+                case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:

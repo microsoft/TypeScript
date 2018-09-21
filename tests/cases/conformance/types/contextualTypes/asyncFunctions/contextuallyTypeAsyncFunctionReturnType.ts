@@ -13,3 +13,13 @@ async function fn2(): Promise<Obj> {
         resolve({ key: "value" });
     });
 }
+
+async function fn3(): Promise<Obj> {
+    return await { key: "value" };
+}
+
+async function fn4(): Promise<Obj> {
+    return await new Promise(resolve => {
+        resolve({ key: "value" });
+    });
+}
