@@ -46,6 +46,8 @@ namespace ts.server {
 
 /* __GDPR__
    "projectInfo" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
+        "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
         "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
         "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
         "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
