@@ -1,0 +1,44 @@
+=== tests/cases/conformance/salsa/use.js ===
+const util = require('./mod')
+>util : typeof import("tests/cases/conformance/salsa/mod")
+>require('./mod') : typeof import("tests/cases/conformance/salsa/mod")
+>require : any
+>'./mod' : "./mod"
+
+function n() {
+>n : () => void
+
+    util.existy // no error
+>util.existy : () => void
+>util : typeof import("tests/cases/conformance/salsa/mod")
+>existy : () => void
+}
+util.existy // no error
+>util.existy : () => void
+>util : typeof import("tests/cases/conformance/salsa/mod")
+>existy : () => void
+
+=== tests/cases/conformance/salsa/mod.js ===
+const util = exports = module.exports = {}
+>util : typeof import("tests/cases/conformance/salsa/mod")
+>exports = module.exports = {} : typeof import("tests/cases/conformance/salsa/mod")
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports = {} : typeof import("tests/cases/conformance/salsa/mod")
+>module.exports : typeof import("tests/cases/conformance/salsa/mod")
+>module : { "tests/cases/conformance/salsa/mod": typeof import("tests/cases/conformance/salsa/mod"); }
+>exports : typeof import("tests/cases/conformance/salsa/mod")
+>{} : {}
+
+if (!!false) {
+>!!false : boolean
+>!false : true
+>false : false
+
+    util.existy = function () { }
+>util.existy = function () { } : () => void
+>util.existy : () => void
+>util : typeof import("tests/cases/conformance/salsa/mod")
+>existy : () => void
+>function () { } : () => void
+}
+

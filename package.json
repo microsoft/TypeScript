@@ -75,6 +75,7 @@
         "gulp-typescript": "latest",
         "istanbul": "latest",
         "jake": "latest",
+        "lodash": "4.17.10",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",

@@ -254,6 +254,11 @@ namespace ts.server {
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
+        /* @internal */
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            return this.typingsCache.inspectValue(options);
+        }
+
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
         }
@@ -350,6 +355,10 @@ namespace ts.server {
 
         readFile(fileName: string): string | undefined {
             return this.projectService.host.readFile(fileName);
+        }
+
+        writeFile(fileName: string, content: string): void {
+            return this.projectService.host.writeFile(fileName, content);
         }
 
         fileExists(file: string): boolean {
@@ -653,7 +662,7 @@ namespace ts.server {
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
-                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath || sourceFile.path);
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
             });

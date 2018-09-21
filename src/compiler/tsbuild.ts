@@ -248,7 +248,7 @@ namespace ts {
         return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
-    function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         return changeExtension(outputPath, Extension.Dts);

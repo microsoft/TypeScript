@@ -292,7 +292,7 @@ interface Array<T> {}`
                 cancellationToken: { throwIfCancellationRequested: noop, isCancellationRequested: returnFalse },
                 preferences: emptyOptions,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions)
+                formatContext: formatting.getFormatContext(testFormatSettings)
             };
 
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
@@ -486,6 +486,12 @@ function [#|f|]():Promise<void | Response> {
         _testConvertToAsyncFunction("convertToAsyncFunction_NoRes4", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(undefined, rejection => console.log("rejected:", rejection));
+}
+`
+        );
+        _testConvertToAsyncFunction("convertToAsyncFunction_NoCatchHandler", `
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(x => x.statusText).catch(undefined);
 }
 `
         );
