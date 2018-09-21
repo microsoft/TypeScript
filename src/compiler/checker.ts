@@ -844,7 +844,7 @@ namespace ts {
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
                 Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
-                    target = cloneSymbol(target);
+                    target = cloneSymbol(resolveSymbol(target));
                 }
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
@@ -873,7 +873,7 @@ namespace ts {
             else if (target.flags & SymbolFlags.NamespaceModule) {
                 error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
             }
-            else {
+            else { // error
                 const isEitherEnum = !!(target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum);
                 const isEitherBlockScoped = !!(target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable);
                 const message = isEitherEnum
@@ -942,7 +942,8 @@ namespace ts {
 
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
             source.forEach((sourceSymbol, id) => {
-                target.set(id, target.has(id) ? mergeSymbol(target.get(id)!, sourceSymbol) : sourceSymbol);
+                const targetSymbol = target.get(id);
+                target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol) : sourceSymbol);
             });
         }
 
