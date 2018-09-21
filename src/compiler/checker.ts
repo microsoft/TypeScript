@@ -495,6 +495,7 @@ namespace ts {
         let deferredGlobalESSymbolType: ObjectType;
         let deferredGlobalTypedPropertyDescriptorType: GenericType;
         let deferredGlobalPromiseType: GenericType;
+        let deferredGlobalPromiseLikeType: GenericType;
         let deferredGlobalPromiseConstructorSymbol: Symbol | undefined;
         let deferredGlobalPromiseConstructorLikeType: ObjectType;
         let deferredGlobalIterableType: GenericType;
@@ -8538,6 +8539,10 @@ namespace ts {
             return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
+        function getGlobalPromiseLikeType(reportErrors: boolean) {
+            return deferredGlobalPromiseLikeType || (deferredGlobalPromiseLikeType = getGlobalType("PromiseLike" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
             return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as __String, reportErrors));
         }
@@ -16393,9 +16398,13 @@ namespace ts {
                 }
 
                 const contextualReturnType = getContextualReturnType(func);
-                return functionFlags & FunctionFlags.Async
-                    ? contextualReturnType && getAwaitedTypeOfPromise(contextualReturnType) // Async function
-                    : contextualReturnType; // Regular function
+                if (contextualReturnType) {
+                    if (functionFlags & FunctionFlags.Async) { // Async function
+                        const contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
+                        return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                    }
+                    return contextualReturnType; // Regular function
+                }
             }
             return undefined;
         }
@@ -20791,6 +20800,18 @@ namespace ts {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType) || emptyObjectType;
                 return createTypeReference(globalPromiseType, [promisedType]);
+            }
+
+            return emptyObjectType;
+        }
+
+        function createPromiseLikeType(promisedType: Type): Type {
+            // creates a `PromiseLike<T>` type where `T` is the promisedType argument
+            const globalPromiseLikeType = getGlobalPromiseLikeType(/*reportErrors*/ true);
+            if (globalPromiseLikeType !== emptyGenericType) {
+                // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
+                promisedType = getAwaitedType(promisedType) || emptyObjectType;
+                return createTypeReference(globalPromiseLikeType, [promisedType]);
             }
 
             return emptyObjectType;
