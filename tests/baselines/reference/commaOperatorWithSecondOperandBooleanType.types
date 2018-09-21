@@ -122,14 +122,14 @@ OBJECT = [1, 2, 3], BOOLEAN = false;
 >false : false
 
 var resultIsBoolean6 = (null, BOOLEAN);
->resultIsBoolean6 : false
+>resultIsBoolean6 : boolean
 >(null, BOOLEAN) : false
 >null, BOOLEAN : false
 >null : null
 >BOOLEAN : false
 
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
->resultIsBoolean7 : false
+>resultIsBoolean7 : boolean
 >(ANY = undefined, BOOLEAN) : false
 >ANY = undefined, BOOLEAN : false
 >ANY = undefined : undefined

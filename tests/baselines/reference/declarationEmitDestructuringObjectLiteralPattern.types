@@ -82,7 +82,7 @@ var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: tr
 >true : true
 
 function f15() {
->f15 : () => { a4: string; b4: number; c4: true; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
 
     var a4 = "hello";
 >a4 : string
@@ -97,17 +97,17 @@ function f15() {
 >true : true
 
     return { a4, b4, c4 };
->{ a4, b4, c4 } : { a4: string; b4: number; c4: true; }
+>{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
 >a4 : string
 >b4 : number
->c4 : true
+>c4 : boolean
 }
 var { a4, b4, c4 } = f15();
 >a4 : string
 >b4 : number
->c4 : true
->f15() : { a4: string; b4: number; c4: true; }
->f15 : () => { a4: string; b4: number; c4: true; }
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
 
 module m {
 >m : typeof m
@@ -115,7 +115,7 @@ module m {
     export var { a4, b4, c4 } = f15();
 >a4 : string
 >b4 : number
->c4 : true
->f15() : { a4: string; b4: number; c4: true; }
->f15 : () => { a4: string; b4: number; c4: true; }
+>c4 : boolean
+>f15() : { a4: string; b4: number; c4: boolean; }
+>f15 : () => { a4: string; b4: number; c4: boolean; }
 }

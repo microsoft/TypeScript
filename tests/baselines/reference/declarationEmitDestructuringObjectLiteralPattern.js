@@ -55,9 +55,9 @@ declare var x11: number, y11: string, z11: boolean;
 declare function f15(): {
     a4: string;
     b4: number;
-    c4: true;
+    c4: boolean;
 };
-declare var a4: string, b4: number, c4: true;
+declare var a4: string, b4: number, c4: boolean;
 declare module m {
-    var a4: string, b4: number, c4: true;
+    var a4: string, b4: number, c4: boolean;
 }

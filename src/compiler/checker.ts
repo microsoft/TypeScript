@@ -14208,7 +14208,10 @@ namespace ts {
                 if (assignedType.flags & TypeFlags.Never) {
                     return assignedType;
                 }
-                const reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+                if (assignedType.flags & (TypeFlags.FreshLiteral | TypeFlags.Literal)) {
+                    reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
+                }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
                 // For now, when that happens, we give up and don't narrow at all.  (This also
                 // means we'll never narrow for erroneous assignments where the assigned type

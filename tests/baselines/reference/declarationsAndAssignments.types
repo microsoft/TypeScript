@@ -483,7 +483,7 @@ module M {
 }
 
 function f15() {
->f15 : () => { a: string; b: number; c: true; }
+>f15 : () => { a: string; b: number; c: boolean; }
 
     var a = "hello";
 >a : string
@@ -498,10 +498,10 @@ function f15() {
 >true : true
 
     return { a, b, c };
->{ a, b, c } : { a: string; b: number; c: true; }
+>{ a, b, c } : { a: string; b: number; c: boolean; }
 >a : string
 >b : number
->c : true
+>c : boolean
 }
 
 function f16() {
@@ -510,9 +510,9 @@ function f16() {
     var { a, b, c } = f15();
 >a : string
 >b : number
->c : true
->f15() : { a: string; b: number; c: true; }
->f15 : () => { a: string; b: number; c: true; }
+>c : boolean
+>f15() : { a: string; b: number; c: boolean; }
+>f15 : () => { a: string; b: number; c: boolean; }
 }
 
 function f17({ a = "", b = 0, c = false }) {
@@ -547,8 +547,8 @@ f17({ c: true });
 f17(f15());
 >f17(f15()) : void
 >f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
->f15() : { a: string; b: number; c: true; }
->f15 : () => { a: string; b: number; c: true; }
+>f15() : { a: string; b: number; c: boolean; }
+>f15 : () => { a: string; b: number; c: boolean; }
 
 function f18() {
 >f18 : () => void

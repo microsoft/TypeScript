@@ -92,7 +92,7 @@ namespace Test {
 >true : true
 
 	let x = file.isFile;
->x : true
+>x : boolean
 >file.isFile : true
 >file : FileSystemObject
 >isFile : true
