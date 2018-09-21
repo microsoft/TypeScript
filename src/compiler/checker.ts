@@ -9369,12 +9369,24 @@ namespace ts {
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
             const objectType = getSimplifiedType(type.objectType);
             const indexType = getSimplifiedType(type.indexType);
-            if (objectType.flags & TypeFlags.Union) {
-                return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+            // T[A | B] -> T[A] | T[B]
+            if (indexType.flags & TypeFlags.Union) {
+                return type.simplified = mapType(indexType, t => getSimplifiedType(getIndexedAccessType(objectType, t)));
             }
-            if (objectType.flags & TypeFlags.Intersection) {
-                return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+            // Only do the inner distributions if the index can no longer be instantiated to cause index distribution again
+            if (!(indexType.flags & TypeFlags.Instantiable)) {
+                // (T | U)[K] -> T[K] | U[K]
+                if (objectType.flags & TypeFlags.Union) {
+                    return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+                }
+                // (T & U)[K] -> T[K] & U[K]
+                if (objectType.flags & TypeFlags.Intersection) {
+                    return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+                }
             }
+            // So ultimately:
+            // ((A & B) | C)[K1 | K2] -> ((A & B) | C)[K1] | ((A & B) | C)[K2] -> (A & B)[K1] | C[K1] | (A & B)[K2] | C[K2] -> (A[K1] & B[K1]) | C[K1] | (A[K2] & B[K2]) | C[K2]
+
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
