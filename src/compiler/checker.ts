@@ -25313,14 +25313,18 @@ namespace ts {
 
                 if (allowSyncIterables) {
                     if (typeAsIterable.iteratedTypeOfIterable) {
-                        return typeAsIterable.iteratedTypeOfIterable;
+                        return allowAsyncIterables
+                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType(typeAsIterable.iteratedTypeOfIterable)
+                            : typeAsIterable.iteratedTypeOfIterable;
                     }
 
                     // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
                     // `IterableIterator<T>` then just grab its type argument.
                     if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
                         isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                        return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
+                        return allowAsyncIterables
+                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType((<GenericType>type).typeArguments![0])
+                            : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
                     }
                 }
 
@@ -25351,9 +25355,11 @@ namespace ts {
                         : createIterableType(iteratedType), errorNode);
                 }
 
-                return asyncMethodType
-                    ? typeAsIterable.iteratedTypeOfAsyncIterable = iteratedType
-                    : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                if (iteratedType) {
+                    return allowAsyncIterables
+                        ? typeAsIterable.iteratedTypeOfAsyncIterable = asyncMethodType ? iteratedType : getAwaitedType(iteratedType)
+                        : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                }
             }
         }
 
