@@ -2489,10 +2489,9 @@
         "category": "Error",
         "code": 2734
     },
-
     "Merged default exports must have the same name.": {
         "category": "Error",
-        "code": 2734
+        "code": 2735
     },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

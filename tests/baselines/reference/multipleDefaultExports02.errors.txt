@@ -1,9 +1,9 @@
 tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2734: Merged default exports must have the same name.
+tests/cases/conformance/es6/modules/m1.ts(1,25): error TS2735: Merged default exports must have the same name.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2393: Duplicate function implementation.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2734: Merged default exports must have the same name.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2735: Merged default exports must have the same name.
 
 
 ==== tests/cases/conformance/es6/modules/m1.ts (6 errors) ====
@@ -13,7 +13,7 @@ tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2734: Merged default ex
                             ~~~
 !!! error TS2393: Duplicate function implementation.
                             ~~~
-!!! error TS2734: Merged default exports must have the same name.
+!!! error TS2735: Merged default exports must have the same name.
     
     }
     
@@ -23,7 +23,7 @@ tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2734: Merged default ex
                             ~~~
 !!! error TS2393: Duplicate function implementation.
                             ~~~
-!!! error TS2734: Merged default exports must have the same name.
+!!! error TS2735: Merged default exports must have the same name.
     
     }
     

@@ -1,17 +1,17 @@
-tests/cases/compiler/a.ts(2,22): error TS2734: Merged default exports must have the same name.
-tests/cases/compiler/a.ts(5,26): error TS2734: Merged default exports must have the same name.
+tests/cases/compiler/a.ts(2,22): error TS2735: Merged default exports must have the same name.
+tests/cases/compiler/a.ts(5,26): error TS2735: Merged default exports must have the same name.
 
 
 ==== tests/cases/compiler/a.ts (2 errors) ====
     // https://github.com/Microsoft/TypeScript/issues/3792
     export default class A {
                          ~
-!!! error TS2734: Merged default exports must have the same name.
+!!! error TS2735: Merged default exports must have the same name.
         A1: string = "init"
     }
     export default namespace B {
                              ~
-!!! error TS2734: Merged default exports must have the same name.
+!!! error TS2735: Merged default exports must have the same name.
         export const A2 = 32;
     }
     
