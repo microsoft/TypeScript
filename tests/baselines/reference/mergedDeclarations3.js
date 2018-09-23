@@ -40,44 +40,44 @@ M.foo.y // ok
 M.foo.z // error
 
 //// [mergedDeclarations3.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var Color;
+    var Color = M.Color || (M.Color = {});
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
-    })(Color = M.Color || (M.Color = {}));
-})(M || (M = {}));
+    })(Color);
+})(M);
 (function (M) {
-    var Color;
+    var Color = M.Color || (M.Color = {});
     (function (Color) {
         Color.Blue = 4;
-    })(Color = M.Color || (M.Color = {}));
-})(M || (M = {}));
+    })(Color);
+})(M);
 var p = M.Color.Blue; // ok
 (function (M) {
     function foo() {
     }
     M.foo = foo;
-})(M || (M = {}));
+})(M);
 (function (M) {
-    var foo;
+    var foo = foo || (foo = {});
     (function (foo) {
         foo.x = 1;
-    })(foo || (foo = {}));
-})(M || (M = {}));
+    })(foo);
+})(M);
 (function (M) {
-    var foo;
+    var foo = M.foo || (M.foo = {});
     (function (foo) {
         foo.y = 2;
-    })(foo = M.foo || (M.foo = {}));
-})(M || (M = {}));
+    })(foo);
+})(M);
 (function (M) {
-    var foo;
+    var foo = foo || (foo = {});
     (function (foo) {
         foo.z = 1;
-    })(foo || (foo = {}));
-})(M || (M = {}));
+    })(foo);
+})(M);
 M.foo(); // ok
 M.foo.x; // error
 M.foo.y; // ok

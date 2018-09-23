@@ -11,6 +11,6 @@ module Test {
 }
 
 //// [implicitAnyInAmbientDeclaration.js]
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
-})(Test || (Test = {}));
+})(Test);

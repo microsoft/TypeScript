@@ -47,10 +47,10 @@ var C = /** @class */ (function () {
     return C;
 }());
 C = null; // Error
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 E = null; // Error
 E.A = null; // OK per spec, Error per implementation (509581)
 function fn() { }

@@ -5,7 +5,7 @@ enum A {
 
 
 //// [enumWithNaNProperty.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A[A["NaN"] = 1] = "NaN";
-})(A || (A = {}));
+})(A);

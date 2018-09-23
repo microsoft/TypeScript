@@ -29,7 +29,7 @@ var c5a = /** @class */ (function () {
 }());
 (function (c5a) {
     var y = 2;
-})(c5a || (c5a = {})); // should be ok
+})(c5a); // should be ok
 var c5b = /** @class */ (function () {
     function c5b() {
     }
@@ -38,7 +38,7 @@ var c5b = /** @class */ (function () {
 }());
 (function (c5b) {
     c5b.y = 2;
-})(c5b || (c5b = {})); // should be ok
+})(c5b); // should be ok
 //// class then import
 var c5c = /** @class */ (function () {
     function c5c() {

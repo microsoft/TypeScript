@@ -147,7 +147,8 @@ c2.k = 20;
 c2.l = 30;
 new c();
 new c2();
-export var m1;
+export const m1 = {};
+export { m1 };
 (function (m1) {
     class c3 {
         constructor() {
@@ -186,8 +187,8 @@ export var m1;
     new c2();
     new c3();
     new c4();
-})(m1 || (m1 = {}));
-var m2;
+})(m1);
+const m2 = {};
 (function (m2) {
     class c3 {
         constructor() {
@@ -227,4 +228,4 @@ var m2;
     new c3();
     new c4();
     new m1.c3();
-})(m2 || (m2 = {}));
+})(m2);

@@ -38,11 +38,11 @@ define(["require", "exports", "react", "react-router"], function (require, expor
     Object.defineProperty(exports, "__esModule", { value: true });
     var Route = ReactRouter.Route;
     var routes1 = <Route />;
-    var M;
+    var M = {};
     (function (M) {
-    })(M || (M = {}));
+    })(M);
     (function (M) {
         // Should emit 'M.X' in both opening and closing tags
         var y = <M.X></M.X>;
-    })(M || (M = {}));
+    })(M);
 });

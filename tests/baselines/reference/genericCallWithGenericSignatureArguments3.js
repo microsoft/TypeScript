@@ -46,14 +46,14 @@ var r2 = foo('', function (x) { return ''; }, function (x) { return ''; }); // s
 var r3 = foo(null, function (x) { return ''; }, function (x) { return ''; }); // Object => Object
 var r4 = foo(null, function (x) { return ''; }, function (x) { return ''; }); // any => any
 var r5 = foo(new Object(), function (x) { return ''; }, function (x) { return ''; }); // Object => Object
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
-var F;
+})(E);
+var F = F || (F = {});
 (function (F) {
     F[F["A"] = 0] = "A";
-})(F || (F = {}));
+})(F);
 var r6 = foo(E.A, function (x) { return E.A; }, function (x) { return F.A; }); // number => number 
 function foo2(x, a, b) {
     var r;

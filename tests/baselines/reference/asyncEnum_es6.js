@@ -4,7 +4,7 @@ async enum E {
 }
 
 //// [asyncEnum_es6.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["Value"] = 0] = "Value";
-})(E || (E = {}));
+})(E);

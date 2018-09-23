@@ -6,9 +6,9 @@ module M {
 }
 
 //// [parserErrantAccessibilityModifierInModule1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var x = 10; // variable local to this module body
     y = x; // property visible only in module
     M.z = y; // property visible to any code
-})(M || (M = {}));
+})(M);

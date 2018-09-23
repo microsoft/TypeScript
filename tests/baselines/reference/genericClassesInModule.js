@@ -9,7 +9,7 @@ module Foo {
 var a = new Foo.B<Foo.A>();
 
 //// [genericClassesInModule.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var B = /** @class */ (function () {
         function B() {
@@ -23,7 +23,7 @@ var Foo;
         return A;
     }());
     Foo.A = A;
-})(Foo || (Foo = {}));
+})(Foo);
 var a = new Foo.B();
 
 

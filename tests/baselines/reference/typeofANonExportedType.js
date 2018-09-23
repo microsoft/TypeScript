@@ -63,7 +63,7 @@ var C = /** @class */ (function () {
 }());
 var c2;
 var i2;
-var M;
+var M = {};
 (function (M) {
     M.foo = '';
     var C = /** @class */ (function () {
@@ -72,11 +72,11 @@ var M;
         return C;
     }());
     M.C = C;
-})(M || (M = {}));
-var E;
+})(M);
+var E = {};
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 function foo() { }
 (function (foo) {
     foo.y = 1;
@@ -86,4 +86,4 @@ function foo() { }
         return C;
     }());
     foo.C = C;
-})(foo || (foo = {}));
+})(foo);

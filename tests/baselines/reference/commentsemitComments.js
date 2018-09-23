@@ -131,7 +131,7 @@ var i = new c();
 /**interface instance comments*/
 var i1_i;
 /** this is module comment*/
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     /** class b */
     var b = /** @class */ (function () {
@@ -141,7 +141,7 @@ var m1;
         return b;
     }());
     m1.b = b;
-})(m1 || (m1 = {}));
+})(m1);
 
 
 //// [commentsemitComments.d.ts]

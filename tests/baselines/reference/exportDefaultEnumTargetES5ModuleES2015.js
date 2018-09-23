@@ -67,52 +67,54 @@ const enumBExternalUsage1 = B.X;
 /**
  * export default enum A 1 comment
  */
-export default var A;
+export default var A = {};
+export default A;
 (function (A) {
     A[A["FOO"] = 0] = "FOO";
-})(A || (A = {})); // export default enum A 1 trailing comment
+})(A); // export default enum A 1 trailing comment
 /**
  * export default enum A 2 comment
  */
 (function (A) {
     A[A["BAR"] = 2] = "BAR";
-})(A || (A = {})); // export default enum A 2 trailing comment
+})(A); // export default enum A 2 trailing comment
 var enumAUsage = A.FOO;
 /**
  * export enum B 1 comment
  */
-export var B;
+export var B = {};
+export { B };
 (function (B) {
     B[B["X"] = 0] = "X";
-})(B || (B = {})); // export enum B 1 trailing comment
+})(B); // export enum B 1 trailing comment
 // export enum B 2 comment
 (function (B) {
     B[B["Y"] = 1] = "Y";
-})(B || (B = {})); // export enum B 2 trailing comment
+})(B); // export enum B 2 trailing comment
 var enumBUsage = B.Y;
-var ns;
+var ns = {};
 (function (ns) {
     // enum ns.C 1 comment
-    var C;
+    var C = ns.C || (ns.C = {});
     (function (C) {
         C[C["X"] = 0] = "X";
-    })(C = ns.C || (ns.C = {})); // enum ns.C 1 trailing comment
+    })(C); // enum ns.C 1 trailing comment
     // enum ns.C 2 comment
     (function (C) {
         C[C["Y"] = 1] = "Y";
-    })(C = ns.C || (ns.C = {})); // enum ns.C 2 trailing comment
-})(ns || (ns = {}));
+    })(C); // enum ns.C 2 trailing comment
+})(ns);
 (function (ns) {
     // enum ns.C 3 comment
-    var C;
+    var C = ns.C || (ns.C = {});
     (function (C) {
         C[C["Z"] = 2] = "Z";
-    })(C = ns.C || (ns.C = {})); // enum ns.C 3 trailing comment
+    })(C); // enum ns.C 3 trailing comment
     var enumCUSage1 = C.X;
-})(ns || (ns = {}));
+})(ns);
 (function (ns) {
     var enumCUsage2 = ns.C.X;
-})(ns || (ns = {}));
+})(ns);
 //// [b.js]
 import A, { B } from "./a";
 var enumAExternalUsage1 = A.FOO;

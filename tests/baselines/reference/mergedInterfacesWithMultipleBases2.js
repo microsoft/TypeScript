@@ -106,7 +106,7 @@ var D = /** @class */ (function () {
 var a;
 var r = a.a;
 // generic interfaces in a module
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -133,4 +133,4 @@ var M;
         }
         return D;
     }());
-})(M || (M = {}));
+})(M);

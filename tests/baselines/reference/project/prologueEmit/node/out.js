@@ -15,7 +15,7 @@ var _this = this;
 // Add a lambda to ensure global 'this' capture is triggered
 (function () { return _this.window; });
 // class inheritance to ensure __extends is emitted
-var m;
+var m = m || (m = {});
 (function (m) {
     var base = /** @class */ (function () {
         function base() {
@@ -31,4 +31,4 @@ var m;
         return child;
     }(base));
     m.child = child;
-})(m || (m = {}));
+})(m);

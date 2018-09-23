@@ -43,16 +43,16 @@ var C = /** @class */ (function () {
     C.prototype.m = function () { C; };
     return C;
 }());
-var E;
+var E = {};
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 0] = "B";
-})(E || (E = {}));
+})(E);
 ;
-var N;
+var N = {};
 (function (N) {
     N;
-})(N || (N = {}));
+})(N);
 var P = /** @class */ (function () {
     function P() {
     }

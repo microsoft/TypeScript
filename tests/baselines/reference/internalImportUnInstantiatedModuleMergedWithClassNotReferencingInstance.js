@@ -18,7 +18,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-var B;
+var B = B || (B = {});
 (function (B) {
     var A = 1;
-})(B || (B = {}));
+})(B);

@@ -130,12 +130,12 @@ var rf10 = undefined || undefined; // undefined || undefined is any
 // If the || expression is not contextually typed, the right operand is contextually typed
 // by the type of the left operand and the result is of the best common type of the two
 // operand types.
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
-})(E || (E = {}));
+})(E);
 var a1;
 var a2;
 var a3;

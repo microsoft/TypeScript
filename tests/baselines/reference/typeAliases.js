@@ -115,10 +115,10 @@ var x13_2;
 foo13(x13_1, x13_2);
 foo13(x13_2, x13_1);
 var x14;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["x"] = 10] = "x";
-})(E || (E = {}));
+})(E);
 f15(E.x).toLowerCase();
 var x;
 f16(x);

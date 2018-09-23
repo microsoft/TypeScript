@@ -29,8 +29,8 @@ var C = /** @class */ (function () {
 }());
 (function (C) {
     C.x = 1;
-})(C || (C = {}));
+})(C);
 (function (C) {
     function x() { }
     C.x = x;
-})(C || (C = {}));
+})(C);

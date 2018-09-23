@@ -13,10 +13,10 @@ var x = f.Mode.Open;
 //// [enumFromExternalModule_0.js]
 "use strict";
 exports.__esModule = true;
-var Mode;
+var Mode = {};
 (function (Mode) {
     Mode[Mode["Open"] = 0] = "Open";
-})(Mode = exports.Mode || (exports.Mode = {}));
+})(Mode);
 //// [enumFromExternalModule_1.js]
 "use strict";
 exports.__esModule = true;

@@ -13,7 +13,7 @@ module M {
 }
 
 //// [newArrays.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -30,4 +30,4 @@ var M;
         };
         return Gar;
     }());
-})(M || (M = {}));
+})(M);

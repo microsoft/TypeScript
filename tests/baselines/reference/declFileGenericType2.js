@@ -56,11 +56,11 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // Module
-var templa;
+var templa = templa || (templa = {});
 (function (templa) {
-    var dom;
+    var dom = templa.dom || (templa.dom = {});
     (function (dom) {
-        var mvc;
+        var mvc = dom.mvc || (dom.mvc = {});
         (function (mvc) {
             var AbstractElementController = /** @class */ (function (_super) {
                 __extends(AbstractElementController, _super);
@@ -70,16 +70,16 @@ var templa;
                 return AbstractElementController;
             }(templa.mvc.AbstractController));
             mvc.AbstractElementController = AbstractElementController;
-        })(mvc = dom.mvc || (dom.mvc = {}));
-    })(dom = templa.dom || (templa.dom = {}));
-})(templa || (templa = {}));
+        })(mvc);
+    })(dom);
+})(templa);
 // Module
 (function (templa) {
-    var dom;
+    var dom = templa.dom || (templa.dom = {});
     (function (dom) {
-        var mvc;
+        var mvc = dom.mvc || (dom.mvc = {});
         (function (mvc) {
-            var composite;
+            var composite = mvc.composite || (mvc.composite = {});
             (function (composite) {
                 var AbstractCompositeElementController = /** @class */ (function (_super) {
                     __extends(AbstractCompositeElementController, _super);
@@ -91,10 +91,10 @@ var templa;
                     return AbstractCompositeElementController;
                 }(templa.dom.mvc.AbstractElementController));
                 composite.AbstractCompositeElementController = AbstractCompositeElementController;
-            })(composite = mvc.composite || (mvc.composite = {}));
-        })(mvc = dom.mvc || (dom.mvc = {}));
-    })(dom = templa.dom || (templa.dom = {}));
-})(templa || (templa = {}));
+            })(composite);
+        })(mvc);
+    })(dom);
+})(templa);
 
 
 //// [declFileGenericType2.d.ts]

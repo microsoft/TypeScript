@@ -8,9 +8,9 @@ module M {
 }
 
 //// [symbolProperty50.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     class C {
         [Symbol.iterator]() { }
     }
-})(M || (M = {}));
+})(M);

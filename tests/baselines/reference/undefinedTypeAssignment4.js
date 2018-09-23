@@ -20,6 +20,6 @@ var undefined = /** @class */ (function () {
 }());
 (function (undefined) {
     undefined.x = 42;
-})(undefined || (undefined = {}));
+})(undefined);
 var x;
 var y;

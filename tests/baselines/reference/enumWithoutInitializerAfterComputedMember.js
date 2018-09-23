@@ -6,9 +6,9 @@ enum E {
 }
 
 //// [enumWithoutInitializerAfterComputedMember.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 0] = "b";
     E[E["c"] = 1] = "c";
-})(E || (E = {}));
+})(E);

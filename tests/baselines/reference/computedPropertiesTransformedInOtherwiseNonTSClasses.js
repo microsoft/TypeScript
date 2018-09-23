@@ -9,7 +9,7 @@ namespace NS {
 
 
 //// [computedPropertiesTransformedInOtherwiseNonTSClasses.js]
-var NS;
+var NS = NS || (NS = {});
 (function (NS) {
     NS.x = Symbol();
     var NotTransformed = /** @class */ (function () {
@@ -18,4 +18,4 @@ var NS;
         return NotTransformed;
     }());
     NS.x;
-})(NS || (NS = {}));
+})(NS);

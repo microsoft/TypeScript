@@ -16,7 +16,7 @@ module A {
 
 
 //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -29,4 +29,4 @@ var A;
         return points;
     }());
     A.points = points;
-})(A || (A = {}));
+})(A);

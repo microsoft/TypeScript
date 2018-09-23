@@ -11,8 +11,8 @@ module Beta {
 var x = Alpha.x
 
 //// [qualifiedName_ImportDeclarations-entity-names-referencing-a-var.js]
-var Alpha;
+var Alpha = Alpha || (Alpha = {});
 (function (Alpha) {
     Alpha.x = 100;
-})(Alpha || (Alpha = {}));
+})(Alpha);
 var x = Alpha.x;

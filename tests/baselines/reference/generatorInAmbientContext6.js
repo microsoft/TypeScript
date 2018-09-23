@@ -4,11 +4,11 @@ module M {
 }
 
 //// [generatorInAmbientContext6.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function* generator() { }
     M.generator = generator;
-})(M || (M = {}));
+})(M);
 
 
 //// [generatorInAmbientContext6.d.ts]

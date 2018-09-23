@@ -8,9 +8,9 @@ module A {
 var c: A.B.C = new A.B.C();
 
 //// [namespaces2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         var C = /** @class */ (function () {
             function C() {
@@ -18,6 +18,6 @@ var A;
             return C;
         }());
         B.C = C;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var c = new A.B.C();

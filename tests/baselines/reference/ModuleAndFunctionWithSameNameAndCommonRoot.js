@@ -30,32 +30,32 @@ module B {
 
 
 //// [module.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var Point;
+    var Point = A.Point || (A.Point = {});
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
-    })(Point = A.Point || (A.Point = {}));
-})(A || (A = {}));
+    })(Point);
+})(A);
 //// [function.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     // duplicate identifier error
     function Point() {
         return { x: 0, y: 0 };
     }
     A.Point = Point;
-})(A || (A = {}));
+})(A);
 //// [simple.js]
-var B;
+var B = B || (B = {});
 (function (B) {
-    var Point;
+    var Point = B.Point || (B.Point = {});
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
-    })(Point = B.Point || (B.Point = {}));
+    })(Point);
     // duplicate identifier error
     function Point() {
         return { x: 0, y: 0 };
     }
     B.Point = Point;
-})(B || (B = {}));
+})(B);

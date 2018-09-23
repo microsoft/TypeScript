@@ -12,8 +12,8 @@ namespace container {
 var type;
 var string;
 var Foo;
-var container;
+var container = container || (container = {});
 (function (container) {
     type;
     Foo = string;
-})(container || (container = {}));
+})(container);

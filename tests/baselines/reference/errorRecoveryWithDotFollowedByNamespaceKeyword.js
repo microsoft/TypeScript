@@ -10,17 +10,17 @@ namespace A {
 }
 
 //// [errorRecoveryWithDotFollowedByNamespaceKeyword.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function foo() {
         if (true) {
             B.
             ;
-            var B = void 0;
+            var B = B || (B = {});
             (function (B) {
                 function baz() { }
                 B.baz = baz;
-            })(B || (B = {}));
+            })(B);
         }
     }
-})(A || (A = {}));
+})(A);

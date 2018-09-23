@@ -43,7 +43,7 @@ interface Foo.I1 { }
 //// [interfaceDeclaration4.js]
 // Import this module when test harness supports external modules. Also remove the internal module below.
 // import Foo = require("interfaceDeclaration5")
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -51,7 +51,7 @@ var Foo;
         return C1;
     }());
     Foo.C1 = C1;
-})(Foo || (Foo = {}));
+})(Foo);
 var C1 = /** @class */ (function () {
     function C1() {
     }

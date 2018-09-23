@@ -45,13 +45,13 @@ export enum Utensils { // Shouldn't error
 exports.__esModule = true;
 exports.Foo = 2;
 exports.Foo = 42; // Should error
-var FooBar;
+var FooBar = {};
 (function (FooBar) {
     FooBar.member1 = 2;
-})(FooBar = exports.FooBar || (exports.FooBar = {}));
+})(FooBar);
 (function (FooBar) {
     FooBar.member2 = 42;
-})(FooBar = exports.FooBar || (exports.FooBar = {}));
+})(FooBar);
 var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member1 = 2;
@@ -68,12 +68,12 @@ var Kettle = /** @class */ (function () {
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
-var Utensils;
+var Utensils = {};
 (function (Utensils) {
     Utensils[Utensils["Spoon"] = 0] = "Spoon";
     Utensils[Utensils["Fork"] = 1] = "Fork";
     Utensils[Utensils["Knife"] = 2] = "Knife";
-})(Utensils = exports.Utensils || (exports.Utensils = {}));
+})(Utensils);
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
-})(Utensils = exports.Utensils || (exports.Utensils = {}));
+})(Utensils);

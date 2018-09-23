@@ -24,15 +24,15 @@ var f: E = new F();
 
 
 //// [ambientClassDeclarationExtends_singleFile.js]
-var D;
+var D = D || (D = {});
 (function (D) {
     var x;
-})(D || (D = {}));
+})(D);
 var d = new D();
 //// [ambientClassDeclarationExtends_file1.js]
-var F;
+var F = F || (F = {});
 (function (F) {
     var y;
-})(F || (F = {}));
+})(F);
 //// [ambientClassDeclarationExtends_file2.js]
 var f = new F();

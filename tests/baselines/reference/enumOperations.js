@@ -17,10 +17,10 @@ enumType >>>anyType;
 
 
 //// [enumOperations.js]
-var Enum;
+var Enum = Enum || (Enum = {});
 (function (Enum) {
     Enum[Enum["None"] = 0] = "None";
-})(Enum || (Enum = {}));
+})(Enum);
 var enumType = Enum.None;
 var numberType = 0;
 var anyType = 0;

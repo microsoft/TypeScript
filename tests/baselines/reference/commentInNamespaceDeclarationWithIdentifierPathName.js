@@ -7,14 +7,14 @@ namespace hello.hi.world
 }
 
 //// [commentInNamespaceDeclarationWithIdentifierPathName.js]
-var hello;
+var hello = hello || (hello = {});
 (function (hello) {
-    var hi;
+    var hi = hello.hi || (hello.hi = {});
     (function (hi) {
-        var world;
+        var world = hi.world || (hi.world = {});
         (function (world) {
             function foo() { }
             // TODO, blah
-        })(world = hi.world || (hi.world = {}));
-    })(hi = hello.hi || (hello.hi = {}));
-})(hello || (hello = {}));
+        })(world);
+    })(hi);
+})(hello);

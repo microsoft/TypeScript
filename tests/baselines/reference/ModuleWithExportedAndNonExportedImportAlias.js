@@ -40,7 +40,7 @@ var line = Geometry.Lines.Line;
 
 
 //// [ModuleWithExportedAndNonExportedImportAlias.js]
-var B;
+var B = B || (B = {});
 (function (B) {
     var Line = /** @class */ (function () {
         function Line(start, end) {
@@ -50,14 +50,14 @@ var B;
         return Line;
     }());
     B.Line = Line;
-})(B || (B = {}));
-var Geometry;
+})(B);
+var Geometry = Geometry || (Geometry = {});
 (function (Geometry) {
     var Lines = B;
     Geometry.Origin = { x: 0, y: 0 };
     // this is valid since B.Line _is_ visible outside Geometry
     Geometry.Unit = new Lines.Line(Geometry.Origin, { x: 1, y: 0 });
-})(Geometry || (Geometry = {}));
+})(Geometry);
 // expected to work since all are exported
 var p;
 var p;

@@ -53,7 +53,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var O;
+var O = O || (O = {});
 (function (O) {
     var A = /** @class */ (function () {
         function A() {
@@ -77,7 +77,7 @@ var O;
         return C;
     }(B));
     O.C = C;
-})(O || (O = {}));
+})(O);
 var e = x.g(new O.A()); // matches overload but bad assignment
 var y = x.f(3); // good
 y = x.f("nope"); // can't assign number to string

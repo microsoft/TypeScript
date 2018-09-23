@@ -16,17 +16,17 @@ module M {
 
 //// [out.js]
 "use strict";
-var M;
+var M = M || (M = {});
 (function (M) {
     function f() {
         var arguments = [];
     }
     M.f = f;
-})(M || (M = {}));
-var M;
+})(M);
+var M = M || (M = {});
 (function (M) {
     function f2() {
         var arguments = [];
     }
     M.f2 = f2;
-})(M || (M = {}));
+})(M);

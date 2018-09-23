@@ -218,7 +218,7 @@ fc1 = fc2; // Error
 fc2 = fc1; // Error
 // Verify that callback parameters aren't loosely checked when types
 // originate in method declarations
-var n1;
+var n1 = {};
 (function (n1) {
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -230,9 +230,9 @@ var n1;
     }());
     f1 = f2;
     f2 = f1; // Error
-})(n1 || (n1 = {}));
-var n2;
+})(n1);
+var n2 = {};
 (function (n2) {
     f1 = f2;
     f2 = f1; // Error
-})(n2 || (n2 = {}));
+})(n2);

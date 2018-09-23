@@ -17,11 +17,11 @@ if (!module.exports) module.exports = "";
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var TypeScript;
+    var TypeScript = {};
     (function (TypeScript) {
-        var Strasse;
+        var Strasse = TypeScript.Strasse || (TypeScript.Strasse = {});
         (function (Strasse) {
-            var Street;
+            var Street = Strasse.Street || (Strasse.Street = {});
             (function (Street) {
                 var Rue = /** @class */ (function () {
                     function Rue() {
@@ -29,9 +29,9 @@ define(["require", "exports"], function (require, exports) {
                     return Rue;
                 }());
                 Street.Rue = Rue;
-            })(Street = Strasse.Street || (Strasse.Street = {}));
-        })(Strasse = TypeScript.Strasse || (TypeScript.Strasse = {}));
-    })(TypeScript = exports.TypeScript || (exports.TypeScript = {}));
+            })(Street);
+        })(Strasse);
+    })(TypeScript);
     var rue = new TypeScript.Strasse.Street.Rue();
     rue.address = "1 Main Street";
     void 0;

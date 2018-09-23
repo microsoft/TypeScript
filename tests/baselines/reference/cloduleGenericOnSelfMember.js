@@ -42,4 +42,4 @@ var Service = /** @class */ (function (_super) {
         name: "1",
         value: 5
     };
-})(Service || (Service = {}));
+})(Service);

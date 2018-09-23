@@ -56,11 +56,11 @@ const um = {
 //// [objectLiteralEnumPropertyNames.js]
 var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 // Fixes #16887
-var Strs;
+var Strs = Strs || (Strs = {});
 (function (Strs) {
     Strs["A"] = "a";
     Strs["B"] = "b";
-})(Strs || (Strs = {}));
+})(Strs);
 var x = (_a = {},
     _a[Strs.A] = 'xo',
     _a[Strs.B] = 'xe',
@@ -83,11 +83,11 @@ var uz = (_e = {},
     _e[a] = 'zo',
     _e[b] = 'ze',
     _e);
-var Nums;
+var Nums = Nums || (Nums = {});
 (function (Nums) {
     Nums[Nums["A"] = 0] = "A";
     Nums[Nums["B"] = 1] = "B";
-})(Nums || (Nums = {}));
+})(Nums);
 var n = (_f = {},
     _f[Nums.A] = 1,
     _f[Nums.B] = 2,

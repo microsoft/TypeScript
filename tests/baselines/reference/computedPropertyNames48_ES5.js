@@ -19,10 +19,10 @@ extractIndexer({
 
 //// [computedPropertyNames48_ES5.js]
 var _a, _b, _c;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["x"] = 0] = "x";
-})(E || (E = {}));
+})(E);
 var a;
 extractIndexer((_a = {},
     _a[a] = "",

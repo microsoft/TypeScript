@@ -21,9 +21,9 @@ var x = new Services.UserServices().getUserName();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var App;
+    var App = {};
     (function (App) {
-        var Services;
+        var Services = App.Services || (App.Services = {});
         (function (Services) {
             var UserServices = /** @class */ (function () {
                 function UserServices() {
@@ -34,8 +34,8 @@ define(["require", "exports"], function (require, exports) {
                 return UserServices;
             }());
             Services.UserServices = UserServices;
-        })(Services = App.Services || (App.Services = {}));
-    })(App = exports.App || (exports.App = {}));
+        })(Services);
+    })(App);
 });
 //// [file2.js]
 define(["require", "exports", "file1"], function (require, exports, appJs) {

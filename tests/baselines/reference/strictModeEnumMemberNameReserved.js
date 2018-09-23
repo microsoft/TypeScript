@@ -9,8 +9,8 @@ const x1: E.static = E.static;
 
 //// [strictModeEnumMemberNameReserved.js]
 "use strict";
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["static"] = 0] = "static";
-})(E || (E = {}));
+})(E);
 var x1 = E.static;

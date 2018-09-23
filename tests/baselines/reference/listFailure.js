@@ -42,7 +42,7 @@ module Editor {
 }
 
 //// [listFailure.js]
-var Editor;
+var Editor = Editor || (Editor = {});
 (function (Editor) {
     var Buffer = /** @class */ (function () {
         function Buffer() {
@@ -86,4 +86,4 @@ var Editor;
         return Line;
     }());
     Editor.Line = Line;
-})(Editor || (Editor = {}));
+})(Editor);

@@ -122,7 +122,7 @@ var Derived2 = /** @class */ (function (_super) {
     }
     return Derived2;
 }(Derived));
-var TargetHasOptional;
+var TargetHasOptional = TargetHasOptional || (TargetHasOptional = {});
 (function (TargetHasOptional) {
     var c;
     var a;
@@ -144,8 +144,8 @@ var TargetHasOptional;
     b = f;
     b = a;
     b = c;
-})(TargetHasOptional || (TargetHasOptional = {}));
-var SourceHasOptional;
+})(TargetHasOptional);
+var SourceHasOptional = SourceHasOptional || (SourceHasOptional = {});
 (function (SourceHasOptional) {
     var c;
     var a;
@@ -166,4 +166,4 @@ var SourceHasOptional;
     b = f; // ok
     b = a; // ok
     b = c; // ok
-})(SourceHasOptional || (SourceHasOptional = {}));
+})(SourceHasOptional);

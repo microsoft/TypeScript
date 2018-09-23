@@ -32,7 +32,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
     var A = /** @class */ (function () {
         function A(a) {
@@ -40,8 +40,8 @@ var M1;
         return A;
     }());
     M1.A = A;
-})(M1 || (M1 = {}));
-var M2;
+})(M1);
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var M1 = 0;
     // Should error.  M1 should bind to the variable, not to the module.
@@ -52,8 +52,8 @@ var M2;
         }
         return B;
     }(M1.A));
-})(M2 || (M2 = {}));
-var M3;
+})(M2);
+var M3 = M3 || (M3 = {});
 (function (M3) {
     // Shouldn't error
     var B = /** @class */ (function (_super) {
@@ -63,4 +63,4 @@ var M3;
         }
         return B;
     }(M1.A));
-})(M3 || (M3 = {}));
+})(M3);

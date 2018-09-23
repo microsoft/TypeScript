@@ -16,9 +16,9 @@ module M2 {
 }
 
 //// [ambientInsideNonAmbient.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
-var M2;
+})(M);
+var M2 = M2 || (M2 = {});
 (function (M2) {
-})(M2 || (M2 = {}));
+})(M2);

@@ -8,12 +8,12 @@ async function f(): X.MyPromise<void> {
 }
 
 //// [asyncQualifiedReturnType_es6.js]
-var X;
+var X = X || (X = {});
 (function (X) {
     class MyPromise extends Promise {
     }
     X.MyPromise = MyPromise;
-})(X || (X = {}));
+})(X);
 function f() {
     return __awaiter(this, void 0, void 0, function* () {
     });

@@ -13,10 +13,10 @@ var q: m.P;             // Error
 
 
 //// [primaryExpressionMods.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     M.a = 1;
-})(M || (M = {}));
+})(M);
 var p; // Used as ModuleName
 var m = M; // Used as TypeName and PrimaryExpression (error on TypeName)
 var m2 = M; // Used as PrimaryExpression in TypeQuery

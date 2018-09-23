@@ -15,9 +15,9 @@ var n: number = modM.x;
 //// [exportAssignmentInternalModule_A.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var M;
+    var M = {};
     (function (M) {
-    })(M || (M = {}));
+    })(M);
     return M;
 });
 //// [exportAssignmentInternalModule_B.js]

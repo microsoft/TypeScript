@@ -472,9 +472,9 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
-    var TokenID;
+    var TokenID = TypeScript.TokenID || (TypeScript.TokenID = {});
     (function (TokenID) {
         // Keywords
         TokenID[TokenID["Any"] = 0] = "Any";
@@ -593,7 +593,7 @@ var TypeScript;
         TokenID[TokenID["Lim"] = 112] = "Lim";
         TokenID[TokenID["LimFixed"] = 105] = "LimFixed";
         TokenID[TokenID["LimKeyword"] = 53] = "LimKeyword";
-    })(TokenID = TypeScript.TokenID || (TypeScript.TokenID = {}));
+    })(TokenID);
     TypeScript.tokenTable = new TokenInfo[];
     TypeScript.nodeTypeTable = new string[];
     TypeScript.nodeTypeToTokTable = new number[];
@@ -610,7 +610,7 @@ var TypeScript;
     TypeScript.noRegexTable[TokenID.CloseBrace] = true;
     TypeScript.noRegexTable[TokenID.True] = true;
     TypeScript.noRegexTable[TokenID.False] = true;
-    var OperatorPrecedence;
+    var OperatorPrecedence = TypeScript.OperatorPrecedence || (TypeScript.OperatorPrecedence = {});
     (function (OperatorPrecedence) {
         OperatorPrecedence[OperatorPrecedence["None"] = 0] = "None";
         OperatorPrecedence[OperatorPrecedence["Comma"] = 1] = "Comma";
@@ -628,8 +628,8 @@ var TypeScript;
         OperatorPrecedence[OperatorPrecedence["Multiplicative"] = 13] = "Multiplicative";
         OperatorPrecedence[OperatorPrecedence["Unary"] = 14] = "Unary";
         OperatorPrecedence[OperatorPrecedence["Lim"] = 15] = "Lim";
-    })(OperatorPrecedence = TypeScript.OperatorPrecedence || (TypeScript.OperatorPrecedence = {}));
-    var Reservation;
+    })(OperatorPrecedence);
+    var Reservation = TypeScript.Reservation || (TypeScript.Reservation = {});
     (function (Reservation) {
         Reservation[Reservation["None"] = 0] = "None";
         Reservation[Reservation["Javascript"] = 1] = "Javascript";
@@ -639,7 +639,7 @@ var TypeScript;
         Reservation[Reservation["TypeScriptAndJS"] = 5] = "TypeScriptAndJS";
         Reservation[Reservation["TypeScriptAndJSFuture"] = 6] = "TypeScriptAndJSFuture";
         Reservation[Reservation["TypeScriptAndJSFutureStrict"] = 12] = "TypeScriptAndJSFutureStrict";
-    })(Reservation = TypeScript.Reservation || (TypeScript.Reservation = {}));
+    })(Reservation);
     var TokenInfo = /** @class */ (function () {
         function TokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
             this.tokenId = tokenId;
@@ -781,7 +781,7 @@ var TypeScript;
         return TypeScript.tokenTable[tokenId];
     }
     TypeScript.lookupToken = lookupToken;
-    var TokenClass;
+    var TokenClass = TypeScript.TokenClass || (TypeScript.TokenClass = {});
     (function (TokenClass) {
         TokenClass[TokenClass["Punctuation"] = 0] = "Punctuation";
         TokenClass[TokenClass["Keyword"] = 1] = "Keyword";
@@ -790,7 +790,7 @@ var TypeScript;
         TokenClass[TokenClass["Whitespace"] = 4] = "Whitespace";
         TokenClass[TokenClass["Identifier"] = 5] = "Identifier";
         TokenClass[TokenClass["Literal"] = 6] = "Literal";
-    })(TokenClass = TypeScript.TokenClass || (TypeScript.TokenClass = {}));
+    })(TokenClass);
     var SavedToken = /** @class */ (function () {
         function SavedToken(tok, minChar, limChar) {
             this.tok = tok;
@@ -941,4 +941,4 @@ var TypeScript;
         }
     }
     TypeScript.initializeStaticTokens = initializeStaticTokens;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

@@ -31,9 +31,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         var EventManager = /** @class */ (function () {
             function EventManager() {
@@ -41,12 +41,12 @@ var A;
             return EventManager;
         }());
         B.EventManager = EventManager;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
-        var C;
+        var C = B.C || (B.C = {});
         (function (C) {
             var ContextMenu = /** @class */ (function (_super) {
                 __extends(ContextMenu, _super);
@@ -56,9 +56,9 @@ var A;
                 return ContextMenu;
             }(B.EventManager));
             C.ContextMenu = ContextMenu;
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+        })(C);
+    })(B);
+})(A);
 
 
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]

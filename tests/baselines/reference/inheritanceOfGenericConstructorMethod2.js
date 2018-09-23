@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var M;
+var M = M || (M = {});
 (function (M) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -42,8 +42,8 @@ var M;
         return C2;
     }());
     M.C2 = C2;
-})(M || (M = {}));
-var N;
+})(M);
+var N = N || (N = {});
 (function (N) {
     var D1 = /** @class */ (function (_super) {
         __extends(D1, _super);
@@ -61,7 +61,7 @@ var N;
         return D2;
     }(M.C2));
     N.D2 = D2;
-})(N || (N = {}));
+})(N);
 var c = new M.C2(); // no error
 var n = new N.D1(); // no error
 var n2 = new N.D2(); // error

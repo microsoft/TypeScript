@@ -8,6 +8,6 @@ module M {
 import r = M.X;
 
 //// [acceptableAlias1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);

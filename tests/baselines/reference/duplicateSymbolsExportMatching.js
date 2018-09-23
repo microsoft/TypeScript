@@ -70,30 +70,30 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     // Should report error only once for instantiated module
-    var M;
+    var M = {};
     (function (M) {
-        var inst;
+        var inst = inst || (inst = {});
         (function (inst) {
             var t;
-        })(inst || (inst = {}));
+        })(inst);
         (function (inst) {
             var t;
-        })(inst = M.inst || (M.inst = {}));
-    })(M || (M = {}));
+        })(inst);
+    })(M);
     // Variables of the same / different type
-    var M2;
+    var M2 = {};
     (function (M2) {
         var v;
         var w;
-    })(M2 || (M2 = {}));
+    })(M2);
     (function (M) {
-        var F;
+        var F = F || (F = {});
         (function (F) {
             var t;
-        })(F || (F = {}));
+        })(F);
         function F() { } // Only one error for duplicate identifier (don't consider visibility)
         M.F = F;
-    })(M || (M = {}));
+    })(M);
     (function (M) {
         var C = /** @class */ (function () {
             function C() {
@@ -102,6 +102,6 @@ define(["require", "exports"], function (require, exports) {
         }());
         (function (C) {
             var t;
-        })(C = M.C || (M.C = {}));
-    })(M || (M = {}));
+        })(C);
+    })(M);
 });

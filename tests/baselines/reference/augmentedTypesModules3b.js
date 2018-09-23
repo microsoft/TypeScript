@@ -27,7 +27,7 @@ var m3b = /** @class */ (function () {
 }());
 (function (m3b) {
     var y = 2;
-})(m3b || (m3b = {}));
+})(m3b);
 var m3c = /** @class */ (function () {
     function m3c() {
     }
@@ -36,16 +36,16 @@ var m3c = /** @class */ (function () {
 }());
 (function (m3c) {
     m3c.y = 2;
-})(m3c || (m3c = {}));
-var m3d;
+})(m3c);
+var m3d = m3d || (m3d = {});
 (function (m3d) {
     m3d.y = 2;
-})(m3d || (m3d = {}));
-var m3e;
+})(m3d);
+var m3e = m3e || (m3e = {});
 (function (m3e) {
     m3e.y = 2;
-})(m3e || (m3e = {}));
-var m3g;
+})(m3e);
+var m3g = m3g || (m3g = {});
 (function (m3g) {
     var C = /** @class */ (function () {
         function C() {
@@ -54,4 +54,4 @@ var m3g;
         return C;
     }());
     m3g.C = C;
-})(m3g || (m3g = {}));
+})(m3g);

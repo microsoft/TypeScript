@@ -64,12 +64,12 @@ function getFalsyPrimitive(x) {
     // Should be unreachable.
     throw "Invalid value";
 }
-var Consts1;
+var Consts1 = Consts1 || (Consts1 = {});
 (function (Consts1) {
     var EMPTY_STRING = getFalsyPrimitive("string");
     var ZERO = getFalsyPrimitive('number');
     var FALSE = getFalsyPrimitive("boolean");
-})(Consts1 || (Consts1 = {}));
+})(Consts1);
 var string = "string";
 var number = "number";
 var boolean = "boolean";
@@ -77,7 +77,7 @@ var stringOrNumber = string || number;
 var stringOrBoolean = string || boolean;
 var booleanOrNumber = number || boolean;
 var stringOrBooleanOrNumber = stringOrBoolean || number;
-var Consts2;
+var Consts2 = Consts2 || (Consts2 = {});
 (function (Consts2) {
     var EMPTY_STRING = getFalsyPrimitive(string);
     var ZERO = getFalsyPrimitive(number);
@@ -86,7 +86,7 @@ var Consts2;
     var b = getFalsyPrimitive(stringOrBoolean);
     var c = getFalsyPrimitive(booleanOrNumber);
     var d = getFalsyPrimitive(stringOrBooleanOrNumber);
-})(Consts2 || (Consts2 = {}));
+})(Consts2);
 
 
 //// [stringLiteralTypesOverloads02.d.ts]

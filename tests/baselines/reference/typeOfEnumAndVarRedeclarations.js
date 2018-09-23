@@ -11,13 +11,13 @@ var y = E;
 var y: { readonly a: E; readonly b: E; readonly [x: number]: string; readonly [x: number]: string } // two errors: the types are not identical and duplicate signatures
 
 //// [typeOfEnumAndVarRedeclarations.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
-})(E || (E = {}));
+})(E);
 (function (E) {
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 var x = E;
 var x; // Shouldnt error
 var y = E;

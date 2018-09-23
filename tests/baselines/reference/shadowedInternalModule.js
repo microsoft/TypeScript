@@ -35,15 +35,15 @@ module Z {
 
 //// [shadowedInternalModule.js]
 // all errors imported modules conflict with local variables
-var A;
+var A = A || (A = {});
 (function (A) {
     A.Point = { x: 0, y: 0 };
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     var A = { x: 0, y: 0 };
-})(B || (B = {}));
-var X;
+})(B);
+var X = X || (X = {});
 (function (X) {
     var Y = /** @class */ (function () {
         function Y() {
@@ -51,8 +51,8 @@ var X;
         return Y;
     }());
     X.Y = Y;
-})(X || (X = {}));
-var Z;
+})(X);
+var Z = Z || (Z = {});
 (function (Z) {
     var Y = 12;
-})(Z || (Z = {}));
+})(Z);

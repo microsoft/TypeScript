@@ -14,9 +14,9 @@ export module c {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var c;
+    var c = {};
     (function (c) {
-    })(c = exports.c || (exports.c = {}));
+    })(c);
 });
 
 

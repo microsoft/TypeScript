@@ -49,19 +49,19 @@ x = C;
 x = b;
 var c;
 x = c;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 x = M;
 x = { f: function () { } };
 function f(a) {
     x = a;
 }
 x = f;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 x = E;
 x = E.A;

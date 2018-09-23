@@ -34,7 +34,7 @@ define(["require", "exports"], function (require, exports) {
         return "require";
     }
     exports.require = require;
-    var m1;
+    var m1 = {};
     (function (m1) {
         function exports() {
             return 1;
@@ -42,8 +42,8 @@ define(["require", "exports"], function (require, exports) {
         function require() {
             return "require";
         }
-    })(m1 || (m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         function exports() {
             return 1;
@@ -53,5 +53,5 @@ define(["require", "exports"], function (require, exports) {
             return "require";
         }
         m2.require = require;
-    })(m2 || (m2 = {}));
+    })(m2);
 });

@@ -4,7 +4,7 @@ module M {
 }
 
 //// [arrowFunctionInExpressionStatement2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     (function () { return 0; });
-})(M || (M = {}));
+})(M);

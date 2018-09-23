@@ -27,7 +27,7 @@ export = Foo;
 
 //// [clinterfaces.js]
 "use strict";
-var M;
+var M = {};
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -39,7 +39,7 @@ var M;
         }
         return D;
     }());
-})(M || (M = {}));
+})(M);
 var Foo = /** @class */ (function () {
     function Foo() {
     }

@@ -60,7 +60,7 @@ var D = /** @class */ (function () {
     return D;
 }());
 function F(x) { return 42; }
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -70,7 +70,7 @@ var M;
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
-})(M || (M = {}));
+})(M);
 var aNumber = 9.9;
 var aString = 'this is a string';
 var aDate = new Date(12);

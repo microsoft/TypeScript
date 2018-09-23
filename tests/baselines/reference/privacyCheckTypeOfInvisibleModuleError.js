@@ -9,12 +9,12 @@ module Outer {
 
 
 //// [privacyCheckTypeOfInvisibleModuleError.js]
-var Outer;
+var Outer = Outer || (Outer = {});
 (function (Outer) {
-    var Inner;
+    var Inner = Inner || (Inner = {});
     (function (Inner) {
-    })(Inner || (Inner = {}));
-})(Outer || (Outer = {}));
+    })(Inner);
+})(Outer);
 
 
 //// [privacyCheckTypeOfInvisibleModuleError.d.ts]

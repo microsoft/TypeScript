@@ -6,7 +6,7 @@ module Foo {
 }
 
 //// [reboundBaseClassSymbol.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var A = 1;
-})(Foo || (Foo = {}));
+})(Foo);

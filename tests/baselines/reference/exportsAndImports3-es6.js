@@ -45,17 +45,17 @@ class C {
 }
 exports.C = C;
 exports.C1 = C;
-var E;
+const E = {};
+exports.E1 = E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E = exports.E || (exports.E = {}));
-exports.E1 = E;
-var M;
-(function (M) {
-})(M = exports.M || (exports.M = {}));
+})(E);
+const M = {};
 exports.M1 = M;
+(function (M) {
+})(M);
 exports.a = M.x;
 exports.a1 = exports.a;
 //// [t2.js]

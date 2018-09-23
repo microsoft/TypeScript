@@ -8,11 +8,11 @@ module Bar {
 }
 
 //// [parserExportAssignment9.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     export default foo;
-})(Foo || (Foo = {}));
-var Bar;
+})(Foo);
+var Bar = Bar || (Bar = {});
 (function (Bar) {
     export default bar;
-})(Bar || (Bar = {}));
+})(Bar);

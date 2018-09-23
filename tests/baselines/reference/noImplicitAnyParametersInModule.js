@@ -46,7 +46,7 @@ module M {
 }
 
 //// [noImplicitAnyParametersInModule.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     // No implicit-'any' errors.
     function m_f1() { }
@@ -97,4 +97,4 @@ var M;
         }
         return "";
     };
-})(M || (M = {}));
+})(M);

@@ -233,7 +233,7 @@ var m3eVar: mAmbient.m3.e;
 
 
 //// [moduledecl.js]
-var m0;
+var m0 = m0 || (m0 = {});
 (function (m0) {
     function f1() {
     }
@@ -244,8 +244,8 @@ var m0;
         }
         return c1;
     }());
-})(m0 || (m0 = {}));
-var m1;
+})(m0);
+var m1 = m1 || (m1 = {});
 (function (m1) {
     function f1() {
     }
@@ -266,42 +266,42 @@ var m1;
         return c1;
     }());
     m1.c1 = c1;
-})(m1 || (m1 = {}));
-var m;
+})(m1);
+var m = m || (m = {});
 (function (m) {
-    var m2;
+    var m2 = m.m2 || (m.m2 = {});
     (function (m2) {
         var a = 10;
-    })(m2 = m.m2 || (m.m2 = {}));
-    var m3;
+    })(m2);
+    var m3 = m.m3 || (m.m3 = {});
     (function (m3) {
-    })(m3 = m.m3 || (m.m3 = {}));
-})(m || (m = {}));
+    })(m3);
+})(m);
 (function (m) {
-    var m25;
+    var m25 = m.m25 || (m.m25 = {});
     (function (m25) {
-        var m5;
+        var m5 = m25.m5 || (m25.m5 = {});
         (function (m5) {
-        })(m5 = m25.m5 || (m25.m5 = {}));
-    })(m25 = m.m25 || (m.m25 = {}));
-})(m || (m = {}));
-var m13;
+        })(m5);
+    })(m25);
+})(m);
+var m13 = m13 || (m13 = {});
 (function (m13) {
-    var m4;
+    var m4 = m13.m4 || (m13.m4 = {});
     (function (m4) {
-        var m2;
+        var m2 = m4.m2 || (m4.m2 = {});
         (function (m2) {
-            var m3;
+            var m3 = m2.m3 || (m2.m3 = {});
             (function (m3) {
-            })(m3 = m2.m3 || (m2.m3 = {}));
-        })(m2 = m4.m2 || (m4.m2 = {}));
+            })(m3);
+        })(m2);
         function f() {
             return 20;
         }
         m4.f = f;
-    })(m4 = m13.m4 || (m13.m4 = {}));
-})(m13 || (m13 = {}));
-var exportTests;
+    })(m4);
+})(m13);
+var exportTests = exportTests || (exportTests = {});
 (function (exportTests) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
@@ -356,7 +356,7 @@ var exportTests;
         return C3_public;
     }());
     exportTests.C3_public = C3_public;
-})(exportTests || (exportTests = {}));
+})(exportTests);
 function foo() {
     return mAmbient.foo();
 }

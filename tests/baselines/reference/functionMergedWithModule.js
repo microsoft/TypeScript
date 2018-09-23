@@ -19,19 +19,19 @@ function foo(title) {
     var x = 10;
 }
 (function (foo) {
-    var Bar;
+    var Bar = foo.Bar || (foo.Bar = {});
     (function (Bar) {
         function f() {
         }
         Bar.f = f;
-    })(Bar = foo.Bar || (foo.Bar = {}));
-})(foo || (foo = {}));
+    })(Bar);
+})(foo);
 (function (foo) {
-    var Baz;
+    var Baz = foo.Baz || (foo.Baz = {});
     (function (Baz) {
         function g() {
             foo.Bar.f();
         }
         Baz.g = g;
-    })(Baz = foo.Baz || (foo.Baz = {}));
-})(foo || (foo = {}));
+    })(Baz);
+})(foo);

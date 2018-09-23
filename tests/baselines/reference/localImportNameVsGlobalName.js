@@ -14,17 +14,17 @@ module App {
 }
 
 //// [localImportNameVsGlobalName.js]
-var Keyboard;
+var Keyboard = Keyboard || (Keyboard = {});
 (function (Keyboard) {
-    var Key;
+    var Key = Keyboard.Key || (Keyboard.Key = {});
     (function (Key) {
         Key[Key["UP"] = 0] = "UP";
         Key[Key["DOWN"] = 1] = "DOWN";
         Key[Key["LEFT"] = 2] = "LEFT";
         Key[Key["RIGHT"] = 3] = "RIGHT";
-    })(Key = Keyboard.Key || (Keyboard.Key = {}));
-})(Keyboard || (Keyboard = {}));
-var App;
+    })(Key);
+})(Keyboard);
+var App = App || (App = {});
 (function (App) {
     var Key = Keyboard.Key;
     function foo(key) { }
@@ -32,4 +32,4 @@ var App;
     foo(Key.UP);
     foo(Key.DOWN);
     foo(Key.LEFT);
-})(App || (App = {}));
+})(App);

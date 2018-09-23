@@ -4,7 +4,7 @@ module foo {
 }
 
 //// [thisKeyword.js]
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     this.bar = 4;
-})(foo || (foo = {}));
+})(foo);

@@ -37,7 +37,7 @@ export module M1 {
 "use strict";
 exports.__esModule = true;
 var foo2 = require("./foo2");
-var M1;
+var M1 = {};
 (function (M1) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -48,12 +48,12 @@ var M1;
         return C1;
     }());
     M1.C1 = C1;
-})(M1 = exports.M1 || (exports.M1 = {}));
+})(M1);
 //// [foo2.js]
 "use strict";
 exports.__esModule = true;
 var foo1 = require("./foo1");
-var M1;
+var M1 = {};
 (function (M1) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -67,4 +67,4 @@ var M1;
         return C1;
     }());
     M1.C1 = C1;
-})(M1 = exports.M1 || (exports.M1 = {}));
+})(M1);

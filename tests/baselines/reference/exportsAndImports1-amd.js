@@ -47,17 +47,17 @@ define(["require", "exports"], function (require, exports) {
         return C;
     }());
     exports.C = C;
-    var E;
+    var E = {};
+    exports.E = E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(E || (E = {}));
-    exports.E = E;
-    var M;
-    (function (M) {
-    })(M || (M = {}));
+    })(E);
+    var M = {};
     exports.M = M;
+    (function (M) {
+    })(M);
     var a = M.x;
     exports.a = a;
 });

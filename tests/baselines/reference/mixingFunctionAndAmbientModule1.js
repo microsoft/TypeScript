@@ -43,20 +43,20 @@ module E {
 
 
 //// [mixingFunctionAndAmbientModule1.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function My(s) { }
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     function My(s) { }
-})(B || (B = {}));
-var C;
+})(B);
+var C = C || (C = {});
 (function (C) {
-})(C || (C = {}));
-var D;
+})(C);
+var D = D || (D = {});
 (function (D) {
-})(D || (D = {}));
-var E;
+})(D);
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);

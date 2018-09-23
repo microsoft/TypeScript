@@ -44,4 +44,4 @@ function maker(value) {
         return Bar;
     }(Foo));
     maker.Bar = Bar;
-})(maker || (maker = {}));
+})(maker);

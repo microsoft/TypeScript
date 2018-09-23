@@ -44,19 +44,19 @@ var e = x;
 var f = x;
 var g = 1;
 var g2 = 1;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 M = x;
 function i(a) {
     a = x;
 }
 i = x;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 x = E;
 x = E.A;
 x = { f: function () { } };

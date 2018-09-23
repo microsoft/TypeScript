@@ -27,7 +27,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -47,4 +47,4 @@ var Validation;
         }
         return c3;
     }(c1));
-})(Validation || (Validation = {}));
+})(Validation);

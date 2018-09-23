@@ -5,8 +5,8 @@ module myMod {
 }
 
 //// [thisInModule.js]
-var myMod;
+var myMod = myMod || (myMod = {});
 (function (myMod) {
     var x;
     this.x = 5;
-})(myMod || (myMod = {}));
+})(myMod);

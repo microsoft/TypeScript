@@ -12,9 +12,9 @@ module c {
 }
 
 //// [internalAliasInitializedModule.js]
-var a;
+var a = a || (a = {});
 (function (a) {
-    var b;
+    var b = a.b || (a.b = {});
     (function (b) {
         var c = /** @class */ (function () {
             function c() {
@@ -22,13 +22,13 @@ var a;
             return c;
         }());
         b.c = c;
-    })(b = a.b || (a.b = {}));
-})(a || (a = {}));
-var c;
+    })(b);
+})(a);
+var c = c || (c = {});
 (function (c) {
     var b = a.b;
     c.x = new b.c();
-})(c || (c = {}));
+})(c);
 
 
 //// [internalAliasInitializedModule.d.ts]

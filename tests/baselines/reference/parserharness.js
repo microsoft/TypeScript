@@ -2134,14 +2134,14 @@ else if (typeof require === "function") {
 else {
     throw new Error('Unknown context');
 }
-var Harness;
+var Harness = Harness || (Harness = {});
 (function (Harness) {
     // Settings 
     Harness.userSpecifiedroot = "";
     var global = Function("return this").call(null);
     Harness.usePull = false;
     // Assert functions
-    var Assert;
+    var Assert = Harness.Assert || (Harness.Assert = {});
     (function (Assert) {
         Assert.bugIds = [];
         Assert.throwAssertError = function (error) {
@@ -2250,7 +2250,7 @@ var Harness;
             }
         }
         Assert.arrayContainsOnce = arrayContainsOnce;
-    })(Assert = Harness.Assert || (Harness.Assert = {}));
+    })(Assert);
     /** Splits the given string on \r\n or on only \n if that fails */
     function splitContentByNewlines(content) {
         // Split up the input file by line
@@ -2508,9 +2508,9 @@ var Harness;
     }(Runnable));
     Harness.Run = Run;
     // Performance test
-    var Perf;
+    var Perf = Harness.Perf || (Harness.Perf = {});
     (function (Perf) {
-        var Clock;
+        var Clock = Perf.Clock || (Perf.Clock = {});
         (function (Clock) {
             if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
                 // Running in JSHost.
@@ -2526,7 +2526,7 @@ var Harness;
                 };
                 Clock.resolution = 1000;
             }
-        })(Clock = Perf.Clock || (Perf.Clock = {}));
+        })(Clock);
         var Timer = /** @class */ (function () {
             function Timer() {
                 this.time = 0;
@@ -2653,9 +2653,9 @@ var Harness;
             Perf.benchmarks.push(BenchmarkClass);
         }
         Perf.addBenchmark = addBenchmark;
-    })(Perf = Harness.Perf || (Harness.Perf = {}));
+    })(Perf);
     /** Functionality for compiling TypeScript code */
-    var Compiler;
+    var Compiler = Harness.Compiler || (Harness.Compiler = {});
     (function (Compiler) {
         /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
@@ -3303,11 +3303,11 @@ var Harness;
             }
         }
         Compiler.defineCompilationContextForTest = defineCompilationContextForTest;
-    })(Compiler = Harness.Compiler || (Harness.Compiler = {}));
+    })(Compiler);
     /** Parses the test cases files
      *  extracts options and individual files in a multifile test
      */
-    var TestCaseParser;
+    var TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {});
     (function (TestCaseParser) {
         optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
         // List of allowed metadata names
@@ -3412,7 +3412,7 @@ var Harness;
             return { settings: settings, testUnitData: files };
         }
         TestCaseParser.makeUnitsFromTest = makeUnitsFromTest;
-    })(TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {}));
+    })(TestCaseParser);
     var ScriptInfo = /** @class */ (function () {
         function ScriptInfo(name, content, isResident, maxScriptVersions) {
             this.name = name;
@@ -3689,7 +3689,7 @@ var Harness;
     }
     Harness.run = run;
     /** Runs TypeScript or Javascript code. */
-    var Runner;
+    var Runner = Harness.Runner || (Harness.Runner = {});
     (function (Runner) {
         function runCollateral(path, callback) {
             path = switchToForwardSlashes(path);
@@ -3725,9 +3725,9 @@ var Harness;
             });
         }
         Runner.runString = runString;
-    })(Runner = Harness.Runner || (Harness.Runner = {}));
+    })(Runner);
     /** Support class for baseline files */
-    var Baseline;
+    var Baseline = Harness.Baseline || (Harness.Baseline = {});
     (function (Baseline) {
         var reportFilename = 'baseline-report.html';
         var firstRun = true;
@@ -3858,10 +3858,10 @@ var Harness;
             }
         }
         Baseline.runBaseline = runBaseline;
-    })(Baseline = Harness.Baseline || (Harness.Baseline = {}));
+    })(Baseline);
     var currentRun = new Run();
     global.describe = describe;
     global.run = run;
     global.it = it;
     global.assert = Harness.Assert;
-})(Harness || (Harness = {}));
+})(Harness);

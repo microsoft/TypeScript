@@ -11,7 +11,7 @@ module B {
 var x: B.A1.I = { x: 1 };
 
 //// [exportImportNonInstantiatedModule.js]
-var B;
+var B = B || (B = {});
 (function (B) {
-})(B || (B = {}));
+})(B);
 var x = { x: 1 };

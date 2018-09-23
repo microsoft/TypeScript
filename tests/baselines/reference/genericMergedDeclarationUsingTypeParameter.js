@@ -10,4 +10,4 @@ module foo {
 function foo(y, z) { return y; }
 (function (foo) {
     var y = 1;
-})(foo || (foo = {}));
+})(foo);

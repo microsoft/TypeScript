@@ -7,10 +7,10 @@ var v = {
 }
 
 //// [computedPropertyNames7_ES6.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["member"] = 0] = "member";
-})(E || (E = {}));
+})(E);
 var v = {
     [E.member]: 0
 };

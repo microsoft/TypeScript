@@ -12,7 +12,7 @@ var t2: M.B[] = [];
 
 //// [moduleClassArrayCodeGenTest.js]
 // Invalid code gen for Array of Module class
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -25,6 +25,6 @@ var M;
         }
         return B;
     }());
-})(M || (M = {}));
+})(M);
 var t = [];
 var t2 = [];

@@ -757,7 +757,7 @@ module Formatting {
 // limitations under the License.
 //
 ///<reference path='formatting.ts' />
-var Formatting;
+var Formatting = Formatting || (Formatting = {});
 (function (Formatting) {
     var Indenter = /** @class */ (function () {
         function Indenter(logger, tree, snapshot, languageHostIndentation, editorOptions, firstToken, smartIndent) {
@@ -1342,4 +1342,4 @@ var Formatting;
         return Indenter;
     }());
     Formatting.Indenter = Indenter;
-})(Formatting || (Formatting = {}));
+})(Formatting);

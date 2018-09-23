@@ -15,14 +15,14 @@ var foo: M.F;
 let x: ns.A;
 
 //// [namespacesDeclaration2.js]
-var N;
+var N = N || (N = {});
 (function (N) {
     function S() { }
-})(N || (N = {}));
-var M;
+})(N);
+var M = M || (M = {});
 (function (M) {
     function F() { }
-})(M || (M = {}));
+})(M);
 var foge;
 var foo;
 var x;

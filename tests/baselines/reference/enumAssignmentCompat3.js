@@ -90,83 +90,83 @@ abc = merged2; // ok
 merged2 = abc; // ok
 
 //// [enumAssignmentCompat3.js]
-var First;
+var First = First || (First = {});
 (function (First) {
-    var E;
+    var E = First.E || (First.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
-    })(E = First.E || (First.E = {}));
-})(First || (First = {}));
-var Abc;
+    })(E);
+})(First);
+var Abc = Abc || (Abc = {});
 (function (Abc) {
-    var E;
+    var E = Abc.E || (Abc.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
-    })(E = Abc.E || (Abc.E = {}));
-    var Nope;
+    })(E);
+    var Nope = Abc.Nope || (Abc.Nope = {});
     (function (Nope) {
         Nope[Nope["a"] = 0] = "a";
         Nope[Nope["b"] = 1] = "b";
         Nope[Nope["c"] = 2] = "c";
-    })(Nope = Abc.Nope || (Abc.Nope = {}));
-})(Abc || (Abc = {}));
-var Abcd;
+    })(Nope);
+})(Abc);
+var Abcd = Abcd || (Abcd = {});
 (function (Abcd) {
-    var E;
+    var E = Abcd.E || (Abcd.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
         E[E["d"] = 3] = "d";
-    })(E = Abcd.E || (Abcd.E = {}));
-})(Abcd || (Abcd = {}));
-var Ab;
+    })(E);
+})(Abcd);
+var Ab = Ab || (Ab = {});
 (function (Ab) {
-    var E;
+    var E = Ab.E || (Ab.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
-    })(E = Ab.E || (Ab.E = {}));
-})(Ab || (Ab = {}));
-var Cd;
+    })(E);
+})(Ab);
+var Cd = Cd || (Cd = {});
 (function (Cd) {
-    var E;
+    var E = Cd.E || (Cd.E = {});
     (function (E) {
         E[E["c"] = 0] = "c";
         E[E["d"] = 1] = "d";
-    })(E = Cd.E || (Cd.E = {}));
-})(Cd || (Cd = {}));
-var Decl;
+    })(E);
+})(Cd);
+var Decl = Decl || (Decl = {});
 (function (Decl) {
-})(Decl || (Decl = {}));
-var Merged;
+})(Decl);
+var Merged = Merged || (Merged = {});
 (function (Merged) {
-    var E;
+    var E = Merged.E || (Merged.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
-    })(E = Merged.E || (Merged.E = {}));
+    })(E);
     (function (E) {
         E[E["c"] = 3] = "c";
         E[E["d"] = 4] = "d";
-    })(E = Merged.E || (Merged.E = {}));
-})(Merged || (Merged = {}));
-var Merged2;
+    })(E);
+})(Merged);
+var Merged2 = Merged2 || (Merged2 = {});
 (function (Merged2) {
-    var E;
+    var E = Merged2.E || (Merged2.E = {});
     (function (E) {
         E[E["a"] = 0] = "a";
         E[E["b"] = 1] = "b";
         E[E["c"] = 2] = "c";
-    })(E = Merged2.E || (Merged2.E = {}));
+    })(E);
     (function (E) {
         E.d = 5;
-    })(E = Merged2.E || (Merged2.E = {}));
-})(Merged2 || (Merged2 = {}));
+    })(E);
+})(Merged2);
 var abc;
 var secondAbc;
 var secondAbcd;

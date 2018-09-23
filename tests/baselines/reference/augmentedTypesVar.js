@@ -61,22 +61,22 @@ var x4a = /** @class */ (function () {
 }()); // error
 // var then enum
 var x5 = 1;
-var x5;
+var x5 = x5 || (x5 = {});
 (function (x5) {
     x5[x5["One"] = 0] = "One";
-})(x5 || (x5 = {})); // error
+})(x5); // error
 // var then module
 var x6 = 1;
 var x6a = 1; // error
-var x6a;
+var x6a = x6a || (x6a = {});
 (function (x6a) {
     var y = 2;
-})(x6a || (x6a = {})); // error since instantiated
+})(x6a); // error since instantiated
 var x6b = 1; // error
-var x6b;
+var x6b = x6b || (x6b = {});
 (function (x6b) {
     x6b.y = 2;
-})(x6b || (x6b = {})); // error
+})(x6b); // error
 // var then import, messes with other error reporting
 //var x7 = 1;
 //import x7 = require('');

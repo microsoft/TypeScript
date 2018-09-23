@@ -15,7 +15,7 @@ var test = new Test.MyClass(func); // Should be OK
 
 
 //// [constructorArgWithGenericCallSignature.js]
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var MyClass = /** @class */ (function () {
         function MyClass(func) {
@@ -25,7 +25,7 @@ var Test;
     Test.MyClass = MyClass;
     function F(func) { }
     Test.F = F;
-})(Test || (Test = {}));
+})(Test);
 var func;
 Test.F(func); // OK
 var test = new Test.MyClass(func); // Should be OK

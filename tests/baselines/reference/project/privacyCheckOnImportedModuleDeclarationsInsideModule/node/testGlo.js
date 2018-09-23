@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
     m2.c1 = new m2.mExported.me.class1;
     function f1() {
@@ -65,4 +65,4 @@ var m2;
         }
         return class4;
     }(mNonExported.mne.class1));
-})(m2 || (m2 = {}));
+})(m2);

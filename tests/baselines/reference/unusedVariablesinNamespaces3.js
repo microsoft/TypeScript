@@ -12,7 +12,7 @@ namespace Validation {
 }
 
 //// [unusedVariablesinNamespaces3.js]
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var lettersRegexp = /^[A-Za-z]+$/;
     var numberRegexp = /^[0-9]+$/;
@@ -26,4 +26,4 @@ var Validation;
         return LettersOnlyValidator;
     }());
     Validation.LettersOnlyValidator = LettersOnlyValidator;
-})(Validation || (Validation = {}));
+})(Validation);

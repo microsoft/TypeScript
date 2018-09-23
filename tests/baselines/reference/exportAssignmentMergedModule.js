@@ -26,24 +26,24 @@ if(!!foo.b){
 
 //// [foo_0.js]
 "use strict";
-var Foo;
+var Foo = {};
 (function (Foo) {
     function a() {
         return 5;
     }
     Foo.a = a;
     Foo.b = true;
-})(Foo || (Foo = {}));
+})(Foo);
 (function (Foo) {
     function c(a) {
         return a;
     }
     Foo.c = c;
-    var Test;
+    var Test = Foo.Test || (Foo.Test = {});
     (function (Test) {
         Test.answer = 42;
-    })(Test = Foo.Test || (Foo.Test = {}));
-})(Foo || (Foo = {}));
+    })(Test);
+})(Foo);
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";

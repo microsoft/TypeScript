@@ -14,11 +14,11 @@ export module M {
 //// [multipleExports.js]
 "use strict";
 exports.__esModule = true;
-var M;
+var M = {};
 (function (M) {
     M.v = 0;
-})(M = exports.M || (exports.M = {}));
+})(M);
 var x = 0;
 (function (M) {
     M.v;
-})(M = exports.M || (exports.M = {}));
+})(M);

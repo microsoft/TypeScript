@@ -88,7 +88,7 @@ module ObjectTypes {
 //// [assignmentCompatWithObjectMembers.js]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // no errors expected
-var SimpleTypes;
+var SimpleTypes = SimpleTypes || (SimpleTypes = {});
 (function (SimpleTypes) {
     var S = /** @class */ (function () {
         function S() {
@@ -127,8 +127,8 @@ var SimpleTypes;
     a2 = b;
     a2 = t2;
     a2 = t;
-})(SimpleTypes || (SimpleTypes = {}));
-var ObjectTypes;
+})(SimpleTypes);
+var ObjectTypes = ObjectTypes || (ObjectTypes = {});
 (function (ObjectTypes) {
     var S = /** @class */ (function () {
         function S() {
@@ -167,4 +167,4 @@ var ObjectTypes;
     a2 = b;
     a2 = t2;
     a2 = t;
-})(ObjectTypes || (ObjectTypes = {}));
+})(ObjectTypes);

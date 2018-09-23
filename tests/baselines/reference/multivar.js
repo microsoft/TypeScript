@@ -49,7 +49,7 @@ var b5 = 10;
 //// [multivar.js]
 var a, b, c;
 var x = 1, y = 2, z = 3;
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
     m2.b2 = 10;
     var m1;
@@ -70,7 +70,7 @@ var m2;
     m2.C2 = C2;
     var m;
     var b2;
-})(m2 || (m2 = {}));
+})(m2);
 var d;
 var a22, b22 = 10, c22 = 30, dn;
 var nn;

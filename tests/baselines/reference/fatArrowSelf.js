@@ -25,7 +25,7 @@ module Consumer {
 }
 
 //// [fatArrowSelf.js]
-var Events;
+var Events = Events || (Events = {});
 (function (Events) {
     var EventEmitter = /** @class */ (function () {
         function EventEmitter() {
@@ -35,8 +35,8 @@ var Events;
         return EventEmitter;
     }());
     Events.EventEmitter = EventEmitter;
-})(Events || (Events = {}));
-var Consumer;
+})(Events);
+var Consumer = Consumer || (Consumer = {});
 (function (Consumer) {
     var EventEmitterConsummer = /** @class */ (function () {
         function EventEmitterConsummer(emitter) {
@@ -52,4 +52,4 @@ var Consumer;
         };
         return EventEmitterConsummer;
     }());
-})(Consumer || (Consumer = {}));
+})(Consumer);

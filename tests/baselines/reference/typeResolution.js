@@ -114,11 +114,11 @@ module TopLevelModule2 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var TopLevelModule1;
+    var TopLevelModule1 = {};
     (function (TopLevelModule1) {
-        var SubModule1;
+        var SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {});
         (function (SubModule1) {
-            var SubSubModule1;
+            var SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {});
             (function (SubSubModule1) {
                 var ClassA = /** @class */ (function () {
                     function ClassA() {
@@ -199,7 +199,7 @@ define(["require", "exports"], function (require, exports) {
                     }
                     return NonExportedClassQ;
                 }());
-            })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
+            })(SubSubModule1);
             // Should have no effect on S1.SS1.ClassA above because it is not exported
             var ClassA = /** @class */ (function () {
                 function ClassA() {
@@ -217,10 +217,10 @@ define(["require", "exports"], function (require, exports) {
                 }
                 return ClassA;
             }());
-        })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
-        var SubModule2;
+        })(SubModule1);
+        var SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {});
         (function (SubModule2) {
-            var SubSubModule2;
+            var SubSubModule2 = SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {});
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
                 var ClassA = /** @class */ (function () {
@@ -244,15 +244,15 @@ define(["require", "exports"], function (require, exports) {
                     return ClassC;
                 }());
                 SubSubModule2.ClassC = ClassC;
-            })(SubSubModule2 = SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {}));
-        })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
+            })(SubSubModule2);
+        })(SubModule2);
         var ClassA = /** @class */ (function () {
             function ClassA() {
             }
             ClassA.prototype.AisIn1 = function () { };
             return ClassA;
         }());
-        var NotExportedModule;
+        var NotExportedModule = NotExportedModule || (NotExportedModule = {});
         (function (NotExportedModule) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {
@@ -260,11 +260,11 @@ define(["require", "exports"], function (require, exports) {
                 return ClassA;
             }());
             NotExportedModule.ClassA = ClassA;
-        })(NotExportedModule || (NotExportedModule = {}));
-    })(TopLevelModule1 = exports.TopLevelModule1 || (exports.TopLevelModule1 = {}));
-    var TopLevelModule2;
+        })(NotExportedModule);
+    })(TopLevelModule1);
+    var TopLevelModule2 = {};
     (function (TopLevelModule2) {
-        var SubModule3;
+        var SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {});
         (function (SubModule3) {
             var ClassA = /** @class */ (function () {
                 function ClassA() {
@@ -273,7 +273,7 @@ define(["require", "exports"], function (require, exports) {
                 return ClassA;
             }());
             SubModule3.ClassA = ClassA;
-        })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
-    })(TopLevelModule2 || (TopLevelModule2 = {}));
+        })(SubModule3);
+    })(TopLevelModule2);
 });
 //# sourceMappingURL=typeResolution.js.map

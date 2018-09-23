@@ -10,15 +10,15 @@ module c {
 
 
 //// [internalAliasVar.js]
-var a;
+var a = a || (a = {});
 (function (a) {
     a.x = 10;
-})(a || (a = {}));
-var c;
+})(a);
+var c = c || (c = {});
 (function (c) {
     var b = a.x;
     c.bVal = b;
-})(c || (c = {}));
+})(c);
 
 
 //// [internalAliasVar.d.ts]

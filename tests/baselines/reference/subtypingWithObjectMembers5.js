@@ -66,7 +66,7 @@ module Optional {
 //// [subtypingWithObjectMembers5.js]
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
-var NotOptional;
+var NotOptional = NotOptional || (NotOptional = {});
 (function (NotOptional) {
     var B = /** @class */ (function () {
         function B() {
@@ -83,9 +83,9 @@ var NotOptional;
         }
         return B3;
     }());
-})(NotOptional || (NotOptional = {}));
+})(NotOptional);
 // same cases as above but with optional
-var Optional;
+var Optional = Optional || (Optional = {});
 (function (Optional) {
     var B = /** @class */ (function () {
         function B() {
@@ -102,4 +102,4 @@ var Optional;
         }
         return B3;
     }());
-})(Optional || (Optional = {}));
+})(Optional);

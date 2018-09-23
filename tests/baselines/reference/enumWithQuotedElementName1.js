@@ -4,7 +4,7 @@ enum E {
 }
 
 //// [enumWithQuotedElementName1.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["fo\"o"] = 0] = "fo\"o";
-})(E || (E = {}));
+})(E);

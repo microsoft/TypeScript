@@ -161,16 +161,16 @@ function foo() {
 this *= value;
 this += value;
 // identifiers: module, class, enum, function
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 M *= value;
 M += value;
 C *= value;
 C += value;
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);
 E *= value;
 E += value;
 foo *= value;

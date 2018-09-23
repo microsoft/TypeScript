@@ -134,7 +134,7 @@ var C8 = /** @class */ (function () {
 (function (C8) {
     function m(a, b) { }
     C8.m = m;
-})(C8 || (C8 = {}));
+})(C8);
 // merged with namespace, static methods, duplicate declarations
 var C9 = /** @class */ (function () {
     function C9() {
@@ -143,22 +143,22 @@ var C9 = /** @class */ (function () {
     return C9;
 }());
 (function (C9) {
-})(C9 || (C9 = {}));
+})(C9);
 // merged namespaces
-var N10;
+var N10 = {};
 (function (N10) {
-})(N10 || (N10 = {}));
+})(N10);
 (function (N10) {
     function m(a) { }
     N10.m = m;
-})(N10 || (N10 = {}));
+})(N10);
 // merged namespaces, duplicate defintions
-var N12;
+var N12 = {};
 (function (N12) {
     function m(a) { }
     N12.m = m;
-})(N12 || (N12 = {}));
+})(N12);
 (function (N12) {
     function m(a) { }
     N12.m = m;
-})(N12 || (N12 = {}));
+})(N12);

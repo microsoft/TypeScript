@@ -8,7 +8,7 @@ module Salt {
 
 
 //// [memberScope.js]
-var Salt;
+var Salt = Salt || (Salt = {});
 (function (Salt) {
     var Pepper = /** @class */ (function () {
         function Pepper() {
@@ -17,4 +17,4 @@ var Salt;
     }());
     Salt.Pepper = Pepper;
     var z = Basil.Pepper;
-})(Salt || (Salt = {}));
+})(Salt);

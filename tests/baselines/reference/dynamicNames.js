@@ -164,12 +164,12 @@ exports.s0 = Symbol();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const module_1 = require("./module");
-var N;
+const N = {};
 (function (N) {
     N.c2 = "a";
     N.c3 = 1;
     N.s1 = module_1.s0;
-})(N || (N = {}));
+})(N);
 exports.c4 = "a";
 exports.c5 = 1;
 exports.s2 = module_1.s0;

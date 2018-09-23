@@ -26,4 +26,4 @@ var Foo = /** @class */ (function () {
         return Baz;
     }());
     Foo.Baz = Baz;
-})(Foo || (Foo = {}));
+})(Foo);

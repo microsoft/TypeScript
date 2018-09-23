@@ -13,16 +13,16 @@ var b: A.B;
 A.B(1);
 
 //// [genericFunduleInModule2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function B(x) { return x; }
     A.B = B;
-})(A || (A = {}));
+})(A);
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         B.x = 1;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var b;
 A.B(1);

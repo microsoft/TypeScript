@@ -97,7 +97,7 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     function exhibitBug() {
         function localFunction() { }
@@ -105,8 +105,8 @@ var M;
         x = localFunction;
     }
     M.exhibitBug = exhibitBug;
-})(M || (M = {}));
-var E;
+})(M);
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = (function () {
         function localFunction() { }
@@ -114,4 +114,4 @@ var E;
         x = localFunction;
         return 0;
     })()] = "A";
-})(E || (E = {}));
+})(E);

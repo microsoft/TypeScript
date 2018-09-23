@@ -295,7 +295,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var fs = module;
 ("fs");
-var TypeScriptAllInOne;
+var TypeScriptAllInOne = TypeScriptAllInOne || (TypeScriptAllInOne = {});
 (function (TypeScriptAllInOne) {
     var Program = /** @class */ (function () {
         function Program() {
@@ -347,7 +347,7 @@ var TypeScriptAllInOne;
     }
     console.log('Done');
     return 0;
-})(TypeScriptAllInOne || (TypeScriptAllInOne = {}));
+})(TypeScriptAllInOne);
 var BasicFeatures = /** @class */ (function () {
     function BasicFeatures() {
     }
@@ -557,15 +557,15 @@ rest: string[];
     DefaultValue(value ?  : string = "Hello");
     { }
 }
-var Weekdays;
+var Weekdays = Weekdays || (Weekdays = {});
 (function (Weekdays) {
     Weekdays[Weekdays["Monday"] = 0] = "Monday";
     Weekdays[Weekdays["Tuesday"] = 1] = "Tuesday";
     Weekdays[Weekdays["Weekend"] = 2] = "Weekend";
-})(Weekdays || (Weekdays = {}));
-var Fruit;
+})(Weekdays);
+var Fruit = Fruit || (Fruit = {});
 (function (Fruit) {
     Fruit[Fruit["Apple"] = 0] = "Apple";
     Fruit[Fruit["Pear"] = 1] = "Pear";
-})(Fruit || (Fruit = {}));
+})(Fruit);
 TypeScriptAllInOne.Program.Main();

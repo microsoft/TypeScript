@@ -48,15 +48,15 @@ var C = /** @class */ (function () {
     C.foo = function () { };
     return C;
 }());
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
-})(E || (E = {}));
-var M;
+})(E);
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var a;
 var b;
 var c;

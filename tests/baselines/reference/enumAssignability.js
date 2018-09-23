@@ -56,14 +56,14 @@ module Others {
 
 //// [enumAssignability.js]
 // enums assignable to number, any, Object, errors unless otherwise noted
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
-var F;
+})(E);
+var F = F || (F = {});
 (function (F) {
     F[F["B"] = 0] = "B";
-})(F || (F = {}));
+})(F);
 var e = E.A;
 var f = F.B;
 e = f;
@@ -72,7 +72,7 @@ e = 1; // ok
 f = 1; // ok
 var x = e; // ok
 x = f; // ok
-var Others;
+var Others = Others || (Others = {});
 (function (Others) {
     var a = e; // ok
     var C = /** @class */ (function () {
@@ -107,4 +107,4 @@ var Others;
         var a = e;
         var b = e;
     }
-})(Others || (Others = {}));
+})(Others);

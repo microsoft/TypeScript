@@ -19,22 +19,22 @@ M.f();
 M.f.hello;
 
 //// [mergedDeclarations4.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f() { }
     M.f = f;
     f();
     M.f();
     var r = f.hello;
-})(M || (M = {}));
+})(M);
 (function (M) {
-    var f;
+    var f = M.f || (M.f = {});
     (function (f) {
         f.hello = 1;
-    })(f = M.f || (M.f = {}));
+    })(f);
     f();
     M.f();
     var r = f.hello;
-})(M || (M = {}));
+})(M);
 M.f();
 M.f.hello;

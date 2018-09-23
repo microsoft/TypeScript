@@ -9,7 +9,7 @@ var x = new M.C<string>();
 
 
 //// [specializationOfExportedClass.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -17,5 +17,5 @@ var M;
         return C;
     }());
     M.C = C;
-})(M || (M = {}));
+})(M);
 var x = new M.C();

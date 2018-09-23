@@ -27,14 +27,15 @@ System.register([], function (exports_1, context_1) {
                 return TopLevelClass;
             }());
             exports_1("TopLevelClass", TopLevelClass);
+            exports_1("TopLevelModule", TopLevelModule = {});
             (function (TopLevelModule) {
                 var v;
-            })(TopLevelModule || (TopLevelModule = {}));
-            exports_1("TopLevelModule", TopLevelModule);
+            })(TopLevelModule);
+            exports_1("TopLevelEnum", TopLevelEnum = {});
             (function (TopLevelEnum) {
                 TopLevelEnum[TopLevelEnum["E"] = 0] = "E";
-            })(TopLevelEnum || (TopLevelEnum = {}));
-            exports_1("TopLevelEnum", TopLevelEnum);
+            })(TopLevelEnum);
+            exports_1("TopLevelModule2", TopLevelModule2 = {});
             (function (TopLevelModule2) {
                 var NonTopLevelClass = /** @class */ (function () {
                     function NonTopLevelClass() {
@@ -42,18 +43,17 @@ System.register([], function (exports_1, context_1) {
                     return NonTopLevelClass;
                 }());
                 TopLevelModule2.NonTopLevelClass = NonTopLevelClass;
-                var NonTopLevelModule;
+                var NonTopLevelModule = TopLevelModule2.NonTopLevelModule || (TopLevelModule2.NonTopLevelModule = {});
                 (function (NonTopLevelModule) {
                     var v;
-                })(NonTopLevelModule = TopLevelModule2.NonTopLevelModule || (TopLevelModule2.NonTopLevelModule = {}));
+                })(NonTopLevelModule);
                 function NonTopLevelFunction() { }
                 TopLevelModule2.NonTopLevelFunction = NonTopLevelFunction;
-                var NonTopLevelEnum;
+                var NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {});
                 (function (NonTopLevelEnum) {
                     NonTopLevelEnum[NonTopLevelEnum["E"] = 0] = "E";
-                })(NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {}));
-            })(TopLevelModule2 || (TopLevelModule2 = {}));
-            exports_1("TopLevelModule2", TopLevelModule2);
+                })(NonTopLevelEnum);
+            })(TopLevelModule2);
         }
     };
 });

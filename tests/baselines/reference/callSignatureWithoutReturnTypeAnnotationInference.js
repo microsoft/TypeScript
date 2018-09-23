@@ -183,7 +183,7 @@ function foo10(x) {
     return c;
 }
 var r10 = foo10(1);
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
     var C = /** @class */ (function () {
@@ -192,7 +192,7 @@ var M;
         return C;
     }());
     M.C = C;
-})(M || (M = {}));
+})(M);
 function foo11() {
     return M;
 }
@@ -205,7 +205,7 @@ var r12 = foo12();
 function m1() { return 1; }
 (function (m1) {
     m1.y = 2;
-})(m1 || (m1 = {}));
+})(m1);
 function foo13() {
     return m1;
 }
@@ -217,18 +217,18 @@ var c1 = /** @class */ (function () {
 }());
 (function (c1) {
     c1.x = 1;
-})(c1 || (c1 = {}));
+})(c1);
 function foo14() {
     return c1;
 }
 var r14 = foo14();
-var e1;
+var e1 = e1 || (e1 = {});
 (function (e1) {
     e1[e1["A"] = 0] = "A";
-})(e1 || (e1 = {}));
+})(e1);
 (function (e1) {
     e1.y = 1;
-})(e1 || (e1 = {}));
+})(e1);
 function foo15() {
     return e1;
 }

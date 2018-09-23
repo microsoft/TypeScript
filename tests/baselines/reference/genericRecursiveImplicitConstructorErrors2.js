@@ -40,16 +40,16 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var TypeScript2;
+var TypeScript2 = TypeScript2 || (TypeScript2 = {});
 (function (TypeScript2) {
     ;
     ;
     ;
-    var PullSymbolVisibility;
+    var PullSymbolVisibility = TypeScript2.PullSymbolVisibility || (TypeScript2.PullSymbolVisibility = {});
     (function (PullSymbolVisibility) {
         PullSymbolVisibility[PullSymbolVisibility["Private"] = 0] = "Private";
         PullSymbolVisibility[PullSymbolVisibility["Public"] = 1] = "Public";
-    })(PullSymbolVisibility = TypeScript2.PullSymbolVisibility || (TypeScript2.PullSymbolVisibility = {}));
+    })(PullSymbolVisibility);
     var PullSymbol = /** @class */ (function () {
         function PullSymbol(name, declKind) {
         }
@@ -70,4 +70,4 @@ var TypeScript2;
         return PullTypeSymbol;
     }(PullSymbol));
     TypeScript2.PullTypeSymbol = PullTypeSymbol;
-})(TypeScript2 || (TypeScript2 = {}));
+})(TypeScript2);

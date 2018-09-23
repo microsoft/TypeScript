@@ -7,10 +7,10 @@ var y = Position.IgnoreRulesSpecific;
 
 
 //// [enumConflictsWithGlobalIdentifier.js]
-var Position;
+var Position = Position || (Position = {});
 (function (Position) {
     Position[Position["IgnoreRulesSpecific"] = 0] = "IgnoreRulesSpecific";
-})(Position || (Position = {}));
+})(Position);
 var x = IgnoreRulesSpecific.
 ;
 var y = Position.IgnoreRulesSpecific;

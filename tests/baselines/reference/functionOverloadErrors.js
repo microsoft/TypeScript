@@ -143,12 +143,12 @@ var cls = /** @class */ (function () {
     return cls;
 }());
 //Function overloads with differing export
-var M;
+var M = M || (M = {});
 (function (M) {
     function fn1() { }
     function fn2() { }
     M.fn2 = fn2;
-})(M || (M = {}));
+})(M);
 function dfn1() { }
 function dfn2() { }
 function fewerParams(n) {

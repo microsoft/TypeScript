@@ -176,13 +176,13 @@ var B = /** @class */ (function (_super) {
     }
     return B;
 }(A));
-var Compass;
+var Compass = Compass || (Compass = {});
 (function (Compass) {
     Compass[Compass["North"] = 0] = "North";
     Compass[Compass["South"] = 1] = "South";
     Compass[Compass["East"] = 2] = "East";
     Compass[Compass["West"] = 3] = "West";
-})(Compass || (Compass = {}));
+})(Compass);
 var numIndex = { 3: 'three', 'three': 'three' };
 var strIndex = { 'N': Compass.North, 'E': Compass.East };
 var bothIndex;

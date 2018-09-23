@@ -11,13 +11,13 @@ a.b.c
 
 //// [asiPreventsParsingAsNamespace05.js]
 var namespace = 10;
-var a;
+var a = a || (a = {});
 (function (a) {
-    var b;
+    var b = a.b || (a.b = {});
     (function (b) {
         b.c = 20;
-    })(b = a.b || (a.b = {}));
-})(a || (a = {}));
+    })(b);
+})(a);
 namespace;
 a.b.c;
 {

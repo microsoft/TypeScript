@@ -10,12 +10,12 @@ sourceFile:Element.ts
 -------------------------------------------------------------------
 >>>"use strict";
 >>>Object.defineProperty(exports, "__esModule", { value: true });
->>>var Element;
+>>>const Element = {};
 1 >
-2 >^^^^
-3 >    ^^^^^^^
-4 >           ^
-5 >            ^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^
+4 >             ^^^^^^
+5 >                   ^^^->
 1 >declare namespace JSX {
   >    interface Element {
   >        name: string;
@@ -30,22 +30,22 @@ sourceFile:Element.ts
   >}
   >
 2 >export namespace 
-3 >    Element
-4 >            {
-  >               export function isElement(el: any): el is JSX.Element {
-  >                   return el.markAsChildOfRootElement !== undefined;
-  >               }
-  >           
-  >               export function createElement(args: any[]) {
-  >           
-  >                   return {
-  >                   }
-  >               }
-  >           }
+3 >      Element
+4 >              {
+  >                 export function isElement(el: any): el is JSX.Element {
+  >                     return el.markAsChildOfRootElement !== undefined;
+  >                 }
+  >             
+  >                 export function createElement(args: any[]) {
+  >             
+  >                     return {
+  >                     }
+  >                 }
+  >             }
 1 >Emitted(3, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(13, 18) + SourceIndex(0)
-3 >Emitted(3, 12) Source(13, 25) + SourceIndex(0)
-4 >Emitted(3, 13) Source(23, 2) + SourceIndex(0)
+2 >Emitted(3, 7) Source(13, 18) + SourceIndex(0)
+3 >Emitted(3, 14) Source(13, 25) + SourceIndex(0)
+4 >Emitted(3, 20) Source(23, 2) + SourceIndex(0)
 ---
 >>>(function (Element) {
 1->
@@ -183,7 +183,6 @@ sourceFile:Element.ts
 2 >    ^^^^^^^^^^^^^^^^^^^^^
 3 >                         ^^^^^^^^^^^^^^^^
 4 >                                         ^
-5 >                                          ^^^^^^^^^^^^^^^->
 1->
 2 >    createElement
 3 >                         (args: any[]) {
@@ -197,48 +196,37 @@ sourceFile:Element.ts
 3 >Emitted(12, 42) Source(22, 6) + SourceIndex(0)
 4 >Emitted(12, 43) Source(22, 6) + SourceIndex(0)
 ---
->>>})(Element = exports.Element || (exports.Element = {}));
-1->
+>>>})(Element);
+1 >
 2 >^
 3 > ^^
 4 >   ^^^^^^^
-5 >          ^^^
-6 >             ^^^^^^^^^^^^^^^
-7 >                            ^^^^^
-8 >                                 ^^^^^^^^^^^^^^^
-9 >                                                ^^^^^^^^
-1->
+5 >          ^^
+6 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >}
 3 > 
 4 >   Element
-5 >          
-6 >             Element
-7 >                            
-8 >                                 Element
-9 >                                                 {
-  >                                                    export function isElement(el: any): el is JSX.Element {
-  >                                                        return el.markAsChildOfRootElement !== undefined;
-  >                                                    }
-  >                                                
-  >                                                    export function createElement(args: any[]) {
-  >                                                
-  >                                                        return {
-  >                                                        }
-  >                                                    }
-  >                                                }
-1->Emitted(13, 1) Source(23, 1) + SourceIndex(0)
+5 >           {
+  >              export function isElement(el: any): el is JSX.Element {
+  >                  return el.markAsChildOfRootElement !== undefined;
+  >              }
+  >          
+  >              export function createElement(args: any[]) {
+  >          
+  >                  return {
+  >                  }
+  >              }
+  >          }
+1 >Emitted(13, 1) Source(23, 1) + SourceIndex(0)
 2 >Emitted(13, 2) Source(23, 2) + SourceIndex(0)
 3 >Emitted(13, 4) Source(13, 18) + SourceIndex(0)
 4 >Emitted(13, 11) Source(13, 25) + SourceIndex(0)
-5 >Emitted(13, 14) Source(13, 18) + SourceIndex(0)
-6 >Emitted(13, 29) Source(13, 25) + SourceIndex(0)
-7 >Emitted(13, 34) Source(13, 18) + SourceIndex(0)
-8 >Emitted(13, 49) Source(13, 25) + SourceIndex(0)
-9 >Emitted(13, 57) Source(23, 2) + SourceIndex(0)
+5 >Emitted(13, 13) Source(23, 2) + SourceIndex(0)
 ---
 >>>exports.createElement = Element.createElement;
-1 >
+1->
 2 >^^^^^^^^
 3 >        ^^^^^^^^^^^^^
 4 >                     ^^^
@@ -246,7 +234,7 @@ sourceFile:Element.ts
 6 >                               ^
 7 >                                ^^^^^^^^^^^^^
 8 >                                             ^
-1 >
+1->
   >
   >export let 
 2 >
@@ -256,7 +244,7 @@ sourceFile:Element.ts
 6 >                               .
 7 >                                createElement
 8 >                                             ;
-1 >Emitted(14, 1) Source(25, 12) + SourceIndex(0)
+1->Emitted(14, 1) Source(25, 12) + SourceIndex(0)
 2 >Emitted(14, 9) Source(25, 12) + SourceIndex(0)
 3 >Emitted(14, 22) Source(25, 25) + SourceIndex(0)
 4 >Emitted(14, 25) Source(25, 28) + SourceIndex(0)

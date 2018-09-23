@@ -86,10 +86,11 @@ exports.__esModule = true;
 /**
  * namespace A 1 leading comment
  */
-var A;
+var A = {};
+exports["default"] = A;
 (function (A) {
     A.A1 = 42;
-})(A = exports.A || (exports.A = {})); // namespace A 1 trailing comment
+})(A); // namespace A 1 trailing comment
 /**
  * namespace A 2 leading comment
  */
@@ -98,15 +99,15 @@ var A;
         return 0xC0FFEE;
     }
     A.A2 = A2;
-})(A = exports.A || (exports.A = {})); // namespace A 2 trailing comment
+})(A); // namespace A 2 trailing comment
 var namespaceAUsage1 = A.A1;
 /**
  * namespace B 1 leading comment
  */
-var B;
+var B = {};
 (function (B) {
     B.B1 = 42;
-})(B = exports.B || (exports.B = {})); // namespace B 1 trailing comment
+})(B); // namespace B 1 trailing comment
 /**
  * namespace B 2 leading comment
  */
@@ -115,17 +116,17 @@ var B;
         return 0xC0FFEE;
     }
     B.B2 = B2;
-})(B = exports.B || (exports.B = {})); // namespace B 2 trailing comment
+})(B); // namespace B 2 trailing comment
 var namespaceBUsage1 = B.B2();
-var ns;
+var ns = {};
 (function (ns) {
     /**
      * namespace C 1 leading comment
      */
-    var C;
+    var C = ns.C || (ns.C = {});
     (function (C) {
         C.C1 = 42;
-    })(C = ns.C || (ns.C = {})); // namespace C 1 trailing comment
+    })(C); // namespace C 1 trailing comment
     /**
      * namespace C 2 leading comment
      */
@@ -134,14 +135,14 @@ var ns;
             return 0xC0FFEE;
         }
         C.C2 = C2;
-    })(C = ns.C || (ns.C = {})); // namespace C 2 trailing comment
+    })(C); // namespace C 2 trailing comment
     var namespaceCUsage1 = C.C1;
-})(ns || (ns = {}));
+})(ns);
 (function (ns) {
     /**
      * namespace C 3 leading comment
      */
-    var C;
+    var C = ns.C || (ns.C = {});
     (function (C) {
         var C3 = /** @class */ (function () {
             function C3() {
@@ -149,11 +150,11 @@ var ns;
             return C3;
         }());
         C.C3 = C3;
-    })(C = ns.C || (ns.C = {})); // namespace C 3 trailing comment
-})(ns || (ns = {}));
+    })(C); // namespace C 3 trailing comment
+})(ns);
 (function (ns) {
     var namespaceCUsage2 = ns.C.C1;
-})(ns || (ns = {}));
+})(ns);
 //// [b.js]
 "use strict";
 exports.__esModule = true;

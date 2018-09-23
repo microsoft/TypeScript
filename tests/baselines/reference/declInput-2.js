@@ -22,7 +22,7 @@ module M {
 }
 
 //// [declInput-2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -47,7 +47,7 @@ var M;
         return D;
     }());
     M.D = D;
-})(M || (M = {}));
+})(M);
 
 
 //// [declInput-2.d.ts]

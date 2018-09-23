@@ -40,7 +40,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
-    var multiM;
+    var multiM = {};
     (function (multiM) {
         /// class b comment
         var b = /** @class */ (function () {
@@ -49,7 +49,7 @@ define(["require", "exports"], function (require, exports) {
             return b;
         }());
         multiM.b = b;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM);
     /** thi is multi module 2*/
     (function (multiM) {
         /** class c comment*/
@@ -66,7 +66,7 @@ define(["require", "exports"], function (require, exports) {
             return e;
         }());
         multiM.e = e;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM);
     new multiM.b();
     new multiM.c();
 });
@@ -75,7 +75,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/
-    var multiM;
+    var multiM = {};
     (function (multiM) {
         /** class d comment*/
         var d = /** @class */ (function () {
@@ -91,7 +91,7 @@ define(["require", "exports"], function (require, exports) {
             return f;
         }());
         multiM.f = f;
-    })(multiM = exports.multiM || (exports.multiM = {}));
+    })(multiM);
     new multiM.d();
 });
 

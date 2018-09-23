@@ -89,11 +89,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Portal;
+var Portal = Portal || (Portal = {});
 (function (Portal) {
-    var Controls;
+    var Controls = Portal.Controls || (Portal.Controls = {});
     (function (Controls) {
-        var Validators;
+        var Validators = Controls.Validators || (Controls.Validators = {});
         (function (Validators) {
             var Validator = /** @class */ (function () {
                 function Validator(message) {
@@ -103,16 +103,16 @@ var Portal;
                 return Validator;
             }());
             Validators.Validator = Validator;
-        })(Validators = Controls.Validators || (Controls.Validators = {}));
-    })(Controls = Portal.Controls || (Portal.Controls = {}));
-})(Portal || (Portal = {}));
-var PortalFx;
+        })(Validators);
+    })(Controls);
+})(Portal);
+var PortalFx = PortalFx || (PortalFx = {});
 (function (PortalFx) {
-    var ViewModels;
+    var ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {});
     (function (ViewModels) {
-        var Controls;
+        var Controls = ViewModels.Controls || (ViewModels.Controls = {});
         (function (Controls) {
-            var Validators;
+            var Validators = Controls.Validators || (Controls.Validators = {});
             (function (Validators) {
                 var Validator = /** @class */ (function (_super) {
                     __extends(Validator, _super);
@@ -122,10 +122,10 @@ var PortalFx;
                     return Validator;
                 }(Portal.Controls.Validators.Validator));
                 Validators.Validator = Validator;
-            })(Validators = Controls.Validators || (Controls.Validators = {}));
-        })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
-    })(ViewModels = PortalFx.ViewModels || (PortalFx.ViewModels = {}));
-})(PortalFx || (PortalFx = {}));
+            })(Validators);
+        })(Controls);
+    })(ViewModels);
+})(PortalFx);
 var ViewModel = /** @class */ (function () {
     function ViewModel() {
         this.validators = ko.observableArray();

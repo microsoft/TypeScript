@@ -22,19 +22,19 @@ namespace SomeOther.Thing {
 }
 
 //// [internal.js]
-var My;
+var My = My || (My = {});
 (function (My) {
-    var Internal;
+    var Internal = My.Internal || (My.Internal = {});
     (function (Internal) {
         function getThing() { }
         Internal.getThing = getThing;
-    })(Internal = My.Internal || (My.Internal = {}));
-})(My || (My = {}));
+    })(Internal);
+})(My);
 //// [usage.js]
 /// <reference path="./internal.ts" />
-var SomeOther;
+var SomeOther = SomeOther || (SomeOther = {});
 (function (SomeOther) {
-    var Thing;
+    var Thing = SomeOther.Thing || (SomeOther.Thing = {});
     (function (Thing) {
         var Internal = My.Internal;
         var Foo = /** @class */ (function () {
@@ -45,8 +45,8 @@ var SomeOther;
             return Foo;
         }());
         Thing.Foo = Foo;
-    })(Thing = SomeOther.Thing || (SomeOther.Thing = {}));
-})(SomeOther || (SomeOther = {}));
+    })(Thing);
+})(SomeOther);
 
 
 //// [internal.d.ts]

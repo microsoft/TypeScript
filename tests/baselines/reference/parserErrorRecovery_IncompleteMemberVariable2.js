@@ -30,7 +30,7 @@ var dist = p.getDist();
 
 //// [parserErrorRecovery_IncompleteMemberVariable2.js]
 // Module
-var Shapes;
+var Shapes = Shapes || (Shapes = {});
 (function (Shapes) {
     // Class
     var Point = /** @class */ (function () {
@@ -46,7 +46,7 @@ var Shapes;
         return Point;
     }());
     Shapes.Point = Point;
-})(Shapes || (Shapes = {}));
+})(Shapes);
 // Local variables
 var p = new Shapes.Point(3, 4);
 var dist = p.getDist();

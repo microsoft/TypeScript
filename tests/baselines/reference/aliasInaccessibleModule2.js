@@ -10,19 +10,19 @@ module M {
 }
 
 //// [aliasInaccessibleModule2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var N;
+    var N = N || (N = {});
     (function (N) {
         var C = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
-    })(N || (N = {}));
+    })(N);
     var R = N;
     M.X = R;
-})(M || (M = {}));
+})(M);
 
 
 //// [aliasInaccessibleModule2.d.ts]

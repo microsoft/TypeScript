@@ -11,13 +11,13 @@ module X.A.B.C {
 }
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var A;
+    var A = X.A || (X.A = {});
     (function (A) {
-        var B;
+        var B = A.B || (A.B = {});
         (function (B) {
-            var C;
+            var C = B.C || (B.C = {});
             (function (C) {
                 var W = /** @class */ (function () {
                     function W() {
@@ -25,10 +25,10 @@ var X;
                     return W;
                 }());
                 C.W = W;
-            })(C = B.C || (B.C = {}));
-        })(B = A.B || (A.B = {}));
-    })(A = X.A || (X.A = {}));
-})(X || (X = {}));
+            })(C);
+        })(B);
+    })(A);
+})(X);
 
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.d.ts]

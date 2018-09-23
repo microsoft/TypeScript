@@ -48,7 +48,7 @@ var c = /** @class */ (function () {
     }
     return c;
 }());
-var m;
+var m = m || (m = {});
 (function (m) {
     var c = /** @class */ (function () {
         function c() {
@@ -62,7 +62,7 @@ var m;
         return g;
     }());
     m.g = g;
-})(m || (m = {}));
+})(m);
 var g = /** @class */ (function () {
     function g() {
     }

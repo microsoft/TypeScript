@@ -39,9 +39,9 @@ module M {
 
 //// [twoInterfacesDifferentRootModule2.js]
 // two interfaces with different root modules should not merge
-var M;
+var M = M || (M = {});
 (function (M) {
-    var M2;
+    var M2 = M2 || (M2 = {});
     (function (M2) {
         var a;
         var r1 = a.foo; // error
@@ -49,11 +49,11 @@ var M;
         var b;
         var r3 = b.foo; // error
         var r4 = b.bar;
-    })(M2 || (M2 = {}));
+    })(M2);
     var a;
     var r1 = a.foo;
     var r2 = a.bar; // error
     var b;
     var r3 = b.foo;
     var r4 = b.bar; // error
-})(M || (M = {}));
+})(M);

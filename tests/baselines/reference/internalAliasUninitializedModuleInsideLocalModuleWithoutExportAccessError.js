@@ -20,8 +20,8 @@ export var z: c.b.I;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var c;
+    var c = {};
     (function (c) {
         c.x.foo();
-    })(c = exports.c || (exports.c = {}));
+    })(c);
 });

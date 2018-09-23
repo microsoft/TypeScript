@@ -48,14 +48,14 @@ foo({
     write: function (value) { return s = value; },
     read: function () { return s; }
 });
-var E1;
+var E1 = E1 || (E1 = {});
 (function (E1) {
     E1[E1["X"] = 0] = "X";
-})(E1 || (E1 = {}));
-var E2;
+})(E1);
+var E2 = E2 || (E2 = {});
 (function (E2) {
     E2[E2["X"] = 0] = "X";
-})(E2 || (E2 = {}));
+})(E2);
 var v1;
 var v1 = f1({ w: function (x) { return x; }, r: function () { return 0; } }, 0);
 var v1 = f1({ w: function (x) { return x; }, r: function () { return 0; } }, E1.X);

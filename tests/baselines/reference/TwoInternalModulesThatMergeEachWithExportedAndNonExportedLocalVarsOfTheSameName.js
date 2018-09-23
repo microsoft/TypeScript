@@ -42,23 +42,23 @@ var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 
 
 //// [part1.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var Utils;
+    var Utils = A.Utils || (A.Utils = {});
     (function (Utils) {
         function mirror(p) {
             return { x: p.y, y: p.x };
         }
         Utils.mirror = mirror;
-    })(Utils = A.Utils || (A.Utils = {}));
+    })(Utils);
     A.Origin = { x: 0, y: 0 };
-})(A || (A = {}));
+})(A);
 //// [part2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     // not a collision, since we don't export
     var Origin = "0,0";
-    var Utils;
+    var Utils = A.Utils || (A.Utils = {});
     (function (Utils) {
         var Plane = /** @class */ (function () {
             function Plane(tl, br) {
@@ -68,8 +68,8 @@ var A;
             return Plane;
         }());
         Utils.Plane = Plane;
-    })(Utils = A.Utils || (A.Utils = {}));
-})(A || (A = {}));
+    })(Utils);
+})(A);
 //// [part3.js]
 // test the merging actually worked
 var o;

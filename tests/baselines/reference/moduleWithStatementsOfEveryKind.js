@@ -72,7 +72,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A;
+var A = A || (A = {});
 (function (A_1) {
     var A = /** @class */ (function () {
         function A() {
@@ -98,19 +98,19 @@ var A;
         }
         return BB;
     }(A));
-    var Module;
+    var Module = Module || (Module = {});
     (function (Module) {
         var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
-    })(Module || (Module = {}));
-    var Color;
+    })(Module);
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color || (Color = {}));
+    })(Color);
     var x = 12;
     function F(s) {
         return 2;
@@ -120,8 +120,8 @@ var A;
         return 'hello ' + s;
     };
     var ol = { s: 'hello', id: 2, isvalid: true };
-})(A || (A = {}));
-var Y;
+})(A);
+var Y = Y || (Y = {});
 (function (Y) {
     var A = /** @class */ (function () {
         function A() {
@@ -151,19 +151,19 @@ var Y;
         return BB;
     }(A));
     Y.BB = BB;
-    var Module;
+    var Module = Y.Module || (Y.Module = {});
     (function (Module) {
         var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
-    })(Module = Y.Module || (Y.Module = {}));
-    var Color;
+    })(Module);
+    var Color = Y.Color || (Y.Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color = Y.Color || (Y.Color = {}));
+    })(Color);
     Y.x = 12;
     function F(s) {
         return 2;
@@ -174,4 +174,4 @@ var Y;
         return 'hello ' + s;
     };
     Y.ol = { s: 'hello', id: 2, isvalid: true };
-})(Y || (Y = {}));
+})(Y);

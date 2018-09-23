@@ -186,7 +186,7 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     function f1() {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -194,7 +194,7 @@ var M;
         }); });
     }
     M.f1 = f1;
-})(M || (M = {}));
+})(M);
 function f14() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {

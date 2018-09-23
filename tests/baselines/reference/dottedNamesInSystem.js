@@ -19,17 +19,17 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
+            exports_1("A", A = {});
             (function (A) {
-                var B;
+                var B = A.B || (A.B = {});
                 (function (B) {
-                    var C;
+                    var C = B.C || (B.C = {});
                     (function (C) {
                         function foo() { }
                         C.foo = foo;
-                    })(C = B.C || (B.C = {}));
-                })(B = A.B || (A.B = {}));
-            })(A || (A = {}));
-            exports_1("A", A);
+                    })(C);
+                })(B);
+            })(A);
         }
     };
 });

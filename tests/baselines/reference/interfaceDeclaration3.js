@@ -59,7 +59,7 @@ interface I2 extends I1 { item:string; }
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var M1;
+    var M1 = {};
     (function (M1) {
         var C1 = /** @class */ (function () {
             function C1() {
@@ -86,8 +86,8 @@ define(["require", "exports"], function (require, exports) {
             }
             return C5;
         }());
-    })(M1 || (M1 = {}));
-    var M2;
+    })(M1);
+    var M2 = {};
     (function (M2) {
         var C1 = /** @class */ (function () {
             function C1() {
@@ -104,7 +104,7 @@ define(["require", "exports"], function (require, exports) {
             }
             return C3;
         }());
-    })(M2 = exports.M2 || (exports.M2 = {}));
+    })(M2);
     var C1 = /** @class */ (function () {
         function C1() {
         }

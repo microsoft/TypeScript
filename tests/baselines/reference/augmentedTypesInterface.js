@@ -43,9 +43,9 @@ var i2 = /** @class */ (function () {
     };
     return i2;
 }());
-var i3;
+var i3 = i3 || (i3 = {});
 (function (i3) {
     i3[i3["One"] = 0] = "One";
-})(i3 || (i3 = {}));
+})(i3);
 ; // error
 //import i4 = require('');  // error

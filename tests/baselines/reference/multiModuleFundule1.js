@@ -16,11 +16,11 @@ var r3 = C.foo();
 function C(x) { }
 (function (C) {
     C.x = 1;
-})(C || (C = {}));
+})(C);
 (function (C) {
     function foo() { }
     C.foo = foo;
-})(C || (C = {}));
+})(C);
 var r = C(2);
 var r2 = new C(2); // using void returning function as constructor
 var r3 = C.foo();

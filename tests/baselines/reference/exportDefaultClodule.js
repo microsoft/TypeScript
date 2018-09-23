@@ -27,7 +27,7 @@ var A = /** @class */ (function () {
 exports["default"] = A;
 (function (A) {
     A.A2 = 32;
-})(A = exports.A || (exports.A = {}));
+})(A);
 //// [b.js]
 "use strict";
 exports.__esModule = true;

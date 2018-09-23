@@ -359,9 +359,9 @@ export module m3 {
 //// [privacyImport.js]
 "use strict";
 exports.__esModule = true;
-var m1;
+var m1 = {};
 (function (m1) {
-    var m1_M1_public;
+    var m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {});
     (function (m1_M1_public) {
         var c1 = /** @class */ (function () {
             function c1() {
@@ -374,8 +374,8 @@ var m1;
         }
         m1_M1_public.f1 = f1;
         m1_M1_public.v1 = c1;
-    })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
-    var m1_M2_private;
+    })(m1_M1_public);
+    var m1_M2_private = m1_M2_private || (m1_M2_private = {});
     (function (m1_M2_private) {
         var c1 = /** @class */ (function () {
             function c1() {
@@ -388,7 +388,7 @@ var m1;
         }
         m1_M2_private.f1 = f1;
         m1_M2_private.v1 = c1;
-    })(m1_M2_private || (m1_M2_private = {}));
+    })(m1_M2_private);
     //export declare module "m1_M3_public" {
     //    export function f1();
     //    export class c1 {
@@ -443,10 +443,10 @@ var m1;
     m1.m1_im2_public = m1_M2_private;
     //export import m1_im3_public = require("m1_M3_public");
     //export import m1_im4_public = require("m1_M4_private");
-})(m1 = exports.m1 || (exports.m1 = {}));
-var m2;
+})(m1);
+var m2 = {};
 (function (m2) {
-    var m2_M1_public;
+    var m2_M1_public = m2.m2_M1_public || (m2.m2_M1_public = {});
     (function (m2_M1_public) {
         var c1 = /** @class */ (function () {
             function c1() {
@@ -459,8 +459,8 @@ var m2;
         }
         m2_M1_public.f1 = f1;
         m2_M1_public.v1 = c1;
-    })(m2_M1_public = m2.m2_M1_public || (m2.m2_M1_public = {}));
-    var m2_M2_private;
+    })(m2_M1_public);
+    var m2_M2_private = m2_M2_private || (m2_M2_private = {});
     (function (m2_M2_private) {
         var c1 = /** @class */ (function () {
             function c1() {
@@ -473,7 +473,7 @@ var m2;
         }
         m2_M2_private.f1 = f1;
         m2_M2_private.v1 = c1;
-    })(m2_M2_private || (m2_M2_private = {}));
+    })(m2_M2_private);
     //export declare module "m2_M3_public" {
     //    export function f1();
     //    export class c1 {
@@ -529,8 +529,8 @@ var m2;
     m2.m1_im2_public = m2_M2_private;
     //export import m1_im3_public = require("m2_M3_public");
     //export import m1_im4_public = require("m2_M4_private");
-})(m2 || (m2 = {}));
-var glo_M1_public;
+})(m2);
+var glo_M1_public = {};
 (function (glo_M1_public) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -543,7 +543,7 @@ var glo_M1_public;
     }
     glo_M1_public.f1 = f1;
     glo_M1_public.v1 = c1;
-})(glo_M1_public = exports.glo_M1_public || (exports.glo_M1_public = {}));
+})(glo_M1_public);
 //export declare module "glo_M2_public" {
 //    export function f1();
 //    export class c1 {
@@ -551,7 +551,7 @@ var glo_M1_public;
 //    export var v1: { new (): c1; };
 //    export var v2: c1;
 //}
-var glo_M3_private;
+var glo_M3_private = {};
 (function (glo_M3_private) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -564,7 +564,7 @@ var glo_M3_private;
     }
     glo_M3_private.f1 = f1;
     glo_M3_private.v1 = c1;
-})(glo_M3_private = exports.glo_M3_private || (exports.glo_M3_private = {}));
+})(glo_M3_private);
 //export declare module "glo_M4_private" {
 //    export function f1();
 //    export class c1 {
@@ -687,21 +687,21 @@ exports.glo_im2_public = glo_M3_private;
 //}
 (function (m2) {
     //import m3 = require("use_glo_M1_public");
-    var m4;
+    var m4 = m4 || (m4 = {});
     (function (m4) {
         var a = 10;
         //import m2 = require("use_glo_M1_public");
-    })(m4 || (m4 = {}));
-})(m2 || (m2 = {}));
-var m3;
+    })(m4);
+})(m2);
+var m3 = {};
 (function (m3) {
     //import m3 = require("use_glo_M1_public");
-    var m4;
+    var m4 = m4 || (m4 = {});
     (function (m4) {
         var a = 10;
         //import m2 = require("use_glo_M1_public");
-    })(m4 || (m4 = {}));
-})(m3 = exports.m3 || (exports.m3 = {}));
+    })(m4);
+})(m3);
 
 
 //// [privacyImport.d.ts]

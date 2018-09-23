@@ -32,7 +32,7 @@ M.f();
 
 
 //// [statics.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C(c1, c2, c3) {
@@ -61,5 +61,5 @@ var M;
         return result;
     }
     M.f = f;
-})(M || (M = {}));
+})(M);
 M.f();

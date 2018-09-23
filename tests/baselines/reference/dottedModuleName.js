@@ -20,35 +20,35 @@ module M.N {
 
 
 //// [dottedModuleName.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         2 * x;
-        var X;
+        var X = N.X || (N.X = {});
         (function (X) {
-            var Y;
+            var Y = X.Y || (X.Y = {});
             (function (Y) {
-                var Z;
+                var Z = Y.Z || (Y.Z = {});
                 (function (Z) {
                     Z.v2 = f(Z.v);
-                })(Z = Y.Z || (Y.Z = {}));
-            })(Y = X.Y || (X.Y = {}));
-        })(X = N.X || (N.X = {}));
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
+                })(Z);
+            })(Y);
+        })(X);
+    })(N);
+})(M);
 (function (M) {
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
-        var X;
+        var X = N.X || (N.X = {});
         (function (X) {
-            var Y;
+            var Y = X.Y || (X.Y = {});
             (function (Y) {
-                var Z;
+                var Z = Y.Z || (Y.Z = {});
                 (function (Z) {
                     Z.v = N.f(10);
-                })(Z = Y.Z || (Y.Z = {}));
-            })(Y = X.Y || (X.Y = {}));
-        })(X = N.X || (N.X = {}));
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
+                })(Z);
+            })(Y);
+        })(X);
+    })(N);
+})(M);

@@ -61,11 +61,11 @@ x6 **= ''
 x6 **= {};
 
 //// [compoundExponentiationAssignmentLHSCannotBeAssigned.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 var a;
 var b;
 var x1;

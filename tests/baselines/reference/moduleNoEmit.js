@@ -4,7 +4,7 @@ module Foo {
 }
 
 //// [moduleNoEmit.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     1 + 1;
-})(Foo || (Foo = {}));
+})(Foo);

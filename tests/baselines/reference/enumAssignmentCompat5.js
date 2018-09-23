@@ -25,18 +25,18 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 
 
 //// [enumAssignmentCompat5.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E || (E = {}));
-var Computed;
+})(E);
+var Computed = Computed || (Computed = {});
 (function (Computed) {
     Computed[Computed["A"] = 2] = "A";
     Computed[Computed["B"] = 4] = "B";
     Computed[Computed["C"] = 8] = "C";
-})(Computed || (Computed = {}));
+})(Computed);
 var n;
 var e = n; // ok because it's too inconvenient otherwise
 e = 0; // ok, in range

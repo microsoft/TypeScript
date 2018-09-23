@@ -23,10 +23,10 @@ i = x;
 
 //// [invalidUndefinedAssignments.js]
 var x;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 E = x;
 E.A = x;
 var C = /** @class */ (function () {
@@ -39,10 +39,10 @@ C = x;
 var g;
 g = x;
 I = x;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 M = x;
 function i(a) { }
 // BUG 767030

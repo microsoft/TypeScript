@@ -130,10 +130,10 @@ function foo5(x) {
         }
     }
 }
-var m;
+var m = m || (m = {});
 (function (m) {
     var x;
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var b = x; // new scope - number | boolean | string
         var y;
@@ -145,14 +145,14 @@ var m;
                 ? x.toString() // boolean
                 : x.toString(); // number
         }
-    })(m2 || (m2 = {}));
-})(m || (m = {}));
-var m1;
+    })(m2);
+})(m);
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var x;
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
-        var m3;
+        var m3 = m2.m3 || (m2.m3 = {});
         (function (m3) {
             var b = x; // new scope - number | boolean | string
             var y;
@@ -164,6 +164,6 @@ var m1;
                     ? x.toString() // boolean
                     : x.toString(); // number
             }
-        })(m3 = m2.m3 || (m2.m3 = {}));
-    })(m2 || (m2 = {}));
-})(m1 || (m1 = {}));
+        })(m3);
+    })(m2);
+})(m1);

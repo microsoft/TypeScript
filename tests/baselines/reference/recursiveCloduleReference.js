@@ -11,7 +11,7 @@ module M
 
 
 //// [recursiveCloduleReference.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -21,7 +21,7 @@ var M;
     M.C = C;
     (function (C_1) {
         C_1.C = M.C;
-    })(C = M.C || (M.C = {}));
+    })(C);
     ;
-})(M || (M = {}));
+})(M);
 ;

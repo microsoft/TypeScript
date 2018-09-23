@@ -231,7 +231,7 @@ var F3 = function () {
     n = c;
 };
 // modules
-var m;
+var m = m || (m = {});
 (function (m) {
     const c = 0;
     n = c;
@@ -239,7 +239,7 @@ var m;
         const c = false;
         var b2 = c;
     }
-})(m || (m = {}));
+})(m);
 // methods
 class C {
     constructor() {

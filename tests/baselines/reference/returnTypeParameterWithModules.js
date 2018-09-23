@@ -15,16 +15,16 @@ module M2 {
 };
 
 //// [returnTypeParameterWithModules.js]
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
     function reduce(ar, f, e) {
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
     }
     M1.reduce = reduce;
     ;
-})(M1 || (M1 = {}));
+})(M1);
 ;
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var A = M1;
     function compose() {
@@ -37,5 +37,5 @@ var M2;
     }
     M2.compose2 = compose2;
     ;
-})(M2 || (M2 = {}));
+})(M2);
 ;

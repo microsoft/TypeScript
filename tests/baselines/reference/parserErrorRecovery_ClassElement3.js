@@ -8,14 +8,14 @@ module M {
    #
 
 //// [parserErrorRecovery_ClassElement3.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
-    var E;
+    var E = E || (E = {});
     (function (E) {
-    })(E || (E = {}));
-})(M || (M = {}));
+    })(E);
+})(M);

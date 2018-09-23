@@ -20,4 +20,4 @@ var A = /** @class */ (function () {
 }());
 (function (A) {
     A.a = 10;
-})(A || (A = {}));
+})(A);

@@ -78,7 +78,7 @@ z[1].toExponential();
 z[2].toExponential();
 z[3].toExponential();
 z[4].toExponential();
-var X;
+var X = X || (X = {});
 (function (X) {
     X[X[1] = 1] = 1;
     X[X[2] = 2] = 2;
@@ -86,7 +86,7 @@ var X;
     X[X["4"] = 4] = "4";
     X[X["foo"] = 5] = "foo";
     X[X["bar"] = 6] = "bar";
-})(X || (X = {}));
+})(X);
 var a = X["foo"];
 var a0 = X["bar"];
 // TODO: make sure that enum still disallow template literals as member names

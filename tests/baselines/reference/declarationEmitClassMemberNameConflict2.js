@@ -22,14 +22,14 @@ class Foo {
 
 //// [declarationEmitClassMemberNameConflict2.js]
 var Bar = 'bar';
-var Hello;
+var Hello = Hello || (Hello = {});
 (function (Hello) {
     Hello[Hello["World"] = 0] = "World";
-})(Hello || (Hello = {}));
-var Hello1;
+})(Hello);
+var Hello1 = Hello1 || (Hello1 = {});
 (function (Hello1) {
     Hello1[Hello1["World1"] = 0] = "World1";
-})(Hello1 || (Hello1 = {}));
+})(Hello1);
 var Foo = /** @class */ (function () {
     function Foo() {
         // Same names + string => OK

@@ -42,7 +42,7 @@ fooLength + 1;
 
 //// [a.js]
 "use strict";
-var A;
+var A = {};
 (function (A) {
     var B = /** @class */ (function () {
         function B(b) {
@@ -52,8 +52,8 @@ var A;
     A.B = B;
     (function (B) {
         B.b = 0;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 module.exports = A.B;
 //// [b.js]
 "use strict";

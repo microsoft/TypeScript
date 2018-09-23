@@ -21,4 +21,4 @@ var C = /** @class */ (function () {
 (function (C) {
     C.f = C.foo; // OK
     C.b = C.bar; // error
-})(C || (C = {}));
+})(C);

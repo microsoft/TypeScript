@@ -57,7 +57,7 @@ module m {
 
 
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var private1 = /** @class */ (function () {
         function private1() {
@@ -99,7 +99,7 @@ var m;
         return new public1();
     }
     m.foo14 = foo14;
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var public2 = /** @class */ (function () {
             function public2() {
@@ -107,7 +107,7 @@ var m;
             return public2;
         }());
         m2.public2 = public2;
-    })(m2 || (m2 = {}));
+    })(m2);
     function foo111() {
         return;
     }
@@ -122,7 +122,7 @@ var m;
         return new m2.public2();
     }
     m.foo114 = foo114;
-})(m || (m = {}));
+})(m);
 
 
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.d.ts]

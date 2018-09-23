@@ -14,7 +14,7 @@ export = x;
 //// [es6ImportNamedImportInIndirectExportAssignment_0.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
     var c = /** @class */ (function () {
         function c() {
@@ -22,7 +22,7 @@ var a;
         return c;
     }());
     a.c = c;
-})(a = exports.a || (exports.a = {}));
+})(a);
 //// [es6ImportNamedImportInIndirectExportAssignment_1.js]
 "use strict";
 var es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");

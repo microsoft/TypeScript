@@ -85,7 +85,7 @@ var D = /** @class */ (function () {
     return D;
 }());
 function F(x) { return 42; }
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -95,7 +95,7 @@ var M;
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
-})(M || (M = {}));
+})(M);
 // all of these are errors
 for (var a;;) { }
 for (var a = 1;;) { }

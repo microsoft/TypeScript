@@ -12,7 +12,7 @@ module M {
 
 
 //// [visSyntax.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -21,4 +21,4 @@ var M;
     }());
     M.C = C;
     M.x = 10;
-})(M || (M = {}));
+})(M);

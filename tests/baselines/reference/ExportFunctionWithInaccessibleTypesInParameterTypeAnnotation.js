@@ -16,7 +16,7 @@ module A {
 }
 
 //// [ExportFunctionWithInaccessibleTypesInParameterTypeAnnotation.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -35,4 +35,4 @@ var A;
         return new Line({ x: 0, y: 0 }, p);
     }
     A.fromOrigin = fromOrigin;
-})(A || (A = {}));
+})(A);

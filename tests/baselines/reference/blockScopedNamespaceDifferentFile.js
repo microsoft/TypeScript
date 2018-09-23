@@ -22,7 +22,7 @@ declare namespace A {
 
 //// [out.js]
 // #15734 failed when test.ts comes before typings.d.ts
-var C;
+var C = C || (C = {});
 (function (C) {
     var Name = /** @class */ (function () {
         function Name(parameters) {
@@ -32,4 +32,4 @@ var C;
         return Name;
     }());
     C.Name = Name;
-})(C || (C = {}));
+})(C);

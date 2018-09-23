@@ -100,7 +100,7 @@ module m {
 
 
 //// [declFileTypeAnnotationVisibilityErrorAccessors.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var private1 = /** @class */ (function () {
         function private1() {
@@ -113,7 +113,7 @@ var m;
         return public1;
     }());
     m.public1 = public1;
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var public2 = /** @class */ (function () {
             function public2() {
@@ -121,7 +121,7 @@ var m;
             return public2;
         }());
         m2.public2 = public2;
-    })(m2 || (m2 = {}));
+    })(m2);
     var c = /** @class */ (function () {
         function c() {
         }
@@ -257,7 +257,7 @@ var m;
         return c;
     }());
     m.c = c;
-})(m || (m = {}));
+})(m);
 
 
 //// [declFileTypeAnnotationVisibilityErrorAccessors.d.ts]

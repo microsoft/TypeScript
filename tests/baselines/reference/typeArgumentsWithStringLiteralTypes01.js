@@ -125,7 +125,7 @@ function fun3() {
     }
     return args[+randBool()];
 }
-var n1;
+var n1 = n1 || (n1 = {});
 (function (n1) {
     // The following should all come back as strings.
     // They should be assignable to/from something of a type 'string'.
@@ -153,8 +153,8 @@ var n1;
     n1.c = takeReturnHelloWorld(n1.c);
     n1.d = takeReturnHelloWorld(n1.d);
     n1.e = takeReturnHelloWorld(n1.e);
-})(n1 || (n1 = {}));
-var n2;
+})(n1);
+var n2 = n2 || (n2 = {});
 (function (n2) {
     // The following (regardless of errors) should come back typed
     // as "Hello" (or "Hello" | "Hello").
@@ -181,8 +181,8 @@ var n2;
     n2.c = takeReturnHelloWorld(n2.c);
     n2.d = takeReturnHelloWorld(n2.d);
     n2.e = takeReturnHelloWorld(n2.e);
-})(n2 || (n2 = {}));
-var n3;
+})(n2);
+var n3 = n3 || (n3 = {});
 (function (n3) {
     // The following (regardless of errors) should come back typed
     // as "Hello" | "World" (or "World" | "Hello").
@@ -209,7 +209,7 @@ var n3;
     n3.c = takeReturnHelloWorld(n3.c);
     n3.d = takeReturnHelloWorld(n3.d);
     n3.e = takeReturnHelloWorld(n3.e);
-})(n3 || (n3 = {}));
+})(n3);
 
 
 //// [typeArgumentsWithStringLiteralTypes01.d.ts]

@@ -34,14 +34,14 @@ module m {
 }
 
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var private1 = /** @class */ (function () {
         function private1() {
         }
         return private1;
     }());
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var public1 = /** @class */ (function () {
             function public1() {
@@ -49,7 +49,7 @@ var m;
             return public1;
         }());
         m2.public1 = public1;
-    })(m2 || (m2 = {}));
+    })(m2);
     m.x2 = {
         x: new private1(),
         y: new m2.public1(),
@@ -60,7 +60,7 @@ var m;
     m.x3 = m.x;
     m.y2 = m.y;
     m.z2 = m.z;
-})(m || (m = {}));
+})(m);
 
 
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.d.ts]

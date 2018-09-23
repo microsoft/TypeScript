@@ -82,9 +82,9 @@ var A = /** @class */ (function () {
     };
     return A;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var objA = new A();
 // any other type var
 var ResultIsNumber = ~ANY1;

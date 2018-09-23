@@ -70,7 +70,7 @@ module TypeScript {
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     // TODO: refactor indent logic for use in emit
     var PrintContext = /** @class */ (function () {
@@ -126,4 +126,4 @@ var TypeScript;
         return ast;
     }
     TypeScript.postPrintAST = postPrintAST;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

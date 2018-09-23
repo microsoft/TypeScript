@@ -246,10 +246,10 @@ var D10 = /** @class */ (function (_super) {
     }
     return D10;
 }(Base));
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var D11 = /** @class */ (function (_super) {
     __extends(D11, _super);
     function D11() {
@@ -260,7 +260,7 @@ var D11 = /** @class */ (function (_super) {
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var D12 = /** @class */ (function (_super) {
     __extends(D12, _super);
     function D12() {
@@ -275,7 +275,7 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);
 var D13 = /** @class */ (function (_super) {
     __extends(D13, _super);
     function D13() {

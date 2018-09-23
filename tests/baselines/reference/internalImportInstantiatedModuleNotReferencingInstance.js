@@ -11,11 +11,11 @@ module B {
 
 
 //// [internalImportInstantiatedModuleNotReferencingInstance.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A.a = 10;
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     var A = 1;
-})(B || (B = {}));
+})(B);

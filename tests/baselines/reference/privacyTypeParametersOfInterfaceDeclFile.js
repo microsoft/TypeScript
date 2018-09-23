@@ -215,7 +215,7 @@ var publicClassT = /** @class */ (function () {
     return publicClassT;
 }());
 exports.publicClassT = publicClassT;
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
         function privateClassInPublicModule() {
@@ -239,8 +239,8 @@ var publicModule;
         return publicClassInPublicModuleT;
     }());
     publicModule.publicClassInPublicModuleT = publicClassInPublicModuleT;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {
         function privateClassInPrivateModule() {
@@ -264,7 +264,7 @@ var privateModule;
         return publicClassInPrivateModuleT;
     }());
     privateModule.publicClassInPrivateModuleT = publicClassInPrivateModuleT;
-})(privateModule || (privateModule = {}));
+})(privateModule);
 
 
 //// [privacyTypeParametersOfInterfaceDeclFile.d.ts]

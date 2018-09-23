@@ -7,10 +7,10 @@ module M {
 
 //// [alwaysStrictModule.js]
 "use strict";
-var M;
+var M = M || (M = {});
 (function (M) {
     function f() {
         var arguments = [];
     }
     M.f = f;
-})(M || (M = {}));
+})(M);

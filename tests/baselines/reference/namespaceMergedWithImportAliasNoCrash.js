@@ -23,10 +23,10 @@ Library.foo; // should be an error
 //// [file2.js]
 "use strict";
 exports.__esModule = true;
-var Lib;
+var Lib = {};
+exports.Lib = Lib;
 (function (Lib) {
     Lib.foo = "";
-})(Lib || (Lib = {}));
-exports.Lib = Lib;
+})(Lib);
 Lib.foo; // should work
 var x; // should be an error

@@ -13,7 +13,7 @@ module M {
 }
 
 //// [symbolDeclarationEmit12.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     class C {
         [Symbol.toPrimitive](x) { }
@@ -24,7 +24,7 @@ var M;
         set [Symbol.toPrimitive](x) { }
     }
     M.C = C;
-})(M || (M = {}));
+})(M);
 
 
 //// [symbolDeclarationEmit12.d.ts]

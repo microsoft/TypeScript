@@ -70,62 +70,62 @@ module schema {
 
 //// [isDeclarationVisibleNodeKinds.js]
 // Function types
-var schema;
+var schema = schema || (schema = {});
 (function (schema_1) {
     function createValidator1(schema) {
         return undefined;
     }
     schema_1.createValidator1 = createValidator1;
-})(schema || (schema = {}));
+})(schema);
 // Constructor types
 (function (schema_2) {
     function createValidator2(schema) {
         return undefined;
     }
     schema_2.createValidator2 = createValidator2;
-})(schema || (schema = {}));
+})(schema);
 // union types
 (function (schema_3) {
     function createValidator3(schema) {
         return undefined;
     }
     schema_3.createValidator3 = createValidator3;
-})(schema || (schema = {}));
+})(schema);
 // Array types
 (function (schema_4) {
     function createValidator4(schema) {
         return undefined;
     }
     schema_4.createValidator4 = createValidator4;
-})(schema || (schema = {}));
+})(schema);
 // TypeLiterals
 (function (schema_5) {
     function createValidator5(schema) {
         return undefined;
     }
     schema_5.createValidator5 = createValidator5;
-})(schema || (schema = {}));
+})(schema);
 // Tuple types
 (function (schema_6) {
     function createValidator6(schema) {
         return undefined;
     }
     schema_6.createValidator6 = createValidator6;
-})(schema || (schema = {}));
+})(schema);
 // Paren Types
 (function (schema_7) {
     function createValidator7(schema) {
         return undefined;
     }
     schema_7.createValidator7 = createValidator7;
-})(schema || (schema = {}));
+})(schema);
 // Type reference
 (function (schema_8) {
     function createValidator8(schema) {
         return undefined;
     }
     schema_8.createValidator8 = createValidator8;
-})(schema || (schema = {}));
+})(schema);
 (function (schema) {
     var T = /** @class */ (function () {
         function T() {
@@ -146,7 +146,7 @@ var schema;
         return T;
     }());
     schema.T = T;
-})(schema || (schema = {}));
+})(schema);
 
 
 //// [isDeclarationVisibleNodeKinds.d.ts]

@@ -40,7 +40,7 @@ module Generic {
 }
 
 //// [staticPropertyNotInClassType.js]
-var NonGeneric;
+var NonGeneric = NonGeneric || (NonGeneric = {});
 (function (NonGeneric) {
     var C = /** @class */ (function () {
         function C(a, b) {
@@ -58,14 +58,14 @@ var NonGeneric;
     }());
     (function (C) {
         C.bar = ''; // not reflected in class type
-    })(C || (C = {}));
+    })(C);
     var c = new C(1, 2);
     var r = c.fn();
     var r4 = c.foo; // error
     var r5 = c.bar; // error
     var r6 = c.x; // error
-})(NonGeneric || (NonGeneric = {}));
-var Generic;
+})(NonGeneric);
+var Generic = Generic || (Generic = {});
 (function (Generic) {
     var C = /** @class */ (function () {
         function C(a, b) {
@@ -83,10 +83,10 @@ var Generic;
     }());
     (function (C) {
         C.bar = ''; // not reflected in class type
-    })(C || (C = {}));
+    })(C);
     var c = new C(1, '');
     var r = c.fn();
     var r4 = c.foo; // error
     var r5 = c.bar; // error
     var r6 = c.x; // error
-})(Generic || (Generic = {}));
+})(Generic);

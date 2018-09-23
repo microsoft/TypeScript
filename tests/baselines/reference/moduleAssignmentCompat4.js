@@ -17,20 +17,20 @@ a = b;
 b = a; // error
 
 //// [moduleAssignmentCompat4.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var M;
+    var M = A.M || (A.M = {});
     (function (M) {
         var C = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
-    })(M = A.M || (A.M = {}));
-})(A || (A = {}));
-var B;
+    })(M);
+})(A);
+var B = B || (B = {});
 (function (B) {
-    var M;
+    var M = B.M || (B.M = {});
     (function (M) {
         var D = /** @class */ (function () {
             function D() {
@@ -38,8 +38,8 @@ var B;
             return D;
         }());
         M.D = D;
-    })(M = B.M || (B.M = {}));
-})(B || (B = {}));
+    })(M);
+})(B);
 var a;
 var b;
 a = b;

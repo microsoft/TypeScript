@@ -8,11 +8,11 @@ enum E {
 }
 
 //// [mergedEnumDeclarationCodeGen.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 0] = "b";
-})(E || (E = {}));
+})(E);
 (function (E) {
     E[E["c"] = 0] = "c";
-})(E || (E = {}));
+})(E);

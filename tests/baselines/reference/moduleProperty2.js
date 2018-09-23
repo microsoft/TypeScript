@@ -15,7 +15,7 @@ module N {
 }
 
 //// [moduleProperty2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f() {
         var x;
@@ -23,9 +23,9 @@ var M;
     var y;
     var test1 = x;
     var test2 = y; // y visible because same module
-})(M || (M = {}));
-var N;
+})(M);
+var N = N || (N = {});
 (function (N) {
     var test3 = M.y; // nope y private property of M
     var test4 = M.z; // ok public property of M
-})(N || (N = {}));
+})(N);

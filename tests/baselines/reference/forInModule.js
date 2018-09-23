@@ -6,9 +6,9 @@ module Foo {
 }
 
 //// [forInModule.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     for (var i = 0; i < 1; i++) {
         i + i;
     }
-})(Foo || (Foo = {}));
+})(Foo);

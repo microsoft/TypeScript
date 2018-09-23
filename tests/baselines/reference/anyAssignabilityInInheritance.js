@@ -113,15 +113,15 @@ var A2 = /** @class */ (function () {
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var r3 = foo3(a); // any
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var r3 = foo3(a); // any
 var CC = /** @class */ (function () {
     function CC() {
@@ -130,7 +130,7 @@ var CC = /** @class */ (function () {
 }());
 (function (CC) {
     CC.bar = 1;
-})(CC || (CC = {}));
+})(CC);
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any

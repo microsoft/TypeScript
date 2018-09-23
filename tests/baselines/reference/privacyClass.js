@@ -143,7 +143,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var m1;
+var m1 = {};
 (function (m1) {
     var m1_c_public = /** @class */ (function () {
         function m1_c_public() {
@@ -240,8 +240,8 @@ var m1;
         return m1_C12_public;
     }(m1_c_private));
     m1.m1_C12_public = m1_C12_public;
-})(m1 = exports.m1 || (exports.m1 = {}));
-var m2;
+})(m1);
+var m2 = {};
 (function (m2) {
     var m2_c_public = /** @class */ (function () {
         function m2_c_public() {
@@ -338,7 +338,7 @@ var m2;
         return m2_C12_public;
     }(m2_c_private));
     m2.m2_C12_public = m2_C12_public;
-})(m2 || (m2 = {}));
+})(m2);
 var glo_c_public = /** @class */ (function () {
     function glo_c_public() {
     }

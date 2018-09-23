@@ -7,9 +7,9 @@ var c = /** @class */ (function () {
     return c;
 }());
 (function () { });
-var e;
+var e = e || (e = {});
 (function (e) {
-})(e || (e = {}));
+})(e);
 // leading
 /*@before*/
 function f2() { } // trailing

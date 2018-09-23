@@ -21,7 +21,7 @@ module Test {
 
 
 //// [arrayAssignmentTest6.js]
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var Bug = /** @class */ (function () {
         function Bug() {
@@ -32,4 +32,4 @@ var Test;
         return Bug;
     }());
     Test.Bug = Bug;
-})(Test || (Test = {}));
+})(Test);

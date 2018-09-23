@@ -4,7 +4,7 @@ module M {
 }
 
 //// [parserExportAssignment5.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     export = A;
-})(M || (M = {}));
+})(M);

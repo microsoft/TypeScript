@@ -22,18 +22,18 @@ module q {
 
 
 //// [file.jsx]
-var my;
+var my = my || (my = {});
 (function (my) {
-})(my || (my = {}));
+})(my);
 // OK
 <my.div n='x'/>;
 // Error
 <my.other />;
-var q;
+var q = q || (q = {});
 (function (q) {
     var mine = my;
     // OK
     <mine.div n='x'/>;
     // Error
     <mine.non />;
-})(q || (q = {}));
+})(q);

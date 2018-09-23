@@ -14,9 +14,9 @@ module A {
 
 
 //// [innerExtern.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         var C = /** @class */ (function () {
             function C() {
@@ -25,5 +25,5 @@ var A;
             return C;
         }());
         B.C = C;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);

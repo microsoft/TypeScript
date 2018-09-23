@@ -11,13 +11,14 @@ export enum Animals {
 
 
 //// [enumExportMergingES6.js]
-export var Animals;
+export const Animals = {};
+export { Animals };
 (function (Animals) {
     Animals[Animals["Cat"] = 1] = "Cat";
-})(Animals || (Animals = {}));
+})(Animals);
 (function (Animals) {
     Animals[Animals["Dog"] = 2] = "Dog";
-})(Animals || (Animals = {}));
+})(Animals);
 (function (Animals) {
     Animals[Animals["CatDog"] = 3] = "CatDog";
-})(Animals || (Animals = {}));
+})(Animals);

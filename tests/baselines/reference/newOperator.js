@@ -69,7 +69,7 @@ var f = new q();
 var t5 = new new Date;
 // Can be an expression
 new String;
-var M;
+var M = M || (M = {});
 (function (M) {
     var T = /** @class */ (function () {
         function T() {
@@ -77,7 +77,7 @@ var M;
         return T;
     }());
     M.T = T;
-})(M || (M = {}));
+})(M);
 var S = /** @class */ (function () {
     function S() {
     }

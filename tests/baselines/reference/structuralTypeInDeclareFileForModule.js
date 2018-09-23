@@ -3,9 +3,9 @@ module M { export var x; }
 var m = M;
 
 //// [structuralTypeInDeclareFileForModule.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var m = M;
 
 

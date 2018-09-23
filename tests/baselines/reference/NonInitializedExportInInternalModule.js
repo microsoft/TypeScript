@@ -35,7 +35,7 @@ module Inner {
 }
 
 //// [NonInitializedExportInInternalModule.js]
-var Inner;
+var Inner = Inner || (Inner = {});
 (function (Inner) {
     var ;
     let;
@@ -45,14 +45,14 @@ var Inner;
         }
         return A;
     }());
-    var B;
+    var B = B || (B = {});
     (function (B) {
         B.a = 1, B.c = 2;
-    })(B || (B = {}));
-    var C;
+    })(B);
+    var C = C || (C = {});
     (function (C) {
         C.a = 1, C.c = 2;
-    })(C || (C = {}));
+    })(C);
     // Shouldn't be filtered
     Inner.a1 = 1;
     Inner.b1 = 1;
@@ -67,4 +67,4 @@ var Inner;
     Inner.f1 = new D;
     Inner.g1 = new D;
     Inner.h1 = new D;
-})(Inner || (Inner = {}));
+})(Inner);

@@ -8,8 +8,8 @@ var c = /** @class */ (function () {
 }());
 (function () { });
 //@after
-var e;
+var e = e || (e = {});
 (function (e) {
-})(e || (e = {}));
+})(e);
 // leading
 function f2() { } // trailing

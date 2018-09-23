@@ -61,38 +61,38 @@ var x:T.I=y;
 
 
 //// [qualify.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     M.m = 0;
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         N.n = 1;
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
+    })(N);
+})(M);
 (function (M) {
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         var y = M.m;
         var x = N.n + y;
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
-var T;
+    })(N);
+})(M);
+var T = T || (T = {});
 (function (T) {
-    var U;
+    var U = T.U || (T.U = {});
     (function (U) {
         var z = 3;
-    })(U = T.U || (T.U = {}));
-})(T || (T = {}));
-var Peer;
+    })(U);
+})(T);
+var Peer = Peer || (Peer = {});
 (function (Peer) {
-    var U2;
+    var U2 = Peer.U2 || (Peer.U2 = {});
     (function (U2) {
         var z = 3;
-    })(U2 = Peer.U2 || (Peer.U2 = {}));
-})(Peer || (Peer = {}));
-var Everest;
+    })(U2);
+})(Peer);
+var Everest = Everest || (Everest = {});
 (function (Everest) {
-    var K2;
+    var K2 = Everest.K2 || (Everest.K2 = {});
     (function (K2) {
         var v1;
         var v2 = v1;
@@ -100,7 +100,7 @@ var Everest;
         var v4 = v1;
         var v5 = v1;
         var v6 = v1;
-    })(K2 = Everest.K2 || (Everest.K2 = {}));
-})(Everest || (Everest = {}));
+    })(K2);
+})(Everest);
 var y;
 var x = y;

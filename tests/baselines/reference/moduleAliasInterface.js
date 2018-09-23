@@ -56,7 +56,7 @@ module B1 {
 
 
 //// [moduleAliasInterface.js]
-var _modes;
+var _modes = _modes || (_modes = {});
 (function (_modes) {
     var Mode = /** @class */ (function () {
         function Mode() {
@@ -64,9 +64,9 @@ var _modes;
         return Mode;
     }());
     _modes.Mode = Mode;
-})(_modes || (_modes = {}));
+})(_modes);
 // _modes. // produces an internal error - please implement in derived class
-var editor;
+var editor = editor || (editor = {});
 (function (editor) {
     var i;
     // If you just use p1:modes, the compiler accepts it - should be an error
@@ -77,9 +77,9 @@ var editor;
         };
         return Bug;
     }());
-})(editor || (editor = {}));
+})(editor);
 var modesOuter = _modes;
-var editor2;
+var editor2 = editor2 || (editor2 = {});
 (function (editor2) {
     var i;
     var Bug = /** @class */ (function () {
@@ -87,7 +87,7 @@ var editor2;
         } // no error here, since modesOuter is declared externally
         return Bug;
     }());
-    var Foo;
+    var Foo = Foo || (Foo = {});
     (function (Foo) {
         var Bar = /** @class */ (function () {
             function Bar() {
@@ -95,14 +95,14 @@ var editor2;
             return Bar;
         }());
         Foo.Bar = Bar;
-    })(Foo || (Foo = {}));
+    })(Foo);
     var Bug2 = /** @class */ (function () {
         function Bug2(p1, p2) {
         }
         return Bug2;
     }());
-})(editor2 || (editor2 = {}));
-var A1;
+})(editor2);
+var A1 = A1 || (A1 = {});
 (function (A1) {
     var A1C1 = /** @class */ (function () {
         function A1C1() {
@@ -110,9 +110,9 @@ var A1;
         return A1C1;
     }());
     A1.A1C1 = A1C1;
-})(A1 || (A1 = {}));
-var B1;
+})(A1);
+var B1 = B1 || (B1 = {});
 (function (B1) {
     var i;
     var c;
-})(B1 || (B1 = {}));
+})(B1);

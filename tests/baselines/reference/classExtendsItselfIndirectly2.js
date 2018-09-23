@@ -43,7 +43,7 @@ var C = /** @class */ (function (_super) {
     }
     return C;
 }(N.E)); // error
-var M;
+var M = M || (M = {});
 (function (M) {
     var D = /** @class */ (function (_super) {
         __extends(D, _super);
@@ -53,8 +53,8 @@ var M;
         return D;
     }(C));
     M.D = D;
-})(M || (M = {}));
-var N;
+})(M);
+var N = N || (N = {});
 (function (N) {
     var E = /** @class */ (function (_super) {
         __extends(E, _super);
@@ -64,8 +64,8 @@ var N;
         return E;
     }(M.D));
     N.E = E;
-})(N || (N = {}));
-var O;
+})(N);
+var O = O || (O = {});
 (function (O) {
     var C2 = /** @class */ (function (_super) {
         __extends(C2, _super);
@@ -74,7 +74,7 @@ var O;
         }
         return C2;
     }(Q.E2)); // error
-    var P;
+    var P = P || (P = {});
     (function (P) {
         var D2 = /** @class */ (function (_super) {
             __extends(D2, _super);
@@ -84,8 +84,8 @@ var O;
             return D2;
         }(C2));
         P.D2 = D2;
-    })(P || (P = {}));
-    var Q;
+    })(P);
+    var Q = Q || (Q = {});
     (function (Q) {
         var E2 = /** @class */ (function (_super) {
             __extends(E2, _super);
@@ -95,5 +95,5 @@ var O;
             return E2;
         }(P.D2));
         Q.E2 = E2;
-    })(Q || (Q = {}));
-})(O || (O = {}));
+    })(Q);
+})(O);

@@ -20,12 +20,12 @@ declare module A {
 }
 
 //// [exportAlreadySeen.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
     function f() { }
     M.f = f;
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         var C = /** @class */ (function () {
             function C() {
@@ -33,5 +33,5 @@ var M;
             return C;
         }());
         N.C = C;
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
+    })(N);
+})(M);

@@ -11,10 +11,10 @@ A.a();
 
 
 //// [qualifiedModuleLocals.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function b() { }
     function a() { A.b(); } // A.b should be an unresolved symbol error
     A.a = a;
-})(A || (A = {}));
+})(A);
 A.a();

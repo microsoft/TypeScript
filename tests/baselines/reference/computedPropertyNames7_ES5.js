@@ -8,10 +8,10 @@ var v = {
 
 //// [computedPropertyNames7_ES5.js]
 var _a;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["member"] = 0] = "member";
-})(E || (E = {}));
+})(E);
 var v = (_a = {},
     _a[E.member] = 0,
     _a);

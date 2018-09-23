@@ -44,10 +44,10 @@ M.x.toString();
 
 
 //// [constDeclarations-access3.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 0;
-})(M || (M = {}));
+})(M);
 // Errors
 M.x = 1;
 M.x += 2;

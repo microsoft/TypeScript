@@ -4,8 +4,8 @@ module Baz { export var x = "hello"; }
 Baz.x = "goodbye";
 
 //// [moduleCodeGenTest3.js]
-var Baz;
+var Baz = Baz || (Baz = {});
 (function (Baz) {
     Baz.x = "hello";
-})(Baz || (Baz = {}));
+})(Baz);
 Baz.x = "goodbye";

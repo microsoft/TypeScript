@@ -33,8 +33,8 @@ var Point = /** @class */ (function () {
 }());
 (function (Point) {
     var Origin = ""; // not an error, since not exported
-})(Point || (Point = {}));
-var A;
+})(Point);
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -47,5 +47,5 @@ var A;
     A.Point = Point;
     (function (Point) {
         var Origin = ""; // not an error since not exported
-    })(Point = A.Point || (A.Point = {}));
-})(A || (A = {}));
+    })(Point);
+})(A);

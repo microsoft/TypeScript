@@ -4,6 +4,6 @@ module M {
 }
 
 //// [parserFunctionDeclaration7.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);

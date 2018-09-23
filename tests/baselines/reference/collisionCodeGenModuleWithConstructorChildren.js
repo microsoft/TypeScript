@@ -24,7 +24,7 @@ module M {
 }
 
 //// [collisionCodeGenModuleWithConstructorChildren.js]
-var M;
+var M = M || (M = {});
 (function (M_1) {
     M_1.x = 3;
     var c = /** @class */ (function () {
@@ -33,7 +33,7 @@ var M;
         }
         return c;
     }());
-})(M || (M = {}));
+})(M);
 (function (M_2) {
     var d = /** @class */ (function () {
         function d(M, p) {
@@ -42,7 +42,7 @@ var M;
         }
         return d;
     }());
-})(M || (M = {}));
+})(M);
 (function (M_3) {
     var d2 = /** @class */ (function () {
         function d2() {
@@ -51,4 +51,4 @@ var M;
         }
         return d2;
     }());
-})(M || (M = {}));
+})(M);

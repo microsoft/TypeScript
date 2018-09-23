@@ -7,7 +7,7 @@ module m {
 }
 
 //// [declFileModuleWithPropertyOfTypeModule.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var c = /** @class */ (function () {
         function c() {
@@ -16,7 +16,7 @@ var m;
     }());
     m.c = c;
     m.a = m;
-})(m || (m = {}));
+})(m);
 
 
 //// [declFileModuleWithPropertyOfTypeModule.d.ts]

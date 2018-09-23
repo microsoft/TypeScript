@@ -56,43 +56,43 @@ module F {
 //// [exportCodeGen.js]
 // should replace all refs to 'x' in the body,
 // with fully qualified
-var A;
+var A = A || (A = {});
 (function (A) {
     A.x = 12;
     function lt12() {
         return A.x < 12;
     }
-})(A || (A = {}));
+})(A);
 // should not fully qualify 'x'
-var B;
+var B = B || (B = {});
 (function (B) {
     var x = 12;
     function lt12() {
         return x < 12;
     }
-})(B || (B = {}));
+})(B);
 // not copied, since not exported
-var C;
+var C = C || (C = {});
 (function (C) {
     function no() {
         return false;
     }
-})(C || (C = {}));
+})(C);
 // copies, since exported
-var D;
+var D = D || (D = {});
 (function (D) {
     function yes() {
         return true;
     }
     D.yes = yes;
-})(D || (D = {}));
+})(D);
 // validate all exportable statements
-var E;
+var E = E || (E = {});
 (function (E) {
-    var Color;
+    var Color = E.Color || (E.Color = {});
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
-    })(Color = E.Color || (E.Color = {}));
+    })(Color);
     function fn() { }
     E.fn = fn;
     var C = /** @class */ (function () {
@@ -101,27 +101,27 @@ var E;
         return C;
     }());
     E.C = C;
-    var M;
+    var M = E.M || (E.M = {});
     (function (M) {
         M.x = 42;
-    })(M = E.M || (E.M = {}));
-})(E || (E = {}));
+    })(M);
+})(E);
 // validate all exportable statements,
 // which are not exported
-var F;
+var F = F || (F = {});
 (function (F) {
-    var Color;
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
-    })(Color || (Color = {}));
+    })(Color);
     function fn() { }
     var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
-    var M;
+    var M = M || (M = {});
     (function (M) {
         var x = 42;
-    })(M || (M = {}));
-})(F || (F = {}));
+    })(M);
+})(F);

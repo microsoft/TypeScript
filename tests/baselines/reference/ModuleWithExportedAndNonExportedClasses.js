@@ -34,7 +34,7 @@ var ag2 = new A.A2<string, number>();
 
 
 //// [ModuleWithExportedAndNonExportedClasses.js]
-var A;
+var A = A || (A = {});
 (function (A_1) {
     var A = /** @class */ (function () {
         function A() {
@@ -58,7 +58,7 @@ var A;
         }
         return AG2;
     }());
-})(A || (A = {}));
+})(A);
 // no errors expected, these are all exported
 var a;
 var a = new A.A();

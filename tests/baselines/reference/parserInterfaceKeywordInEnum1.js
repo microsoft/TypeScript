@@ -8,7 +8,7 @@ enum Bar {
 
 //// [parserInterfaceKeywordInEnum1.js]
 "use strict";
-var Bar;
+var Bar = Bar || (Bar = {});
 (function (Bar) {
     Bar[Bar["interface"] = 0] = "interface";
-})(Bar || (Bar = {}));
+})(Bar);

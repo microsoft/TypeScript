@@ -1538,7 +1538,7 @@ var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
     });
     return privateClassWithPrivateModuleSetAccessorTypes;
 }());
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -2017,8 +2017,8 @@ var publicModule;
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -2497,7 +2497,7 @@ var privateModule;
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
-})(privateModule || (privateModule = {}));
+})(privateModule);
 //// [privacyAccessorDeclFile_GlobalFile.js]
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
@@ -2594,7 +2594,7 @@ var publicClassInGlobalWithWithPublicSetAccessorTypes = /** @class */ (function 
     });
     return publicClassInGlobalWithWithPublicSetAccessorTypes;
 }());
-var publicModuleInGlobal;
+var publicModuleInGlobal = publicModuleInGlobal || (publicModuleInGlobal = {});
 (function (publicModuleInGlobal) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -2607,7 +2607,7 @@ var publicModuleInGlobal;
         return publicClass;
     }());
     publicModuleInGlobal.publicClass = publicClass;
-    var privateModule;
+    var privateModule = privateModule || (privateModule = {});
     (function (privateModule) {
         var privateClass = /** @class */ (function () {
             function privateClass() {
@@ -3086,7 +3086,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithPrivateModuleSetAccessorTypes;
         }());
-    })(privateModule || (privateModule = {}));
+    })(privateModule);
     var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
@@ -3553,7 +3553,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
-})(publicModuleInGlobal || (publicModuleInGlobal = {}));
+})(publicModuleInGlobal);
 
 
 //// [privacyAccessorDeclFile_externalModule.d.ts]

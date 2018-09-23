@@ -59,11 +59,11 @@ class C<T, U> {
 //// [functionExpressionContextualTyping1.js]
 // When a function expression with no type parameters and no parameter type annotations 
 // is contextually typed (section 4.19) by a type T and a contextual signature S can be extracted from T
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["red"] = 0] = "red";
     E[E["blue"] = 1] = "blue";
-})(E || (E = {}));
+})(E);
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
 var a0 = function (num, str) {

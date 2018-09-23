@@ -25,9 +25,9 @@ x7 = importInst;
 
 
 //// [typeofInternalModules.js]
-var Outer;
+var Outer = Outer || (Outer = {});
 (function (Outer) {
-    var instantiated;
+    var instantiated = Outer.instantiated || (Outer.instantiated = {});
     (function (instantiated) {
         var C = /** @class */ (function () {
             function C() {
@@ -35,8 +35,8 @@ var Outer;
             return C;
         }());
         instantiated.C = C;
-    })(instantiated = Outer.instantiated || (Outer.instantiated = {}));
-})(Outer || (Outer = {}));
+    })(instantiated);
+})(Outer);
 var importInst = Outer.instantiated;
 var x1 = importInst.C;
 var x2 = new x1();

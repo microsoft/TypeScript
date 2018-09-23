@@ -30,38 +30,38 @@ const e5: Ka.Foo | boolean = Z.Foo.A; // ok
 
 
 //// [enumLiteralAssignableToEnumInsideUnion.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Foo;
+    var Foo = X.Foo || (X.Foo = {});
     (function (Foo) {
         Foo[Foo["A"] = 0] = "A";
         Foo[Foo["B"] = 1] = "B";
-    })(Foo = X.Foo || (X.Foo = {}));
-})(X || (X = {}));
-var Y;
+    })(Foo);
+})(X);
+var Y = Y || (Y = {});
 (function (Y) {
-    var Foo;
+    var Foo = Y.Foo || (Y.Foo = {});
     (function (Foo) {
         Foo[Foo["A"] = 0] = "A";
         Foo[Foo["B"] = 1] = "B";
-    })(Foo = Y.Foo || (Y.Foo = {}));
-})(Y || (Y = {}));
-var Z;
+    })(Foo);
+})(Y);
+var Z = Z || (Z = {});
 (function (Z) {
-    var Foo;
+    var Foo = Z.Foo || (Z.Foo = {});
     (function (Foo) {
         Foo[Foo["A"] = 2] = "A";
         Foo[Foo["B"] = 4] = "B";
-    })(Foo = Z.Foo || (Z.Foo = {}));
-})(Z || (Z = {}));
-var Ka;
+    })(Foo);
+})(Z);
+var Ka = Ka || (Ka = {});
 (function (Ka) {
-    var Foo;
+    var Foo = Ka.Foo || (Ka.Foo = {});
     (function (Foo) {
         Foo[Foo["A"] = 1024] = "A";
         Foo[Foo["B"] = 2048] = "B";
-    })(Foo = Ka.Foo || (Ka.Foo = {}));
-})(Ka || (Ka = {}));
+    })(Foo);
+})(Ka);
 var e0 = Y.Foo.A; // ok
 var e1 = Z.Foo.A; // not legal, Z is computed
 var e2 = Z.Foo.A; // still not legal

@@ -33,11 +33,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var base;
+        var base = Y.base || (Y.base = {});
         (function (base) {
             var W = /** @class */ (function (_super) {
                 __extends(W, _super);
@@ -47,15 +47,15 @@ var X;
                 return W;
             }(A.B.Base.W));
             base.W = W;
-        })(base = Y.base || (Y.base = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(base);
+    })(Y);
+})(X);
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var base;
+        var base = Y.base || (Y.base = {});
         (function (base) {
-            var Z;
+            var Z = base.Z || (base.Z = {});
             (function (Z) {
                 var W = /** @class */ (function (_super) {
                     __extends(W, _super);
@@ -65,10 +65,10 @@ var X;
                     return W;
                 }(X.Y.base.W));
                 Z.W = W;
-            })(Z = base.Z || (base.Z = {}));
-        })(base = Y.base || (Y.base = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+            })(Z);
+        })(base);
+    })(Y);
+})(X);
 
 
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.d.ts]

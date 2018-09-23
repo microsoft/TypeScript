@@ -9,8 +9,8 @@ module M {
 }
 
 //// [overloadsInDifferentContainersDisagreeOnAmbient.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f() { }
     M.f = f;
-})(M || (M = {}));
+})(M);

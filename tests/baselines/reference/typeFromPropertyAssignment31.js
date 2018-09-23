@@ -37,7 +37,7 @@ ExpandoMerge.m = function (n) {
 };
 (function (ExpandoMerge) {
     ExpandoMerge.p2 = 222;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 ExpandoMerge.p4 = 44444; // ok
 ExpandoMerge.p6 = 66666; // ok
 ExpandoMerge.p8 = false; // type error
@@ -49,7 +49,7 @@ ExpandoMerge.p8 = false; // type error
     ExpandoMerge.p7 = 7;
     ExpandoMerge.p8 = 6;
     ExpandoMerge.p9 = 7;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 ExpandoMerge.p5 = 555555; // ok
 ExpandoMerge.p7 = 777777; // ok
 ExpandoMerge.p9 = false; // type error

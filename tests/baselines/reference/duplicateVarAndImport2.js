@@ -7,8 +7,8 @@ import a = M;
 //// [duplicateVarAndImport2.js]
 // error since module is instantiated
 var a;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 var a = M;

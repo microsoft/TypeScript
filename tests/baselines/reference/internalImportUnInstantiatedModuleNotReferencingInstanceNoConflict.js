@@ -10,7 +10,7 @@ module B {
 
 
 //// [internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.js]
-var B;
+var B = B || (B = {});
 (function (B) {
     var A = 1;
-})(B || (B = {}));
+})(B);

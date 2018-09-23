@@ -66,30 +66,30 @@ c.someMethodThatCallsAnOuterMethod();
 
 
 //// [moduleVisibilityTest1.js]
-var OuterMod;
+var OuterMod = OuterMod || (OuterMod = {});
 (function (OuterMod) {
     function someExportedOuterFunc() { return -1; }
     OuterMod.someExportedOuterFunc = someExportedOuterFunc;
-    var OuterInnerMod;
+    var OuterInnerMod = OuterMod.OuterInnerMod || (OuterMod.OuterInnerMod = {});
     (function (OuterInnerMod) {
         function someExportedOuterInnerFunc() { return "foo"; }
         OuterInnerMod.someExportedOuterInnerFunc = someExportedOuterInnerFunc;
-    })(OuterInnerMod = OuterMod.OuterInnerMod || (OuterMod.OuterInnerMod = {}));
-})(OuterMod || (OuterMod = {}));
+    })(OuterInnerMod);
+})(OuterMod);
 var OuterInnerAlias = OuterMod.OuterInnerMod;
-var M;
+var M = M || (M = {});
 (function (M) {
-    var InnerMod;
+    var InnerMod = M.InnerMod || (M.InnerMod = {});
     (function (InnerMod) {
         function someExportedInnerFunc() { return -2; }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
-    })(InnerMod = M.InnerMod || (M.InnerMod = {}));
-    var E;
+    })(InnerMod);
+    var E = M.E || (M.E = {});
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(E = M.E || (M.E = {}));
+    })(E);
     M.x = 5;
     var y = M.x + M.x;
     var B = /** @class */ (function () {
@@ -113,11 +113,11 @@ var M;
     M.C = C;
     var someModuleVar = 4;
     function someModuleFunction() { return 5; }
-})(M || (M = {}));
+})(M);
 (function (M) {
     M.c = M.x;
     M.meb = M.E.B;
-})(M || (M = {}));
+})(M);
 var cprime = null;
 var c = new M.C();
 var z = M.x;

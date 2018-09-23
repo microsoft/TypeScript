@@ -95,7 +95,7 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var require;
+    var require = {};
     (function (require) {
         var C = /** @class */ (function () {
             function C() {
@@ -103,12 +103,12 @@ define(["require", "exports"], function (require, exports) {
             return C;
         }());
         require.C = C;
-    })(require = exports.require || (exports.require = {}));
+    })(require);
     function foo() {
         return null;
     }
     exports.foo = foo;
-    var exports;
+    var exports = {};
     (function (exports) {
         var C = /** @class */ (function () {
             function C() {
@@ -116,14 +116,14 @@ define(["require", "exports"], function (require, exports) {
             return C;
         }());
         exports.C = C;
-    })(exports = exports.exports || (exports.exports = {}));
+    })(exports);
     function foo2() {
         return null;
     }
     exports.foo2 = foo2;
-    var m1;
+    var m1 = {};
     (function (m1) {
-        var require;
+        var require = require || (require = {});
         (function (require) {
             var C = /** @class */ (function () {
                 function C() {
@@ -131,8 +131,8 @@ define(["require", "exports"], function (require, exports) {
                 return C;
             }());
             require.C = C;
-        })(require || (require = {}));
-        var exports;
+        })(require);
+        var exports = exports || (exports = {});
         (function (exports) {
             var C = /** @class */ (function () {
                 function C() {
@@ -140,11 +140,11 @@ define(["require", "exports"], function (require, exports) {
                 return C;
             }());
             exports.C = C;
-        })(exports || (exports = {}));
-    })(m1 || (m1 = {}));
-    var m2;
+        })(exports);
+    })(m1);
+    var m2 = {};
     (function (m2) {
-        var require;
+        var require = m2.require || (m2.require = {});
         (function (require) {
             var C = /** @class */ (function () {
                 function C() {
@@ -152,8 +152,8 @@ define(["require", "exports"], function (require, exports) {
                 return C;
             }());
             require.C = C;
-        })(require = m2.require || (m2.require = {}));
-        var exports;
+        })(require);
+        var exports = m2.exports || (m2.exports = {});
         (function (exports) {
             var C = /** @class */ (function () {
                 function C() {
@@ -161,11 +161,11 @@ define(["require", "exports"], function (require, exports) {
                 return C;
             }());
             exports.C = C;
-        })(exports = m2.exports || (m2.exports = {}));
-    })(m2 || (m2 = {}));
+        })(exports);
+    })(m2);
 });
 //// [collisionExportsRequireAndModule_globalFile.js]
-var require;
+var require = require || (require = {});
 (function (require) {
     var C = /** @class */ (function () {
         function C() {
@@ -173,8 +173,8 @@ var require;
         return C;
     }());
     require.C = C;
-})(require || (require = {}));
-var exports;
+})(require);
+var exports = exports || (exports = {});
 (function (exports) {
     var C = /** @class */ (function () {
         function C() {
@@ -182,10 +182,10 @@ var exports;
         return C;
     }());
     exports.C = C;
-})(exports || (exports = {}));
-var m3;
+})(exports);
+var m3 = m3 || (m3 = {});
 (function (m3) {
-    var require;
+    var require = require || (require = {});
     (function (require) {
         var C = /** @class */ (function () {
             function C() {
@@ -193,8 +193,8 @@ var m3;
             return C;
         }());
         require.C = C;
-    })(require || (require = {}));
-    var exports;
+    })(require);
+    var exports = exports || (exports = {});
     (function (exports) {
         var C = /** @class */ (function () {
             function C() {
@@ -202,11 +202,11 @@ var m3;
             return C;
         }());
         exports.C = C;
-    })(exports || (exports = {}));
-})(m3 || (m3 = {}));
-var m4;
+    })(exports);
+})(m3);
+var m4 = m4 || (m4 = {});
 (function (m4) {
-    var require;
+    var require = m4.require || (m4.require = {});
     (function (require) {
         var C = /** @class */ (function () {
             function C() {
@@ -214,8 +214,8 @@ var m4;
             return C;
         }());
         require.C = C;
-    })(require = m4.require || (m4.require = {}));
-    var exports;
+    })(require);
+    var exports = m4.exports || (m4.exports = {});
     (function (exports) {
         var C = /** @class */ (function () {
             function C() {
@@ -223,5 +223,5 @@ var m4;
             return C;
         }());
         exports.C = C;
-    })(exports = m4.exports || (m4.exports = {}));
-})(m4 || (m4 = {}));
+    })(exports);
+})(m4);

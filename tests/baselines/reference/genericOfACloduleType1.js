@@ -19,7 +19,7 @@ var G = /** @class */ (function () {
     G.prototype.bar = function (x) { return x; };
     return G;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -35,8 +35,8 @@ var M;
             return X;
         }());
         C.X = X;
-    })(C = M.C || (M.C = {}));
+    })(C);
     var g1 = new G();
     g1.bar(null).foo();
-})(M || (M = {}));
+})(M);
 var g2 = new G(); // was: error Type reference cannot refer to container 'M.C'.

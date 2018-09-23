@@ -29,7 +29,7 @@ var a;
 var b1;
 a = b1; // error
 b1 = a; // error
-var Generics;
+var Generics = Generics || (Generics = {});
 (function (Generics) {
     var A = /** @class */ (function () {
         function A() {
@@ -42,4 +42,4 @@ var Generics;
         a = b; // error
         b = a; // error
     }
-})(Generics || (Generics = {}));
+})(Generics);

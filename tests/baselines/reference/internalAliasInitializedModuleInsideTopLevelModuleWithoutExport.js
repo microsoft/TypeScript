@@ -13,9 +13,9 @@ export var x: b.c = new b.c();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var a;
+    var a = {};
     (function (a) {
-        var b;
+        var b = a.b || (a.b = {});
         (function (b) {
             var c = /** @class */ (function () {
                 function c() {
@@ -23,8 +23,8 @@ define(["require", "exports"], function (require, exports) {
                 return c;
             }());
             b.c = c;
-        })(b = a.b || (a.b = {}));
-    })(a = exports.a || (exports.a = {}));
+        })(b);
+    })(a);
     var b = a.b;
     exports.x = new b.c();
 });

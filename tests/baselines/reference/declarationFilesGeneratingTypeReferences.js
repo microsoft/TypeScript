@@ -13,9 +13,9 @@ namespace Test {
 
 //// [out.js]
 /// <reference types="jquery"/>
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
-})(Test || (Test = {}));
+})(Test);
 
 
 //// [out.d.ts]

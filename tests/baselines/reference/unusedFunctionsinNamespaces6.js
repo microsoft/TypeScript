@@ -19,7 +19,7 @@ namespace Validation {
 }
 
 //// [unusedFunctionsinNamespaces6.js]
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var function1 = function () {
     };
@@ -32,4 +32,4 @@ var Validation;
     function function4() {
     }
     Validation.a = function3;
-})(Validation || (Validation = {}));
+})(Validation);

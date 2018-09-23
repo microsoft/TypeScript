@@ -1,5 +1,6 @@
 "use strict";
 exports.__esModule = true;
-var A;
+var A = {};
+exports["default"] = A;
 (function (A) {
-})(A = exports.A || (exports.A = {}));
+})(A);

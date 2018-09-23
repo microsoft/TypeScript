@@ -12,10 +12,10 @@ function foo2() {
 //// [blockScopedEnumVariablesUseBeforeDef.js]
 function foo1() {
     return E.A;
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["A"] = 0] = "A";
-    })(E || (E = {}));
+    })(E);
 }
 function foo2() {
     return 0 /* A */;

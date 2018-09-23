@@ -9,7 +9,7 @@ module mod {
 
 
 //// [parameterPropertyInConstructor2.js]
-var mod;
+var mod = mod || (mod = {});
 (function (mod) {
     var Customers = /** @class */ (function () {
         function Customers(names, ages) {
@@ -18,4 +18,4 @@ var mod;
         }
         return Customers;
     }());
-})(mod || (mod = {}));
+})(mod);

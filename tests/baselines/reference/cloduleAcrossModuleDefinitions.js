@@ -16,7 +16,7 @@ var b: A.B; // ok
 
 
 //// [cloduleAcrossModuleDefinitions.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var B = /** @class */ (function () {
         function B() {
@@ -26,11 +26,11 @@ var A;
         return B;
     }());
     A.B = B;
-})(A || (A = {}));
+})(A);
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         B.x = 1;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var b; // ok

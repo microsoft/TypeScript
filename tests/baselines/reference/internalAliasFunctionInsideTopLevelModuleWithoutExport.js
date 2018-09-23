@@ -13,13 +13,13 @@ export var bVal2 = b;
 //// [internalAliasFunctionInsideTopLevelModuleWithoutExport.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
     function foo(x) {
         return x;
     }
     a.foo = foo;
-})(a = exports.a || (exports.a = {}));
+})(a);
 var b = a.foo;
 exports.bVal = b(10);
 exports.bVal2 = b;

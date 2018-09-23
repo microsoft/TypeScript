@@ -9,10 +9,10 @@ export namespace TypeGuards {
 //// [typeGuardOnContainerTypeNoHang.js]
 "use strict";
 exports.__esModule = true;
-var TypeGuards;
+var TypeGuards = {};
 (function (TypeGuards) {
     function IsObject(value) {
         return typeof (value) === 'object';
     }
     TypeGuards.IsObject = IsObject;
-})(TypeGuards = exports.TypeGuards || (exports.TypeGuards = {}));
+})(TypeGuards);

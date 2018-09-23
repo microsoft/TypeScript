@@ -83,10 +83,10 @@ var C = /** @class */ (function () {
     return C;
 }());
 var a;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var b = { foo: E.A };
 function foo5(x) { }
 function foo5b(x) { }

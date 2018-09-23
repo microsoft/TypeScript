@@ -78,10 +78,10 @@ var C2 = /** @class */ (function () {
     C2.y = undefined;
     return C2;
 }());
-var N1;
+var N1 = N1 || (N1 = {});
 (function (N1) {
     N1.y = this;
-})(N1 || (N1 = {}));
+})(N1);
 var C3 = /** @class */ (function () {
     function C3() {
         this.x1 = {

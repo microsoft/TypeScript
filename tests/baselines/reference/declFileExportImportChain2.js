@@ -23,9 +23,9 @@ export var x: c.b.m2.c1;
 //// [declFileExportImportChain2_a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var m1;
+    var m1 = {};
     (function (m1) {
-        var m2;
+        var m2 = m1.m2 || (m1.m2 = {});
         (function (m2) {
             var c1 = /** @class */ (function () {
                 function c1() {
@@ -33,8 +33,8 @@ define(["require", "exports"], function (require, exports) {
                 return c1;
             }());
             m2.c1 = c1;
-        })(m2 = m1.m2 || (m1.m2 = {}));
-    })(m1 || (m1 = {}));
+        })(m2);
+    })(m1);
     return m1;
 });
 //// [declFileExportImportChain2_b.js]

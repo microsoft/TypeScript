@@ -16,4 +16,4 @@ var Clod = /** @class */ (function () {
 }());
 (function (Clod) {
     var p = x; // x isn't in scope here
-})(Clod || (Clod = {}));
+})(Clod);

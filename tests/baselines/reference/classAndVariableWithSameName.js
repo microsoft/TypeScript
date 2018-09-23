@@ -17,7 +17,7 @@ var C = /** @class */ (function () {
     return C;
 }()); // error
 var C = ''; // error
-var M;
+var M = M || (M = {});
 (function (M) {
     var D = /** @class */ (function () {
         function D() {
@@ -25,4 +25,4 @@ var M;
         return D;
     }());
     var D = 1; // error
-})(M || (M = {}));
+})(M);

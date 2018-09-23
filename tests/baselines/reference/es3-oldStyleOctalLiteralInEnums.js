@@ -5,8 +5,8 @@ enum E {
 }
 
 //// [es3-oldStyleOctalLiteralInEnums.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["x"] = -1] = "x";
     E[E["y"] = 2] = "y";
-})(E || (E = {}));
+})(E);

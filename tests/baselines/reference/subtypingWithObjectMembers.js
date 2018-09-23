@@ -138,7 +138,7 @@ var B3 = /** @class */ (function (_super) {
     }
     return B3;
 }(A3));
-var TwoLevels;
+var TwoLevels = TwoLevels || (TwoLevels = {});
 (function (TwoLevels) {
     var A = /** @class */ (function () {
         function A() {
@@ -176,4 +176,4 @@ var TwoLevels;
         }
         return B3;
     }(A3));
-})(TwoLevels || (TwoLevels = {}));
+})(TwoLevels);

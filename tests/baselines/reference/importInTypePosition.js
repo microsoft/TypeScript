@@ -22,7 +22,7 @@ module C {
 
 
 //// [importInTypePosition.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -33,11 +33,11 @@ var A;
     }());
     A.Point = Point;
     A.Origin = new Point(0, 0);
-})(A || (A = {}));
+})(A);
 // no code gen expected
-var C;
+var C = C || (C = {});
 (function (C) {
     var m;
     var p;
     var p = { x: 0, y: 0 };
-})(C || (C = {}));
+})(C);

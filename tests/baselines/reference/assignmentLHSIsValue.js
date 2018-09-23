@@ -98,14 +98,14 @@ var C = /** @class */ (function () {
 function foo() { this = value; }
 this = value;
 // identifiers: module, class, enum, function
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 M = value;
 C = value;
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);
 E = value;
 foo = value;
 // literals

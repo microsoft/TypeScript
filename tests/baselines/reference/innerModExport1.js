@@ -20,7 +20,7 @@ module Outer {
 Outer.ExportFunc();
 
 //// [innerModExport1.js]
-var Outer;
+var Outer = Outer || (Outer = {});
 (function (Outer) {
     // inner mod 1
     var non_export_var;
@@ -34,5 +34,5 @@ var Outer;
     Outer.outer_var_export = 0;
     function outerFuncExport() { return 0; }
     Outer.outerFuncExport = outerFuncExport;
-})(Outer || (Outer = {}));
+})(Outer);
 Outer.ExportFunc();

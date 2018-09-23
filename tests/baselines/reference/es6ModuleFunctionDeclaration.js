@@ -35,7 +35,8 @@ function foo2() {
 }
 foo();
 foo2();
-export var m1;
+export const m1 = {};
+export { m1 };
 (function (m1) {
     function foo3() {
     }
@@ -46,8 +47,8 @@ export var m1;
     foo2();
     foo3();
     foo4();
-})(m1 || (m1 = {}));
-var m2;
+})(m1);
+const m2 = {};
 (function (m2) {
     function foo3() {
     }
@@ -59,4 +60,4 @@ var m2;
     foo3();
     foo4();
     m1.foo3();
-})(m2 || (m2 = {}));
+})(m2);

@@ -321,7 +321,7 @@ function bar2() {
     }
     use(x);
 }
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
     var x = 1;
     use(x);
@@ -329,8 +329,8 @@ var M1;
     use(y);
     var z = { a: 1 }.a;
     use(z);
-})(M1 || (M1 = {}));
-var M2;
+})(M1);
+var M2 = M2 || (M2 = {});
 (function (M2) {
     {
         var x_5 = 1;
@@ -341,8 +341,8 @@ var M2;
         use(z_5);
     }
     use(x);
-})(M2 || (M2 = {}));
-var M3;
+})(M2);
+var M3 = M3 || (M3 = {});
 (function (M3) {
     var x = 1;
     use(x);
@@ -350,8 +350,8 @@ var M3;
     use(y);
     var z = { a: 1 }.a;
     use(z);
-})(M3 || (M3 = {}));
-var M4;
+})(M3);
+var M4 = M4 || (M4 = {});
 (function (M4) {
     {
         var x_6 = 1;
@@ -364,7 +364,7 @@ var M4;
     use(x);
     use(y);
     use(z);
-})(M4 || (M4 = {}));
+})(M4);
 function foo3() {
     for (var x_7;;) {
         use(x_7);

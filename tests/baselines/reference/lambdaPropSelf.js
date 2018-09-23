@@ -41,7 +41,7 @@ var T = /** @class */ (function () {
     };
     return T;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     var x = this;
-})(M || (M = {}));
+})(M);

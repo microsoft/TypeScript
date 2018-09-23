@@ -16,7 +16,7 @@ module Test {
 
 
 //// [assignToExistingClass.js]
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var Mocked = /** @class */ (function () {
         function Mocked() {
@@ -33,4 +33,4 @@ var Test;
         };
         return Tester;
     }());
-})(Test || (Test = {}));
+})(Test);

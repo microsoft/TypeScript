@@ -41,9 +41,9 @@ var a: { id: string };
 
 
 //// [class.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
         class Point {
             constructor(x, y) {
@@ -52,19 +52,19 @@ var X;
             }
         }
         Y.Point = Point;
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+    })(Y);
+})(X);
 //// [module.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        let Point;
+        const Point = Y.Point || (Y.Point = {});
         (function (Point) {
             Point.Origin = new Point(0, 0);
-        })(Point = Y.Point || (Y.Point = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Point);
+    })(Y);
+})(X);
 //// [test.js]
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1, 1);
@@ -74,7 +74,7 @@ class A {
 }
 (function (A) {
     A.Instance = new A();
-})(A || (A = {}));
+})(A);
 // ensure merging works as expected
 var a = A.Instance;
 var a = new A();

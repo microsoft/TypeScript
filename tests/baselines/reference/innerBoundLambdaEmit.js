@@ -10,7 +10,7 @@ interface Array<T> {
 
 
 //// [innerBoundLambdaEmit.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -19,4 +19,4 @@ var M;
     }());
     M.Foo = Foo;
     var bar = function () { };
-})(M || (M = {}));
+})(M);

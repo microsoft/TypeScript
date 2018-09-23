@@ -116,12 +116,12 @@ function overload1(ns) {
 }
 var withOverloadSignature = overload1;
 function f(n) { }
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
     function foo(n) {
     }
     m2.foo = foo;
-})(m2 || (m2 = {}));
+})(m2);
 m2.foo(function () {
     var b = 30;
     return b;

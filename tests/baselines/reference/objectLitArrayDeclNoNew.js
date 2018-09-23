@@ -29,7 +29,7 @@ module Test {
 
 //// [objectLitArrayDeclNoNew.js]
 "use strict";
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var Gar = /** @class */ (function () {
         function Gar() {
@@ -46,4 +46,4 @@ var Test;
         };
     }
     Test.bug = bug;
-})(Test || (Test = {}));
+})(Test);

@@ -94,11 +94,11 @@ var ClassWithInitializer = /** @class */ (function (_super) {
     }
     return ClassWithInitializer;
 }(BaseErrClass));
-var M;
+var M = M || (M = {});
 (function (M) {
     //'this' in module variable
     var x = this; // Error
-})(M || (M = {}));
+})(M);
 //'this' as type parameter constraint
 // function fn<T extends this >() { } // Error
 //'this' as a type argument
@@ -112,8 +112,8 @@ var ErrClass3 = /** @class */ (function (_super) {
     return ErrClass3;
 }(this));
 //'this' as a computed enum value
-var SomeEnum;
+var SomeEnum = SomeEnum || (SomeEnum = {});
 (function (SomeEnum) {
     SomeEnum[SomeEnum["A"] = this] = "A";
     SomeEnum[SomeEnum["B"] = this.spaaaace] = "B"; // Also should not be allowed
-})(SomeEnum || (SomeEnum = {}));
+})(SomeEnum);

@@ -6,8 +6,8 @@ module A {
 var a: A; // no error
 
 //// [moduleWithValuesAsType.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var b = 1;
-})(A || (A = {}));
+})(A);
 var a; // no error

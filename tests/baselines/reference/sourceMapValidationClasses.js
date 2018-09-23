@@ -37,9 +37,9 @@ module Foo.Bar {
 }
 
 //// [sourceMapValidationClasses.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
-    var Bar;
+    var Bar = Foo.Bar || (Foo.Bar = {});
     (function (Bar) {
         "use strict";
         var Greeter = /** @class */ (function () {
@@ -73,6 +73,6 @@ var Foo;
         for (var j = 0; j < b.length; j++) {
             b[j].greet();
         }
-    })(Bar = Foo.Bar || (Foo.Bar = {}));
-})(Foo || (Foo = {}));
+    })(Bar);
+})(Foo);
 //# sourceMappingURL=sourceMapValidationClasses.js.map

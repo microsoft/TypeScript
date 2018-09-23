@@ -97,7 +97,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var FileSystemObject = /** @class */ (function () {
         function FileSystemObject(path) {
@@ -170,7 +170,7 @@ var Test;
     if (general.isMoreSpecific) {
         general.do();
     }
-})(Test || (Test = {}));
+})(Test);
 
 
 //// [typeGuardOfFormThisMember.d.ts]

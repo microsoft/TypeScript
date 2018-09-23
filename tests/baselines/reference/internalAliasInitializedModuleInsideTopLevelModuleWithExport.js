@@ -12,9 +12,9 @@ export var x: b.c = new b.c();
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
-    var b;
+    var b = a.b || (a.b = {});
     (function (b) {
         var c = /** @class */ (function () {
             function c() {
@@ -22,8 +22,8 @@ var a;
             return c;
         }());
         b.c = c;
-    })(b = a.b || (a.b = {}));
-})(a = exports.a || (exports.a = {}));
+    })(b);
+})(a);
 exports.b = a.b;
 exports.x = new exports.b.c();
 

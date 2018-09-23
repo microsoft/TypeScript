@@ -9,7 +9,7 @@ module A {
 }
 
 //// [ExportVariableOfGenericTypeWithInaccessibleTypeAsTypeArgument.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var B = /** @class */ (function () {
         function B() {
@@ -17,4 +17,4 @@ var A;
         return B;
     }());
     A.beez2 = new Array();
-})(A || (A = {}));
+})(A);

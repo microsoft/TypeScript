@@ -1,4 +1,4 @@
-var test;
+var test = test || (test = {});
 (function (test) {
     var ClassA = /** @class */ (function () {
         function ClassA() {
@@ -7,4 +7,4 @@ var test;
         return ClassA;
     }());
     test.ClassA = ClassA;
-})(test || (test = {}));
+})(test);

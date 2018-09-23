@@ -144,11 +144,11 @@ interface I20 {
 }
 
 //// [unionSubtypeIfEveryConstituentTypeIsSubtype.js]
-var e;
+var e = e || (e = {});
 (function (e) {
     e[e["e1"] = 0] = "e1";
     e[e["e2"] = 1] = "e2";
-})(e || (e = {}));
+})(e);
 var A = /** @class */ (function () {
     function A() {
     }
@@ -159,14 +159,14 @@ var A2 = /** @class */ (function () {
     }
     return A2;
 }());
-var E2;
+var E2 = E2 || (E2 = {});
 (function (E2) {
     E2[E2["A"] = 0] = "A";
-})(E2 || (E2 = {}));
+})(E2);
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var c = /** @class */ (function () {
     function c() {
     }
@@ -174,4 +174,4 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);

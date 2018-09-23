@@ -20,8 +20,7 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             (function (F) {
                 var x;
-            })(F || (F = {}));
-            exports_1("F", F);
+            })(F);
             C = /** @class */ (function () {
                 function C() {
                 }
@@ -30,15 +29,13 @@ System.register([], function (exports_1, context_1) {
             exports_1("C", C);
             (function (C) {
                 var x;
-            })(C || (C = {}));
-            exports_1("C", C);
+            })(C);
+            exports_1("E", E = {});
             (function (E) {
-            })(E || (E = {}));
-            exports_1("E", E);
+            })(E);
             (function (E) {
                 var x;
-            })(E || (E = {}));
-            exports_1("E", E);
+            })(E);
         }
     };
 });

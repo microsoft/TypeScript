@@ -17,7 +17,7 @@ module C {
 }
 
 //// [importedModuleAddToGlobal.js]
-var B;
+var B = B || (B = {});
 (function (B_1) {
     var B = /** @class */ (function () {
         function B() {
@@ -25,8 +25,8 @@ var B;
         return B;
     }());
     B_1.B = B;
-})(B || (B = {}));
-var C;
+})(B);
+var C = C || (C = {});
 (function (C) {
     function hello() { return null; }
-})(C || (C = {}));
+})(C);

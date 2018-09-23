@@ -6,9 +6,9 @@ module m1 {
 var foo = m1.m1;
 
 //// [collisionCodeGenModuleWithMemberVariable.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1_1) {
     m1_1.m1 = 10;
     var b = m1_1.m1;
-})(m1 || (m1 = {}));
+})(m1);
 var foo = m1.m1;

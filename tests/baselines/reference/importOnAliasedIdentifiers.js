@@ -11,11 +11,11 @@ module B {
 }
 
 //// [importOnAliasedIdentifiers.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     var Z = A.X; // Alias for both type and member A.X
     var v = Z;
-})(B || (B = {}));
+})(B);

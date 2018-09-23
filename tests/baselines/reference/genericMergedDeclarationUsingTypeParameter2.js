@@ -14,4 +14,4 @@ var foo = /** @class */ (function () {
 }());
 (function (foo) {
     var y = 1;
-})(foo || (foo = {}));
+})(foo);

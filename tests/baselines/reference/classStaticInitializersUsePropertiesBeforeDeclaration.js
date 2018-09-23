@@ -27,14 +27,14 @@ var Foo = /** @class */ (function () {
     Foo.namespaceMember = Namespace.A;
     return Foo;
 }());
-var Enum;
+var Enum = Enum || (Enum = {});
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
-})(Enum || (Enum = {}));
+})(Enum);
 var ObjLiteral = {
     A: 0
 };
-var Namespace;
+var Namespace = Namespace || (Namespace = {});
 (function (Namespace) {
     Namespace.A = 0;
-})(Namespace || (Namespace = {}));
+})(Namespace);

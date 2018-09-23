@@ -29,7 +29,7 @@ define(["require", "exports"], function (require, exports) {
     function foo() { }
     (function (foo) {
         foo.v = 1;
-    })(foo || (foo = {}));
+    })(foo);
     return foo;
 });
 //// [file2.js]

@@ -34,7 +34,7 @@
 //// [parserModule1.js]
 "use strict";
 exports.__esModule = true;
-var CompilerDiagnostics;
+var CompilerDiagnostics = {};
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;
     CompilerDiagnostics.diagnosticWriter = null;
@@ -59,4 +59,4 @@ var CompilerDiagnostics;
         }
     }
     CompilerDiagnostics.assert = assert;
-})(CompilerDiagnostics = exports.CompilerDiagnostics || (exports.CompilerDiagnostics = {}));
+})(CompilerDiagnostics);

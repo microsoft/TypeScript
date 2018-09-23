@@ -27,11 +27,11 @@ module Microsoft.PeopleAtWork.Model {
 //// [emitMemberAccessExpression_file2.js]
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
-var Microsoft;
+var Microsoft = Microsoft || (Microsoft = {});
 (function (Microsoft) {
-    var PeopleAtWork;
+    var PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {});
     (function (PeopleAtWork) {
-        var Model;
+        var Model = PeopleAtWork.Model || (PeopleAtWork.Model = {});
         (function (Model) {
             var _Person = /** @class */ (function () {
                 function _Person() {
@@ -42,20 +42,20 @@ var Microsoft;
                 return _Person;
             }());
             Model._Person = _Person;
-        })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
-    })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
-})(Microsoft || (Microsoft = {}));
+        })(Model);
+    })(PeopleAtWork);
+})(Microsoft);
 //// [emitMemberAccessExpression_file1.js]
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";
 //// [emitMemberAccessExpression_file3.js]
 /// <reference path="emitMemberAccessExpression_file2.ts" />
 /// <reference path="emitMemberAccessExpression_file1.ts" />
-var Microsoft;
+var Microsoft = Microsoft || (Microsoft = {});
 (function (Microsoft) {
-    var PeopleAtWork;
+    var PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {});
     (function (PeopleAtWork) {
-        var Model;
+        var Model = PeopleAtWork.Model || (PeopleAtWork.Model = {});
         (function (Model) {
             var KnockoutExtentions = /** @class */ (function () {
                 function KnockoutExtentions() {
@@ -63,6 +63,6 @@ var Microsoft;
                 return KnockoutExtentions;
             }());
             Model.KnockoutExtentions = KnockoutExtentions;
-        })(Model = PeopleAtWork.Model || (PeopleAtWork.Model = {}));
-    })(PeopleAtWork = Microsoft.PeopleAtWork || (Microsoft.PeopleAtWork = {}));
-})(Microsoft || (Microsoft = {}));
+        })(Model);
+    })(PeopleAtWork);
+})(Microsoft);

@@ -48,10 +48,10 @@ module T {
 }
 
 //// [nameCollisions.js]
-var T;
+var T = T || (T = {});
 (function (T) {
     var x = 2;
-    var x;
+    var x = x || (x = {});
     (function (x) {
         var Bar = /** @class */ (function () {
             function Bar() {
@@ -59,16 +59,16 @@ var T;
             return Bar;
         }());
         x.Bar = Bar;
-    })(x || (x = {}));
-    var z;
+    })(x);
+    var z = z || (z = {});
     (function (z) {
         var t;
-    })(z || (z = {}));
+    })(z);
     var z; // error
-    var y;
+    var y = y || (y = {});
     (function (y) {
         var b;
-    })(y || (y = {}));
+    })(y);
     var y = /** @class */ (function () {
         function y() {
         }
@@ -103,4 +103,4 @@ var T;
         }
         return cli2;
     }());
-})(T || (T = {}));
+})(T);

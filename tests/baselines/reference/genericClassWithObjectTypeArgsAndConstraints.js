@@ -78,7 +78,7 @@ var X = /** @class */ (function () {
     }
     return X;
 }());
-var Class;
+var Class = Class || (Class = {});
 (function (Class) {
     var G = /** @class */ (function () {
         function G() {
@@ -106,8 +106,8 @@ var Class;
     var g2;
     var r = g2.foo2(c1, d1);
     var r2 = g2.foo2(c1, c1);
-})(Class || (Class = {}));
-var Interface;
+})(Class);
+var Interface = Interface || (Interface = {});
 (function (Interface) {
     var c1 = new X();
     var d1 = new X();
@@ -117,4 +117,4 @@ var Interface;
     var g2;
     var r = g2.foo2(c1, d1);
     var r2 = g2.foo2(c1, c1);
-})(Interface || (Interface = {}));
+})(Interface);

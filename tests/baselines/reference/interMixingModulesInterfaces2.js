@@ -16,14 +16,14 @@ module A {
 var x: A.B = null;
 
 //// [interMixingModulesInterfaces2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = B || (B = {});
     (function (B) {
         function createB() {
             return null;
         }
         B.createB = createB;
-    })(B || (B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var x = null;

@@ -22,7 +22,7 @@ var d = {
 };
 
 //// [declFileTypeofInAnonymousType.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var c = /** @class */ (function () {
         function c() {
@@ -30,13 +30,13 @@ var m1;
         return c;
     }());
     m1.c = c;
-    var e;
+    var e = m1.e || (m1.e = {});
     (function (e) {
         e[e["weekday"] = 0] = "weekday";
         e[e["weekend"] = 1] = "weekend";
         e[e["holiday"] = 2] = "holiday";
-    })(e = m1.e || (m1.e = {}));
-})(m1 || (m1 = {}));
+    })(e);
+})(m1);
 var a;
 var b = {
     c: m1.c,

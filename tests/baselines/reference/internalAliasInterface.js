@@ -11,9 +11,9 @@ module c {
 
 
 //// [internalAliasInterface.js]
-var c;
+var c = c || (c = {});
 (function (c) {
-})(c || (c = {}));
+})(c);
 
 
 //// [internalAliasInterface.d.ts]

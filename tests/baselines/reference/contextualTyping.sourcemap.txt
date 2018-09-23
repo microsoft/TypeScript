@@ -134,35 +134,46 @@ sourceFile:contextualTyping.ts
 1->Emitted(10, 1) Source(20, 1) + SourceIndex(0)
 2 >Emitted(10, 40) Source(20, 40) + SourceIndex(0)
 ---
->>>var C2T5;
+>>>var C2T5 = C2T5 || (C2T5 = {});
 1 >
 2 >^^^^
 3 >    ^^^^
-4 >        ^
-5 >         ^^^^^^^^^^->
+4 >        ^^^
+5 >           ^^^^
+6 >               ^^^^^
+7 >                    ^^^^
+8 >                        ^^^^^^^
 1 >
   >
 2 >module 
 3 >    C2T5
-4 >         {
-  >            export var foo: (i: number, s: string) => number = function(i) {
-  >                return i;
-  >            }
-  >        }
+4 >        
+5 >           C2T5
+6 >               
+7 >                    C2T5
+8 >                         {
+  >                            export var foo: (i: number, s: string) => number = function(i) {
+  >                                return i;
+  >                            }
+  >                        }
 1 >Emitted(11, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(11, 5) Source(21, 8) + SourceIndex(0)
 3 >Emitted(11, 9) Source(21, 12) + SourceIndex(0)
-4 >Emitted(11, 10) Source(25, 2) + SourceIndex(0)
+4 >Emitted(11, 12) Source(21, 8) + SourceIndex(0)
+5 >Emitted(11, 16) Source(21, 12) + SourceIndex(0)
+6 >Emitted(11, 21) Source(21, 8) + SourceIndex(0)
+7 >Emitted(11, 25) Source(21, 12) + SourceIndex(0)
+8 >Emitted(11, 32) Source(25, 2) + SourceIndex(0)
 ---
 >>>(function (C2T5) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^
 4 >               ^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >module 
 3 >           C2T5
-1->Emitted(12, 1) Source(21, 1) + SourceIndex(0)
+1 >Emitted(12, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(12, 12) Source(21, 8) + SourceIndex(0)
 3 >Emitted(12, 16) Source(21, 12) + SourceIndex(0)
 ---
@@ -203,7 +214,7 @@ sourceFile:contextualTyping.ts
 1 >^^^^
 2 >    ^
 3 >     ^
-4 >      ^^^^^^^^^^^^^^^^^^^->
+4 >      ^^^^->
 1 >
   >    
 2 >    }
@@ -212,34 +223,28 @@ sourceFile:contextualTyping.ts
 2 >Emitted(15, 6) Source(24, 6) + SourceIndex(0)
 3 >Emitted(15, 7) Source(24, 6) + SourceIndex(0)
 ---
->>>})(C2T5 || (C2T5 = {}));
+>>>})(C2T5);
 1->
 2 >^
 3 > ^^
 4 >   ^^^^
-5 >       ^^^^^
-6 >            ^^^^
-7 >                ^^^^^^^^
-8 >                        ^^^^^^^^^->
+5 >       ^^
+6 >         ^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
 3 > 
 4 >   C2T5
-5 >       
-6 >            C2T5
-7 >                 {
-  >                    export var foo: (i: number, s: string) => number = function(i) {
-  >                        return i;
-  >                    }
-  >                }
+5 >        {
+  >           export var foo: (i: number, s: string) => number = function(i) {
+  >               return i;
+  >           }
+  >       }
 1->Emitted(16, 1) Source(25, 1) + SourceIndex(0)
 2 >Emitted(16, 2) Source(25, 2) + SourceIndex(0)
 3 >Emitted(16, 4) Source(21, 8) + SourceIndex(0)
 4 >Emitted(16, 8) Source(21, 12) + SourceIndex(0)
-5 >Emitted(16, 13) Source(21, 8) + SourceIndex(0)
-6 >Emitted(16, 17) Source(21, 12) + SourceIndex(0)
-7 >Emitted(16, 25) Source(25, 2) + SourceIndex(0)
+5 >Emitted(16, 10) Source(25, 2) + SourceIndex(0)
 ---
 >>>// CONTEXT: Variable declaration
 1->
@@ -1038,36 +1043,47 @@ sourceFile:contextualTyping.ts
 1->Emitted(49, 1) Source(65, 1) + SourceIndex(0)
 2 >Emitted(49, 39) Source(65, 39) + SourceIndex(0)
 ---
->>>var C5T5;
+>>>var C5T5 = C5T5 || (C5T5 = {});
 1 >
 2 >^^^^
 3 >    ^^^^
-4 >        ^
-5 >         ^^^^^^^^^^->
+4 >        ^^^
+5 >           ^^^^
+6 >               ^^^^^
+7 >                    ^^^^
+8 >                        ^^^^^^^
 1 >
   >
 2 >module 
 3 >    C5T5
-4 >         {
-  >            export var foo: (i: number, s: string) => string;
-  >            foo = function(i, s) {
-  >                return s;
-  >            }
-  >        }
+4 >        
+5 >           C5T5
+6 >               
+7 >                    C5T5
+8 >                         {
+  >                            export var foo: (i: number, s: string) => string;
+  >                            foo = function(i, s) {
+  >                                return s;
+  >                            }
+  >                        }
 1 >Emitted(50, 1) Source(66, 1) + SourceIndex(0)
 2 >Emitted(50, 5) Source(66, 8) + SourceIndex(0)
 3 >Emitted(50, 9) Source(66, 12) + SourceIndex(0)
-4 >Emitted(50, 10) Source(71, 2) + SourceIndex(0)
+4 >Emitted(50, 12) Source(66, 8) + SourceIndex(0)
+5 >Emitted(50, 16) Source(66, 12) + SourceIndex(0)
+6 >Emitted(50, 21) Source(66, 8) + SourceIndex(0)
+7 >Emitted(50, 25) Source(66, 12) + SourceIndex(0)
+8 >Emitted(50, 32) Source(71, 2) + SourceIndex(0)
 ---
 >>>(function (C5T5) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^
 4 >               ^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >module 
 3 >           C5T5
-1->Emitted(51, 1) Source(66, 1) + SourceIndex(0)
+1 >Emitted(51, 1) Source(66, 1) + SourceIndex(0)
 2 >Emitted(51, 12) Source(66, 8) + SourceIndex(0)
 3 >Emitted(51, 16) Source(66, 12) + SourceIndex(0)
 ---
@@ -1118,7 +1134,7 @@ sourceFile:contextualTyping.ts
 1 >^^^^
 2 >    ^
 3 >     ^
-4 >      ^^^^^^^^^^^^^^^^^^^->
+4 >      ^^^^->
 1 >
   >    
 2 >    }
@@ -1127,35 +1143,29 @@ sourceFile:contextualTyping.ts
 2 >Emitted(54, 6) Source(70, 6) + SourceIndex(0)
 3 >Emitted(54, 7) Source(70, 6) + SourceIndex(0)
 ---
->>>})(C5T5 || (C5T5 = {}));
+>>>})(C5T5);
 1->
 2 >^
 3 > ^^
 4 >   ^^^^
-5 >       ^^^^^
-6 >            ^^^^
-7 >                ^^^^^^^^
-8 >                        ^^^^^^^^->
+5 >       ^^
+6 >         ^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
 3 > 
 4 >   C5T5
-5 >       
-6 >            C5T5
-7 >                 {
-  >                    export var foo: (i: number, s: string) => string;
-  >                    foo = function(i, s) {
-  >                        return s;
-  >                    }
-  >                }
+5 >        {
+  >           export var foo: (i: number, s: string) => string;
+  >           foo = function(i, s) {
+  >               return s;
+  >           }
+  >       }
 1->Emitted(55, 1) Source(71, 1) + SourceIndex(0)
 2 >Emitted(55, 2) Source(71, 2) + SourceIndex(0)
 3 >Emitted(55, 4) Source(66, 8) + SourceIndex(0)
 4 >Emitted(55, 8) Source(66, 12) + SourceIndex(0)
-5 >Emitted(55, 13) Source(66, 8) + SourceIndex(0)
-6 >Emitted(55, 17) Source(66, 12) + SourceIndex(0)
-7 >Emitted(55, 25) Source(71, 2) + SourceIndex(0)
+5 >Emitted(55, 10) Source(71, 2) + SourceIndex(0)
 ---
 >>>// CONTEXT: Variable assignment
 1->

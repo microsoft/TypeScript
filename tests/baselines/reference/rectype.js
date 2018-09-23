@@ -14,7 +14,7 @@ module M {
 
 
 //// [rectype.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f(p) { return f; }
     M.f = f;
@@ -23,4 +23,4 @@ var M;
     f(i);
     f(f(i));
     f((f(f(i))));
-})(M || (M = {}));
+})(M);

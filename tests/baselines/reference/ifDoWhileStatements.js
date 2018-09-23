@@ -195,7 +195,7 @@ var D = /** @class */ (function () {
 }());
 function F(x) { return 42; }
 function F2(x) { return x < 42; }
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -205,8 +205,8 @@ var M;
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
-})(M || (M = {}));
-var N;
+})(M);
+var N = N || (N = {});
 (function (N) {
     var A = /** @class */ (function () {
         function A() {
@@ -216,7 +216,7 @@ var N;
     N.A = A;
     function F2(x) { return x.toString(); }
     N.F2 = F2;
-})(N || (N = {}));
+})(N);
 // literals
 if (true) { }
 while (true) { }

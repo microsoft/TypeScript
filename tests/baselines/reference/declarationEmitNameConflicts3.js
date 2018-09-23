@@ -40,26 +40,26 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var M;
+var M = M || (M = {});
 (function (M) {
-    var D;
+    var D = M.D || (M.D = {});
     (function (D) {
         function f() { }
         D.f = f;
-    })(D = M.D || (M.D = {}));
-    var C;
+    })(D);
+    var C = M.C || (M.C = {});
     (function (C) {
         function f() { }
         C.f = f;
-    })(C = M.C || (M.C = {}));
-    var E;
+    })(C);
+    var E = M.E || (M.E = {});
     (function (E) {
         function f() { }
         E.f = f;
-    })(E = M.E || (M.E = {}));
-})(M || (M = {}));
+    })(E);
+})(M);
 (function (M) {
-    var P;
+    var P = M.P || (M.P = {});
     (function (P) {
         var C = /** @class */ (function () {
             function C() {
@@ -76,15 +76,15 @@ var M;
             return E;
         }(C));
         P.E = E;
-        var D;
+        var D = P.D || (P.D = {});
         (function (D) {
             D[D["f"] = 0] = "f";
-        })(D = P.D || (P.D = {}));
+        })(D);
         P.w = M.D.f; // error, should be typeof M.D.f
         P.x = M.C.f; // error, should be typeof M.C.f
         P.x = M.E.f; // error, should be typeof M.E.f
-    })(P = M.P || (M.P = {}));
-})(M || (M = {}));
+    })(P);
+})(M);
 
 
 //// [declarationEmitNameConflicts3.d.ts]

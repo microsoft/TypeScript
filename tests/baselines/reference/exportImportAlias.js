@@ -70,7 +70,7 @@ var p: M.D.Point;
 
 //// [exportImportAlias.js]
 // expect no errors here
-var A;
+var A = A || (A = {});
 (function (A) {
     A.x = 'hello world';
     var Point = /** @class */ (function () {
@@ -81,16 +81,16 @@ var A;
         return Point;
     }());
     A.Point = Point;
-})(A || (A = {}));
-var C;
+})(A);
+var C = C || (C = {});
 (function (C) {
     C.a = A;
-})(C || (C = {}));
+})(C);
 var a = C.a.x;
 var b = new C.a.Point(0, 0);
 var c;
 var c;
-var X;
+var X = X || (X = {});
 (function (X) {
     function Y() {
         return 42;
@@ -105,16 +105,16 @@ var X;
             return Point;
         }());
         Y.Point = Point;
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
-var Z;
+    })(Y);
+})(X);
+var Z = Z || (Z = {});
 (function (Z) {
     // 'y' should be a fundule here
     Z.y = X.Y;
-})(Z || (Z = {}));
+})(Z);
 var m = Z.y();
 var n = new Z.y.Point(0, 0);
-var K;
+var K = K || (K = {});
 (function (K) {
     var L = /** @class */ (function () {
         function L(name) {
@@ -125,12 +125,12 @@ var K;
     K.L = L;
     (function (L) {
         L.y = 12;
-    })(L = K.L || (K.L = {}));
-})(K || (K = {}));
-var M;
+    })(L);
+})(K);
+var M = M || (M = {});
 (function (M) {
     M.D = K.L;
-})(M || (M = {}));
+})(M);
 var o;
 var o = new M.D('Hello');
 var p;

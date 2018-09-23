@@ -20,10 +20,10 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Alpha;
+var Alpha = Alpha || (Alpha = {});
 (function (Alpha) {
     Alpha.x = 100;
-})(Alpha || (Alpha = {}));
+})(Alpha);
 var Beta = /** @class */ (function (_super) {
     __extends(Beta, _super);
     function Beta() {

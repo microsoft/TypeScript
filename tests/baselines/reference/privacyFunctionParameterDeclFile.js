@@ -799,7 +799,7 @@ var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
 }());
 function privateFunctionWithPrivateModuleParameterTypes(param) {
 }
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -912,8 +912,8 @@ var publicModule;
     }());
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -1026,7 +1026,7 @@ var privateModule;
     }());
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
-})(privateModule || (privateModule = {}));
+})(privateModule);
 //// [privacyFunctionParameterDeclFile_GlobalFile.js]
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
@@ -1050,7 +1050,7 @@ var publicClassWithWithPublicParmeterTypesInGlobal = /** @class */ (function () 
 }());
 function publicFunctionWithPublicParmeterTypesInGlobal(param) {
 }
-var publicModuleInGlobal;
+var publicModuleInGlobal = publicModuleInGlobal || (publicModuleInGlobal = {});
 (function (publicModuleInGlobal) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -1063,7 +1063,7 @@ var publicModuleInGlobal;
         return publicClass;
     }());
     publicModuleInGlobal.publicClass = publicClass;
-    var privateModule;
+    var privateModule = privateModule || (privateModule = {});
     (function (privateModule) {
         var privateClass = /** @class */ (function () {
             function privateClass() {
@@ -1176,7 +1176,7 @@ var publicModuleInGlobal;
         }());
         function privateFunctionWithPrivateModuleParameterTypes(param) {
         }
-    })(privateModule || (privateModule = {}));
+    })(privateModule);
     var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
         function publicClassWithWithPrivateParmeterTypes(param, param1, param2) {
             this.param1 = param1;
@@ -1277,7 +1277,7 @@ var publicModuleInGlobal;
     }());
     function privateFunctionWithPrivateModuleParameterTypes(param) {
     }
-})(publicModuleInGlobal || (publicModuleInGlobal = {}));
+})(publicModuleInGlobal);
 
 
 //// [privacyFunctionParameterDeclFile_externalModule.d.ts]

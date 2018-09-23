@@ -7,11 +7,11 @@ module a{
 }
 
 //// [nestedModulePrivateAccess.js]
-var a;
+var a = a || (a = {});
 (function (a) {
     var x;
-    var b;
+    var b = b || (b = {});
     (function (b) {
         var y = x; // should not be an error
-    })(b || (b = {}));
-})(a || (a = {}));
+    })(b);
+})(a);

@@ -78,42 +78,42 @@ function f4() {
 while (true)
     ;
 var x = 1;
-var A;
+var A = A || (A = {});
 (function (A) {
     while (true)
         ;
     var x;
-})(A || (A = {}));
-var A1;
+})(A);
+var A1 = A1 || (A1 = {});
 (function (A1) {
     do { } while (true);
-})(A1 || (A1 = {}));
-var A2;
+})(A1);
+var A2 = A2 || (A2 = {});
 (function (A2) {
     while (true)
         ;
-    var A;
+    var A = A || (A = {});
     (function (A) {
         var x = 1;
-    })(A || (A = {}));
-})(A2 || (A2 = {}));
-var A3;
+    })(A);
+})(A2);
+var A3 = A3 || (A3 = {});
 (function (A3) {
     while (true)
         ;
-})(A3 || (A3 = {}));
-var A4;
+})(A3);
+var A4 = A4 || (A4 = {});
 (function (A4) {
     while (true)
         ;
-    var A;
+    var A = A || (A = {});
     (function (A) {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["X"] = 0] = "X";
-        })(E || (E = {}));
-    })(A || (A = {}));
-})(A4 || (A4 = {}));
+        })(E);
+    })(A);
+})(A4);
 function f1(x) {
     if (x) {
         return;
@@ -131,25 +131,25 @@ function f2() {
         return A;
     }());
 }
-var B;
+var B = B || (B = {});
 (function (B) {
     for (;;)
         ;
-})(B || (B = {}));
+})(B);
 function f3() {
     do {
     } while (true);
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["X"] = 1] = "X";
-    })(E || (E = {}));
+    })(E);
 }
 function f4() {
     if (true) {
         throw new Error();
     }
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["X"] = 1] = "X";
-    })(E || (E = {}));
+    })(E);
 }

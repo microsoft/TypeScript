@@ -24,15 +24,17 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
+            TopLevelConstEnum = {};
             (function (TopLevelConstEnum) {
                 TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
-            })(TopLevelConstEnum || (TopLevelConstEnum = {}));
+            })(TopLevelConstEnum);
+            M = {};
             (function (M) {
-                var NonTopLevelConstEnum;
+                var NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {});
                 (function (NonTopLevelConstEnum) {
                     NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
-                })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
-            })(M || (M = {}));
+                })(NonTopLevelConstEnum);
+            })(M);
         }
     };
 });

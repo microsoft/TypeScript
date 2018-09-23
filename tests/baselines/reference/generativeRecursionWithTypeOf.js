@@ -17,10 +17,10 @@ var C = /** @class */ (function () {
     C.foo = function (x) { };
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     function f(x) {
         return new x();
     }
     M.f = f;
-})(M || (M = {}));
+})(M);

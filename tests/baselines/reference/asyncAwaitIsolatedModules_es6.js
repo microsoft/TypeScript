@@ -104,10 +104,10 @@ class C {
         return __awaiter(this, void 0, void 0, function* () { });
     }
 }
-var M;
+const M = {};
 (function (M) {
     function f1() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
     M.f1 = f1;
-})(M || (M = {}));
+})(M);

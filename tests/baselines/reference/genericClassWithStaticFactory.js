@@ -142,7 +142,7 @@ module Editor {
 }
 
 //// [genericClassWithStaticFactory.js]
-var Editor;
+var Editor = Editor || (Editor = {});
 (function (Editor) {
     var List = /** @class */ (function () {
         function List(isHead, data) {
@@ -264,4 +264,4 @@ var Editor;
         return ListFactory;
     }());
     Editor.ListFactory = ListFactory;
-})(Editor || (Editor = {}));
+})(Editor);

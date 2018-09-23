@@ -39,7 +39,7 @@ class C {
 
 
 //// [privateInstanceVisibility.js]
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var Example = /** @class */ (function () {
         function Example() {
@@ -53,7 +53,7 @@ var Test;
         return Example;
     }());
     Test.Example = Example;
-})(Test || (Test = {}));
+})(Test);
 var C = /** @class */ (function () {
     function C() {
     }

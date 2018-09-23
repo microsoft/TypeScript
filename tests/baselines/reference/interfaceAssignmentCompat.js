@@ -53,14 +53,14 @@ M.test();
 
 
 //// [interfaceAssignmentCompat.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var Color;
+    var Color = M.Color || (M.Color = {});
     (function (Color) {
         Color[Color["Green"] = 0] = "Green";
         Color[Color["Blue"] = 1] = "Blue";
         Color[Color["Brown"] = 2] = "Brown";
-    })(Color = M.Color || (M.Color = {}));
+    })(Color);
     function CompareEyes(a, b) {
         return a.color - b.color;
     }
@@ -89,5 +89,5 @@ var M;
         return result;
     }
     M.test = test;
-})(M || (M = {}));
+})(M);
 M.test();

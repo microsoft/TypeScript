@@ -10,10 +10,10 @@ for ({x, y: y = E.x} of array) {
 //// [for-of47.js]
 var x, y;
 var array = [{ x: "", y: true }];
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["x"] = 0] = "x";
-})(E || (E = {}));
+})(E);
 for ({ x, y: y = E.x } of array) {
     x;
     y;

@@ -14,11 +14,11 @@ module X {
 }
 
 //// [moduleImport.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
-        var C;
+        var C = B.C || (B.C = {});
         (function (C) {
             var XYZ = X.Y.Z;
             function ping(x) {
@@ -26,10 +26,10 @@ var A;
                     XYZ.pong(x - 1);
             }
             C.ping = ping;
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
-var X;
+        })(C);
+    })(B);
+})(A);
+var X = X || (X = {});
 (function (X) {
     var ABC = A.B.C;
     function pong(x) {
@@ -37,4 +37,4 @@ var X;
             ABC.ping(x - 1);
     }
     X.pong = pong;
-})(X || (X = {}));
+})(X);

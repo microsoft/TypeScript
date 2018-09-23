@@ -5,10 +5,10 @@ module m1 {
 
 
 //// [stringLiteralObjectLiteralDeclaration1.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     m1.n = { 'foo bar': 4 };
-})(m1 || (m1 = {}));
+})(m1);
 
 
 //// [stringLiteralObjectLiteralDeclaration1.d.ts]

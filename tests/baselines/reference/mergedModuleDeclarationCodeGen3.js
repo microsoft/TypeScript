@@ -9,22 +9,22 @@ module my.data.foo {
 }
 
 //// [mergedModuleDeclarationCodeGen3.js]
-var my;
+var my = my || (my = {});
 (function (my) {
-    var data;
+    var data = my.data || (my.data = {});
     (function (data) {
         function buz() { }
         data.buz = buz;
-    })(data = my.data || (my.data = {}));
-})(my || (my = {}));
+    })(data);
+})(my);
 (function (my_1) {
-    var data;
+    var data = my_1.data || (my_1.data = {});
     (function (data_1) {
-        var foo;
+        var foo = data_1.foo || (data_1.foo = {});
         (function (foo_1) {
             function data(my, foo) {
                 data_1.buz();
             }
-        })(foo = data_1.foo || (data_1.foo = {}));
-    })(data = my_1.data || (my_1.data = {}));
-})(my || (my = {}));
+        })(foo);
+    })(data);
+})(my);

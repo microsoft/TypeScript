@@ -19,4 +19,4 @@ function Foo() {
 }
 exports.default = Foo;
 (function (Foo) {
-})(Foo || (Foo = {}));
+})(Foo);

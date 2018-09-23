@@ -148,7 +148,7 @@ var b = /** @class */ (function (_super) {
     }
     return b;
 }(a));
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var b = /** @class */ (function () {
         function b() {
@@ -161,10 +161,10 @@ var m1;
         }
         return d;
     }());
-})(m1 || (m1 = {}));
-var m2;
+})(m1);
+var m2 = m2 || (m2 = {});
 (function (m2) {
-    var m3;
+    var m3 = m2.m3 || (m2.m3 = {});
     (function (m3) {
         var c = /** @class */ (function (_super) {
             __extends(c, _super);
@@ -180,8 +180,8 @@ var m2;
             return ib2;
         }());
         m3.ib2 = ib2;
-    })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 || (m2 = {}));
+    })(m3);
+})(m2);
 var c = /** @class */ (function (_super) {
     __extends(c, _super);
     function c() {

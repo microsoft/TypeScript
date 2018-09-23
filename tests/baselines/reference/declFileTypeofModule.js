@@ -13,14 +13,14 @@ var m2_1 = m2;
 var m2_2: typeof m2;
 
 //// [declFileTypeofModule.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
-})(m1 || (m1 = {}));
+})(m1);
 var m1_1 = m1;
 var m1_2;
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
-})(m2 || (m2 = {}));
+})(m2);
 var m2_1 = m2;
 var m2_2;
 

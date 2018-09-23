@@ -6,4 +6,4 @@ class C {
 C.bar = 20;
 (function (C) {
     C.x = 10;
-})(C || (C = {}));
+})(C);

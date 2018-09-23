@@ -17,10 +17,10 @@ const snb: string | number | boolean = item[e];
 
 
 //// [stringEnumInElementAccess01.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E["A"] = "a";
     E["B"] = "b";
     E["C"] = "c";
-})(E || (E = {}));
+})(E);
 var snb = item[e];

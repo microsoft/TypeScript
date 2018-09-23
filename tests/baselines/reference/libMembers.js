@@ -21,7 +21,7 @@ s.substring(0);
 s.substring(3, 4);
 s.subby(12); // error unresolved
 String.fromCharCode(12);
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -33,4 +33,4 @@ var M;
     a.length;
     a.push(new C());
     (new C()).prototype;
-})(M || (M = {}));
+})(M);

@@ -166,12 +166,12 @@ var r8b6 = f !== null;
 var r8b7 = g !== null;
 
 //// [comparisonOperatorWithOneOperandIsNull.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
-})(E || (E = {}));
+})(E);
 function foo(t) {
     var foo_r1 = t < null;
     var foo_r2 = t > null;

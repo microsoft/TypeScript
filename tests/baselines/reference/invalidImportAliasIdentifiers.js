@@ -34,10 +34,10 @@ var C = /** @class */ (function () {
     return C;
 }());
 var c = C;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["Red"] = 0] = "Red";
     E[E["Blue"] = 1] = "Blue";
-})(E || (E = {}));
+})(E);
 var e = E;
 var i = I;

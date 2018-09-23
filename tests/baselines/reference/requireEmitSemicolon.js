@@ -23,7 +23,7 @@ export module Database {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Models;
+    var Models = {};
     (function (Models) {
         var Person = /** @class */ (function () {
             function Person(name) {
@@ -31,13 +31,13 @@ define(["require", "exports"], function (require, exports) {
             return Person;
         }());
         Models.Person = Person;
-    })(Models = exports.Models || (exports.Models = {}));
+    })(Models);
 });
 //// [requireEmitSemicolon_1.js]
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
     "use strict";
     exports.__esModule = true;
-    var Database;
+    var Database = {};
     (function (Database) {
         var DB = /** @class */ (function () {
             function DB() {
@@ -48,5 +48,5 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
             return DB;
         }());
         Database.DB = DB;
-    })(Database = exports.Database || (exports.Database = {}));
+    })(Database);
 });

@@ -5,7 +5,7 @@ enum Bar {
 
 
 //// [parserInterfaceKeywordInEnum.js]
-var Bar;
+var Bar = Bar || (Bar = {});
 (function (Bar) {
     Bar[Bar["interface"] = 0] = "interface";
-})(Bar || (Bar = {}));
+})(Bar);

@@ -49,14 +49,14 @@ var C = /** @class */ (function () {
     return C;
 }());
 function f1() { }
-var M;
+var M = M || (M = {});
 (function (M) {
     M.y = 1;
-})(M || (M = {}));
-var E;
+})(M);
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var a = {
     a: 1,
     b: '',

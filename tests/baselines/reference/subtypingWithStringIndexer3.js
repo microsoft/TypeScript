@@ -77,7 +77,7 @@ var B2 = /** @class */ (function (_super) {
     }
     return B2;
 }(A));
-var Generics;
+var Generics = Generics || (Generics = {});
 (function (Generics) {
     var A = /** @class */ (function () {
         function A() {
@@ -119,4 +119,4 @@ var Generics;
         }
         return B5;
     }(A));
-})(Generics || (Generics = {}));
+})(Generics);

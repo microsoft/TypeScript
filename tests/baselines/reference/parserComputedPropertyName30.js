@@ -6,9 +6,9 @@ enum E {
 }
 
 //// [parserComputedPropertyName30.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     // no ASI, comma expected
     E[E[e] = id++] = e;
     E[E[e2] = 1] = e2;
-})(E || (E = {}));
+})(E);

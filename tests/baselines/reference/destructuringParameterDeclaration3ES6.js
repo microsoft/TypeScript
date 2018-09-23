@@ -69,11 +69,11 @@ a11([1, 2]); // Parameter type is number[]
 function foo(...a) { }
 foo("hello", 1, 2);
 foo("hello", "world");
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 function foo1(...a) { }
 foo1(1, 2, 3, E.a);
 foo1(1, 2, 3, 0 /* a */, E.b);

@@ -7,9 +7,9 @@ var x = E;
 var x = E.a;
 
 //// [duplicateLocalVariable4.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
-})(E || (E = {}));
+})(E);
 var x = E;
 var x = E.a;

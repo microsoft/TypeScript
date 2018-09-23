@@ -19,18 +19,18 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     exports.x = 1; // Makes this an external module 
-    var Q;
+    var Q = {};
     (function (Q) {
         function foo(x) {
             return x;
         }
         Q.foo = foo;
-    })(Q || (Q = {}));
+    })(Q);
     (function (Q) {
         function bar() {
             Q.foo(null);
         }
-    })(Q || (Q = {}));
+    })(Q);
 });
 
 

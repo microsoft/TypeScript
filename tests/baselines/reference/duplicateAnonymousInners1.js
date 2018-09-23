@@ -26,7 +26,7 @@ module Foo {
 
 
 //// [duplicateAnonymousInners1.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var Helper = /** @class */ (function () {
         function Helper() {
@@ -40,7 +40,7 @@ var Foo;
     }());
     // Inner should show up in intellisense
     Foo.Outer = 0;
-})(Foo || (Foo = {}));
+})(Foo);
 (function (Foo) {
     // Should not be an error
     var Helper = /** @class */ (function () {
@@ -50,4 +50,4 @@ var Foo;
     }());
     // Inner should not show up in intellisense
     // Outer should show up in intellisense
-})(Foo || (Foo = {}));
+})(Foo);

@@ -744,7 +744,7 @@ define(["require", "exports"], function (require, exports) {
         });
         return C;
     }());
-    var M;
+    var M = {};
     (function (M_1) {
         var V;
         function F() { }
@@ -793,7 +793,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return C;
         }());
-        var M;
+        var M = M || (M = {});
         (function (M) {
             var V;
             function F() { }
@@ -821,7 +821,7 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(M || (M = {}));
+        })(M);
         function eF() { }
         M_1.eF = eF;
         ;
@@ -870,7 +870,7 @@ define(["require", "exports"], function (require, exports) {
             return eC;
         }());
         M_1.eC = eC;
-        var eM;
+        var eM = M_1.eM || (M_1.eM = {});
         (function (eM) {
             var V;
             function F() { }
@@ -898,9 +898,9 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(eM = M_1.eM || (M_1.eM = {}));
+        })(eM);
         ;
-    })(M || (M = {}));
+    })(M);
     function eF() { }
     exports.eF = eF;
     ;
@@ -949,7 +949,7 @@ define(["require", "exports"], function (require, exports) {
         return eC;
     }());
     exports.eC = eC;
-    var eM;
+    var eM = {};
     (function (eM_1) {
         var V;
         function F() { }
@@ -998,7 +998,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return C;
         }());
-        var M;
+        var M = M || (M = {});
         (function (M) {
             var V;
             function F() { }
@@ -1026,7 +1026,7 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(M || (M = {}));
+        })(M);
         function eF() { }
         eM_1.eF = eF;
         ;
@@ -1075,7 +1075,7 @@ define(["require", "exports"], function (require, exports) {
             return eC;
         }());
         eM_1.eC = eC;
-        var eM;
+        var eM = eM_1.eM || (eM_1.eM = {});
         (function (eM) {
             var V;
             function F() { }
@@ -1103,9 +1103,9 @@ define(["require", "exports"], function (require, exports) {
             ;
             ;
             ;
-        })(eM = eM_1.eM || (eM_1.eM = {}));
+        })(eM);
         ;
-    })(eM = exports.eM || (exports.eM = {}));
+    })(eM);
     ;
 });
 

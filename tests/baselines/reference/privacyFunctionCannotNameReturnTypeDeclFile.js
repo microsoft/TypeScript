@@ -176,7 +176,7 @@ function createWidget1() {
     return new Widget1();
 }
 exports.createWidget1 = createWidget1;
-var SpecializedWidget;
+var SpecializedWidget = {};
 (function (SpecializedWidget) {
     var Widget2 = /** @class */ (function () {
         function Widget2() {
@@ -189,7 +189,7 @@ var SpecializedWidget;
         return new Widget2();
     }
     SpecializedWidget.createWidget2 = createWidget2;
-})(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
+})(SpecializedWidget);
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 "use strict";
 exports.__esModule = true;

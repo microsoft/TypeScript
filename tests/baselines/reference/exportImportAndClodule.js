@@ -20,7 +20,7 @@ var p: { x: number; y: number; }
 var p: M.D.Point;
 
 //// [exportImportAndClodule.js]
-var K;
+var K = K || (K = {});
 (function (K) {
     var L = /** @class */ (function () {
         function L(name) {
@@ -31,12 +31,12 @@ var K;
     K.L = L;
     (function (L) {
         L.y = 12;
-    })(L = K.L || (K.L = {}));
-})(K || (K = {}));
-var M;
+    })(L);
+})(K);
+var M = M || (M = {});
 (function (M) {
     M.D = K.L;
-})(M || (M = {}));
+})(M);
 var o;
 var o = new M.D('Hello');
 var p;

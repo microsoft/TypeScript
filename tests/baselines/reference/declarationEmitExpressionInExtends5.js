@@ -34,7 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var SomeClass = /** @class */ (function () {
         function SomeClass() {
@@ -54,7 +54,7 @@ var Test;
         return SomeClass;
     }
     Test.getClass = getClass;
-})(Test || (Test = {}));
+})(Test);
 
 
 //// [declarationEmitExpressionInExtends5.d.ts]

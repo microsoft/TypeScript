@@ -236,7 +236,7 @@ var privateClassWithTypeParametersFromPrivateModule = /** @class */ (function ()
     };
     return privateClassWithTypeParametersFromPrivateModule;
 }());
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClassInPublicModule = /** @class */ (function () {
         function privateClassInPublicModule() {
@@ -317,8 +317,8 @@ var publicModule;
         };
         return privateClassWithTypeParametersFromPrivateModule;
     }());
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClassInPrivateModule = /** @class */ (function () {
         function privateClassInPrivateModule() {
@@ -382,7 +382,7 @@ var privateModule;
         };
         return privateClassWithPublicTypeParametersWithoutExtends;
     }());
-})(privateModule || (privateModule = {}));
+})(privateModule);
 
 
 //// [privacyTypeParametersOfClassDeclFile.d.ts]

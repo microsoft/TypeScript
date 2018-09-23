@@ -58,10 +58,10 @@ var y = /** @class */ (function () {
 module.exports = x;
 //// [foo3.js]
 "use strict";
-var x;
+var x = {};
 (function (x_1) {
     x_1.x = 10;
-})(x || (x = {}));
+})(x);
 var y = /** @class */ (function () {
     function y() {
     }

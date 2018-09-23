@@ -37,10 +37,10 @@ var c = null;
 var d = null;
 var e = null;
 e = null; // ok
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 E.A = null; // error
 var C = /** @class */ (function () {
     function C() {
@@ -53,10 +53,10 @@ C = null; // error
 var g;
 g = null; // ok
 I = null; // error
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 M = null; // error
 var h = null;
 function i(a) {

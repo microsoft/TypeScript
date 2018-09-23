@@ -20,7 +20,7 @@ module consumer {
 
 
 //// [innerAliases2.js]
-var _provider;
+var _provider = _provider || (_provider = {});
 (function (_provider) {
     var UsefulClass = /** @class */ (function () {
         function UsefulClass() {
@@ -30,8 +30,8 @@ var _provider;
         return UsefulClass;
     }());
     _provider.UsefulClass = UsefulClass;
-})(_provider || (_provider = {}));
-var consumer;
+})(_provider);
+var consumer = consumer || (consumer = {});
 (function (consumer) {
     var provider = _provider;
     var g = null;
@@ -39,4 +39,4 @@ var consumer;
         var p2 = new provider.UsefulClass();
         return p2;
     }
-})(consumer || (consumer = {}));
+})(consumer);

@@ -6,7 +6,7 @@ module Tools {
 var logger = Tools.NullLogger();
 
 //// [forgottenNew.js]
-var Tools;
+var Tools = Tools || (Tools = {});
 (function (Tools) {
     var NullLogger = /** @class */ (function () {
         function NullLogger() {
@@ -14,5 +14,5 @@ var Tools;
         return NullLogger;
     }());
     Tools.NullLogger = NullLogger;
-})(Tools || (Tools = {}));
+})(Tools);
 var logger = Tools.NullLogger();

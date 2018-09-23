@@ -29,9 +29,9 @@ label: function gen1() {
     return __awaiter(this, void 0, void 0, function* () { });
 }
 label: {
-    var E;
+    var E = E || (E = {});
     (function (E) {
-    })(E || (E = {}));
+    })(E);
 }
 label: 
 label: class C {

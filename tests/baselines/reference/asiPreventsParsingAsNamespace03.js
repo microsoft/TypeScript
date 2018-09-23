@@ -11,9 +11,9 @@ namespace container {
 //// [asiPreventsParsingAsNamespace03.js]
 var namespace;
 var n;
-var container;
+var container = container || (container = {});
 (function (container) {
     namespace; // this is the identifier 'namespace'
     n; // this is the identifier 'n'
     { } // this is a block body
-})(container || (container = {}));
+})(container);

@@ -121,7 +121,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var EmptyTypes;
+var EmptyTypes = EmptyTypes || (EmptyTypes = {});
 (function (EmptyTypes) {
     var base = /** @class */ (function () {
         function base() {
@@ -179,8 +179,8 @@ var EmptyTypes;
         };
         return f;
     }());
-})(EmptyTypes || (EmptyTypes = {}));
-var NonEmptyTypes;
+})(EmptyTypes);
+var NonEmptyTypes = NonEmptyTypes || (NonEmptyTypes = {});
 (function (NonEmptyTypes) {
     var base = /** @class */ (function () {
         function base() {
@@ -238,4 +238,4 @@ var NonEmptyTypes;
         };
         return f;
     }());
-})(NonEmptyTypes || (NonEmptyTypes = {}));
+})(NonEmptyTypes);

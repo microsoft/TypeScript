@@ -93,7 +93,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Y;
+var Y = Y || (Y = {});
 (function (Y) {
     var A = /** @class */ (function () {
         function A() {
@@ -107,8 +107,8 @@ var Y;
         }
         return BB;
     }(A));
-})(Y || (Y = {}));
-var Y2;
+})(Y);
+var Y2 = Y2 || (Y2 = {});
 (function (Y2) {
     var AA = /** @class */ (function () {
         function AA() {
@@ -122,27 +122,27 @@ var Y2;
         }
         return B;
     }(AA));
-})(Y2 || (Y2 = {}));
-var Y3;
+})(Y2);
+var Y3 = Y3 || (Y3 = {});
 (function (Y3) {
-    var Module;
+    var Module = Module || (Module = {});
     (function (Module) {
         var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
-    })(Module || (Module = {}));
-})(Y3 || (Y3 = {}));
-var Y4;
+    })(Module);
+})(Y3);
+var Y4 = Y4 || (Y4 = {});
 (function (Y4) {
-    var Color;
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color || (Color = {}));
-})(Y4 || (Y4 = {}));
-var YY;
+    })(Color);
+})(Y4);
+var YY = YY || (YY = {});
 (function (YY) {
     var A = /** @class */ (function () {
         function A() {
@@ -156,8 +156,8 @@ var YY;
         }
         return BB;
     }(A));
-})(YY || (YY = {}));
-var YY2;
+})(YY);
+var YY2 = YY2 || (YY2 = {});
 (function (YY2) {
     var AA = /** @class */ (function () {
         function AA() {
@@ -171,27 +171,27 @@ var YY2;
         }
         return B;
     }(AA));
-})(YY2 || (YY2 = {}));
-var YY3;
+})(YY2);
+var YY3 = YY3 || (YY3 = {});
 (function (YY3) {
-    var Module;
+    var Module = Module || (Module = {});
     (function (Module) {
         var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
-    })(Module || (Module = {}));
-})(YY3 || (YY3 = {}));
-var YY4;
+    })(Module);
+})(YY3);
+var YY4 = YY4 || (YY4 = {});
 (function (YY4) {
-    var Color;
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color || (Color = {}));
-})(YY4 || (YY4 = {}));
-var YYY;
+    })(Color);
+})(YY4);
+var YYY = YYY || (YYY = {});
 (function (YYY) {
     var A = /** @class */ (function () {
         function A() {
@@ -205,8 +205,8 @@ var YYY;
         }
         return BB;
     }(A));
-})(YYY || (YYY = {}));
-var YYY2;
+})(YYY);
+var YYY2 = YYY2 || (YYY2 = {});
 (function (YYY2) {
     var AA = /** @class */ (function () {
         function AA() {
@@ -220,23 +220,23 @@ var YYY2;
         }
         return B;
     }(AA));
-})(YYY2 || (YYY2 = {}));
-var YYY3;
+})(YYY2);
+var YYY3 = YYY3 || (YYY3 = {});
 (function (YYY3) {
-    var Module;
+    var Module = Module || (Module = {});
     (function (Module) {
         var A = /** @class */ (function () {
             function A() {
             }
             return A;
         }());
-    })(Module || (Module = {}));
-})(YYY3 || (YYY3 = {}));
-var YYY4;
+    })(Module);
+})(YYY3);
+var YYY4 = YYY4 || (YYY4 = {});
 (function (YYY4) {
-    var Color;
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color || (Color = {}));
-})(YYY4 || (YYY4 = {}));
+    })(Color);
+})(YYY4);

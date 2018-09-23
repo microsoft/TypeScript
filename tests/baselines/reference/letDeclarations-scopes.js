@@ -247,7 +247,7 @@ var F3 = function () {
     n = l;
 };
 // modules
-var m;
+var m = m || (m = {});
 (function (m) {
     let l = 0;
     n = l;
@@ -256,7 +256,7 @@ var m;
         var b2 = l;
     }
     lable: let l2 = 0;
-})(m || (m = {}));
+})(m);
 // methods
 class C {
     constructor() {

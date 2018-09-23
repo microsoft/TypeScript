@@ -13,14 +13,14 @@ module M{
 
 
 //// [unexportedInstanceClassVariables.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A(val) {
         }
         return A;
     }());
-})(M || (M = {}));
+})(M);
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -28,4 +28,4 @@ var M;
         return A;
     }());
     var a = new A();
-})(M || (M = {}));
+})(M);

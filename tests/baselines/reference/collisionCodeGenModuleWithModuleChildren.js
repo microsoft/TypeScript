@@ -43,17 +43,17 @@ module M {
 }
 
 //// [collisionCodeGenModuleWithModuleChildren.js]
-var M;
+var M = M || (M = {});
 (function (M_1) {
     M_1.x = 3;
-    var m1;
+    var m1 = m1 || (m1 = {});
     (function (m1) {
         var M = 10;
         var p = M_1.x;
-    })(m1 || (m1 = {}));
-})(M || (M = {}));
+    })(m1);
+})(M);
 (function (M_2) {
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var M = /** @class */ (function () {
             function M() {
@@ -62,30 +62,30 @@ var M;
         }());
         var p = M_2.x;
         var p2 = new M();
-    })(m2 || (m2 = {}));
-})(M || (M = {}));
+    })(m2);
+})(M);
 (function (M_3) {
-    var m3;
+    var m3 = m3 || (m3 = {});
     (function (m3) {
         function M() {
         }
         var p = M_3.x;
         var p2 = M();
-    })(m3 || (m3 = {}));
-})(M || (M = {}));
+    })(m3);
+})(M);
 (function (M) {
-    var m3;
+    var m3 = m3 || (m3 = {});
     (function (m3) {
         var p = M.x;
         var p2;
-    })(m3 || (m3 = {}));
-})(M || (M = {}));
+    })(m3);
+})(M);
 (function (M_4) {
-    var m4;
+    var m4 = m4 || (m4 = {});
     (function (m4) {
-        var M;
+        var M = M || (M = {});
         (function (M) {
             var p = M_4.x;
-        })(M || (M = {}));
-    })(m4 || (m4 = {}));
-})(M || (M = {}));
+        })(M);
+    })(m4);
+})(M);

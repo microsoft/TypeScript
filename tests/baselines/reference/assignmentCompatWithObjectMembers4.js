@@ -106,7 +106,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var OnlyDerived;
+var OnlyDerived = OnlyDerived || (OnlyDerived = {});
 (function (OnlyDerived) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -164,8 +164,8 @@ var OnlyDerived;
     a2 = b; // error
     a2 = t2; // error
     a2 = t; // error
-})(OnlyDerived || (OnlyDerived = {}));
-var WithBase;
+})(OnlyDerived);
+var WithBase = WithBase || (WithBase = {});
 (function (WithBase) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -223,4 +223,4 @@ var WithBase;
     a2 = b; // ok
     a2 = t2; // ok
     a2 = t; // ok
-})(WithBase || (WithBase = {}));
+})(WithBase);

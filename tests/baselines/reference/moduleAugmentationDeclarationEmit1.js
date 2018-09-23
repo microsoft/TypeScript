@@ -34,10 +34,10 @@ let y = x.map(x => x + 1);
 //// [observable.js]
 "use strict";
 exports.__esModule = true;
-var Observable;
+var Observable = {};
 (function (Observable) {
     var someValue;
-})(Observable = exports.Observable || (exports.Observable = {}));
+})(Observable);
 //// [map.js]
 "use strict";
 exports.__esModule = true;

@@ -22,7 +22,7 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 ///<reference path='reuseInnerModuleMember_0.ts'/>
-var bar;
+var bar = {};
 (function (bar) {
     var x;
-})(bar || (bar = {}));
+})(bar);

@@ -30,7 +30,7 @@ var fn2 = A.fn2;
 var fng2 = A.fng2;
 
 //// [ModuleWithExportedAndNonExportedFunctions.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function fn(s) {
         return true;
@@ -46,7 +46,7 @@ var A;
     function fng2(s) {
         return null;
     }
-})(A || (A = {}));
+})(A);
 // these should not be errors since the functions are exported
 var fn;
 var fn = A.fn;

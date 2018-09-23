@@ -18,7 +18,7 @@ export module m2 {
 //// [internalAliasClassInsideLocalModuleWithoutExport.js]
 "use strict";
 exports.__esModule = true;
-var x;
+var x = {};
 (function (x) {
     var c = /** @class */ (function () {
         function c() {
@@ -29,16 +29,16 @@ var x;
         return c;
     }());
     x.c = c;
-})(x = exports.x || (exports.x = {}));
-var m2;
+})(x);
+var m2 = {};
 (function (m2) {
-    var m3;
+    var m3 = m2.m3 || (m2.m3 = {});
     (function (m3) {
         var c = x.c;
         m3.cProp = new c();
         var cReturnVal = m3.cProp.foo(10);
-    })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 = exports.m2 || (exports.m2 = {}));
+    })(m3);
+})(m2);
 
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]

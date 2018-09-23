@@ -32,25 +32,25 @@ module Foo3 {
 }
 
 //// [moduleAndInterfaceWithSameName.js]
-var Foo1;
+var Foo1 = Foo1 || (Foo1 = {});
 (function (Foo1) {
-    var Bar;
+    var Bar = Foo1.Bar || (Foo1.Bar = {});
     (function (Bar) {
         Bar.x = 42;
-    })(Bar = Foo1.Bar || (Foo1.Bar = {}));
-})(Foo1 || (Foo1 = {}));
-var Foo2;
+    })(Bar);
+})(Foo1);
+var Foo2 = Foo2 || (Foo2 = {});
 (function (Foo2) {
-    var Bar;
+    var Bar = Bar || (Bar = {});
     (function (Bar) {
         Bar.x = 42;
-    })(Bar || (Bar = {}));
-})(Foo2 || (Foo2 = {}));
+    })(Bar);
+})(Foo2);
 var z2 = Foo2.Bar.y; // Error for using interface name as a value.
-var Foo3;
+var Foo3 = Foo3 || (Foo3 = {});
 (function (Foo3) {
-    var Bar;
+    var Bar = Foo3.Bar || (Foo3.Bar = {});
     (function (Bar) {
         Bar.x = 42;
-    })(Bar = Foo3.Bar || (Foo3.Bar = {}));
-})(Foo3 || (Foo3 = {}));
+    })(Bar);
+})(Foo3);

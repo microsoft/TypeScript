@@ -132,7 +132,7 @@ module GenericSignaturesValid {
 
 //// [assignmentCompatWithGenericCallSignaturesWithOptionalParameters.js]
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
-var ClassTypeParam;
+var ClassTypeParam = ClassTypeParam || (ClassTypeParam = {});
 (function (ClassTypeParam) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -160,8 +160,8 @@ var ClassTypeParam;
         }
         return Base;
     }());
-})(ClassTypeParam || (ClassTypeParam = {}));
-var GenericSignaturesInvalid;
+})(ClassTypeParam);
+var GenericSignaturesInvalid = GenericSignaturesInvalid || (GenericSignaturesInvalid = {});
 (function (GenericSignaturesInvalid) {
     var Base2 = /** @class */ (function () {
         function Base2() {
@@ -203,8 +203,8 @@ var GenericSignaturesInvalid;
         b.a5 = t.a4;
         b.a5 = t.a5;
     }
-})(GenericSignaturesInvalid || (GenericSignaturesInvalid = {}));
-var GenericSignaturesValid;
+})(GenericSignaturesInvalid);
+var GenericSignaturesValid = GenericSignaturesValid || (GenericSignaturesValid = {});
 (function (GenericSignaturesValid) {
     var Base2 = /** @class */ (function () {
         function Base2() {
@@ -232,4 +232,4 @@ var GenericSignaturesValid;
         }
         return Base2;
     }());
-})(GenericSignaturesValid || (GenericSignaturesValid = {}));
+})(GenericSignaturesValid);

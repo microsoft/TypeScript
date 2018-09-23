@@ -4,7 +4,7 @@ enum E {
 }
 
 //// [enumWithParenthesizedInitializer1.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["e"] = -3] = "e";
-})(E || (E = {}));
+})(E);

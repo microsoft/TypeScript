@@ -1,12 +1,12 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var outer;
+    var outer = {};
     (function (outer) {
-        var inner;
+        var inner = outer.inner || (outer.inner = {});
         (function (inner) {
             var local = 1;
             inner.a = local;
-        })(inner = outer.inner || (outer.inner = {}));
-    })(outer = exports.outer || (exports.outer = {}));
+        })(inner);
+    })(outer);
 });

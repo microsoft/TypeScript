@@ -156,16 +156,16 @@ var rj12 = 1 | E.b;
 
 //// [arithmeticOperatorWithEnumUnion.js]
 // operands of an enum type are treated as having the primitive type Number.
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
-var F;
+})(E);
+var F = F || (F = {});
 (function (F) {
     F[F["c"] = 0] = "c";
     F[F["d"] = 1] = "d";
-})(F || (F = {}));
+})(F);
 var a;
 var b;
 var c;

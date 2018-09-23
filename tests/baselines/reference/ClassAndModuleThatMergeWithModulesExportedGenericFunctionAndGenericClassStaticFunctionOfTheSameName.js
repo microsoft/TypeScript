@@ -28,4 +28,4 @@ var clodule = /** @class */ (function () {
         return x;
     }
     clodule.fn = fn;
-})(clodule || (clodule = {}));
+})(clodule);

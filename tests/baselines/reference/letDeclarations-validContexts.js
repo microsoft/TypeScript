@@ -211,13 +211,13 @@ var F3 = function () {
     let l21 = 0;
 };
 // modules
-var m;
+var m = m || (m = {});
 (function (m) {
     let l22 = 0;
     {
         let l23 = 0;
     }
-})(m || (m = {}));
+})(m);
 // methods
 class C {
     constructor() {
@@ -254,10 +254,10 @@ function f3() {
         label2: let l33 = 0;
     }
 }
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
     label: let l34 = 0;
     {
         label2: let l35 = 0;
     }
-})(m3 || (m3 = {}));
+})(m3);

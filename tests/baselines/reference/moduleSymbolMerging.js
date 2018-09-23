@@ -15,15 +15,15 @@ module B {
 //// [A.js]
 //// [B.js]
 ///<reference path="A.ts" />
-var A;
+var A = A || (A = {});
 (function (A) {
     ;
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     function f() { return null; }
     B.f = f;
-})(B || (B = {}));
+})(B);
 
 
 //// [A.d.ts]

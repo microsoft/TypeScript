@@ -67,7 +67,7 @@ module WithCandidates {
 //// [genericClassWithFunctionTypedMemberArguments.js]
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
-var ImmediatelyFix;
+var ImmediatelyFix = ImmediatelyFix || (ImmediatelyFix = {});
 (function (ImmediatelyFix) {
     var C = /** @class */ (function () {
         function C() {
@@ -92,8 +92,8 @@ var ImmediatelyFix;
     var c2 = new C2();
     var ra = c2.foo(function (x) { return 1; }); // number
     var r3a = c2.foo(function (x) { return 1; }); // number
-})(ImmediatelyFix || (ImmediatelyFix = {}));
-var WithCandidates;
+})(ImmediatelyFix);
+var WithCandidates = WithCandidates || (WithCandidates = {});
 (function (WithCandidates) {
     var C = /** @class */ (function () {
         function C() {
@@ -134,4 +134,4 @@ var WithCandidates;
         var r11b = c3.foo3(1, function (x) { return ''; }, 1); // error
         var r12 = c3.foo3(1, function (a) { return ''; }, 1); // error
     }
-})(WithCandidates || (WithCandidates = {}));
+})(WithCandidates);

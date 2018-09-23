@@ -31,12 +31,13 @@ System.register(["foo"], function (exports_1, context_1) {
             x = new foo_1.alias.Class();
             y = new cls();
             z = new cls2();
+            M = {};
             (function (M) {
                 M.cls = foo_1.alias.Class;
                 var x = new foo_1.alias.Class();
                 var y = new M.cls();
                 var z = new cls2();
-            })(M || (M = {}));
+            })(M);
         }
     };
 });

@@ -118,13 +118,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Sample;
+var Sample = Sample || (Sample = {});
 (function (Sample) {
-    var Actions;
+    var Actions = Sample.Actions || (Sample.Actions = {});
     (function (Actions) {
-        var Thing;
+        var Thing = Actions.Thing || (Actions.Thing = {});
         (function (Thing_1) {
-            var Find;
+            var Find = Thing_1.Find || (Thing_1.Find = {});
             (function (Find) {
                 var StartFindAction = /** @class */ (function () {
                     function StartFindAction() {
@@ -136,14 +136,14 @@ var Sample;
                     return StartFindAction;
                 }());
                 Find.StartFindAction = StartFindAction;
-            })(Find = Thing_1.Find || (Thing_1.Find = {}));
-        })(Thing = Actions.Thing || (Actions.Thing = {}));
-    })(Actions = Sample.Actions || (Sample.Actions = {}));
-})(Sample || (Sample = {}));
+            })(Find);
+        })(Thing);
+    })(Actions);
+})(Sample);
 (function (Sample) {
-    var Thing;
+    var Thing = Sample.Thing || (Sample.Thing = {});
     (function (Thing) {
-        var Widgets;
+        var Widgets = Thing.Widgets || (Thing.Widgets = {});
         (function (Widgets) {
             var FindWidget = /** @class */ (function () {
                 function FindWidget(codeThing) {
@@ -163,9 +163,9 @@ var Sample;
                 return FindWidget;
             }());
             Widgets.FindWidget = FindWidget;
-        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
-    })(Thing = Sample.Thing || (Sample.Thing = {}));
-})(Sample || (Sample = {}));
+        })(Widgets);
+    })(Thing);
+})(Sample);
 var AbstractMode = /** @class */ (function () {
     function AbstractMode() {
     }
@@ -173,11 +173,11 @@ var AbstractMode = /** @class */ (function () {
     return AbstractMode;
 }());
 (function (Sample) {
-    var Thing;
+    var Thing = Sample.Thing || (Sample.Thing = {});
     (function (Thing) {
-        var Languages;
+        var Languages = Thing.Languages || (Thing.Languages = {});
         (function (Languages) {
-            var PlainText;
+            var PlainText = Languages.PlainText || (Languages.PlainText = {});
             (function (PlainText) {
                 var State = /** @class */ (function () {
                     function State(mode) {
@@ -205,8 +205,8 @@ var AbstractMode = /** @class */ (function () {
                     return Mode;
                 }(AbstractMode));
                 PlainText.Mode = Mode;
-            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
-        })(Languages = Thing.Languages || (Thing.Languages = {}));
-    })(Thing = Sample.Thing || (Sample.Thing = {}));
-})(Sample || (Sample = {}));
+            })(PlainText);
+        })(Languages);
+    })(Thing);
+})(Sample);
 //# sourceMappingURL=recursiveClassReferenceTest.js.map

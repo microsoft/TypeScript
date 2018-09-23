@@ -2653,34 +2653,12 @@ namespace ts {
             // `containerName` is the expression used inside of the enum for assignments.
             const containerName = getNamespaceContainerName(node);
 
-            // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
-                ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-            //  x || (x = {})
-            //  exports.x || (exports.x = {})
-            let moduleArg =
-                createLogicalOr(
-                    exportName,
-                    createAssignment(
-                        exportName,
-                        createObjectLiteral()
-                    )
-                );
-
-            if (hasNamespaceQualifiedExportName(node)) {
-                // `localName` is the expression used within this node's containing scope for any local references.
-                const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-                //  x = (exports.x || (exports.x = {}))
-                moduleArg = createAssignment(localName, moduleArg);
-            }
+            const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  (function (x) {
             //      x[x["y"] = 0] = "y";
             //      ...
-            //  })(x || (x = {}));
+            //  })(x);
             const enumStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
@@ -2693,23 +2671,19 @@ namespace ts {
                         transformEnumBody(node, containerName)
                     ),
                     /*typeArguments*/ undefined,
-                    [moduleArg]
+                    [localName]
                 )
             );
 
             setOriginalNode(enumStatement, node);
-            if (varAdded) {
-                // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
-                setSyntheticLeadingComments(enumStatement, undefined);
-                setSyntheticTrailingComments(enumStatement, undefined);
-            }
             setTextRange(enumStatement, node);
+            setCommentRange(enumStatement, node);
             addEmitFlags(enumStatement, emitFlags);
             statements.push(enumStatement);
 
             // Add a DeclarationMarker for the enum to preserve trailing comments and mark
             // the end of the declaration.
-            statements.push(createEndOfDeclarationMarker(node));
+            // statements.push(createEndOfDeclarationMarker(node));
             return statements;
         }
 
@@ -2804,18 +2778,6 @@ namespace ts {
         }
 
         /**
-         * Determines whether an exported declaration will have a qualified export name (e.g. `f.x`
-         * or `exports.x`).
-         */
-        function hasNamespaceQualifiedExportName(node: Node) {
-            return isExportOfNamespace(node)
-                || (isExternalModuleExport(node)
-                    && moduleKind !== ModuleKind.ES2015
-                    && moduleKind !== ModuleKind.ESNext
-                    && moduleKind !== ModuleKind.System);
-        }
-
-        /**
          * Records that a declaration was emitted in the current scope, if it was the first
          * declaration for the provided symbol.
          */
@@ -2851,22 +2813,47 @@ namespace ts {
          * Adds a leading VariableStatement for a enum or module declaration.
          */
         function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
-            // Emit a variable statement for the module. We emit top-level enums as a `var`
-            // declaration to avoid static errors in global scripts scripts due to redeclaration.
-            // enums in any other scope are emitted as a `let` declaration.
-            const statement = createVariableStatement(
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
-                createVariableDeclarationList([
-                    createVariableDeclaration(
-                        getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                    )
-                ], currentLexicalScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
-            );
-
-            setOriginalNode(statement, node);
 
             recordEmittedDeclarationInScope(node);
             if (isFirstEmittedDeclarationInScope(node)) {
+                // Emit a local variable statement for the module. We emit top-level enums as a `var`
+                // declaration to avoid static errors in global scripts scripts due to redeclaration.
+                // enums in any other scope are emitted as a `const` declaration.
+                const nodeModifierFlags = getModifierFlags(node);
+                const nodeIsExportDefault = (nodeModifierFlags & ModifierFlags.Export) && (nodeModifierFlags & ModifierFlags.Default);
+
+                const fileIsExternalModule = isExternalModule(currentSourceFile);
+                const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+                let varInitializer;
+                if (fileIsExternalModule && !currentNamespace) {
+                    // toplevel declaration in an external module
+                    // cannot merge with another var
+                    varInitializer = createObjectLiteral();
+                }
+                else {
+                    const exportName = hasModifier(node, ModifierFlags.Export) && !nodeIsExportDefault
+                        ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
+                        : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+                    varInitializer = createLogicalOr(
+                        exportName,
+                        createAssignment(exportName, createObjectLiteral())
+                    );
+                }
+
+                const statement = createVariableStatement(
+                    visitNodes(node.modifiers, modifierVisitor, isModifier),
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                                localName,
+                                /* type */ undefined,
+                                varInitializer
+                        )
+                    ], currentLexicalScope.kind === SyntaxKind.SourceFile && !fileIsExternalModule ? NodeFlags.None : NodeFlags.Const)
+                );
+
+                setOriginalNode(statement, node);
+
+
                 // Adjust the source map emit to match the old emitter.
                 if (node.kind === SyntaxKind.EnumDeclaration) {
                     setSourceMapRange(statement.declarationList, node);
@@ -2882,31 +2869,27 @@ namespace ts {
                 //     module m1 {
                 //         function foo4Export() {
                 //         }
-                //     } // trailing comment module
+                //     } // trailing module comment
                 //
                 // Should emit:
                 //
                 //     /** Module comment*/
-                //     var m1;
+                //     var m1 = m1 || {};
                 //     (function (m1) {
                 //         function foo4Export() {
                 //         }
-                //     })(m1 || (m1 = {})); // trailing comment module
+                //     })(m1); // trailing module comment
                 //
                 setCommentRange(statement, node);
-                addEmitFlags(statement, EmitFlags.NoTrailingComments | EmitFlags.HasEndOfDeclarationMarker);
+                addEmitFlags(statement, EmitFlags.NoTrailingComments);
                 statements.push(statement);
+                if (nodeIsExportDefault) {
+                    statements.push(createExportAssignment(/* decorators */ undefined, /* modifiers */ undefined, /* isExportEquals */ false, localName));
+                }
+                else if (!currentNamespace && nodeModifierFlags & ModifierFlags.Export) {
+                    statements.push(createExternalModuleExport(localName));
+                }
                 return true;
-            }
-            else {
-                // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
-                // declaration we do not emit a leading variable declaration. To preserve the
-                // begin/end semantics of the declararation and to properly handle exports
-                // we wrap the leading variable declaration in a `MergeDeclarationMarker`.
-                const mergeMarker = createMergeDeclarationMarker(statement);
-                setEmitFlags(mergeMarker, EmitFlags.NoComments | EmitFlags.HasEndOfDeclarationMarker);
-                statements.push(mergeMarker);
-                return false;
             }
         }
 
@@ -2948,33 +2931,11 @@ namespace ts {
             // `containerName` is the expression used inside of the namespace for exports.
             const containerName = getNamespaceContainerName(node);
 
-            // `exportName` is the expression used within this node's container for any exported references.
-            const exportName = hasModifier(node, ModifierFlags.Export)
-                ? getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true)
-                : getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-            //  x || (x = {})
-            //  exports.x || (exports.x = {})
-            let moduleArg =
-                createLogicalOr(
-                    exportName,
-                    createAssignment(
-                        exportName,
-                        createObjectLiteral()
-                    )
-                );
-
-            if (hasNamespaceQualifiedExportName(node)) {
-                // `localName` is the expression used within this node's containing scope for any local references.
-                const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
-
-                //  x = (exports.x || (exports.x = {}))
-                moduleArg = createAssignment(localName, moduleArg);
-            }
+            const localName = getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  (function (x_1) {
             //      x_1.y = ...;
-            //  })(x || (x = {}));
+            //  })(x);
             const moduleStatement = createExpressionStatement(
                 createCall(
                     createFunctionExpression(
@@ -2987,23 +2948,16 @@ namespace ts {
                         transformModuleBody(node, containerName)
                     ),
                     /*typeArguments*/ undefined,
-                    [moduleArg]
+                    [localName]
                 )
             );
 
             setOriginalNode(moduleStatement, node);
-            if (varAdded) {
-                // If a variable was added, synthetic comments are emitted on it, not on the moduleStatement.
-                setSyntheticLeadingComments(moduleStatement, undefined);
-                setSyntheticTrailingComments(moduleStatement, undefined);
-            }
+            setCommentRange(moduleStatement, node);
             setTextRange(moduleStatement, node);
             addEmitFlags(moduleStatement, emitFlags);
             statements.push(moduleStatement);
 
-            // Add a DeclarationMarker for the namespace to preserve trailing comments and mark
-            // the end of the declaration.
-            statements.push(createEndOfDeclarationMarker(node));
             return statements;
         }
 

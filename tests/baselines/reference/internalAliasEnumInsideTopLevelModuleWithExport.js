@@ -15,15 +15,15 @@ export var bVal: b = b.Sunday;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var a;
+    var a = {};
     (function (a) {
-        var weekend;
+        var weekend = a.weekend || (a.weekend = {});
         (function (weekend) {
             weekend[weekend["Friday"] = 0] = "Friday";
             weekend[weekend["Saturday"] = 1] = "Saturday";
             weekend[weekend["Sunday"] = 2] = "Sunday";
-        })(weekend = a.weekend || (a.weekend = {}));
-    })(a = exports.a || (exports.a = {}));
+        })(weekend);
+    })(a);
     exports.b = a.weekend;
     exports.bVal = exports.b.Sunday;
 });

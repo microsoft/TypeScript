@@ -8,15 +8,15 @@ module a.e.f {
 
 
 //// [internalAliasWithDottedNameEmit.js]
-var a;
+var a = a || (a = {});
 (function (a) {
-    var b;
+    var b = a.b || (a.b = {});
     (function (b) {
-        var c;
+        var c = b.c || (b.c = {});
         (function (c) {
-        })(c = b.c || (b.c = {}));
-    })(b = a.b || (a.b = {}));
-})(a || (a = {}));
+        })(c);
+    })(b);
+})(a);
 
 
 //// [internalAliasWithDottedNameEmit.d.ts]

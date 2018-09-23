@@ -43,22 +43,22 @@ module E {
 
 //// [importStatementsInterfaces.js]
 // no code gen expected
-var C;
+var C = C || (C = {});
 (function (C) {
     var m;
     var p;
     var p = { x: 0, y: 0, z: 0 };
-})(C || (C = {}));
+})(C);
 // no code gen expected
-var D;
+var D = D || (D = {});
 (function (D) {
     var p;
-})(D || (D = {}));
+})(D);
 // no code gen expected
-var E;
+var E = E || (E = {});
 (function (E) {
     function xDist(x) {
         return 0 - x.x;
     }
     E.xDist = xDist;
-})(E || (E = {}));
+})(E);

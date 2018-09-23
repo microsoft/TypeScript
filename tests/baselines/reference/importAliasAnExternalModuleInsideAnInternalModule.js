@@ -17,18 +17,18 @@ module m_private {
 //// [importAliasAnExternalModuleInsideAnInternalModule_file0.js]
 "use strict";
 exports.__esModule = true;
-var m;
+var m = {};
 (function (m) {
     function foo() { }
     m.foo = foo;
-})(m = exports.m || (exports.m = {}));
+})(m);
 //// [importAliasAnExternalModuleInsideAnInternalModule_file1.js]
 "use strict";
 exports.__esModule = true;
 var r = require("./importAliasAnExternalModuleInsideAnInternalModule_file0");
-var m_private;
+var m_private = {};
 (function (m_private) {
     //import r2 = require('m'); // would be error
     m_private.C = r; // no error
     m_private.C.m.foo();
-})(m_private || (m_private = {}));
+})(m_private);

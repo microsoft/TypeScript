@@ -14,11 +14,11 @@ y.m.foo();
 //// [chainedImportAlias_file0.js]
 "use strict";
 exports.__esModule = true;
-var m;
+var m = {};
 (function (m) {
     function foo() { }
     m.foo = foo;
-})(m = exports.m || (exports.m = {}));
+})(m);
 //// [chainedImportAlias_file1.js]
 "use strict";
 exports.__esModule = true;

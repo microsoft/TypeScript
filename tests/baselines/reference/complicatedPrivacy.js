@@ -105,9 +105,9 @@ module mglo5 {
 
 
 //// [complicatedPrivacy.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
-    var m2;
+    var m2 = m1.m2 || (m1.m2 = {});
     (function (m2) {
         function f1(c1) {
         }
@@ -133,7 +133,7 @@ var m1;
             return C2;
         }());
         m2.C2 = C2;
-    })(m2 = m1.m2 || (m1.m2 = {}));
+    })(m2);
     function f2(arg1) {
     }
     m1.f2 = f2;
@@ -147,11 +147,11 @@ var m1;
     function f5(arg2) {
     }
     m1.f5 = f5;
-    var m3;
+    var m3 = m3 || (m3 = {});
     (function (m3) {
         function f2(f1) {
         }
-    })(m3 || (m3 = {}));
+    })(m3);
     var C1 = /** @class */ (function () {
         function C1() {
         }
@@ -163,15 +163,15 @@ var m1;
         return C5;
     }());
     m1.C5 = C5;
-})(m1 || (m1 = {}));
+})(m1);
 var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
-    var m3;
+    var m3 = m2.m3 || (m2.m3 = {});
     (function (m3) {
         var c_pr = /** @class */ (function () {
             function c_pr() {
@@ -182,22 +182,22 @@ var m2;
             return c_pr;
         }());
         m3.c_pr = c_pr;
-        var m4;
+        var m4 = m4 || (m4 = {});
         (function (m4) {
             var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
             }());
-            var m5;
+            var m5 = m5 || (m5 = {});
             (function (m5) {
-                var m6;
+                var m6 = m5.m6 || (m5.m6 = {});
                 (function (m6) {
                     function f1() {
                         return new C();
                     }
-                })(m6 = m5.m6 || (m5.m6 = {}));
-            })(m5 || (m5 = {}));
-        })(m4 || (m4 = {}));
-    })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 || (m2 = {}));
+                })(m6);
+            })(m5);
+        })(m4);
+    })(m3);
+})(m2);

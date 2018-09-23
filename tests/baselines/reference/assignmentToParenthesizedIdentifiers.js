@@ -77,9 +77,9 @@ x = 3; // OK
 (x) = 3; // OK
 x = ''; // Error
 (x) = ''; // Error
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 M.y = 3; // OK
 (M).y = 3; // OK
 (M.y) = 3; // OK
@@ -88,13 +88,13 @@ M.y = ''; // Error
 (M.y) = ''; // Error
 M = { y: 3 }; // Error
 (M) = { y: 3 }; // Error
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
-    var M3;
+    var M3 = M2.M3 || (M2.M3 = {});
     (function (M3) {
-    })(M3 = M2.M3 || (M2.M3 = {}));
+    })(M3);
     M3 = { x: 3 }; // Error
-})(M2 || (M2 = {}));
+})(M2);
 M2.M3 = { x: 3 }; // OK
 (M2).M3 = { x: 3 }; // OK
 (M2.M3) = { x: 3 }; // OK
@@ -120,10 +120,10 @@ function fn2(x, y) {
     (y)['t'] = ''; // Error
     (y['t']) = ''; // Error
 }
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 E = undefined; // Error
 (E) = undefined; // Error
 var C = /** @class */ (function () {

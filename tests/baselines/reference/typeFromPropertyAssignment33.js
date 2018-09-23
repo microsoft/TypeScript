@@ -34,7 +34,7 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 
 
 //// [ns.js]
-var ExpandoMerge;
+var ExpandoMerge = ExpandoMerge || (ExpandoMerge = {});
 (function (ExpandoMerge) {
     ExpandoMerge.p3 = 333;
     ExpandoMerge.p4 = 4;
@@ -43,10 +43,10 @@ var ExpandoMerge;
     ExpandoMerge.p7 = 7;
     ExpandoMerge.p8 = 6;
     ExpandoMerge.p9 = 7;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 (function (ExpandoMerge) {
     ExpandoMerge.p2 = 222;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 //// [expando.js]
 function ExpandoMerge(n) {
     return n;

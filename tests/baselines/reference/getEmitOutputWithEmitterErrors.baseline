@@ -1,7 +1,7 @@
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/inputFile.js
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -9,7 +9,7 @@ var M;
         return C;
     }());
     M.foo = new C();
-})(M || (M = {}));
+})(M);
 
 FileName : /tests/cases/fourslash/inputFile.d.ts
 declare module M {

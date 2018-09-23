@@ -69,13 +69,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var M;
+var M = M || (M = {});
 (function (M) {
     function fn(x) {
         return '';
     }
     M.fn = fn;
-})(M || (M = {}));
+})(M);
 var x;
 switch (x) {
     case '':

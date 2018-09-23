@@ -47,9 +47,9 @@ module TypeScript.Syntax {
 
 
 //// [moduleMemberWithoutTypeAnnotation1.js]
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
-    var Parser;
+    var Parser = TypeScript.Parser || (TypeScript.Parser = {});
     (function (Parser) {
         var SyntaxCursor = /** @class */ (function () {
             function SyntaxCursor() {
@@ -59,8 +59,8 @@ var TypeScript;
             };
             return SyntaxCursor;
         }());
-    })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
-})(TypeScript || (TypeScript = {}));
+    })(Parser);
+})(TypeScript);
 (function (TypeScript) {
     ;
     ;
@@ -79,7 +79,7 @@ var TypeScript;
         return PositionedToken;
     }());
     TypeScript.PositionedToken = PositionedToken;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);
 (function (TypeScript) {
     var SyntaxNode = /** @class */ (function () {
         function SyntaxNode() {
@@ -95,9 +95,9 @@ var TypeScript;
         return SyntaxNode;
     }());
     TypeScript.SyntaxNode = SyntaxNode;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);
 (function (TypeScript) {
-    var Syntax;
+    var Syntax = TypeScript.Syntax || (TypeScript.Syntax = {});
     (function (Syntax) {
         function childIndex() { }
         Syntax.childIndex = childIndex;
@@ -110,5 +110,5 @@ var TypeScript;
             return VariableWidthTokenWithTrailingTrivia;
         }());
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;
-    })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
-})(TypeScript || (TypeScript = {}));
+    })(Syntax);
+})(TypeScript);

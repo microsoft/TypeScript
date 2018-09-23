@@ -13,7 +13,7 @@ var x;
 function foo() {
     var x;
 }
-var A;
+var A = A || (A = {});
 (function (A) {
     var x;
-})(A || (A = {}));
+})(A);

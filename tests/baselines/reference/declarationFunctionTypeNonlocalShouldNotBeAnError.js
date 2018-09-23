@@ -9,13 +9,13 @@ namespace foo {
 
 
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.js]
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     function bar() { }
     foo.obj = {
         bar: bar
     };
-})(foo || (foo = {}));
+})(foo);
 
 
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.d.ts]

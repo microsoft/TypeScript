@@ -18,10 +18,10 @@ export { x };
 //// [server.js]
 class c {
 }
-var m;
+const m = {};
 (function (m) {
     m.x = 10;
-})(m || (m = {}));
+})(m);
 var x = 10;
 export { c };
 export { c as c2 };

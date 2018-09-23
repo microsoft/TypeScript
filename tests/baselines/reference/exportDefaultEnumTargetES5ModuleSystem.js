@@ -71,56 +71,56 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {// https://github.com/Microsoft/TypeScript/issues/3792
+            exports_1("A", A = {});
+            exports_1("default", A);
             /**
              * export default enum A 1 comment
              */
             (function (A) {
                 A[A["FOO"] = 0] = "FOO";
-            })(A || (A = {})); // export default enum A 1 trailing comment
-            exports_1("A", A);
+            })(A); // export default enum A 1 trailing comment
             /**
              * export default enum A 2 comment
              */
             (function (A) {
                 A[A["BAR"] = 2] = "BAR";
-            })(A || (A = {})); // export default enum A 2 trailing comment
-            exports_1("A", A);
+            })(A); // export default enum A 2 trailing comment
             enumAUsage = A.FOO;
+            exports_1("B", B = {});
             /**
              * export enum B 1 comment
              */
             (function (B) {
                 B[B["X"] = 0] = "X";
-            })(B || (B = {})); // export enum B 1 trailing comment
-            exports_1("B", B);
+            })(B); // export enum B 1 trailing comment
             // export enum B 2 comment
             (function (B) {
                 B[B["Y"] = 1] = "Y";
-            })(B || (B = {})); // export enum B 2 trailing comment
-            exports_1("B", B);
+            })(B); // export enum B 2 trailing comment
             enumBUsage = B.Y;
+            ns = {};
             (function (ns) {
                 // enum ns.C 1 comment
-                var C;
+                var C = ns.C || (ns.C = {});
                 (function (C) {
                     C[C["X"] = 0] = "X";
-                })(C = ns.C || (ns.C = {})); // enum ns.C 1 trailing comment
+                })(C); // enum ns.C 1 trailing comment
                 // enum ns.C 2 comment
                 (function (C) {
                     C[C["Y"] = 1] = "Y";
-                })(C = ns.C || (ns.C = {})); // enum ns.C 2 trailing comment
-            })(ns || (ns = {}));
+                })(C); // enum ns.C 2 trailing comment
+            })(ns);
             (function (ns) {
                 // enum ns.C 3 comment
-                var C;
+                var C = ns.C || (ns.C = {});
                 (function (C) {
                     C[C["Z"] = 2] = "Z";
-                })(C = ns.C || (ns.C = {})); // enum ns.C 3 trailing comment
+                })(C); // enum ns.C 3 trailing comment
                 var enumCUSage1 = C.X;
-            })(ns || (ns = {}));
+            })(ns);
             (function (ns) {
                 var enumCUsage2 = ns.C.X;
-            })(ns || (ns = {}));
+            })(ns);
         }
     };
 });

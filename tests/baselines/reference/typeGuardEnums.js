@@ -20,12 +20,12 @@ else {
 
 
 //// [typeGuardEnums.js]
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
-var V;
+})(E);
+var V = V || (V = {});
 (function (V) {
-})(V || (V = {}));
+})(V);
 var x;
 if (typeof x === "number") {
     x; // number|E|V

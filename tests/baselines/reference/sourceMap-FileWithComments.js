@@ -37,7 +37,7 @@ var dist = p.getDist();
 
 //// [sourceMap-FileWithComments.js]
 // Module
-var Shapes;
+var Shapes = Shapes || (Shapes = {});
 (function (Shapes) {
     // Class
     var Point = /** @class */ (function () {
@@ -62,7 +62,7 @@ var Shapes;
     * this is another comment
     */
     var b = 10;
-})(Shapes || (Shapes = {}));
+})(Shapes);
 /** Local Variable */
 var p = new Shapes.Point(3, 4);
 var dist = p.getDist();

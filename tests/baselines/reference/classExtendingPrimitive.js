@@ -90,10 +90,10 @@ var C7 = /** @class */ (function (_super) {
     }
     return C7;
 }(Undefined));
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var C8 = /** @class */ (function (_super) {
     __extends(C8, _super);
     function C8() {

@@ -17,7 +17,7 @@ module M {
 
 
 //// [recursiveIdenticalOverloadResolution.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f(p) { return f; }
     ;
@@ -25,4 +25,4 @@ var M;
     f(i);
     f(f(i));
     f((f(f(i))));
-})(M || (M = {}));
+})(M);

@@ -9,7 +9,7 @@ module m1 {
 }
 
 //// [sourcemapValidationDuplicateNames.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var x = 10;
     var c = /** @class */ (function () {
@@ -18,8 +18,8 @@ var m1;
         return c;
     }());
     m1.c = c;
-})(m1 || (m1 = {}));
+})(m1);
 (function (m1) {
     var b = new m1.c();
-})(m1 || (m1 = {}));
+})(m1);
 //# sourceMappingURL=sourcemapValidationDuplicateNames.js.map

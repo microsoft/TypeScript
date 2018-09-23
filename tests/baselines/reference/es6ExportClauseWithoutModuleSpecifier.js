@@ -22,10 +22,11 @@ export { x } from "server";
 //// [server.js]
 export class c {
 }
-export var m;
+export const m = {};
+export { m };
 (function (m) {
     m.x = 10;
-})(m || (m = {}));
+})(m);
 export var x = 10;
 //// [client.js]
 export { c } from "server";

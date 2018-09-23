@@ -9,10 +9,10 @@ define(["require", "exports"], function (require, exports) {
         }
         return C;
     }());
-    var M;
+    var M = {};
     (function (M) {
         M.foo = new C();
-    })(M = exports.M || (exports.M = {}));
+    })(M);
 });
 
 FileName : /tests/cases/fourslash/inputFile.d.ts

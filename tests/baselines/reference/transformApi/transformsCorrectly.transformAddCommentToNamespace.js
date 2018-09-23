@@ -1,9 +1,10 @@
 /*comment*/
-var Foo;
+var Foo = Foo || (Foo = {});
+/*comment*/
 (function (Foo) {
     Foo.x = 1;
-})(Foo || (Foo = {}));
+})(Foo);
 /*comment*/
 (function (Foo) {
     Foo.y = 1;
-})(Foo || (Foo = {}));
+})(Foo);

@@ -11,9 +11,9 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
-    var outerModule;
+    var outerModule = {};
     (function (outerModule) {
-        var InnerModule;
+        var InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {});
         (function (InnerModule) {
             /// class b comment
             var b = /** @class */ (function () {
@@ -22,8 +22,8 @@ define(["require", "exports"], function (require, exports) {
                 return b;
             }());
             InnerModule.b = b;
-        })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
-    })(outerModule = exports.outerModule || (exports.outerModule = {}));
+        })(InnerModule);
+    })(outerModule);
 });
 
 

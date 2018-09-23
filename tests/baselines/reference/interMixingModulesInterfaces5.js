@@ -16,14 +16,14 @@ module A {
 var x: number = A.B.createB();
 
 //// [interMixingModulesInterfaces5.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         function createB() {
             return null;
         }
         B.createB = createB;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var x = A.B.createB();

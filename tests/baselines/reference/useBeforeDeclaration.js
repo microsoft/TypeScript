@@ -21,7 +21,7 @@ namespace ts {
 
 
 //// [test.js]
-var ts;
+var ts = ts || (ts = {});
 (function (ts) {
     function printVersion() {
         log("Version: " + ts.sys.version); // the call of sys.version is deferred, should not report an error.
@@ -30,8 +30,8 @@ var ts;
     function log(info) {
     }
     ts.log = log;
-})(ts || (ts = {}));
-var ts;
+})(ts);
+var ts = ts || (ts = {});
 (function (ts) {
     ts.sys = { version: "2.0.5" };
-})(ts || (ts = {}));
+})(ts);

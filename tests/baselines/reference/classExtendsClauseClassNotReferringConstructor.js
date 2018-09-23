@@ -25,7 +25,7 @@ var A = /** @class */ (function () {
     }
     return A;
 }());
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var A = 1;
     var B = /** @class */ (function (_super) {
@@ -35,4 +35,4 @@ var Foo;
         }
         return B;
     }(A));
-})(Foo || (Foo = {}));
+})(Foo);

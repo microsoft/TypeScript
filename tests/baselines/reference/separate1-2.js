@@ -4,8 +4,8 @@ module X {
 }
 
 //// [separate1-2.js]
-var X;
+var X = X || (X = {});
 (function (X) {
     function f() { }
     X.f = f;
-})(X || (X = {}));
+})(X);

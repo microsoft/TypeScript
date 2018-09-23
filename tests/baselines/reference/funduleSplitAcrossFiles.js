@@ -12,8 +12,8 @@ D.y;
 //// [funduleSplitAcrossFiles_function.js]
 function D() { }
 //// [funduleSplitAcrossFiles_module.js]
-var D;
+var D = D || (D = {});
 (function (D) {
     D.y = "hi";
-})(D || (D = {}));
+})(D);
 D.y;

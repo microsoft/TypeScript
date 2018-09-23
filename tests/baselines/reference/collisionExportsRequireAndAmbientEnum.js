@@ -64,11 +64,11 @@ module m4 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var m2;
+    var m2 = {};
     (function (m2) {
-    })(m2 || (m2 = {}));
+    })(m2);
 });
 //// [collisionExportsRequireAndAmbientEnum_globalFile.js]
-var m4;
+var m4 = m4 || (m4 = {});
 (function (m4) {
-})(m4 || (m4 = {}));
+})(m4);

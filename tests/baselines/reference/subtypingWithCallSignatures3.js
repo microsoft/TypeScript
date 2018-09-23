@@ -134,7 +134,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Errors;
+var Errors = Errors || (Errors = {});
 (function (Errors) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -215,11 +215,11 @@ var Errors;
     var r8 = foo16(r8arg); // any
     var r9arg = function (x) { return null; };
     var r9 = foo17(r9arg); // (x: { <T extends Derived >(a: T): T; <T extends Base >(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[];
-})(Errors || (Errors = {}));
-var WithGenericSignaturesInBaseType;
+})(Errors);
+var WithGenericSignaturesInBaseType = WithGenericSignaturesInBaseType || (WithGenericSignaturesInBaseType = {});
 (function (WithGenericSignaturesInBaseType) {
     var r2arg2 = function (x) { return ['']; };
     var r2 = foo2(r2arg2); // <T>(x:T) => T[] since we can infer from generic signatures now
     var r3arg2 = function (x) { return null; };
     var r3 = foo3(r3arg2); // any
-})(WithGenericSignaturesInBaseType || (WithGenericSignaturesInBaseType = {}));
+})(WithGenericSignaturesInBaseType);

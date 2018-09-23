@@ -68,9 +68,9 @@ var A = /** @class */ (function () {
     A.foo = function () { return ""; };
     return A;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var objA = new A();
 // string type var
 var ResultIsString1 = typeof STRING;

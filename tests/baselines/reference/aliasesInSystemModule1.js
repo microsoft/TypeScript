@@ -32,12 +32,13 @@ System.register(["foo"], function (exports_1, context_1) {
             x = new alias.Class();
             y = new cls();
             z = new cls2();
+            M = {};
             (function (M) {
                 M.cls = alias.Class;
                 var x = new alias.Class();
                 var y = new M.cls();
                 var z = new cls2();
-            })(M || (M = {}));
+            })(M);
         }
     };
 });

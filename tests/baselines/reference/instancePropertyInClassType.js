@@ -39,7 +39,7 @@ module Generic {
 }
 
 //// [instancePropertyInClassType.js]
-var NonGeneric;
+var NonGeneric = NonGeneric || (NonGeneric = {});
 (function (NonGeneric) {
     var C = /** @class */ (function () {
         function C(a, b) {
@@ -63,8 +63,8 @@ var NonGeneric;
     var r3 = r.y;
     r.y = 4;
     var r6 = c.y(); // error
-})(NonGeneric || (NonGeneric = {}));
-var Generic;
+})(NonGeneric);
+var Generic = Generic || (Generic = {});
 (function (Generic) {
     var C = /** @class */ (function () {
         function C(a, b) {
@@ -88,4 +88,4 @@ var Generic;
     var r3 = r.y;
     r.y = '';
     var r6 = c.y(); // error
-})(Generic || (Generic = {}));
+})(Generic);

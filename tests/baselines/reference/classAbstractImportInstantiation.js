@@ -11,7 +11,7 @@ new myA;
 
 
 //// [classAbstractImportInstantiation.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var A = /** @class */ (function () {
         function A() {
@@ -20,6 +20,6 @@ var M;
     }());
     M.A = A;
     new A;
-})(M || (M = {}));
+})(M);
 var myA = M.A;
 new myA;

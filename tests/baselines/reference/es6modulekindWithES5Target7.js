@@ -9,7 +9,8 @@ export namespace N2 {
 
 
 //// [es6modulekindWithES5Target7.js]
-export var N;
+export var N = {};
+export { N };
 (function (N) {
     var x = 0;
-})(N || (N = {}));
+})(N);

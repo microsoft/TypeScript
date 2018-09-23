@@ -13,9 +13,9 @@ export = foo
 //// [m1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo;
+    var foo = {};
     (function (foo) {
         var x = 1;
-    })(foo || (foo = {}));
+    })(foo);
     return foo;
 });

@@ -33,7 +33,7 @@ module M { // Shouldnt bn _M
 }
 
 //// [collisionCodeGenModuleWithMethodChildren.js]
-var M;
+var M = M || (M = {});
 (function (M_1) {
     M_1.x = 3;
     var c = /** @class */ (function () {
@@ -44,7 +44,7 @@ var M;
         };
         return c;
     }());
-})(M || (M = {}));
+})(M);
 (function (M_2) {
     var d = /** @class */ (function () {
         function d() {
@@ -55,7 +55,7 @@ var M;
         };
         return d;
     }());
-})(M || (M = {}));
+})(M);
 (function (M_3) {
     var e = /** @class */ (function () {
         function e() {
@@ -67,7 +67,7 @@ var M;
         };
         return e;
     }());
-})(M || (M = {}));
+})(M);
 (function (M) {
     var f = /** @class */ (function () {
         function f() {
@@ -76,4 +76,4 @@ var M;
         };
         return f;
     }());
-})(M || (M = {}));
+})(M);

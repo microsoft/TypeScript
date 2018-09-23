@@ -7,11 +7,11 @@ module Q {
 }
 
 //// [sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js]
-var Q;
+var Q = Q || (Q = {});
 (function (Q) {
     function P() {
         // Test this
         var a = 1;
     }
-})(Q || (Q = {}));
+})(Q);
 //# sourceMappingURL=sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js.map

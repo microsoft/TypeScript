@@ -9,7 +9,7 @@ module m1 {
 var foo = new m1.c1();
 
 //// [collisionCodeGenModuleWithPrivateMember.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1_1) {
     var m1 = /** @class */ (function () {
         function m1() {
@@ -23,5 +23,5 @@ var m1;
         return c1;
     }());
     m1_1.c1 = c1;
-})(m1 || (m1 = {}));
+})(m1);
 var foo = new m1.c1();

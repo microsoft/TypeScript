@@ -126,10 +126,10 @@ class FileService {
 }
 
 //// [variableDeclaratorResolvedDuringContextualTyping.js]
-var WinJS;
+var WinJS = WinJS || (WinJS = {});
 (function (WinJS) {
-})(WinJS || (WinJS = {}));
-var Errors;
+})(WinJS);
+var Errors = Errors || (Errors = {});
 (function (Errors) {
     var ConnectionError /* extends Error */ = /** @class */ (function () {
         function ConnectionError(request) {
@@ -137,7 +137,7 @@ var Errors;
         return ConnectionError;
     }());
     Errors.ConnectionError = ConnectionError;
-})(Errors || (Errors = {}));
+})(Errors);
 var FileService = /** @class */ (function () {
     function FileService() {
     }

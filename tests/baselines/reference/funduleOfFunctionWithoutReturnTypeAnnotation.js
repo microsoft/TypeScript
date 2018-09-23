@@ -13,4 +13,4 @@ function fn() {
 }
 (function (fn) {
     fn.n = 1;
-})(fn || (fn = {}));
+})(fn);

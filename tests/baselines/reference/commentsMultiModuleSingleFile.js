@@ -25,7 +25,7 @@ new multiM.c();
 
 //// [commentsMultiModuleSingleFile.js]
 /** this is multi declare module*/
-var multiM;
+var multiM = multiM || (multiM = {});
 (function (multiM) {
     /** class b*/
     var b = /** @class */ (function () {
@@ -41,7 +41,7 @@ var multiM;
         return d;
     }());
     multiM.d = d;
-})(multiM || (multiM = {}));
+})(multiM);
 /// this is multi module 2
 (function (multiM) {
     /** class c comment*/
@@ -58,7 +58,7 @@ var multiM;
         return e;
     }());
     multiM.e = e;
-})(multiM || (multiM = {}));
+})(multiM);
 new multiM.b();
 new multiM.c();
 

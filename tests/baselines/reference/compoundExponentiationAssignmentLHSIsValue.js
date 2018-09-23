@@ -120,14 +120,14 @@ function foo() {
 }
 this = Math.pow(this, value);
 // identifiers: module, class, enum, function
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 M = Math.pow(M, value);
 C = Math.pow(C, value);
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);
 E = Math.pow(E, value);
 foo = Math.pow(foo, value);
 // literals

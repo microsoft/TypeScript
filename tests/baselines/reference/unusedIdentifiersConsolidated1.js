@@ -135,7 +135,7 @@ var Dummy = /** @class */ (function () {
 }());
 var user = "Jane User";
 var user2 = "Jane2 User2";
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var lettersRegexp = /^[A-Za-z]+$/;
     var numberRegexp = /^[0-9]+$/;
@@ -164,8 +164,8 @@ var Validation;
         }
         return dummy;
     }());
-})(Validation || (Validation = {}));
-var Greeter;
+})(Validation);
+var Greeter = Greeter || (Greeter = {});
 (function (Greeter) {
     var class1 = /** @class */ (function () {
         function class1() {
@@ -191,4 +191,4 @@ var Greeter;
         return class4;
     }());
     Greeter.class4 = class4;
-})(Greeter || (Greeter = {}));
+})(Greeter);

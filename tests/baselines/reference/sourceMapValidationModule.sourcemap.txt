@@ -8,33 +8,44 @@ sources: sourceMapValidationModule.ts
 emittedFile:tests/cases/compiler/sourceMapValidationModule.js
 sourceFile:sourceMapValidationModule.ts
 -------------------------------------------------------------------
->>>var m2;
+>>>var m2 = m2 || (m2 = {});
 1 >
 2 >^^^^
 3 >    ^^
-4 >      ^
-5 >       ^^^^^^^^^^->
+4 >      ^^^
+5 >         ^^
+6 >           ^^^^^
+7 >                ^^
+8 >                  ^^^^^^^
 1 >
 2 >module 
 3 >    m2
-4 >       {
-  >          var a = 10;
-  >          a++;
-  >      }
+4 >      
+5 >         m2
+6 >           
+7 >                m2
+8 >                   {
+  >                      var a = 10;
+  >                      a++;
+  >                  }
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
 3 >Emitted(1, 7) Source(1, 10) + SourceIndex(0)
-4 >Emitted(1, 8) Source(4, 2) + SourceIndex(0)
+4 >Emitted(1, 10) Source(1, 8) + SourceIndex(0)
+5 >Emitted(1, 12) Source(1, 10) + SourceIndex(0)
+6 >Emitted(1, 17) Source(1, 8) + SourceIndex(0)
+7 >Emitted(1, 19) Source(1, 10) + SourceIndex(0)
+8 >Emitted(1, 26) Source(4, 2) + SourceIndex(0)
 ---
 >>>(function (m2) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^
 4 >             ^^^->
-1->
+1 >
 2 >module 
 3 >           m2
-1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
 3 >Emitted(2, 14) Source(1, 10) + SourceIndex(0)
 ---
@@ -64,7 +75,6 @@ sourceFile:sourceMapValidationModule.ts
 2 >    ^
 3 >     ^^
 4 >       ^
-5 >        ^^^^^^^^^^^^^->
 1 >
   >    
 2 >    a
@@ -75,95 +85,113 @@ sourceFile:sourceMapValidationModule.ts
 3 >Emitted(4, 8) Source(3, 8) + SourceIndex(0)
 4 >Emitted(4, 9) Source(3, 9) + SourceIndex(0)
 ---
->>>})(m2 || (m2 = {}));
-1->
+>>>})(m2);
+1 >
 2 >^
 3 > ^^
 4 >   ^^
-5 >     ^^^^^
-6 >          ^^
-7 >            ^^^^^^^^
-1->
+5 >     ^^
+6 >       ^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >}
 3 > 
 4 >   m2
-5 >     
-6 >          m2
-7 >             {
-  >                var a = 10;
-  >                a++;
-  >            }
-1->Emitted(5, 1) Source(4, 1) + SourceIndex(0)
+5 >      {
+  >         var a = 10;
+  >         a++;
+  >     }
+1 >Emitted(5, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(5, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(5, 4) Source(1, 8) + SourceIndex(0)
 4 >Emitted(5, 6) Source(1, 10) + SourceIndex(0)
-5 >Emitted(5, 11) Source(1, 8) + SourceIndex(0)
-6 >Emitted(5, 13) Source(1, 10) + SourceIndex(0)
-7 >Emitted(5, 21) Source(4, 2) + SourceIndex(0)
+5 >Emitted(5, 8) Source(4, 2) + SourceIndex(0)
 ---
->>>var m3;
-1 >
+>>>var m3 = m3 || (m3 = {});
+1->
 2 >^^^^
 3 >    ^^
-4 >      ^
-5 >       ^^^^^^^^^^->
-1 >
+4 >      ^^^
+5 >         ^^
+6 >           ^^^^^
+7 >                ^^
+8 >                  ^^^^^^^
+1->
   >
 2 >module 
 3 >    m3
-4 >       {
-  >          module m4 {
-  >              export var x = 30;
-  >          }
-  >      
-  >          export function foo() {
-  >              return m4.x;
-  >          }
-  >      }
-1 >Emitted(6, 1) Source(5, 1) + SourceIndex(0)
+4 >      
+5 >         m3
+6 >           
+7 >                m3
+8 >                   {
+  >                      module m4 {
+  >                          export var x = 30;
+  >                      }
+  >                  
+  >                      export function foo() {
+  >                          return m4.x;
+  >                      }
+  >                  }
+1->Emitted(6, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(6, 5) Source(5, 8) + SourceIndex(0)
 3 >Emitted(6, 7) Source(5, 10) + SourceIndex(0)
-4 >Emitted(6, 8) Source(13, 2) + SourceIndex(0)
+4 >Emitted(6, 10) Source(5, 8) + SourceIndex(0)
+5 >Emitted(6, 12) Source(5, 10) + SourceIndex(0)
+6 >Emitted(6, 17) Source(5, 8) + SourceIndex(0)
+7 >Emitted(6, 19) Source(5, 10) + SourceIndex(0)
+8 >Emitted(6, 26) Source(13, 2) + SourceIndex(0)
 ---
 >>>(function (m3) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^
-1->
+4 >             ^^^^^^^^^^^^^^^^^->
+1 >
 2 >module 
 3 >           m3
-1->Emitted(7, 1) Source(5, 1) + SourceIndex(0)
+1 >Emitted(7, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(7, 12) Source(5, 8) + SourceIndex(0)
 3 >Emitted(7, 14) Source(5, 10) + SourceIndex(0)
 ---
->>>    var m4;
-1 >^^^^
+>>>    var m4 = m4 || (m4 = {});
+1->^^^^
 2 >    ^^^^
 3 >        ^^
-4 >          ^
-5 >           ^^^^^^^^^^->
-1 > {
+4 >          ^^^
+5 >             ^^
+6 >               ^^^^^
+7 >                    ^^
+8 >                      ^^^^^^^
+1-> {
   >    
 2 >    module 
 3 >        m4
-4 >           {
-  >                  export var x = 30;
-  >              }
-1 >Emitted(8, 5) Source(6, 5) + SourceIndex(0)
+4 >          
+5 >             m4
+6 >               
+7 >                    m4
+8 >                       {
+  >                              export var x = 30;
+  >                          }
+1->Emitted(8, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(8, 9) Source(6, 12) + SourceIndex(0)
 3 >Emitted(8, 11) Source(6, 14) + SourceIndex(0)
-4 >Emitted(8, 12) Source(8, 6) + SourceIndex(0)
+4 >Emitted(8, 14) Source(6, 12) + SourceIndex(0)
+5 >Emitted(8, 16) Source(6, 14) + SourceIndex(0)
+6 >Emitted(8, 21) Source(6, 12) + SourceIndex(0)
+7 >Emitted(8, 23) Source(6, 14) + SourceIndex(0)
+8 >Emitted(8, 30) Source(8, 6) + SourceIndex(0)
 ---
 >>>    (function (m4) {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^
 4 >                 ^^->
-1->
+1 >
 2 >    module 
 3 >               m4
-1->Emitted(9, 5) Source(6, 5) + SourceIndex(0)
+1 >Emitted(9, 5) Source(6, 5) + SourceIndex(0)
 2 >Emitted(9, 16) Source(6, 12) + SourceIndex(0)
 3 >Emitted(9, 18) Source(6, 14) + SourceIndex(0)
 ---
@@ -173,7 +201,6 @@ sourceFile:sourceMapValidationModule.ts
 3 >            ^^^
 4 >               ^^
 5 >                 ^
-6 >                  ^^^^^^^->
 1-> {
   >        export var 
 2 >        x
@@ -186,43 +213,38 @@ sourceFile:sourceMapValidationModule.ts
 4 >Emitted(10, 18) Source(7, 26) + SourceIndex(0)
 5 >Emitted(10, 19) Source(7, 27) + SourceIndex(0)
 ---
->>>    })(m4 || (m4 = {}));
-1->^^^^
+>>>    })(m4);
+1 >^^^^
 2 >    ^
 3 >     ^^
 4 >       ^^
-5 >         ^^^^^
-6 >              ^^
-7 >                ^^^^^^^^
-1->
+5 >         ^^
+6 >           ^^^^^^^^^^->
+1 >
   >    
 2 >    }
 3 >     
 4 >       m4
-5 >         
-6 >              m4
-7 >                 {
-  >                        export var x = 30;
-  >                    }
-1->Emitted(11, 5) Source(8, 5) + SourceIndex(0)
+5 >          {
+  >                 export var x = 30;
+  >             }
+1 >Emitted(11, 5) Source(8, 5) + SourceIndex(0)
 2 >Emitted(11, 6) Source(8, 6) + SourceIndex(0)
 3 >Emitted(11, 8) Source(6, 12) + SourceIndex(0)
 4 >Emitted(11, 10) Source(6, 14) + SourceIndex(0)
-5 >Emitted(11, 15) Source(6, 12) + SourceIndex(0)
-6 >Emitted(11, 17) Source(6, 14) + SourceIndex(0)
-7 >Emitted(11, 25) Source(8, 6) + SourceIndex(0)
+5 >Emitted(11, 12) Source(8, 6) + SourceIndex(0)
 ---
 >>>    function foo() {
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^
 4 >                ^^^^^->
-1 >
+1->
   >
   >    
 2 >    export function 
 3 >             foo
-1 >Emitted(12, 5) Source(10, 5) + SourceIndex(0)
+1->Emitted(12, 5) Source(10, 5) + SourceIndex(0)
 2 >Emitted(12, 14) Source(10, 21) + SourceIndex(0)
 3 >Emitted(12, 17) Source(10, 24) + SourceIndex(0)
 ---
@@ -262,7 +284,6 @@ sourceFile:sourceMapValidationModule.ts
 2 >    ^^^^^^
 3 >          ^^^^^^
 4 >                ^
-5 >                 ^^^^->
 1->
 2 >    foo
 3 >          () {
@@ -274,37 +295,31 @@ sourceFile:sourceMapValidationModule.ts
 3 >Emitted(15, 17) Source(12, 6) + SourceIndex(0)
 4 >Emitted(15, 18) Source(12, 6) + SourceIndex(0)
 ---
->>>})(m3 || (m3 = {}));
-1->
+>>>})(m3);
+1 >
 2 >^
 3 > ^^
 4 >   ^^
-5 >     ^^^^^
-6 >          ^^
-7 >            ^^^^^^^^
-8 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+5 >     ^^
+6 >       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
   >
 2 >}
 3 > 
 4 >   m3
-5 >     
-6 >          m3
-7 >             {
-  >                module m4 {
-  >                    export var x = 30;
-  >                }
-  >            
-  >                export function foo() {
-  >                    return m4.x;
-  >                }
-  >            }
-1->Emitted(16, 1) Source(13, 1) + SourceIndex(0)
+5 >      {
+  >         module m4 {
+  >             export var x = 30;
+  >         }
+  >     
+  >         export function foo() {
+  >             return m4.x;
+  >         }
+  >     }
+1 >Emitted(16, 1) Source(13, 1) + SourceIndex(0)
 2 >Emitted(16, 2) Source(13, 2) + SourceIndex(0)
 3 >Emitted(16, 4) Source(5, 8) + SourceIndex(0)
 4 >Emitted(16, 6) Source(5, 10) + SourceIndex(0)
-5 >Emitted(16, 11) Source(5, 8) + SourceIndex(0)
-6 >Emitted(16, 13) Source(5, 10) + SourceIndex(0)
-7 >Emitted(16, 21) Source(13, 2) + SourceIndex(0)
+5 >Emitted(16, 8) Source(13, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationModule.js.map

@@ -441,7 +441,7 @@ var bigClass = /** @class */ (function () {
     }
     return bigClass;
 }());
-var bigEnum;
+var bigEnum = bigEnum || (bigEnum = {});
 (function (bigEnum) {
     bigEnum[bigEnum["constructor"] = 0] = "constructor";
     bigEnum[bigEnum["any"] = 1] = "any";
@@ -497,8 +497,8 @@ var bigEnum;
     bigEnum[bigEnum["void"] = 51] = "void";
     bigEnum[bigEnum["while"] = 52] = "while";
     bigEnum[bigEnum["with"] = 53] = "with";
-})(bigEnum || (bigEnum = {}));
-var bigModule;
+})(bigEnum);
+var bigModule = bigModule || (bigModule = {});
 (function (bigModule) {
     var constructor = /** @class */ (function () {
         function constructor() {
@@ -570,4 +570,4 @@ var bigModule;
         }
         return declare;
     }());
-})(bigModule || (bigModule = {}));
+})(bigModule);

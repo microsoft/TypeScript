@@ -165,9 +165,9 @@ finally {
     var c = 0;
 }
 // in a namespace
-var N;
+var N = {};
 (function (N) {
     var x;
-})(N || (N = {}));
+})(N);
 for (var x = void 0, z = (void 0).z; (x); )
     ;

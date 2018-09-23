@@ -6,9 +6,9 @@ namespace Test1 {
 }
 
 //// [errorForUsingPropertyOfTypeAsType02.js]
-var Test1;
+var Test1 = Test1 || (Test1 = {});
 (function (Test1) {
     function foo(x) {
         var a = x.abc;
     }
-})(Test1 || (Test1 = {}));
+})(Test1);

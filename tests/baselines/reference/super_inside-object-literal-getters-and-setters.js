@@ -41,7 +41,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var ObjectLiteral;
+var ObjectLiteral = ObjectLiteral || (ObjectLiteral = {});
 (function (ObjectLiteral) {
     var ThisInObjectLiteral = {
         _foo: '1',
@@ -55,7 +55,7 @@ var ObjectLiteral;
             return _super._foo;
         }
     };
-})(ObjectLiteral || (ObjectLiteral = {}));
+})(ObjectLiteral);
 var F = /** @class */ (function () {
     function F() {
     }

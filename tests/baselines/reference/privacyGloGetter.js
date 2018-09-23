@@ -89,7 +89,7 @@ class C7_public {
 }
 
 //// [privacyGloGetter.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
@@ -187,7 +187,7 @@ var m1;
         });
         return C4_private;
     }());
-})(m1 || (m1 = {}));
+})(m1);
 var C6_public = /** @class */ (function () {
     function C6_public() {
     }

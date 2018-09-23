@@ -9,7 +9,7 @@ module M {
 var r: typeof M;
 
 //// [typeofModuleWithoutExports.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var x = 1;
     var C = /** @class */ (function () {
@@ -17,5 +17,5 @@ var M;
         }
         return C;
     }());
-})(M || (M = {}));
+})(M);
 var r;

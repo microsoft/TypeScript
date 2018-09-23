@@ -72,7 +72,7 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(C));
-var M;
+var M = M || (M = {});
 (function (M) {
     var E = /** @class */ (function () {
         function E() {
@@ -80,7 +80,7 @@ var M;
         return E;
     }());
     M.E = E;
-})(M || (M = {}));
+})(M);
 var D2 = /** @class */ (function (_super) {
     __extends(D2, _super);
     function D2() {

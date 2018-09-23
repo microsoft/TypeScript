@@ -31,7 +31,7 @@ module M {
 }
 
 //// [declFileTypeAnnotationTypeAlias.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var c = /** @class */ (function () {
         function c() {
@@ -39,7 +39,7 @@ var M;
         return c;
     }());
     M.c = c;
-    var m;
+    var m = M.m || (M.m = {});
     (function (m) {
         var c = /** @class */ (function () {
             function c() {
@@ -47,10 +47,10 @@ var M;
             return c;
         }());
         m.c = c;
-    })(m = M.m || (M.m = {}));
-})(M || (M = {}));
+    })(m);
+})(M);
 (function (M) {
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         var Window = /** @class */ (function () {
             function Window() {
@@ -58,8 +58,8 @@ var M;
             return Window;
         }());
         N.Window = Window;
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
+    })(N);
+})(M);
 
 
 //// [declFileTypeAnnotationTypeAlias.d.ts]

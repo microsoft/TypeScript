@@ -136,20 +136,20 @@ var obj; // OK
 var arr = [function (n) { return ''; }];
 var arr; // Incorrect error here (bug 829597)
 // Arrow function as enum value
-var E;
+var E = E || (E = {});
 (function (E) {
     var _this = this;
     E[E["x"] = function () { return 4; }] = "x";
     E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum
-})(E || (E = {}));
+})(E);
 // Arrow function as module variable initializer
-var M;
+var M = M || (M = {});
 (function (M) {
     M.a = function (s) { return ''; };
     var b = function (s) { return s; };
-})(M || (M = {}));
+})(M);
 // Repeat above for module members that are functions? (necessary to redo all of them?)
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var _this = this;
     // Arrow function used in with statement
@@ -178,19 +178,19 @@ var M2;
     var arr = [function (n) { return ''; }];
     var arr; // Incorrect error here (bug 829597)
     // Arrow function as enum value
-    var E;
+    var E = E || (E = {});
     (function (E) {
         var _this = this;
         E[E["x"] = function () { return 4; }] = "x";
         E[E["y"] = (function () { return _this; }).length] = "y";
-    })(E || (E = {}));
+    })(E);
     // Arrow function as module variable initializer
-    var M;
+    var M = M || (M = {});
     (function (M) {
         M.a = function (s) { return ''; };
         var b = function (s) { return s; };
-    })(M || (M = {}));
-})(M2 || (M2 = {}));
+    })(M);
+})(M2);
 // <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = function (n) { return [n]; };
 var generic1; // Incorrect error, Bug 829597

@@ -36,7 +36,7 @@ module test {
 
 //// [duplicateStringIndexers.js]
 // it is an error to have duplicate index signatures of the same kind in a type
-var test;
+var test = test || (test = {});
 (function (test) {
     var C = /** @class */ (function () {
         function C() {
@@ -44,4 +44,4 @@ var test;
         return C;
     }());
     var a;
-})(test || (test = {}));
+})(test);

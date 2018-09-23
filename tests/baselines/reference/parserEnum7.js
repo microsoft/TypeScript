@@ -4,9 +4,9 @@ enum E {
 }
 
 //// [parserEnum7.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E[1] = 0] = 1;
     E[E[2] = 1] = 2;
     E[E[3] = 2] = 3;
-})(E || (E = {}));
+})(E);

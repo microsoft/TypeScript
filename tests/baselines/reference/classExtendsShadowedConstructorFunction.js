@@ -27,7 +27,7 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = 1;
     var D = /** @class */ (function (_super) {
@@ -37,4 +37,4 @@ var M;
         }
         return D;
     }(C));
-})(M || (M = {}));
+})(M);

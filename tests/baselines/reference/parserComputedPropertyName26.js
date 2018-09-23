@@ -6,8 +6,8 @@ enum E {
 }
 
 //// [parserComputedPropertyName26.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     // No ASI
     E[E[e] = 0[e2] = 1] = e;
-})(E || (E = {}));
+})(E);

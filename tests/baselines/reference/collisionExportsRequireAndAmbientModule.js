@@ -106,13 +106,13 @@ define(["require", "exports"], function (require, exports) {
         return null;
     }
     exports.foo2 = foo2;
-    var m2;
+    var m2 = {};
     (function (m2) {
         var a = 10;
-    })(m2 || (m2 = {}));
+    })(m2);
 });
 //// [collisionExportsRequireAndAmbientModule_globalFile.js]
-var m4;
+var m4 = m4 || (m4 = {});
 (function (m4) {
     var a = 10;
-})(m4 || (m4 = {}));
+})(m4);

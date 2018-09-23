@@ -23,12 +23,12 @@ var x;
 var x = 2; //error
 var y = "";
 var y; //error
-var N;
+var N = N || (N = {});
 (function (N) {
     var x;
     var x = 2; //error
     var y = "";
     var y; //error
-})(N || (N = {}));
+})(N);
 var z;
 var z; // ok

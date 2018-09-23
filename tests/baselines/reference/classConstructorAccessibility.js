@@ -56,7 +56,7 @@ var E = /** @class */ (function () {
 var c = new C(1);
 var d = new D(1); // error
 var e = new E(1); // error
-var Generic;
+var Generic = Generic || (Generic = {});
 (function (Generic) {
     var C = /** @class */ (function () {
         function C(x) {
@@ -79,7 +79,7 @@ var Generic;
     var c = new C(1);
     var d = new D(1); // error
     var e = new E(1); // error
-})(Generic || (Generic = {}));
+})(Generic);
 
 
 //// [classConstructorAccessibility.d.ts]

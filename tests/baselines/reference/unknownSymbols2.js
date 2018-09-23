@@ -31,7 +31,7 @@ module M {
 }
 
 //// [unknownSymbols2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var x;
     var y = x + asdf;
@@ -52,8 +52,8 @@ var M;
     }
     var a = function () { return asdf; };
     var b = function (asdf) { return qwerty; };
-    var N;
+    var N = N || (N = {});
     (function (N) {
         var x = 1;
-    })(N || (N = {}));
-})(M || (M = {}));
+    })(N);
+})(M);

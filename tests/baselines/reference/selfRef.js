@@ -19,7 +19,7 @@ module M
 
 
 //// [selfRef.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Test = /** @class */ (function () {
         function Test() {
@@ -36,4 +36,4 @@ var M;
         return Test;
     }());
     M.Test = Test;
-})(M || (M = {}));
+})(M);

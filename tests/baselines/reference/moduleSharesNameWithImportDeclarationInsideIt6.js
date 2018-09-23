@@ -11,22 +11,22 @@ module A.M {
 }
 
 //// [moduleSharesNameWithImportDeclarationInsideIt6.js]
-var Z;
+var Z = Z || (Z = {});
 (function (Z) {
-    var M;
+    var M = Z.M || (Z.M = {});
     (function (M) {
         function bar() {
             return "";
         }
         M.bar = bar;
-    })(M = Z.M || (Z.M = {}));
-})(Z || (Z = {}));
-var A;
+    })(M);
+})(Z);
+var A = A || (A = {});
 (function (A) {
-    var M;
+    var M = A.M || (A.M = {});
     (function (M_1) {
         function bar() {
         }
         M_1.bar = bar;
-    })(M = A.M || (A.M = {}));
-})(A || (A = {}));
+    })(M);
+})(A);

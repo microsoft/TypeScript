@@ -26,11 +26,11 @@ var r12 = 1 ** E.b;
 
 //// [exponentiationOperatorWithEnum.js]
 // operands of an enum type are treated as having the primitive type Number.
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 var a;
 var b;
 var c;

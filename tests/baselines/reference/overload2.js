@@ -17,12 +17,12 @@ function foo1(x: number) {
 
 
 //// [overload2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
-})(B || (B = {}));
+})(B);
 // should be ok
 function foo(x) {
 }

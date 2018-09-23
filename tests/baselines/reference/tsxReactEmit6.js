@@ -38,9 +38,9 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 (function (M) {
     // Should emit M.React.createElement
     //  and M.React.__spread
@@ -48,4 +48,4 @@ var M;
     var spread1 = M.React.createElement("div", __assign({ x: '' }, foo, { y: '' }));
     // Quotes
     var x = M.React.createElement("div", null, "This \"quote\" thing");
-})(M || (M = {}));
+})(M);

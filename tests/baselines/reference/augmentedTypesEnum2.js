@@ -21,16 +21,16 @@ class e2 { // error
 
 //// [augmentedTypesEnum2.js]
 // enum then interface
-var e1;
+var e1 = e1 || (e1 = {});
 (function (e1) {
     e1[e1["One"] = 0] = "One";
-})(e1 || (e1 = {})); // error
+})(e1); // error
 // interface then enum works
 // enum then class
-var e2;
+var e2 = e2 || (e2 = {});
 (function (e2) {
     e2[e2["One"] = 0] = "One";
-})(e2 || (e2 = {}));
+})(e2);
 ; // error
 var e2 = /** @class */ (function () {
     function e2() {

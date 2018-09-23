@@ -99,14 +99,14 @@ new m7.m8.m9.c();
 
 //// [commentsModules.js]
 /** Module comment*/
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     /** foo's comment*/
     function foo() {
         return m1.b;
     }
     /** m2 comments*/
-    var m2;
+    var m2 = m1.m2 || (m1.m2 = {});
     (function (m2) {
         /** class comment;*/
         var c = /** @class */ (function () {
@@ -118,7 +118,7 @@ var m1;
         ;
         /** i*/
         m2.i = new c();
-    })(m2 = m1.m2 || (m1.m2 = {}));
+    })(m2);
     /** exported function*/
     function fooExport() {
         return foo();
@@ -139,13 +139,13 @@ var m1;
      */
     function foo4Export() {
     }
-})(m1 || (m1 = {})); // trailing comment module
+})(m1); // trailing comment module
 m1.fooExport();
 var myvar = new m1.m2.c();
 /** module comment of m2.m3*/
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
-    var m3;
+    var m3 = m2.m3 || (m2.m3 = {});
     (function (m3) {
         /** Exported class comment*/
         var c = /** @class */ (function () {
@@ -154,15 +154,15 @@ var m2;
             return c;
         }());
         m3.c = c;
-    })(m3 = m2.m3 || (m2.m3 = {}));
-})(m2 || (m2 = {})); /* trailing dotted module comment*/
+    })(m3);
+})(m2); /* trailing dotted module comment*/
 new m2.m3.c();
 /** module comment of m3.m4.m5*/
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
-    var m4;
+    var m4 = m3.m4 || (m3.m4 = {});
     (function (m4) {
-        var m5;
+        var m5 = m4.m5 || (m4.m5 = {});
         (function (m5) {
             /** Exported class comment*/
             var c = /** @class */ (function () {
@@ -171,18 +171,18 @@ var m3;
                 return c;
             }());
             m5.c = c;
-        })(m5 = m4.m5 || (m4.m5 = {}));
-    })(m4 = m3.m4 || (m3.m4 = {}));
-})(m3 || (m3 = {})); // trailing dotted module 2
+        })(m5);
+    })(m4);
+})(m3); // trailing dotted module 2
 new m3.m4.m5.c();
 /** module comment of m4.m5.m6*/
-var m4;
+var m4 = m4 || (m4 = {});
 (function (m4) {
-    var m5;
+    var m5 = m4.m5 || (m4.m5 = {});
     (function (m5) {
-        var m6;
+        var m6 = m5.m6 || (m5.m6 = {});
         (function (m6) {
-            var m7;
+            var m7 = m6.m7 || (m6.m7 = {});
             (function (m7) {
                 /** Exported class comment*/
                 var c = /** @class */ (function () {
@@ -191,20 +191,20 @@ var m4;
                     return c;
                 }());
                 m7.c = c;
-            })(m7 = m6.m7 || (m6.m7 = {})); /* trailing inner module */ /* multiple comments*/
-        })(m6 = m5.m6 || (m5.m6 = {}));
-    })(m5 = m4.m5 || (m4.m5 = {}));
-})(m4 || (m4 = {}));
+            })(m7); /* trailing inner module */ /* multiple comments*/
+        })(m6);
+    })(m5);
+})(m4);
 new m4.m5.m6.m7.c();
 /** module comment of m5.m6.m7*/
-var m5;
+var m5 = m5 || (m5 = {});
 (function (m5) {
-    var m6;
+    var m6 = m5.m6 || (m5.m6 = {});
     (function (m6) {
-        var m7;
+        var m7 = m6.m7 || (m6.m7 = {});
         (function (m7) {
             /** module m8 comment*/
-            var m8;
+            var m8 = m7.m8 || (m7.m8 = {});
             (function (m8) {
                 /** Exported class comment*/
                 var c = /** @class */ (function () {
@@ -213,16 +213,16 @@ var m5;
                     return c;
                 }());
                 m8.c = c;
-            })(m8 = m7.m8 || (m7.m8 = {}));
-        })(m7 = m6.m7 || (m6.m7 = {}));
-    })(m6 = m5.m6 || (m5.m6 = {}));
-})(m5 || (m5 = {}));
+            })(m8);
+        })(m7);
+    })(m6);
+})(m5);
 new m5.m6.m7.m8.c();
-var m6;
+var m6 = m6 || (m6 = {});
 (function (m6) {
-    var m7;
+    var m7 = m6.m7 || (m6.m7 = {});
     (function (m7) {
-        var m8;
+        var m8 = m7.m8 || (m7.m8 = {});
         (function (m8) {
             /** Exported class comment*/
             var c = /** @class */ (function () {
@@ -231,16 +231,16 @@ var m6;
                 return c;
             }());
             m8.c = c;
-        })(m8 = m7.m8 || (m7.m8 = {}));
-    })(m7 = m6.m7 || (m6.m7 = {}));
-})(m6 || (m6 = {}));
+        })(m8);
+    })(m7);
+})(m6);
 new m6.m7.m8.c();
-var m7;
+var m7 = m7 || (m7 = {});
 (function (m7) {
-    var m8;
+    var m8 = m7.m8 || (m7.m8 = {});
     (function (m8) {
         /** module m9 comment*/
-        var m9;
+        var m9 = m8.m9 || (m8.m9 = {});
         (function (m9) {
             /** Exported class comment*/
             var c = /** @class */ (function () {
@@ -262,9 +262,9 @@ var m7;
                 return e;
             }());
             m9.e = e;
-        })(m9 = m8.m9 || (m8.m9 = {}));
-    })(m8 = m7.m8 || (m7.m8 = {}));
-})(m7 || (m7 = {}));
+        })(m9);
+    })(m8);
+})(m7);
 new m7.m8.m9.c();
 
 

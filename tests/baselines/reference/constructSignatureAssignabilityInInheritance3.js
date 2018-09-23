@@ -127,7 +127,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Errors;
+var Errors = Errors || (Errors = {});
 (function (Errors) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -155,4 +155,4 @@ var Errors;
         }
         return OtherDerived;
     }(Base));
-})(Errors || (Errors = {}));
+})(Errors);

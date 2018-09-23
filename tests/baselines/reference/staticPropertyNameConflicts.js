@@ -325,15 +325,15 @@ var StaticArgumentsFn_Anonymous = /** @class */ (function () {
 }());
 // === Static properties on default exported classes ===
 // name
-var TestOnDefaultExportedClass_1;
+var TestOnDefaultExportedClass_1 = TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {});
 (function (TestOnDefaultExportedClass_1) {
     var StaticName = /** @class */ (function () {
         function StaticName() {
         }
         return StaticName;
     }());
-})(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
-var TestOnDefaultExportedClass_2;
+})(TestOnDefaultExportedClass_1);
+var TestOnDefaultExportedClass_2 = TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {});
 (function (TestOnDefaultExportedClass_2) {
     var StaticNameFn = /** @class */ (function () {
         function StaticNameFn() {
@@ -342,9 +342,9 @@ var TestOnDefaultExportedClass_2;
         StaticNameFn.prototype.name = function () { }; // ok
         return StaticNameFn;
     }());
-})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
+})(TestOnDefaultExportedClass_2);
 // length
-var TestOnDefaultExportedClass_3;
+var TestOnDefaultExportedClass_3 = TestOnDefaultExportedClass_3 || (TestOnDefaultExportedClass_3 = {});
 (function (TestOnDefaultExportedClass_3) {
     var StaticLength = /** @class */ (function () {
         function StaticLength() {
@@ -352,8 +352,8 @@ var TestOnDefaultExportedClass_3;
         return StaticLength;
     }());
     TestOnDefaultExportedClass_3.StaticLength = StaticLength;
-})(TestOnDefaultExportedClass_3 || (TestOnDefaultExportedClass_3 = {}));
-var TestOnDefaultExportedClass_4;
+})(TestOnDefaultExportedClass_3);
+var TestOnDefaultExportedClass_4 = TestOnDefaultExportedClass_4 || (TestOnDefaultExportedClass_4 = {});
 (function (TestOnDefaultExportedClass_4) {
     var StaticLengthFn = /** @class */ (function () {
         function StaticLengthFn() {
@@ -363,9 +363,9 @@ var TestOnDefaultExportedClass_4;
         return StaticLengthFn;
     }());
     TestOnDefaultExportedClass_4.StaticLengthFn = StaticLengthFn;
-})(TestOnDefaultExportedClass_4 || (TestOnDefaultExportedClass_4 = {}));
+})(TestOnDefaultExportedClass_4);
 // prototype
-var TestOnDefaultExportedClass_5;
+var TestOnDefaultExportedClass_5 = TestOnDefaultExportedClass_5 || (TestOnDefaultExportedClass_5 = {});
 (function (TestOnDefaultExportedClass_5) {
     var StaticPrototype = /** @class */ (function () {
         function StaticPrototype() {
@@ -373,8 +373,8 @@ var TestOnDefaultExportedClass_5;
         return StaticPrototype;
     }());
     TestOnDefaultExportedClass_5.StaticPrototype = StaticPrototype;
-})(TestOnDefaultExportedClass_5 || (TestOnDefaultExportedClass_5 = {}));
-var TestOnDefaultExportedClass_6;
+})(TestOnDefaultExportedClass_5);
+var TestOnDefaultExportedClass_6 = TestOnDefaultExportedClass_6 || (TestOnDefaultExportedClass_6 = {});
 (function (TestOnDefaultExportedClass_6) {
     var StaticPrototypeFn = /** @class */ (function () {
         function StaticPrototypeFn() {
@@ -384,9 +384,9 @@ var TestOnDefaultExportedClass_6;
         return StaticPrototypeFn;
     }());
     TestOnDefaultExportedClass_6.StaticPrototypeFn = StaticPrototypeFn;
-})(TestOnDefaultExportedClass_6 || (TestOnDefaultExportedClass_6 = {}));
+})(TestOnDefaultExportedClass_6);
 // caller
-var TestOnDefaultExportedClass_7;
+var TestOnDefaultExportedClass_7 = TestOnDefaultExportedClass_7 || (TestOnDefaultExportedClass_7 = {});
 (function (TestOnDefaultExportedClass_7) {
     var StaticCaller = /** @class */ (function () {
         function StaticCaller() {
@@ -394,8 +394,8 @@ var TestOnDefaultExportedClass_7;
         return StaticCaller;
     }());
     TestOnDefaultExportedClass_7.StaticCaller = StaticCaller;
-})(TestOnDefaultExportedClass_7 || (TestOnDefaultExportedClass_7 = {}));
-var TestOnDefaultExportedClass_8;
+})(TestOnDefaultExportedClass_7);
+var TestOnDefaultExportedClass_8 = TestOnDefaultExportedClass_8 || (TestOnDefaultExportedClass_8 = {});
 (function (TestOnDefaultExportedClass_8) {
     var StaticCallerFn = /** @class */ (function () {
         function StaticCallerFn() {
@@ -405,9 +405,9 @@ var TestOnDefaultExportedClass_8;
         return StaticCallerFn;
     }());
     TestOnDefaultExportedClass_8.StaticCallerFn = StaticCallerFn;
-})(TestOnDefaultExportedClass_8 || (TestOnDefaultExportedClass_8 = {}));
+})(TestOnDefaultExportedClass_8);
 // arguments
-var TestOnDefaultExportedClass_9;
+var TestOnDefaultExportedClass_9 = TestOnDefaultExportedClass_9 || (TestOnDefaultExportedClass_9 = {});
 (function (TestOnDefaultExportedClass_9) {
     var StaticArguments = /** @class */ (function () {
         function StaticArguments() {
@@ -415,8 +415,8 @@ var TestOnDefaultExportedClass_9;
         return StaticArguments;
     }());
     TestOnDefaultExportedClass_9.StaticArguments = StaticArguments;
-})(TestOnDefaultExportedClass_9 || (TestOnDefaultExportedClass_9 = {}));
-var TestOnDefaultExportedClass_10;
+})(TestOnDefaultExportedClass_9);
+var TestOnDefaultExportedClass_10 = TestOnDefaultExportedClass_10 || (TestOnDefaultExportedClass_10 = {});
 (function (TestOnDefaultExportedClass_10) {
     var StaticArgumentsFn = /** @class */ (function () {
         function StaticArgumentsFn() {
@@ -426,4 +426,4 @@ var TestOnDefaultExportedClass_10;
         return StaticArgumentsFn;
     }());
     TestOnDefaultExportedClass_10.StaticArgumentsFn = StaticArgumentsFn;
-})(TestOnDefaultExportedClass_10 || (TestOnDefaultExportedClass_10 = {}));
+})(TestOnDefaultExportedClass_10);

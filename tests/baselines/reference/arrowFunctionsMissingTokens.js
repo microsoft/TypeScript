@@ -66,17 +66,17 @@ module okay {
 }
 
 //// [arrowFunctionsMissingTokens.js]
-var missingArrowsWithCurly;
+var missingArrowsWithCurly = missingArrowsWithCurly || (missingArrowsWithCurly = {});
 (function (missingArrowsWithCurly) {
     var a = function () { };
     var b = function () { };
     var c = function (x) { };
     var d = function (x, y) { };
     var e = function (x, y) { };
-})(missingArrowsWithCurly || (missingArrowsWithCurly = {}));
-var missingCurliesWithArrow;
+})(missingArrowsWithCurly);
+var missingCurliesWithArrow = missingCurliesWithArrow || (missingCurliesWithArrow = {});
 (function (missingCurliesWithArrow) {
-    var withStatement;
+    var withStatement = withStatement || (withStatement = {});
     (function (withStatement) {
         var a = function () { var k = 10; };
         var b = function () { var k = 10; };
@@ -84,14 +84,14 @@ var missingCurliesWithArrow;
         var d = function (x, y) { var k = 10; };
         var e = function (x, y) { var k = 10; };
         var f = function () { var k = 10; };
-    })(withStatement || (withStatement = {}));
-    var withoutStatement;
+    })(withStatement);
+    var withoutStatement = withoutStatement || (withoutStatement = {});
     (function (withoutStatement) {
         var a = function () { return ; };
-    })(withoutStatement || (withoutStatement = {}));
+    })(withoutStatement);
     ;
     var b = function () { return ; };
-})(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
+})(missingCurliesWithArrow);
 var c = function (x) { return ; };
 ;
 var d = function (x, y) { return ; };
@@ -99,19 +99,19 @@ var d = function (x, y) { return ; };
 var e = function (x, y) { return ; };
 ;
 var f = function () { return ; };
-var ce_nEst_pas_une_arrow_function;
+var ce_nEst_pas_une_arrow_function = ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {});
 (function (ce_nEst_pas_une_arrow_function) {
     var a = ();
     var b = function () { return ; };
     var c = (x);
     var d = function (x, y) { return ; };
     var e = function (x, y) { return ; };
-})(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
-var okay;
+})(ce_nEst_pas_une_arrow_function);
+var okay = okay || (okay = {});
 (function (okay) {
     var a = function () { };
     var b = function () { };
     var c = function (x) { };
     var d = function (x, y) { };
     var e = function (x, y) { };
-})(okay || (okay = {}));
+})(okay);

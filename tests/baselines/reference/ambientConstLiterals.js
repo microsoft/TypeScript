@@ -25,13 +25,13 @@ const c14 = Math.random() > 0.5 ? 123 : 456;
 function f(x) {
     return x;
 }
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
     E[E["non identifier"] = 3] = "non identifier";
-})(E || (E = {}));
+})(E);
 var c1 = "abc";
 var c2 = 123;
 var c3 = c1;

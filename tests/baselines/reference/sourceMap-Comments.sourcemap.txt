@@ -8,93 +8,115 @@ sources: sourceMap-Comments.ts
 emittedFile:tests/cases/compiler/sourceMap-Comments.js
 sourceFile:sourceMap-Comments.ts
 -------------------------------------------------------------------
->>>var sas;
+>>>var sas = sas || (sas = {});
 1 >
 2 >^^^^
 3 >    ^^^
-4 >       ^
-5 >        ^^^^^^^^^^->
+4 >       ^^^
+5 >          ^^^
+6 >             ^^^^^
+7 >                  ^^^
+8 >                     ^^^^^^^
 1 >
 2 >module 
 3 >    sas
-4 >       .tools {
-  >           export class Test {
-  >               public doX(): void {
-  >                   let f: number = 2;
-  >                   switch (f) {
-  >                       case 1:
-  >                           break;
-  >                       case 2:
-  >                           //line comment 1
-  >                           //line comment 2
-  >                           break;
-  >                       case 3:
-  >                           //a comment
-  >                           break;
-  >                   }
-  >               }
-  >           }
-  >       
-  >       }
+4 >       
+5 >          sas
+6 >             
+7 >                  sas
+8 >                     .tools {
+  >                         export class Test {
+  >                             public doX(): void {
+  >                                 let f: number = 2;
+  >                                 switch (f) {
+  >                                     case 1:
+  >                                         break;
+  >                                     case 2:
+  >                                         //line comment 1
+  >                                         //line comment 2
+  >                                         break;
+  >                                     case 3:
+  >                                         //a comment
+  >                                         break;
+  >                                 }
+  >                             }
+  >                         }
+  >                     
+  >                     }
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 8) + SourceIndex(0)
 3 >Emitted(1, 8) Source(1, 11) + SourceIndex(0)
-4 >Emitted(1, 9) Source(19, 2) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 8) + SourceIndex(0)
+5 >Emitted(1, 14) Source(1, 11) + SourceIndex(0)
+6 >Emitted(1, 19) Source(1, 8) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 11) + SourceIndex(0)
+8 >Emitted(1, 29) Source(19, 2) + SourceIndex(0)
 ---
 >>>(function (sas) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^^
-4 >              ^->
-1->
+4 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >module 
 3 >           sas
-1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
 3 >Emitted(2, 15) Source(1, 11) + SourceIndex(0)
 ---
->>>    var tools;
+>>>    var tools = sas.tools || (sas.tools = {});
 1->^^^^
 2 >    ^^^^
 3 >        ^^^^^
-4 >             ^
-5 >              ^^^^^^^^^^->
+4 >             ^^^
+5 >                ^^^^^^^^^
+6 >                         ^^^^^
+7 >                              ^^^^^^^^^
+8 >                                       ^^^^^^^
 1->.
 2 >    
 3 >        tools
-4 >              {
-  >                 export class Test {
-  >                     public doX(): void {
-  >                         let f: number = 2;
-  >                         switch (f) {
-  >                             case 1:
-  >                                 break;
-  >                             case 2:
-  >                                 //line comment 1
-  >                                 //line comment 2
-  >                                 break;
-  >                             case 3:
-  >                                 //a comment
-  >                                 break;
-  >                         }
-  >                     }
-  >                 }
-  >             
-  >             }
+4 >             
+5 >                tools
+6 >                         
+7 >                              tools
+8 >                                        {
+  >                                           export class Test {
+  >                                               public doX(): void {
+  >                                                   let f: number = 2;
+  >                                                   switch (f) {
+  >                                                       case 1:
+  >                                                           break;
+  >                                                       case 2:
+  >                                                           //line comment 1
+  >                                                           //line comment 2
+  >                                                           break;
+  >                                                       case 3:
+  >                                                           //a comment
+  >                                                           break;
+  >                                                   }
+  >                                               }
+  >                                           }
+  >                                       
+  >                                       }
 1->Emitted(3, 5) Source(1, 12) + SourceIndex(0)
 2 >Emitted(3, 9) Source(1, 12) + SourceIndex(0)
 3 >Emitted(3, 14) Source(1, 17) + SourceIndex(0)
-4 >Emitted(3, 15) Source(19, 2) + SourceIndex(0)
+4 >Emitted(3, 17) Source(1, 12) + SourceIndex(0)
+5 >Emitted(3, 26) Source(1, 17) + SourceIndex(0)
+6 >Emitted(3, 31) Source(1, 12) + SourceIndex(0)
+7 >Emitted(3, 40) Source(1, 17) + SourceIndex(0)
+8 >Emitted(3, 47) Source(19, 2) + SourceIndex(0)
 ---
 >>>    (function (tools) {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
 4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >    
 3 >               tools
-1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
+1 >Emitted(4, 5) Source(1, 12) + SourceIndex(0)
 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
 3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
 ---
@@ -338,7 +360,6 @@ sourceFile:sourceMap-Comments.ts
 2 >        ^^^^^^^^^^
 3 >                  ^^^^^^^
 4 >                         ^
-5 >                          ^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        Test
 3 >                   {
@@ -363,95 +384,77 @@ sourceFile:sourceMap-Comments.ts
 3 >Emitted(24, 26) Source(17, 6) + SourceIndex(0)
 4 >Emitted(24, 27) Source(17, 6) + SourceIndex(0)
 ---
->>>    })(tools = sas.tools || (sas.tools = {}));
-1->^^^^
+>>>    })(tools);
+1 >^^^^
 2 >    ^
 3 >     ^^
 4 >       ^^^^^
-5 >            ^^^
-6 >               ^^^^^^^^^
-7 >                        ^^^^^
-8 >                             ^^^^^^^^^
-9 >                                      ^^^^^^^^
-1->
+5 >            ^^
+1 >
   >
   >
 2 >    }
 3 >     
 4 >       tools
-5 >            
-6 >               tools
-7 >                        
-8 >                             tools
-9 >                                       {
-  >                                          export class Test {
-  >                                              public doX(): void {
-  >                                                  let f: number = 2;
-  >                                                  switch (f) {
-  >                                                      case 1:
-  >                                                          break;
-  >                                                      case 2:
-  >                                                          //line comment 1
-  >                                                          //line comment 2
-  >                                                          break;
-  >                                                      case 3:
-  >                                                          //a comment
-  >                                                          break;
-  >                                                  }
-  >                                              }
-  >                                          }
-  >                                      
-  >                                      }
-1->Emitted(25, 5) Source(19, 1) + SourceIndex(0)
+5 >             {
+  >                export class Test {
+  >                    public doX(): void {
+  >                        let f: number = 2;
+  >                        switch (f) {
+  >                            case 1:
+  >                                break;
+  >                            case 2:
+  >                                //line comment 1
+  >                                //line comment 2
+  >                                break;
+  >                            case 3:
+  >                                //a comment
+  >                                break;
+  >                        }
+  >                    }
+  >                }
+  >            
+  >            }
+1 >Emitted(25, 5) Source(19, 1) + SourceIndex(0)
 2 >Emitted(25, 6) Source(19, 2) + SourceIndex(0)
 3 >Emitted(25, 8) Source(1, 12) + SourceIndex(0)
 4 >Emitted(25, 13) Source(1, 17) + SourceIndex(0)
-5 >Emitted(25, 16) Source(1, 12) + SourceIndex(0)
-6 >Emitted(25, 25) Source(1, 17) + SourceIndex(0)
-7 >Emitted(25, 30) Source(1, 12) + SourceIndex(0)
-8 >Emitted(25, 39) Source(1, 17) + SourceIndex(0)
-9 >Emitted(25, 47) Source(19, 2) + SourceIndex(0)
+5 >Emitted(25, 15) Source(19, 2) + SourceIndex(0)
 ---
->>>})(sas || (sas = {}));
+>>>})(sas);
 1 >
 2 >^
 3 > ^^
 4 >   ^^^
-5 >      ^^^^^
-6 >           ^^^
-7 >              ^^^^^^^^
-8 >                      ^^^^^^^^^^^^^^^^^^^^^^^->
+5 >      ^^
+6 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
 4 >   sas
-5 >      
-6 >           sas
-7 >              .tools {
-  >                  export class Test {
-  >                      public doX(): void {
-  >                          let f: number = 2;
-  >                          switch (f) {
-  >                              case 1:
-  >                                  break;
-  >                              case 2:
-  >                                  //line comment 1
-  >                                  //line comment 2
-  >                                  break;
-  >                              case 3:
-  >                                  //a comment
-  >                                  break;
-  >                          }
-  >                      }
+5 >      .tools {
+  >          export class Test {
+  >              public doX(): void {
+  >                  let f: number = 2;
+  >                  switch (f) {
+  >                      case 1:
+  >                          break;
+  >                      case 2:
+  >                          //line comment 1
+  >                          //line comment 2
+  >                          break;
+  >                      case 3:
+  >                          //a comment
+  >                          break;
   >                  }
-  >              
   >              }
+  >          }
+  >      
+  >      }
 1 >Emitted(26, 1) Source(19, 1) + SourceIndex(0)
 2 >Emitted(26, 2) Source(19, 2) + SourceIndex(0)
 3 >Emitted(26, 4) Source(1, 8) + SourceIndex(0)
 4 >Emitted(26, 7) Source(1, 11) + SourceIndex(0)
-5 >Emitted(26, 12) Source(1, 8) + SourceIndex(0)
-6 >Emitted(26, 15) Source(1, 11) + SourceIndex(0)
-7 >Emitted(26, 23) Source(19, 2) + SourceIndex(0)
+5 >Emitted(26, 9) Source(19, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-Comments.js.map

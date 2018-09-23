@@ -24,7 +24,7 @@ bug3(fprime);
 bug3(function(x:string):string { return x; });
 
 //// [overloadResolutionOverNonCTLambdas.js]
-var Bugs;
+var Bugs = Bugs || (Bugs = {});
 (function (Bugs) {
     var A = /** @class */ (function () {
         function A() {
@@ -49,7 +49,7 @@ var Bugs;
         });
         return result;
     }
-})(Bugs || (Bugs = {}));
+})(Bugs);
 function bug3(f) { return f("s"); }
 function fprime(x) { return x; }
 bug3(fprime);

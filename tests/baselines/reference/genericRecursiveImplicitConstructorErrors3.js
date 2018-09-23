@@ -44,7 +44,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     var MemberName = /** @class */ (function () {
         function MemberName() {
@@ -54,7 +54,7 @@ var TypeScript;
         return MemberName;
     }());
     TypeScript.MemberName = MemberName;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);
 (function (TypeScript) {
     var PullSymbol = /** @class */ (function () {
         function PullSymbol() {
@@ -86,4 +86,4 @@ var TypeScript;
         return PullTypeSymbol;
     }(PullSymbol));
     TypeScript.PullTypeSymbol = PullTypeSymbol;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

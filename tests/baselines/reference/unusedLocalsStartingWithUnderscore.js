@@ -20,11 +20,11 @@ for (var _i = 0, _a = []; _i < _a.length; _i++) {
     var _1 = _a[_i];
 }
 for (var _2 in []) { }
-var _ns;
+var _ns = {};
 (function (_ns) {
     var _;
     for (var _i = 0, _a = []; _i < _a.length; _i++) {
         var _3 = _a[_i];
     }
     for (var _4 in []) { }
-})(_ns || (_ns = {}));
+})(_ns);

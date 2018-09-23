@@ -73,10 +73,10 @@ var e = undefined;
 x = e;
 var e2;
 x = e2;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 x = E.A;
 var f = E.A;
 x = f;

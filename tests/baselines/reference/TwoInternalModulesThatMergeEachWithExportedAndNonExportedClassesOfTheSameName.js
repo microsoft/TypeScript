@@ -41,7 +41,7 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -49,7 +49,7 @@ var A;
         return Point;
     }());
     A.Point = Point;
-})(A || (A = {}));
+})(A);
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -59,15 +59,15 @@ var A;
         };
         return Point;
     }());
-})(A || (A = {}));
+})(A);
 // ensure merges as expected
 var p;
 var p;
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var Z;
+        var Z = Y.Z || (Y.Z = {});
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
@@ -75,22 +75,22 @@ var X;
                 return Line;
             }());
             Z.Line = Line;
-        })(Z = Y.Z || (Y.Z = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Z);
+    })(Y);
+})(X);
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var Z;
+        var Z = Y.Z || (Y.Z = {});
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
                 }
                 return Line;
             }());
-        })(Z = Y.Z || (Y.Z = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Z);
+    })(Y);
+})(X);
 // ensure merges as expected
 var l;
 var l;

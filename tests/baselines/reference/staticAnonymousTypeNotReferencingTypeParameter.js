@@ -164,7 +164,7 @@ var ListWrapper2 = /** @class */ (function () {
     };
     return ListWrapper2;
 }());
-var tessst;
+var tessst = tessst || (tessst = {});
 (function (tessst) {
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
@@ -183,7 +183,7 @@ var tessst;
         return undefined;
     }
     tessst.funkyFor = funkyFor;
-})(tessst || (tessst = {}));
+})(tessst);
 var ListWrapper = /** @class */ (function () {
     function ListWrapper() {
     }

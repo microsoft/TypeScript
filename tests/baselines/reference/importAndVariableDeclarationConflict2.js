@@ -12,10 +12,10 @@ class C {
 }
 
 //// [importAndVariableDeclarationConflict2.js]
-var m;
+var m = m || (m = {});
 (function (m_1) {
     m_1.m = '';
-})(m || (m = {}));
+})(m);
 var x = m.m;
 var C = /** @class */ (function () {
     function C() {

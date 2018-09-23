@@ -291,7 +291,7 @@ var r4 = i.as;
 var a;
 var r5 = a.abstract;
 var r6 = a.as;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["abstract"] = 0] = "abstract";
     E[E["as"] = 1] = "as";
@@ -356,6 +356,6 @@ var E;
     E[E["volatile"] = 60] = "volatile";
     E[E["while"] = 61] = "while";
     E[E["with"] = 62] = "with";
-})(E || (E = {}));
+})(E);
 var r7 = E.abstract;
 var r8 = E.as;

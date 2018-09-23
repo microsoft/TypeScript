@@ -50,7 +50,7 @@ var Aaa = /** @class */ (function (_super) {
         return SomeType;
     }());
     Aaa.SomeType = SomeType;
-})(Aaa || (Aaa = {}));
+})(Aaa);
 (function (Bbb) {
     var SomeType = /** @class */ (function () {
         function SomeType() {
@@ -58,7 +58,7 @@ var Aaa = /** @class */ (function (_super) {
         return SomeType;
     }());
     Bbb.SomeType = SomeType;
-})(Bbb || (Bbb = {}));
+})(Bbb);
 var a;
 
 

@@ -70,9 +70,10 @@ System.register(["f1"], function (exports_1, context_1) {
             x = 1;
             exports_1("x", x);
             exports_1("x1", x);
+            N = {};
             (function (N) {
                 N.x = 1;
-            })(N || (N = {}));
+            })(N);
             IX = N.x;
             exports_1("IX", IX);
             exports_1("IX1", IX);

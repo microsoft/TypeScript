@@ -34,7 +34,8 @@ export module M {
 
 
 //// [es6ModuleInternalNamedImports2.js]
-export var M;
+export const M = {};
+export { M };
 (function (M) {
     // variable
     M.M_V = 0;
@@ -43,19 +44,19 @@ export var M;
     }
     M.M_C = M_C;
     // instantiated module
-    let M_M;
+    const M_M = M.M_M || (M.M_M = {});
     (function (M_M) {
         var x;
-    })(M_M = M.M_M || (M.M_M = {}));
+    })(M_M);
     // function
     function M_F() { }
     M.M_F = M_F;
     // enum
-    let M_E;
+    const M_E = M.M_E || (M.M_E = {});
     (function (M_E) {
-    })(M_E = M.M_E || (M.M_E = {}));
+    })(M_E);
     // alias
     M.M_A = M_M;
-})(M || (M = {}));
+})(M);
 (function (M) {
-})(M || (M = {}));
+})(M);

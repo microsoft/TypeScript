@@ -11,6 +11,6 @@ module M2 {
 }
 
 //// [decoratorOnImportEquals1.js]
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
-})(M1 || (M1 = {}));
+})(M1);

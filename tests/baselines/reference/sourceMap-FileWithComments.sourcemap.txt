@@ -11,7 +11,7 @@ sourceFile:sourceMap-FileWithComments.ts
 >>>// Module
 1 >
 2 >^^^^^^^^^
-3 >         ^^^->
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >// Interface
   >interface IPoint {
   >    getDist(): number;
@@ -22,54 +22,65 @@ sourceFile:sourceMap-FileWithComments.ts
 1 >Emitted(1, 1) Source(6, 1) + SourceIndex(0)
 2 >Emitted(1, 10) Source(6, 10) + SourceIndex(0)
 ---
->>>var Shapes;
+>>>var Shapes = Shapes || (Shapes = {});
 1->
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^
-5 >           ^^^^^^^^^^->
+4 >          ^^^
+5 >             ^^^^^^
+6 >                   ^^^^^
+7 >                        ^^^^^^
+8 >                              ^^^^^^^
 1->
   >
 2 >module 
 3 >    Shapes
-4 >           {
-  >          
-  >              // Class
-  >              export class Point implements IPoint {
-  >                  // Constructor
-  >                  constructor(public x: number, public y: number) { }
-  >          
-  >                  // Instance member
-  >                  getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
-  >          
-  >                  // Static member
-  >                  static origin = new Point(0, 0);
-  >              }
-  >          
-  >              // Variable comment after class
-  >              var a = 10;
-  >          
-  >              export function foo() {
-  >              }
-  >          
-  >              /**  comment after function
-  >              * this is another comment 
-  >              */
-  >              var b = 10;
-  >          }
+4 >          
+5 >             Shapes
+6 >                   
+7 >                        Shapes
+8 >                               {
+  >                              
+  >                                  // Class
+  >                                  export class Point implements IPoint {
+  >                                      // Constructor
+  >                                      constructor(public x: number, public y: number) { }
+  >                              
+  >                                      // Instance member
+  >                                      getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+  >                              
+  >                                      // Static member
+  >                                      static origin = new Point(0, 0);
+  >                                  }
+  >                              
+  >                                  // Variable comment after class
+  >                                  var a = 10;
+  >                              
+  >                                  export function foo() {
+  >                                  }
+  >                              
+  >                                  /**  comment after function
+  >                                  * this is another comment 
+  >                                  */
+  >                                  var b = 10;
+  >                              }
 1->Emitted(2, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(2, 5) Source(7, 8) + SourceIndex(0)
 3 >Emitted(2, 11) Source(7, 14) + SourceIndex(0)
-4 >Emitted(2, 12) Source(31, 2) + SourceIndex(0)
+4 >Emitted(2, 14) Source(7, 8) + SourceIndex(0)
+5 >Emitted(2, 20) Source(7, 14) + SourceIndex(0)
+6 >Emitted(2, 25) Source(7, 8) + SourceIndex(0)
+7 >Emitted(2, 31) Source(7, 14) + SourceIndex(0)
+8 >Emitted(2, 38) Source(31, 2) + SourceIndex(0)
 ---
 >>>(function (Shapes) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^
-1->
+1 >
 2 >module 
 3 >           Shapes
-1->Emitted(3, 1) Source(7, 1) + SourceIndex(0)
+1 >Emitted(3, 1) Source(7, 1) + SourceIndex(0)
 2 >Emitted(3, 12) Source(7, 8) + SourceIndex(0)
 3 >Emitted(3, 18) Source(7, 14) + SourceIndex(0)
 ---
@@ -457,7 +468,6 @@ sourceFile:sourceMap-FileWithComments.ts
 4 >         ^^^
 5 >            ^^
 6 >              ^
-7 >               ^^^^^^^^^^^^^^->
 1->
   >    
 2 >    var 
@@ -472,63 +482,58 @@ sourceFile:sourceMap-FileWithComments.ts
 5 >Emitted(26, 15) Source(30, 15) + SourceIndex(0)
 6 >Emitted(26, 16) Source(30, 16) + SourceIndex(0)
 ---
->>>})(Shapes || (Shapes = {}));
-1->
+>>>})(Shapes);
+1 >
 2 >^
 3 > ^^
 4 >   ^^^^^^
-5 >         ^^^^^
-6 >              ^^^^^^
-7 >                    ^^^^^^^^
-1->
+5 >         ^^
+6 >           ^^^^^^^^^^^->
+1 >
   >
 2 >}
 3 > 
 4 >   Shapes
-5 >         
-6 >              Shapes
-7 >                     {
-  >                    
-  >                        // Class
-  >                        export class Point implements IPoint {
-  >                            // Constructor
-  >                            constructor(public x: number, public y: number) { }
-  >                    
-  >                            // Instance member
-  >                            getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
-  >                    
-  >                            // Static member
-  >                            static origin = new Point(0, 0);
-  >                        }
-  >                    
-  >                        // Variable comment after class
-  >                        var a = 10;
-  >                    
-  >                        export function foo() {
-  >                        }
-  >                    
-  >                        /**  comment after function
-  >                        * this is another comment 
-  >                        */
-  >                        var b = 10;
-  >                    }
-1->Emitted(27, 1) Source(31, 1) + SourceIndex(0)
+5 >          {
+  >         
+  >             // Class
+  >             export class Point implements IPoint {
+  >                 // Constructor
+  >                 constructor(public x: number, public y: number) { }
+  >         
+  >                 // Instance member
+  >                 getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+  >         
+  >                 // Static member
+  >                 static origin = new Point(0, 0);
+  >             }
+  >         
+  >             // Variable comment after class
+  >             var a = 10;
+  >         
+  >             export function foo() {
+  >             }
+  >         
+  >             /**  comment after function
+  >             * this is another comment 
+  >             */
+  >             var b = 10;
+  >         }
+1 >Emitted(27, 1) Source(31, 1) + SourceIndex(0)
 2 >Emitted(27, 2) Source(31, 2) + SourceIndex(0)
 3 >Emitted(27, 4) Source(7, 8) + SourceIndex(0)
 4 >Emitted(27, 10) Source(7, 14) + SourceIndex(0)
-5 >Emitted(27, 15) Source(7, 8) + SourceIndex(0)
-6 >Emitted(27, 21) Source(7, 14) + SourceIndex(0)
-7 >Emitted(27, 29) Source(31, 2) + SourceIndex(0)
+5 >Emitted(27, 12) Source(31, 2) + SourceIndex(0)
 ---
 >>>/** Local Variable */
-1 >
+1->
 2 >^^^^^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^^^^->
-1 >
+1->
   >
   >
 2 >/** Local Variable */
-1 >Emitted(28, 1) Source(33, 1) + SourceIndex(0)
+1->Emitted(28, 1) Source(33, 1) + SourceIndex(0)
 2 >Emitted(28, 22) Source(33, 22) + SourceIndex(0)
 ---
 >>>var p = new Shapes.Point(3, 4);

@@ -56,7 +56,7 @@ var D = /** @class */ (function (_super) {
     }
     D.foo = foo;
     ;
-})(D || (D = {}));
+})(D);
 var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {

@@ -31,7 +31,7 @@ function use() {
 
 
 //// [aliasErrors.js]
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     var Provide = /** @class */ (function () {
         function Provide() {
@@ -39,9 +39,9 @@ var foo;
         return Provide;
     }());
     foo.Provide = Provide;
-    var bar;
+    var bar = foo.bar || (foo.bar = {});
     (function (bar) {
-        var baz;
+        var baz = bar.baz || (bar.baz = {});
         (function (baz) {
             var boo = /** @class */ (function () {
                 function boo() {
@@ -49,9 +49,9 @@ var foo;
                 return boo;
             }());
             baz.boo = boo;
-        })(baz = bar.baz || (bar.baz = {}));
-    })(bar = foo.bar || (foo.bar = {}));
-})(foo || (foo = {}));
+        })(baz);
+    })(bar);
+})(foo);
 var provide = foo;
 var booz = foo.bar.baz;
 var beez = foo.bar;

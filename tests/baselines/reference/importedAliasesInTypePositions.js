@@ -22,13 +22,13 @@ export module ImportingModule {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var elaborate;
+    var elaborate = {};
     (function (elaborate) {
-        var nested;
+        var nested = elaborate.nested || (elaborate.nested = {});
         (function (nested) {
-            var mod;
+            var mod = nested.mod || (nested.mod = {});
             (function (mod) {
-                var name;
+                var name = mod.name || (mod.name = {});
                 (function (name) {
                     var ReferredTo = /** @class */ (function () {
                         function ReferredTo() {
@@ -38,16 +38,16 @@ define(["require", "exports"], function (require, exports) {
                         return ReferredTo;
                     }());
                     name.ReferredTo = ReferredTo;
-                })(name = mod.name || (mod.name = {}));
-            })(mod = nested.mod || (nested.mod = {}));
-        })(nested = elaborate.nested || (elaborate.nested = {}));
-    })(elaborate = exports.elaborate || (exports.elaborate = {}));
+                })(name);
+            })(mod);
+        })(nested);
+    })(elaborate);
 });
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var ImportingModule;
+    var ImportingModule = {};
     (function (ImportingModule) {
         var UsesReferredType = /** @class */ (function () {
             function UsesReferredType(referred) {
@@ -55,5 +55,5 @@ define(["require", "exports"], function (require, exports) {
             }
             return UsesReferredType;
         }());
-    })(ImportingModule = exports.ImportingModule || (exports.ImportingModule = {}));
+    })(ImportingModule);
 });

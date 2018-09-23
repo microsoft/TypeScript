@@ -16,8 +16,8 @@ function Foo() { }
 { }
 4 + ;
 5;
-var M;
+var M = M || (M = {});
 (function (M) {
     function a(T) { }
-})(M || (M = {}));
+})(M);
 var x = ;

@@ -235,12 +235,12 @@ var C1T5 = /** @class */ (function () {
     return C1T5;
 }());
 // CONTEXT: Module property declaration
-var C2T5;
+var C2T5 = C2T5 || (C2T5 = {});
 (function (C2T5) {
     C2T5.foo = function (i) {
         return i;
     };
-})(C2T5 || (C2T5 = {}));
+})(C2T5);
 // CONTEXT: Variable declaration
 var c3t1 = (function (s) { return s; });
 var c3t2 = ({
@@ -274,12 +274,12 @@ var C4T5 = /** @class */ (function () {
     return C4T5;
 }());
 // CONTEXT: Module property assignment
-var C5T5;
+var C5T5 = C5T5 || (C5T5 = {});
 (function (C5T5) {
     C5T5.foo = function (i, s) {
         return s;
     };
-})(C5T5 || (C5T5 = {}));
+})(C5T5);
 // CONTEXT: Variable assignment
 var c6t5;
 c6t5 = function (n) { return ({}); };

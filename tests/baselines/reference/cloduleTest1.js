@@ -12,9 +12,9 @@
 
 
 //// [cloduleTest1.js]
-var $;
+var $ = $ || ($ = {});
 (function ($) {
     function ajax(options) { }
     $.ajax = ajax;
-})($ || ($ = {}));
+})($);
 var it = $('.foo').addClass('bar');

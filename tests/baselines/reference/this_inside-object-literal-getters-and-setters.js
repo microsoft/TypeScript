@@ -17,7 +17,7 @@ module ObjectLiteral {
 
 
 //// [this_inside-object-literal-getters-and-setters.js]
-var ObjectLiteral;
+var ObjectLiteral = ObjectLiteral || (ObjectLiteral = {});
 (function (ObjectLiteral) {
     var ThisInObjectLiteral = {
         _foo: '1',
@@ -31,4 +31,4 @@ var ObjectLiteral;
             return this._foo;
         }
     };
-})(ObjectLiteral || (ObjectLiteral = {}));
+})(ObjectLiteral);

@@ -13,11 +13,11 @@ module foo {
 //// [assignmentToFunction.js]
 function fn() { }
 fn = function () { return 3; };
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     function xyz() {
         function bar() {
         }
         bar = null;
     }
-})(foo || (foo = {}));
+})(foo);

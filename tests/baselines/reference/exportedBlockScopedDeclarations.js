@@ -26,17 +26,17 @@ define(["require", "exports"], function (require, exports) {
     function f() {
         var bar = bar; // compile error
     }
-    var NS;
+    var NS = {};
     (function (NS) {
         NS.bar = NS.bar; // should be compile error
-    })(NS || (NS = {}));
+    })(NS);
     var foo1 = foo1; // compile error
     exports.bar1 = exports.bar1; // should be compile error
     function f1() {
         var bar1 = bar1; // compile error
     }
-    var NS1;
+    var NS1 = {};
     (function (NS1) {
         NS1.bar1 = NS1.bar1; // should be compile error
-    })(NS1 || (NS1 = {}));
+    })(NS1);
 });

@@ -13,7 +13,7 @@ module M2 {
 }
 
 //// [classImplementsImportedInterface.js]
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var C = /** @class */ (function () {
         function C() {
@@ -21,4 +21,4 @@ var M2;
         C.prototype.foo = function () { };
         return C;
     }());
-})(M2 || (M2 = {}));
+})(M2);

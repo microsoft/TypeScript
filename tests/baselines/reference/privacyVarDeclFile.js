@@ -474,7 +474,7 @@ var privateClassWithPrivateModulePropertyTypes = /** @class */ (function () {
     return privateClassWithPrivateModulePropertyTypes;
 }());
 var privateVarWithPrivateModulePropertyTypes;
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -523,8 +523,8 @@ var publicModule;
         return privateClassWithPrivateModulePropertyTypes;
     }());
     var privateVarWithPrivateModulePropertyTypes;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -573,7 +573,7 @@ var privateModule;
         return privateClassWithPrivateModulePropertyTypes;
     }());
     var privateVarWithPrivateModulePropertyTypes;
-})(privateModule || (privateModule = {}));
+})(privateModule);
 //// [privacyVarDeclFile_GlobalFile.js]
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
@@ -586,7 +586,7 @@ var publicClassWithWithPublicPropertyTypesInGlobal = /** @class */ (function () 
     return publicClassWithWithPublicPropertyTypesInGlobal;
 }());
 var publicVarWithPublicPropertyTypesInGlobal;
-var publicModuleInGlobal;
+var publicModuleInGlobal = publicModuleInGlobal || (publicModuleInGlobal = {});
 (function (publicModuleInGlobal) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -599,7 +599,7 @@ var publicModuleInGlobal;
         return publicClass;
     }());
     publicModuleInGlobal.publicClass = publicClass;
-    var privateModule;
+    var privateModule = privateModule || (privateModule = {});
     (function (privateModule) {
         var privateClass = /** @class */ (function () {
             function privateClass() {
@@ -648,7 +648,7 @@ var publicModuleInGlobal;
             return privateClassWithPrivateModulePropertyTypes;
         }());
         var privateVarWithPrivateModulePropertyTypes;
-    })(privateModule || (privateModule = {}));
+    })(privateModule);
     var publicClassWithWithPrivatePropertyTypes = /** @class */ (function () {
         function publicClassWithWithPrivatePropertyTypes() {
         }
@@ -685,7 +685,7 @@ var publicModuleInGlobal;
         return privateClassWithPrivateModulePropertyTypes;
     }());
     var privateVarWithPrivateModulePropertyTypes;
-})(publicModuleInGlobal || (publicModuleInGlobal = {}));
+})(publicModuleInGlobal);
 
 
 //// [privacyVarDeclFile_externalModule.d.ts]

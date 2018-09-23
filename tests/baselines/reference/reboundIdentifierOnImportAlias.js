@@ -8,11 +8,11 @@ module Bar {
 }
 
 //// [reboundIdentifierOnImportAlias.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     Foo.x = "hello";
-})(Foo || (Foo = {}));
-var Bar;
+})(Foo);
+var Bar = Bar || (Bar = {});
 (function (Bar) {
     var Foo = 1;
-})(Bar || (Bar = {}));
+})(Bar);

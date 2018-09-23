@@ -62,10 +62,10 @@ var p3 = m3.Color.Blue;
 
 //// [instantiatedModule.js]
 // adding the var makes this an instantiated module
-var M;
+var M = M || (M = {});
 (function (M) {
     M.Point = 1;
-})(M || (M = {}));
+})(M);
 // primary expression
 var m;
 var m = M;
@@ -76,7 +76,7 @@ var p1;
 var p1;
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -87,7 +87,7 @@ var M2;
         return Point;
     }());
     M2.Point = Point;
-})(M2 || (M2 = {}));
+})(M2);
 var m2;
 var m2 = M2;
 // static side of the class
@@ -99,14 +99,14 @@ var p2;
 var p2;
 var p2 = new m2.Point();
 var p2 = new M2.Point();
-var M3;
+var M3 = M3 || (M3 = {});
 (function (M3) {
-    var Color;
+    var Color = M3.Color || (M3.Color = {});
     (function (Color) {
         Color[Color["Blue"] = 0] = "Blue";
         Color[Color["Red"] = 1] = "Red";
-    })(Color = M3.Color || (M3.Color = {}));
-})(M3 || (M3 = {}));
+    })(Color);
+})(M3);
 var m3;
 var m3 = M3;
 var a3;

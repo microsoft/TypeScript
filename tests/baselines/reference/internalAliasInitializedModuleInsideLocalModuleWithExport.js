@@ -15,9 +15,9 @@ export module c {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var a;
+    var a = {};
     (function (a) {
-        var b;
+        var b = a.b || (a.b = {});
         (function (b) {
             var c = /** @class */ (function () {
                 function c() {
@@ -25,13 +25,13 @@ define(["require", "exports"], function (require, exports) {
                 return c;
             }());
             b.c = c;
-        })(b = a.b || (a.b = {}));
-    })(a = exports.a || (exports.a = {}));
-    var c;
+        })(b);
+    })(a);
+    var c = {};
     (function (c) {
         c.b = a.b;
         c.x = new c.b.c();
-    })(c = exports.c || (exports.c = {}));
+    })(c);
 });
 
 

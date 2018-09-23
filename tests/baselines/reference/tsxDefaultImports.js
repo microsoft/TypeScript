@@ -16,10 +16,10 @@ let a = Def.E.one;
 //// [a.js]
 "use strict";
 exports.__esModule = true;
-var SomeEnum;
+var SomeEnum = {};
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
-})(SomeEnum || (SomeEnum = {}));
+})(SomeEnum);
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }

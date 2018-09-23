@@ -11,7 +11,7 @@ module B {
 }
 
 //// [unusedImports10.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Calculator = /** @class */ (function () {
         function Calculator() {
@@ -21,4 +21,4 @@ var A;
         return Calculator;
     }());
     A.Calculator = Calculator;
-})(A || (A = {}));
+})(A);

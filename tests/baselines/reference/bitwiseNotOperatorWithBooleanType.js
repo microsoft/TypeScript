@@ -48,9 +48,9 @@ var A = /** @class */ (function () {
     A.foo = function () { return false; };
     return A;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var objA = new A();
 // boolean type var
 var ResultIsNumber1 = ~BOOLEAN;

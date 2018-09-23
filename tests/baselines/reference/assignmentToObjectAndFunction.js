@@ -40,16 +40,16 @@ var errFun = {}; // Error for no call signature
 function foo() { }
 (function (foo) {
     foo.boom = 0;
-})(foo || (foo = {}));
+})(foo);
 var goodFundule = foo; // ok
 function bar() { }
 (function (bar) {
     function apply(thisArg, argArray) { }
     bar.apply = apply;
-})(bar || (bar = {}));
+})(bar);
 var goodFundule2 = bar; // ok
 function bad() { }
 (function (bad) {
     bad.apply = 0;
-})(bad || (bad = {}));
+})(bad);
 var badFundule = bad; // error

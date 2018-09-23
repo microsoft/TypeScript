@@ -18,14 +18,14 @@ m.y.x;
 //// [objectLiteralShorthandPropertiesErrorWithModule.js]
 // module export
 var x = "Foo";
-var m;
+var m = m || (m = {});
 (function (m) {
-})(m || (m = {}));
-var n;
+})(m);
+var n = n || (n = {});
 (function (n) {
     var z = 10000;
     n.y = {
         m: .x // error
     };
-})(n || (n = {}));
+})(n);
 m.y.x;

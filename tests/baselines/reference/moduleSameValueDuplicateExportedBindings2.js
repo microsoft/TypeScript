@@ -16,11 +16,11 @@ export enum Animals {
 //// [c.js]
 "use strict";
 exports.__esModule = true;
-var Animals;
+var Animals = {};
 (function (Animals) {
     Animals[Animals["Cat"] = 0] = "Cat";
     Animals[Animals["Dog"] = 1] = "Dog";
-})(Animals = exports.Animals || (exports.Animals = {}));
+})(Animals);
 ;
 //// [b.js]
 "use strict";

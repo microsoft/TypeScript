@@ -88,7 +88,7 @@ module NumbersAndStrings {
 //// [assignmentCompatWithObjectMembersStringNumericNames.js]
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 // string named numeric properties work correctly, errors below unless otherwise noted
-var JustStrings;
+var JustStrings = JustStrings || (JustStrings = {});
 (function (JustStrings) {
     var S = /** @class */ (function () {
         function S() {
@@ -127,8 +127,8 @@ var JustStrings;
     a2 = b; // ok
     a2 = t2; // ok
     a2 = t;
-})(JustStrings || (JustStrings = {}));
-var NumbersAndStrings;
+})(JustStrings);
+var NumbersAndStrings = NumbersAndStrings || (NumbersAndStrings = {});
 (function (NumbersAndStrings) {
     var S = /** @class */ (function () {
         function S() {
@@ -168,4 +168,4 @@ var NumbersAndStrings;
     a2 = b; // error
     a2 = t2; // error
     a2 = t; // error
-})(NumbersAndStrings || (NumbersAndStrings = {}));
+})(NumbersAndStrings);

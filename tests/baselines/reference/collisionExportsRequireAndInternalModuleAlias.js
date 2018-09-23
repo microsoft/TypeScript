@@ -26,7 +26,7 @@ module m2 {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var m;
+    var m = {};
     (function (m) {
         var c = /** @class */ (function () {
             function c() {
@@ -34,23 +34,23 @@ define(["require", "exports"], function (require, exports) {
             return c;
         }());
         m.c = c;
-    })(m = exports.m || (exports.m = {}));
+    })(m);
     var exports = m.c;
     var require = m.c;
     new exports();
     new require();
-    var m1;
+    var m1 = {};
     (function (m1) {
         var exports = m.c;
         var require = m.c;
         new exports();
         new require();
-    })(m1 || (m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         m2.exports = m.c;
         m2.require = m.c;
         new m2.exports();
         new m2.require();
-    })(m2 || (m2 = {}));
+    })(m2);
 });

@@ -6,11 +6,11 @@ namespace Validation {
 }
 
 //// [unusedClassesinNamespace1.js]
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;
     }());
-})(Validation || (Validation = {}));
+})(Validation);

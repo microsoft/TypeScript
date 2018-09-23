@@ -246,12 +246,12 @@ function f() {
 }
 
 //// [expr.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["Red"] = 0] = "Red";
     E[E["Green"] = 1] = "Green";
     E[E["Blue"] = 2] = "Blue";
-})(E || (E = {}));
+})(E);
 function f() {
     var a;
     var n = 3;

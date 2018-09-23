@@ -18,11 +18,11 @@ module m1 {
 }
 
 //// [fooResult.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     M.X = 1;
-})(M || (M = {}));
-var m1;
+})(M);
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -30,5 +30,5 @@ var m1;
         return c1;
     }());
     m1.c1 = c1;
-})(m1 || (m1 = {}));
+})(m1);
 //# sourceMappingURL=fooResult.js.map

@@ -13,13 +13,13 @@ module m {
 
 
 //// [objectLiteralShorthandPropertiesWithModuleES6.js]
-var m;
+var m = m || (m = {});
 (function (m) {
-})(m || (m = {}));
+})(m);
 (function (m) {
     var z = m.x;
     var y = {
         a: m.x,
         x: m.x
     };
-})(m || (m = {}));
+})(m);

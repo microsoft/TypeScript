@@ -41,7 +41,7 @@ module M {
 
 
 //// [file.jsx]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -49,7 +49,7 @@ var M;
         return Foo;
     }());
     M.Foo = Foo;
-    var S;
+    var S = M.S || (M.S = {});
     (function (S) {
         var Bar = /** @class */ (function () {
             function Bar() {
@@ -59,26 +59,26 @@ var M;
         S.Bar = Bar;
         // Emit Foo
         // Foo, <Foo />;
-    })(S = M.S || (M.S = {}));
-})(M || (M = {}));
+    })(S);
+})(M);
 (function (M) {
     // Emit M.Foo
     M.Foo, <M.Foo />;
-    var S;
+    var S = M.S || (M.S = {});
     (function (S) {
         // Emit M.Foo
         M.Foo, <M.Foo />;
         // Emit S.Bar
         S.Bar, <S.Bar />;
-    })(S = M.S || (M.S = {}));
-})(M || (M = {}));
+    })(S);
+})(M);
 (function (M) {
     // Emit M.S.Bar
     M.S.Bar, <M.S.Bar />;
-})(M || (M = {}));
+})(M);
 (function (M_1) {
     var M = 100;
     // Emit M_1.Foo
     M_1.Foo, <M_1.Foo />;
-})(M || (M = {}));
+})(M);
 //# sourceMappingURL=file.jsx.map

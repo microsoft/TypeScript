@@ -180,12 +180,12 @@ aa = append(aa, 1);
 
 
 //// [literalTypes2.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E || (E = {}));
+})(E);
 var cond;
 function f1(p1, p2, p3, p4) {
     if (p1 === void 0) { p1 = 1; }

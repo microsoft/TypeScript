@@ -34,8 +34,8 @@ var Point = /** @class */ (function () {
 (function (Point) {
     function Origin() { return null; } //expected duplicate identifier error
     Point.Origin = Origin;
-})(Point || (Point = {}));
-var A;
+})(Point);
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -49,5 +49,5 @@ var A;
     (function (Point) {
         function Origin() { return ""; } //expected duplicate identifier error
         Point.Origin = Origin;
-    })(Point = A.Point || (A.Point = {}));
-})(A || (A = {}));
+    })(Point);
+})(A);

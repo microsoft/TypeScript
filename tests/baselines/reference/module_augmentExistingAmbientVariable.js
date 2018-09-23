@@ -6,7 +6,7 @@ module console {
 }
 
 //// [module_augmentExistingAmbientVariable.js]
-var console;
+var console = console || (console = {});
 (function (console) {
     console.x = 2;
-})(console || (console = {}));
+})(console);

@@ -23,21 +23,21 @@ var cl = B.Point.Origin;
 
 
 //// [function.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     function Point() {
         return { x: 0, y: 0 };
     }
     A.Point = Point;
-})(A || (A = {}));
+})(A);
 //// [module.js]
-var B;
+var B = B || (B = {});
 (function (B) {
-    var Point;
+    var Point = B.Point || (B.Point = {});
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
-    })(Point = B.Point || (B.Point = {}));
-})(B || (B = {}));
+    })(Point);
+})(B);
 //// [test.js]
 var fn;
 var fn = A.Point;

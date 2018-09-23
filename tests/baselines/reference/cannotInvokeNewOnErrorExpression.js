@@ -6,12 +6,12 @@ module M
 var t = new M.ClassA[];
 
 //// [cannotInvokeNewOnErrorExpression.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var ClassA = /** @class */ (function () {
         function ClassA() {
         }
         return ClassA;
     }());
-})(M || (M = {}));
+})(M);
 var t = new M.ClassA[];

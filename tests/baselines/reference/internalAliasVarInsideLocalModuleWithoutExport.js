@@ -13,15 +13,15 @@ export module c {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var a;
+    var a = {};
     (function (a) {
         a.x = 10;
-    })(a = exports.a || (exports.a = {}));
-    var c;
+    })(a);
+    var c = {};
     (function (c) {
         var b = a.x;
         c.bVal = b;
-    })(c = exports.c || (exports.c = {}));
+    })(c);
 });
 
 

@@ -113,7 +113,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Errors;
+var Errors = Errors || (Errors = {});
 (function (Errors) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -141,7 +141,7 @@ var Errors;
         }
         return OtherDerived;
     }(Base));
-    var WithNonGenericSignaturesInBaseType;
+    var WithNonGenericSignaturesInBaseType = WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {});
     (function (WithNonGenericSignaturesInBaseType) {
         // target type with non-generic call signatures
         var a2;
@@ -184,8 +184,8 @@ var Errors;
         var b17;
         a17 = b17;
         b17 = a17;
-    })(WithNonGenericSignaturesInBaseType || (WithNonGenericSignaturesInBaseType = {}));
-    var WithGenericSignaturesInBaseType;
+    })(WithNonGenericSignaturesInBaseType);
+    var WithGenericSignaturesInBaseType = WithGenericSignaturesInBaseType || (WithGenericSignaturesInBaseType = {});
     (function (WithGenericSignaturesInBaseType) {
         // target type has generic call signature
         var a2;
@@ -197,5 +197,5 @@ var Errors;
         var b3;
         a3 = b3;
         b3 = a3;
-    })(WithGenericSignaturesInBaseType || (WithGenericSignaturesInBaseType = {}));
-})(Errors || (Errors = {}));
+    })(WithGenericSignaturesInBaseType);
+})(Errors);

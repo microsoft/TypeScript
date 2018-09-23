@@ -14,8 +14,8 @@ module empty {
 // test
 var f = '';
 // test #2
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     function bar() { }
-})(foo || (foo = {}));
+})(foo);
 // test #4

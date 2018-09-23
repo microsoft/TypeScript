@@ -33,13 +33,13 @@ class C {
 
 //// [duplicateVariablesByScope.js]
 // duplicate local variables are only reported at global scope
-var M;
+var M = M || (M = {});
 (function (M) {
     for (var j = 0; j < 10; j++) {
     }
     for (var j = 0; j < 10; j++) {
     }
-})(M || (M = {}));
+})(M);
 function foo() {
     var x = 2;
     var x = 1;

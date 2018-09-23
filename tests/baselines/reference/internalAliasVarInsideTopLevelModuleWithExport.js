@@ -12,10 +12,10 @@ export var bVal = b;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var a;
+    var a = {};
     (function (a) {
         a.x = 10;
-    })(a = exports.a || (exports.a = {}));
+    })(a);
     exports.b = a.x;
     exports.bVal = exports.b;
 });

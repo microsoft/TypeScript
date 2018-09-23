@@ -29,7 +29,7 @@ module test {
 // The instanceof operator requires the left operand to be of type Any or an object type, and the right 
 // operand to be of type Any or a subtype of the ‘Function’ interface type. The result is always of the 
 // Boolean primitive type.
-var test;
+var test = test || (test = {});
 (function (test) {
     var Object = /** @class */ (function () {
         function Object() {
@@ -45,4 +45,4 @@ var test;
     null instanceof null;
     obj instanceof Object;
     undefined instanceof undefined;
-})(test || (test = {}));
+})(test);

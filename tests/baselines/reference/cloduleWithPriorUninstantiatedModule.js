@@ -29,4 +29,4 @@ var Moclodule = /** @class */ (function () {
         return Manager;
     }());
     Moclodule.Manager = Manager;
-})(Moclodule || (Moclodule = {}));
+})(Moclodule);

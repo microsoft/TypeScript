@@ -88,9 +88,9 @@ var A = /** @class */ (function () {
     };
     return A;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 var objA = new A();
 // any type var
 var ResultIsNumber1 = ++ANY2;

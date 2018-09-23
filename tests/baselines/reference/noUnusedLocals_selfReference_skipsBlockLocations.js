@@ -18,7 +18,7 @@ namespace n {
 
 
 //// [noUnusedLocals_selfReference_skipsBlockLocations.js]
-var n;
+var n = n || (n = {});
 (function (n) {
     function f() {
         f;
@@ -33,4 +33,4 @@ var n;
                 h;
             }
     }
-})(n || (n = {}));
+})(n);

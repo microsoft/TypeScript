@@ -21,17 +21,18 @@ export var a = "hello";
 export var x = a, y = x;
 var b = y;
 var c = b, d = c;
-export var m1;
+export const m1 = {};
+export { m1 };
 (function (m1) {
     m1.k = a;
     m1.l = b, m1.m = m1.k;
     var n = m1.k;
     var o = n, p = m1.k;
-})(m1 || (m1 = {}));
-var m2;
+})(m1);
+const m2 = {};
 (function (m2) {
     m2.k = a;
     m2.l = b, m2.m = m2.k;
     var n = m1.k;
     var o = n, p = m2.k;
-})(m2 || (m2 = {}));
+})(m2);

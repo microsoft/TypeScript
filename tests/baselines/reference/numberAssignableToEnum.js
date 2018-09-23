@@ -6,10 +6,10 @@ e = n;
 n = e;
 
 //// [numberAssignableToEnum.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var n;
 var e;
 e = n;

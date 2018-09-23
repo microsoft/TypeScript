@@ -125,10 +125,10 @@ b1([1, 2, 3]); // z is widen to the type any[]
 b2("string", { x: 200, y: "string" });
 b2("string", { x: 200, y: true });
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     Foo[Foo["a"] = 0] = "a";
-})(Foo || (Foo = {}));
+})(Foo);
 function c0({ z: { x, y: { j } } }) { }
 function c1({ z } = { z: 10 }) { }
 function c2({ z = 10 }) { }

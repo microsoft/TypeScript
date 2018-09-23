@@ -35,27 +35,27 @@ define(["require", "exports"], function (require, exports) {
     exports.foo = foo;
     var exports = 1;
     var require = "require";
-    var m1;
+    var m1 = {};
     (function (m1) {
         var exports = 0;
         var require = "require";
-    })(m1 || (m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         m2.exports = 0;
         m2.require = "require";
-    })(m2 || (m2 = {}));
+    })(m2);
 });
 //// [collisionExportsRequireAndVar_globalFile.js]
 var exports = 0;
 var require = "require";
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
     var exports = 0;
     var require = "require";
-})(m3 || (m3 = {}));
-var m4;
+})(m3);
+var m4 = m4 || (m4 = {});
 (function (m4) {
     m4.exports = 0;
     m4.require = "require";
-})(m4 || (m4 = {}));
+})(m4);

@@ -9,7 +9,7 @@ var d = {
 };
 
 //// [declFileModuleAssignmentInObjectLiteralProperty.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var c = /** @class */ (function () {
         function c() {
@@ -17,7 +17,7 @@ var m1;
         return c;
     }());
     m1.c = c;
-})(m1 || (m1 = {}));
+})(m1);
 var d = {
     m1: { m: m1 },
     m2: { c: m1.c }

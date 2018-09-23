@@ -25,33 +25,34 @@ module m2 {
 }
 
 //// [es6ModuleModuleDeclaration.js]
-export var m1;
+export const m1 = {};
+export { m1 };
 (function (m1) {
     m1.a = 10;
     var b = 10;
-    let innerExportedModule;
+    const innerExportedModule = m1.innerExportedModule || (m1.innerExportedModule = {});
     (function (innerExportedModule) {
         innerExportedModule.k = 10;
         var l = 10;
-    })(innerExportedModule = m1.innerExportedModule || (m1.innerExportedModule = {}));
-    let innerNonExportedModule;
+    })(innerExportedModule);
+    const innerNonExportedModule = m1.innerNonExportedModule || (m1.innerNonExportedModule = {});
     (function (innerNonExportedModule) {
         innerNonExportedModule.x = 10;
         var y = 10;
-    })(innerNonExportedModule = m1.innerNonExportedModule || (m1.innerNonExportedModule = {}));
-})(m1 || (m1 = {}));
-var m2;
+    })(innerNonExportedModule);
+})(m1);
+const m2 = {};
 (function (m2) {
     m2.a = 10;
     var b = 10;
-    let innerExportedModule;
+    const innerExportedModule = m2.innerExportedModule || (m2.innerExportedModule = {});
     (function (innerExportedModule) {
         innerExportedModule.k = 10;
         var l = 10;
-    })(innerExportedModule = m2.innerExportedModule || (m2.innerExportedModule = {}));
-    let innerNonExportedModule;
+    })(innerExportedModule);
+    const innerNonExportedModule = m2.innerNonExportedModule || (m2.innerNonExportedModule = {});
     (function (innerNonExportedModule) {
         innerNonExportedModule.x = 10;
         var y = 10;
-    })(innerNonExportedModule = m2.innerNonExportedModule || (m2.innerNonExportedModule = {}));
-})(m2 || (m2 = {}));
+    })(innerNonExportedModule);
+})(m2);

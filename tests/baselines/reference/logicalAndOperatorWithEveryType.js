@@ -126,12 +126,12 @@ var rj10 = undefined && undefined;
 //// [logicalAndOperatorWithEveryType.js]
 // The && operator permits the operands to be of any type and produces a result of the same
 // type as the second operand.
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
-})(E || (E = {}));
+})(E);
 var a1;
 var a2;
 var a3;

@@ -16,7 +16,7 @@ module ConstructSignature {
 }
 
 //// [subtypingWithConstructSignatures.js]
-var ConstructSignature;
+var ConstructSignature = ConstructSignature || (ConstructSignature = {});
 (function (ConstructSignature) {
     var rarg1;
     var r = foo1(rarg1); // ok because base returns void
@@ -26,4 +26,4 @@ var ConstructSignature;
     var r3 = foo2(r3arg1); // ok because base returns void
     var r4arg1;
     var r4 = foo2(r4arg1); // ok because base returns void
-})(ConstructSignature || (ConstructSignature = {}));
+})(ConstructSignature);

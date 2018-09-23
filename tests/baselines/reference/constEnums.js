@@ -154,17 +154,17 @@ function bar(e: A.B.C.E): number {
 }
 
 //// [constEnums.js]
-var A2;
+var A2 = A2 || (A2 = {});
 (function (A2) {
-    var B;
+    var B = A2.B || (A2.B = {});
     (function (B) {
         // module C will be classified as value
-        var C;
+        var C = B.C || (B.C = {});
         (function (C) {
             var x = 1;
-        })(C = B.C || (B.C = {}));
-    })(B = A2.B || (A2.B = {}));
-})(A2 || (A2 = {}));
+        })(C);
+    })(B);
+})(A2);
 var I2 = A2.B;
 function foo0(e) {
     if (e === 1 /* V1 */) {

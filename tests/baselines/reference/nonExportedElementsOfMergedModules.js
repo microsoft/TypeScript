@@ -17,24 +17,24 @@ module One {
 
 
 //// [nonExportedElementsOfMergedModules.js]
-var One;
+var One = One || (One = {});
 (function (One) {
-    var A;
+    var A = A || (A = {});
     (function (A) {
         A[A["X"] = 0] = "X";
-    })(A || (A = {}));
-    var B;
+    })(A);
+    var B = B || (B = {});
     (function (B) {
-    })(B || (B = {}));
-})(One || (One = {}));
+    })(B);
+})(One);
 (function (One) {
-    var A;
+    var A = A || (A = {});
     (function (A) {
         A[A["Y"] = 0] = "Y";
-    })(A || (A = {}));
-    var B;
+    })(A);
+    var B = B || (B = {});
     (function (B) {
-    })(B || (B = {}));
+    })(B);
     B.x;
     B.y;
-})(One || (One = {}));
+})(One);

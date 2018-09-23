@@ -95,7 +95,7 @@ var num;
 var strOrNum;
 var var1;
 // Inside module
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
@@ -113,12 +113,12 @@ var m1;
     else {
         strOrNum = m1.var3; // string | number
     }
-})(m1 || (m1 = {}));
+})(m1);
 // local module
-var m2;
+var m2 = m2 || (m2 = {});
 (function (m2) {
     var var2;
-    var m3;
+    var m3 = m3 || (m3 = {});
     (function (m3) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
@@ -140,12 +140,12 @@ var m2;
         else {
             strOrNum = m3.var5; // string | number
         }
-    })(m3 || (m3 = {}));
-})(m2 || (m2 = {}));
+    })(m3);
+})(m2);
 // Dotted module
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
-    var m4;
+    var m4 = m3.m4 || (m3.m4 = {});
     (function (m4) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
@@ -163,5 +163,5 @@ var m3;
         else {
             strOrNum = m4.var3; // string | number
         }
-    })(m4 = m3.m4 || (m3.m4 = {}));
-})(m3 || (m3 = {}));
+    })(m4);
+})(m3);

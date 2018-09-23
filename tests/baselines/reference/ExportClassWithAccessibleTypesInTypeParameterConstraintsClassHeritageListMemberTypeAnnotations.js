@@ -34,7 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point() {
@@ -60,4 +60,4 @@ var A;
         return Line;
     }());
     A.Line = Line;
-})(A || (A = {}));
+})(A);

@@ -14,13 +14,13 @@ module B {
 }
 
 //// [constEnumOnlyModuleMerging.js]
-var Outer;
+var Outer = Outer || (Outer = {});
 (function (Outer) {
     Outer.x = 1;
-})(Outer || (Outer = {}));
-var B;
+})(Outer);
+var B = B || (B = {});
 (function (B) {
     var O = Outer;
     var x = 0 /* X */;
     var y = O.x;
-})(B || (B = {}));
+})(B);

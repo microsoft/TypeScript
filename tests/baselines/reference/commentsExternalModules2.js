@@ -65,14 +65,14 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /** Module comment*/
-    var m1;
+    var m1 = {};
     (function (m1) {
         /** foo's comment*/
         function foo() {
             return m1.b;
         }
         /** m2 comments*/
-        var m2;
+        var m2 = m1.m2 || (m1.m2 = {});
         (function (m2) {
             /** class comment;*/
             var c = /** @class */ (function () {
@@ -84,17 +84,17 @@ define(["require", "exports"], function (require, exports) {
             ;
             /** i*/
             m2.i = new c();
-        })(m2 = m1.m2 || (m1.m2 = {}));
+        })(m2);
         /** exported function*/
         function fooExport() {
             return foo();
         }
         m1.fooExport = fooExport;
-    })(m1 = exports.m1 || (exports.m1 = {}));
+    })(m1);
     m1.fooExport();
     var myvar = new m1.m2.c();
     /** Module comment */
-    var m4;
+    var m4 = {};
     (function (m4) {
         /** foo's comment
         */
@@ -103,7 +103,7 @@ define(["require", "exports"], function (require, exports) {
         }
         /** m2 comments
         */
-        var m2;
+        var m2 = m4.m2 || (m4.m2 = {});
         (function (m2) {
             /** class comment; */
             var c = /** @class */ (function () {
@@ -115,13 +115,13 @@ define(["require", "exports"], function (require, exports) {
             ;
             /** i */
             m2.i = new c();
-        })(m2 = m4.m2 || (m4.m2 = {}));
+        })(m2);
         /** exported function */
         function fooExport() {
             return foo();
         }
         m4.fooExport = fooExport;
-    })(m4 = exports.m4 || (exports.m4 = {}));
+    })(m4);
     m4.fooExport();
     var myvar2 = new m4.m2.c();
 });

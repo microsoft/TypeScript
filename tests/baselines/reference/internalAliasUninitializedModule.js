@@ -14,10 +14,10 @@ module c {
 }
 
 //// [internalAliasUninitializedModule.js]
-var c;
+var c = c || (c = {});
 (function (c) {
     c.x.foo();
-})(c || (c = {}));
+})(c);
 
 
 //// [internalAliasUninitializedModule.d.ts]

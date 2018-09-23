@@ -191,13 +191,13 @@ var F3 = function () {
     const c21 = 0;
 };
 // modules
-var m;
+var m = m || (m = {});
 (function (m) {
     const c22 = 0;
     {
         const c23 = 0;
     }
-})(m || (m = {}));
+})(m);
 // methods
 class C {
     constructor() {

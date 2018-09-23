@@ -148,7 +148,7 @@ var B = /** @class */ (function (_super) {
 }(A));
 var i;
 for (var x in i[42]) { }
-var M;
+var M = M || (M = {});
 (function (M) {
     var X = /** @class */ (function () {
         function X() {
@@ -156,13 +156,13 @@ var M;
         return X;
     }());
     M.X = X;
-})(M || (M = {}));
+})(M);
 for (var x in M) { }
 for (var x in M.X) { }
-var Color;
+var Color = Color || (Color = {});
 (function (Color) {
     Color[Color["Red"] = 0] = "Red";
     Color[Color["Blue"] = 1] = "Blue";
-})(Color || (Color = {}));
+})(Color);
 for (var x in Color) { }
 for (var x in Color.Blue) { }

@@ -10,12 +10,12 @@ sourceFile:sourceMapValidationImport.ts
 -------------------------------------------------------------------
 >>>"use strict";
 >>>exports.__esModule = true;
->>>var m;
+>>>var m = {};
 1 >
 2 >^^^^
 3 >    ^
-4 >     ^
-5 >      ^^^^^^^^^^->
+4 >     ^^^^^^
+5 >           ^^^^^->
 1 >
 2 >export module 
 3 >    m
@@ -26,7 +26,7 @@ sourceFile:sourceMapValidationImport.ts
 1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(3, 5) Source(1, 15) + SourceIndex(0)
 3 >Emitted(3, 6) Source(1, 16) + SourceIndex(0)
-4 >Emitted(3, 7) Source(4, 2) + SourceIndex(0)
+4 >Emitted(3, 12) Source(4, 2) + SourceIndex(0)
 ---
 >>>(function (m) {
 1->
@@ -92,7 +92,6 @@ sourceFile:sourceMapValidationImport.ts
 2 >    ^^^
 3 >       ^^^^
 4 >           ^
-5 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    c
 3 >        {
@@ -103,41 +102,30 @@ sourceFile:sourceMapValidationImport.ts
 3 >Emitted(10, 12) Source(3, 6) + SourceIndex(0)
 4 >Emitted(10, 13) Source(3, 6) + SourceIndex(0)
 ---
->>>})(m = exports.m || (exports.m = {}));
-1->
+>>>})(m);
+1 >
 2 >^
 3 > ^^
 4 >   ^
-5 >    ^^^
-6 >       ^^^^^^^^^
-7 >                ^^^^^
-8 >                     ^^^^^^^^^
-9 >                              ^^^^^^^^
-1->
+5 >    ^^
+6 >      ^^^^^^^->
+1 >
   >
 2 >}
 3 > 
 4 >   m
-5 >    
-6 >       m
-7 >                
-8 >                     m
-9 >                               {
-  >                                  export class c {
-  >                                  }
-  >                              }
-1->Emitted(11, 1) Source(4, 1) + SourceIndex(0)
+5 >     {
+  >        export class c {
+  >        }
+  >    }
+1 >Emitted(11, 1) Source(4, 1) + SourceIndex(0)
 2 >Emitted(11, 2) Source(4, 2) + SourceIndex(0)
 3 >Emitted(11, 4) Source(1, 15) + SourceIndex(0)
 4 >Emitted(11, 5) Source(1, 16) + SourceIndex(0)
-5 >Emitted(11, 8) Source(1, 15) + SourceIndex(0)
-6 >Emitted(11, 17) Source(1, 16) + SourceIndex(0)
-7 >Emitted(11, 22) Source(1, 15) + SourceIndex(0)
-8 >Emitted(11, 31) Source(1, 16) + SourceIndex(0)
-9 >Emitted(11, 39) Source(4, 2) + SourceIndex(0)
+5 >Emitted(11, 7) Source(4, 2) + SourceIndex(0)
 ---
 >>>var a = m.c;
-1 >
+1->
 2 >^^^^
 3 >    ^
 4 >     ^^^
@@ -146,7 +134,7 @@ sourceFile:sourceMapValidationImport.ts
 7 >          ^
 8 >           ^
 9 >            ^^^^^->
-1 >
+1->
   >
 2 >import 
 3 >    a
@@ -155,7 +143,7 @@ sourceFile:sourceMapValidationImport.ts
 6 >         .
 7 >          c
 8 >           ;
-1 >Emitted(12, 1) Source(5, 1) + SourceIndex(0)
+1->Emitted(12, 1) Source(5, 1) + SourceIndex(0)
 2 >Emitted(12, 5) Source(5, 8) + SourceIndex(0)
 3 >Emitted(12, 6) Source(5, 9) + SourceIndex(0)
 4 >Emitted(12, 9) Source(5, 12) + SourceIndex(0)

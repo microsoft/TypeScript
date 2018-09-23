@@ -45,26 +45,28 @@ var C = /** @class */ (function () {
 export { C };
 (function (C) {
     C.x = 1;
-})(C || (C = {}));
-export var E;
+})(C);
+export var E = {};
+export { E };
 (function (E) {
     E[E["w"] = 1] = "w";
-})(E || (E = {}));
+})(E);
 (function (E) {
     E[E["x"] = 2] = "x";
-})(E || (E = {}));
+})(E);
 (function (E) {
     E.y = 1;
-})(E || (E = {}));
+})(E);
 (function (E) {
     E.z = 1;
-})(E || (E = {}));
-export var N;
+})(E);
+export var N = {};
+export { N };
 (function (N) {
     N.x = 1;
-})(N || (N = {}));
+})(N);
 export function F() {
 }
 (function (F) {
     F.x = 1;
-})(F || (F = {}));
+})(F);

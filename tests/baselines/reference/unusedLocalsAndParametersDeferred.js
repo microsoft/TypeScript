@@ -315,11 +315,11 @@ finally {
     });
 }
 // in a namespace
-var N;
+var N = {};
 (function (N) {
     var x;
     defered(function () {
         x;
     });
-})(N || (N = {}));
+})(N);
 N;

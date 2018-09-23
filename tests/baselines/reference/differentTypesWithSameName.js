@@ -17,7 +17,7 @@ var v: variable = new variable();
 m.doSomething(v);
 
 //// [differentTypesWithSameName.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var variable = /** @class */ (function () {
         function variable() {
@@ -28,7 +28,7 @@ var m;
     function doSomething(v) {
     }
     m.doSomething = doSomething;
-})(m || (m = {}));
+})(m);
 var variable = /** @class */ (function () {
     function variable() {
     }

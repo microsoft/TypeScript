@@ -20,15 +20,15 @@ if(color === foo.green){
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo;
+    var foo = {};
     (function (foo) {
         foo[foo["red"] = 0] = "red";
         foo[foo["green"] = 1] = "green";
         foo[foo["blue"] = 2] = "blue";
-    })(foo || (foo = {}));
+    })(foo);
     (function (foo) {
         foo.answer = 42;
-    })(foo || (foo = {}));
+    })(foo);
     return foo;
 });
 //// [foo_1.js]

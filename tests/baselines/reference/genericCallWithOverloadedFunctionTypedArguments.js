@@ -47,7 +47,7 @@ module GenericParameter {
 //// [genericCallWithOverloadedFunctionTypedArguments.js]
 // Function typed arguments with multiple signatures must be passed an implementation that matches all of them
 // Inferences are made quadratic-pairwise to and from these overload sets
-var NonGenericParameter;
+var NonGenericParameter = NonGenericParameter || (NonGenericParameter = {});
 (function (NonGenericParameter) {
     var a;
     function foo4(cb) {
@@ -56,8 +56,8 @@ var NonGenericParameter;
     var r = foo4(a);
     var r2 = foo4(function (x) { return x; });
     var r4 = foo4(function (x) { return x; });
-})(NonGenericParameter || (NonGenericParameter = {}));
-var GenericParameter;
+})(NonGenericParameter);
+var GenericParameter = GenericParameter || (GenericParameter = {});
 (function (GenericParameter) {
     function foo5(cb) {
         return cb;
@@ -78,4 +78,4 @@ var GenericParameter;
     var r13 = foo7(1, function (x) { return ''; }); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
     var a;
     var r14 = foo7(1, a); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
-})(GenericParameter || (GenericParameter = {}));
+})(GenericParameter);

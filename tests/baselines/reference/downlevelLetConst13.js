@@ -28,7 +28,7 @@ exports.bar1 = [1][0];
 exports.bar2 = [2][0];
 exports.bar3 = { a: 1 }.a;
 exports.bar4 = { a: 1 }.a;
-var M;
+var M = {};
 (function (M) {
     M.baz = 100;
     M.baz2 = true;
@@ -36,4 +36,4 @@ var M;
     M.bar6 = [2][0];
     M.bar7 = { a: 1 }.a;
     M.bar8 = { a: 1 }.a;
-})(M = exports.M || (exports.M = {}));
+})(M);

@@ -148,7 +148,7 @@ var SubE3 = /** @class */ (function (_super) {
     return SubE3;
 }(Base3));
 // Case 4
-var Base4;
+var Base4 = Base4 || (Base4 = {});
 (function (Base4) {
     var Sub4 = /** @class */ (function () {
         function Sub4() {
@@ -178,4 +178,4 @@ var Base4;
         return Sub4E;
     }());
     Base4.Sub4E = Sub4E;
-})(Base4 || (Base4 = {}));
+})(Base4);

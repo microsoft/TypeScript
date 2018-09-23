@@ -195,14 +195,14 @@ var C2 = /** @class */ (function () {
     }
     return C2;
 }());
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var c = /** @class */ (function () {
     function c() {
     }
@@ -210,7 +210,7 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);
 function f4(x) {
     var r0 = true ? x : null; // ok
     var r0 = true ? null : x; // ok

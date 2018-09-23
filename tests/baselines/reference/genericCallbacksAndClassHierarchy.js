@@ -37,7 +37,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var M;
+var M = M || (M = {});
 (function (M) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -72,4 +72,4 @@ var M;
         return D;
     }());
     M.D = D;
-})(M || (M = {}));
+})(M);

@@ -41,9 +41,9 @@ module M2 {
 
 
 //// [declFileTypeAnnotationVisibilityErrorTypeAlias.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         var Window = /** @class */ (function () {
             function Window() {
@@ -51,11 +51,11 @@ var M;
             return Window;
         }());
         N.Window = Window;
-    })(N = M.N || (M.N = {}));
-})(M || (M = {}));
-var M1;
+    })(N);
+})(M);
+var M1 = M1 || (M1 = {});
 (function (M1) {
-    var N;
+    var N = M1.N || (M1.N = {});
     (function (N) {
         var Window = /** @class */ (function () {
             function Window() {
@@ -63,9 +63,9 @@ var M1;
             return Window;
         }());
         N.Window = Window;
-    })(N = M1.N || (M1.N = {}));
-})(M1 || (M1 = {}));
-var M2;
+    })(N);
+})(M1);
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var private1 = /** @class */ (function () {
         function private1() {
@@ -77,7 +77,7 @@ var M2;
         }
         return public1;
     }());
-    var m3;
+    var m3 = m3 || (m3 = {});
     (function (m3) {
         var public1 = /** @class */ (function () {
             function public1() {
@@ -85,8 +85,8 @@ var M2;
             return public1;
         }());
         m3.public1 = public1;
-    })(m3 || (m3 = {}));
-})(M2 || (M2 = {}));
+    })(m3);
+})(M2);
 
 
 //// [declFileTypeAnnotationVisibilityErrorTypeAlias.d.ts]

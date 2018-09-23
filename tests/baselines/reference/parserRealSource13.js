@@ -150,9 +150,9 @@ module TypeScript.AstWalkerWithDetailCallback {
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
-    var AstWalkerWithDetailCallback;
+    var AstWalkerWithDetailCallback = TypeScript.AstWalkerWithDetailCallback || (TypeScript.AstWalkerWithDetailCallback = {});
     (function (AstWalkerWithDetailCallback) {
         function walk(script, callback) {
             var pre = function (cur, parent) {
@@ -179,5 +179,5 @@ var TypeScript;
             }
             return true;
         }
-    })(AstWalkerWithDetailCallback = TypeScript.AstWalkerWithDetailCallback || (TypeScript.AstWalkerWithDetailCallback = {}));
-})(TypeScript || (TypeScript = {}));
+    })(AstWalkerWithDetailCallback);
+})(TypeScript);

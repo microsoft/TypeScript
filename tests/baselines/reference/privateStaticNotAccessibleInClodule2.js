@@ -43,4 +43,4 @@ var D = /** @class */ (function (_super) {
 }(C));
 (function (D) {
     D.y = D.bar; // error
-})(D || (D = {}));
+})(D);

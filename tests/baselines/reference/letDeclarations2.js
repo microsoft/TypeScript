@@ -5,11 +5,11 @@ module M {
 }
 
 //// [letDeclarations2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     let l1 = "s";
     M.l2 = 0;
-})(M || (M = {}));
+})(M);
 
 
 //// [letDeclarations2.d.ts]

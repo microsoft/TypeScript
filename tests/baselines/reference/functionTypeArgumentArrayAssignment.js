@@ -12,9 +12,9 @@ module test {
 
 
 //// [functionTypeArgumentArrayAssignment.js]
-var test;
+var test = test || (test = {});
 (function (test) {
     function map() {
         var ys = [];
     }
-})(test || (test = {}));
+})(test);

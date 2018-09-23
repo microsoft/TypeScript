@@ -16,11 +16,11 @@ module X.Y.base.Z {
 }
 
 //// [declarationEmitNameConflicts2.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var base;
+        var base = Y.base || (Y.base = {});
         (function (base) {
             function f() { }
             base.f = f;
@@ -30,30 +30,30 @@ var X;
                 return C;
             }());
             base.C = C;
-            var M;
+            var M = base.M || (base.M = {});
             (function (M) {
-            })(M = base.M || (base.M = {}));
-            var E;
+            })(M);
+            var E = base.E || (base.E = {});
             (function (E) {
-            })(E = base.E || (base.E = {}));
-        })(base = Y.base || (Y.base = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+            })(E);
+        })(base);
+    })(Y);
+})(X);
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var base;
+        var base = Y.base || (Y.base = {});
         (function (base) {
-            var Z;
+            var Z = base.Z || (base.Z = {});
             (function (Z) {
                 Z.f = X.Y.base.f; // Should be base.f
                 Z.C = X.Y.base.C; // Should be base.C
                 Z.M = X.Y.base.M; // Should be base.M
                 Z.E = X.Y.base.E; // Should be base.E
-            })(Z = base.Z || (base.Z = {}));
-        })(base = Y.base || (Y.base = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+            })(Z);
+        })(base);
+    })(Y);
+})(X);
 
 
 //// [declarationEmitNameConflicts2.d.ts]

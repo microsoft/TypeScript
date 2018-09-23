@@ -42,12 +42,12 @@ var Shape = /** @class */ (function () {
     return Shape;
 }());
 (function (Shape) {
-    var Utils;
+    var Utils = Shape.Utils || (Shape.Utils = {});
     (function (Utils) {
         function convert() { return null; }
         Utils.convert = convert;
-    })(Utils = Shape.Utils || (Shape.Utils = {}));
-})(Shape || (Shape = {}));
+    })(Utils);
+})(Shape);
 var Path = /** @class */ (function (_super) {
     __extends(Path, _super);
     function Path() {
@@ -56,11 +56,11 @@ var Path = /** @class */ (function (_super) {
     return Path;
 }(Shape));
 (function (Path) {
-    var Utils;
+    var Utils = Path.Utils || (Path.Utils = {});
     (function (Utils) {
         function convert2() {
             return null;
         }
         Utils.convert2 = convert2;
-    })(Utils = Path.Utils || (Path.Utils = {}));
-})(Path || (Path = {}));
+    })(Utils);
+})(Path);

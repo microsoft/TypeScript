@@ -30,9 +30,9 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);
 var v1;
 var v2;
 var v3;
@@ -43,9 +43,9 @@ function f() {
         }
         return C;
     }());
-    var E;
+    var E = E || (E = {});
     (function (E) {
-    })(E || (E = {}));
+    })(E);
     var v1;
     var v2;
     var v3;

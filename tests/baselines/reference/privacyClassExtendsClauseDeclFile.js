@@ -112,7 +112,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var publicClassInPublicModule = /** @class */ (function () {
         function publicClassInPublicModule() {
@@ -172,8 +172,8 @@ var publicModule;
         return publicClassExtendingFromPrivateModuleClass;
     }(privateModule.publicClassInPrivateModule));
     publicModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var publicClassInPrivateModule = /** @class */ (function () {
         function publicClassInPrivateModule() {
@@ -233,7 +233,7 @@ var privateModule;
         return publicClassExtendingFromPrivateModuleClass;
     }(privateModule.publicClassInPrivateModule));
     privateModule.publicClassExtendingFromPrivateModuleClass = publicClassExtendingFromPrivateModuleClass;
-})(privateModule || (privateModule = {}));
+})(privateModule);
 var publicClass = /** @class */ (function () {
     function publicClass() {
     }
@@ -306,7 +306,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var publicModuleInGlobal;
+var publicModuleInGlobal = publicModuleInGlobal || (publicModuleInGlobal = {});
 (function (publicModuleInGlobal) {
     var publicClassInPublicModule = /** @class */ (function () {
         function publicClassInPublicModule() {
@@ -351,7 +351,7 @@ var publicModuleInGlobal;
         return publicClassExtendingPrivateClassInModule;
     }(privateClassInPublicModule));
     publicModuleInGlobal.publicClassExtendingPrivateClassInModule = publicClassExtendingPrivateClassInModule;
-})(publicModuleInGlobal || (publicModuleInGlobal = {}));
+})(publicModuleInGlobal);
 var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
     }

@@ -26,11 +26,11 @@ module MsPortal.Util.TemplateEngine {
 
 
 //// [crashRegressionTest.js]
-var MsPortal;
+var MsPortal = MsPortal || (MsPortal = {});
 (function (MsPortal) {
-    var Util;
+    var Util = MsPortal.Util || (MsPortal.Util = {});
     (function (Util) {
-        var TemplateEngine;
+        var TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {});
         (function (TemplateEngine) {
             "use strict";
             var StringTemplate = /** @class */ (function () {
@@ -50,6 +50,6 @@ var MsPortal;
                 return TemplateStorage;
             }());
             TemplateEngine.TemplateStorage = TemplateStorage;
-        })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));
-    })(Util = MsPortal.Util || (MsPortal.Util = {}));
-})(MsPortal || (MsPortal = {}));
+        })(TemplateEngine);
+    })(Util);
+})(MsPortal);

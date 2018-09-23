@@ -74,7 +74,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var m1_c_public = /** @class */ (function () {
         function m1_c_public() {
@@ -171,7 +171,7 @@ var m1;
         return m1_C12_public;
     }(m1_c_private));
     m1.m1_C12_public = m1_C12_public;
-})(m1 || (m1 = {}));
+})(m1);
 var glo_c_public = /** @class */ (function () {
     function glo_c_public() {
     }

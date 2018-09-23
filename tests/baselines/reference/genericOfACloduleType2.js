@@ -22,7 +22,7 @@ var G = /** @class */ (function () {
     G.prototype.bar = function (x) { return x; };
     return G;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -38,11 +38,11 @@ var M;
             return X;
         }());
         C.X = X;
-    })(C = M.C || (M.C = {}));
+    })(C);
     var g1 = new G();
     g1.bar(null).foo(); // no error
-})(M || (M = {}));
-var N;
+})(M);
+var N = N || (N = {});
 (function (N) {
     var g2 = new G();
-})(N || (N = {}));
+})(N);

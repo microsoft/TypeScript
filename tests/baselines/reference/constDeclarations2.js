@@ -9,12 +9,12 @@ module M {
 
 //// [constDeclarations2.js]
 // No error
-var M;
+var M = M || (M = {});
 (function (M) {
     M.c1 = false;
     M.c2 = 23;
     M.c3 = 0, M.c4 = "", M.c5 = null;
-})(M || (M = {}));
+})(M);
 
 
 //// [constDeclarations2.d.ts]

@@ -29,7 +29,7 @@ function exports() {
 function require() {
     return "require";
 }
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
     function exports() {
         return 1;
@@ -37,8 +37,8 @@ var m3;
     function require() {
         return "require";
     }
-})(m3 || (m3 = {}));
-var m4;
+})(m3);
+var m4 = m4 || (m4 = {});
 (function (m4) {
     function exports() {
         return 1;
@@ -48,4 +48,4 @@ var m4;
         return "require";
     }
     m4.require = require;
-})(m4 || (m4 = {}));
+})(m4);

@@ -51,13 +51,13 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
-var N;
+var N = N || (N = {});
 (function (N) {
-    var F;
+    var F = N.F || (N.F = {});
     (function (F) {
         var t;
-    })(F = N.F || (N.F = {}));
-})(N || (N = {}));
+    })(F);
+})(N);
 //// [file2.js]
 var I = /** @class */ (function () {
     function I() {
@@ -71,9 +71,9 @@ var f = /** @class */ (function () {
     return f;
 }()); // error -- cannot merge function with non-ambient class
 var v = 3;
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
-})(Foo || (Foo = {}));
+})(Foo);
 
 
 //// [file1.d.ts]

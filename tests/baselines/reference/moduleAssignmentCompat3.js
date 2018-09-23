@@ -15,14 +15,14 @@ b = a;
 
 
 //// [moduleAssignmentCompat3.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A.x = 1;
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     B.x = "";
-})(B || (B = {}));
+})(B);
 var a;
 var b;
 // both errors

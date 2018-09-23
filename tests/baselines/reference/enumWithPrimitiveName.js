@@ -4,12 +4,12 @@ enum number { }
 enum any { }
 
 //// [enumWithPrimitiveName.js]
-var string;
+var string = string || (string = {});
 (function (string) {
-})(string || (string = {}));
-var number;
+})(string);
+var number = number || (number = {});
 (function (number) {
-})(number || (number = {}));
-var any;
+})(number);
+var any = any || (any = {});
 (function (any) {
-})(any || (any = {}));
+})(any);

@@ -15,11 +15,11 @@ function fill<B extends Colors>(f: B) {
 }
 
 //// [enumPropertyAccess.js]
-var Colors;
+var Colors = Colors || (Colors = {});
 (function (Colors) {
     Colors[Colors["Red"] = 0] = "Red";
     Colors[Colors["Green"] = 1] = "Green";
-})(Colors || (Colors = {}));
+})(Colors);
 var x = Colors.Red; // type of 'x' should be 'Colors'
 var p = x.Green; // error
 x.toFixed(); // ok

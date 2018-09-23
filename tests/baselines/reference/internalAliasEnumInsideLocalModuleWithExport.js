@@ -16,20 +16,20 @@ export module c {
 //// [internalAliasEnumInsideLocalModuleWithExport.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
-    var weekend;
+    var weekend = a.weekend || (a.weekend = {});
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";
         weekend[weekend["Sunday"] = 2] = "Sunday";
-    })(weekend = a.weekend || (a.weekend = {}));
-})(a = exports.a || (exports.a = {}));
-var c;
+    })(weekend);
+})(a);
+var c = {};
 (function (c) {
     c.b = a.weekend;
     c.bVal = c.b.Sunday;
-})(c = exports.c || (exports.c = {}));
+})(c);
 
 
 //// [internalAliasEnumInsideLocalModuleWithExport.d.ts]

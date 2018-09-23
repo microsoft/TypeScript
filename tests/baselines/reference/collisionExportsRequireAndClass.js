@@ -52,7 +52,7 @@ define(["require", "exports"], function (require, exports) {
         return exports;
     }());
     exports.exports = exports;
-    var m1;
+    var m1 = {};
     (function (m1) {
         var require = /** @class */ (function () {
             function require() {
@@ -64,8 +64,8 @@ define(["require", "exports"], function (require, exports) {
             }
             return exports;
         }());
-    })(m1 || (m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         var require = /** @class */ (function () {
             function require() {
@@ -79,7 +79,7 @@ define(["require", "exports"], function (require, exports) {
             return exports;
         }());
         m2.exports = exports;
-    })(m2 || (m2 = {}));
+    })(m2);
 });
 //// [collisionExportsRequireAndClass_globalFile.js]
 var require = /** @class */ (function () {
@@ -92,7 +92,7 @@ var exports = /** @class */ (function () {
     }
     return exports;
 }());
-var m3;
+var m3 = m3 || (m3 = {});
 (function (m3) {
     var require = /** @class */ (function () {
         function require() {
@@ -104,8 +104,8 @@ var m3;
         }
         return exports;
     }());
-})(m3 || (m3 = {}));
-var m4;
+})(m3);
+var m4 = m4 || (m4 = {});
 (function (m4) {
     var require = /** @class */ (function () {
         function require() {
@@ -119,4 +119,4 @@ var m4;
         return exports;
     }());
     m4.exports = exports;
-})(m4 || (m4 = {}));
+})(m4);

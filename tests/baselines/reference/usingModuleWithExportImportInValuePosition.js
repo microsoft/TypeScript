@@ -20,7 +20,7 @@ var c: { name: string };
 var c: C.a.B.Id;
 
 //// [usingModuleWithExportImportInValuePosition.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A.x = 'hello world';
     var Point = /** @class */ (function () {
@@ -31,11 +31,11 @@ var A;
         return Point;
     }());
     A.Point = Point;
-})(A || (A = {}));
-var C;
+})(A);
+var C = C || (C = {});
 (function (C) {
     C.a = A;
-})(C || (C = {}));
+})(C);
 var a = C.a.x;
 var b = new C.a.Point(0, 0);
 var c;

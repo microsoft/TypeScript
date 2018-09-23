@@ -81,7 +81,7 @@ var glo_v22_public: glo_C1_public = new glo_C1_public();
 
 
 //// [privacyGloVar.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
@@ -133,7 +133,7 @@ var m1;
     m1.m1_v22_public = new C1_public();
     var m1_v23_private = new C2_private();
     m1.m1_v24_public = new C2_private(); // error
-})(m1 || (m1 = {}));
+})(m1);
 var glo_C1_public = /** @class */ (function () {
     function glo_C1_public() {
     }

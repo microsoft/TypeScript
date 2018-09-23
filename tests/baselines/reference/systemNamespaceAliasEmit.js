@@ -18,17 +18,19 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            (function (ns) {
-                var value = 1;
-            })(ns || (ns = {}));
+            ns = {};
             exports_1("ns", ns);
             exports_1("FooBar", ns);
+            (function (ns) {
+                var value = 1;
+            })(ns);
+            AnEnum = {};
+            exports_1("AnEnum", AnEnum);
+            exports_1("BarEnum", AnEnum);
             (function (AnEnum) {
                 AnEnum[AnEnum["ONE"] = 0] = "ONE";
                 AnEnum[AnEnum["TWO"] = 1] = "TWO";
-            })(AnEnum || (AnEnum = {}));
-            exports_1("AnEnum", AnEnum);
-            exports_1("BarEnum", AnEnum);
+            })(AnEnum);
         }
     };
 });

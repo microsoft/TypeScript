@@ -11,12 +11,12 @@ M.f(3);
 
 
 //// [global.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function f(y) {
         return x + y;
     }
     M.f = f;
-})(M || (M = {}));
+})(M);
 var x = 10;
 M.f(3);

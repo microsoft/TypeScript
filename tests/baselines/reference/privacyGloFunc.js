@@ -534,7 +534,7 @@ export function f12_public(): C5_private { //error
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var m1;
+    var m1 = {};
     (function (m1) {
         var C1_public = /** @class */ (function () {
             function C1_public() {
@@ -684,8 +684,8 @@ define(["require", "exports"], function (require, exports) {
             return new C2_private(); //error
         }
         m1.f12_public = f12_public;
-    })(m1 = exports.m1 || (exports.m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         var m2_C1_public = /** @class */ (function () {
             function m2_C1_public() {
@@ -835,7 +835,7 @@ define(["require", "exports"], function (require, exports) {
             return new m2_C2_private();
         }
         m2.f12_public = f12_public;
-    })(m2 || (m2 = {}));
+    })(m2);
     var C5_private = /** @class */ (function () {
         function C5_private() {
         }

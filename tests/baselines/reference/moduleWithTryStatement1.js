@@ -9,11 +9,11 @@ var v = M;
 
 
 //// [moduleWithTryStatement1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     try {
     }
     catch (e) {
     }
-})(M || (M = {}));
+})(M);
 var v = M;

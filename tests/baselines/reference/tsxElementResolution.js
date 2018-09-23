@@ -35,7 +35,7 @@ var Other = /** @class */ (function () {
     }
     return Other;
 }());
-var Dotted;
+var Dotted = Dotted || (Dotted = {});
 (function (Dotted) {
     var Name = /** @class */ (function () {
         function Name() {
@@ -43,7 +43,7 @@ var Dotted;
         return Name;
     }());
     Dotted.Name = Name;
-})(Dotted || (Dotted = {}));
+})(Dotted);
 // Should find the intrinsic element, not the class element
 var a = <foundFirst x="hello"/>;
 var b = <string_named />;

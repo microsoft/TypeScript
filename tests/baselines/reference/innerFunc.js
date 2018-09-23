@@ -17,7 +17,7 @@ function salt() {
     function pepper() { return 5; }
     return pepper();
 }
-var M;
+var M = M || (M = {});
 (function (M) {
     function tungsten() {
         function oxygen() { return 6; }
@@ -25,4 +25,4 @@ var M;
         return oxygen();
     }
     M.tungsten = tungsten;
-})(M || (M = {}));
+})(M);

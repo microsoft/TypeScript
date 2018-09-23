@@ -26,7 +26,7 @@ export module Foo {
 //// [recursiveMods.js]
 "use strict";
 exports.__esModule = true;
-var Foo;
+var Foo = {};
 (function (Foo) {
     var C = /** @class */ (function () {
         function C() {
@@ -34,7 +34,7 @@ var Foo;
         return C;
     }());
     Foo.C = C;
-})(Foo = exports.Foo || (exports.Foo = {}));
+})(Foo);
 (function (Foo) {
     function Bar() {
         if (true) {
@@ -50,4 +50,4 @@ var Foo;
         var c = Baz();
         return;
     }
-})(Foo = exports.Foo || (exports.Foo = {}));
+})(Foo);

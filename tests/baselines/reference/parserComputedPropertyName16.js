@@ -4,7 +4,7 @@ enum E {
 }
 
 //// [parserComputedPropertyName16.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E[e] = 1] = e;
-})(E || (E = {}));
+})(E);

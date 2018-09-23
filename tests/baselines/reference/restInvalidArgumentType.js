@@ -65,11 +65,11 @@ var __rest = (this && this.__rest) || function (s, e) {
             t[p[i]] = s[p[i]];
     return t;
 };
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["v1"] = 0] = "v1";
     E[E["v2"] = 1] = "v2";
-})(E || (E = {}));
+})(E);
 ;
 function f(p1, p2) {
     var t;

@@ -66,8 +66,8 @@ class C {
     static async m5() { }
     static async m6() { }
 }
-var M;
+const M = {};
 (function (M) {
     async function f1() { }
     M.f1 = f1;
-})(M || (M = {}));
+})(M);

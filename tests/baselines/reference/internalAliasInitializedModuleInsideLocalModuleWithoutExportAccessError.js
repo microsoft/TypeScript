@@ -16,9 +16,9 @@ export var d = new c.b.c();
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
-    var b;
+    var b = a.b || (a.b = {});
     (function (b) {
         var c = /** @class */ (function () {
             function c() {
@@ -26,11 +26,11 @@ var a;
             return c;
         }());
         b.c = c;
-    })(b = a.b || (a.b = {}));
-})(a = exports.a || (exports.a = {}));
-var c;
+    })(b);
+})(a);
+var c = {};
 (function (c) {
     var b = a.b;
     c.x = new b.c();
-})(c = exports.c || (exports.c = {}));
+})(c);
 exports.d = new c.b.c();

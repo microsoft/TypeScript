@@ -28,7 +28,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-var n;
+var n = n || (n = {});
 (function (n) {
     function id(x) {
         return x;
@@ -37,7 +37,7 @@ var n;
         return id(__makeTemplateObject(["hello world"], ["hello world"]));
     }
     var result = templateObjectFactory() === templateObjectFactory();
-})(n || (n = {}));
+})(n);
 //// [module.js]
 "use strict";
 var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {

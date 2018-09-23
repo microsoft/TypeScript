@@ -18,11 +18,11 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     var D = /** @class */ (function () {
         function D() {
         }
         return D;
     }());
-})(M || (M = {}));
+})(M);

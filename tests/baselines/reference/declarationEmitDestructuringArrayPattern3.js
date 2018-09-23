@@ -4,11 +4,11 @@ module M {
 }
 
 //// [declarationEmitDestructuringArrayPattern3.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var _a;
     _a = [1, 2], M.a = _a[0], M.b = _a[1];
-})(M || (M = {}));
+})(M);
 
 
 //// [declarationEmitDestructuringArrayPattern3.d.ts]

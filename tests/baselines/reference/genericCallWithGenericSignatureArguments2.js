@@ -76,7 +76,7 @@ module TU {
 //// [genericCallWithGenericSignatureArguments2.js]
 // When a function expression is inferentially typed (section 4.9.3) and a type assigned to a parameter in that expression references type parameters for which inferences are being made, 
 // the corresponding inferred type arguments to become fixed and no further candidate inferences are made for them.
-var onlyT;
+var onlyT = onlyT || (onlyT = {});
 (function (onlyT) {
     function foo(a, b) {
         var r;
@@ -97,21 +97,21 @@ var onlyT;
         var r7 = foo2(function (a) { return a; }, function (b) { return b; }); // error
         var r7b = foo2(function (a) { return a; }, function (b) { return b; }); // valid, T is inferred to be Date
     }
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["A"] = 0] = "A";
-    })(E || (E = {}));
-    var F;
+    })(E);
+    var F = F || (F = {});
     (function (F) {
         F[F["A"] = 0] = "A";
-    })(F || (F = {}));
+    })(F);
     function foo3(x, a, b) {
         var r;
         return r;
     }
     var r7 = foo3(E.A, function (x) { return E.A; }, function (x) { return F.A; }); // error
-})(onlyT || (onlyT = {}));
-var TU;
+})(onlyT);
+var TU = TU || (TU = {});
 (function (TU) {
     function foo(a, b) {
         var r;
@@ -131,17 +131,17 @@ var TU;
         var r7 = foo2(function (a) { return a; }, function (b) { return b; });
         var r7b = foo2(function (a) { return a; }, function (b) { return b; });
     }
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["A"] = 0] = "A";
-    })(E || (E = {}));
-    var F;
+    })(E);
+    var F = F || (F = {});
     (function (F) {
         F[F["A"] = 0] = "A";
-    })(F || (F = {}));
+    })(F);
     function foo3(x, a, b) {
         var r;
         return r;
     }
     var r7 = foo3(E.A, function (x) { return E.A; }, function (x) { return F.A; });
-})(TU || (TU = {}));
+})(TU);

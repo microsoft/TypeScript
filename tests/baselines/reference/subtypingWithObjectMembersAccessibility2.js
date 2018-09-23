@@ -88,7 +88,7 @@ var Derived = /** @class */ (function (_super) {
     }
     return Derived;
 }(Base));
-var ExplicitPublic;
+var ExplicitPublic = ExplicitPublic || (ExplicitPublic = {});
 (function (ExplicitPublic) {
     var A = /** @class */ (function () {
         function A() {
@@ -126,8 +126,8 @@ var ExplicitPublic;
         }
         return B3;
     }(A3));
-})(ExplicitPublic || (ExplicitPublic = {}));
-var ImplicitPublic;
+})(ExplicitPublic);
+var ImplicitPublic = ImplicitPublic || (ImplicitPublic = {});
 (function (ImplicitPublic) {
     var A = /** @class */ (function () {
         function A() {
@@ -165,4 +165,4 @@ var ImplicitPublic;
         }
         return B3;
     }(A3));
-})(ImplicitPublic || (ImplicitPublic = {}));
+})(ImplicitPublic);

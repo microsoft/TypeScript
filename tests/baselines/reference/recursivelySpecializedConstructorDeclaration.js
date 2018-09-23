@@ -43,13 +43,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var MsPortal;
+var MsPortal = MsPortal || (MsPortal = {});
 (function (MsPortal) {
-    var Controls;
+    var Controls = MsPortal.Controls || (MsPortal.Controls = {});
     (function (Controls) {
-        var Base;
+        var Base = Controls.Base || (Controls.Base = {});
         (function (Base) {
-            var ItemList;
+            var ItemList = Base.ItemList || (Base.ItemList = {});
             (function (ItemList) {
                 var ItemValue = /** @class */ (function () {
                     function ItemValue(value) {
@@ -65,10 +65,10 @@ var MsPortal;
                     return ViewModel;
                 }(ItemValue));
                 ItemList.ViewModel = ViewModel;
-            })(ItemList = Base.ItemList || (Base.ItemList = {}));
-        })(Base = Controls.Base || (Controls.Base = {}));
-    })(Controls = MsPortal.Controls || (MsPortal.Controls = {}));
-})(MsPortal || (MsPortal = {}));
+            })(ItemList);
+        })(Base);
+    })(Controls);
+})(MsPortal);
 // Generates:
 /*
 declare module MsPortal.Controls.Base.ItemList {

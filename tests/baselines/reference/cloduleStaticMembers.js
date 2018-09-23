@@ -25,4 +25,4 @@ var Clod = /** @class */ (function () {
     var q = x;
     var s = Clod.y;
     var t = y;
-})(Clod || (Clod = {}));
+})(Clod);

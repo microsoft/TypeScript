@@ -41,7 +41,7 @@ f.privMeth(); // should not work
 f.privProp; // should not work
 f.pubMeth(); // should work
 f.pubProp; // should work
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -52,7 +52,7 @@ var M;
     }());
     M.C = C;
     M.V = 0;
-})(M || (M = {}));
+})(M);
 var c = new M.C();
 c.pub; // should work
 c.priv; // should not work

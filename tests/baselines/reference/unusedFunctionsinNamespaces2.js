@@ -5,8 +5,8 @@ namespace Validation {
 }
 
 //// [unusedFunctionsinNamespaces2.js]
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var function1 = function () {
     };
-})(Validation || (Validation = {}));
+})(Validation);

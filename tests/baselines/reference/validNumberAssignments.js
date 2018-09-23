@@ -14,10 +14,10 @@ var x = 1;
 var a = x;
 var b = x;
 var c = x;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 ;
 var d = x;
 var e = E.A;

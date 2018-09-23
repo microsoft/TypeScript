@@ -32,20 +32,20 @@ class A {
 
 
 //// [module.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var Point;
+        var Point = Y.Point || (Y.Point = {});
         (function (Point) {
             Point.Origin = new Point(0, 0);
-        })(Point = Y.Point || (Y.Point = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Point);
+    })(Y);
+})(X);
 //// [classPoint.js]
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
         // duplicate identifier
         var Point = /** @class */ (function () {
@@ -56,13 +56,13 @@ var X;
             return Point;
         }());
         Y.Point = Point;
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+    })(Y);
+})(X);
 //// [simple.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A.Instance = new A();
-})(A || (A = {}));
+})(A);
 // duplicate identifier
 var A = /** @class */ (function () {
     function A() {

@@ -15,19 +15,19 @@ export module c {
 //// [internalAliasFunctionInsideLocalModuleWithExport.js]
 "use strict";
 exports.__esModule = true;
-var a;
+var a = {};
 (function (a) {
     function foo(x) {
         return x;
     }
     a.foo = foo;
-})(a = exports.a || (exports.a = {}));
-var c;
+})(a);
+var c = {};
 (function (c) {
     c.b = a.foo;
     c.bVal = c.b(10);
     c.bVal2 = c.b;
-})(c = exports.c || (exports.c = {}));
+})(c);
 
 
 //// [internalAliasFunctionInsideLocalModuleWithExport.d.ts]

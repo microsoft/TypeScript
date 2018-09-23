@@ -23,7 +23,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var TypeScript2;
+var TypeScript2 = TypeScript2 || (TypeScript2 = {});
 (function (TypeScript2) {
     var MemberName = /** @class */ (function () {
         function MemberName() {
@@ -40,5 +40,5 @@ var TypeScript2;
         return MemberNameArray;
     }(MemberName));
     TypeScript2.MemberNameArray = MemberNameArray;
-})(TypeScript2 || (TypeScript2 = {}));
+})(TypeScript2);
 var a = new TypeScript2.MemberNameArray();

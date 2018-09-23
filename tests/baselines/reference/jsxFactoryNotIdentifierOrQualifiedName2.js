@@ -52,7 +52,7 @@ class A {
 //// [Element.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Element;
+const Element = {};
 (function (Element) {
     function isElement(el) {
         return el.markAsChildOfRootElement !== undefined;
@@ -62,7 +62,7 @@ var Element;
         return {};
     }
     Element.createElement = createElement;
-})(Element = exports.Element || (exports.Element = {}));
+})(Element);
 exports.createElement = Element.createElement;
 function toCamelCase(text) {
     return text[0].toLowerCase() + text.substring(1);

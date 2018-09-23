@@ -579,7 +579,7 @@ module TypeScript {
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     function lastOf(items) {
         return (items === null || items.length === 0) ? null : items[items.length - 1];
@@ -957,7 +957,7 @@ var TypeScript;
         return AstPathContext;
     }());
     TypeScript.AstPathContext = AstPathContext;
-    var GetAstPathOptions;
+    var GetAstPathOptions = TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {});
     (function (GetAstPathOptions) {
         GetAstPathOptions[GetAstPathOptions["Default"] = 0] = "Default";
         GetAstPathOptions[GetAstPathOptions["EdgeInclusive"] = 1] = "EdgeInclusive";
@@ -969,7 +969,7 @@ var TypeScript;
         // we don't find the "precomment" attached to the errorneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 2] = "DontPruneSearchBasedOnPosition";
-    })(GetAstPathOptions = TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));
+    })(GetAstPathOptions);
     ///
     /// Return the stack of AST nodes containing "position"
     ///
@@ -1075,4 +1075,4 @@ var TypeScript;
         TypeScript.getAstWalkerFactory().walk(ast, pre, post, null, path);
     }
     TypeScript.walkAST = walkAST;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

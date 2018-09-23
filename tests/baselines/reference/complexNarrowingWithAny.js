@@ -621,7 +621,7 @@ exports.__esModule = true;
 // import * as import50 from '@angular/forms/src/directives/ng_control';
 // import * as import51 from '@angular/forms/src/directives/control_container';
 //stubbed out imports
-var import44;
+var import44 = {};
 (function (import44) {
     var FormGroupDirective = /** @class */ (function () {
         function FormGroupDirective(any) {
@@ -629,8 +629,8 @@ var import44;
         return FormGroupDirective;
     }());
     import44.FormGroupDirective = FormGroupDirective;
-})(import44 || (import44 = {}));
-var import45;
+})(import44);
+var import45 = {};
 (function (import45) {
     var NgControlStatus = /** @class */ (function () {
         function NgControlStatus(any) {
@@ -644,8 +644,8 @@ var import45;
         return NgControlStatusGroup;
     }());
     import45.NgControlStatusGroup = NgControlStatusGroup;
-})(import45 || (import45 = {}));
-var import46;
+})(import45);
+var import46 = {};
 (function (import46) {
     var DefaultValueAccessor = /** @class */ (function () {
         function DefaultValueAccessor(any) {
@@ -653,8 +653,8 @@ var import46;
         return DefaultValueAccessor;
     }());
     import46.DefaultValueAccessor = DefaultValueAccessor;
-})(import46 || (import46 = {}));
-var import47;
+})(import46);
+var import47 = {};
 (function (import47) {
     var FormControlName = /** @class */ (function () {
         function FormControlName(any) {
@@ -662,8 +662,8 @@ var import47;
         return FormControlName;
     }());
     import47.FormControlName = FormControlName;
-})(import47 || (import47 = {}));
-var import48;
+})(import47);
+var import48 = {};
 (function (import48) {
     var FormControlName = /** @class */ (function () {
         function FormControlName(any) {
@@ -671,15 +671,15 @@ var import48;
         return FormControlName;
     }());
     import48.FormControlName = FormControlName;
-})(import48 || (import48 = {}));
+})(import48);
 //HERE BE DRAGONS
 //Using a value here - 65+ seconds to typecheck
-var import49;
+var import49 = {};
 (function (import49) {
     //real code uses an opaque token, using new String() to simulate.
     //export var NG_VALUE_ACCESSOR = new OpaqueToken('ngValueAccessor')
     import49.NG_VALUE_ACCESSOR = new String('foo');
-})(import49 || (import49 = {}));
+})(import49);
 //using a class - < 1 sec typecheck
 // namespace import49 {
 // 	export class NG_VALUE_ACCESSOR {
@@ -687,7 +687,7 @@ var import49;
 // 	}
 // }
 //END DRAGONS
-var import50;
+var import50 = {};
 (function (import50) {
     var NgControl = /** @class */ (function () {
         function NgControl(any) {
@@ -695,8 +695,8 @@ var import50;
         return NgControl;
     }());
     import50.NgControl = NgControl;
-})(import50 || (import50 = {}));
-var import51;
+})(import50);
+var import51 = {};
 (function (import51) {
     var ControlContainer = /** @class */ (function () {
         function ControlContainer(any) {
@@ -704,7 +704,7 @@ var import51;
         return ControlContainer;
     }());
     import51.ControlContainer = ControlContainer;
-})(import51 || (import51 = {}));
+})(import51);
 var _View_AppComponent0 = /** @class */ (function () {
     function _View_AppComponent0(viewUtils, parentInjector, declarationEl) {
     }

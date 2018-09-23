@@ -60,9 +60,9 @@ label: function gen1() {
     }); });
 }
 label: {
-    var E;
+    var E = E || (E = {});
     (function (E) {
-    })(E || (E = {}));
+    })(E);
 }
 label: 
 label: {

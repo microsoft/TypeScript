@@ -30,11 +30,11 @@ var C = /** @class */ (function () {
 (function (C) {
     C.x = 1;
     var y = 2;
-})(C || (C = {}));
+})(C);
 (function (C) {
     function foo() { }
     C.foo = foo;
     function baz() { return ''; }
-})(C || (C = {}));
+})(C);
 var c = new C(C.x);
 c.foo = C.foo;

@@ -27,14 +27,14 @@ namespace Test1 {
 }
 
 //// [errorForUsingPropertyOfTypeAsType03.js]
-var Test1;
+var Test1 = Test1 || (Test1 = {});
 (function (Test1) {
-    var Color;
+    var Color = Color || (Color = {});
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
         Color[Color["Blue"] = 2] = "Blue";
-    })(Color || (Color = {}));
+    })(Color);
     var a1;
     var a2;
     var a3;
@@ -47,4 +47,4 @@ var Test1;
     var d1;
     var d2;
     var d3;
-})(Test1 || (Test1 = {}));
+})(Test1);

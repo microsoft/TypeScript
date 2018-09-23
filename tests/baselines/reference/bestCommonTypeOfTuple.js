@@ -29,14 +29,14 @@ var e4 = t4[3];  // number
 function f1(x) { return "foo"; }
 function f2(x) { return 10; }
 function f3(x) { return true; }
-var E1;
+var E1 = E1 || (E1 = {});
 (function (E1) {
     E1[E1["one"] = 0] = "one";
-})(E1 || (E1 = {}));
-var E2;
+})(E1);
+var E2 = E2 || (E2 = {});
 (function (E2) {
     E2[E2["two"] = 0] = "two";
-})(E2 || (E2 = {}));
+})(E2);
 var t1;
 var t2;
 var t3;

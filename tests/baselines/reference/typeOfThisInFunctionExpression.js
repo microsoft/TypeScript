@@ -72,7 +72,7 @@ var C = /** @class */ (function () {
     }
     return C;
 }());
-var M;
+var M = M || (M = {});
 (function (M) {
     function fn() {
         var p = this;
@@ -86,4 +86,4 @@ var M;
         var x = this;
         var x;
     };
-})(M || (M = {}));
+})(M);

@@ -25,11 +25,11 @@ var c = /** @class */ (function () {
 }());
 exports.c = c;
 exports.c2 = c;
-var m;
+var m = {};
+exports.instantiatedModule = m;
 (function (m) {
     m.x = 10;
-})(m || (m = {}));
-exports.instantiatedModule = m;
+})(m);
 var x = 10;
 exports.x = x;
 

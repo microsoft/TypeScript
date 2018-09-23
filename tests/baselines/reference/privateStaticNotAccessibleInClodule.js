@@ -19,4 +19,4 @@ var C = /** @class */ (function () {
 }());
 (function (C) {
     C.y = C.bar; // error
-})(C || (C = {}));
+})(C);

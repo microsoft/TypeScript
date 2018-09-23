@@ -142,14 +142,14 @@ var A2 = /** @class */ (function () {
     }
     return A2;
 }());
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var c = /** @class */ (function () {
     function c() {
     }
@@ -157,4 +157,4 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);

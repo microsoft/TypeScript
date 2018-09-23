@@ -21,9 +21,9 @@ module sas.tools {
 
 
 //// [sourceMap-Comments.js]
-var sas;
+var sas = sas || (sas = {});
 (function (sas) {
-    var tools;
+    var tools = sas.tools || (sas.tools = {});
     (function (tools) {
         var Test = /** @class */ (function () {
             function Test() {
@@ -45,6 +45,6 @@ var sas;
             return Test;
         }());
         tools.Test = Test;
-    })(tools = sas.tools || (sas.tools = {}));
-})(sas || (sas = {}));
+    })(tools);
+})(sas);
 //# sourceMappingURL=sourceMap-Comments.js.map

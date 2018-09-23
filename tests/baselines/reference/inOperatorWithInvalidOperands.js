@@ -44,10 +44,10 @@ var rb10 = x in undefined;
 var rc1 = {} in '';
 
 //// [inOperatorWithInvalidOperands.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
-})(E || (E = {}));
+})(E);
 var x;
 // invalid left operands
 // the left operand is required to be of type Any, the String primitive type, or the Number primitive type

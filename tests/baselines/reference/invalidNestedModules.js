@@ -30,11 +30,11 @@ module M2 {
 
 
 //// [invalidNestedModules.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
-        var C;
+        var C = B.C || (B.C = {});
         (function (C) {
             var Point = /** @class */ (function () {
                 function Point() {
@@ -42,11 +42,11 @@ var A;
                 return Point;
             }());
             C.Point = Point;
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+        })(C);
+    })(B);
+})(A);
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
         var C = /** @class */ (function () {
             function C() {
@@ -54,11 +54,11 @@ var A;
             return C;
         }());
         B.C = C;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
-var M2;
+    })(B);
+})(A);
+var M2 = M2 || (M2 = {});
 (function (M2) {
-    var X;
+    var X = M2.X || (M2.X = {});
     (function (X) {
         var Point = /** @class */ (function () {
             function Point() {
@@ -66,10 +66,10 @@ var M2;
             return Point;
         }());
         X.Point = Point;
-    })(X = M2.X || (M2.X = {}));
-})(M2 || (M2 = {}));
+    })(X);
+})(M2);
 (function (M2) {
-    var X;
+    var X = M2.X || (M2.X = {});
     (function (X) {
-    })(X = M2.X || (M2.X = {}));
-})(M2 || (M2 = {}));
+    })(X);
+})(M2);

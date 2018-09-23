@@ -107,19 +107,19 @@ p.b = 1;
 var q = p;
 q.a = 1;
 q.b = 1;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(E || (E = {}));
+})(E);
 E.A = 1; // Error
-var N;
+var N = N || (N = {});
 (function (N) {
     N.a = 1;
     N.b = 1;
     N.c = 1;
-})(N || (N = {}));
+})(N);
 N.a = 1; // Error
 N.b = 1;
 N.c = 1;

@@ -23,16 +23,16 @@ var ResultIsBoolean5 = !!!(ENUM["B"] + ENUM.C);
 
 //// [logicalNotOperatorWithEnumType.js]
 // ! operator on enum type
-var ENUM;
+var ENUM = ENUM || (ENUM = {});
 (function (ENUM) {
     ENUM[ENUM["A"] = 0] = "A";
     ENUM[ENUM["B"] = 1] = "B";
     ENUM[ENUM["C"] = 2] = "C";
-})(ENUM || (ENUM = {}));
+})(ENUM);
 ;
-var ENUM1;
+var ENUM1 = ENUM1 || (ENUM1 = {});
 (function (ENUM1) {
-})(ENUM1 || (ENUM1 = {}));
+})(ENUM1);
 ;
 // enum type var
 var ResultIsBoolean1 = !ENUM;

@@ -155,12 +155,12 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function f1() {
-    var E;
+    var E = E || (E = {});
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(E || (E = {}));
+    })(E);
     var C = /** @class */ (function () {
         function C() {
         }
@@ -172,12 +172,12 @@ function f1() {
 }
 function f2() {
     function g() {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         var C = /** @class */ (function () {
             function C() {
             }
@@ -191,12 +191,12 @@ function f2() {
 }
 function f3(b) {
     if (true) {
-        var E = void 0;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         if (b) {
             var C = /** @class */ (function () {
                 function C() {
@@ -221,12 +221,12 @@ function f3(b) {
 }
 function f5() {
     var z1 = function () {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         var C = /** @class */ (function () {
             function C() {
             }
@@ -235,12 +235,12 @@ function f5() {
         return new C();
     };
     var z2 = function () {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         var C = /** @class */ (function () {
             function C() {
             }
@@ -251,12 +251,12 @@ function f5() {
 }
 var A = /** @class */ (function () {
     function A() {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         var C = /** @class */ (function () {
             function C() {
             }
@@ -264,12 +264,12 @@ var A = /** @class */ (function () {
         }());
     }
     A.prototype.m = function () {
-        var E;
+        var E = E || (E = {});
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
-        })(E || (E = {}));
+        })(E);
         var C = /** @class */ (function () {
             function C() {
             }
@@ -279,12 +279,12 @@ var A = /** @class */ (function () {
     };
     Object.defineProperty(A.prototype, "p", {
         get: function () {
-            var E;
+            var E = E || (E = {});
             (function (E) {
                 E[E["A"] = 0] = "A";
                 E[E["B"] = 1] = "B";
                 E[E["C"] = 2] = "C";
-            })(E || (E = {}));
+            })(E);
             var C = /** @class */ (function () {
                 function C() {
                 }

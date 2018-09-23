@@ -2381,7 +2381,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     var ASTSpan = /** @class */ (function () {
         function ASTSpan() {
@@ -4664,4 +4664,4 @@ var TypeScript;
         return DebuggerStatement;
     }(Statement));
     TypeScript.DebuggerStatement = DebuggerStatement;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

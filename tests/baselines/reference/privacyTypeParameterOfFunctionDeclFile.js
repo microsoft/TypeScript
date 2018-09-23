@@ -572,7 +572,7 @@ var privateClassWithWithPrivateModuleTypeParameters = /** @class */ (function ()
 }());
 function privateFunctionWithPrivateMopduleTypeParameters() {
 }
-var publicModule;
+var publicModule = {};
 (function (publicModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -705,8 +705,8 @@ var publicModule;
     }());
     function privateFunctionWithPrivateMopduleTypeParameters() {
     }
-})(publicModule = exports.publicModule || (exports.publicModule = {}));
-var privateModule;
+})(publicModule);
+var privateModule = {};
 (function (privateModule) {
     var privateClass = /** @class */ (function () {
         function privateClass() {
@@ -815,7 +815,7 @@ var privateModule;
     privateModule.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
     function privateFunctionWithPublicTypeParametersWithoutExtends() {
     }
-})(privateModule || (privateModule = {}));
+})(privateModule);
 
 
 //// [privacyTypeParameterOfFunctionDeclFile.d.ts]

@@ -47,17 +47,17 @@ module D {
 }
 
 //// [nameCollision.js]
-var A;
+var A = A || (A = {});
 (function (A_1) {
     // these 2 statements force an underscore before the 'A' 
     // in the generated function call.
     var A = 12;
     var _A = '';
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     var A = 12;
-})(B || (B = {}));
+})(B);
 (function (B_1) {
     // re-opened module with colliding name
     // this should add an underscore.
@@ -66,35 +66,35 @@ var B;
         }
         return B;
     }());
-})(B || (B = {}));
-var X;
+})(B);
+var X = X || (X = {});
 (function (X_1) {
     var X = 13;
-    var Y;
+    var Y = X_1.Y || (X_1.Y = {});
     (function (Y_1) {
         var Y = 13;
-        var Z;
+        var Z = Y_1.Z || (Y_1.Z = {});
         (function (Z_1) {
             var X = 12;
             var Y = 12;
             var Z = 12;
-        })(Z = Y_1.Z || (Y_1.Z = {}));
-    })(Y = X_1.Y || (X_1.Y = {}));
-})(X || (X = {}));
-var Y;
+        })(Z);
+    })(Y);
+})(X);
+var Y = Y || (Y = {});
 (function (Y_2) {
-    var Y;
+    var Y = Y_2.Y || (Y_2.Y = {});
     (function (Y_3) {
-        var Y;
+        var Y = Y_3.Y || (Y_3.Y = {});
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";
-        })(Y = Y_3.Y || (Y_3.Y = {}));
-    })(Y = Y_2.Y || (Y_2.Y = {}));
-})(Y || (Y = {}));
+        })(Y);
+    })(Y);
+})(Y);
 // no collision, since interface doesn't
 // generate code.
-var D;
+var D = D || (D = {});
 (function (D) {
     D.E = 'hello';
-})(D || (D = {}));
+})(D);

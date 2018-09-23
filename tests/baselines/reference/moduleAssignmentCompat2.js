@@ -14,7 +14,7 @@ a = b;
 b = a; // error
 
 //// [moduleAssignmentCompat2.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var C = /** @class */ (function () {
         function C() {
@@ -22,8 +22,8 @@ var A;
         return C;
     }());
     A.C = C;
-})(A || (A = {}));
-var B;
+})(A);
+var B = B || (B = {});
 (function (B) {
     var C = /** @class */ (function () {
         function C() {
@@ -37,7 +37,7 @@ var B;
         return D;
     }());
     B.D = D;
-})(B || (B = {}));
+})(B);
 var a;
 var b;
 a = b;

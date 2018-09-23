@@ -3,6 +3,6 @@ enum E {
 }
 
 //// [emptyEnum.js]
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);

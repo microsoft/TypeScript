@@ -69,7 +69,7 @@ var D = /** @class */ (function (_super) {
     }
     return D;
 }(C));
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -81,4 +81,4 @@ var M;
         }
         return C2;
     }());
-})(M || (M = {}));
+})(M);

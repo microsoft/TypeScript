@@ -12,7 +12,7 @@ module A {
 }
 
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInNestedMemberTypeAnnotations.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -22,4 +22,4 @@ var A;
         return Point;
     }());
     A.UnitSquare = null;
-})(A || (A = {}));
+})(A);

@@ -123,12 +123,12 @@ function ExpandoMerge(n) {
 ExpandoMerge.p1 = 111;
 (function (ExpandoMerge) {
     ExpandoMerge.p2 = 222;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 (function (ExpandoMerge) {
     ExpandoMerge.p3 = 333;
-})(ExpandoMerge || (ExpandoMerge = {}));
+})(ExpandoMerge);
 var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
-var Ns;
+var Ns = Ns || (Ns = {});
 (function (Ns) {
     function ExpandoNamespace() { }
     ExpandoNamespace.p6 = 42;
@@ -136,7 +136,7 @@ var Ns;
         return ExpandoNamespace;
     }
     Ns.foo = foo;
-})(Ns || (Ns = {}));
+})(Ns);
 // Should not work in Typescript -- must be const
 var ExpandoExpr2 = function (n) {
     return n.toString();

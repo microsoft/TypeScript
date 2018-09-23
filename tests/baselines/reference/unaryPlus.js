@@ -15,11 +15,11 @@ var z = ~"3"; // should be valid
 // allowed per spec
 var a = +1;
 var b = +"";
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["some"] = 0] = "some";
     E[E["thing"] = 1] = "thing";
-})(E || (E = {}));
+})(E);
 ;
 var c = +E.some;
 // also allowed, used to be errors

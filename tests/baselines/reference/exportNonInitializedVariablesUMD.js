@@ -53,14 +53,14 @@ export let h1: D = new D;
         }
         return A;
     }());
-    var B;
+    var B = {};
     (function (B) {
         B.a = 1, B.c = 2;
-    })(B || (B = {}));
-    var C;
+    })(B);
+    var C = {};
     (function (C) {
         C.a = 1, C.c = 2;
-    })(C || (C = {}));
+    })(C);
     // Shouldn't be filtered
     exports.a1 = 1;
     exports.b1 = 1;

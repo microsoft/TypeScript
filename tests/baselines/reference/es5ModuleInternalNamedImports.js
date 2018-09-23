@@ -39,7 +39,7 @@ import M3 from "M3";
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var M;
+    var M = {};
     (function (M) {
         // variable
         M.M_V = 0;
@@ -51,18 +51,18 @@ define(["require", "exports"], function (require, exports) {
         }());
         M.M_C = M_C;
         // instantiated module
-        var M_M;
+        var M_M = M.M_M || (M.M_M = {});
         (function (M_M) {
             var x;
-        })(M_M = M.M_M || (M.M_M = {}));
+        })(M_M);
         // function
         function M_F() { }
         M.M_F = M_F;
         // enum
-        var M_E;
+        var M_E = M.M_E || (M.M_E = {});
         (function (M_E) {
-        })(M_E = M.M_E || (M.M_E = {}));
+        })(M_E);
         // alias
         M.M_A = M_M;
-    })(M = exports.M || (exports.M = {}));
+    })(M);
 });

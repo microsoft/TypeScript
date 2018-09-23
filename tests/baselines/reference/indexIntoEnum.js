@@ -7,10 +7,10 @@ module M {
 }
 
 //// [indexIntoEnum.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-    var E;
+    var E = E || (E = {});
     (function (E) {
-    })(E || (E = {}));
+    })(E);
     var x = E[0];
-})(M || (M = {}));
+})(M);

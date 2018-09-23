@@ -18,10 +18,10 @@ module Moclodule {
 
 //// [cloduleWithPriorInstantiatedModule.js]
 // Non-ambient & instantiated module.
-var Moclodule;
+var Moclodule = Moclodule || (Moclodule = {});
 (function (Moclodule) {
     var x = 10;
-})(Moclodule || (Moclodule = {}));
+})(Moclodule);
 var Moclodule = /** @class */ (function () {
     function Moclodule() {
     }
@@ -35,4 +35,4 @@ var Moclodule = /** @class */ (function () {
         return Manager;
     }());
     Moclodule.Manager = Manager;
-})(Moclodule || (Moclodule = {}));
+})(Moclodule);

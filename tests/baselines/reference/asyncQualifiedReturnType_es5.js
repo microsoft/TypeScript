@@ -8,7 +8,7 @@ async function f(): X.MyPromise<void> {
 }
 
 //// [asyncQualifiedReturnType_es5.js]
-var X;
+var X = X || (X = {});
 (function (X) {
     var MyPromise = /** @class */ (function (_super) {
         __extends(MyPromise, _super);
@@ -18,7 +18,7 @@ var X;
         return MyPromise;
     }(Promise));
     X.MyPromise = MyPromise;
-})(X || (X = {}));
+})(X);
 function f() {
     return __awaiter(this, void 0, X.MyPromise, function () {
         return __generator(this, function (_a) {

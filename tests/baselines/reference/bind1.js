@@ -6,7 +6,7 @@ module M {
 
 
 //// [bind1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -14,4 +14,4 @@ var M;
         return C;
     }()); // this should be an unresolved symbol I error
     M.C = C;
-})(M || (M = {}));
+})(M);

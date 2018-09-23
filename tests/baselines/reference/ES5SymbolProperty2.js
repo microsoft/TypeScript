@@ -11,7 +11,7 @@ module M {
 (new M.C)[Symbol.iterator];
 
 //// [ES5SymbolProperty2.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Symbol;
     var C = /** @class */ (function () {
@@ -22,5 +22,5 @@ var M;
     }());
     M.C = C;
     (new C)[Symbol.iterator];
-})(M || (M = {}));
+})(M);
 (new M.C)[Symbol.iterator];

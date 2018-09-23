@@ -32,7 +32,7 @@ module P {
 }
 
 //// [moduleElementsInWrongContext3.js]
-var P;
+var P = P || (P = {});
 (function (P) {
     {
         export = M;
@@ -55,4 +55,4 @@ var P;
         import { baz } from "ambient";
         import "ambient";
     }
-})(P || (P = {}));
+})(P);

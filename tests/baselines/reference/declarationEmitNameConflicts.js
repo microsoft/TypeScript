@@ -51,7 +51,7 @@ export module M.Q {
 
 //// [declarationEmit_nameConflicts_1.js]
 "use strict";
-var f;
+var f = {};
 (function (f) {
     var c = /** @class */ (function () {
         function c() {
@@ -59,13 +59,13 @@ var f;
         return c;
     }());
     f.c = c;
-})(f || (f = {}));
+})(f);
 module.exports = f;
 //// [declarationEmit_nameConflicts_0.js]
 "use strict";
 exports.__esModule = true;
 var im = require("./declarationEmit_nameConflicts_1");
-var M;
+var M = {};
 (function (M) {
     function f() { }
     M.f = f;
@@ -75,19 +75,19 @@ var M;
         return C;
     }());
     M.C = C;
-    var N;
+    var N = M.N || (M.N = {});
     (function (N) {
         function g() { }
         N.g = g;
         ;
-    })(N = M.N || (M.N = {}));
+    })(N);
     M.a = M.f;
     M.b = M.C;
     M.c = N;
     M.d = im;
-})(M = exports.M || (exports.M = {}));
+})(M);
 (function (M) {
-    var P;
+    var P = M.P || (M.P = {});
     (function (P) {
         function f() { }
         P.f = f;
@@ -97,22 +97,22 @@ var M;
             return C;
         }());
         P.C = C;
-        var N;
+        var N = P.N || (P.N = {});
         (function (N) {
             function g() { }
             N.g = g;
             ;
-        })(N = P.N || (P.N = {}));
+        })(N);
         P.im = M.P.f;
         P.a = M.a; // emitted incorrectly as typeof f
         P.b = M.b; // ok
         P.c = M.c; // ok
         P.g = M.c.g; // ok
         P.d = M.d; // emitted incorrectly as typeof im
-    })(P = M.P || (M.P = {}));
-})(M = exports.M || (exports.M = {}));
+    })(P);
+})(M);
 (function (M) {
-    var Q;
+    var Q = M.Q || (M.Q = {});
     (function (Q) {
         function f() { }
         Q.f = f;
@@ -122,14 +122,14 @@ var M;
             return C;
         }());
         Q.C = C;
-        var N;
+        var N = Q.N || (Q.N = {});
         (function (N) {
             function g() { }
             N.g = g;
             ;
-        })(N = Q.N || (Q.N = {}));
-    })(Q = M.Q || (M.Q = {}));
-})(M = exports.M || (exports.M = {}));
+        })(N);
+    })(Q);
+})(M);
 
 
 //// [declarationEmit_nameConflicts_1.d.ts]

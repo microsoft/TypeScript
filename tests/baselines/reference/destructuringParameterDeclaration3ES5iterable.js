@@ -125,11 +125,11 @@ function foo() {
 }
 foo("hello", 1, 2);
 foo("hello", "world");
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 function foo1() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {

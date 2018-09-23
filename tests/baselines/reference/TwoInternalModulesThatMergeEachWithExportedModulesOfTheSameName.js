@@ -35,25 +35,25 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedModulesOfTheSameName.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 (function (A) {
-    var B;
+    var B = B || (B = {});
     (function (B) {
-    })(B || (B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 // ensure the right var decl is exported
 var x;
 var x = A.B.x;
-var X;
+var X = X || (X = {});
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var Z;
+        var Z = Y.Z || (Y.Z = {});
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
@@ -61,13 +61,13 @@ var X;
                 return Line;
             }());
             Z.Line = Line;
-        })(Z = Y.Z || (Y.Z = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Z);
+    })(Y);
+})(X);
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
-        var Z;
+        var Z = Z || (Z = {});
         (function (Z) {
             var Line = /** @class */ (function () {
                 function Line() {
@@ -75,9 +75,9 @@ var X;
                 return Line;
             }());
             Z.Line = Line;
-        })(Z || (Z = {}));
-    })(Y = X.Y || (X.Y = {}));
-})(X || (X = {}));
+        })(Z);
+    })(Y);
+})(X);
 // make sure merging works as expected
 var l;
 var l;

@@ -12,7 +12,7 @@ module m4 {
 }
 
 //// [collisionExportsRequireAndAmbientFunctionInGlobalFile.js]
-var m4;
+var m4 = m4 || (m4 = {});
 (function (m4) {
     var a = 10;
-})(m4 || (m4 = {}));
+})(m4);

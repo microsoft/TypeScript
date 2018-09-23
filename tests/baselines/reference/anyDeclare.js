@@ -7,8 +7,8 @@ module myMod {
 
 
 //// [anyDeclare.js]
-var myMod;
+var myMod = myMod || (myMod = {});
 (function (myMod) {
     var myFn;
     function myFn() { }
-})(myMod || (myMod = {}));
+})(myMod);

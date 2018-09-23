@@ -57,14 +57,14 @@ module Gar {
 
 
 //// [duplicateAnonymousModuleClasses.js]
-var F;
+var F = F || (F = {});
 (function (F) {
     var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
     }());
-})(F || (F = {}));
+})(F);
 (function (F) {
     // Should not be an error
     var Helper = /** @class */ (function () {
@@ -72,15 +72,15 @@ var F;
         }
         return Helper;
     }());
-})(F || (F = {}));
-var Foo;
+})(F);
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     var Helper = /** @class */ (function () {
         function Helper() {
         }
         return Helper;
     }());
-})(Foo || (Foo = {}));
+})(Foo);
 (function (Foo) {
     // Should not be an error
     var Helper = /** @class */ (function () {
@@ -88,17 +88,17 @@ var Foo;
         }
         return Helper;
     }());
-})(Foo || (Foo = {}));
-var Gar;
+})(Foo);
+var Gar = Gar || (Gar = {});
 (function (Gar) {
-    var Foo;
+    var Foo = Foo || (Foo = {});
     (function (Foo) {
         var Helper = /** @class */ (function () {
             function Helper() {
             }
             return Helper;
         }());
-    })(Foo || (Foo = {}));
+    })(Foo);
     (function (Foo) {
         // Should not be an error
         var Helper = /** @class */ (function () {
@@ -106,5 +106,5 @@ var Gar;
             }
             return Helper;
         }());
-    })(Foo || (Foo = {}));
-})(Gar || (Gar = {}));
+    })(Foo);
+})(Gar);

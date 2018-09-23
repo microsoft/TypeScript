@@ -17,7 +17,7 @@ module Editor {
 }
 
 //// [staticMethodReferencingTypeArgument1.js]
-var Editor;
+var Editor = Editor || (Editor = {});
 (function (Editor) {
     var List = /** @class */ (function () {
         function List(isHead, data) {
@@ -33,4 +33,4 @@ var Editor;
         return List;
     }());
     Editor.List = List;
-})(Editor || (Editor = {}));
+})(Editor);

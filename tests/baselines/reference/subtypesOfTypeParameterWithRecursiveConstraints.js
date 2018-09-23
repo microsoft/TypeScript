@@ -215,7 +215,7 @@ function f(t, u, v) {
     var r12 = true ? v : new Foo();
     var r12 = true ? new Foo() : v;
 }
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
     var Base = /** @class */ (function () {
         function Base() {
@@ -285,8 +285,8 @@ var M1;
         }
         return D9;
     }(Base));
-})(M1 || (M1 = {}));
-var M2;
+})(M1);
+var M2 = M2 || (M2 = {});
 (function (M2) {
     var Base2 = /** @class */ (function () {
         function Base2() {
@@ -356,4 +356,4 @@ var M2;
         }
         return D9;
     }(Base2));
-})(M2 || (M2 = {}));
+})(M2);

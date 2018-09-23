@@ -6,9 +6,9 @@ module M {
 }
 
 //// [computedPropertyNames19_ES6.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var obj = {
         [this.bar]: 0
     };
-})(M || (M = {}));
+})(M);

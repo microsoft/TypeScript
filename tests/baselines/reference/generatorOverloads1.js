@@ -6,7 +6,7 @@ module M {
 }
 
 //// [generatorOverloads1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     function* f(s) { }
-})(M || (M = {}));
+})(M);

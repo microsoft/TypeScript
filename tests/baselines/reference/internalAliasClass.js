@@ -10,7 +10,7 @@ module c {
 }
 
 //// [internalAliasClass.js]
-var a;
+var a = a || (a = {});
 (function (a) {
     var c = /** @class */ (function () {
         function c() {
@@ -18,12 +18,12 @@ var a;
         return c;
     }());
     a.c = c;
-})(a || (a = {}));
-var c;
+})(a);
+var c = c || (c = {});
 (function (c) {
     var b = a.c;
     c.x = new b();
-})(c || (c = {}));
+})(c);
 
 
 //// [internalAliasClass.d.ts]

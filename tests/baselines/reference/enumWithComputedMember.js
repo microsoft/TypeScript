@@ -7,9 +7,9 @@ enum A {
 
 
 //// [enumWithComputedMember.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     A[A["X"] = "".length] = "X";
     A[A["Y"] = A.X] = "Y";
     A[A["Z"] = void 0] = "Z";
-})(A || (A = {}));
+})(A);

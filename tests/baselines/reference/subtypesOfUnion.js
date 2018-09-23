@@ -53,11 +53,11 @@ interface I2<T> {
 }
 
 //// [subtypesOfUnion.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["e1"] = 0] = "e1";
     E[E["e2"] = 1] = "e2";
-})(E || (E = {}));
+})(E);
 var A = /** @class */ (function () {
     function A() {
     }
@@ -71,7 +71,7 @@ var A2 = /** @class */ (function () {
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var c = /** @class */ (function () {
     function c() {
     }
@@ -79,4 +79,4 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);

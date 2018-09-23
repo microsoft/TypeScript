@@ -45,7 +45,7 @@ module m {
 
 
 //// [declFileTypeAnnotationVisibilityErrorParameterOfFunction.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var private1 = /** @class */ (function () {
         function private1() {
@@ -83,7 +83,7 @@ var m;
         if (param === void 0) { param = new public1(); }
     }
     m.foo14 = foo14;
-    var m2;
+    var m2 = m2 || (m2 = {});
     (function (m2) {
         var public2 = /** @class */ (function () {
             function public2() {
@@ -91,7 +91,7 @@ var m;
             return public2;
         }());
         m2.public2 = public2;
-    })(m2 || (m2 = {}));
+    })(m2);
     function foo111(param) {
     }
     function foo112(param) {
@@ -104,7 +104,7 @@ var m;
         if (param === void 0) { param = new m2.public2(); }
     }
     m.foo114 = foo114;
-})(m || (m = {}));
+})(m);
 
 
 //// [declFileTypeAnnotationVisibilityErrorParameterOfFunction.d.ts]

@@ -39,7 +39,7 @@ result+=x.fonly("a","b","c","d"); //ok
 
 
 //// [vararg.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C = /** @class */ (function () {
         function C() {
@@ -76,7 +76,7 @@ var M;
         return C;
     }());
     M.C = C;
-})(M || (M = {}));
+})(M);
 var x = new M.C();
 var result = "";
 result += x.f(x, 3, 3); // bad first param

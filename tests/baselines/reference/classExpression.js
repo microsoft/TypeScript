@@ -25,11 +25,11 @@ var y = {
         return C2;
     }())
 };
-var M;
+var M = M || (M = {});
 (function (M) {
     var z = /** @class */ (function () {
         function C4() {
         }
         return C4;
     }());
-})(M || (M = {}));
+})(M);

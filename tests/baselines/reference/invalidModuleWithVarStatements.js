@@ -29,27 +29,27 @@ module YY3 {
 
 //// [invalidModuleWithVarStatements.js]
 // All of these should be an error
-var Y;
+var Y = Y || (Y = {});
 (function (Y) {
     var x = 0;
-})(Y || (Y = {}));
-var Y2;
+})(Y);
+var Y2 = Y2 || (Y2 = {});
 (function (Y2) {
     function fn(x) { }
-})(Y2 || (Y2 = {}));
-var Y4;
+})(Y2);
+var Y4 = Y4 || (Y4 = {});
 (function (Y4) {
     var x = 0;
-})(Y4 || (Y4 = {}));
-var YY;
+})(Y4);
+var YY = YY || (YY = {});
 (function (YY) {
     function fn(x) { }
-})(YY || (YY = {}));
-var YY2;
+})(YY);
+var YY2 = YY2 || (YY2 = {});
 (function (YY2) {
     var x = 0;
-})(YY2 || (YY2 = {}));
-var YY3;
+})(YY2);
+var YY3 = YY3 || (YY3 = {});
 (function (YY3) {
     function fn(x) { }
-})(YY3 || (YY3 = {}));
+})(YY3);

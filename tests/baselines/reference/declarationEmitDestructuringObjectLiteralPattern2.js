@@ -22,11 +22,11 @@ function f15() {
     return { a4: a4, b4: b4, c4: c4 };
 }
 var _c = f15(), a4 = _c.a4, b4 = _c.b4, c4 = _c.c4;
-var m;
+var m = m || (m = {});
 (function (m) {
     var _a;
     _a = f15(), m.a4 = _a.a4, m.b4 = _a.b4, m.c4 = _a.c4;
-})(m || (m = {}));
+})(m);
 
 
 //// [declarationEmitDestructuringObjectLiteralPattern2.d.ts]

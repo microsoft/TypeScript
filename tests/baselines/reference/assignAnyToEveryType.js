@@ -56,10 +56,10 @@ var e = null;
 e = x;
 var f = undefined;
 f = x;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var g = x;
 var g2 = E.A;
 g2 = x;
@@ -72,10 +72,10 @@ var h = x;
 var i = x;
 var j = x;
 var j2 = x;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.foo = 1;
-})(M || (M = {}));
+})(M);
 M = x;
 function k(a) {
     a = x;

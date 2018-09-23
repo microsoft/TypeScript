@@ -27,11 +27,11 @@ e = 1.0;
 e = -1;
 
 //// [validEnumAssignments.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
-})(E || (E = {}));
+})(E);
 var n;
 var a;
 var e;

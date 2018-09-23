@@ -32,9 +32,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 C = null;
-var E;
+var E = E || (E = {});
 (function (E) {
-})(E || (E = {}));
+})(E);
 E = null;
 function f() { }
 f = null;

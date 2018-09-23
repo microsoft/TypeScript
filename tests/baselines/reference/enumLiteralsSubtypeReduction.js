@@ -2056,7 +2056,7 @@ function run(a: number) {
 
 
 //// [enumLiteralsSubtypeReduction.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["E0"] = 0] = "E0";
     E[E["E1"] = 1] = "E1";
@@ -3082,7 +3082,7 @@ var E;
     E[E["E1021"] = 1021] = "E1021";
     E[E["E1022"] = 1022] = "E1022";
     E[E["E1023"] = 1023] = "E1023";
-})(E || (E = {}));
+})(E);
 function run(a) {
     switch (a) {
         case 0:

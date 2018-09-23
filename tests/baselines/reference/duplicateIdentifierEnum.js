@@ -40,10 +40,10 @@ enum E {
 
 //// [duplicateIdentifierEnum_A.js]
 // Test the error message when attempting to merge an enum with a class, an interface, or a function.
-var A;
+var A = A || (A = {});
 (function (A) {
     A[A["bar"] = 0] = "bar";
-})(A || (A = {}));
+})(A);
 var A = /** @class */ (function () {
     function A() {
     }
@@ -52,10 +52,10 @@ var A = /** @class */ (function () {
 function C() {
     return 0;
 }
-var D;
+var D = D || (D = {});
 (function (D) {
     D[D["bar"] = 0] = "bar";
-})(D || (D = {}));
+})(D);
 var E = /** @class */ (function () {
     function E() {
     }
@@ -66,7 +66,7 @@ var E = /** @class */ (function () {
 function D() {
     return 0;
 }
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["bar"] = 0] = "bar";
-})(E || (E = {}));
+})(E);

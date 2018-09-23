@@ -28,7 +28,7 @@ module MyModule {
 }
 
 //// [getAccessorWithImpliedReturnTypeAndFunctionClassMerge.js]
-var MyModule;
+var MyModule = MyModule || (MyModule = {});
 (function (MyModule) {
     var MyClass = /** @class */ (function () {
         function MyClass() {
@@ -44,4 +44,4 @@ var MyModule;
         return MyClass;
     }());
     MyModule.MyClass = MyClass;
-})(MyModule || (MyModule = {}));
+})(MyModule);

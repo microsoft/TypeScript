@@ -16,8 +16,8 @@ var D = /** @class */ (function () {
     return D;
 }());
 //// [cloduleSplitAcrossFiles_module.js]
-var D;
+var D = D || (D = {});
 (function (D) {
     D.y = "hi";
-})(D || (D = {}));
+})(D);
 D.y;

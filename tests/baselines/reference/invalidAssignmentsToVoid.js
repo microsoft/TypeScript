@@ -38,10 +38,10 @@ x = C;
 x = c;
 var i;
 x = i;
-var M;
+var M = M || (M = {});
 (function (M) {
     M.x = 1;
-})(M || (M = {}));
+})(M);
 x = M;
 function f(a) {
     x = a;

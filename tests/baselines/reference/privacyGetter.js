@@ -211,7 +211,7 @@ class C8_private {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var m1;
+    var m1 = {};
     (function (m1) {
         var C1_public = /** @class */ (function () {
             function C1_public() {
@@ -309,8 +309,8 @@ define(["require", "exports"], function (require, exports) {
             });
             return C4_private;
         }());
-    })(m1 = exports.m1 || (exports.m1 = {}));
-    var m2;
+    })(m1);
+    var m2 = {};
     (function (m2) {
         var m2_C1_public = /** @class */ (function () {
             function m2_C1_public() {
@@ -408,7 +408,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return m2_C4_private;
         }());
-    })(m2 || (m2 = {}));
+    })(m2);
     var C5_private = /** @class */ (function () {
         function C5_private() {
         }

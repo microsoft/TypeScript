@@ -63,7 +63,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var NonGeneric;
+var NonGeneric = NonGeneric || (NonGeneric = {});
 (function (NonGeneric) {
     var C = /** @class */ (function () {
         function C(x) {
@@ -90,8 +90,8 @@ var NonGeneric;
     var d = new D(); // error
     var d2 = new D(1); // ok
     var d3 = new D(''); // ok
-})(NonGeneric || (NonGeneric = {}));
-var Generics;
+})(NonGeneric);
+var Generics = Generics || (Generics = {});
 (function (Generics) {
     var C = /** @class */ (function () {
         function C(x) {
@@ -118,4 +118,4 @@ var Generics;
     var d = new D(); // error
     var d2 = new D(1); // ok
     var d3 = new D(''); // ok
-})(Generics || (Generics = {}));
+})(Generics);

@@ -18,9 +18,9 @@ export module X {
 //// [mergedModuleDeclarationCodeGen.js]
 "use strict";
 exports.__esModule = true;
-var X;
+var X = {};
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y_1) {
         var A = /** @class */ (function () {
             function A(Y) {
@@ -28,10 +28,10 @@ var X;
             }
             return A;
         }());
-    })(Y = X.Y || (X.Y = {}));
-})(X = exports.X || (exports.X = {}));
+    })(Y);
+})(X);
 (function (X) {
-    var Y;
+    var Y = X.Y || (X.Y = {});
     (function (Y) {
         var B = /** @class */ (function () {
             function B() {
@@ -39,5 +39,5 @@ var X;
             return B;
         }());
         Y.B = B;
-    })(Y = X.Y || (X.Y = {}));
-})(X = exports.X || (exports.X = {}));
+    })(Y);
+})(X);

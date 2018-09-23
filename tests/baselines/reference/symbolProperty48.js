@@ -8,10 +8,10 @@ module M {
 }
 
 //// [symbolProperty48.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var Symbol;
     class C {
         [Symbol.iterator]() { }
     }
-})(M || (M = {}));
+})(M);

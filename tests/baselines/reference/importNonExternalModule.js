@@ -14,10 +14,10 @@ if(foo.answer === 42){
 
 
 //// [foo_0.js]
-var foo;
+var foo = foo || (foo = {});
 (function (foo) {
     foo.answer = 42;
-})(foo || (foo = {}));
+})(foo);
 //// [foo_1.js]
 define(["require", "exports", "./foo_0"], function (require, exports, foo) {
     "use strict";

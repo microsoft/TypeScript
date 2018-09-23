@@ -69,12 +69,12 @@ var rh5 = E.a !== 0;
 var rh6 = 0 !== E.a;
 
 //// [comparisonOperatorWithSubtypeEnumAndNumber.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
-})(E || (E = {}));
+})(E);
 var a;
 var b;
 // operator <

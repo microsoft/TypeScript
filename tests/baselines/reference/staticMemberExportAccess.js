@@ -32,7 +32,7 @@ var Sammy = /** @class */ (function () {
 }());
 (function (Sammy) {
     Sammy.x = 1;
-})(Sammy || (Sammy = {}));
+})(Sammy);
 var $;
 var instanceOfClassSammy = new $.sammy(); // should be error
 var r1 = instanceOfClassSammy.foo(); // r1 is string

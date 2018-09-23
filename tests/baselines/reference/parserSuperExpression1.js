@@ -22,9 +22,9 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
-var M1;
+var M1 = M1 || (M1 = {});
 (function (M1) {
-    var M2;
+    var M2 = M1.M2 || (M1.M2 = {});
     (function (M2) {
         var C = /** @class */ (function () {
             function C() {
@@ -34,5 +34,5 @@ var M1;
             };
             return C;
         }());
-    })(M2 = M1.M2 || (M1.M2 = {}));
-})(M1 || (M1 = {}));
+    })(M2);
+})(M1);

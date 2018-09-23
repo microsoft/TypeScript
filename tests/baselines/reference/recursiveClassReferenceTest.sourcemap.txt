@@ -39,12 +39,15 @@ sourceFile:recursiveClassReferenceTest.ts
 >>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 >>>    };
 >>>})();
->>>var Sample;
+>>>var Sample = Sample || (Sample = {});
 1 >
 2 >^^^^
 3 >    ^^^^^^
-4 >          ^
-5 >           ^^^^^^^^^^->
+4 >          ^^^
+5 >             ^^^^^^
+6 >                   ^^^^^
+7 >                        ^^^^^^
+8 >                              ^^^^^^^
 1 >
   >
   >
@@ -78,139 +81,183 @@ sourceFile:recursiveClassReferenceTest.ts
   >
 2 >module 
 3 >    Sample
-4 >          .Actions.Thing.Find {
-  >          	export class StartFindAction implements Sample.Thing.IAction {
-  >          		
-  >          		public getId() { return "yo"; }
-  >          		
-  >          		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >          
-  >          			return true;
-  >          		}
-  >          	}
-  >          }
+4 >          
+5 >             Sample
+6 >                   
+7 >                        Sample
+8 >                              .Actions.Thing.Find {
+  >                              	export class StartFindAction implements Sample.Thing.IAction {
+  >                              		
+  >                              		public getId() { return "yo"; }
+  >                              		
+  >                              		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                              
+  >                              			return true;
+  >                              		}
+  >                              	}
+  >                              }
 1 >Emitted(16, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(16, 5) Source(32, 8) + SourceIndex(0)
 3 >Emitted(16, 11) Source(32, 14) + SourceIndex(0)
-4 >Emitted(16, 12) Source(42, 2) + SourceIndex(0)
+4 >Emitted(16, 14) Source(32, 8) + SourceIndex(0)
+5 >Emitted(16, 20) Source(32, 14) + SourceIndex(0)
+6 >Emitted(16, 25) Source(32, 8) + SourceIndex(0)
+7 >Emitted(16, 31) Source(32, 14) + SourceIndex(0)
+8 >Emitted(16, 38) Source(42, 2) + SourceIndex(0)
 ---
 >>>(function (Sample) {
-1->
+1 >
 2 >^^^^^^^^^^^
 3 >           ^^^^^^
-1->
+4 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >module 
 3 >           Sample
-1->Emitted(17, 1) Source(32, 1) + SourceIndex(0)
+1 >Emitted(17, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(17, 12) Source(32, 8) + SourceIndex(0)
 3 >Emitted(17, 18) Source(32, 14) + SourceIndex(0)
 ---
->>>    var Actions;
-1 >^^^^
+>>>    var Actions = Sample.Actions || (Sample.Actions = {});
+1->^^^^
 2 >    ^^^^
 3 >        ^^^^^^^
-4 >               ^
-5 >                ^^^^^^^^^^->
-1 >.
+4 >               ^^^
+5 >                  ^^^^^^^^^^^^^^
+6 >                                ^^^^^
+7 >                                     ^^^^^^^^^^^^^^
+8 >                                                   ^^^^^^^
+1->.
 2 >    
 3 >        Actions
-4 >               .Thing.Find {
-  >               	export class StartFindAction implements Sample.Thing.IAction {
-  >               		
-  >               		public getId() { return "yo"; }
-  >               		
-  >               		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >               
-  >               			return true;
-  >               		}
-  >               	}
-  >               }
-1 >Emitted(18, 5) Source(32, 15) + SourceIndex(0)
+4 >               
+5 >                  Actions
+6 >                                
+7 >                                     Actions
+8 >                                                   .Thing.Find {
+  >                                                   	export class StartFindAction implements Sample.Thing.IAction {
+  >                                                   		
+  >                                                   		public getId() { return "yo"; }
+  >                                                   		
+  >                                                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                                   
+  >                                                   			return true;
+  >                                                   		}
+  >                                                   	}
+  >                                                   }
+1->Emitted(18, 5) Source(32, 15) + SourceIndex(0)
 2 >Emitted(18, 9) Source(32, 15) + SourceIndex(0)
 3 >Emitted(18, 16) Source(32, 22) + SourceIndex(0)
-4 >Emitted(18, 17) Source(42, 2) + SourceIndex(0)
+4 >Emitted(18, 19) Source(32, 15) + SourceIndex(0)
+5 >Emitted(18, 33) Source(32, 22) + SourceIndex(0)
+6 >Emitted(18, 38) Source(32, 15) + SourceIndex(0)
+7 >Emitted(18, 52) Source(32, 22) + SourceIndex(0)
+8 >Emitted(18, 59) Source(42, 2) + SourceIndex(0)
 ---
 >>>    (function (Actions) {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^^^
-1->
+4 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >    
 3 >               Actions
-1->Emitted(19, 5) Source(32, 15) + SourceIndex(0)
+1 >Emitted(19, 5) Source(32, 15) + SourceIndex(0)
 2 >Emitted(19, 16) Source(32, 15) + SourceIndex(0)
 3 >Emitted(19, 23) Source(32, 22) + SourceIndex(0)
 ---
->>>        var Thing;
-1 >^^^^^^^^
+>>>        var Thing = Actions.Thing || (Actions.Thing = {});
+1->^^^^^^^^
 2 >        ^^^^
 3 >            ^^^^^
-4 >                 ^
-5 >                  ^^^^^^^^^^^^->
-1 >.
+4 >                 ^^^
+5 >                    ^^^^^^^^^^^^^
+6 >                                 ^^^^^
+7 >                                      ^^^^^^^^^^^^^
+8 >                                                   ^^^^^^^
+1->.
 2 >        
 3 >            Thing
-4 >                 .Find {
-  >                 	export class StartFindAction implements Sample.Thing.IAction {
-  >                 		
-  >                 		public getId() { return "yo"; }
-  >                 		
-  >                 		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                 
-  >                 			return true;
-  >                 		}
-  >                 	}
-  >                 }
-1 >Emitted(20, 9) Source(32, 23) + SourceIndex(0)
+4 >                 
+5 >                    Thing
+6 >                                 
+7 >                                      Thing
+8 >                                                   .Find {
+  >                                                   	export class StartFindAction implements Sample.Thing.IAction {
+  >                                                   		
+  >                                                   		public getId() { return "yo"; }
+  >                                                   		
+  >                                                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                                   
+  >                                                   			return true;
+  >                                                   		}
+  >                                                   	}
+  >                                                   }
+1->Emitted(20, 9) Source(32, 23) + SourceIndex(0)
 2 >Emitted(20, 13) Source(32, 23) + SourceIndex(0)
 3 >Emitted(20, 18) Source(32, 28) + SourceIndex(0)
-4 >Emitted(20, 19) Source(42, 2) + SourceIndex(0)
+4 >Emitted(20, 21) Source(32, 23) + SourceIndex(0)
+5 >Emitted(20, 34) Source(32, 28) + SourceIndex(0)
+6 >Emitted(20, 39) Source(32, 23) + SourceIndex(0)
+7 >Emitted(20, 52) Source(32, 28) + SourceIndex(0)
+8 >Emitted(20, 59) Source(42, 2) + SourceIndex(0)
 ---
 >>>        (function (Thing_1) {
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^
-1->
+4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >        
 3 >                   Thing
-1->Emitted(21, 9) Source(32, 23) + SourceIndex(0)
+1 >Emitted(21, 9) Source(32, 23) + SourceIndex(0)
 2 >Emitted(21, 20) Source(32, 23) + SourceIndex(0)
 3 >Emitted(21, 27) Source(32, 28) + SourceIndex(0)
 ---
->>>            var Find;
-1 >^^^^^^^^^^^^
+>>>            var Find = Thing_1.Find || (Thing_1.Find = {});
+1->^^^^^^^^^^^^
 2 >            ^^^^
 3 >                ^^^^
-4 >                    ^
-5 >                     ^^^^^^^^^^->
-1 >.
+4 >                    ^^^
+5 >                       ^^^^^^^^^^^^
+6 >                                   ^^^^^
+7 >                                        ^^^^^^^^^^^^
+8 >                                                    ^^^^^^^
+1->.
 2 >            
 3 >                Find
-4 >                     {
-  >                    	export class StartFindAction implements Sample.Thing.IAction {
-  >                    		
-  >                    		public getId() { return "yo"; }
-  >                    		
-  >                    		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                    
-  >                    			return true;
-  >                    		}
-  >                    	}
-  >                    }
-1 >Emitted(22, 13) Source(32, 29) + SourceIndex(0)
+4 >                    
+5 >                       Find
+6 >                                   
+7 >                                        Find
+8 >                                                     {
+  >                                                    	export class StartFindAction implements Sample.Thing.IAction {
+  >                                                    		
+  >                                                    		public getId() { return "yo"; }
+  >                                                    		
+  >                                                    		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                                                    
+  >                                                    			return true;
+  >                                                    		}
+  >                                                    	}
+  >                                                    }
+1->Emitted(22, 13) Source(32, 29) + SourceIndex(0)
 2 >Emitted(22, 17) Source(32, 29) + SourceIndex(0)
 3 >Emitted(22, 21) Source(32, 33) + SourceIndex(0)
-4 >Emitted(22, 22) Source(42, 2) + SourceIndex(0)
+4 >Emitted(22, 24) Source(32, 29) + SourceIndex(0)
+5 >Emitted(22, 36) Source(32, 33) + SourceIndex(0)
+6 >Emitted(22, 41) Source(32, 29) + SourceIndex(0)
+7 >Emitted(22, 53) Source(32, 33) + SourceIndex(0)
+8 >Emitted(22, 60) Source(42, 2) + SourceIndex(0)
 ---
 >>>            (function (Find) {
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^
 4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >            
 3 >                       Find
-1->Emitted(23, 13) Source(32, 29) + SourceIndex(0)
+1 >Emitted(23, 13) Source(32, 29) + SourceIndex(0)
 2 >Emitted(23, 24) Source(32, 29) + SourceIndex(0)
 3 >Emitted(23, 28) Source(32, 33) + SourceIndex(0)
 ---
@@ -355,7 +402,6 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                ^^^^^^^^^^^^^^^^^^^^
 3 >                                    ^^^^^^^^^^^^^^^^^^
 4 >                                                      ^
-5 >                                                       ^^^^^->
 1->
 2 >                StartFindAction
 3 >                                     implements Sample.Thing.IAction {
@@ -373,262 +419,243 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(33, 55) Source(41, 3) + SourceIndex(0)
 4 >Emitted(33, 56) Source(41, 3) + SourceIndex(0)
 ---
->>>            })(Find = Thing_1.Find || (Thing_1.Find = {}));
-1->^^^^^^^^^^^^
+>>>            })(Find);
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^^^^
-5 >                   ^^^
-6 >                      ^^^^^^^^^^^^
-7 >                                  ^^^^^
-8 >                                       ^^^^^^^^^^^^
-9 >                                                   ^^^^^^^^
-1->
+5 >                   ^^
+1 >
   >
 2 >            }
 3 >             
 4 >               Find
-5 >                   
-6 >                      Find
-7 >                                  
-8 >                                       Find
-9 >                                                    {
-  >                                                   	export class StartFindAction implements Sample.Thing.IAction {
-  >                                                   		
-  >                                                   		public getId() { return "yo"; }
-  >                                                   		
-  >                                                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                                   
-  >                                                   			return true;
-  >                                                   		}
-  >                                                   	}
-  >                                                   }
-1->Emitted(34, 13) Source(42, 1) + SourceIndex(0)
+5 >                    {
+  >                   	export class StartFindAction implements Sample.Thing.IAction {
+  >                   		
+  >                   		public getId() { return "yo"; }
+  >                   		
+  >                   		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                   
+  >                   			return true;
+  >                   		}
+  >                   	}
+  >                   }
+1 >Emitted(34, 13) Source(42, 1) + SourceIndex(0)
 2 >Emitted(34, 14) Source(42, 2) + SourceIndex(0)
 3 >Emitted(34, 16) Source(32, 29) + SourceIndex(0)
 4 >Emitted(34, 20) Source(32, 33) + SourceIndex(0)
-5 >Emitted(34, 23) Source(32, 29) + SourceIndex(0)
-6 >Emitted(34, 35) Source(32, 33) + SourceIndex(0)
-7 >Emitted(34, 40) Source(32, 29) + SourceIndex(0)
-8 >Emitted(34, 52) Source(32, 33) + SourceIndex(0)
-9 >Emitted(34, 60) Source(42, 2) + SourceIndex(0)
+5 >Emitted(34, 22) Source(42, 2) + SourceIndex(0)
 ---
->>>        })(Thing = Actions.Thing || (Actions.Thing = {}));
+>>>        })(Thing);
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^
 4 >           ^^^^^
-5 >                ^^^
-6 >                   ^^^^^^^^^^^^^
-7 >                                ^^^^^
-8 >                                     ^^^^^^^^^^^^^
-9 >                                                  ^^^^^^^^
-10>                                                          ^->
+5 >                ^^
 1 >
 2 >        }
 3 >         
 4 >           Thing
-5 >                
-6 >                   Thing
-7 >                                
-8 >                                     Thing
-9 >                                                  .Find {
-  >                                                  	export class StartFindAction implements Sample.Thing.IAction {
-  >                                                  		
-  >                                                  		public getId() { return "yo"; }
-  >                                                  		
-  >                                                  		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                                  
-  >                                                  			return true;
-  >                                                  		}
-  >                                                  	}
-  >                                                  }
+5 >                .Find {
+  >                	export class StartFindAction implements Sample.Thing.IAction {
+  >                		
+  >                		public getId() { return "yo"; }
+  >                		
+  >                		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >                
+  >                			return true;
+  >                		}
+  >                	}
+  >                }
 1 >Emitted(35, 9) Source(42, 1) + SourceIndex(0)
 2 >Emitted(35, 10) Source(42, 2) + SourceIndex(0)
 3 >Emitted(35, 12) Source(32, 23) + SourceIndex(0)
 4 >Emitted(35, 17) Source(32, 28) + SourceIndex(0)
-5 >Emitted(35, 20) Source(32, 23) + SourceIndex(0)
-6 >Emitted(35, 33) Source(32, 28) + SourceIndex(0)
-7 >Emitted(35, 38) Source(32, 23) + SourceIndex(0)
-8 >Emitted(35, 51) Source(32, 28) + SourceIndex(0)
-9 >Emitted(35, 59) Source(42, 2) + SourceIndex(0)
+5 >Emitted(35, 19) Source(42, 2) + SourceIndex(0)
 ---
->>>    })(Actions = Sample.Actions || (Sample.Actions = {}));
-1->^^^^
+>>>    })(Actions);
+1 >^^^^
 2 >    ^
 3 >     ^^
 4 >       ^^^^^^^
-5 >              ^^^
-6 >                 ^^^^^^^^^^^^^^
-7 >                               ^^^^^
-8 >                                    ^^^^^^^^^^^^^^
-9 >                                                  ^^^^^^^^
-1->
+5 >              ^^
+1 >
 2 >    }
 3 >     
 4 >       Actions
-5 >              
-6 >                 Actions
-7 >                               
-8 >                                    Actions
-9 >                                                  .Thing.Find {
-  >                                                  	export class StartFindAction implements Sample.Thing.IAction {
-  >                                                  		
-  >                                                  		public getId() { return "yo"; }
-  >                                                  		
-  >                                                  		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                                                  
-  >                                                  			return true;
-  >                                                  		}
-  >                                                  	}
-  >                                                  }
-1->Emitted(36, 5) Source(42, 1) + SourceIndex(0)
+5 >              .Thing.Find {
+  >              	export class StartFindAction implements Sample.Thing.IAction {
+  >              		
+  >              		public getId() { return "yo"; }
+  >              		
+  >              		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >              
+  >              			return true;
+  >              		}
+  >              	}
+  >              }
+1 >Emitted(36, 5) Source(42, 1) + SourceIndex(0)
 2 >Emitted(36, 6) Source(42, 2) + SourceIndex(0)
 3 >Emitted(36, 8) Source(32, 15) + SourceIndex(0)
 4 >Emitted(36, 15) Source(32, 22) + SourceIndex(0)
-5 >Emitted(36, 18) Source(32, 15) + SourceIndex(0)
-6 >Emitted(36, 32) Source(32, 22) + SourceIndex(0)
-7 >Emitted(36, 37) Source(32, 15) + SourceIndex(0)
-8 >Emitted(36, 51) Source(32, 22) + SourceIndex(0)
-9 >Emitted(36, 59) Source(42, 2) + SourceIndex(0)
+5 >Emitted(36, 17) Source(42, 2) + SourceIndex(0)
 ---
->>>})(Sample || (Sample = {}));
+>>>})(Sample);
 1 >
 2 >^
 3 > ^^
 4 >   ^^^^^^
-5 >         ^^^^^
-6 >              ^^^^^^
-7 >                    ^^^^^^^^
+5 >         ^^
+6 >           ^^^^^^^^^^->
 1 >
 2 >}
 3 > 
 4 >   Sample
-5 >         
-6 >              Sample
-7 >                    .Actions.Thing.Find {
-  >                    	export class StartFindAction implements Sample.Thing.IAction {
-  >                    		
-  >                    		public getId() { return "yo"; }
-  >                    		
-  >                    		public run(Thing:Sample.Thing.ICodeThing):boolean {
-  >                    
-  >                    			return true;
-  >                    		}
-  >                    	}
-  >                    }
+5 >         .Actions.Thing.Find {
+  >         	export class StartFindAction implements Sample.Thing.IAction {
+  >         		
+  >         		public getId() { return "yo"; }
+  >         		
+  >         		public run(Thing:Sample.Thing.ICodeThing):boolean {
+  >         
+  >         			return true;
+  >         		}
+  >         	}
+  >         }
 1 >Emitted(37, 1) Source(42, 1) + SourceIndex(0)
 2 >Emitted(37, 2) Source(42, 2) + SourceIndex(0)
 3 >Emitted(37, 4) Source(32, 8) + SourceIndex(0)
 4 >Emitted(37, 10) Source(32, 14) + SourceIndex(0)
-5 >Emitted(37, 15) Source(32, 8) + SourceIndex(0)
-6 >Emitted(37, 21) Source(32, 14) + SourceIndex(0)
-7 >Emitted(37, 29) Source(42, 2) + SourceIndex(0)
+5 >Emitted(37, 12) Source(42, 2) + SourceIndex(0)
 ---
 >>>(function (Sample) {
-1 >
+1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^
-1 >
+4 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
   >
   >
 2 >module 
 3 >           Sample
-1 >Emitted(38, 1) Source(44, 1) + SourceIndex(0)
+1->Emitted(38, 1) Source(44, 1) + SourceIndex(0)
 2 >Emitted(38, 12) Source(44, 8) + SourceIndex(0)
 3 >Emitted(38, 18) Source(44, 14) + SourceIndex(0)
 ---
->>>    var Thing;
-1 >^^^^
+>>>    var Thing = Sample.Thing || (Sample.Thing = {});
+1->^^^^
 2 >    ^^^^
 3 >        ^^^^^
-4 >             ^
-5 >              ^^^^^^^^^^->
-1 >.
+4 >             ^^^
+5 >                ^^^^^^^^^^^^
+6 >                            ^^^^^
+7 >                                 ^^^^^^^^^^^^
+8 >                                             ^^^^^^^
+1->.
 2 >    
 3 >        Thing
-4 >             .Widgets {
-  >             	export class FindWidget implements Sample.Thing.IWidget {
-  >             
-  >             		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >             			
-  >             		private domNode:any = null;
-  >             		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >             		    // scenario 1
-  >             		    codeThing.addWidget("addWidget", this);
-  >             		}
-  >             		
-  >             		public getDomNode() {
-  >             			return domNode;
-  >             		}
-  >             		
-  >             		public destroy() {
-  >             
-  >             		}
-  >             
-  >             	}
-  >             }
-1 >Emitted(39, 5) Source(44, 15) + SourceIndex(0)
+4 >             
+5 >                Thing
+6 >                            
+7 >                                 Thing
+8 >                                             .Widgets {
+  >                                             	export class FindWidget implements Sample.Thing.IWidget {
+  >                                             
+  >                                             		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >                                             			
+  >                                             		private domNode:any = null;
+  >                                             		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >                                             		    // scenario 1
+  >                                             		    codeThing.addWidget("addWidget", this);
+  >                                             		}
+  >                                             		
+  >                                             		public getDomNode() {
+  >                                             			return domNode;
+  >                                             		}
+  >                                             		
+  >                                             		public destroy() {
+  >                                             
+  >                                             		}
+  >                                             
+  >                                             	}
+  >                                             }
+1->Emitted(39, 5) Source(44, 15) + SourceIndex(0)
 2 >Emitted(39, 9) Source(44, 15) + SourceIndex(0)
 3 >Emitted(39, 14) Source(44, 20) + SourceIndex(0)
-4 >Emitted(39, 15) Source(64, 2) + SourceIndex(0)
+4 >Emitted(39, 17) Source(44, 15) + SourceIndex(0)
+5 >Emitted(39, 29) Source(44, 20) + SourceIndex(0)
+6 >Emitted(39, 34) Source(44, 15) + SourceIndex(0)
+7 >Emitted(39, 46) Source(44, 20) + SourceIndex(0)
+8 >Emitted(39, 53) Source(64, 2) + SourceIndex(0)
 ---
 >>>    (function (Thing) {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
-4 >                    ^->
-1->
+4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >    
 3 >               Thing
-1->Emitted(40, 5) Source(44, 15) + SourceIndex(0)
+1 >Emitted(40, 5) Source(44, 15) + SourceIndex(0)
 2 >Emitted(40, 16) Source(44, 15) + SourceIndex(0)
 3 >Emitted(40, 21) Source(44, 20) + SourceIndex(0)
 ---
->>>        var Widgets;
+>>>        var Widgets = Thing.Widgets || (Thing.Widgets = {});
 1->^^^^^^^^
 2 >        ^^^^
 3 >            ^^^^^^^
-4 >                   ^
-5 >                    ^^^^^^^^^^->
+4 >                   ^^^
+5 >                      ^^^^^^^^^^^^^
+6 >                                   ^^^^^
+7 >                                        ^^^^^^^^^^^^^
+8 >                                                     ^^^^^^^
 1->.
 2 >        
 3 >            Widgets
-4 >                    {
-  >                   	export class FindWidget implements Sample.Thing.IWidget {
-  >                   
-  >                   		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                   			
-  >                   		private domNode:any = null;
-  >                   		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >                   		    // scenario 1
-  >                   		    codeThing.addWidget("addWidget", this);
-  >                   		}
-  >                   		
-  >                   		public getDomNode() {
-  >                   			return domNode;
-  >                   		}
-  >                   		
-  >                   		public destroy() {
-  >                   
-  >                   		}
-  >                   
-  >                   	}
-  >                   }
+4 >                   
+5 >                      Widgets
+6 >                                   
+7 >                                        Widgets
+8 >                                                      {
+  >                                                     	export class FindWidget implements Sample.Thing.IWidget {
+  >                                                     
+  >                                                     		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >                                                     			
+  >                                                     		private domNode:any = null;
+  >                                                     		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >                                                     		    // scenario 1
+  >                                                     		    codeThing.addWidget("addWidget", this);
+  >                                                     		}
+  >                                                     		
+  >                                                     		public getDomNode() {
+  >                                                     			return domNode;
+  >                                                     		}
+  >                                                     		
+  >                                                     		public destroy() {
+  >                                                     
+  >                                                     		}
+  >                                                     
+  >                                                     	}
+  >                                                     }
 1->Emitted(41, 9) Source(44, 21) + SourceIndex(0)
 2 >Emitted(41, 13) Source(44, 21) + SourceIndex(0)
 3 >Emitted(41, 20) Source(44, 28) + SourceIndex(0)
-4 >Emitted(41, 21) Source(64, 2) + SourceIndex(0)
+4 >Emitted(41, 23) Source(44, 21) + SourceIndex(0)
+5 >Emitted(41, 36) Source(44, 28) + SourceIndex(0)
+6 >Emitted(41, 41) Source(44, 21) + SourceIndex(0)
+7 >Emitted(41, 54) Source(44, 28) + SourceIndex(0)
+8 >Emitted(41, 61) Source(64, 2) + SourceIndex(0)
 ---
 >>>        (function (Widgets) {
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^
 4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >        
 3 >                   Widgets
-1->Emitted(42, 9) Source(44, 21) + SourceIndex(0)
+1 >Emitted(42, 9) Source(44, 21) + SourceIndex(0)
 2 >Emitted(42, 20) Source(44, 21) + SourceIndex(0)
 3 >Emitted(42, 27) Source(44, 28) + SourceIndex(0)
 ---
@@ -924,7 +951,6 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >            ^^^^^^^^^^^^^^^^^^
 3 >                              ^^^^^^^^^^^^^
 4 >                                           ^
-5 >                                            ^^^^^^^^^^^^^^^^^->
 1->
 2 >            FindWidget
 3 >                               implements Sample.Thing.IWidget {
@@ -952,148 +978,118 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(60, 44) Source(63, 3) + SourceIndex(0)
 4 >Emitted(60, 45) Source(63, 3) + SourceIndex(0)
 ---
->>>        })(Widgets = Thing.Widgets || (Thing.Widgets = {}));
-1->^^^^^^^^
+>>>        })(Widgets);
+1 >^^^^^^^^
 2 >        ^
 3 >         ^^
 4 >           ^^^^^^^
-5 >                  ^^^
-6 >                     ^^^^^^^^^^^^^
-7 >                                  ^^^^^
-8 >                                       ^^^^^^^^^^^^^
-9 >                                                    ^^^^^^^^
-1->
+5 >                  ^^
+1 >
   >
 2 >        }
 3 >         
 4 >           Widgets
-5 >                  
-6 >                     Widgets
-7 >                                  
-8 >                                       Widgets
-9 >                                                     {
-  >                                                    	export class FindWidget implements Sample.Thing.IWidget {
-  >                                                    
-  >                                                    		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                                                    			
-  >                                                    		private domNode:any = null;
-  >                                                    		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >                                                    		    // scenario 1
-  >                                                    		    codeThing.addWidget("addWidget", this);
-  >                                                    		}
-  >                                                    		
-  >                                                    		public getDomNode() {
-  >                                                    			return domNode;
-  >                                                    		}
-  >                                                    		
-  >                                                    		public destroy() {
-  >                                                    
-  >                                                    		}
-  >                                                    
-  >                                                    	}
-  >                                                    }
-1->Emitted(61, 9) Source(64, 1) + SourceIndex(0)
+5 >                   {
+  >                  	export class FindWidget implements Sample.Thing.IWidget {
+  >                  
+  >                  		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >                  			
+  >                  		private domNode:any = null;
+  >                  		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >                  		    // scenario 1
+  >                  		    codeThing.addWidget("addWidget", this);
+  >                  		}
+  >                  		
+  >                  		public getDomNode() {
+  >                  			return domNode;
+  >                  		}
+  >                  		
+  >                  		public destroy() {
+  >                  
+  >                  		}
+  >                  
+  >                  	}
+  >                  }
+1 >Emitted(61, 9) Source(64, 1) + SourceIndex(0)
 2 >Emitted(61, 10) Source(64, 2) + SourceIndex(0)
 3 >Emitted(61, 12) Source(44, 21) + SourceIndex(0)
 4 >Emitted(61, 19) Source(44, 28) + SourceIndex(0)
-5 >Emitted(61, 22) Source(44, 21) + SourceIndex(0)
-6 >Emitted(61, 35) Source(44, 28) + SourceIndex(0)
-7 >Emitted(61, 40) Source(44, 21) + SourceIndex(0)
-8 >Emitted(61, 53) Source(44, 28) + SourceIndex(0)
-9 >Emitted(61, 61) Source(64, 2) + SourceIndex(0)
+5 >Emitted(61, 21) Source(64, 2) + SourceIndex(0)
 ---
->>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
+>>>    })(Thing);
 1 >^^^^
 2 >    ^
 3 >     ^^
 4 >       ^^^^^
-5 >            ^^^
-6 >               ^^^^^^^^^^^^
-7 >                           ^^^^^
-8 >                                ^^^^^^^^^^^^
-9 >                                            ^^^^^^^^
+5 >            ^^
 1 >
 2 >    }
 3 >     
 4 >       Thing
-5 >            
-6 >               Thing
-7 >                           
-8 >                                Thing
-9 >                                            .Widgets {
-  >                                            	export class FindWidget implements Sample.Thing.IWidget {
-  >                                            
-  >                                            		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                                            			
-  >                                            		private domNode:any = null;
-  >                                            		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >                                            		    // scenario 1
-  >                                            		    codeThing.addWidget("addWidget", this);
-  >                                            		}
-  >                                            		
-  >                                            		public getDomNode() {
-  >                                            			return domNode;
-  >                                            		}
-  >                                            		
-  >                                            		public destroy() {
-  >                                            
-  >                                            		}
-  >                                            
-  >                                            	}
-  >                                            }
+5 >            .Widgets {
+  >            	export class FindWidget implements Sample.Thing.IWidget {
+  >            
+  >            		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >            			
+  >            		private domNode:any = null;
+  >            		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >            		    // scenario 1
+  >            		    codeThing.addWidget("addWidget", this);
+  >            		}
+  >            		
+  >            		public getDomNode() {
+  >            			return domNode;
+  >            		}
+  >            		
+  >            		public destroy() {
+  >            
+  >            		}
+  >            
+  >            	}
+  >            }
 1 >Emitted(62, 5) Source(64, 1) + SourceIndex(0)
 2 >Emitted(62, 6) Source(64, 2) + SourceIndex(0)
 3 >Emitted(62, 8) Source(44, 15) + SourceIndex(0)
 4 >Emitted(62, 13) Source(44, 20) + SourceIndex(0)
-5 >Emitted(62, 16) Source(44, 15) + SourceIndex(0)
-6 >Emitted(62, 28) Source(44, 20) + SourceIndex(0)
-7 >Emitted(62, 33) Source(44, 15) + SourceIndex(0)
-8 >Emitted(62, 45) Source(44, 20) + SourceIndex(0)
-9 >Emitted(62, 53) Source(64, 2) + SourceIndex(0)
+5 >Emitted(62, 15) Source(64, 2) + SourceIndex(0)
 ---
->>>})(Sample || (Sample = {}));
+>>>})(Sample);
 1 >
 2 >^
 3 > ^^
 4 >   ^^^^^^
-5 >         ^^^^^
-6 >              ^^^^^^
-7 >                    ^^^^^^^^
-8 >                            ^^^^^^^^^^^^^^^^^^^^->
+5 >         ^^
+6 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
 4 >   Sample
-5 >         
-6 >              Sample
-7 >                    .Thing.Widgets {
-  >                    	export class FindWidget implements Sample.Thing.IWidget {
-  >                    
-  >                    		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
-  >                    			
-  >                    		private domNode:any = null;
-  >                    		constructor(private codeThing: Sample.Thing.ICodeThing) {
-  >                    		    // scenario 1
-  >                    		    codeThing.addWidget("addWidget", this);
-  >                    		}
-  >                    		
-  >                    		public getDomNode() {
-  >                    			return domNode;
-  >                    		}
-  >                    		
-  >                    		public destroy() {
-  >                    
-  >                    		}
-  >                    
-  >                    	}
-  >                    }
+5 >         .Thing.Widgets {
+  >         	export class FindWidget implements Sample.Thing.IWidget {
+  >         
+  >         		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
+  >         			
+  >         		private domNode:any = null;
+  >         		constructor(private codeThing: Sample.Thing.ICodeThing) {
+  >         		    // scenario 1
+  >         		    codeThing.addWidget("addWidget", this);
+  >         		}
+  >         		
+  >         		public getDomNode() {
+  >         			return domNode;
+  >         		}
+  >         		
+  >         		public destroy() {
+  >         
+  >         		}
+  >         
+  >         	}
+  >         }
 1 >Emitted(63, 1) Source(64, 1) + SourceIndex(0)
 2 >Emitted(63, 2) Source(64, 2) + SourceIndex(0)
 3 >Emitted(63, 4) Source(44, 8) + SourceIndex(0)
 4 >Emitted(63, 10) Source(44, 14) + SourceIndex(0)
-5 >Emitted(63, 15) Source(44, 8) + SourceIndex(0)
-6 >Emitted(63, 21) Source(44, 14) + SourceIndex(0)
-7 >Emitted(63, 29) Source(64, 2) + SourceIndex(0)
+5 >Emitted(63, 12) Source(64, 2) + SourceIndex(0)
 ---
 >>>var AbstractMode = /** @class */ (function () {
 1->
@@ -1175,6 +1171,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->
 2 >^^^^^^^^^^^
 3 >           ^^^^^^
+4 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >interface IState {}
@@ -1191,155 +1188,189 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >Emitted(70, 12) Source(76, 8) + SourceIndex(0)
 3 >Emitted(70, 18) Source(76, 14) + SourceIndex(0)
 ---
->>>    var Thing;
-1 >^^^^
+>>>    var Thing = Sample.Thing || (Sample.Thing = {});
+1->^^^^
 2 >    ^^^^
 3 >        ^^^^^
-4 >             ^
-5 >              ^^^^^^^^^^->
-1 >.
+4 >             ^^^
+5 >                ^^^^^^^^^^^^
+6 >                            ^^^^^
+7 >                                 ^^^^^^^^^^^^
+8 >                                             ^^^^^^^
+1->.
 2 >    
 3 >        Thing
-4 >             .Languages.PlainText {
-  >             	
-  >             	export class State implements IState {		
-  >                     constructor(private mode: IMode) { }
-  >             		public clone():IState {
-  >             			return this;
-  >             		}
-  >             
-  >             		public equals(other:IState):boolean {
-  >             			return this === other;
-  >             		}
-  >             		
-  >             		public getMode(): IMode { return mode; }
-  >             	}
-  >             	
-  >             	export class Mode extends AbstractMode {
-  >             
-  >             		// scenario 2
-  >             		public getInitialState(): IState {
-  >             			return new State(self);
-  >             		}
-  >             
-  >             
-  >             	}
-  >             }
-1 >Emitted(71, 5) Source(76, 15) + SourceIndex(0)
+4 >             
+5 >                Thing
+6 >                            
+7 >                                 Thing
+8 >                                             .Languages.PlainText {
+  >                                             	
+  >                                             	export class State implements IState {		
+  >                                                     constructor(private mode: IMode) { }
+  >                                             		public clone():IState {
+  >                                             			return this;
+  >                                             		}
+  >                                             
+  >                                             		public equals(other:IState):boolean {
+  >                                             			return this === other;
+  >                                             		}
+  >                                             		
+  >                                             		public getMode(): IMode { return mode; }
+  >                                             	}
+  >                                             	
+  >                                             	export class Mode extends AbstractMode {
+  >                                             
+  >                                             		// scenario 2
+  >                                             		public getInitialState(): IState {
+  >                                             			return new State(self);
+  >                                             		}
+  >                                             
+  >                                             
+  >                                             	}
+  >                                             }
+1->Emitted(71, 5) Source(76, 15) + SourceIndex(0)
 2 >Emitted(71, 9) Source(76, 15) + SourceIndex(0)
 3 >Emitted(71, 14) Source(76, 20) + SourceIndex(0)
-4 >Emitted(71, 15) Source(100, 2) + SourceIndex(0)
+4 >Emitted(71, 17) Source(76, 15) + SourceIndex(0)
+5 >Emitted(71, 29) Source(76, 20) + SourceIndex(0)
+6 >Emitted(71, 34) Source(76, 15) + SourceIndex(0)
+7 >Emitted(71, 46) Source(76, 20) + SourceIndex(0)
+8 >Emitted(71, 53) Source(100, 2) + SourceIndex(0)
 ---
 >>>    (function (Thing) {
-1->^^^^
+1 >^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
-4 >                    ^^^->
-1->
+4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >    
 3 >               Thing
-1->Emitted(72, 5) Source(76, 15) + SourceIndex(0)
+1 >Emitted(72, 5) Source(76, 15) + SourceIndex(0)
 2 >Emitted(72, 16) Source(76, 15) + SourceIndex(0)
 3 >Emitted(72, 21) Source(76, 20) + SourceIndex(0)
 ---
->>>        var Languages;
+>>>        var Languages = Thing.Languages || (Thing.Languages = {});
 1->^^^^^^^^
 2 >        ^^^^
 3 >            ^^^^^^^^^
-4 >                     ^
-5 >                      ^^^^^^^^^^->
+4 >                     ^^^
+5 >                        ^^^^^^^^^^^^^^^
+6 >                                       ^^^^^
+7 >                                            ^^^^^^^^^^^^^^^
+8 >                                                           ^^^^^^^
 1->.
 2 >        
 3 >            Languages
-4 >                     .PlainText {
-  >                     	
-  >                     	export class State implements IState {		
-  >                             constructor(private mode: IMode) { }
-  >                     		public clone():IState {
-  >                     			return this;
-  >                     		}
-  >                     
-  >                     		public equals(other:IState):boolean {
-  >                     			return this === other;
-  >                     		}
-  >                     		
-  >                     		public getMode(): IMode { return mode; }
-  >                     	}
-  >                     	
-  >                     	export class Mode extends AbstractMode {
-  >                     
-  >                     		// scenario 2
-  >                     		public getInitialState(): IState {
-  >                     			return new State(self);
-  >                     		}
-  >                     
-  >                     
-  >                     	}
-  >                     }
+4 >                     
+5 >                        Languages
+6 >                                       
+7 >                                            Languages
+8 >                                                           .PlainText {
+  >                                                           	
+  >                                                           	export class State implements IState {		
+  >                                                                   constructor(private mode: IMode) { }
+  >                                                           		public clone():IState {
+  >                                                           			return this;
+  >                                                           		}
+  >                                                           
+  >                                                           		public equals(other:IState):boolean {
+  >                                                           			return this === other;
+  >                                                           		}
+  >                                                           		
+  >                                                           		public getMode(): IMode { return mode; }
+  >                                                           	}
+  >                                                           	
+  >                                                           	export class Mode extends AbstractMode {
+  >                                                           
+  >                                                           		// scenario 2
+  >                                                           		public getInitialState(): IState {
+  >                                                           			return new State(self);
+  >                                                           		}
+  >                                                           
+  >                                                           
+  >                                                           	}
+  >                                                           }
 1->Emitted(73, 9) Source(76, 21) + SourceIndex(0)
 2 >Emitted(73, 13) Source(76, 21) + SourceIndex(0)
 3 >Emitted(73, 22) Source(76, 30) + SourceIndex(0)
-4 >Emitted(73, 23) Source(100, 2) + SourceIndex(0)
+4 >Emitted(73, 25) Source(76, 21) + SourceIndex(0)
+5 >Emitted(73, 40) Source(76, 30) + SourceIndex(0)
+6 >Emitted(73, 45) Source(76, 21) + SourceIndex(0)
+7 >Emitted(73, 60) Source(76, 30) + SourceIndex(0)
+8 >Emitted(73, 67) Source(100, 2) + SourceIndex(0)
 ---
 >>>        (function (Languages) {
-1->^^^^^^^^
+1 >^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^^^
-1->
+4 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
 2 >        
 3 >                   Languages
-1->Emitted(74, 9) Source(76, 21) + SourceIndex(0)
+1 >Emitted(74, 9) Source(76, 21) + SourceIndex(0)
 2 >Emitted(74, 20) Source(76, 21) + SourceIndex(0)
 3 >Emitted(74, 29) Source(76, 30) + SourceIndex(0)
 ---
->>>            var PlainText;
-1 >^^^^^^^^^^^^
+>>>            var PlainText = Languages.PlainText || (Languages.PlainText = {});
+1->^^^^^^^^^^^^
 2 >            ^^^^
 3 >                ^^^^^^^^^
-4 >                         ^
-5 >                          ^^^^^^^^^^->
-1 >.
+4 >                         ^^^
+5 >                            ^^^^^^^^^^^^^^^^^^^
+6 >                                               ^^^^^
+7 >                                                    ^^^^^^^^^^^^^^^^^^^
+8 >                                                                       ^^^^^^^
+1->.
 2 >            
 3 >                PlainText
-4 >                          {
-  >                         	
-  >                         	export class State implements IState {		
-  >                                 constructor(private mode: IMode) { }
-  >                         		public clone():IState {
-  >                         			return this;
-  >                         		}
-  >                         
-  >                         		public equals(other:IState):boolean {
-  >                         			return this === other;
-  >                         		}
-  >                         		
-  >                         		public getMode(): IMode { return mode; }
-  >                         	}
-  >                         	
-  >                         	export class Mode extends AbstractMode {
-  >                         
-  >                         		// scenario 2
-  >                         		public getInitialState(): IState {
-  >                         			return new State(self);
-  >                         		}
-  >                         
-  >                         
-  >                         	}
-  >                         }
-1 >Emitted(75, 13) Source(76, 31) + SourceIndex(0)
+4 >                         
+5 >                            PlainText
+6 >                                               
+7 >                                                    PlainText
+8 >                                                                        {
+  >                                                                       	
+  >                                                                       	export class State implements IState {		
+  >                                                                               constructor(private mode: IMode) { }
+  >                                                                       		public clone():IState {
+  >                                                                       			return this;
+  >                                                                       		}
+  >                                                                       
+  >                                                                       		public equals(other:IState):boolean {
+  >                                                                       			return this === other;
+  >                                                                       		}
+  >                                                                       		
+  >                                                                       		public getMode(): IMode { return mode; }
+  >                                                                       	}
+  >                                                                       	
+  >                                                                       	export class Mode extends AbstractMode {
+  >                                                                       
+  >                                                                       		// scenario 2
+  >                                                                       		public getInitialState(): IState {
+  >                                                                       			return new State(self);
+  >                                                                       		}
+  >                                                                       
+  >                                                                       
+  >                                                                       	}
+  >                                                                       }
+1->Emitted(75, 13) Source(76, 31) + SourceIndex(0)
 2 >Emitted(75, 17) Source(76, 31) + SourceIndex(0)
 3 >Emitted(75, 26) Source(76, 40) + SourceIndex(0)
-4 >Emitted(75, 27) Source(100, 2) + SourceIndex(0)
+4 >Emitted(75, 29) Source(76, 31) + SourceIndex(0)
+5 >Emitted(75, 48) Source(76, 40) + SourceIndex(0)
+6 >Emitted(75, 53) Source(76, 31) + SourceIndex(0)
+7 >Emitted(75, 72) Source(76, 40) + SourceIndex(0)
+8 >Emitted(75, 79) Source(100, 2) + SourceIndex(0)
 ---
 >>>            (function (PlainText) {
-1->^^^^^^^^^^^^
+1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
 4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >            
 3 >                       PlainText
-1->Emitted(76, 13) Source(76, 31) + SourceIndex(0)
+1 >Emitted(76, 13) Source(76, 31) + SourceIndex(0)
 2 >Emitted(76, 24) Source(76, 31) + SourceIndex(0)
 3 >Emitted(76, 33) Source(76, 40) + SourceIndex(0)
 ---
@@ -1713,7 +1744,6 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                ^^^^^^^^^^^^^^
 3 >                              ^^^^^^^
 4 >                                     ^
-5 >                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                Mode
 3 >                               extends AbstractMode {
@@ -1731,182 +1761,59 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(102, 38) Source(99, 3) + SourceIndex(0)
 4 >Emitted(102, 39) Source(99, 3) + SourceIndex(0)
 ---
->>>            })(PlainText = Languages.PlainText || (Languages.PlainText = {}));
-1->^^^^^^^^^^^^
+>>>            })(PlainText);
+1 >^^^^^^^^^^^^
 2 >            ^
 3 >             ^^
 4 >               ^^^^^^^^^
-5 >                        ^^^
-6 >                           ^^^^^^^^^^^^^^^^^^^
-7 >                                              ^^^^^
-8 >                                                   ^^^^^^^^^^^^^^^^^^^
-9 >                                                                      ^^^^^^^^
-1->
+5 >                        ^^
+1 >
   >
 2 >            }
 3 >             
 4 >               PlainText
-5 >                        
-6 >                           PlainText
-7 >                                              
-8 >                                                   PlainText
-9 >                                                                       {
-  >                                                                      	
-  >                                                                      	export class State implements IState {		
-  >                                                                              constructor(private mode: IMode) { }
-  >                                                                      		public clone():IState {
-  >                                                                      			return this;
-  >                                                                      		}
-  >                                                                      
-  >                                                                      		public equals(other:IState):boolean {
-  >                                                                      			return this === other;
-  >                                                                      		}
-  >                                                                      		
-  >                                                                      		public getMode(): IMode { return mode; }
-  >                                                                      	}
-  >                                                                      	
-  >                                                                      	export class Mode extends AbstractMode {
-  >                                                                      
-  >                                                                      		// scenario 2
-  >                                                                      		public getInitialState(): IState {
-  >                                                                      			return new State(self);
-  >                                                                      		}
-  >                                                                      
-  >                                                                      
-  >                                                                      	}
-  >                                                                      }
-1->Emitted(103, 13) Source(100, 1) + SourceIndex(0)
+5 >                         {
+  >                        	
+  >                        	export class State implements IState {		
+  >                                constructor(private mode: IMode) { }
+  >                        		public clone():IState {
+  >                        			return this;
+  >                        		}
+  >                        
+  >                        		public equals(other:IState):boolean {
+  >                        			return this === other;
+  >                        		}
+  >                        		
+  >                        		public getMode(): IMode { return mode; }
+  >                        	}
+  >                        	
+  >                        	export class Mode extends AbstractMode {
+  >                        
+  >                        		// scenario 2
+  >                        		public getInitialState(): IState {
+  >                        			return new State(self);
+  >                        		}
+  >                        
+  >                        
+  >                        	}
+  >                        }
+1 >Emitted(103, 13) Source(100, 1) + SourceIndex(0)
 2 >Emitted(103, 14) Source(100, 2) + SourceIndex(0)
 3 >Emitted(103, 16) Source(76, 31) + SourceIndex(0)
 4 >Emitted(103, 25) Source(76, 40) + SourceIndex(0)
-5 >Emitted(103, 28) Source(76, 31) + SourceIndex(0)
-6 >Emitted(103, 47) Source(76, 40) + SourceIndex(0)
-7 >Emitted(103, 52) Source(76, 31) + SourceIndex(0)
-8 >Emitted(103, 71) Source(76, 40) + SourceIndex(0)
-9 >Emitted(103, 79) Source(100, 2) + SourceIndex(0)
+5 >Emitted(103, 27) Source(100, 2) + SourceIndex(0)
 ---
->>>        })(Languages = Thing.Languages || (Thing.Languages = {}));
+>>>        })(Languages);
 1 >^^^^^^^^
 2 >        ^
 3 >         ^^
 4 >           ^^^^^^^^^
-5 >                    ^^^
-6 >                       ^^^^^^^^^^^^^^^
-7 >                                      ^^^^^
-8 >                                           ^^^^^^^^^^^^^^^
-9 >                                                          ^^^^^^^^
+5 >                    ^^
 1 >
 2 >        }
 3 >         
 4 >           Languages
-5 >                    
-6 >                       Languages
-7 >                                      
-8 >                                           Languages
-9 >                                                          .PlainText {
-  >                                                          	
-  >                                                          	export class State implements IState {		
-  >                                                                  constructor(private mode: IMode) { }
-  >                                                          		public clone():IState {
-  >                                                          			return this;
-  >                                                          		}
-  >                                                          
-  >                                                          		public equals(other:IState):boolean {
-  >                                                          			return this === other;
-  >                                                          		}
-  >                                                          		
-  >                                                          		public getMode(): IMode { return mode; }
-  >                                                          	}
-  >                                                          	
-  >                                                          	export class Mode extends AbstractMode {
-  >                                                          
-  >                                                          		// scenario 2
-  >                                                          		public getInitialState(): IState {
-  >                                                          			return new State(self);
-  >                                                          		}
-  >                                                          
-  >                                                          
-  >                                                          	}
-  >                                                          }
-1 >Emitted(104, 9) Source(100, 1) + SourceIndex(0)
-2 >Emitted(104, 10) Source(100, 2) + SourceIndex(0)
-3 >Emitted(104, 12) Source(76, 21) + SourceIndex(0)
-4 >Emitted(104, 21) Source(76, 30) + SourceIndex(0)
-5 >Emitted(104, 24) Source(76, 21) + SourceIndex(0)
-6 >Emitted(104, 39) Source(76, 30) + SourceIndex(0)
-7 >Emitted(104, 44) Source(76, 21) + SourceIndex(0)
-8 >Emitted(104, 59) Source(76, 30) + SourceIndex(0)
-9 >Emitted(104, 67) Source(100, 2) + SourceIndex(0)
----
->>>    })(Thing = Sample.Thing || (Sample.Thing = {}));
-1 >^^^^
-2 >    ^
-3 >     ^^
-4 >       ^^^^^
-5 >            ^^^
-6 >               ^^^^^^^^^^^^
-7 >                           ^^^^^
-8 >                                ^^^^^^^^^^^^
-9 >                                            ^^^^^^^^
-1 >
-2 >    }
-3 >     
-4 >       Thing
-5 >            
-6 >               Thing
-7 >                           
-8 >                                Thing
-9 >                                            .Languages.PlainText {
-  >                                            	
-  >                                            	export class State implements IState {		
-  >                                                    constructor(private mode: IMode) { }
-  >                                            		public clone():IState {
-  >                                            			return this;
-  >                                            		}
-  >                                            
-  >                                            		public equals(other:IState):boolean {
-  >                                            			return this === other;
-  >                                            		}
-  >                                            		
-  >                                            		public getMode(): IMode { return mode; }
-  >                                            	}
-  >                                            	
-  >                                            	export class Mode extends AbstractMode {
-  >                                            
-  >                                            		// scenario 2
-  >                                            		public getInitialState(): IState {
-  >                                            			return new State(self);
-  >                                            		}
-  >                                            
-  >                                            
-  >                                            	}
-  >                                            }
-1 >Emitted(105, 5) Source(100, 1) + SourceIndex(0)
-2 >Emitted(105, 6) Source(100, 2) + SourceIndex(0)
-3 >Emitted(105, 8) Source(76, 15) + SourceIndex(0)
-4 >Emitted(105, 13) Source(76, 20) + SourceIndex(0)
-5 >Emitted(105, 16) Source(76, 15) + SourceIndex(0)
-6 >Emitted(105, 28) Source(76, 20) + SourceIndex(0)
-7 >Emitted(105, 33) Source(76, 15) + SourceIndex(0)
-8 >Emitted(105, 45) Source(76, 20) + SourceIndex(0)
-9 >Emitted(105, 53) Source(100, 2) + SourceIndex(0)
----
->>>})(Sample || (Sample = {}));
-1 >
-2 >^
-3 > ^^
-4 >   ^^^^^^
-5 >         ^^^^^
-6 >              ^^^^^^
-7 >                    ^^^^^^^^
-8 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >}
-3 > 
-4 >   Sample
-5 >         
-6 >              Sample
-7 >                    .Thing.Languages.PlainText {
+5 >                    .PlainText {
   >                    	
   >                    	export class State implements IState {		
   >                            constructor(private mode: IMode) { }
@@ -1931,12 +1838,93 @@ sourceFile:recursiveClassReferenceTest.ts
   >                    
   >                    	}
   >                    }
+1 >Emitted(104, 9) Source(100, 1) + SourceIndex(0)
+2 >Emitted(104, 10) Source(100, 2) + SourceIndex(0)
+3 >Emitted(104, 12) Source(76, 21) + SourceIndex(0)
+4 >Emitted(104, 21) Source(76, 30) + SourceIndex(0)
+5 >Emitted(104, 23) Source(100, 2) + SourceIndex(0)
+---
+>>>    })(Thing);
+1 >^^^^
+2 >    ^
+3 >     ^^
+4 >       ^^^^^
+5 >            ^^
+1 >
+2 >    }
+3 >     
+4 >       Thing
+5 >            .Languages.PlainText {
+  >            	
+  >            	export class State implements IState {		
+  >                    constructor(private mode: IMode) { }
+  >            		public clone():IState {
+  >            			return this;
+  >            		}
+  >            
+  >            		public equals(other:IState):boolean {
+  >            			return this === other;
+  >            		}
+  >            		
+  >            		public getMode(): IMode { return mode; }
+  >            	}
+  >            	
+  >            	export class Mode extends AbstractMode {
+  >            
+  >            		// scenario 2
+  >            		public getInitialState(): IState {
+  >            			return new State(self);
+  >            		}
+  >            
+  >            
+  >            	}
+  >            }
+1 >Emitted(105, 5) Source(100, 1) + SourceIndex(0)
+2 >Emitted(105, 6) Source(100, 2) + SourceIndex(0)
+3 >Emitted(105, 8) Source(76, 15) + SourceIndex(0)
+4 >Emitted(105, 13) Source(76, 20) + SourceIndex(0)
+5 >Emitted(105, 15) Source(100, 2) + SourceIndex(0)
+---
+>>>})(Sample);
+1 >
+2 >^
+3 > ^^
+4 >   ^^^^^^
+5 >         ^^
+6 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >}
+3 > 
+4 >   Sample
+5 >         .Thing.Languages.PlainText {
+  >         	
+  >         	export class State implements IState {		
+  >                 constructor(private mode: IMode) { }
+  >         		public clone():IState {
+  >         			return this;
+  >         		}
+  >         
+  >         		public equals(other:IState):boolean {
+  >         			return this === other;
+  >         		}
+  >         		
+  >         		public getMode(): IMode { return mode; }
+  >         	}
+  >         	
+  >         	export class Mode extends AbstractMode {
+  >         
+  >         		// scenario 2
+  >         		public getInitialState(): IState {
+  >         			return new State(self);
+  >         		}
+  >         
+  >         
+  >         	}
+  >         }
 1 >Emitted(106, 1) Source(100, 1) + SourceIndex(0)
 2 >Emitted(106, 2) Source(100, 2) + SourceIndex(0)
 3 >Emitted(106, 4) Source(76, 8) + SourceIndex(0)
 4 >Emitted(106, 10) Source(76, 14) + SourceIndex(0)
-5 >Emitted(106, 15) Source(76, 8) + SourceIndex(0)
-6 >Emitted(106, 21) Source(76, 14) + SourceIndex(0)
-7 >Emitted(106, 29) Source(100, 2) + SourceIndex(0)
+5 >Emitted(106, 12) Source(100, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=recursiveClassReferenceTest.js.map

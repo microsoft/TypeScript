@@ -193,15 +193,15 @@ var derived2;
     var o = [derived, derived2]; // {}[]
     var p = [derived, derived2, base]; // Base[]
     var q = [[function () { return derived2; }], [function () { return derived; }]]; // {}[]
-})(Derived || (Derived = {}));
-var WithContextualType;
+})(Derived);
+var WithContextualType = WithContextualType || (WithContextualType = {});
 (function (WithContextualType) {
     // no errors
     var a = [derived, derived2];
     var b = [null];
     var c = [];
     var d = [function () { return derived; }, function () { return derived2; }];
-})(WithContextualType || (WithContextualType = {}));
+})(WithContextualType);
 function foo(t, u) {
     var a = [t, t]; // T[]
     var b = [t, null]; // T[]

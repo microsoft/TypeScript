@@ -20,7 +20,7 @@ module Query {
 "use strict";
 exports.__esModule = true;
 exports.x = 1; // Makes this an external module
-var Query;
+var Query = {};
 (function (Query) {
     function fromDoWhile(doWhile) {
         return null;
@@ -31,7 +31,7 @@ var Query;
             return true;
         });
     }
-})(Query || (Query = {}));
+})(Query);
 
 
 //// [privacyCheckAnonymousFunctionParameter.d.ts]

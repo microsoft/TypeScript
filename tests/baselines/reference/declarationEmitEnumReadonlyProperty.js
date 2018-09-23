@@ -11,11 +11,11 @@ class C {
 let x: E.A = new C().type;
 
 //// [declarationEmitEnumReadonlyProperty.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E["A"] = "a";
     E["B"] = "b";
-})(E || (E = {}));
+})(E);
 var C = /** @class */ (function () {
     function C() {
         this.type = E.A;

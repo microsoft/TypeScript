@@ -7,7 +7,7 @@ module M {
 
 
 //// [moduleReopenedTypeSameBlock.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var C1 = /** @class */ (function () {
         function C1() {
@@ -15,7 +15,7 @@ var M;
         return C1;
     }());
     M.C1 = C1;
-})(M || (M = {}));
+})(M);
 (function (M) {
     var C2 = /** @class */ (function () {
         function C2() {
@@ -24,4 +24,4 @@ var M;
         return C2;
     }());
     M.C2 = C2;
-})(M || (M = {}));
+})(M);

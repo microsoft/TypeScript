@@ -13,7 +13,7 @@ module m2 {
 }
 
 //// [declFileInternalAliases.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     var c = /** @class */ (function () {
         function c() {
@@ -21,17 +21,17 @@ var m;
         return c;
     }());
     m.c = c;
-})(m || (m = {}));
-var m1;
+})(m);
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var x = m.c;
     m1.d = new x(); // emit the type as m.c
-})(m1 || (m1 = {}));
-var m2;
+})(m1);
+var m2 = m2 || (m2 = {});
 (function (m2) {
     m2.x = m.c;
     m2.d = new m2.x(); // emit the type as x
-})(m2 || (m2 = {}));
+})(m2);
 
 
 //// [declFileInternalAliases.d.ts]

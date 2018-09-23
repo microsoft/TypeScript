@@ -47,7 +47,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
-var Test;
+var Test = Test || (Test = {});
 (function (Test) {
     var FileSystemObject = /** @class */ (function () {
         function FileSystemObject(path) {
@@ -95,7 +95,7 @@ var Test;
     file.isNetworked = file.isFile;
     file.isFSO = file.isNetworked;
     file.isFile = file.isFSO;
-})(Test || (Test = {}));
+})(Test);
 
 
 //// [typeGuardOfFormThisMemberErrors.d.ts]

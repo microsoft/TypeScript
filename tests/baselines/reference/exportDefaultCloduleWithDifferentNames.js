@@ -19,7 +19,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 exports["default"] = A;
-var B;
+var B = {};
+exports["default"] = B;
 (function (B) {
     B.A2 = 32;
-})(B = exports.B || (exports.B = {}));
+})(B);

@@ -13,8 +13,8 @@ module A4 {
 
 //// [reachabilityChecks2.js]
 while (true) { }
-var A4;
+var A4 = A4 || (A4 = {});
 (function (A4) {
     while (true)
         ;
-})(A4 || (A4 = {}));
+})(A4);

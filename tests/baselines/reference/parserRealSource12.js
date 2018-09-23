@@ -534,7 +534,7 @@ module TypeScript {
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     var AstWalkOptions = /** @class */ (function () {
         function AstWalkOptions() {
@@ -730,7 +730,7 @@ var TypeScript;
         return globalAstWalkerFactory;
     }
     TypeScript.getAstWalkerFactory = getAstWalkerFactory;
-    var ChildrenWalkers;
+    var ChildrenWalkers = ChildrenWalkers || (ChildrenWalkers = {});
     (function (ChildrenWalkers) {
         function walkNone(preAst, parent, walker) {
             // Nothing to do
@@ -1028,5 +1028,5 @@ var TypeScript;
             }
         }
         ChildrenWalkers.walkLabeledStatementChildren = walkLabeledStatementChildren;
-    })(ChildrenWalkers || (ChildrenWalkers = {}));
-})(TypeScript || (TypeScript = {}));
+    })(ChildrenWalkers);
+})(TypeScript);

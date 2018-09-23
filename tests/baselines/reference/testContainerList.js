@@ -9,7 +9,7 @@ module A {
 
 //// [testContainerList.js]
 // Regression test for #325
-var A;
+var A = A || (A = {});
 (function (A) {
     var C = /** @class */ (function () {
         function C(d) {
@@ -17,4 +17,4 @@ var A;
         }
         return C;
     }());
-})(A || (A = {}));
+})(A);

@@ -5,7 +5,7 @@ enum E {
 
 
 //// [enumWithUnicodeEscape1.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["gold \u2730"] = 0] = "gold \u2730";
-})(E || (E = {}));
+})(E);

@@ -69,13 +69,13 @@ function f1() {
         function x() { }
     }
 }
-var M0;
+var M0 = M0 || (M0 = {});
 (function (M0) {
     let x2;
     var x2;
     function x2() { }
-})(M0 || (M0 = {}));
-var M1;
+})(M0);
+var M1 = M1 || (M1 = {});
 (function (M1) {
     let x2;
     {
@@ -84,7 +84,7 @@ var M1;
     {
         function x2() { }
     }
-})(M1 || (M1 = {}));
+})(M1);
 let x11;
 for (var x11;;) {
 }
@@ -93,9 +93,9 @@ function f2() {
     for (var x11;;) {
     }
 }
-var M2;
+var M2 = M2 || (M2 = {});
 (function (M2) {
     let x11;
     for (var x11;;) {
     }
-})(M2 || (M2 = {}));
+})(M2);

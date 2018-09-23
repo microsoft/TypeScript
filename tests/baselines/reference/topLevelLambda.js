@@ -5,8 +5,8 @@ module M {
 
 
 //// [topLevelLambda.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var _this = this;
     var f = function () { _this.window; };
-})(M || (M = {}));
+})(M);

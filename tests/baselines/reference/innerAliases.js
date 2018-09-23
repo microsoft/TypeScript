@@ -24,11 +24,11 @@ c = new D.inner.Class1();
 
 
 //// [innerAliases.js]
-var A;
+var A = A || (A = {});
 (function (A) {
-    var B;
+    var B = A.B || (A.B = {});
     (function (B) {
-        var C;
+        var C = B.C || (B.C = {});
         (function (C) {
             var Class1 = /** @class */ (function () {
                 function Class1() {
@@ -36,14 +36,14 @@ var A;
                 return Class1;
             }());
             C.Class1 = Class1;
-        })(C = B.C || (B.C = {}));
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
-var D;
+        })(C);
+    })(B);
+})(A);
+var D = D || (D = {});
 (function (D) {
     var inner = A.B.C;
     var c1 = new inner.Class1();
-    var E;
+    var E = D.E || (D.E = {});
     (function (E) {
         var Class2 = /** @class */ (function () {
             function Class2() {
@@ -51,7 +51,7 @@ var D;
             return Class2;
         }());
         E.Class2 = Class2;
-    })(E = D.E || (D.E = {}));
-})(D || (D = {}));
+    })(E);
+})(D);
 var c;
 c = new D.inner.Class1();

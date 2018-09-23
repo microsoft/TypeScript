@@ -17,32 +17,32 @@ module superContain {
 }
 
 //// [mergedModuleDeclarationCodeGen4.js]
-var superContain;
+var superContain = superContain || (superContain = {});
 (function (superContain) {
-    var contain;
+    var contain = superContain.contain || (superContain.contain = {});
     (function (contain_1) {
-        var my;
+        var my = contain_1.my || (contain_1.my = {});
         (function (my) {
-            var buz;
+            var buz = my.buz || (my.buz = {});
             (function (buz) {
-                var data;
+                var data = buz.data || (buz.data = {});
                 (function (data) {
                     function foo() { }
                     data.foo = foo;
-                })(data = buz.data || (buz.data = {}));
-            })(buz = my.buz || (my.buz = {}));
-        })(my = contain_1.my || (contain_1.my = {}));
+                })(data);
+            })(buz);
+        })(my);
         (function (my_1) {
-            var buz;
+            var buz = my_1.buz || (my_1.buz = {});
             (function (buz_1) {
-                var data;
+                var data = buz_1.data || (buz_1.data = {});
                 (function (data_1) {
                     function bar(contain, my, buz, data) {
                         data_1.foo();
                     }
                     data_1.bar = bar;
-                })(data = buz_1.data || (buz_1.data = {}));
-            })(buz = my_1.buz || (my_1.buz = {}));
-        })(my = contain_1.my || (contain_1.my = {}));
-    })(contain = superContain.contain || (superContain.contain = {}));
-})(superContain || (superContain = {}));
+                })(data);
+            })(buz);
+        })(my);
+    })(contain);
+})(superContain);

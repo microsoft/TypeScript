@@ -129,7 +129,7 @@ var f16 = function (a, b) {
 function foo(func) { }
 foo(function () { return true; });
 foo(function () { return false; });
-var m;
+var m = m || (m = {});
 (function (m) {
     var City = /** @class */ (function () {
         function City(x, thing) {
@@ -138,9 +138,9 @@ var m;
         }
         return City;
     }());
-    var Enum;
+    var Enum = m.Enum || (m.Enum = {});
     (function (Enum) {
         Enum[Enum["claw"] = (function () { return 10; })()] = "claw";
-    })(Enum = m.Enum || (m.Enum = {}));
+    })(Enum);
     m.v = function (x) { return new City(Enum.claw); };
-})(m || (m = {}));
+})(m);

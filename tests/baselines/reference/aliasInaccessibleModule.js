@@ -6,9 +6,9 @@ module M {
 }
 
 //// [aliasInaccessibleModule.js]
-var M;
+var M = M || (M = {});
 (function (M) {
-})(M || (M = {}));
+})(M);
 
 
 //// [aliasInaccessibleModule.d.ts]

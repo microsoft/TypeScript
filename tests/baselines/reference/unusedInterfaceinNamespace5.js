@@ -24,7 +24,7 @@ namespace Validation {
 }
 
 //// [unusedInterfaceinNamespace5.js]
-var Validation;
+var Validation = Validation || (Validation = {});
 (function (Validation) {
     var c1 = /** @class */ (function () {
         function c1() {
@@ -32,4 +32,4 @@ var Validation;
         return c1;
     }());
     Validation.c1 = c1;
-})(Validation || (Validation = {}));
+})(Validation);

@@ -11,8 +11,8 @@ module M {
 
 
 //// [assignToFn.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var x = { f: function (n) { return true; } };
     x.f = "hello";
-})(M || (M = {}));
+})(M);

@@ -225,7 +225,7 @@ module TypeScript {
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
-var TypeScript;
+var TypeScript = TypeScript || (TypeScript = {});
 (function (TypeScript) {
     var TypeCollectionContext = /** @class */ (function () {
         function TypeCollectionContext(scopeChain, checker) {
@@ -420,4 +420,4 @@ var TypeScript;
         return context;
     }
     TypeScript.findEnclosingScopeAt = findEnclosingScopeAt;
-})(TypeScript || (TypeScript = {}));
+})(TypeScript);

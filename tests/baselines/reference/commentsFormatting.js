@@ -86,7 +86,7 @@ this is 4 spaces left aligned but above line is empty
 }
 
 //// [commentsFormatting.js]
-var m;
+var m = m || (m = {});
 (function (m) {
     /** this is first line - aligned to class declaration
 * this is 4 spaces left aligned
@@ -184,7 +184,7 @@ this is 4 spaces left aligned but above line is empty
         return c4;
     }());
     m.c4 = c4;
-})(m || (m = {}));
+})(m);
 
 
 //// [commentsFormatting.d.ts]

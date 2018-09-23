@@ -42,10 +42,10 @@ define(["require", "exports"], function (require, exports) {
             return A;
         }());
         foo.A = A;
-        var B;
+        var B = foo.B || (foo.B = {});
         (function (B) {
-        })(B = foo.B || (foo.B = {}));
-    })(foo || (foo = {}));
+        })(B);
+    })(foo);
     return foo;
 });
 //// [file2.js]

@@ -14,7 +14,7 @@ var daysOfMonth = days;
 var daysOfYear: typeof days;
 
 //// [declFileTypeofEnum.js]
-var days;
+var days = days || (days = {});
 (function (days) {
     days[days["monday"] = 0] = "monday";
     days[days["tuesday"] = 1] = "tuesday";
@@ -23,7 +23,7 @@ var days;
     days[days["friday"] = 4] = "friday";
     days[days["saturday"] = 5] = "saturday";
     days[days["sunday"] = 6] = "sunday";
-})(days || (days = {}));
+})(days);
 var weekendDay = days.saturday;
 var daysOfMonth = days;
 var daysOfYear;

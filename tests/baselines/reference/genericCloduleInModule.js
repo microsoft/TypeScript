@@ -13,7 +13,7 @@ var b: A.B<number>;
 b.foo();
 
 //// [genericCloduleInModule.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var B = /** @class */ (function () {
         function B() {
@@ -25,7 +25,7 @@ var A;
     A.B = B;
     (function (B) {
         B.x = 1;
-    })(B = A.B || (A.B = {}));
-})(A || (A = {}));
+    })(B);
+})(A);
 var b;
 b.foo();

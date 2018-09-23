@@ -49,7 +49,7 @@ var g = /** @class */ (function () {
     }
     return g;
 }());
-var m;
+var m = m || (m = {});
 (function (m) {
     var c = /** @class */ (function () {
         function c() {
@@ -57,7 +57,7 @@ var m;
         return c;
     }());
     m.c = c;
-})(m || (m = {}));
+})(m);
 // Object literal with everything
 var x;
 // Function type

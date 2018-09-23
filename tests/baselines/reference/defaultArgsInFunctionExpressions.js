@@ -60,9 +60,9 @@ var f4 = function (a) {
 var f5 = function (a) {
     if (a === void 0) { a = function (s) { return s; }; }
 };
-var U;
+var U = U || (U = {});
 (function (U) {
-})(U || (U = {}));
+})(U);
 var f6 = function (t) {
     if (t === void 0) { t = T; }
 };

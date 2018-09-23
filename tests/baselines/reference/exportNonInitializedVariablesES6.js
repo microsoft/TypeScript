@@ -45,14 +45,14 @@ class A {
 }
 export var e;
 export let f;
-var B;
+const B = {};
 (function (B) {
     B.a = 1, B.c = 2;
-})(B || (B = {}));
-var C;
+})(B);
+const C = {};
 (function (C) {
     C.a = 1, C.c = 2;
-})(C || (C = {}));
+})(C);
 // Shouldn't be filtered
 export var a1 = 1;
 export let b1 = 1;

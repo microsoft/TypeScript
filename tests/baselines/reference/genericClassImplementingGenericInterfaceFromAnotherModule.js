@@ -8,7 +8,7 @@ module bar {
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.js]
-var bar;
+var bar = bar || (bar = {});
 (function (bar) {
     var Foo = /** @class */ (function () {
         function Foo() {
@@ -16,7 +16,7 @@ var bar;
         return Foo;
     }());
     bar.Foo = Foo;
-})(bar || (bar = {}));
+})(bar);
 
 
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.d.ts]

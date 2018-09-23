@@ -11,13 +11,13 @@ module Foo {
 }
 
 //// [mergedDeclarations2.js]
-var Foo;
+var Foo = Foo || (Foo = {});
 (function (Foo) {
     Foo[Foo["b"] = 0] = "b";
-})(Foo || (Foo = {}));
+})(Foo);
 (function (Foo) {
     Foo[Foo["a"] = 0] = "a";
-})(Foo || (Foo = {}));
+})(Foo);
 (function (Foo) {
     Foo.x = b;
-})(Foo || (Foo = {}));
+})(Foo);

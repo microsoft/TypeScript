@@ -18,7 +18,7 @@ module M {
 
 
 //// [covariance1.js]
-var M;
+var M = M || (M = {});
 (function (M) {
     var XX = /** @class */ (function () {
         function XX(m1) {
@@ -33,4 +33,4 @@ var M;
     f({ x: a }); // ok
     var b;
     f({ x: b }); // ok covariant subtype
-})(M || (M = {}));
+})(M);

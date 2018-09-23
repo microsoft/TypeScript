@@ -31,27 +31,27 @@ module otherRoot {
 }
 
 //// [part1.js]
-var Root;
+var Root = Root || (Root = {});
 (function (Root) {
-    var A;
+    var A = Root.A || (Root.A = {});
     (function (A) {
-        var Utils;
+        var Utils = A.Utils || (A.Utils = {});
         (function (Utils) {
             function mirror(p) {
                 return { x: p.y, y: p.x };
             }
             Utils.mirror = mirror;
-        })(Utils = A.Utils || (A.Utils = {}));
-    })(A = Root.A || (Root.A = {}));
-})(Root || (Root = {}));
+        })(Utils);
+    })(A);
+})(Root);
 //// [part2.js]
-var otherRoot;
+var otherRoot = otherRoot || (otherRoot = {});
 (function (otherRoot) {
-    var A;
+    var A = otherRoot.A || (otherRoot.A = {});
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
-        var Utils;
+        var Utils = A.Utils || (A.Utils = {});
         (function (Utils) {
             var Plane = /** @class */ (function () {
                 function Plane(tl, br) {
@@ -61,6 +61,6 @@ var otherRoot;
                 return Plane;
             }());
             Utils.Plane = Plane;
-        })(Utils = A.Utils || (A.Utils = {}));
-    })(A = otherRoot.A || (otherRoot.A = {}));
-})(otherRoot || (otherRoot = {}));
+        })(Utils);
+    })(A);
+})(otherRoot);

@@ -120,7 +120,7 @@ interface glo_C3_public extends glo_i_public {
 
 
 //// [privacyGloInterface.js]
-var m1;
+var m1 = m1 || (m1 = {});
 (function (m1) {
     var C1_public = /** @class */ (function () {
         function C1_public() {
@@ -135,7 +135,7 @@ var m1;
         }
         return C2_private;
     }());
-})(m1 || (m1 = {}));
+})(m1);
 var C5_public = /** @class */ (function () {
     function C5_public() {
     }

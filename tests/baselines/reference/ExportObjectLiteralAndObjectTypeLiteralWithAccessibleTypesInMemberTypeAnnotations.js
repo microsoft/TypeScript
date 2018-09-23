@@ -12,7 +12,7 @@ module A {
 
 
 //// [ExportObjectLiteralAndObjectTypeLiteralWithAccessibleTypesInMemberTypeAnnotations.js]
-var A;
+var A = A || (A = {});
 (function (A) {
     var Point = /** @class */ (function () {
         function Point(x, y) {
@@ -23,4 +23,4 @@ var A;
     }());
     A.Origin = { x: 0, y: 0 };
     A.Unity = { start: new Point(0, 0), end: new Point(1, 0) };
-})(A || (A = {}));
+})(A);

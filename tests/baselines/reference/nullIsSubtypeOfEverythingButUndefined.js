@@ -133,10 +133,10 @@ var C2 = /** @class */ (function () {
 var c2;
 var r12 = true ? c2 : null;
 var r12 = true ? null : c2;
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["A"] = 0] = "A";
-})(E || (E = {}));
+})(E);
 var r13 = true ? E : null;
 var r13 = true ? null : E;
 var r14 = true ? E.A : null;
@@ -144,7 +144,7 @@ var r14 = true ? null : E.A;
 function f() { }
 (function (f) {
     f.bar = 1;
-})(f || (f = {}));
+})(f);
 var af;
 var r15 = true ? af : null;
 var r15 = true ? null : af;
@@ -155,7 +155,7 @@ var c = /** @class */ (function () {
 }());
 (function (c) {
     c.bar = 1;
-})(c || (c = {}));
+})(c);
 var ac;
 var r16 = true ? ac : null;
 var r16 = true ? null : ac;

@@ -49,10 +49,10 @@ var mResult3 = m[hi];
 
 
 //// [noImplicitAnyIndexing.js]
-var MyEmusEnum;
+var MyEmusEnum = MyEmusEnum || (MyEmusEnum = {});
 (function (MyEmusEnum) {
     MyEmusEnum[MyEmusEnum["emu"] = 0] = "emu";
-})(MyEmusEnum || (MyEmusEnum = {}));
+})(MyEmusEnum);
 // Should be okay; should be a string.
 var strRepresentation1 = MyEmusEnum[0];
 // Should be okay; should be a string.

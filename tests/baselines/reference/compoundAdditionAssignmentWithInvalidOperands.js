@@ -41,11 +41,11 @@ x5 += true;
 x5 += {};
 
 //// [compoundAdditionAssignmentWithInvalidOperands.js]
-var E;
+var E = E || (E = {});
 (function (E) {
     E[E["a"] = 0] = "a";
     E[E["b"] = 1] = "b";
-})(E || (E = {}));
+})(E);
 var a;
 var x1;
 x1 += a;
