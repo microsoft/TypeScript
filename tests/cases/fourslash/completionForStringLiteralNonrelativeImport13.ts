@@ -8,7 +8,7 @@
 ////     "version": "1.0.0",
 ////     "types": "index",
 ////     "typesVersions": {
-////         "3.0": { "*" : ["ts3.0/*"] }
+////         ">=3.1.0-0": { "*" : ["ts3.1/*"] }
 ////     }
 //// }
 
@@ -18,10 +18,10 @@
 // @Filename: node_modules/ext/aaa.d.ts
 //// export {};
 
-// @Filename: node_modules/ext/ts3.0/index.d.ts
+// @Filename: node_modules/ext/ts3.1/index.d.ts
 //// export {};
 
-// @Filename: node_modules/ext/ts3.0/zzz.d.ts
+// @Filename: node_modules/ext/ts3.1/zzz.d.ts
 //// export {};
 
 // @Filename: main.ts
@@ -31,6 +31,6 @@
 
 verify.completions({
     marker: test.markerNames(),
-    exact: ["aaa", "index", "ts3.0", "zzz"],
+    exact: ["aaa", "index", "ts3.1", "zzz"],
     isNewIdentifierLocation: true,
 });
