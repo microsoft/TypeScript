@@ -8868,7 +8868,7 @@ namespace ts {
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
-                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
+                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.BooleanLiteral) {
                         removeRedundantLiteralTypes(typeSet, includes);
                     }
                     break;
@@ -12933,8 +12933,8 @@ namespace ts {
         function getDefinitelyFalsyPartOfType(type: Type): Type {
             return type.flags & TypeFlags.String ? emptyStringType :
                 type.flags & TypeFlags.Number ? zeroType :
-                type.flags & TypeFlags.Boolean || type === regularFalseType ? regularFalseType :
-                type === falseType ? falseType :
+                type === regularFalseType ||
+                type === falseType ||
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
                 type.flags & TypeFlags.StringLiteral && (<LiteralType>type).value === "" ||
                 type.flags & TypeFlags.NumberLiteral && (<LiteralType>type).value === 0 ? type :
@@ -14200,7 +14200,7 @@ namespace ts {
                     return assignedType;
                 }
                 let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & (TypeFlags.FreshLiteral | TypeFlags.Literal)) {
+                if (assignedType.flags & TypeFlags.FreshLiteral && assignedType.flags & TypeFlags.BooleanLiteral) {
                     reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
                 }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
