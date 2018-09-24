@@ -103,7 +103,7 @@ function f3() {
 >'x' : "x"
 
     let x2 = x;
->x2 : string
+>x2 : "x"
 >x : "x"
 
     // Desired: OK (up for debate?)
@@ -111,7 +111,7 @@ function f3() {
     // 3.1 as-is: OK
     x2 = 'y';
 >x2 = 'y' : "y"
->x2 : string
+>x2 : "x"
 >'y' : "y"
 
     // Desired/actual: All OK

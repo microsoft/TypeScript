@@ -14209,7 +14209,7 @@ namespace ts {
                     return assignedType;
                 }
                 let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & (TypeFlags.FreshLiteral | TypeFlags.BooleanLiteral)) {
+                if (assignedType.flags & TypeFlags.FreshLiteral && assignedType.flags & TypeFlags.BooleanLiteral) {
                     reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
                 }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
