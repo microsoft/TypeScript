@@ -8868,7 +8868,7 @@ namespace ts {
             }
             switch (unionReduction) {
                 case UnionReduction.Literal:
-                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique) {
+                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.BooleanLiteral) {
                         removeRedundantLiteralTypes(typeSet, includes);
                     }
                     break;
@@ -12933,7 +12933,7 @@ namespace ts {
         function getDefinitelyFalsyPartOfType(type: Type): Type {
             return type.flags & TypeFlags.String ? emptyStringType :
                 type.flags & TypeFlags.Number ? zeroType :
-                type.flags & TypeFlags.Boolean || type === regularFalseType ? regularFalseType :
+                type === regularFalseType ? regularFalseType :
                 type === falseType ? falseType :
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
                 type.flags & TypeFlags.StringLiteral && (<LiteralType>type).value === "" ||
