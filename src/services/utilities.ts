@@ -370,6 +370,7 @@ namespace ts {
                 switch (kind) {
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                     case AssignmentDeclarationKind.None:
                         return ScriptElementKind.unknown;
                     case AssignmentDeclarationKind.ExportsProperty:

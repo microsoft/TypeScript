@@ -2194,6 +2194,8 @@ namespace ts {
                             return bindObjectDefinePropertyAssignment(node as BindableObjectDefinePropertyCall);
                         case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                             return bindObjectDefinePropertyExport(node as BindableObjectDefinePropertyCall);
+                        case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
+                            return bindObjectDefinePrototypeProperty(node as BindableObjectDefinePropertyCall);
                         case AssignmentDeclarationKind.None:
                             break; // Nothing to do
                         default:
@@ -2493,6 +2495,11 @@ namespace ts {
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
             bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
+        }
+
+        function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
+            const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
+            bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ true);
         }
 
         /**

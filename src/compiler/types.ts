@@ -1700,7 +1700,6 @@ namespace ts {
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
 
-
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
@@ -4269,6 +4268,8 @@ namespace ts {
         ObjectDefinePropertyValue,
         // Object.defineProperty(exports || module.exports, 'name', ...);
         ObjectDefinePropertyExports,
+        // Object.defineProperty(Foo.prototype, 'name', ...);
+        ObjectDefinePrototypeProperty,
     }
 
     /** @deprecated Use FileExtensionInfo instead. */

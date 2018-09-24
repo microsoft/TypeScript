@@ -16045,6 +16045,25 @@ namespace ts {
                 getAssignmentDeclarationKind(container.parent.parent.parent) === AssignmentDeclarationKind.Prototype) {
                 return (container.parent.parent.parent.left as PropertyAccessExpression).expression;
             }
+            else if (container.kind === SyntaxKind.FunctionExpression &&
+                isPropertyAssignment(container.parent) &&
+                isIdentifier(container.parent.name) &&
+                (container.parent.name.escapedText === "value" || container.parent.name.escapedText === "get" || container.parent.name.escapedText === "set") &&
+                isObjectLiteralExpression(container.parent.parent) &&
+                isCallExpression(container.parent.parent.parent) &&
+                container.parent.parent.parent.arguments[2] === container.parent.parent &&
+                getAssignmentDeclarationKind(container.parent.parent.parent) === AssignmentDeclarationKind.ObjectDefinePrototypeProperty) {
+                return (container.parent.parent.parent.arguments[0] as PropertyAccessExpression).expression;
+            }
+            else if (isMethodDeclaration(container) &&
+                isIdentifier(container.name) &&
+                (container.name.escapedText === "value" || container.name.escapedText === "get" || container.name.escapedText === "set") &&
+                isObjectLiteralExpression(container.parent) &&
+                isCallExpression(container.parent.parent) &&
+                container.parent.parent.arguments[2] === container.parent &&
+                getAssignmentDeclarationKind(container.parent.parent) === AssignmentDeclarationKind.ObjectDefinePrototypeProperty) {
+                return (container.parent.parent.arguments[0] as PropertyAccessExpression).expression;
+            }
         }
 
         function getTypeForThisExpressionFromJSDoc(node: Node) {
@@ -16603,6 +16622,7 @@ namespace ts {
                     return thisType && getTypeOfPropertyOfContextualType(thisType, thisAccess.name.escapedText) || false;
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                     return Debug.fail("Unimplemented");
                 default:
                     return Debug.assertNever(kind);
@@ -21335,7 +21355,7 @@ namespace ts {
             // Variables declared with 'const'
             // Get accessors without matching set accessors
             // Enum members
-            // JS Assignments with writable false or no setter
+            // Object.defineProperty assignments with writable false or no setter
             // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
             return !!(getCheckFlags(symbol) & CheckFlags.Readonly ||
                 symbol.flags & SymbolFlags.Property && getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly ||

@@ -1789,25 +1789,6 @@ namespace ts {
         return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
     }
 
-    export function getDescriptorInitializerOfKind(props: NodeArray<ObjectLiteralElementLike>, kind: "value" | "get" | "set") {
-        const init = find(props, p => !!p.name && getTextOfPropertyName(p.name) === kind);
-        if (init) {
-            switch (init.kind) {
-                case SyntaxKind.PropertyAssignment:
-                    return init.initializer;
-                case SyntaxKind.ShorthandPropertyAssignment:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                    return init;
-                case SyntaxKind.SetAccessor:
-                    return undefined;
-                default:
-                    return Debug.fail("Spread assignments could never have the name 'value'");
-            }
-        }
-        return undefined;
-    }
-
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
@@ -1930,13 +1911,13 @@ namespace ts {
     }
 
     export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
-            return !(length(expr.arguments) !== 3 ||
-                !isPropertyAccessExpression(expr.expression) ||
-                !isIdentifier(expr.expression.expression) ||
-                idText(expr.expression.expression) !== "Object" ||
-                idText(expr.expression.name) !== "defineProperty" ||
-                !isStringOrNumericLiteralLike(expr.arguments[1]) ||
-                !isEntityNameExpression(expr.arguments[0]));
+            return length(expr.arguments) === 3 &&
+                isPropertyAccessExpression(expr.expression) &&
+                isIdentifier(expr.expression.expression) &&
+                idText(expr.expression.expression) === "Object" &&
+                idText(expr.expression.name) === "defineProperty" &&
+                isStringOrNumericLiteralLike(expr.arguments[1]) &&
+                isEntityNameExpression(expr.arguments[0]);
     }
 
     function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
@@ -1945,8 +1926,16 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if ((isIdentifier(entityName) && entityName.escapedText === "exports") || (isPropertyAccessExpression(entityName) && isIdentifier(entityName.expression) && entityName.expression.escapedText === "module" && entityName.name.escapedText === "exports")) {
+            if ((isIdentifier(entityName) && entityName.escapedText === "exports") ||
+                    (isPropertyAccessExpression(entityName) &&
+                    isIdentifier(entityName.expression) &&
+                    entityName.expression.escapedText === "module" &&
+                    entityName.name.escapedText === "exports")
+            ) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
+            }
+            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+                return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
             }
             return AssignmentDeclarationKind.ObjectDefinePropertyValue;
         }
@@ -5027,6 +5016,7 @@ namespace ts {
                         return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
                     case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                     case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                         return (expr as BindableObjectDefinePropertyCall).arguments[1];
                     default:
                         return undefined;
