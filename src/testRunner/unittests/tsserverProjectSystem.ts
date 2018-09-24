@@ -8294,6 +8294,7 @@ namespace ts.projectSystem {
                 info: {
                     canRename: true,
                     displayName: "C",
+                    fileToRename: undefined,
                     fullDisplayName: '"/users/username/projects/a/c/fc".C',
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
@@ -9462,8 +9463,7 @@ export function Test2() {
                 content: "{}",
             };
 
-            const host = createServerHost([aTs, bTs, tsconfig]);
-            const session = createSession(host);
+            const session = createSession(createServerHost([aTs, bTs, tsconfig]));
             openFilesForSession([aTs, bTs], session);
 
             const requestLocation: protocol.FileLocationRequestArgs = {
@@ -9566,6 +9566,31 @@ export function Test2() {
                     ...detailsCommon,
                 }
             ]);
+        });
+    });
+
+    describe("tsserverProjectSystem rename", () => {
+        it("works", () => {
+            const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
+            const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
+
+            const session = createSession(createServerHost([aTs, bTs]));
+            openFilesForSession([bTs], session);
+
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    fileToRename: aTs.path,
+                    displayName: aTs.path,
+                    fullDisplayName: aTs.path,
+                    kind: ScriptElementKind.moduleElement,
+                    kindModifiers: "",
+                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
+                },
+                locs: [{ file: bTs.path, locs: [protocolTextSpanFromSubstring(bTs.content, "./a")] }],
+            });
         });
     });
 
@@ -10062,6 +10087,7 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnA",
+                    fileToRename: undefined,
                     fullDisplayName: "fnA",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
@@ -10081,6 +10107,7 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnA",
+                    fileToRename: undefined,
                     fullDisplayName: '"/a/a".fnA',
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
@@ -10110,6 +10137,7 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnB",
+                    fileToRename: undefined,
                     fullDisplayName: "fnB",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
