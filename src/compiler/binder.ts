@@ -234,13 +234,17 @@ namespace ts {
             }
 
             if (symbolFlags & SymbolFlags.Value) {
-                const { valueDeclaration } = symbol;
-                if (!valueDeclaration ||
-                    (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
-                    (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
-                    // other kinds of value declarations take precedence over modules and assignment declarations
-                    symbol.valueDeclaration = node;
-                }
+                setValueDeclaration(symbol, node);
+            }
+        }
+
+        function setValueDeclaration(symbol: Symbol, node: Declaration): void {
+            const { valueDeclaration } = symbol;
+            if (!valueDeclaration ||
+                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
+                (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
+                // other kinds of value declarations take precedence over modules and assignment declarations
+                symbol.valueDeclaration = node;
             }
         }
 
@@ -2286,14 +2290,19 @@ namespace ts {
                 bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
             }
             else {
-                const flags = node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(node)
+                const flags = exportAssignmentIsAlias(node)
                     // An export default clause with an EntityNameExpression or a class expression exports all meanings of that identifier or expression;
                     ? SymbolFlags.Alias
                     // An export default clause with any other expression exports a value
                     : SymbolFlags.Property;
                 // If there is an `export default x;` alias declaration, can't `export default` anything else.
                 // (In contrast, you can still have `export default function f() {}` and `export default interface I {}`.)
-                declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+                const symbol = declareSymbol(container.symbol.exports, container.symbol, node, flags, SymbolFlags.All);
+
+                if (node.isExportEquals) {
+                    // Will be an error later, since the module already has other exports. Just make sure this has a valueDeclaration set.
+                    setValueDeclaration(symbol, node);
+                }
             }
         }
 
@@ -2456,7 +2465,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2513,7 +2522,7 @@ namespace ts {
             const isToplevel = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
+            if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
@@ -2523,7 +2532,9 @@ namespace ts {
                         return symbol;
                     }
                     else {
-                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
+                        const table = parent ? parent.exports! :
+                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                        return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
             }
@@ -2657,7 +2668,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                const isEnum = !!getJSDocEnumTag(node);
+                const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
                 const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
                 const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
@@ -2891,6 +2902,9 @@ namespace ts {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
+        }
+        if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
+            return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }

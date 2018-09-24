@@ -1,0 +1,45 @@
+tests/cases/conformance/salsa/a.js(27,20): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+
+
+==== tests/cases/conformance/salsa/a.js (1 errors) ====
+    // all references to _map, set, get, addon should be ok
+    
+    /** @constructor */
+    var Multimap = function() {
+        this._map = {};
+        this._map
+        this.set
+        this.get
+        this.addon
+    };
+    
+    Multimap.prototype = {
+        set: function() {
+            this._map
+            this.set
+            this.get
+            this.addon
+        },
+        get() {
+            this._map
+            this.set
+            this.get
+            this.addon
+        }
+    }
+    
+    Multimap.prototype.addon = function () {
+                       ~~~~~
+!!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+        this._map
+        this.set
+        this.get
+        this.addon
+    }
+    
+    var mm = new Multimap();
+    mm._map
+    mm.set
+    mm.get
+    mm.addon
+    

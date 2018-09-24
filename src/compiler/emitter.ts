@@ -192,7 +192,7 @@ namespace ts {
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Setup and perform the transformation to retrieve declarations from the input files
-            const nonJsFiles = filter(sourceFiles, isSourceFileNotJavascript);
+            const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
             const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
@@ -1015,7 +1015,7 @@ namespace ts {
                             writeLines(helper.text);
                         }
                         else {
-                            writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
+                            writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
                         helpersEmitted = true;
                     }
@@ -1041,7 +1041,7 @@ namespace ts {
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
         function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node);
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -1532,7 +1532,7 @@ namespace ts {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression);
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
                 return !expression.numericLiteralFlags
                     && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
             }
@@ -3306,20 +3306,20 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return getEmitFlags(node) & EmitFlags.NoAsciiEscaping ?
+                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
                         `"${escapeString(getTextOfNode(textSourceNode))}"` :
                         `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile);
+            return getLiteralText(node, currentSourceFile, neverAsciiEscape);
         }
 
         /**
@@ -3588,7 +3588,7 @@ namespace ts {
             }
         }
 
-        function makeFileLevelOptmiisticUniqueName(name: string) {
+        function makeFileLevelOptimisticUniqueName(name: string) {
             return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
         }
 

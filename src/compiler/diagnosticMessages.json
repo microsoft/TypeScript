@@ -2112,6 +2112,10 @@
         "category": "Error",
         "code": 2585
     },
+    "Enum type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2586
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2948,7 +2952,10 @@
         "category": "Error",
         "code": 5072
     },
-
+    "Build option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5073
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3748,7 +3755,7 @@
         "category": "Message",
         "code": 6212
     },
-    "Did you mean to use `new` with this expression?": {
+    "Did you mean to use 'new' with this expression?": {
         "category": "Message",
         "code": 6213
     },
@@ -3878,10 +3885,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -3890,6 +3893,10 @@
     "The expected type comes from this index signature.": {
         "category": "Message",
         "code": 6501
+    },
+    "The expected type comes from the return type of this signature.": {
+        "category": "Message",
+        "code": 6502
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -4149,6 +4156,10 @@
     "The type of a function declaration must match the function's signature.": {
         "category": "Error",
         "code": 8030
+    },
+    "You cannot rename a module via a global import.": {
+        "category": "Error",
+        "code": 8031
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4648,7 +4659,7 @@
         "category": "Message",
         "code": 95062
     },
-    
+
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4657,12 +4668,20 @@
         "category": "Message",
         "code": 95064
     },
-    "Convert to async function":{
+    "Convert to async function": {
         "category": "Message",
-         "code": 95065
+        "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
-         "code": 95066
+        "category": "Message",
+        "code": 95066
+    },
+    "Generate types for '{0}'": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Generate types for all packages without types": {
+        "category": "Message",
+        "code": 95068
     }
 }
