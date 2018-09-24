@@ -23,6 +23,42 @@ namespace ts {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
             });
+
+            it("builds correctly when outDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/", "/logic/outDir/"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
+
+            it("builds correctly when declarationDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/index.d.ts", "/logic/out/decls/index.d.ts"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
         });
 
         describe("tsbuild - dry builds", () => {
@@ -319,6 +355,25 @@ export class cNew {}`);
                     "TSFILE: /src/tests/index.js",
                     "TSFILE: /src/tests/index.d.ts",
                 ]);
+            });
+        });
+
+        describe("tsbuild - with rootDir of project reference in parentDirectory", () => {
+            const projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
+            const allExpectedOutputs = [
+                "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
+                "/src/dist/main/a.js", "/src/dist/main/a.d.ts",
+                "/src/dist/main/b.js", "/src/dist/main/b.d.ts"
+            ];
+            it("verify that it builds correctly", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
             });
         });
     }

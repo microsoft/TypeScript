@@ -2561,6 +2561,12 @@ namespace ts {
          * path = input file's path
          */
         /* @internal */ resolvedPath: Path;
+        /** Original file name that can be different from fileName,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case originalFileName = name of input file
+         * fileName = output file's name
+         */
+        /* @internal */ originalFileName: string;
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.

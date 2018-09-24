@@ -495,6 +495,7 @@ namespace ts {
         let deferredGlobalESSymbolType: ObjectType;
         let deferredGlobalTypedPropertyDescriptorType: GenericType;
         let deferredGlobalPromiseType: GenericType;
+        let deferredGlobalPromiseLikeType: GenericType;
         let deferredGlobalPromiseConstructorSymbol: Symbol | undefined;
         let deferredGlobalPromiseConstructorLikeType: ObjectType;
         let deferredGlobalIterableType: GenericType;
@@ -8185,7 +8186,7 @@ namespace ts {
                 const isJs = isInJSFile(node);
                 const isJsImplicitAny = !noImplicitAny && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
-                    const missingAugmentsTag = isJs && node.parent.kind !== SyntaxKind.JSDocAugmentsTag;
+                    const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
                     const diag = minTypeArgumentCount === typeParameters.length
                         ? missingAugmentsTag
                         ? Diagnostics.Expected_0_type_arguments_provide_these_with_an_extends_tag
@@ -8563,6 +8564,10 @@ namespace ts {
 
         function getGlobalPromiseType(reportErrors: boolean) {
             return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalPromiseLikeType(reportErrors: boolean) {
+            return deferredGlobalPromiseLikeType || (deferredGlobalPromiseLikeType = getGlobalType("PromiseLike" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
@@ -9396,12 +9401,24 @@ namespace ts {
             // '{ [P in T]: { [Q in U]: number } }[T][U]' we want to first simplify the inner indexed access type.
             const objectType = getSimplifiedType(type.objectType);
             const indexType = getSimplifiedType(type.indexType);
-            if (objectType.flags & TypeFlags.Union) {
-                return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+            // T[A | B] -> T[A] | T[B]
+            if (indexType.flags & TypeFlags.Union) {
+                return type.simplified = mapType(indexType, t => getSimplifiedType(getIndexedAccessType(objectType, t)));
             }
-            if (objectType.flags & TypeFlags.Intersection) {
-                return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+            // Only do the inner distributions if the index can no longer be instantiated to cause index distribution again
+            if (!(indexType.flags & TypeFlags.Instantiable)) {
+                // (T | U)[K] -> T[K] | U[K]
+                if (objectType.flags & TypeFlags.Union) {
+                    return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+                }
+                // (T & U)[K] -> T[K] & U[K]
+                if (objectType.flags & TypeFlags.Intersection) {
+                    return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+                }
             }
+            // So ultimately:
+            // ((A & B) | C)[K1 | K2] -> ((A & B) | C)[K1] | ((A & B) | C)[K2] -> (A & B)[K1] | C[K1] | (A & B)[K2] | C[K2] -> (A[K1] & B[K1]) | C[K1] | (A[K2] & B[K2]) | C[K2]
+
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
@@ -13466,6 +13483,7 @@ namespace ts {
             let visited: Map<boolean>;
             let contravariant = false;
             let propagationType: Type;
+            let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
@@ -13643,7 +13661,15 @@ namespace ts {
                         // getApparentType can return _any_ type, since an indexed access or conditional may simplify to any other type.
                         // If that occurs and it doesn't simplify to an object or intersection, we'll need to restart `inferFromTypes`
                         // with the simplified source.
-                        if (apparentSource !== source && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                        if (apparentSource !== source && allowComplexConstraintInference && !(apparentSource.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+                            // TODO: The `allowComplexConstraintInference` flag is a hack! This forbids inference from complex constraints within constraints!
+                            // This isn't required algorithmically, but rather is used to lower the memory burden caused by performing inference
+                            // that is _too good_ in projects with complicated constraints (eg, fp-ts). In such cases, if we did not limit ourselves
+                            // here, we might produce more valid inferences for types, causing us to do more checks and perform more instantiations
+                            // (in addition to the extra stack depth here) which, in turn, can push the already close process over its limit.
+                            // TL;DR: If we ever become generally more memory efficienct (or our resource budget ever increases), we should just
+                            // remove this `allowComplexConstraintInference` flag.
+                            allowComplexConstraintInference = false;
                             return inferFromTypes(apparentSource, target);
                         }
                         source = apparentSource;
@@ -16399,9 +16425,22 @@ namespace ts {
                 }
 
                 const contextualReturnType = getContextualReturnType(func);
-                return functionFlags & FunctionFlags.Async
-                    ? contextualReturnType && getAwaitedTypeOfPromise(contextualReturnType) // Async function
-                    : contextualReturnType; // Regular function
+                if (contextualReturnType) {
+                    if (functionFlags & FunctionFlags.Async) { // Async function
+                        const contextualAwaitedType = getAwaitedTypeOfPromise(contextualReturnType);
+                        return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                    }
+                    return contextualReturnType; // Regular function
+                }
+            }
+            return undefined;
+        }
+
+        function getContextualTypeForAwaitOperand(node: AwaitExpression): Type | undefined {
+            const contextualType = getContextualType(node);
+            if (contextualType) {
+                const contextualAwaitedType = getAwaitedType(contextualType);
+                return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
             }
             return undefined;
         }
@@ -16770,7 +16809,9 @@ namespace ts {
                     return getContextualTypeForReturnExpression(node);
                 case SyntaxKind.YieldExpression:
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
-                    case SyntaxKind.CallExpression:
+                case SyntaxKind.AwaitExpression:
+                    return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
+                case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -16816,6 +16857,12 @@ namespace ts {
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement) {
+            if (isJsxOpeningElement(node) && node.parent.contextualType) {
+                // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
+                // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
+                // (as below) instead!
+                return node.parent.contextualType;
+            }
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             }
@@ -18517,7 +18564,10 @@ namespace ts {
                     }
                 }
             }
-            else if (strictNullChecks && prop && prop.valueDeclaration && isPropertyAccessExpression(prop.valueDeclaration) && getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration)) {
+            else if (strictNullChecks && prop && prop.valueDeclaration &&
+                isPropertyAccessExpression(prop.valueDeclaration) &&
+                getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration) &&
+                getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
@@ -20797,6 +20847,18 @@ namespace ts {
                 // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
                 promisedType = getAwaitedType(promisedType) || emptyObjectType;
                 return createTypeReference(globalPromiseType, [promisedType]);
+            }
+
+            return emptyObjectType;
+        }
+
+        function createPromiseLikeType(promisedType: Type): Type {
+            // creates a `PromiseLike<T>` type where `T` is the promisedType argument
+            const globalPromiseLikeType = getGlobalPromiseLikeType(/*reportErrors*/ true);
+            if (globalPromiseLikeType !== emptyGenericType) {
+                // if the promised type is itself a promise, get the underlying type; otherwise, fallback to the promised type
+                promisedType = getAwaitedType(promisedType) || emptyObjectType;
+                return createTypeReference(globalPromiseLikeType, [promisedType]);
             }
 
             return emptyObjectType;
@@ -25321,14 +25383,18 @@ namespace ts {
 
                 if (allowSyncIterables) {
                     if (typeAsIterable.iteratedTypeOfIterable) {
-                        return typeAsIterable.iteratedTypeOfIterable;
+                        return allowAsyncIterables
+                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType(typeAsIterable.iteratedTypeOfIterable)
+                            : typeAsIterable.iteratedTypeOfIterable;
                     }
 
                     // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
                     // `IterableIterator<T>` then just grab its type argument.
                     if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
                         isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                        return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
+                        return allowAsyncIterables
+                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType((<GenericType>type).typeArguments![0])
+                            : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
                     }
                 }
 
@@ -25359,9 +25425,11 @@ namespace ts {
                         : createIterableType(iteratedType), errorNode);
                 }
 
-                return asyncMethodType
-                    ? typeAsIterable.iteratedTypeOfAsyncIterable = iteratedType
-                    : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                if (iteratedType) {
+                    return allowAsyncIterables
+                        ? typeAsIterable.iteratedTypeOfAsyncIterable = asyncMethodType ? iteratedType : getAwaitedType(iteratedType)
+                        : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                }
             }
         }
 
@@ -26237,6 +26305,8 @@ namespace ts {
 
         function isPropertyInitializedInConstructor(propName: Identifier, propType: Type, constructor: ConstructorDeclaration) {
             const reference = createPropertyAccess(createThis(), propName);
+            reference.expression.parent = reference;
+            reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
             const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
             return !(getFalsyFlags(flowType) & TypeFlags.Undefined);

@@ -1409,8 +1409,11 @@ namespace ts {
     /**
      * Tests whether a value is string
      */
-    export function isString(text: any): text is string {
+    export function isString(text: unknown): text is string {
         return typeof text === "string";
+    }
+    export function isNumber(x: unknown): x is number {
+        return typeof x === "number";
     }
 
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
@@ -1534,6 +1537,7 @@ namespace ts {
      * Every function should be assignable to this, but this should not be assignable to every function.
      */
     export type AnyFunction = (...args: never[]) => void;
+    export type AnyConstructor = new (...args: unknown[]) => unknown;
 
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
@@ -2124,5 +2128,9 @@ namespace ts {
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
         }
+    }
+
+    export function fill<T>(length: number, cb: (index: number) => T): T[] {
+        return new Array(length).fill(0).map((_, i) => cb(i));
     }
 }
