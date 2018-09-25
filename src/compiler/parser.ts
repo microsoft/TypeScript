@@ -6308,7 +6308,7 @@ namespace ts {
 
             // Parses out a JSDoc type expression.
             export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
-                const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
+                const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
