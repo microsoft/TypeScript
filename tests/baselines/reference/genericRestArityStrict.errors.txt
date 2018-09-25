@@ -1,7 +1,8 @@
-tests/cases/conformance/types/rest/genericRestArityStrict.ts(7,6): error TS2345: Argument of type '(x: number, y: number) => number' is not assignable to parameter of type '() => void'.
+tests/cases/conformance/types/rest/genericRestArityStrict.ts(7,1): error TS2554: Expected 3 arguments, but got 1.
+tests/cases/conformance/types/rest/genericRestArityStrict.ts(8,1): error TS2554: Expected 3 arguments, but got 8.
 
 
-==== tests/cases/conformance/types/rest/genericRestArityStrict.ts (1 errors) ====
+==== tests/cases/conformance/types/rest/genericRestArityStrict.ts (2 errors) ====
     // Repro from #25559
     
     declare function call<TS extends unknown[]>(
@@ -9,7 +10,10 @@ tests/cases/conformance/types/rest/genericRestArityStrict.ts(7,6): error TS2345:
         ...args: TS): void;
       
     call((x: number, y: number) => x + y);
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, y: number) => number' is not assignable to parameter of type '() => void'.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 3 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/types/rest/genericRestArityStrict.ts:5:5: An argument for 'args' was not provided.
     call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 3 arguments, but got 8.
     
