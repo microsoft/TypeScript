@@ -1007,6 +1007,10 @@
         "category": "Error",
         "code": 1349
     },
+    "Print the final configuration instead of building.": {
+        "category": "Message",
+        "code": 1350
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

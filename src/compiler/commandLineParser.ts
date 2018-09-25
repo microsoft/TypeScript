@@ -164,6 +164,13 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
+        {
+            name: "showConfig",
+            type: "boolean",
+            category: Diagnostics.Command_line_Options,
+            isCommandLineOnly: true,
+            description: Diagnostics.Print_the_final_configuration_instead_of_building
+        },
 
         // Basic
         {
