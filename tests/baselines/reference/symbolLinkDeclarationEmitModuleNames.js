@@ -72,4 +72,4 @@ import { Constructor } from "@loopback/context";
 export declare type ControllerClass = Constructor<any>;
 //// [usage.d.ts]
 import { BindingKey } from '@loopback/context';
-export declare const CONTROLLER_CLASS: BindingKey<import("@loopback/context/src/value-promise").Constructor<any>>;
+export declare const CONTROLLER_CLASS: BindingKey<import("@loopback/context").Constructor<any>>;

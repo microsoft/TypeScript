@@ -1,0 +1,54 @@
+=== tests/cases/compiler/monorepo/pkg1/dist/index.d.ts ===
+export * from './types';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg1/dist/types.d.ts ===
+export declare type A = {
+>A : A
+
+    id: string;
+>id : string
+
+};
+export declare type B = {
+>B : B
+
+    id: number;
+>id : number
+
+};
+export declare type IdType = A | B;
+>IdType : IdType
+
+export declare class MetadataAccessor<T, D extends IdType = IdType> {
+>MetadataAccessor : MetadataAccessor<T, D>
+
+    readonly key: string;
+>key : string
+
+    private constructor();
+    toString(): string;
+>toString : () => string
+
+    static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
+>create : <T, D extends IdType = IdType>(key: string) => MetadataAccessor<T, D>
+>key : string
+}
+=== tests/cases/compiler/monorepo/pkg2/dist/index.d.ts ===
+export * from './types';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg2/dist/types.d.ts ===
+export {MetadataAccessor} from '@raymondfeng/pkg1';
+>MetadataAccessor : typeof import("tests/cases/compiler/monorepo/pkg1/dist/index").MetadataAccessor
+
+=== tests/cases/compiler/monorepo/pkg3/src/index.ts ===
+export * from './keys';
+No type information for this code.=== tests/cases/compiler/monorepo/pkg3/src/keys.ts ===
+import {MetadataAccessor} from "@raymondfeng/pkg2";
+>MetadataAccessor : typeof MetadataAccessor
+
+export const ADMIN = MetadataAccessor.create<boolean>('1');
+>ADMIN : MetadataAccessor<boolean, import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType>
+>MetadataAccessor.create<boolean>('1') : MetadataAccessor<boolean, import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType>
+>MetadataAccessor.create : <T, D extends import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType = import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType>(key: string) => MetadataAccessor<T, D>
+>MetadataAccessor : typeof MetadataAccessor
+>create : <T, D extends import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType = import("tests/cases/compiler/monorepo/pkg1/dist/index").IdType>(key: string) => MetadataAccessor<T, D>
+>'1' : "1"
+

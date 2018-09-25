@@ -2489,6 +2489,10 @@
         "category": "Error",
         "code": 2734
     },
+    "The inferred type of '{0}' requires a reference to a module at '{1}' to name, which would likely break on type redistribution. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2735
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

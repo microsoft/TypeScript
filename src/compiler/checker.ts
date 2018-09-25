@@ -2551,6 +2551,40 @@ namespace ts {
             return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
+        function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] | undefined {
+            const containingFile = getSourceFileOfNode(enclosingDeclaration);
+            if (containingFile && containingFile.imports) {
+                // Try to make an import using an import already in the enclosing file, if possible
+                let results: Symbol[] | undefined;
+                for (const importRef of containingFile.imports) {
+                    if (nodeIsSynthesized(importRef)) continue; // Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
+                    const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef);
+                    if (!resolvedModule) continue;
+                    const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
+                    if (!ref) continue;
+                    results = append(results, resolvedModule);
+                }
+                if (results) {
+                    return results;
+                }
+            }
+            const links = getSymbolLinks(symbol);
+            if (links.extendedContainers) {
+                return links.extendedContainers;
+            }
+            let results: Symbol[] = [];
+            // No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
+            const otherFiles = host.getSourceFiles();
+            for (const file of otherFiles) {
+                if (!isExternalModule(file)) continue;
+                const sym = getSymbolOfNode(file);
+                const ref = getAliasForSymbolInContainer(sym, symbol);
+                if (!ref) continue;
+                results = append(results, sym);
+            }
+            return links.extendedContainers = results;
+        }
+
         /**
          * Attempts to find the symbol corresponding to the container a symbol is in - usually this
          * is just its' `.parent`, but for locals, this value is `undefined`
@@ -2559,10 +2593,12 @@ namespace ts {
             const container = getParentOfSymbol(symbol);
             if (container) {
                 const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
+                const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
                 if (enclosingDeclaration && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
-                    return concatenate([container], additionalContainers); // This order expresses a preference for the real container if it is in scope
+                    return concatenate(concatenate([container], additionalContainers), reexportContainers); // This order expresses a preference for the real container if it is in scope
                 }
-                return append(additionalContainers, container);
+                const res = append(additionalContainers, container);
+                return concatenate(res, reexportContainers);
             }
             const candidates = mapDefined(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
             if (!length(candidates)) {
@@ -3889,6 +3925,7 @@ namespace ts {
                         // Go up and add our parent.
                         const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration);
                         if (length(parents)) {
+                            parents!.sort(sortByBestName);
                             for (const parent of parents!) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
@@ -3913,6 +3950,24 @@ namespace ts {
                         }
                         return [symbol];
                     }
+                }
+
+                function sortByBestName(a: Symbol, b: Symbol) {
+                    if (some(a.declarations, hasNonGlobalAugmentationExternalModuleSymbol) && some(b.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        const specifierA = getSpecifierForModuleSymbol(a, context);
+                        const specifierB = getSpecifierForModuleSymbol(b, context);
+                        if (pathIsRelative(specifierA) === pathIsRelative(specifierB)) {
+                            // Both relative or both non-relative, sort by number of parts
+                            return moduleSpecifiers.countPathComponents(specifierA) - moduleSpecifiers.countPathComponents(specifierB);
+                        }
+                        if (pathIsRelative(specifierB)) {
+                            // A is non-relative, B is relative: prefer A
+                            return -1;
+                        }
+                        // A is relative, B is non-relative: prefer B
+                        return 1;
+                    }
+                    return 0;
                 }
             }
 
@@ -4016,6 +4071,14 @@ namespace ts {
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
                     const specifier = getSpecifierForModuleSymbol(chain[0], context);
+                    if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs && specifier.indexOf("/node_modules/") >= 0) {
+                        // If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
+                        // since declaration files with these kinds of references are liable to fail when published :(
+                        context.encounteredError = true;
+                        if (context.tracker.reportLikelyUnsafeImportRequiredError) {
+                            context.tracker.reportLikelyUnsafeImportRequiredError(specifier);
+                        }
+                    }
                     const lit = createLiteralTypeNode(createLiteral(specifier));
                     if (context.tracker.trackExternalModuleSymbolOfImportTypeNode) context.tracker.trackExternalModuleSymbolOfImportTypeNode(chain[0]);
                     context.approximateLength += specifier.length + 10; // specifier + import("")

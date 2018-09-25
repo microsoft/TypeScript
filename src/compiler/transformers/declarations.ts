@@ -45,6 +45,7 @@ namespace ts {
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
+            reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode
@@ -150,6 +151,14 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     "this"));
+            }
+        }
+
+        function reportLikelyUnsafeImportRequiredError(specifier: string) {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_requires_a_reference_to_a_module_at_1_to_name_which_would_likely_break_on_type_redistribution_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    specifier));
             }
         }
 

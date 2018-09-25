@@ -139,7 +139,7 @@ namespace ts.moduleSpecifiers {
         return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
     }
 
-    function countPathComponents(path: string): number {
+    export function countPathComponents(path: string): number {
         let count = 0;
         for (let i = startsWith(path, "./") ? 2 : 0; i < path.length; i++) {
             if (path.charCodeAt(i) === CharacterCodes.slash) count++;
