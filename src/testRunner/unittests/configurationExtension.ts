@@ -4,6 +4,83 @@ namespace ts {
             cwd,
             files: {
                 [root]: {
+                    "dev/node_modules/config-box/package.json": JSON.stringify({
+                        name: "config-box",
+                        version: "1.0.0",
+                        tsconfig: "./strict.json"
+                    }),
+                    "dev/node_modules/config-box/strict.json": JSON.stringify({
+                        compilerOptions: {
+                            strict: true,
+                        }
+                    }),
+                    "dev/node_modules/config-box/unstrict.json": JSON.stringify({
+                        compilerOptions: {
+                            strict: false,
+                        }
+                    }),
+                    "dev/tsconfig.extendsBox.json": JSON.stringify({
+                        extends: "config-box",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsStrict.json": JSON.stringify({
+                        extends: "config-box/strict",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsUnStrict.json": JSON.stringify({
+                        extends: "config-box/unstrict",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsStrictExtension.json": JSON.stringify({
+                        extends: "config-box/strict.json",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/node_modules/config-box-implied/package.json": JSON.stringify({
+                        name: "config-box-implied",
+                        version: "1.0.0",
+                    }),
+                    "dev/node_modules/config-box-implied/tsconfig.json": JSON.stringify({
+                        compilerOptions: {
+                            strict: true,
+                        }
+                    }),
+                    "dev/node_modules/config-box-implied/unstrict/tsconfig.json": JSON.stringify({
+                        compilerOptions: {
+                            strict: false,
+                        }
+                    }),
+                    "dev/tsconfig.extendsBoxImplied.json": JSON.stringify({
+                        extends: "config-box-implied",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsBoxImpliedUnstrict.json": JSON.stringify({
+                        extends: "config-box-implied/unstrict",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsBoxImpliedUnstrictExtension.json": JSON.stringify({
+                        extends: "config-box-implied/unstrict/tsconfig",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
+                    "dev/tsconfig.extendsBoxImpliedPath.json": JSON.stringify({
+                        extends: "config-box-implied/tsconfig.json",
+                        files: [
+                            "main.ts",
+                        ]
+                    }),
                     "dev/tsconfig.json": JSON.stringify({
                         extends: "./configs/base",
                         files: [
@@ -221,12 +298,6 @@ namespace ts {
                     messageText: `Compiler option 'extends' requires a value of type string.`
                 }]);
 
-                testFailure("can error when 'extends' is neither relative nor rooted.", "extends2.json", [{
-                    code: 18001,
-                    category: DiagnosticCategory.Error,
-                    messageText: `A path in an 'extends' option must be relative or rooted, but 'configs/base' is not.`
-                }]);
-
                 testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {
                     allowJs: true,
                     noImplicitAny: true,
@@ -244,6 +315,17 @@ namespace ts {
                 }, [
                     combinePaths(basePath, "main.ts")
                 ]);
+
+                describe("finding extended configs from node_modules", () => {
+                    testSuccess("can lookup via tsconfig field", "tsconfig.extendsBox.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via package-relative path", "tsconfig.extendsStrict.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via non-redirected-to package-relative path", "tsconfig.extendsUnStrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via package-relative path with extension", "tsconfig.extendsStrictExtension.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via an implicit tsconfig", "tsconfig.extendsBoxImplied.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [combinePaths(basePath, "main.ts")]);
+                    testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [combinePaths(basePath, "main.ts")]);
+                });
 
                 it("adds extendedSourceFiles only once", () => {
                     const sourceFile = readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));

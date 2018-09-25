@@ -2163,20 +2163,24 @@ namespace ts {
         errors: Push<Diagnostic>,
         createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
         extendedConfig = normalizeSlashes(extendedConfig);
-        // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
-        if (!(isRootedDiskPath(extendedConfig) || startsWith(extendedConfig, "./") || startsWith(extendedConfig, "../"))) {
-            errors.push(createDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
-            return undefined;
-        }
-        let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
-        if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
-            extendedConfigPath = `${extendedConfigPath}.json`;
-            if (!host.fileExists(extendedConfigPath)) {
-                errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
-                return undefined;
+        if (isRootedDiskPath(extendedConfig) || startsWith(extendedConfig, "./") || startsWith(extendedConfig, "../")) {
+            let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
+            if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
+                extendedConfigPath = `${extendedConfigPath}.json`;
+                if (!host.fileExists(extendedConfigPath)) {
+                    errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+                    return undefined;
+                }
             }
+            return extendedConfigPath;
         }
-        return extendedConfigPath;
+        // If the path isn't a rooted or relative path, resolve like a module
+        const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.NodeJs }, host, /*cache*/ undefined, /*lookupConfig*/ true);
+        if (resolved.resolvedModule) {
+            return resolved.resolvedModule.resolvedFileName;
+        }
+        errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+        return undefined;
     }
 
     function getExtendedConfig(
