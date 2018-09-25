@@ -619,6 +619,8 @@ namespace ts {
     }
 
     export interface RenameLocation extends DocumentSpan {
+        readonly prefixText: string | undefined;
+        readonly suffixText: string | undefined;
     }
 
     export interface ReferenceEntry extends DocumentSpan {

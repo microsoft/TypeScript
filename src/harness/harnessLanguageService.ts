@@ -459,7 +459,9 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
         }
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
-            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+            const res = unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments)) as ReadonlyArray<ts.RenameLocation>;
+            // JSON serialization removes undefined properties, so add them back if necessary.
+            return res.map((r): ts.RenameLocation => ({ prefixText: undefined, suffixText: undefined, ...r }));
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));

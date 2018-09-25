@@ -391,7 +391,7 @@ namespace ts.server {
             for (const entry of body.locs) {
                 const fileName = entry.file;
                 for (const loc of entry.locs) {
-                    locations.push({ textSpan: this.decodeSpan(loc, fileName), fileName });
+                    locations.push({ textSpan: this.decodeSpan(loc, fileName), fileName, prefixText: loc.prefixText, suffixText: loc.suffixText });
                 }
             }
 

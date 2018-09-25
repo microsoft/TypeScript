@@ -1135,7 +1135,12 @@ namespace ts.server.protocol {
         /** The file to which the spans apply */
         file: string;
         /** The text spans in this group */
-        locs: TextSpan[];
+        locs: RenameTextSpan[];
+    }
+
+    export interface RenameTextSpan extends TextSpan {
+        readonly prefixText: string | undefined;
+        readonly suffixText: string | undefined;
     }
 
     export interface RenameResponseBody {
