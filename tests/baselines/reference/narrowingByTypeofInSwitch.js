@@ -236,6 +236,20 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
     }
 }
 
+function narrowingNarrows(x: {} | undefined) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertFunction(x); return;
+        case 'symbol': assertSymbol(x); return;
+        case 'object': const _: {} = x; return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+        case 'number': assertNever(x); return;
+        default: const _y: {} = x; return;
+    }
+}
+
 
 //// [narrowingByTypeofInSwitch.js]
 function assertNever(x) {
@@ -537,6 +551,37 @@ function keyofNarrowing(k) {
         case 'string':
             assertString(k);
             assertKeyofS(k);
+            return;
+    }
+}
+function narrowingNarrows(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+            return;
+        case 'boolean':
+            assertBoolean(x);
+            return;
+        case 'function':
+            assertFunction(x);
+            return;
+        case 'symbol':
+            assertSymbol(x);
+            return;
+        case 'object':
+            var _ = x;
+            return;
+        case 'string':
+            assertString(x);
+            return;
+        case 'undefined':
+            assertUndefined(x);
+            return;
+        case 'number':
+            assertNever(x);
+            return;
+        default:
+            var _y = x;
             return;
     }
 }

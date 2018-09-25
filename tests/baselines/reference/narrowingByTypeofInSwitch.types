@@ -564,8 +564,8 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'number': return [xy]
 >'number' : "number"
->[xy] : [X | Y]
->xy : X | Y
+>[xy] : [(X & number) | (Y & number)]
+>xy : (X & number) | (Y & number)
     }
 }
 
@@ -805,6 +805,67 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >assertKeyofS(k) : void
 >assertKeyofS : (k1: keyof S) => void
 >k : keyof S & string
+    }
+}
+
+function narrowingNarrows(x: {} | undefined) {
+>narrowingNarrows : (x: {} | undefined) => void
+>x : {} | undefined
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : {} | undefined
+
+        case 'number': assertNumber(x); return;
+>'number' : "number"
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case 'boolean': assertBoolean(x); return;
+>'boolean' : "boolean"
+>assertBoolean(x) : boolean
+>assertBoolean : (x: boolean) => boolean
+>x : boolean
+
+        case 'function': assertFunction(x); return;
+>'function' : "function"
+>assertFunction(x) : Function
+>assertFunction : (x: Function) => Function
+>x : Function
+
+        case 'symbol': assertSymbol(x); return;
+>'symbol' : "symbol"
+>assertSymbol(x) : symbol
+>assertSymbol : (x: symbol) => symbol
+>x : symbol
+
+        case 'object': const _: {} = x; return;
+>'object' : "object"
+>_ : {}
+>x : {}
+
+        case 'string': assertString(x); return;
+>'string' : "string"
+>assertString(x) : string
+>assertString : (x: string) => string
+>x : string
+
+        case 'undefined': assertUndefined(x); return;
+>'undefined' : "undefined"
+>assertUndefined(x) : undefined
+>assertUndefined : (x: undefined) => undefined
+>x : undefined
+
+        case 'number': assertNever(x); return;
+>'number' : "number"
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        default: const _y: {} = x; return;
+>_y : {}
+>x : {}
     }
 }
 

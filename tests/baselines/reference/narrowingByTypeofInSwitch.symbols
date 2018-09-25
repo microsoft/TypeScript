@@ -670,3 +670,48 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
     }
 }
 
+function narrowingNarrows(x: {} | undefined) {
+>narrowingNarrows : Symbol(narrowingNarrows, Decl(narrowingByTypeofInSwitch.ts, 235, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+    switch (typeof x) {
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'number': assertNumber(x); return;
+>assertNumber : Symbol(assertNumber, Decl(narrowingByTypeofInSwitch.ts, 2, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'boolean': assertBoolean(x); return;
+>assertBoolean : Symbol(assertBoolean, Decl(narrowingByTypeofInSwitch.ts, 6, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'function': assertFunction(x); return;
+>assertFunction : Symbol(assertFunction, Decl(narrowingByTypeofInSwitch.ts, 18, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'symbol': assertSymbol(x); return;
+>assertSymbol : Symbol(assertSymbol, Decl(narrowingByTypeofInSwitch.ts, 14, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'object': const _: {} = x; return;
+>_ : Symbol(_, Decl(narrowingByTypeofInSwitch.ts, 243, 28))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'string': assertString(x); return;
+>assertString : Symbol(assertString, Decl(narrowingByTypeofInSwitch.ts, 10, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'undefined': assertUndefined(x); return;
+>assertUndefined : Symbol(assertUndefined, Decl(narrowingByTypeofInSwitch.ts, 30, 1))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        case 'number': assertNever(x); return;
+>assertNever : Symbol(assertNever, Decl(narrowingByTypeofInSwitch.ts, 0, 0))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+
+        default: const _y: {} = x; return;
+>_y : Symbol(_y, Decl(narrowingByTypeofInSwitch.ts, 247, 22))
+>x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 237, 26))
+    }
+}
+
