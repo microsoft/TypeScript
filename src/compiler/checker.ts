@@ -1,6 +1,3 @@
-
-
-
 /* @internal */
 namespace ts {
     const ambientModuleSymbolRegex = /^".+"$/;
@@ -13553,10 +13550,10 @@ namespace ts {
                                 // We make contravariant inferences only if we are in a pure contravariant position,
                                 // i.e. only if we have not descended into a bivariant position.
                                 if (contravariant && !bivariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                    inference.contraCandidates = appendIfUnique(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, candidate);
+                                    inference.candidates = appendIfUnique(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
