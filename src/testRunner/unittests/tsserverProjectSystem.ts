@@ -9581,7 +9581,7 @@ export function Test2() {
     });
 
     describe("tsserverProjectSystem rename", () => {
-        it("works", () => {
+        it("works with fileToRename", () => {
             const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
             const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
 
@@ -9601,6 +9601,35 @@ export function Test2() {
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
                 locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+            });
+        });
+
+        it("works with prefixText and suffixText", () => {
+            const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
+            const session = createSession(createServerHost([aTs]));
+            openFilesForSession([aTs], session);
+
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "x",
+                    fullDisplayName: "x",
+                    kind: ScriptElementKind.constElement,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
+                },
+                locs: [
+                    {
+                        file: aTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(aTs.content, "x"),
+                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
+                        ],
+                    },
+                ],
             });
         });
     });
@@ -10187,36 +10216,6 @@ declare class TestLib {
                 },
             ]);
             verifySingleInferredProject(session);
-        });
-    });
-
-    describe("tsserverProjectSystem rename", () => {
-        it("works", () => {
-            const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
-            const session = createSession(createServerHost([aTs]));
-            openFilesForSession([aTs], session);
-
-            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
-                info: {
-                    canRename: true,
-                    displayName: "x",
-                    fullDisplayName: "x",
-                    kind: ScriptElementKind.constElement,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
-                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
-                },
-                locs: [
-                    {
-                        file: aTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring(aTs.content, "x"),
-                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
-                        ],
-                    },
-                ],
-            });
         });
     });
 
