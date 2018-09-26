@@ -5,7 +5,7 @@
 // @strict: true
 
 // @Filename: /node_modules/foo/bar.json
-////export const x = 0;
+////{ "a": 0 }
 
 // @Filename: /a.ts
 ////import abs = require([|"foo/bar.json"|]);
