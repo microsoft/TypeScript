@@ -453,9 +453,9 @@ namespace ts.projectSystem {
         str: string,
         substring: string,
         options?: SpanFromSubstringOptions,
-        { prefixText, suffixText }: { prefixText?: string, suffixText?: string } = {},
+        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
     ): protocol.RenameTextSpan {
-        return { ...protocolTextSpanFromSubstring(str, substring, options), prefixText, suffixText };
+        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
     }
     function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
         const start = nthIndexOf(str, substring, options ? options.index : 0);
@@ -472,7 +472,7 @@ namespace ts.projectSystem {
         return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
     }
     function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
-        return { ...documentSpanFromSubstring(file, substring, options), prefixText: undefined, suffixText: undefined };
+        return documentSpanFromSubstring(file, substring, options);
     }
     interface SpanFromSubstringOptions {
         readonly index: number;
@@ -9600,7 +9600,7 @@ export function Test2() {
                     localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
-                locs: [{ file: bTs.path, locs: [protocolTextSpanFromSubstring(bTs.content, "./a")] }],
+                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
             });
         });
     });

@@ -1190,11 +1190,11 @@ namespace ts.server {
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
             const map = createMap<protocol.SpanGroup>();
-            for (const { fileName, textSpan, prefixText, suffixText } of locations) {
+            for (const { fileName, textSpan, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
                 const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
-                group.locs.push({ ...this.toLocationTextSpan(textSpan, scriptInfo), prefixText, suffixText });
+                group.locs.push({ ...this.toLocationTextSpan(textSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
         }

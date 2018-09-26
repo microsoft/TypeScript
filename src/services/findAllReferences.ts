@@ -180,29 +180,29 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function getPrefixAndSuffixText(entry: Entry, originalNode: Node): { readonly prefixText: string | undefined, readonly suffixText: string | undefined } {
+    function getPrefixAndSuffixText(entry: Entry, originalNode: Node): { readonly prefixText?: string, readonly suffixText?: string } {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
             const name = originalNode.text;
             const isShorthandAssignment = isShorthandPropertyAssignment(node.parent);
             if (isShorthandAssignment || isObjectBindingElementWithoutPropertyName(node.parent)) {
                 if (kind === EntryKind.SearchedLocalFoundProperty) {
-                    return { prefixText: name + ": ", suffixText: undefined };
+                    return { prefixText: name + ": " };
                 }
                 else if (kind === EntryKind.SearchedPropertyFoundLocal) {
-                    return { prefixText: undefined, suffixText: ": " + name };
+                    return { suffixText: ": " + name };
                 }
                 else {
                     return isShorthandAssignment
                         // In `const o = { x }; o.x`, symbolAtLocation at `x` in `{ x }` is the property symbol.
-                        ? { prefixText: undefined, suffixText: ": " + name }
+                        ? { suffixText: ": " + name }
                         // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
-                        : { prefixText: name + ": ", suffixText: undefined };
+                        : { prefixText: name + ": " };
                 }
             }
         }
 
-        return { prefixText: undefined, suffixText: undefined };
+        return emptyOptions;
     }
 
     function toImplementationLocation(entry: Entry, checker: TypeChecker): ImplementationLocation {

@@ -4960,8 +4960,8 @@ declare namespace ts {
         originalFileName?: string;
     }
     interface RenameLocation extends DocumentSpan {
-        readonly prefixText: string | undefined;
-        readonly suffixText: string | undefined;
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;

@@ -1413,8 +1413,8 @@ Actual: ${stringify(fullActual)}`);
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                    const { range, prefixText, suffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions, prefixText: undefined, suffixText: undefined };
-                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), prefixText, suffixText };
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
+                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
                 })));
             }
         }

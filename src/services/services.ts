@@ -1545,7 +1545,7 @@ namespace ts {
             if (isIdentifier(node) && isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation =>
-                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile), prefixText: undefined, suffixText: undefined }));
+                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
                 return getReferencesWorker(node, position, { findInStrings, findInComments, isForRename: true }, FindAllReferences.toRenameLocation);

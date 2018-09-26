@@ -1139,8 +1139,8 @@ namespace ts.server.protocol {
     }
 
     export interface RenameTextSpan extends TextSpan {
-        readonly prefixText: string | undefined;
-        readonly suffixText: string | undefined;
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
 
     export interface RenameResponseBody {
