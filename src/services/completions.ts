@@ -1397,7 +1397,7 @@ namespace ts.Completions {
                 if (resolvedModuleSymbol !== moduleSymbol &&
                     // Don't add another completion for `export =` of a symbol that's already global.
                     // So in `declare namespace foo {} declare module "foo" { export = foo; }`, there will just be the global completion for `foo`.
-                    resolvedModuleSymbol.declarations.some(d => !!d.getSourceFile().externalModuleIndicator)) {
+                    some(resolvedModuleSymbol.declarations, d => !!d.getSourceFile().externalModuleIndicator)) {
                     symbols.push(resolvedModuleSymbol);
                     symbolToOriginInfoMap[getSymbolId(resolvedModuleSymbol)] = { kind: SymbolOriginInfoKind.Export, moduleSymbol, isDefaultExport: false };
                 }
