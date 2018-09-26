@@ -8,4 +8,5 @@ tests/cases/compiler/functionCall18.ts(4,1): error TS2554: Expected 2 arguments,
     foo<string>("hello");
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 tests/cases/compiler/functionCall18.ts:2:31: An argument for 'b' was not provided.
     

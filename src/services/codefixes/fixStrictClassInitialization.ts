@@ -110,7 +110,7 @@ namespace ts.codefix {
 
     function getDefaultValueFromType (checker: TypeChecker, type: Type): Expression | undefined {
         if (type.flags & TypeFlags.BooleanLiteral) {
-            return type === checker.getFalseType() ? createFalse() : createTrue();
+            return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? createFalse() : createTrue();
         }
         else if (type.isLiteral()) {
             return createLiteral(type.value);

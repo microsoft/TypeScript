@@ -538,6 +538,7 @@ namespace ts {
         public fileName: string;
         public path: Path;
         public resolvedPath: Path;
+        public originalFileName: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;
@@ -757,7 +758,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.BinaryExpression:
-                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                        if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
                             addDeclaration(node as BinaryExpression);
                         }
                     // falls through
@@ -1172,9 +1173,10 @@ namespace ts {
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -1214,6 +1216,10 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
+                readDirectory(path, extensions, exclude, include, depth) {
+                    Debug.assertDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                    return host.readDirectory!(path, extensions, exclude, include, depth);
+                },
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames: host.hasChangedAutomaticTypeDirectiveNames
@@ -1237,7 +1243,7 @@ namespace ts {
                 options: newSettings,
                 host: compilerHost,
                 oldProgram: program,
-                projectReferences: hostCache.getProjectReferences()
+                projectReferences
             };
             program = createProgram(options);
 
@@ -1374,7 +1380,7 @@ namespace ts {
             // Therefore only get diagnostics for given file.
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
-            if (!program.getCompilerOptions().declaration) {
+            if (!getEmitDeclarations(program.getCompilerOptions())) {
                 return semanticDiagnostics.slice();
             }
 
@@ -1800,25 +1806,36 @@ namespace ts {
             return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences, sourceMapper);
         }
 
-        function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrUndefined?: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-            const action = typeof fileName === "string" ? actionOrUndefined! : fileName as CodeActionCommand[];
-            return isArray(action) ? Promise.all(action.map(applySingleCodeActionCommand)) : applySingleCodeActionCommand(action);
+        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
+            const formatSettings = typeof fileName !== "string" ? actionOrFormatSettingsOrUndefined as FormatCodeSettings : undefined;
+            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a, formatSettings))) : applySingleCodeActionCommand(action, formatSettings);
         }
 
-        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand, formatSettings: FormatCodeSettings | undefined): Promise<ApplyCodeActionCommandResult> {
+            const getPath = (path: string): Path => toPath(path, currentDirectory, getCanonicalFileName);
             switch (action.type) {
                 case "install package":
                     return host.installPackage
-                        ? host.installPackage({ fileName: toPath(action.file, currentDirectory, getCanonicalFileName), packageName: action.packageName })
+                        ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
                         : Promise.reject("Host does not implement `installPackage`");
+                case "generate types": {
+                    const { fileToGenerateTypesFor, outputFileName } = action;
+                    if (!host.inspectValue) return Promise.reject("Host does not implement `installPackage`");
+                    const valueInfoPromise = host.inspectValue({ fileNameToRequire: fileToGenerateTypesFor });
+                    return valueInfoPromise.then(valueInfo => {
+                        const fullOut = getPath(outputFileName);
+                        host.writeFile!(fullOut, valueInfoToDeclarationFileText(valueInfo, formatSettings || testFormatSettings)); // TODO: GH#18217
+                        return { successMessage: `Wrote types to '${fullOut}'` };
+                    });
+                }
                 default:
-                    return Debug.fail();
-                    // TODO: Debug.assertNever(action); will only work if there is more than one type.
+                    return Debug.assertNever(action);
             }
         }
 

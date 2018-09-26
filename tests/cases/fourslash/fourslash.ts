@@ -284,7 +284,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: string, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -299,7 +299,7 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]): void;
+        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -331,7 +331,7 @@ declare namespace FourSlashInterface {
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
-        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[]): void;
+        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -348,6 +348,8 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
+
+        generateTypes(...options: GenerateTypesOptions[]): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -550,6 +552,7 @@ declare namespace FourSlashInterface {
         // details
         readonly text?: string,
         readonly documentation?: string,
+        readonly tags?: ReadonlyArray<JSDocTagInfo>;
         readonly sourceDisplay?: string,
     };
 
@@ -632,8 +635,15 @@ declare namespace FourSlashInterface {
     }
 
     interface JSDocTagInfo {
-        name: string;
-        text: string | undefined;
+        readonly name: string;
+        readonly text: string | undefined;
+    }
+
+    interface GenerateTypesOptions {
+        readonly name?: string;
+        readonly value: unknown;
+        readonly output?: string | undefined;
+        readonly outputBaseline?: string;
     }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;

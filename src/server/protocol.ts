@@ -1123,6 +1123,9 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers: string;
+
+        /** Span of text to rename. */
+        triggerSpan: TextSpan;
     }
 
     /**
@@ -2734,6 +2737,14 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
+/* __GDPR__
+   "typingsinstalled" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
+        "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+        "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+   }
+ */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages

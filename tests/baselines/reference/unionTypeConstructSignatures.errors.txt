@@ -55,6 +55,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     new unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:12:41: An argument for 'a' was not provided.
     
     var unionOfDifferentParameterTypes: { new (a: number): number; } | { new (a: string): Date; };
     new unionOfDifferentParameterTypes(10);// error - no call signatures
@@ -71,6 +72,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     new unionOfDifferentNumberOfSignatures(); // error - no call signatures
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:23:48: An argument for 'a' was not provided.
     new unionOfDifferentNumberOfSignatures(10); // error - no call signatures
     new unionOfDifferentNumberOfSignatures("hello"); // error - no call signatures
                                            ~~~~~~~
@@ -96,11 +98,13 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithOptionalParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:33:41: An argument for 'a' was not provided.
     
     var unionWithOptionalParameter2: { new (a: string, b?: number): string; } | { new (a: string, b: number): number };
     strOrNum = new unionWithOptionalParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:39:95: An argument for 'b' was not provided.
     strOrNum = new unionWithOptionalParameter2('hello', 10); // error no call signature
     strOrNum = new unionWithOptionalParameter2('hello', "hello"); // error no call signature
                                                         ~~~~~~~
@@ -108,6 +112,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithOptionalParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:39:84: An argument for 'a' was not provided.
     
     var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
     strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
@@ -120,6 +125,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithOptionalParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:45:84: An argument for 'a' was not provided.
     
     var unionWithRestParameter1: { new (a: string, ...b: number[]): string; } | { new (a: string, ...b: number[]): number };
     strOrNum = new unionWithRestParameter1('hello');
@@ -131,11 +137,13 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithRestParameter1(); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:51:37: An argument for 'a' was not provided.
     
     var unionWithRestParameter2: { new (a: string, ...b: number[]): string; } | { new (a: string, b: number): number };
     strOrNum = new unionWithRestParameter2('hello'); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:58:95: An argument for 'b' was not provided.
     strOrNum = new unionWithRestParameter2('hello', 10); // error no call signature
     strOrNum = new unionWithRestParameter2('hello', 10, 11); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,6 +154,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithRestParameter2(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:58:84: An argument for 'a' was not provided.
     
     var unionWithRestParameter3: { new (a: string, ...b: number[]): string; } | { new (a: string): number };
     strOrNum = new unionWithRestParameter3('hello'); // error no call signature
@@ -161,3 +170,4 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     strOrNum = new unionWithRestParameter3(); // error no call signature
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:65:84: An argument for 'a' was not provided.

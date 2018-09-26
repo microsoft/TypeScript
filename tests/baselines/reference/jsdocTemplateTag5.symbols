@@ -29,7 +29,8 @@ Multimap.prototype = {
 >key : Symbol(key, Decl(a.js, 16, 8))
 
         return this._map[key + ''];
->this : Symbol(__object, Decl(a.js, 11, 20))
+>this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
+>_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
 >key : Symbol(key, Decl(a.js, 16, 8))
     }
 }
@@ -64,7 +65,8 @@ Multimap2.prototype = {
 >key : Symbol(key, Decl(a.js, 37, 18))
 
         return this._map[key + ''];
->this : Symbol(__object, Decl(a.js, 32, 21))
+>this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
+>_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
 >key : Symbol(key, Decl(a.js, 37, 18))
     }
 }
@@ -106,7 +108,8 @@ Ns.Multimap3.prototype = {
 >key : Symbol(key, Decl(a.js, 59, 8))
 
         return this._map[key + ''];
->this : Symbol(__object, Decl(a.js, 54, 24))
+>this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
+>_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
 >key : Symbol(key, Decl(a.js, 59, 8))
     }
 }

@@ -270,17 +270,17 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.BinaryExpression: {
-                const special = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const special = getAssignmentDeclarationKind(node as BinaryExpression);
                 switch (special) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    case SpecialPropertyAssignmentKind.Prototype:
+                    case AssignmentDeclarationKind.ExportsProperty:
+                    case AssignmentDeclarationKind.ModuleExports:
+                    case AssignmentDeclarationKind.PrototypeProperty:
+                    case AssignmentDeclarationKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         return;
-                    case SpecialPropertyAssignmentKind.ThisProperty:
-                    case SpecialPropertyAssignmentKind.Property:
-                    case SpecialPropertyAssignmentKind.None:
+                    case AssignmentDeclarationKind.ThisProperty:
+                    case AssignmentDeclarationKind.Property:
+                    case AssignmentDeclarationKind.None:
                         break;
                     default:
                         Debug.assertNever(special);

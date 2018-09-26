@@ -1,0 +1,27 @@
+=== tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts ===
+type Errors<T> = { [P in keyof T]: string | undefined } & {all: string | undefined};
+>Errors : Symbol(Errors, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 0))
+>T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 12))
+>P : Symbol(P, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 20))
+>T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 12))
+>all : Symbol(all, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 59))
+
+function foo<T>() {
+>foo : Symbol(foo, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 84))
+>T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 1, 13))
+
+    let obj!: Errors<T>
+>obj : Symbol(obj, Decl(undefinedAssignableToGenericMappedIntersection.ts, 2, 7))
+>Errors : Symbol(Errors, Decl(undefinedAssignableToGenericMappedIntersection.ts, 0, 0))
+>T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 1, 13))
+
+    let x!: keyof T;
+>x : Symbol(x, Decl(undefinedAssignableToGenericMappedIntersection.ts, 3, 7))
+>T : Symbol(T, Decl(undefinedAssignableToGenericMappedIntersection.ts, 1, 13))
+
+    obj[x] = undefined;
+>obj : Symbol(obj, Decl(undefinedAssignableToGenericMappedIntersection.ts, 2, 7))
+>x : Symbol(x, Decl(undefinedAssignableToGenericMappedIntersection.ts, 3, 7))
+>undefined : Symbol(undefined)
+}
+

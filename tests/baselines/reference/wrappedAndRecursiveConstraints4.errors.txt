@@ -19,4 +19,3 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursi
                             ~~~~~~
 !!! error TS2322: Type '(x: number) => void' is not assignable to type '(pos: number) => string'.
 !!! error TS2322:   Type 'void' is not assignable to type 'string'.
-!!! related TS6500 /.ts/lib.es5.d.ts:332:5: The expected type comes from property 'charAt' which is declared here on type 'string'

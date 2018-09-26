@@ -164,6 +164,11 @@ namespace ts.server.typingsInstaller {
                         }
                         break;
                     }
+                    case "inspectValue": {
+                        const response: InspectValueResponse = { kind: ActionValueInspected, result: inspectModule(req.options.fileNameToRequire) };
+                        this.sendResponse(response);
+                        break;
+                    }
                     default:
                         Debug.assertNever(req);
                 }
