@@ -1713,6 +1713,9 @@ namespace ts.Completions {
                         break;
                     case SyntaxKind.AsteriskToken:
                         return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+                    case SyntaxKind.Identifier:
+                        return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
+                            ? contextToken.parent.parent : undefined;
                 }
             }
 
@@ -1928,7 +1931,6 @@ namespace ts.Completions {
             // Previous token may have been a keyword that was converted to an identifier.
             switch (keywordForNode(contextToken)) {
                 case SyntaxKind.AbstractKeyword:
-                case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
@@ -1943,6 +1945,8 @@ namespace ts.Completions {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.YieldKeyword:
                     return true;
+                case SyntaxKind.AsyncKeyword:
+                    return isPropertyDeclaration(contextToken.parent);
             }
 
             return isDeclarationName(contextToken)
