@@ -951,15 +951,19 @@ namespace ts.projectSystem {
                 import * as fs from "fs";
                 import * as commander from "commander";`
             };
+            const cachePath = "/a/cache";
+            const node = {
+                path: cachePath + "/node_modules/@types/node/index.d.ts",
+                content: "export let x: number",
+            };
             const commanderJS: TestFSWithWatch.File = {
                 path: "/node_modules/commander/index.js",
                 content: "module.exports = 0",
             };
 
-            const cachePath = "/a/cache";
             const typeNames: ReadonlyArray<string> = ["node", "commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
-            const host = createServerHost([file, commanderJS]);
+            const host = createServerHost([file, node, commanderJS]);
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) });
@@ -973,6 +977,10 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
+            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/cache/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+
             service.checkNumberOfProjects({ inferredProjects: 1 });
             checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
 
@@ -981,9 +989,7 @@ namespace ts.projectSystem {
                 assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
             }
             host.checkTimeoutQueueLengthAndRun(2);
-
-            // TODO: GH#27302 Should update the project to not include commanderJS.path when @types/commander is installed. Currently it sticks with the JS file.
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path, ...typeNames.map(typePath)]);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, ...typeNames.map(typePath)]);
         });
 
         it("should pick typing names from non-relative unresolved imports", () => {

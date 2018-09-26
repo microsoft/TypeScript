@@ -217,26 +217,29 @@ namespace ts {
             });
         }
 
+<<<<<<< HEAD
         function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): CachedResolvedModuleWithFailedLookupLocations {
             const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache);
             // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
             if (!resolutionHost.getGlobalCache) {
                 return primaryResult;
             }
+=======
+        function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference): CachedResolvedModuleWithFailedLookupLocations {
+            const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference);
+>>>>>>> 9db864e... Fix bugs relating to watching the cache
 
-            // otherwise try to load typings from @types
-            const globalCache = resolutionHost.getGlobalCache();
+            const globalCache = resolutionHost.getGlobalCache ? resolutionHost.getGlobalCache() : undefined;
             if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, resolutionHost.projectName, compilerOptions, host, globalCache);
-                if (resolvedModule) {
-                    return { resolvedModule, failedLookupLocations: addRange(primaryResult.failedLookupLocations as string[], failedLookupLocations) };
-                }
+                return { resolvedModule: resolvedModule || primaryResult.resolvedModule, failedLookupLocations: [...primaryResult.failedLookupLocations, ...failedLookupLocations] };
             }
-
-            // Default return the result from the first pass
-            return primaryResult;
+            else {
+                // Default return the result from the first pass
+                return primaryResult;
+            }
         }
 
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
@@ -379,10 +382,17 @@ namespace ts {
                 return true;
             }
 
+            const globalCache = resolutionHost.getGlobalCache ? resolutionHost.getGlobalCache() : undefined;
+            // Using identity for getCanonicalFileName because assuming that if a path came from globalCache its case hasn't been changed.
+            if (globalCache !== undefined && startsWithDirectory(dirPath, globalCache, identity)) {
+                return true;
+            }
+
+            // Path must have at least 3 components
             for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
                 searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
                 if (searchIndex === 0) {
-                    // Folder isnt at expected minimun levels
+                    // Folder isnt at expected minimum levels
                     return false;
                 }
             }
