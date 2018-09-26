@@ -8309,7 +8309,6 @@ namespace ts.projectSystem {
                     fullDisplayName: '"/users/username/projects/a/c/fc".C',
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(cFile.content, "C"),
                 },
                 locs: [
@@ -9597,7 +9596,6 @@ export function Test2() {
                     fullDisplayName: aTs.path,
                     kind: ScriptElementKind.moduleElement,
                     kindModifiers: "",
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
                 locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
@@ -9618,7 +9616,6 @@ export function Test2() {
                     fullDisplayName: "x",
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
                 },
                 locs: [
@@ -10131,7 +10128,6 @@ declare class TestLib {
                     fullDisplayName: "fnA",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
@@ -10151,7 +10147,6 @@ declare class TestLib {
                     fullDisplayName: '"/a/a".fnA',
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(aTs.content, "fnA"),
                 },
                 locs: [renameATs(aTs), renameUserTs(userTs)],
@@ -10181,7 +10176,6 @@ declare class TestLib {
                     fullDisplayName: "fnB",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                 },
                 locs: [

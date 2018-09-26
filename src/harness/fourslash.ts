@@ -1537,7 +1537,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined): void {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (!renameInfo.canRename) {
-                this.raiseError("Rename did not succeed");
+                throw this.raiseError("Rename did not succeed");
             }
 
             this.validate("displayName", displayName, renameInfo.displayName);
@@ -1563,9 +1563,8 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameInfoFailed(message?: string) {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (renameInfo.canRename) {
-                this.raiseError("Rename was expected to fail");
+                throw this.raiseError("Rename was expected to fail");
             }
-
             this.validate("error", message, renameInfo.localizedErrorMessage);
         }
 
