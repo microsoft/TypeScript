@@ -77,6 +77,7 @@ namespace ts {
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
+        const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
@@ -476,6 +477,8 @@ namespace ts {
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
+        let globalCallableFunctionType: ObjectType;
+        let globalNewableFunctionType: ObjectType;
         let globalArrayType: GenericType;
         let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
@@ -1708,7 +1711,9 @@ namespace ts {
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             // Block-scoped variables cannot be used before their definition
-            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined);
+            const declaration = find(
+                result.declarations,
+                d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) || isInJSFile(d) && !!getJSDocEnumTag(d));
 
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
@@ -7391,8 +7396,12 @@ namespace ts {
                 if (symbol && symbolIsValue(symbol)) {
                     return symbol;
                 }
-                if (resolved === anyFunctionType || resolved.callSignatures.length || resolved.constructSignatures.length) {
-                    const symbol = getPropertyOfObjectType(globalFunctionType, name);
+                const functionType = resolved === anyFunctionType ? globalFunctionType :
+                    resolved.callSignatures.length ? globalCallableFunctionType :
+                    resolved.constructSignatures.length ? globalNewableFunctionType :
+                    undefined;
+                if (functionType) {
+                    const symbol = getPropertyOfObjectType(functionType, name);
                     if (symbol) {
                         return symbol;
                     }
@@ -13250,10 +13259,8 @@ namespace ts {
             const targetCount = getParameterCount(target);
             const sourceRestType = getEffectiveRestType(source);
             const targetRestType = getEffectiveRestType(target);
-            const paramCount = targetRestType ? Math.min(targetCount - 1, sourceCount) :
-                sourceRestType ? targetCount :
-                Math.min(sourceCount, targetCount);
-
+            const targetNonRestCount = targetRestType ? targetCount - 1 : targetCount;
+            const paramCount = sourceRestType ? targetNonRestCount : Math.min(sourceCount, targetNonRestCount);
             const sourceThisType = getThisTypeOfSignature(source);
             if (sourceThisType) {
                 const targetThisType = getThisTypeOfSignature(target);
@@ -13900,15 +13907,17 @@ namespace ts {
             if (!inferredType) {
                 const signature = context.signature;
                 if (signature) {
-                    if (inference.contraCandidates && (!inference.candidates || inference.candidates.length === 1 && inference.candidates[0].flags & TypeFlags.Never)) {
-                        // If we have contravariant inferences, but no covariant inferences or a single
-                        // covariant inference of 'never', we find the best common subtype and treat that
-                        // as a single covariant candidate.
-                        inference.candidates = [getContravariantInference(inference)];
-                        inference.contraCandidates = undefined;
+                    const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
+                    if (inference.contraCandidates) {
+                        const inferredContravariantType = getContravariantInference(inference);
+                        // If we have both co- and contra-variant inferences, we prefer the contra-variant inference
+                        // unless the co-variant inference is a subtype and not 'never'.
+                        inferredType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
+                            isTypeSubtypeOf(inferredCovariantType, inferredContravariantType) ?
+                            inferredCovariantType : inferredContravariantType;
                     }
-                    if (inference.candidates) {
-                        inferredType = getCovariantInference(inference, signature);
+                    else if (inferredCovariantType) {
+                        inferredType = inferredCovariantType;
                     }
                     else if (context.flags & InferenceFlags.NoDefault) {
                         // We use silentNeverType as the wildcard that signals no inferences.
@@ -19684,7 +19693,10 @@ namespace ts {
                         checkCandidate = candidate;
                     }
                     if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                        candidateForArgumentError = checkCandidate;
+                        // Give preference to error candidates that have no rest parameters (as they are more specific)
+                        if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
+                            candidateForArgumentError = checkCandidate;
+                        }
                         continue;
                     }
                     if (excludeArgument) {
@@ -19697,7 +19709,10 @@ namespace ts {
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration));
                         }
                         if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
-                            candidateForArgumentError = checkCandidate;
+                            // Give preference to error candidates that have no rest parameters (as they are more specific)
+                            if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
+                                candidateForArgumentError = checkCandidate;
+                            }
                             continue;
                         }
                     }
@@ -28029,8 +28044,11 @@ namespace ts {
         function getAugmentedPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
             const propsByName = createSymbolTable(getPropertiesOfType(type));
-            if (typeHasCallOrConstructSignatures(type)) {
-                forEach(getPropertiesOfType(globalFunctionType), p => {
+            const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType :
+                getSignaturesOfType(type, SignatureKind.Construct).length ? globalNewableFunctionType :
+                undefined;
+            if (functionType) {
+                forEach(getPropertiesOfType(functionType), p => {
                     if (!propsByName.has(p.escapedName)) {
                         propsByName.set(p.escapedName, p);
                     }
@@ -28810,6 +28828,8 @@ namespace ts {
             globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
             globalObjectType = getGlobalType("Object" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalFunctionType = getGlobalType("Function" as __String, /*arity*/ 0, /*reportErrors*/ true);
+            globalCallableFunctionType = strictBindCallApply && getGlobalType("CallableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
+            globalNewableFunctionType = strictBindCallApply && getGlobalType("NewableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
             globalStringType = getGlobalType("String" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);

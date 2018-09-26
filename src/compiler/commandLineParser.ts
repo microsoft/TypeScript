@@ -374,6 +374,14 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_function_types
         },
         {
+            name: "strictBindCallApply",
+            type: "boolean",
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_bind_call_and_apply_methods_on_functions
+        },
+        {
             name: "strictPropertyInitialization",
             type: "boolean",
             affectsSemanticDiagnostics: true,
