@@ -13462,6 +13462,7 @@ namespace ts {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             let contravariant = false;
+            let bivariant = false;
             let propagationType: Type;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
@@ -13548,11 +13549,13 @@ namespace ts {
                             }
                             if (priority === inference.priority) {
                                 const candidate = propagationType || source;
-                                if (contravariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                // We make contravariant inferences only if we are in a pure contravariant position,
+                                // i.e. only if we have not descended into a bivariant position.
+                                if (contravariant && !bivariant) {
+                                    inference.contraCandidates = appendIfUnique(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, candidate);
+                                    inference.candidates = appendIfUnique(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
@@ -13800,7 +13803,12 @@ namespace ts {
 
             function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
                 if (!skipParameters) {
+                    const saveBivariant = bivariant;
+                    const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+                    // Once we descend into a bivariant signature we remain bivariant for all nested inferences
+                    bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
                     forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                    bivariant = saveBivariant;
                 }
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
