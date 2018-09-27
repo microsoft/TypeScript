@@ -1087,22 +1087,17 @@ namespace ts.server.protocol {
     /**
      * Information about the item to be renamed.
      */
-    export interface RenameInfo {
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
         /**
          * True if item can be renamed.
          */
-        canRename: boolean;
-
+        canRename: true;
         /**
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
-
-        /**
-         * Error message if item can not be renamed.
-         */
-        localizedErrorMessage?: string;
 
         /**
          * Display name of the item to be renamed.
@@ -1126,6 +1121,13 @@ namespace ts.server.protocol {
 
         /** Span of text to rename. */
         triggerSpan: TextSpan;
+    }
+    export interface RenameInfoFailure {
+        canRename: false;
+        /**
+         * Error message if item can not be renamed.
+         */
+        localizedErrorMessage: string;
     }
 
     /**
