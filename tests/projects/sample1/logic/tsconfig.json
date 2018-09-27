@@ -3,7 +3,8 @@
         "composite": true,
         "declaration": true,
         "sourceMap": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
     },
     "references": [
         { "path": "../core" }

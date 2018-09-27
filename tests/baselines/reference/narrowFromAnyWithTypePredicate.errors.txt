@@ -39,7 +39,7 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
         x.mesage;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:904:5: 'message' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:964:5: 'message' is declared here.
     }
     
     if (isDate(x)) {
@@ -47,6 +47,6 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
         x.getHuors();
           ~~~~~~~~
 !!! error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
-!!! related TS2728 /.ts/lib.es5.d.ts:693:5: 'getHours' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:753:5: 'getHours' is declared here.
     }
     
