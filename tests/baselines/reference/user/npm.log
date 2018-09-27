@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/npm/bin/npm-cli.js(6,13): error TS2551: Property 'echo' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Echo'?
 node_modules/npm/bin/npm-cli.js(13,13): error TS2551: Property 'quit' does not exist on type '{ Echo(s: any): void; StdErr: TextStreamWriter; StdOut: TextStreamWriter; Arguments: { length: number; Item(n: number): string; }; ScriptFullName: string; Quit(exitCode?: number | undefined): number; ... 12 more ...; Sleep(intTime: number): void; }'. Did you mean 'Quit'?
 node_modules/npm/bin/npm-cli.js(47,7): error TS2339: Property 'argv' does not exist on type 'typeof EventEmitter'.

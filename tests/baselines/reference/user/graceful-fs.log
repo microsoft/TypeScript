@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/graceful-fs/fs.js(14,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'copy' must be of type '{ __proto__: any; }', but here has type 'any'.
 node_modules/graceful-fs/fs.js(17,38): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.

@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/bcryptjs/scripts/build.js(1,26): error TS2307: Cannot find module 'metascript'.
 node_modules/bcryptjs/scripts/build.js(32,1): error TS2322: Type '{ VERSION: any; }' is not assignable to type '{ VERSION: any; ISAAC: boolean; }'.
   Property 'ISAAC' is missing in type '{ VERSION: any; }'.

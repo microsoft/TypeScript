@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/bluebird/js/release/assert.js(11,30): error TS2339: Property 'constructor$' does not exist on type 'Error'.
 node_modules/bluebird/js/release/async.js(92,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/release/async.js(93,21): error TS2300: Duplicate identifier 'invoke'.

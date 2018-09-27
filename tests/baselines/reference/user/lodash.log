@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/lodash/_Hash.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_ListCache.js(20,17): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_MapCache.js(20,17): error TS2532: Object is possibly 'undefined'.
