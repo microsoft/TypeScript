@@ -56,6 +56,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "constDeclarations_access_1"], function (require, exports, m) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    ///<reference path='constDeclarations_access_1.ts'/>
     // Errors
     m.x = 1;
     m.x += 2;

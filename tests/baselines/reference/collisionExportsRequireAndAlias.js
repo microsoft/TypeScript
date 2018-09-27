@@ -37,6 +37,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "collisionExportsRequireAndAlias_file1", "collisionExportsRequireAndAlias_file3333"], function (require, exports, require, exports) {
     "use strict";
     exports.__esModule = true;
+    // Error
     function foo() {
         require.bar();
     }

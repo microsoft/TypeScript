@@ -31,5 +31,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "exportEqualErrorType_0"], function (require, exports, connect) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='exportEqualErrorType_0.ts'/>
     connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 });

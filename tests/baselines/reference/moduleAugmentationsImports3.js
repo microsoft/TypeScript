@@ -69,6 +69,7 @@ define("b", ["require", "exports"], function (require, exports) {
 define("e", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
+    /// <reference path="c.d.ts"/>
     a_1.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "D", "e"], function (require, exports) {

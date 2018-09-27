@@ -37,6 +37,8 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='requireEmitSemicolon_0.ts'/>
+    // bug was we were not emitting a ; here and causing runtime failures in node
     var Database;
     (function (Database) {
         var DB = /** @class */ (function () {

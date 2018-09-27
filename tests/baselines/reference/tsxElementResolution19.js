@@ -34,5 +34,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "react", "./file1"], function (require, exports, React, file1_1) {
     "use strict";
     exports.__esModule = true;
+    // Should not elide React import
     React.createElement(file1_1.MyClass, null);
 });

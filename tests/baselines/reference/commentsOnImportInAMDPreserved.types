@@ -1,0 +1,4 @@
+=== tests/cases/compiler/commentsOnImportInAMDPreserved.ts ===
+// foo
+No type information for this code.import 'foo';
+No type information for this code.

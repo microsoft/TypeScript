@@ -129,6 +129,8 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "commentsExternalModules2_0"], function (require, exports, extMod) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**This is on import declaration*/
+    // trailing comment 1
     extMod.m1.fooExport();
     exports.newVar = new extMod.m1.m2.c();
     extMod.m4.fooExport();

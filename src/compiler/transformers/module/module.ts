@@ -850,6 +850,9 @@ namespace ts {
                     )
                 );
             }
+            else if (hasLeadingOrTrailingComments(node, currentSourceFile)) {
+                statements = append(statements, createCommentPreservationStatement(node));
+            }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
@@ -938,6 +941,9 @@ namespace ts {
                             node
                         )
                     );
+                }
+                else if (hasLeadingOrTrailingComments(node, currentSourceFile)) {
+                    statements = append(statements, createCommentPreservationStatement(node));
                 }
             }
 

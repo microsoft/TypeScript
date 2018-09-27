@@ -31,6 +31,7 @@ let b = x.b;
 define(["require", "exports", "file1"], function (require, exports, x) {
     "use strict";
     exports.__esModule = true;
+    /// <reference path="file1.d.ts"/>
     x.b = 1;
 });
 //// [file3.js]

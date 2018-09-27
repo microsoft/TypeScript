@@ -34,6 +34,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./file3", "file4"], function (require, exports, file3_1, file4_1) {
     "use strict";
     exports.__esModule = true;
+    // found with fallback
     exports.x = file3_1.x + file4_1.y;
 });
 //// [file1.js]

@@ -18,6 +18,7 @@ define(["require", "exports", "ext"], function (require, exports, ext) {
         }
         return D;
     }());
+    // Cannot resolve this ext module reference
     var x = ext;
     return D;
 });

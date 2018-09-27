@@ -3355,6 +3355,11 @@ namespace ts {
 
     // Utilities
 
+    /** @internal */
+    export function createCommentPreservationStatement(node: Statement): Statement {
+        return addEmitFlags(setCommentRange(setOriginalNode(createEmptyStatement(), node), node), EmitFlags.CommentsOnly);
+    }
+
     export function createForOfBindingStatement(node: ForInitializer, boundValue: Expression): Statement {
         if (isVariableDeclarationList(node)) {
             const firstDeclaration = first(node.declarations);

@@ -32,5 +32,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "memberAccessMustUseModuleInstances_0"], function (require, exports, WinJS) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='memberAccessMustUseModuleInstances_0.ts'/>
     WinJS.Promise.timeout(10);
 });

@@ -255,4 +255,8 @@ namespace ts {
             return result;
         };
     }
+
+    export function hasLeadingOrTrailingComments(node: Node, sourceFile: SourceFile) {
+        return !!(getSyntheticLeadingComments(node) || getSyntheticTrailingComments(node) || getLeadingCommentRangesOfNode(node, sourceFile) || getTrailingCommentRanges(sourceFile.text, node.pos))
+    }
 }

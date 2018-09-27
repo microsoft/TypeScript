@@ -31,5 +31,7 @@ import s2 = require('elements2');
 define(["require", "exports", "elements1"], function (require, exports, s1) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path="file.tsx" />
+    // Should keep s1 and elide s2
     <s1.MyElement />;
 });

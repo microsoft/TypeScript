@@ -23,6 +23,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "moduleAliasAsFunctionArgument_0"], function (require, exports, a) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='moduleAliasAsFunctionArgument_0.ts'/>
     function fn(arg) {
     }
     a.x; // OK

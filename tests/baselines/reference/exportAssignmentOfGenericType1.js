@@ -40,6 +40,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (require, exports, q) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='exportAssignmentOfGenericType1_0.ts'/>
     var M = /** @class */ (function (_super) {
         __extends(M, _super);
         function M() {

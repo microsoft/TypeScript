@@ -1,6 +1,7 @@
 define(["require", "exports", "private_m4"], function (require, exports, private_m4) {
     "use strict";
     exports.__esModule = true;
+    // only used privately no need to emit
     var usePrivate_m4_m1;
     (function (usePrivate_m4_m1) {
         var x3 = private_m4.x;

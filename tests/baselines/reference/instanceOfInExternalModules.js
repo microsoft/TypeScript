@@ -26,6 +26,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "instanceOfInExternalModules_require"], function (require, exports, Bar) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='instanceOfInExternalModules_require.ts'/>
     function IsFoo(value) {
         return value instanceof Bar.Foo;
     }

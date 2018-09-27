@@ -727,7 +727,7 @@ namespace ts {
                     case SyntaxKind.VariableStatement:
                         return emitVariableStatement(<VariableStatement>node);
                     case SyntaxKind.EmptyStatement:
-                        return emitEmptyStatement();
+                        return !(getEmitFlags(node) & EmitFlags.CommentsOnly) ? emitEmptyStatement() : undefined;
                     case SyntaxKind.ExpressionStatement:
                         return emitExpressionStatement(<ExpressionStatement>node);
                     case SyntaxKind.IfStatement:

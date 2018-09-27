@@ -23,5 +23,6 @@ var c = new A();
 define(["require", "exports", "M"], function (require, exports, A) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='ambientExternalModuleWithInternalImportDeclaration_0.ts'/>
     var c = new A();
 });

@@ -22,5 +22,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "exportEqualCallable_0"], function (require, exports, connect) {
     "use strict";
     exports.__esModule = true;
+    ///<reference path='exportEqualCallable_0.ts'/>
     connect();
 });
