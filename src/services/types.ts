@@ -821,19 +821,23 @@ namespace ts {
         tags?: JSDocTagInfo[];
     }
 
-    export interface RenameInfo {
-        canRename: boolean;
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
+        canRename: true;
         /**
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
-        localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
         triggerSpan: TextSpan;
+    }
+    export interface RenameInfoFailure {
+        canRename: false;
+        localizedErrorMessage: string;
     }
 
     export interface SignatureHelpParameter {
