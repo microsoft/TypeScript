@@ -387,8 +387,13 @@ namespace ts {
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
-                                // Return just the type directive names
-                                result.push(getBaseFileName(normalized));
+                                const baseFileName = getBaseFileName(normalized);
+
+                                // At this stage, skip results with leading dot.
+                                if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
+                                    // Return just the type directive names
+                                    result.push(baseFileName);
+                                }
                             }
                         }
                     }
