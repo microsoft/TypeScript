@@ -1455,7 +1455,7 @@ namespace ts {
             if (!result) {
                 if (lastLocation) {
                     Debug.assert(lastLocation.kind === SyntaxKind.SourceFile);
-                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports") {
+                    if ((lastLocation as SourceFile).commonJsModuleIndicator && name === "exports" && meaning & lastLocation.symbol.flags) {
                         return lastLocation.symbol;
                     }
                 }
