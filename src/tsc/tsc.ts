@@ -133,47 +133,8 @@ namespace ts {
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
-                const getCanonicalFileName = createGetCanonicalFileName(sys.useCaseSensitiveFileNames);
-                const files = map(
-                    filter(
-                        configParseResult.fileNames,
-                        !configParseResult.configFileSpecs ? _ => false : matchesSpecs(
-                            configFileName,
-                            configParseResult.configFileSpecs.validatedIncludeSpecs,
-                            configParseResult.configFileSpecs.validatedExcludeSpecs
-                        )
-                    ),
-                    f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName!, sys.getCurrentDirectory()), f, getCanonicalFileName)
-                );
-                const config = {
-                    compilerOptions: {
-                        ...Object.keys(configParseResult.options).map((key) => {
-                            const value = configParseResult.options[key];
-                            const option = getOptionFromName(key);
-                            if (!option) {
-                                return [key, value] as [keyof CompilerOptions, {} | undefined];
-                            }
-                            return [key, unencodeCompilerOption(value, option, getCanonicalFileName)] as [keyof CompilerOptions, {} | undefined];
-                        }).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
-                        showConfig: undefined,
-                        configFile: undefined,
-                        configFilePath: undefined,
-                        help: undefined,
-                        init: undefined,
-                        listFiles: undefined,
-                        listEmittedFiles: undefined,
-                        project: undefined,
-                    },
-                    references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
-                    files: length(files) ? files : undefined,
-                    ...(configParseResult.configFileSpecs ? {
-                        include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
-                        exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
-                    } : {}),
-                    compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
-                };
                 // tslint:disable-next-line:no-null-keyword
-                sys.write(JSON.stringify(config, null, 4) + sys.newLine);
+                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
             }
             updateReportDiagnostic(configParseResult.options);
@@ -195,53 +156,6 @@ namespace ts {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
         }
-    }
-
-    function unencodeCompilerOption(value: any, option: CommandLineOption, getCanonicalFileName: ReturnType<typeof createGetCanonicalFileName>): {} | undefined {
-        switch (option.type) {
-            case "object":
-            case "number":
-            case "boolean":
-                return value;
-            case "string":
-                if (option.isFilePath) {
-                    return getRelativePathFromFile(sys.getCurrentDirectory(), getNormalizedAbsolutePath(value as string, sys.getCurrentDirectory()), getCanonicalFileName);
-                }
-                return value;
-            case "list":
-                const elementType = (option as CommandLineOptionOfListType).element;
-                return isArray(value) ? value.map(v => unencodeCompilerOption(v, elementType, getCanonicalFileName)) : undefined;
-            default:
-                return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
-                    if (optionEnumValue === value) {
-                        return optionStringValue;
-                    }
-                });
-        }
-    }
-
-    function filterSameAsDefaultInclude(specs: ReadonlyArray<string> | undefined) {
-        if (!length(specs)) return undefined;
-        if (length(specs) !== 1) return specs;
-        if (specs![0] === "**/*") return undefined;
-        return specs;
-    }
-
-    function matchesSpecs(path: string, includeSpecs: ReadonlyArray<string> | undefined, excludeSpecs: ReadonlyArray<string> | undefined): (path: string) => boolean {
-        if (!includeSpecs) return _ => false;
-        const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, sys.useCaseSensitiveFileNames, sys.getCurrentDirectory());
-        const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, sys.useCaseSensitiveFileNames);
-        const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, sys.useCaseSensitiveFileNames);
-        if (includeRe) {
-            if (excludeRe) {
-                return path => includeRe.test(path) && !excludeRe.test(path);
-            }
-            return path => includeRe.test(path);
-        }
-        if (excludeRe) {
-            return path => !excludeRe.test(path);
-        }
-        return _ => false;
     }
 
     function reportWatchModeWithoutSysSupport() {

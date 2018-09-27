@@ -75,6 +75,7 @@
         "unittests/reuseProgramStructure.ts",
         "unittests/session.ts",
         "unittests/semver.ts",
+        "unittests/showConfig.ts",
         "unittests/symbolWalker.ts",
         "unittests/telemetry.ts",
         "unittests/textChanges.ts",

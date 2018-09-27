@@ -1653,6 +1653,137 @@ namespace ts {
     }
 
     /**
+     * Generate an uncommented, complete tsconfig for use with "--showConfig"
+     * @param configParseResult options to be generated into tsconfig.json
+     * @param configFileName name of the parsed config file - output paths will be generated relative to this
+     * @param host provides current directory and case sensitivity services
+     */
+    /** @internal */
+    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): object {
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const files = map(
+            filter(
+                configParseResult.fileNames,
+                !configParseResult.configFileSpecs ? _ => false : matchesSpecs(
+                    configFileName,
+                    configParseResult.configFileSpecs.validatedIncludeSpecs,
+                    configParseResult.configFileSpecs.validatedExcludeSpecs
+                )
+            ),
+            f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName!, host.getCurrentDirectory()), f, getCanonicalFileName)
+        );
+        const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
+        const config = {
+            compilerOptions: {
+                ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+                showConfig: undefined,
+                configFile: undefined,
+                configFilePath: undefined,
+                help: undefined,
+                init: undefined,
+                listFiles: undefined,
+                listEmittedFiles: undefined,
+                project: undefined,
+            },
+            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
+            files: length(files) ? files : undefined,
+            ...(configParseResult.configFileSpecs ? {
+                include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
+                exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
+            } : {}),
+            compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
+        };
+        return config;
+    }
+
+    function filterSameAsDefaultInclude(specs: ReadonlyArray<string> | undefined) {
+        if (!length(specs)) return undefined;
+        if (length(specs) !== 1) return specs;
+        if (specs![0] === "**/*") return undefined;
+        return specs;
+    }
+
+    function matchesSpecs(path: string, includeSpecs: ReadonlyArray<string> | undefined, excludeSpecs: ReadonlyArray<string> | undefined): (path: string) => boolean {
+        if (!includeSpecs) return _ => false;
+        const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, sys.useCaseSensitiveFileNames, sys.getCurrentDirectory());
+        const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, sys.useCaseSensitiveFileNames);
+        const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, sys.useCaseSensitiveFileNames);
+        if (includeRe) {
+            if (excludeRe) {
+                return path => includeRe.test(path) && !excludeRe.test(path);
+            }
+            return path => includeRe.test(path);
+        }
+        if (excludeRe) {
+            return path => !excludeRe.test(path);
+        }
+        return _ => false;
+    }
+
+    function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
+        if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
+            // this is of a type CommandLineOptionOfPrimitiveType
+            return undefined;
+        }
+        else if (optionDefinition.type === "list") {
+            return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
+        }
+        else {
+            return (<CommandLineOptionOfCustomType>optionDefinition).type;
+        }
+    }
+
+    function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
+        // There is a typeMap associated with this command-line option so use it to map value back to its name
+        return forEachEntry(customTypeMap, (mapValue, key) => {
+            if (mapValue === value) {
+                return key;
+            }
+        });
+    }
+
+    function serializeCompilerOptions(options: CompilerOptions, pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }): Map<CompilerOptionsValue> {
+        const result = createMap<CompilerOptionsValue>();
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+        const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                // tsconfig only options cannot be specified via command line,
+                // so we can assume that only types that can appear here string | number | boolean
+                if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
+                    continue;
+                }
+                const value = <CompilerOptionsValue>options[name];
+                const optionDefinition = optionsNameMap.get(name.toLowerCase());
+                if (optionDefinition) {
+                    const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
+                    if (!customTypeMap) {
+                        // There is no map associated with this compiler option then use the value as-is
+                        // This is the case if the value is expect to be string, number, boolean or list of string
+                        if (pathOptions && optionDefinition.isFilePath) {
+                            result.set(name, getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!));
+                        }
+                        else {
+                            result.set(name, value);
+                        }
+                    }
+                    else {
+                        if (optionDefinition.type === "list") {
+                            result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
+                        }
+                        else {
+                            // There is a typeMap associated with this command-line option so use it to map value back to its name
+                            result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Generate tsconfig configuration when running command line "--init"
      * @param options commandlineOptions to be generated into tsconfig.json
      * @param fileNames array of filenames to be generated into tsconfig.json
@@ -1662,63 +1793,6 @@ namespace ts {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
         return writeConfigurations();
-
-        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
-            if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
-                // this is of a type CommandLineOptionOfPrimitiveType
-                return undefined;
-            }
-            else if (optionDefinition.type === "list") {
-                return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
-            }
-            else {
-                return (<CommandLineOptionOfCustomType>optionDefinition).type;
-            }
-        }
-
-        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
-            // There is a typeMap associated with this command-line option so use it to map value back to its name
-            return forEachEntry(customTypeMap, (mapValue, key) => {
-                if (mapValue === value) {
-                    return key;
-                }
-            });
-        }
-
-        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
-            const result = createMap<CompilerOptionsValue>();
-            const optionsNameMap = getOptionNameMap().optionNameMap;
-
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
-                        continue;
-                    }
-                    const value = <CompilerOptionsValue>options[name];
-                    const optionDefinition = optionsNameMap.get(name.toLowerCase());
-                    if (optionDefinition) {
-                        const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
-                        if (!customTypeMap) {
-                            // There is no map associated with this compiler option then use the value as-is
-                            // This is the case if the value is expect to be string, number, boolean or list of string
-                            result.set(name, value);
-                        }
-                        else {
-                            if (optionDefinition.type === "list") {
-                                result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
-                            }
-                            else {
-                                // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
 
         function getDefaultValueForOption(option: CommandLineOption) {
             switch (option.type) {
