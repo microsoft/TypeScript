@@ -11517,7 +11517,10 @@ namespace ts {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
-                                        errorNode = propDeclaration;
+                                        // Use the property declaration only if they are from same file
+                                        if (getSourceFileOfNode(errorNode) === getSourceFileOfNode(propDeclaration)) {
+                                            errorNode = propDeclaration;
+                                        }
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {

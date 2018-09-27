@@ -1,0 +1,35 @@
+=== tests/cases/compiler/ourParam.ts ===
+export default {
+>{    nonExistingParam: '42',} : { nonExistingParam: string; }
+
+    nonExistingParam: '42',
+>nonExistingParam : string
+>'42' : "42"
+}
+
+=== tests/cases/compiler/index.ts ===
+import ourParam from './ourParam'
+>ourParam : { nonExistingParam: string; }
+
+export interface OurType {
+    a: number
+>a : number
+}
+const ourMethod = (param: OurType) => {
+>ourMethod : (param: OurType) => void
+>(param: OurType) => {    console.log(param)} : (param: OurType) => void
+>param : OurType
+
+    console.log(param)
+>console.log(param) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>param : OurType
+}
+const result = ourMethod(ourParam)
+>result : void
+>ourMethod(ourParam) : void
+>ourMethod : (param: OurType) => void
+>ourParam : { nonExistingParam: string; }
+

@@ -1,0 +1,21 @@
+tests/cases/compiler/index.ts(8,26): error TS2345: Argument of type '{ nonExistingParam: string; }' is not assignable to parameter of type 'OurType'.
+  Object literal may only specify known properties, and 'nonExistingParam' does not exist in type 'OurType'.
+
+
+==== tests/cases/compiler/ourParam.ts (0 errors) ====
+    export default {
+        nonExistingParam: '42',
+    }
+    
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import ourParam from './ourParam'
+    export interface OurType {
+        a: number
+    }
+    const ourMethod = (param: OurType) => {
+        console.log(param)
+    }
+    const result = ourMethod(ourParam)
+                             ~~~~~~~~
+!!! error TS2345: Argument of type '{ nonExistingParam: string; }' is not assignable to parameter of type 'OurType'.
+!!! error TS2345:   Object literal may only specify known properties, and 'nonExistingParam' does not exist in type 'OurType'.

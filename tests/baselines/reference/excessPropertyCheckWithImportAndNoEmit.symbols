@@ -1,0 +1,32 @@
+=== tests/cases/compiler/ourParam.ts ===
+export default {
+    nonExistingParam: '42',
+>nonExistingParam : Symbol(nonExistingParam, Decl(ourParam.ts, 0, 16))
+}
+
+=== tests/cases/compiler/index.ts ===
+import ourParam from './ourParam'
+>ourParam : Symbol(ourParam, Decl(index.ts, 0, 6))
+
+export interface OurType {
+>OurType : Symbol(OurType, Decl(index.ts, 0, 33))
+
+    a: number
+>a : Symbol(OurType.a, Decl(index.ts, 1, 26))
+}
+const ourMethod = (param: OurType) => {
+>ourMethod : Symbol(ourMethod, Decl(index.ts, 4, 5))
+>param : Symbol(param, Decl(index.ts, 4, 19))
+>OurType : Symbol(OurType, Decl(index.ts, 0, 33))
+
+    console.log(param)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>param : Symbol(param, Decl(index.ts, 4, 19))
+}
+const result = ourMethod(ourParam)
+>result : Symbol(result, Decl(index.ts, 7, 5))
+>ourMethod : Symbol(ourMethod, Decl(index.ts, 4, 5))
+>ourParam : Symbol(ourParam, Decl(index.ts, 0, 6))
+
