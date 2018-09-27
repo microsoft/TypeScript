@@ -10596,7 +10596,8 @@ namespace ts {
             return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
                 target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
                 source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || emptyObjectType, target) :
-                target === globalObjectType || target === globalFunctionType ? isTypeSubtypeOf(source, target) :
+                target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+                target === globalFunctionType ? isFunctionObjectType(source as ObjectType) :
                 hasBaseType(source, getTargetType(target));
             }
 
@@ -15348,7 +15349,7 @@ namespace ts {
 
                 // Check that right operand is a function type with a prototype property
                 const rightType = getTypeOfExpression(expr.right);
-                if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
+                if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
                     return type;
                 }
 
