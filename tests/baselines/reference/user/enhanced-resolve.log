@@ -1,5 +1,7 @@
 Exit Code: 1
 Standard output:
+../../../../built/local/lib.dom.d.ts(17295,13): error TS2451: Cannot redeclare block-scoped variable 'console'.
+node_modules/@types/node/index.d.ts(198,15): error TS2451: Cannot redeclare block-scoped variable 'console'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(116,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
   Type 'null' is not assignable to type 'number | undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(129,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
