@@ -1711,7 +1711,9 @@ namespace ts {
         function checkResolvedBlockScopedVariable(result: Symbol, errorLocation: Node): void {
             Debug.assert(!!(result.flags & SymbolFlags.BlockScopedVariable || result.flags & SymbolFlags.Class || result.flags & SymbolFlags.Enum));
             // Block-scoped variables cannot be used before their definition
-            const declaration = forEach(result.declarations, d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) ? d : undefined);
+            const declaration = find(
+                result.declarations,
+                d => isBlockOrCatchScoped(d) || isClassLike(d) || (d.kind === SyntaxKind.EnumDeclaration) || isInJSFile(d) && !!getJSDocEnumTag(d));
 
             if (declaration === undefined) return Debug.fail("Declaration to checkResolvedBlockScopedVariable is undefined");
 
@@ -2342,7 +2344,7 @@ namespace ts {
         }
 
         function getCommonJsExportEquals(exported: Symbol | undefined, moduleSymbol: Symbol): Symbol | undefined {
-            if (!exported || moduleSymbol.exports!.size === 1) {
+            if (!exported || exported === unknownSymbol || moduleSymbol.exports!.size === 1) {
                 return exported;
             }
             const merged = cloneSymbol(exported);
@@ -13460,6 +13462,7 @@ namespace ts {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             let contravariant = false;
+            let bivariant = false;
             let propagationType: Type;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
@@ -13546,11 +13549,13 @@ namespace ts {
                             }
                             if (priority === inference.priority) {
                                 const candidate = propagationType || source;
-                                if (contravariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                // We make contravariant inferences only if we are in a pure contravariant position,
+                                // i.e. only if we have not descended into a bivariant position.
+                                if (contravariant && !bivariant) {
+                                    inference.contraCandidates = appendIfUnique(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, candidate);
+                                    inference.candidates = appendIfUnique(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
@@ -13798,7 +13803,12 @@ namespace ts {
 
             function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
                 if (!skipParameters) {
+                    const saveBivariant = bivariant;
+                    const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+                    // Once we descend into a bivariant signature we remain bivariant for all nested inferences
+                    bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
                     forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                    bivariant = saveBivariant;
                 }
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -15742,6 +15752,10 @@ namespace ts {
             return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
         }
 
+        function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
+            return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
+        }
+
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES2015 ||
                 (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
@@ -15770,7 +15784,25 @@ namespace ts {
             if (containedInIterationStatement) {
                 if (usedInFunction) {
                     // mark iteration statement as containing block-scoped binding captured in some function
-                    getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    let capturesBlockScopeBindingInLoopBody = true;
+                    if (isForStatement(container) &&
+                        getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList)!.parent === container) {
+                        const part = getPartOfForStatementContainingNode(node.parent, container);
+                        if (part) {
+                            const links = getNodeLinks(part);
+                            links.flags |= NodeCheckFlags.ContainsCapturedBlockScopeBinding;
+
+                            const capturedBindings = links.capturedBlockScopeBindings || (links.capturedBlockScopeBindings = []);
+                            pushIfUnique(capturedBindings, symbol);
+
+                            if (part === container.initializer) {
+                                capturesBlockScopeBindingInLoopBody = false; // Initializer is outside of loop body
+                            }
+                        }
+                    }
+                    if (capturesBlockScopeBindingInLoopBody) {
+                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
                 }
 
                 // mark variables that are declared in loop initializer and reassigned inside the body of ForStatement.
@@ -15788,6 +15820,11 @@ namespace ts {
             if (usedInFunction) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
+        }
+
+        function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
+            const links = getNodeLinks(node);
+            return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfNode(decl));
         }
 
         function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
@@ -28676,7 +28713,12 @@ namespace ts {
                         getAccessor
                     };
                 },
-                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined)
+                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined),
+                isBindingCapturedByNode: (node, decl) => {
+                    const parseNode = getParseTreeNode(node);
+                    const parseDecl = getParseTreeNode(decl);
+                    return !!parseNode && !!parseDecl && (isVariableDeclaration(parseDecl) || isBindingElement(parseDecl)) && isBindingCapturedByNode(parseNode, parseDecl);
+                }
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {

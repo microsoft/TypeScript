@@ -3420,6 +3420,7 @@ namespace ts {
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
+        isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     }
 
     export const enum SymbolFlags {
@@ -3668,14 +3669,15 @@ namespace ts {
         EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00020000,  // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00040000,  // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithBodyScopedClassBinding     = 0x00080000,  // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00100000,  // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-        AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
-        ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
-        ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
+        ContainsCapturedBlockScopeBinding   = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00040000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding     = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00200000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
+        ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
     }
 
     /* @internal */
@@ -3700,6 +3702,7 @@ namespace ts {
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
     export const enum TypeFlags {

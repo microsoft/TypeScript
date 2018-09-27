@@ -43,7 +43,7 @@ namespace ts.Completions {
         }
 
         const contextToken = findPrecedingToken(position, sourceFile);
-        if (triggerCharacter && (!contextToken || !isValidTrigger(sourceFile, triggerCharacter, contextToken, position))) return undefined;
+        if (triggerCharacter && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) return undefined;
 
         if (isInString(sourceFile, position, contextToken)) {
             return !contextToken || !isStringLiteralLike(contextToken)
@@ -1713,6 +1713,9 @@ namespace ts.Completions {
                         break;
                     case SyntaxKind.AsteriskToken:
                         return isMethodDeclaration(parent) ? tryCast(parent.parent, isObjectLiteralExpression) : undefined;
+                    case SyntaxKind.Identifier:
+                        return (contextToken as Identifier).text === "async" && isShorthandPropertyAssignment(contextToken.parent)
+                            ? contextToken.parent.parent : undefined;
                 }
             }
 
@@ -1928,7 +1931,6 @@ namespace ts.Completions {
             // Previous token may have been a keyword that was converted to an identifier.
             switch (keywordForNode(contextToken)) {
                 case SyntaxKind.AbstractKeyword:
-                case SyntaxKind.AsyncKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
@@ -1943,6 +1945,8 @@ namespace ts.Completions {
                 case SyntaxKind.VarKeyword:
                 case SyntaxKind.YieldKeyword:
                     return true;
+                case SyntaxKind.AsyncKeyword:
+                    return isPropertyDeclaration(contextToken.parent);
             }
 
             return isDeclarationName(contextToken)
@@ -2272,7 +2276,7 @@ namespace ts.Completions {
         return !!type.getStringIndexType() || !!type.getNumberIndexType();
     }
 
-    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node, position: number): boolean {
+    function isValidTrigger(sourceFile: SourceFile, triggerCharacter: CompletionsTriggerCharacter, contextToken: Node | undefined, position: number): boolean {
         switch (triggerCharacter) {
             case ".":
             case "@":
@@ -2281,14 +2285,14 @@ namespace ts.Completions {
             case "'":
             case "`":
                 // Only automatically bring up completions if this is an opening quote.
-                return isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
+                return !!contextToken && isStringLiteralOrTemplate(contextToken) && position === contextToken.getStart(sourceFile) + 1;
             case "<":
                 // Opening JSX tag
-                return contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
+                return !!contextToken && contextToken.kind === SyntaxKind.LessThanToken && (!isBinaryExpression(contextToken.parent) || binaryExpressionMayBeOpenTag(contextToken.parent));
             case "/":
-                return isStringLiteralLike(contextToken)
+                return !!contextToken && (isStringLiteralLike(contextToken)
                     ? !!tryGetImportFromModuleSpecifier(contextToken)
-                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent);
+                    : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
             default:
                 return Debug.assertNever(triggerCharacter);
         }

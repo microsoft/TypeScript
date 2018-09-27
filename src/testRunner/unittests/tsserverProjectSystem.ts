@@ -449,6 +449,14 @@ namespace ts.projectSystem {
         const toLocation = protocolToLocation(str);
         return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
+    function protocolRenameSpanFromSubstring(
+        str: string,
+        substring: string,
+        options?: SpanFromSubstringOptions,
+        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
+    ): protocol.RenameTextSpan {
+        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
+    }
     function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
         const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
@@ -462,6 +470,9 @@ namespace ts.projectSystem {
     }
     function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
         return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
+    }
+    function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
+        return documentSpanFromSubstring(file, substring, options);
     }
     interface SpanFromSubstringOptions {
         readonly index: number;
@@ -8284,12 +8295,12 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
 
             assert.equal(aFile.content, bFile.content);
-            const abLocs: protocol.TextSpan[] = [
-                protocolTextSpanFromSubstring(aFile.content, "C"),
-                protocolTextSpanFromSubstring(aFile.content, "C", { index: 1 }),
+            const abLocs: protocol.RenameTextSpan[] = [
+                protocolRenameSpanFromSubstring(aFile.content, "C"),
+                protocolRenameSpanFromSubstring(aFile.content, "C", { index: 1 }),
             ];
-            const span = protocolTextSpanFromSubstring(cFile.content, "C");
-            const cLocs: protocol.TextSpan[] = [span];
+            const span = protocolRenameSpanFromSubstring(cFile.content, "C");
+            const cLocs: protocol.RenameTextSpan[] = [span];
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
                     canRename: true,
@@ -8298,8 +8309,7 @@ namespace ts.projectSystem {
                     fullDisplayName: '"/users/username/projects/a/c/fc".C',
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
-                    triggerSpan: span,
+                    triggerSpan: protocolTextSpanFromSubstring(cFile.content, "C"),
                 },
                 locs: [
                     { file: aFc, locs: cLocs },
@@ -9570,7 +9580,7 @@ export function Test2() {
     });
 
     describe("tsserverProjectSystem rename", () => {
-        it("works", () => {
+        it("works with fileToRename", () => {
             const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
             const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
 
@@ -9586,10 +9596,37 @@ export function Test2() {
                     fullDisplayName: aTs.path,
                     kind: ScriptElementKind.moduleElement,
                     kindModifiers: "",
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
                 },
-                locs: [{ file: bTs.path, locs: [protocolTextSpanFromSubstring(bTs.content, "./a")] }],
+                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+            });
+        });
+
+        it("works with prefixText and suffixText", () => {
+            const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
+            const session = createSession(createServerHost([aTs]));
+            openFilesForSession([aTs], session);
+
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "x",
+                    fullDisplayName: "x",
+                    kind: ScriptElementKind.constElement,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
+                },
+                locs: [
+                    {
+                        file: aTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(aTs.content, "x"),
+                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
+                        ],
+                    },
+                ],
             });
         });
     });
@@ -10070,13 +10107,13 @@ declare class TestLib {
 
         const renameATs = (aTs: File): protocol.SpanGroup => ({
             file: aTs.path,
-            locs: [protocolTextSpanFromSubstring(aTs.content, "fnA")],
+            locs: [protocolRenameSpanFromSubstring(aTs.content, "fnA")],
         });
         const renameUserTs = (userTs: File): protocol.SpanGroup => ({
             file: userTs.path,
             locs: [
-                protocolTextSpanFromSubstring(userTs.content, "fnA"),
-                protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                protocolRenameSpanFromSubstring(userTs.content, "fnA"),
+                protocolRenameSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
             ],
         });
 
@@ -10091,7 +10128,6 @@ declare class TestLib {
                     fullDisplayName: "fnA",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
@@ -10111,7 +10147,6 @@ declare class TestLib {
                     fullDisplayName: '"/a/a".fnA',
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(aTs.content, "fnA"),
                 },
                 locs: [renameATs(aTs), renameUserTs(userTs)],
@@ -10123,9 +10158,9 @@ declare class TestLib {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
-                documentSpanFromSubstring(userTs, "fnA"),
-                documentSpanFromSubstring(userTs, "fnA", { index: 1 }),
-                documentSpanFromSubstring(aTs, "fnA"),
+                renameLocation(userTs, "fnA"),
+                renameLocation(userTs, "fnA", { index: 1 }),
+                renameLocation(aTs, "fnA"),
             ]);
             verifyATsConfigOriginalProject(session);
         });
@@ -10141,20 +10176,19 @@ declare class TestLib {
                     fullDisplayName: "fnB",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
                     triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                 },
                 locs: [
                     {
                         file: userTs.path,
                         locs: [
-                            protocolTextSpanFromSubstring(userTs.content, "fnB"),
-                            protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
+                            protocolRenameSpanFromSubstring(userTs.content, "fnB"),
+                            protocolRenameSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                         ],
                     },
                     {
                         file: bDts.path,
-                        locs: [protocolTextSpanFromSubstring(bDts.content, "fnB")],
+                        locs: [protocolRenameSpanFromSubstring(bDts.content, "fnB")],
                     }
                 ],
             });
