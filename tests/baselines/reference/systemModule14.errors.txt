@@ -1,4 +1,4 @@
-tests/cases/compiler/systemModule14.ts(5,17): error TS2307: Cannot find module 'foo'.
+tests/cases/compiler/systemModule14.ts(5,17): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/systemModule14.ts (1 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/systemModule14.ts(5,17): error TS2307: Cannot find module '
     
     import {a} from "foo";
                     ~~~~~
-!!! error TS2307: Cannot find module 'foo'.
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
     export {foo}
     
     var x = 1;

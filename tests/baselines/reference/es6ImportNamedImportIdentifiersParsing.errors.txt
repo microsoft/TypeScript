@@ -1,16 +1,16 @@
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(1,10): error TS2300: Duplicate identifier 'yield'.
-tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(1,23): error TS2307: Cannot find module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(1,23): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,10): error TS1003: Identifier expected.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,10): error TS2300: Duplicate identifier 'default'.
-tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,25): error TS2307: Cannot find module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(2,25): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,19): error TS1003: Identifier expected.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,19): error TS2300: Duplicate identifier 'default'.
-tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,34): error TS2307: Cannot find module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(3,34): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,21): error TS2300: Duplicate identifier 'yield'.
-tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,34): error TS2307: Cannot find module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(4,34): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,21): error TS1003: Identifier expected.
 tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,21): error TS2300: Duplicate identifier 'default'.
-tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS2307: Cannot find module 'somemodule'.
+tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts (13 errors) ====
@@ -18,30 +18,30 @@ tests/cases/compiler/es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS23
              ~~~~~
 !!! error TS2300: Duplicate identifier 'yield'.
                           ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'somemodule'.
+!!! error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
     import { default } from "somemodule"; // Error - as this is keyword that is not allowed as identifier
              ~~~~~~~
 !!! error TS1003: Identifier expected.
              ~~~~~~~
 !!! error TS2300: Duplicate identifier 'default'.
                             ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'somemodule'.
+!!! error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
     import { yield as default } from "somemodule"; // error to use default as binding name
                       ~~~~~~~
 !!! error TS1003: Identifier expected.
                       ~~~~~~~
 !!! error TS2300: Duplicate identifier 'default'.
                                      ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'somemodule'.
+!!! error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
     import { default as yield } from "somemodule"; // no error 
                         ~~~~~
 !!! error TS2300: Duplicate identifier 'yield'.
                                      ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'somemodule'.
+!!! error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
     import { default as default } from "somemodule"; // default as is ok, error of default binding name
                         ~~~~~~~
 !!! error TS1003: Identifier expected.
                         ~~~~~~~
 !!! error TS2300: Duplicate identifier 'default'.
                                        ~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'somemodule'.
+!!! error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.

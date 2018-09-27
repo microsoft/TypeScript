@@ -19,14 +19,14 @@ src/doc/doc-printer.js(214,18): error TS2532: Object is possibly 'undefined'.
 src/doc/doc-printer.js(215,17): error TS2532: Object is possibly 'undefined'.
 src/doc/doc-printer.js(447,37): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'never[]'.
   Type 'any[]' is not assignable to type 'never'.
-src/language-css/clean.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
+src/language-css/clean.js(3,30): error TS2307: Cannot find module 'html-tag-names' or its corresponding type declarations.
 src/language-css/parser-postcss.js(78,32): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(88,30): error TS2345: Argument of type '{ open: null; close: null; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(93,30): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(100,30): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(104,28): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(407,32): error TS2531: Object is possibly 'null'.
-src/language-css/printer-postcss.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
+src/language-css/printer-postcss.js(3,30): error TS2307: Cannot find module 'html-tag-names' or its corresponding type declarations.
 src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }; }' is not assignable to parameter of type 'PreprocessOptions'.
   Types of property 'plugins' are incompatible.
     Type '{ ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.

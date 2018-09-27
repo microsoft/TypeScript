@@ -3350,11 +3350,11 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(216,19): 
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(239,45): error TS2694: Namespace 'Changes.ChangesView' has no exported member 'Row'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(270,38): error TS2694: Namespace 'Changes.ChangesView' has no exported member 'Row'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(314,21): error TS2339: Property 'Row' does not exist on type 'typeof ChangesView'.
-node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/activeline.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(8,5): error TS2304: Cannot find name 'define'.
@@ -3476,25 +3476,25 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9372,12): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9446,9): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9467,11): error TS2339: Property 'contextMenuPending' does not exist on type 'TextareaInput'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(9527,40): error TS2339: Property 'getValue' does not exist on type 'CodeMirror$1'.
-node_modules/chrome-devtools-frontend/front_end/cm/comment.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/comment.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/comment.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(12,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(12,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(13,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/markselection.js(14,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,15): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
 node_modules/chrome-devtools-frontend/front_end/cm/matchbrackets.js(13,48): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
-node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/multiplex.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(17,5): error TS2304: Cannot find name 'define'.
@@ -3513,76 +3513,76 @@ node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.j
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(154,13): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(155,24): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/DefaultCodeMirrorMimeMode.js(22,14): error TS2339: Property 'eval' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clike.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(11,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/clojure.js(13,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(10,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(10,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(11,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(12,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(41,3): error TS2740: Type 'RegExp' is missing the following properties from type 'string[]': length, pop, push, concat, and 28 more.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/coffeescript.js(282,24): error TS2339: Property 'exec' does not exist on type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,5): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2307: Cannot find module '../xml/xml'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,50): error TS2307: Cannot find module '../xml/xml' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(6,73): error TS2307: Cannot find module '../javascript/javascript' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/jsx.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(11,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(12,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/livescript.js(13,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,5): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2307: Cannot find module '../clike/clike'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(6,85): error TS2307: Cannot find module '../clike/clike' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(172,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/php.js(174,15): error TS2403: Subsequent variable declarations must have the same type.  Variable 'style' must be of type 'string', but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/python.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/shell.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(8,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(9,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_modes/stylus.js(10,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/css.js(8,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,5): error TS2554: Expected 0-1 arguments, but got 3.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2307: Cannot find module '../../addon/mode/multiplex'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(6,50): error TS2307: Cannot find module '../htmlmixed/htmlmixed' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(7,17): error TS2307: Cannot find module '../../addon/mode/multiplex' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(8,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlembedded.js(9,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,5): error TS2554: Expected 0-1 arguments, but got 4.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2307: Cannot find module '../xml/xml'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2307: Cannot find module '../javascript/javascript'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2307: Cannot find module '../css/css'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,50): error TS2307: Cannot find module '../xml/xml' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,73): error TS2307: Cannot find module '../javascript/javascript' or its corresponding type declarations.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(6,110): error TS2307: Cannot find module '../css/css' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/htmlmixed.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/javascript.js(8,5): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror'.
+node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(6,17): error TS2307: Cannot find module '../../lib/codemirror' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(7,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm_web_modes/xml.js(8,5): error TS2304: Cannot find name 'define'.
@@ -11612,7 +11612,7 @@ node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(29,54
 node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(30,65): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(139,9): error TS2322: Type 'Node' is not assignable to type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/terminal/TerminalWidget.js(146,7): error TS2322: Type 'Node' is not assignable to type 'ChildNode'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(19,34): error TS2307: Cannot find module '../../xterm'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(19,34): error TS2307: Cannot find module '../../xterm' or its corresponding type declarations.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(20,21): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(24,5): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/addons/fit/fit.js(29,16): error TS2339: Property 'Terminal' does not exist on type 'Window'.

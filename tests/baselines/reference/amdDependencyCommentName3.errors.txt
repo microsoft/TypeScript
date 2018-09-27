@@ -1,4 +1,4 @@
-tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2307: Cannot find module 'm2'.
+tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2307: Cannot find module 'm2' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/amdDependencyCommentName3.ts (1 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2307: Cannot fi
     
     import m1 = require("m2")
                         ~~~~
-!!! error TS2307: Cannot find module 'm2'.
+!!! error TS2307: Cannot find module 'm2' or its corresponding type declarations.
     m1.f();

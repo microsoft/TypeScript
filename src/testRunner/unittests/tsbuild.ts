@@ -451,7 +451,7 @@ export const b = new A();`);
                 ];
                 verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                     allExpectedOutputs,
-                    [Diagnostics.Cannot_find_module_0],
+                    [Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations],
                     expectedFileTraces);
             });
         });

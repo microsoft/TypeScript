@@ -9,7 +9,7 @@ tests/cases/compiler/es5ModuleInternalNamedImports.ts(29,5): error TS1194: Expor
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,25): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(31,20): error TS1147: Import declarations in a namespace cannot reference a module.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cannot find module 'M3'.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cannot find module 'M3' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/es5ModuleInternalNamedImports.ts (12 errors) ====
@@ -70,5 +70,5 @@ tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cann
     }
     import M3 from "M3";
                    ~~~~
-!!! error TS2307: Cannot find module 'M3'.
+!!! error TS2307: Cannot find module 'M3' or its corresponding type declarations.
     
