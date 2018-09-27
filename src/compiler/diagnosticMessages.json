@@ -2116,6 +2116,10 @@
         "category": "Error",
         "code": 2586
     },
+    "JSDoc type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2587
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
