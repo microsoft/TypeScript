@@ -16755,14 +16755,7 @@ namespace ts {
             return false;
         }
 
-        // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
-        // be "pushed" onto a node using the contextualType property.
-        function getApparentTypeOfContextualType(node: Expression): Type | undefined {
-            let contextualType = getContextualType(node);
-            contextualType = contextualType && mapType(contextualType, getApparentType);
-            if (!(contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node))) {
-                return contextualType;
-            }
+        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
             // Keep the below up-to-date with the work done within `isRelatedTo` by `findMatchingDiscriminantType`
             let match: Type | undefined;
             propLoop: for (const prop of node.properties) {
@@ -16770,7 +16763,7 @@ namespace ts {
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
                 if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
                     const discriminatingType = checkExpression(prop.initializer);
-                    for (const type of (contextualType as UnionType).types) {
+                    for (const type of contextualType.types) {
                         const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
                         if (targetType && isTypeAssignableTo(discriminatingType, targetType)) {
                             if (match) {
@@ -16784,6 +16777,57 @@ namespace ts {
                 }
             }
             return match || contextualType;
+        }
+
+        function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
+            let match: Type | undefined;
+            propLoop: for (const prop of node.properties) {
+                if (!prop.symbol) continue;
+                if (prop.kind !== SyntaxKind.JsxAttribute) continue;
+                let discriminatingType: Type | undefined;
+                let possiblyDiscriminant: boolean;
+                if (!prop.initializer) {
+                    discriminatingType = trueType;
+                    possiblyDiscriminant = !!isDiscriminantProperty(contextualType, prop.symbol.escapedName);
+                }
+                else {
+                    const simpleInitializer = isStringLiteral(prop.initializer) ? prop.initializer : prop.initializer.expression;
+                    possiblyDiscriminant = !!(simpleInitializer && isPossiblyDiscriminantValue(simpleInitializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName));
+                    if (possiblyDiscriminant) {
+                        discriminatingType = checkExpression(simpleInitializer!);
+                    }
+                }
+                if (possiblyDiscriminant) {
+                    for (const type of contextualType.types) {
+                        const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
+                        if (targetType && isTypeAssignableTo(discriminatingType!, targetType)) {
+                            if (match) {
+                                if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                                match = undefined;
+                                break propLoop;
+                            }
+                            match = type;
+                        }
+                    }
+                }
+            }
+            return match || contextualType;
+        }
+
+        // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
+        // be "pushed" onto a node using the contextualType property.
+        function getApparentTypeOfContextualType(node: Expression): Type | undefined {
+            let contextualType = getContextualType(node);
+            contextualType = contextualType && mapType(contextualType, getApparentType);
+            if (contextualType && contextualType.flags & TypeFlags.Union) {
+                if (isObjectLiteralExpression(node)) {
+                    return discriminateContextualTypeByObjectMembers(node, contextualType as UnionType);
+                }
+                else if (isJsxAttributes(node)) {
+                    return discriminateContextualTypeByJSXAttributes(node, contextualType as UnionType);
+                }
+            }
+            return contextualType;
         }
 
         /**
