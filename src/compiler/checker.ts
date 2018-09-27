@@ -5173,7 +5173,7 @@ namespace ts {
                 return type;
             }
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                return checkExpression((<ExportAssignment>declaration).expression);
+                return widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
 
             // Handle variable, parameter or property
