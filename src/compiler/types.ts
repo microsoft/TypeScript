@@ -2908,7 +2908,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TypeCheckerHost {
+    export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
         getCompilerOptions(): CompilerOptions;
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
@@ -3183,6 +3183,8 @@ namespace ts {
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
         InReverseMappedType                     = 1 << 25,
+
+        /* @internal */ DoNotIncludeSymbolChain                 = 1 << 25,    // Skip looking up and printing an accessible symbol chain
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -3245,6 +3247,9 @@ namespace ts {
 
         // Prefer aliases which are not directly visible
         UseAliasDefinedOutsideCurrentScope = 0x00000008,
+
+        // Skip building an accessible symbol chain
+        /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
     }
 
     /* @internal */
@@ -5382,7 +5387,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: EmitHost;
+        moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): ReadonlyArray<SourceFile>, getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
