@@ -58,6 +58,28 @@ namespace ts.server {
         return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
 
+    const stream: {
+        Readable: { from(str: string): NodeJS.ReadStream; };
+    } = require("stream");
+
+    function getInputReadStream(inputFile: string) {
+        const lines = fs.readFileSync(stripQuotes(inputFile), "utf8")?.split(/\r?\n/) || [];
+        const result = [];
+        for (const line of lines) {
+            if (line.match(/^\s*\{\"seq\":/)) {
+                try {
+                    const json = JSON.parse(line);
+                    if (json && json.type === "request") {
+                        result.push(line);
+                    }
+                }
+                catch (e) {
+                }
+            }
+        }
+        return stream.Readable.from(result.join("\n"));
+    }
+
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
         on(message: "message" | "exit", f: (m: any) => void): void;
@@ -107,11 +129,18 @@ namespace ts.server {
         writeSync(fd: number, data: any, position?: number, enconding?: string): number;
         statSync(path: string): Stats;
         stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
+        readFileSync(path: string, options: { encoding: string; flag?: string; } | string): string;
     } = require("fs");
 
-
+    let inputStream: NodeJS.ReadStream | undefined;
+    {
+        const inputFile = findArgument("--inputFile");
+        if (inputFile) {
+            inputStream = getInputReadStream(stripQuotes(inputFile));
+        }
+    }
     const rl = readline.createInterface({
-        input: process.stdin,
+        input: inputStream || process.stdin,
         output: process.stdout,
         terminal: false,
     });
@@ -578,7 +607,9 @@ namespace ts.server {
             });
 
             rl.on("close", () => {
-                this.exit();
+                if (!inputStream) {
+                    this.exit();
+                }
             });
         }
     }
