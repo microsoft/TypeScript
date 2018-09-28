@@ -26,9 +26,6 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, program, span: { start }, errorCode, cancellationToken } = context;
-            if (isSourceFileJS(sourceFile)) {
-                return undefined; // TODO: GH#20113
-            }
 
             const token = getTokenAtPosition(sourceFile, start);
             let declaration!: Declaration | undefined;

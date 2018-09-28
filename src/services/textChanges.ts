@@ -41,6 +41,12 @@ namespace ts.textChanges {
         Start
     }
 
+    export enum CommentKind {
+        Single,
+        Multi,
+        Jsdoc,
+    }
+
     function skipWhitespacesAndLineBreaks(text: string, start: number) {
         return skipTrivia(text, start, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
@@ -315,7 +321,7 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
-        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string, kind = CommentKind.Single): void {
             const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
             const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
             // First try to see if we can put the comment on the previous line.
@@ -325,7 +331,10 @@ namespace ts.textChanges {
             const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position);
             const indent = sourceFile.text.slice(lineStartPosition, startPosition);
-            const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
+            const completeCommentText = kind === CommentKind.Jsdoc ? `/**${commentText}*/` :
+                kind === CommentKind.Multi ? `/*${commentText}*/` :
+                `//${commentText}`;
+            const text = (insertAtLineStart ? "" : this.newLineCharacter) + completeCommentText + this.newLineCharacter + indent;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
@@ -339,6 +348,10 @@ namespace ts.textChanges {
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            if (isInJSFile(sourceFile)) {
+                this.tryInsertJSDocType(sourceFile, node, type);
+                return;
+            }
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
@@ -353,6 +366,21 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+        }
+
+        /** TODO: Try allowing insertion of other things too
+         * TODO: Might need to only disallow node from being a parameterdecl, propertydecl, propertysig
+         * (or correctly handle parameterdecl by walking up and adding a param, at least)
+         */
+        public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+            if (isParameter(node)) {
+                // RECUR with node=node.parent
+                node = node.parent;
+            }
+
+            const commentText = ` @type {${createPrinter().printNode(EmitHint.Unspecified, type, sourceFile)}} `;
+            this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos).line, node.pos, commentText, CommentKind.Jsdoc);
+            // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
