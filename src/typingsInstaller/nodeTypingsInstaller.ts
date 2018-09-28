@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace ts.server.typingsInstaller {
     const fs: {
         appendFileSync(file: string, content: string): void
@@ -13,15 +11,25 @@ namespace ts.server.typingsInstaller {
 
     class FileLog implements Log {
         private logEnabled = true;
-        constructor(private readonly logFile?: string) {
+        private readonly logFile: string = "";
+
+        constructor(logFile: string | undefined) {
+            if (typeof logFile !== "string") {
+                this.logEnabled = false;
+            }
+            else {
+                this.logFile = logFile;
+            }
         }
 
         isEnabled = () => {
-            return this.logEnabled && this.logFile !== undefined;
+            return this.logEnabled;
         }
         writeLine = (text: string) => {
+            if (!this.logEnabled) return;
+
             try {
-                fs.appendFileSync(this.logFile!, `[${nowString()}] ${text}${sys.newLine}`); // TODO: GH#18217
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
                 this.logEnabled = false;
