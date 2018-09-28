@@ -27940,24 +27940,20 @@ namespace ts {
                 return errorType;
             }
 
+            const classDecl = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
+            const classType = classDecl && getDeclaredTypeOfClassOrInterface(getSymbolOfNode(classDecl.class));
             if (isPartOfTypeNode(node)) {
                 const typeFromTypeNode = getTypeFromTypeNode(<TypeNode>node);
-
-                if (isExpressionWithTypeArgumentsInClassImplementsClause(node)) {
-                    return getTypeWithThisArgument(typeFromTypeNode, getTypeOfClassContainingHeritageClause(node).thisType);
-                }
-
-                return typeFromTypeNode;
+                return classType ? getTypeWithThisArgument(typeFromTypeNode, classType.thisType) : typeFromTypeNode;
             }
 
             if (isExpressionNode(node)) {
                 return getRegularTypeOfExpression(<Expression>node);
             }
 
-            if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
+            if (classType && !classDecl!.isImplements) {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
-                const classType = getTypeOfClassContainingHeritageClause(node);
                 const baseType = firstOrUndefined(getBaseTypes(classType));
                 return baseType ? getTypeWithThisArgument(baseType, classType.thisType) : errorType;
             }
@@ -27997,10 +27993,6 @@ namespace ts {
             }
 
             return errorType;
-        }
-
-        function getTypeOfClassContainingHeritageClause(node: ExpressionWithTypeArguments): InterfaceType {
-            return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent.parent));
         }
 
         // Gets the type of object literal or array literal of destructuring assignment.

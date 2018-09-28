@@ -3734,11 +3734,20 @@ namespace ts {
 
     /** Get `C` given `N` if `N` is in the position `class C extends N` where `N` is an ExpressionWithTypeArguments. */
     export function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined {
-        if (isExpressionWithTypeArguments(node) &&
-            node.parent.token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent)) {
-            return node.parent.parent;
-        }
+        const cls = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
+        return cls && !cls.isImplements ? cls.class : undefined;
+    }
+
+    export interface ClassImplementingOrExtendingExpressionWithTypeArguments {
+        readonly class: ClassLikeDeclaration;
+        readonly isImplements: boolean;
+    }
+    export function tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node: Node): ClassImplementingOrExtendingExpressionWithTypeArguments | undefined {
+        return isExpressionWithTypeArguments(node)
+            && isHeritageClause(node.parent)
+            && isClassLike(node.parent.parent)
+            ? { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword }
+            : undefined;
     }
 
     export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
@@ -3763,15 +3772,6 @@ namespace ts {
 
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): node is ExpressionWithTypeArguments {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
-    }
-
-    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): node is ExpressionWithTypeArguments {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments
-            && isEntityNameExpression((node as ExpressionWithTypeArguments).expression)
-            && node.parent
-            && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
-            && node.parent.parent
-            && isClassLike(node.parent.parent);
     }
 
     export function isEntityNameExpression(node: Node): node is EntityNameExpression {
