@@ -5,6 +5,8 @@ import {
     Debug,
     directorySeparator,
     DirectoryWatcherCallback,
+    emptyArray,
+    endsWith,
     FileWatcher,
     getDirectoryPath,
     getRootLength,
@@ -469,11 +471,14 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
 
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-        terminal: false,
-    });
+    const fs: {
+        readFileSync(path: string, options: { encoding: string; flag?: string; } | string): string;
+        writeFileSync(path: string, data: string): string;
+    } = require("fs");
+
+    const stream: {
+        Readable: { from(str: string): NodeJS.ReadStream; };
+    } = require("stream");
 
     class NodeTypingsInstallerAdapter extends ts.server.TypingsInstallerAdapter {
         protected override installer!: NodeChildProcess;
@@ -698,6 +703,12 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
         startTracing("server", traceDir);
     }
 
+    const inputStream = getInputReadStream(ts.server.findArgument("--inputRequestsFile"), ts.server.findArgument("--inputLogFile"), ts.server.findArgument("--createRequestsFile"));
+    const rl = readline.createInterface({
+        input: inputStream || process.stdin,
+        output: process.stdout,
+        terminal: false,
+    });
     const ioSession = useNodeIpc ? new IpcIOSession() : new IOSession();
     process.on("uncaughtException", err => {
         ioSession.logError(err, "unknown");
@@ -706,6 +717,47 @@ function startNodeSession(options: StartSessionOptions, logger: ts.server.Logger
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    function getInputReadStream(inputRequestsFile: string | undefined, inputLogFile: string | undefined, requestFile: string | undefined) {
+        if (!inputRequestsFile && !inputLogFile) return undefined;
+        let result: any[];
+        if (inputRequestsFile) {
+            const text = fs.readFileSync(stripQuotes(inputRequestsFile), "utf8");
+            try {
+                result = text ? JSON.parse(text) : emptyArray;
+            }
+            catch (e) {
+                result = [];
+            }
+        }
+        else {
+            const lines = fs.readFileSync(stripQuotes(inputLogFile!), "utf8")?.split(/\r?\n/) || [];
+            result = [];
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                if (!endsWith(line, "] request:")) continue;
+                const texts: string[] = [];
+                for (i++; i < lines.length; i++) {
+                    if (lines[i].search(/((Info)|(Perf)|(Err))\s[0-9]+\s*\[/) === 0) {
+                        i--;
+                        break;
+                    }
+                    texts.push(lines[i]);
+                }
+                const text = texts.join("");
+                try {
+                    const json = JSON.parse(text);
+                    if (json && json.type === "request") {
+                        result.push(json);
+                    }
+                }
+                catch (e) {} // eslint-disable-line no-empty
+            }
+        }
+        if (requestFile) fs.writeFileSync(stripQuotes(requestFile), JSON.stringify(result, /*replacer*/ undefined, " "));
+        console.log(`Requests:: ${result.length}`);
+        return stream.Readable.from(result.map(r => JSON.stringify(r)).join("\n"));
+    }
 
     function getGlobalTypingsCacheLocation() {
         switch (process.platform) {

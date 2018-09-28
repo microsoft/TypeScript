@@ -31,9 +31,9 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
     // the log. This is so that language service plugins which use
     // console.log don't break the message passing between tsserver
     // and the client
-    console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Info);
-    console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
-    console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
+    // console.log = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Info);
+    // console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
+    // console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), ts.server.Msg.Err);
 
     startServer(
         {

@@ -3672,6 +3672,7 @@ export class Session<TMessage = string> implements EventSender {
         let relevantFile: protocol.FileRequestArgs | undefined;
         try {
             request = this.parseMessage(message);
+            console.log(`${request.seq}:: ${request.command}`);
             relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
 
             tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
@@ -3712,7 +3713,7 @@ export class Session<TMessage = string> implements EventSender {
                 this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                 return;
             }
-
+            console.log(`${request?.seq}:: ${request?.command}:: Exception`, err);
             this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
             perfLogger?.logStopCommand("" + (request && request.command), "Error: " + err);
             tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
