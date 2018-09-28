@@ -5616,15 +5616,15 @@ namespace ts {
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */
-    export type PragmaPsuedoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
 
     /* @internal */
-    export type PragmaPsuedoMapEntry = {[K in keyof PragmaPsuedoMap]: {name: K, args: PragmaPsuedoMap[K]}}[keyof PragmaPsuedoMap];
+    export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
 
     /* @internal */
-    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
-        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]> {
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
     }
 
     /**
@@ -5633,10 +5633,10 @@ namespace ts {
      * in multiple places
      */
     /* @internal */
-    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]>, ReadonlyPragmaMap {
-        set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
-        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    export interface PragmaMap extends Map<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap {
+        set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
     }
 
     export interface UserPreferences {
