@@ -373,12 +373,17 @@ namespace ts.textChanges {
          * (or correctly handle parameterdecl by walking up and adding a param, at least)
          */
         public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
-            if (isParameter(node)) {
+            // if (isParameter(node)) {
                 // RECUR with node=node.parent
-                node = node.parent;
-            }
+                // node = node.parent;
+            // }
 
-            const commentText = ` @type {${createPrinter().printNode(EmitHint.Unspecified, type, sourceFile)}} `;
+            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, the line before might the wrong place, etc)
+            // TODO: Parameter probably shouldn't need to manually unescape its text
+            const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
+            const commentText = isParameter(node) && isIdentifier(node.name) ?
+                ` @param {${printed}} ${unescapeLeadingUnderscores(node.name.escapedText)} ` :
+                ` @type {${printed}} `;
             this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos).line, node.pos, commentText, CommentKind.Jsdoc);
             // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
