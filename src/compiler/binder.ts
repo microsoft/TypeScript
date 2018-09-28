@@ -640,6 +640,7 @@ namespace ts {
         function bindChildrenWorker(node: Node): void {
             if (checkUnreachable(node)) {
                 bindEachChild(node);
+                bindJSDoc(node);
                 return;
             }
             switch (node.kind) {
