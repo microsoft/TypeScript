@@ -1,5 +1,10 @@
 namespace ts {
     describe("convertCompilerOptionsFromJson", () => {
+        const formatDiagnosticHost: FormatDiagnosticsHost = {
+            getCurrentDirectory: () => "/apath/",
+            getCanonicalFileName: createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ true),
+            getNewLine: () => "\n"
+        };
         function assertCompilerOptions(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
             assertCompilerOptionsWithJson(json, configFileName, expectedResult);
             assertCompilerOptionsWithJsonNode(json, configFileName, expectedResult);
@@ -24,9 +29,11 @@ namespace ts {
         }
 
         function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: Diagnostic[] }) {
-            const fileText = JSON.stringify(json);
+            assertCompilerOptionsWithJsonText(JSON.stringify(json), configFileName, expectedResult);
+        }
+
+        function assertCompilerOptionsWithJsonText(fileText: string, configFileName: string, expectedResult: { compilerOptions: CompilerOptions, errors: (Diagnostic | string)[] }) {
             const result = parseJsonText(configFileName, fileText);
-            assert(!result.parseDiagnostics.length);
             assert(!!result.endOfFileToken);
             const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
@@ -37,18 +44,27 @@ namespace ts {
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
             assert.equal(actualCompilerOptions.configFile, result);
 
-            const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+            const actualErrors = (result.parseDiagnostics as Diagnostic[]).concat(actualParseErrors.filter(error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code));
             const expectedErrors = expectedResult.errors;
-            assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
+            assert.isTrue(expectedErrors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedErrors.map(e => isString(e) ? e : getDiagnosticString(e)), undefined, " ")}. Actual error: ${JSON.stringify(actualErrors.map(getDiagnosticString), undefined, " ")}.`);
             for (let i = 0; i < actualErrors.length; i++) {
                 const actualError = actualErrors[i];
                 const expectedError = expectedErrors[i];
-                assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
-                assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
-                assert(actualError.file);
-                assert(actualError.start);
-                assert(actualError.length);
+                if (isString(expectedError)) {
+                    assert.equal(getDiagnosticString(actualError), expectedError);
+                }
+                else {
+                    assert.equal(actualError.code, expectedError.code, `Expected error-code: ${JSON.stringify(expectedError.code)}. Actual error-code: ${JSON.stringify(actualError.code)}.`);
+                    assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
+                    assert(actualError.file);
+                    assert(actualError.start);
+                    assert(actualError.length);
+                }
             }
+        }
+
+        function getDiagnosticString(diagnostic: Diagnostic) {
+            return formatDiagnostic(diagnostic, formatDiagnosticHost);
         }
 
         // tsconfig.json tests
@@ -536,6 +552,100 @@ namespace ts {
                         noEmit: true
                     },
                     errors: []
+                }
+            );
+        });
+
+        it("Convert tsconfig options when there are multiple invalid strings", () => {
+            assertCompilerOptionsWithJsonText(`{
+  "compilerOptions": {
+    "target": "<%- options.useTsWithBabel ? 'esnext' : 'es5' %>",
+    "module": "esnext",
+    <%_ if (options.classComponent) { _%>
+    "experimentalDecorators": true,
+    <%_ } _%>
+    "sourceMap": true,
+    "types": [
+      "webpack-env"<% if (hasMocha || hasJest) { %>,<% } %>
+      <%_ if (hasMocha) { _%>
+      "mocha",
+      "chai"
+      <%_ } else if (hasJest) { _%>
+      "jest"
+      <%_ } _%>
+    ]
+  }
+}
+`, "tsconfig.json",
+                {
+                    compilerOptions: {
+                        target: undefined,
+                        module: ModuleKind.ESNext,
+                        types: []
+                    },
+                    errors: [
+                        "tsconfig.json(5,5): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(5,6): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(5,9): error TS1005: ':' expected.\n",
+                        "tsconfig.json(5,20): error TS1005: ',' expected.\n",
+                        "tsconfig.json(5,41): error TS1109: Expression expected.\n",
+                        "tsconfig.json(6,29): error TS1005: ';' expected.\n",
+                        "tsconfig.json(7,5): error TS1109: Expression expected.\n",
+                        "tsconfig.json(7,6): error TS1109: Expression expected.\n",
+                        "tsconfig.json(7,11): error TS1005: ',' expected.\n",
+                        "tsconfig.json(7,12): error TS1005: ':' expected.\n",
+                        "tsconfig.json(7,13): error TS1109: Expression expected.\n",
+                        "tsconfig.json(8,16): error TS1005: ',' expected.\n",
+                        "tsconfig.json(8,22): error TS1005: ':' expected.\n",
+                        "tsconfig.json(10,21): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,23): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,36): error TS1005: ',' expected.\n",
+                        "tsconfig.json(10,50): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,51): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,52): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,53): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,54): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,56): error TS1109: Expression expected.\n",
+                        "tsconfig.json(10,58): error TS1005: ',' expected.\n",
+                        "tsconfig.json(10,59): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(11,7): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(11,8): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(11,11): error TS1005: ':' expected.\n",
+                        "tsconfig.json(11,29): error TS1109: Expression expected.\n",
+                        "tsconfig.json(14,8): error TS1109: Expression expected.\n",
+                        "tsconfig.json(14,13): error TS1005: ',' expected.\n",
+                        "tsconfig.json(14,18): error TS1005: ':' expected.\n",
+                        "tsconfig.json(14,35): error TS1109: Expression expected.\n",
+                        "tsconfig.json(16,8): error TS1109: Expression expected.\n",
+                        "tsconfig.json(16,13): error TS1005: ',' expected.\n",
+                        "tsconfig.json(16,14): error TS1005: ':' expected.\n",
+                        "tsconfig.json(16,15): error TS1109: Expression expected.\n",
+                        "tsconfig.json(17,5): error TS1109: Expression expected.\n",
+                        "tsconfig.json(3,15): error TS6046: Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'esnext'.\n",
+                        "tsconfig.json(5,7): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(5,7): error TS5023: Unknown compiler option '_'.\n",
+                        "tsconfig.json(5,8): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n",
+                        "tsconfig.json(5,9): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(7,11): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(7,11): error TS5023: Unknown compiler option '_'.\n",
+                        "tsconfig.json(7,12): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n",
+                        "tsconfig.json(8,18): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(8,18): error TS5023: Unknown compiler option 'true'.\n",
+                        "tsconfig.json(8,22): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n",
+                        "tsconfig.json(10,7): error TS5024: Compiler option 'types' requires a value of type string.\n",
+                        "tsconfig.json(10,23): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(11,9): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(11,9): error TS5023: Unknown compiler option '_'.\n",
+                        "tsconfig.json(11,10): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n",
+                        "tsconfig.json(11,11): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(14,13): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(14,13): error TS5023: Unknown compiler option 'else'.\n",
+                        "tsconfig.json(14,17): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n",
+                        "tsconfig.json(14,18): error TS1136: Property assignment expected.\n",
+                        "tsconfig.json(16,13): error TS1327: String literal with double quotes expected.\n",
+                        "tsconfig.json(16,13): error TS5023: Unknown compiler option '_'.\n",
+                        "tsconfig.json(16,14): error TS1328: Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.\n"
+                    ]
                 }
             );
         });

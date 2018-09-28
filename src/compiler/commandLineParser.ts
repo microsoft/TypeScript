@@ -1529,7 +1529,12 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            if (!returnValue) {
+                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+            }
+
+            // Filter out invalid values
+            return filter(elements.map(element => convertPropertyValueToJson(element, elementOption)), v => v !== undefined);
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
