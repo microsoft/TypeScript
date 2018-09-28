@@ -17175,37 +17175,45 @@ namespace ts {
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
+                let tupleResult: Type | undefined;
                 if (inDestructuringPattern && minLength > 0) {
                     const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasRestElement));
                     type.pattern = node;
                     return type;
                 }
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
-                    const pattern = contextualType.pattern;
-                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
-                    // tuple type with the corresponding binding or assignment element types to make the lengths equal.
-                    if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
-                        const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
-                        for (let i = elementCount; i < patternElements.length; i++) {
-                            const e = patternElements[i];
-                            if (hasDefaultValue(e)) {
-                                elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
-                            }
-                            else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
-                                if (e.kind !== SyntaxKind.OmittedExpression) {
-                                    error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
-                                }
-                                elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
-                            }
-                        }
-                    }
-                    return createTupleType(elementTypes, minLength, hasRestElement);
+                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount)) {
+                    return tupleResult;
                 }
                 else if (forceTuple) {
                     return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }
             return getArrayLiteralType(elementTypes, UnionReduction.Subtype);
+        }
+
+        function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length) {
+            if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
+                const minLength = elementCount - (hasRestElement ? 1 : 0);
+                const pattern = contextualType.pattern;
+                // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
+                // tuple type with the corresponding binding or assignment element types to make the lengths equal.
+                if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
+                    const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
+                    for (let i = elementCount; i < patternElements.length; i++) {
+                        const e = patternElements[i];
+                        if (hasDefaultValue(e)) {
+                            elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
+                        }
+                        else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
+                            if (e.kind !== SyntaxKind.OmittedExpression) {
+                                error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            }
+                            elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
+                        }
+                    }
+                }
+                return createTupleType(elementTypes, minLength, hasRestElement);
+            }
         }
 
         function getArrayLiteralType(elementTypes: Type[], unionReduction = UnionReduction.Literal) {
@@ -17623,11 +17631,13 @@ namespace ts {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                     }
 
+                    const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes);
+                    const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
                     childrenPropSymbol.type = childrenTypes.length === 1 ?
                         childrenTypes[0] :
-                        createArrayType(getUnionType(childrenTypes));
+                        (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
