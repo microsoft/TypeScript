@@ -1,0 +1,64 @@
+=== tests/cases/compiler/bigintIndex.ts ===
+interface BigIntIndex<E> {
+>BigIntIndex : Symbol(BigIntIndex, Decl(bigintIndex.ts, 0, 0))
+>E : Symbol(E, Decl(bigintIndex.ts, 0, 22))
+
+    [index: bigint]: E; // should error
+>index : Symbol(index, Decl(bigintIndex.ts, 1, 5))
+>E : Symbol(E, Decl(bigintIndex.ts, 0, 22))
+}
+
+const arr: number[] = [1, 2, 3];
+>arr : Symbol(arr, Decl(bigintIndex.ts, 4, 5))
+
+let num: number = arr[1];
+>num : Symbol(num, Decl(bigintIndex.ts, 5, 3))
+>arr : Symbol(arr, Decl(bigintIndex.ts, 4, 5))
+
+num = arr["1"];
+>num : Symbol(num, Decl(bigintIndex.ts, 5, 3))
+>arr : Symbol(arr, Decl(bigintIndex.ts, 4, 5))
+
+num = arr[1n]; // should error
+>num : Symbol(num, Decl(bigintIndex.ts, 5, 3))
+>arr : Symbol(arr, Decl(bigintIndex.ts, 4, 5))
+
+let key: keyof any; // should be type "string | number | symbol"
+>key : Symbol(key, Decl(bigintIndex.ts, 9, 3))
+
+key = 123;
+>key : Symbol(key, Decl(bigintIndex.ts, 9, 3))
+
+key = "abc";
+>key : Symbol(key, Decl(bigintIndex.ts, 9, 3))
+
+key = Symbol();
+>key : Symbol(key, Decl(bigintIndex.ts, 9, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+key = 123n; // should error
+>key : Symbol(key, Decl(bigintIndex.ts, 9, 3))
+
+// Show correct usage of bigint index: explicitly convert to string
+const bigNum: bigint = 0n;
+>bigNum : Symbol(bigNum, Decl(bigintIndex.ts, 16, 5))
+
+const typedArray = new Uint8Array(3);
+>typedArray : Symbol(typedArray, Decl(bigintIndex.ts, 17, 5))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+typedArray[bigNum] = 0xAA; // should error
+>typedArray : Symbol(typedArray, Decl(bigintIndex.ts, 17, 5))
+>bigNum : Symbol(bigNum, Decl(bigintIndex.ts, 16, 5))
+
+typedArray[String(bigNum)] = 0xAA;
+>typedArray : Symbol(typedArray, Decl(bigintIndex.ts, 17, 5))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+>bigNum : Symbol(bigNum, Decl(bigintIndex.ts, 16, 5))
+
+typedArray["1"] = 0xBB;
+>typedArray : Symbol(typedArray, Decl(bigintIndex.ts, 17, 5))
+
+typedArray[2] = 0xCC;
+>typedArray : Symbol(typedArray, Decl(bigintIndex.ts, 17, 5))
+

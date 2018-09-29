@@ -3,6 +3,12 @@ const normalNumber = 123; // should not error
 >normalNumber : 123
 >123 : 123
 
+let bigintType: bigint; // should not error
+>bigintType : bigint
+
+let bigintLiteralType: 123n; // should error when used as type
+>bigintLiteralType : 123n
+
 const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should error
 >bigintNumber : bigint
 >123n * 0b1111n + 0o444n * 0x7fn : bigint
