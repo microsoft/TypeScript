@@ -2006,6 +2006,9 @@ namespace ts {
                 case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
 
+                case TypeReferenceSerializationKind.BigIntLikeType:
+                    return createIdentifier("BigInt");
+
                 case TypeReferenceSerializationKind.BooleanType:
                     return createIdentifier("Boolean");
 

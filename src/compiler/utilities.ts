@@ -976,6 +976,7 @@ namespace ts {
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.UnknownKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
@@ -6214,6 +6215,7 @@ namespace ts {
             || kind === SyntaxKind.AnyKeyword
             || kind === SyntaxKind.UnknownKeyword
             || kind === SyntaxKind.NumberKeyword
+            || kind === SyntaxKind.BigIntKeyword
             || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
