@@ -3697,8 +3697,12 @@ namespace ts {
                 break;
 
             case SyntaxKind.NumericLiteral:
-                if ((<NumericLiteral>node).numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
+                const flags = (<NumericLiteral>node).numericLiteralFlags;
+                if (flags & TokenFlags.BinaryOrOctalSpecifier) {
                     transformFlags |= TransformFlags.AssertES2015;
+                }
+                if (flags & TokenFlags.BigInt) {
+                    transformFlags |= TransformFlags.AssertESNext;
                 }
                 break;
 
@@ -3718,6 +3722,7 @@ namespace ts {
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.ObjectKeyword:
             case SyntaxKind.StringKeyword:
@@ -3926,6 +3931,7 @@ namespace ts {
                 return TransformFlags.MethodOrAccessorExcludes;
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.ObjectKeyword:

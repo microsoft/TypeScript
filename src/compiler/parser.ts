@@ -2247,8 +2247,7 @@ namespace ts {
 
         function parseLiteralLikeNode(kind: SyntaxKind): LiteralExpression | LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
-            const text = scanner.getTokenValue();
-            node.text = text;
+            node.text = scanner.getTokenValue();
 
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
@@ -2902,6 +2901,7 @@ namespace ts {
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.UndefinedKeyword:
@@ -2960,6 +2960,7 @@ namespace ts {
                 case SyntaxKind.UnknownKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
+                case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UniqueKeyword:
