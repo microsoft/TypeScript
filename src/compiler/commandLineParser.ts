@@ -584,6 +584,12 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
+        {
+            name: "experimentalBigInt",
+            type: "boolean",
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_expressions
+        },
 
         // Advanced
         {

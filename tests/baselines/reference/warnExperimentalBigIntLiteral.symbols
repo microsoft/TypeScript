@@ -1,0 +1,7 @@
+=== tests/cases/compiler/warnExperimentalBigIntLiteral.ts ===
+const normalNumber = 123; // should not error
+>normalNumber : Symbol(normalNumber, Decl(warnExperimentalBigIntLiteral.ts, 0, 5))
+
+const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should error
+>bigintNumber : Symbol(bigintNumber, Decl(warnExperimentalBigIntLiteral.ts, 1, 5))
+
