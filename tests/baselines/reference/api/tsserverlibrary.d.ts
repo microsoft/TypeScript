@@ -3013,6 +3013,11 @@ declare namespace ts {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
     }
+    /** Represents a bigint literal value without requiring bigint support */
+    interface PseudoBigInt {
+        negative: boolean;
+        base10Value: string;
+    }
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;

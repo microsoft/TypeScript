@@ -5761,4 +5761,10 @@ namespace ts {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
     }
+
+    /** Represents a bigint literal value without requiring bigint support */
+    export interface PseudoBigInt {
+        negative: boolean;
+        base10Value: string;
+    }
 }
