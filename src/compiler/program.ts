@@ -2049,7 +2049,11 @@ namespace ts {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
                 // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-                if (file && options.forceConsistentCasingInFileNames) {
+                
+                //default to true
+                const forceCasing = options.forceConsistentCasingInFileNames || options.forceConsistentCasingInFileNames==null
+
+                if (file && forceCasing) {
                     let inputName = fileName;
                     const checkedName = file.fileName;
                     const isRedirect = toPath(checkedName) !== toPath(inputName);
