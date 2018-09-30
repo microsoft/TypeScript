@@ -62,7 +62,7 @@ namespace ts {
         return pretty ?
             (diagnostic, newLine, options) => {
                 clearScreenIfNotWatchingForFileChanges(system, diagnostic, options);
-                let output = `[${formatColorAndReset(new Date().toLocaleTimeString(), ForegroundColorEscapeSequences.Grey)}] `;
+                let output = `[${formatColorAndReset(new Date().toLocaleTimeString("en-US", { hour12: false }), ForegroundColorEscapeSequences.Grey)}] `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${newLine + newLine}`;
                 system.write(output);
             } :
@@ -73,7 +73,7 @@ namespace ts {
                     output += newLine;
                 }
 
-                output += `${new Date().toLocaleTimeString()} - `;
+                output += `${new Date().toLocaleTimeString("en-US", { hour12: false })} - `;
                 output += `${flattenDiagnosticMessageText(diagnostic.messageText, system.newLine)}${getPlainDiagnosticFollowingNewLines(diagnostic, newLine)}`;
 
                 system.write(output);
