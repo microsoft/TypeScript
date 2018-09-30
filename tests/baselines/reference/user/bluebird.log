@@ -20,6 +20,10 @@ node_modules/bluebird/js/release/debuggability.js(168,17): error TS2403: Subsequ
 node_modules/bluebird/js/release/debuggability.js(174,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(175,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any, desc: any) => any)' has no compatible call signatures.
 node_modules/bluebird/js/release/debuggability.js(176,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any, desc: any) => any)' has no compatible call signatures.
+node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["removeListener", string, (...args: any[]) => void]'.
+  Property '0' is missing in type 'IArguments'.
+node_modules/bluebird/js/release/debuggability.js(242,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'pop' is missing in type 'IArguments'.
 node_modules/bluebird/js/release/debuggability.js(491,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/debuggability.js(562,46): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/debuggability.js(736,5): error TS2721: Cannot invoke an object which is possibly 'null'.
@@ -50,6 +54,7 @@ node_modules/bluebird/js/release/map.js(111,23): error TS2339: Property '_values
 node_modules/bluebird/js/release/map.js(113,18): error TS2339: Property '_isResolved' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(127,10): error TS2339: Property '_resolve' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(156,66): error TS2339: Property 'promise' does not exist on type 'MappingPromiseArray'.
+node_modules/bluebird/js/release/method.js(15,46): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/bluebird/js/release/nodeback.js(21,20): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: {}) => string[]) | ((o: any) => string[])' has no compatible call signatures.
 node_modules/bluebird/js/release/nodeify.js(32,19): error TS2339: Property 'cause' does not exist on type 'Error'.
 node_modules/bluebird/js/release/promise.js(4,12): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.

@@ -520,6 +520,7 @@ namespace ts.server {
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
+                typesMapLocation,
             });
 
             this.eventPort = eventPort;

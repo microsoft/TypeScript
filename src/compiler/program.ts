@@ -207,7 +207,7 @@ namespace ts {
             ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
         ];
 
-        if (program.getCompilerOptions().declaration) {
+        if (getEmitDeclarations(program.getCompilerOptions())) {
             addRange(diagnostics, program.getDeclarationDiagnostics(sourceFile, cancellationToken));
         }
 
@@ -485,11 +485,11 @@ namespace ts {
 
         function sourceFileNotUptoDate(sourceFile: SourceFile) {
             return !sourceFileVersionUptoDate(sourceFile) ||
-                hasInvalidatedResolution(sourceFile.resolvedPath || sourceFile.path);
+                hasInvalidatedResolution(sourceFile.resolvedPath);
         }
 
         function sourceFileVersionUptoDate(sourceFile: SourceFile) {
-            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath || sourceFile.path);
+            return sourceFile.version === getSourceVersion(sourceFile.resolvedPath);
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
@@ -663,7 +663,7 @@ namespace ts {
 
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: (ResolvedProjectReference | undefined)[] | undefined = projectReferences ? [] : undefined;
-        const projectReferenceRedirects: Map<string> = createMap();
+        let projectReferenceRedirects: ParsedCommandLine[] | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -681,7 +681,7 @@ namespace ts {
                             const dtsOutfile = changeExtension(out, ".d.ts");
                             processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                         }
-                        addProjectReferenceRedirects(parsedRef.commandLine, projectReferenceRedirects);
+                        addProjectReferenceRedirects(parsedRef.commandLine);
                     }
                 }
             }
@@ -817,9 +817,9 @@ namespace ts {
                     // If a rootDir is specified use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
                 }
-                else if (options.composite) {
+                else if (options.composite && options.configFilePath) {
                     // Project compilations never infer their root from the input source paths
-                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath!)); // TODO: GH#18217
+                    commonSourceDirectory = getDirectoryPath(normalizeSlashes(options.configFilePath));
                     checkSourceFilesBelongToPath(emittedFiles, commonSourceDirectory);
                 }
                 else {
@@ -1079,7 +1079,7 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath || oldSourceFile.path, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
                     : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
@@ -1110,7 +1110,11 @@ namespace ts {
                     fileChanged = newSourceFile !== oldSourceFile;
                 }
 
+                // Since the project references havent changed, its right to set originalFileName and resolvedPath here
                 newSourceFile.path = oldSourceFile.path;
+                newSourceFile.originalFileName = oldSourceFile.originalFileName;
+                newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
+                newSourceFile.fileName = oldSourceFile.fileName;
                 filePaths.push(newSourceFile.path);
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
@@ -1187,7 +1191,7 @@ namespace ts {
             modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
-                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
+                const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.originalFileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = getModuleNames(newSourceFile);
                     const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile, modifiedFilePaths };
@@ -1248,7 +1252,7 @@ namespace ts {
             if (resolvedProjectReferences) {
                 resolvedProjectReferences.forEach(ref => {
                     if (ref) {
-                        addProjectReferenceRedirects(ref.commandLine, projectReferenceRedirects);
+                        addProjectReferenceRedirects(ref.commandLine);
                     }
                 });
             }
@@ -1388,7 +1392,7 @@ namespace ts {
                         ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
                     ];
 
-                    if (diagnostics.length === 0 && program.getCompilerOptions().declaration) {
+                    if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {
                         declarationDiagnostics = program.getDeclarationDiagnostics(/*sourceFile*/ undefined, cancellationToken);
                     }
 
@@ -2040,6 +2044,7 @@ namespace ts {
 
         // Get source file from normalized fileName
         function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile: SourceFile, refPos: number, refEnd: number, packageId: PackageId | undefined): SourceFile | undefined {
+            const originalFileName = fileName;
             if (filesByName.has(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -2136,6 +2141,7 @@ namespace ts {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
+                file.originalFileName = originalFileName;
 
                 if (host.useCaseSensitiveFileNames()) {
                     const pathLowerCase = path.toLowerCase();
@@ -2173,25 +2179,29 @@ namespace ts {
         }
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
-            const path = toPath(fileName);
+            // Ignore dts or any of the non ts files
+            if (!projectReferenceRedirects || fileExtensionIs(fileName, Extension.Dts) || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
+                return undefined;
+            }
+
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
-            const normalized = getNormalizedAbsolutePath(fileName, path);
-            let result: string | undefined;
-            projectReferenceRedirects.forEach((v, k) => {
-                if (result !== undefined) {
+            return forEach(projectReferenceRedirects, referencedProject => {
+                // not input file from the referenced project, ignore
+                if (!contains(referencedProject.fileNames, fileName, isSameFile)) {
                     return undefined;
                 }
-                if (normalized.indexOf(k) === 0) {
-                    result = changeExtension(fileName.replace(k, v), ".d.ts");
-                }
+
+                const out = referencedProject.options.outFile || referencedProject.options.out;
+                return out ?
+                    changeExtension(out, Extension.Dts) :
+                    getOutputDeclarationFileName(fileName, referencedProject);
             });
-            return result;
         }
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
-                const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
+                const referencedFileName = resolveTripleslashReference(ref.fileName, file.originalFileName);
                 processSourceFile(referencedFileName, isDefaultLib, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined, file, ref.pos, ref.end);
             });
         }
@@ -2203,7 +2213,7 @@ namespace ts {
                 return;
             }
 
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.fileName);
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName);
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
@@ -2299,7 +2309,7 @@ namespace ts {
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const moduleNames = getModuleNames(file);
                 const oldProgramState: OldProgramState = { program: oldProgram, oldSourceFile: oldProgram && oldProgram.getSourceFile(file.fileName), modifiedFilePaths };
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.originalFileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
@@ -2390,15 +2400,8 @@ namespace ts {
             return { commandLine, sourceFile };
         }
 
-        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine, target: Map<string>) {
-            const rootDir = normalizePath(referencedProject.options.rootDir || getDirectoryPath(referencedProject.options.configFilePath!)); // TODO: GH#18217
-            target.set(rootDir, getDeclarationOutputDirectory(referencedProject));
-        }
-
-        function getDeclarationOutputDirectory(proj: ParsedCommandLine) {
-            return proj.options.declarationDir ||
-                proj.options.outDir ||
-                getDirectoryPath(proj.options.configFilePath!); // TODO: GH#18217
+        function addProjectReferenceRedirects(referencedProject: ParsedCommandLine) {
+            (projectReferenceRedirects || (projectReferenceRedirects = [])).push(referencedProject);
         }
 
         function verifyCompilerOptions() {
@@ -2407,8 +2410,8 @@ namespace ts {
             }
 
             if (options.isolatedModules) {
-                if (options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");
+                if (getEmitDeclarations(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, getEmitDeclarationOptionName(options), "isolatedModules");
                 }
 
                 if (options.noEmitOnError) {
@@ -2533,7 +2536,7 @@ namespace ts {
 
             if (options.declarationDir) {
                 if (!getEmitDeclarations(options)) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration");
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "declarationDir", "declaration", "composite");
                 }
                 if (options.out || options.outFile) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
@@ -2541,7 +2544,7 @@ namespace ts {
             }
 
             if (options.declarationMap && !getEmitDeclarations(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationMap", "declaration");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "declarationMap", "declaration", "composite");
             }
 
             if (options.lib && options.noLib) {
@@ -2610,7 +2613,7 @@ namespace ts {
             }
 
             if (!options.noEmit && options.allowJs && getEmitDeclarations(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", options.declaration ? "declaration" : "composite");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", getEmitDeclarationOptionName(options));
             }
 
             if (options.checkJs && !options.allowJs) {
@@ -2618,8 +2621,8 @@ namespace ts {
             }
 
             if (options.emitDeclarationOnly) {
-                if (!options.declaration) {
-                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDeclarationOnly", "declaration");
+                if (!getEmitDeclarations(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "emitDeclarationOnly", "declaration", "composite");
                 }
 
                 if (options.noEmit) {
@@ -2877,6 +2880,9 @@ namespace ts {
         return resolveConfigFileProjectName(passedInRef.path);
     }
 
+    function getEmitDeclarationOptionName(options: CompilerOptions) {
+        return options.declaration ? "declaration" : "composite";
+    }
     /* @internal */
     /**
      * Returns a DiagnosticMessage if we won't include a resolved module due to its extension.

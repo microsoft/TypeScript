@@ -3759,6 +3759,10 @@
         "category": "Message",
         "code": 6213
     },
+    "Enable strict 'bind', 'call', and 'apply' methods on functions.": {
+        "category": "Message",
+        "code": 6214
+    },
 
     "Projects to reference": {
         "category": "Message",

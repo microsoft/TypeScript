@@ -78,6 +78,14 @@ namespace ts {
             type: "boolean"
         },
         {
+            name: "watch",
+            shortName: "w",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Watch_input_files,
+        },
+        {
             name: "preserveWatchOutput",
             type: "boolean",
             showInSimplifiedHelpView: false,
@@ -96,13 +104,12 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
+
         {
-            name: "watch",
-            shortName: "w",
+            name: "traceResolution",
             type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Watch_input_files,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
     ];
 
@@ -367,6 +374,14 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_function_types
         },
         {
+            name: "strictBindCallApply",
+            type: "boolean",
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_bind_call_and_apply_methods_on_functions
+        },
+        {
             name: "strictPropertyInitialization",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -580,12 +595,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Show_verbose_diagnostic_information
-        },
-        {
-            name: "traceResolution",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Enable_tracing_of_the_name_resolution_process
         },
         {
             name: "resolveJsonModule",
@@ -1520,7 +1529,12 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            if (!returnValue) {
+                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+            }
+
+            // Filter out invalid values
+            return filter(elements.map(element => convertPropertyValueToJson(element, elementOption)), v => v !== undefined);
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
@@ -1886,7 +1900,8 @@ namespace ts {
                     filesSpecs = <ReadonlyArray<string>>raw.files;
                     const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
                     const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
-                    if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
+                    const hasExtends = hasProperty(raw, "extends");
+                    if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
                         if (sourceFile) {
                             const fileName = configFileName || "tsconfig.json";
                             const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;

@@ -4,6 +4,8 @@ namespace ts.TestFSWithWatch {
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}

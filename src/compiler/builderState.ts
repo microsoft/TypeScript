@@ -88,7 +88,7 @@ namespace ts.BuilderState {
     function getReferencedFileFromImportedModuleSymbol(symbol: Symbol) {
         if (symbol.declarations && symbol.declarations[0]) {
             const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-            return declarationSourceFile && (declarationSourceFile.resolvedPath || declarationSourceFile.path);
+            return declarationSourceFile && declarationSourceFile.resolvedPath;
         }
     }
 
