@@ -2310,12 +2310,9 @@ namespace ts {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
-            const diag = !isSourceFile(node.parent)
-                ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
-                : !isExternalModule(node.parent)
-                ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
-                : !node.parent.isDeclarationFile
-                ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
+            const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
+                : !isExternalModule(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
+                : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
                 : undefined;
             if (diag) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
