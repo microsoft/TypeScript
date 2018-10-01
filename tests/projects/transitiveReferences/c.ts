@@ -1,2 +1,4 @@
 import {b} from './b';
-console.log(b);
+import {X} from "@ref/a";
+b;
+X;

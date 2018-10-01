@@ -392,6 +392,7 @@ export class cNew {}`);
                     ...getLibs(),
                     "/src/a.d.ts",
                     "/src/b.d.ts",
+                    "/src/refs/a.d.ts",
                     "/src/c.ts"
                 ]);
             });
