@@ -300,23 +300,16 @@ type S2 = {
     b: string;
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -886,23 +879,16 @@ var C1 = /** @class */ (function () {
     };
     return C1;
 }());
-function f90(x1, x2, x3, x4) {
+function f90(x1, x2, x3) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 function f91(x, y, z) {
     var a;
@@ -1240,7 +1226,7 @@ declare type S2 = {
     a: string;
     b: string;
 };
-declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
 declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {
