@@ -58,12 +58,13 @@ namespace ts.projectSystem {
         getLogFileName: () => undefined,
     };
 
-    function createHasErrorMessageLogger() {
+    export function createHasErrorMessageLogger() {
         let hasErrorMsg = false;
         const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
         const logger: server.Logger = {
             close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-            msg: () => {
+            msg: (s, type) => {
+                Debug.fail(`Error: ${s}, type: ${type}`);
                 hasErrorMsg = true;
             }
         };
@@ -322,7 +323,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || nullLogger,
+            logger: opts.logger || createHasErrorMessageLogger().logger,
             canUseEvents: false
         };
 
@@ -359,7 +360,7 @@ namespace ts.projectSystem {
     }
     export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
         const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || nullLogger;
+        const logger = parameters.logger || createHasErrorMessageLogger().logger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
     }
