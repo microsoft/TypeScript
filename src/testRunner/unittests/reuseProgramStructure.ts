@@ -119,7 +119,6 @@ namespace ts {
         });
         const useCaseSensitiveFileNames = sys && sys.useCaseSensitiveFileNames;
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        const filesByPath = useGetSourceFileByPath ? mapEntries(files, (fileName, file) => [toPath(fileName, "", getCanonicalFileName), file]) : undefined;
         const trace: string[] = [];
         const result: TestCompilerHost = {
             trace: s => trace.push(s),
@@ -139,7 +138,8 @@ namespace ts {
             },
         };
         if (useGetSourceFileByPath) {
-            result.getSourceFileByPath = (_fileName, path) => filesByPath!.get(path);
+            const filesByPath = mapEntries(files, (fileName, file) => [toPath(fileName, "", getCanonicalFileName), file]);
+            result.getSourceFileByPath = (_fileName, path) => filesByPath.get(path);
         }
         return result;
     }
