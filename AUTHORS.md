@@ -69,6 +69,7 @@ TypeScript is authored by:
 * Chuck Jazdzewski
 * Colby Russell
 * Colin Snover
+* Colin Petherbridge
 * Cotton Hou 
 * Cyrus Najmabadi
 * Dafrok Zhang
