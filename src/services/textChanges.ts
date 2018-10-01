@@ -213,7 +213,7 @@ namespace ts.textChanges {
         formatContext: formatting.FormatContext;
     }
 
-    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
+    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature | PropertyAccessExpression;
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
@@ -347,11 +347,11 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
-            if (isInJSFile(sourceFile)) {
-                this.tryInsertJSDocType(sourceFile, node, type);
-                return;
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
+            if (isInJSFile(sourceFile) && topNode.parent.kind !== SyntaxKind.PropertySignature) {
+                return this.tryInsertJSDocType(sourceFile, topNode, type);
             }
+            let node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
@@ -373,18 +373,14 @@ namespace ts.textChanges {
          * (or correctly handle parameterdecl by walking up and adding a param, at least)
          */
         public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
-            // if (isParameter(node)) {
-                // RECUR with node=node.parent
-                // node = node.parent;
-            // }
-
-            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, the line before might the wrong place, etc)
+            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, the line before might be the wrong place, etc)
             // TODO: Parameter probably shouldn't need to manually unescape its text
             const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
-            const commentText = isParameter(node) && isIdentifier(node.name) ?
-                ` @param {${printed}} ${unescapeLeadingUnderscores(node.name.escapedText)} ` :
+            const commentText =
+                isParameter(node) && isIdentifier(node.name) ? ` @param {${printed}} ${unescapeLeadingUnderscores(node.name.escapedText)} ` :
+                isGetAccessorDeclaration(node) ? ` @return {${printed}}` :
                 ` @type {${printed}} `;
-            this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos).line, node.pos, commentText, CommentKind.Jsdoc);
+            this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos + 1).line, node.pos, commentText, CommentKind.Jsdoc);
             // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
 

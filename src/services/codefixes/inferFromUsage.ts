@@ -47,7 +47,7 @@ namespace ts.codefix {
     function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
         switch (errorCode) {
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                return isSetAccessor(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
+                return isSetAccessorDeclaration(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return Diagnostics.Infer_parameter_types_from_usage;
             default:
@@ -56,7 +56,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker): Declaration | undefined {
-        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
+        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
             return undefined;
         }
 
@@ -65,9 +65,15 @@ namespace ts.codefix {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
+                // TODO: Here!
                 if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
                     annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
                     return parent;
+                }
+                if (isPropertyAccessExpression(parent)) {
+                    annotateThisPropertyAssignment(changes, sourceFile, parent, program, cancellationToken);
+                    return parent;
+                    // Try jumping!
                 }
                 return undefined;
 
@@ -89,7 +95,7 @@ namespace ts.codefix {
         switch (errorCode) {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                if (isSetAccessor(containingFunction)) {
+                if (isSetAccessorDeclaration(containingFunction)) {
                     annotateSetAccessor(changes, sourceFile, containingFunction, program, cancellationToken);
                     return containingFunction;
                 }
@@ -105,7 +111,7 @@ namespace ts.codefix {
             // Get Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
             case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
-                if (isGetAccessor(containingFunction) && isIdentifier(containingFunction.name)) {
+                if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
                     annotate(changes, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program);
                     return containingFunction;
                 }
@@ -113,7 +119,7 @@ namespace ts.codefix {
 
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
-                if (isSetAccessor(containingFunction)) {
+                if (isSetAccessorDeclaration(containingFunction)) {
                     annotateSetAccessor(changes, sourceFile, containingFunction, program, cancellationToken);
                     return containingFunction;
                 }
@@ -128,6 +134,10 @@ namespace ts.codefix {
         if (isIdentifier(declaration.name)) {
             annotate(changes, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program);
         }
+    }
+
+    function annotateThisPropertyAssignment(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: PropertyAccessExpression, program: Program, cancellationToken: CancellationToken): void {
+        annotate(changes, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program);
     }
 
     function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {

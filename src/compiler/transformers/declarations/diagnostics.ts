@@ -33,8 +33,8 @@ namespace ts {
             isPropertyDeclaration(node) ||
             isPropertySignature(node) ||
             isBindingElement(node) ||
-            isSetAccessor(node) ||
-            isGetAccessor(node) ||
+            isSetAccessorDeclaration(node) ||
+            isGetAccessorDeclaration(node) ||
             isConstructSignatureDeclaration(node) ||
             isCallSignatureDeclaration(node) ||
             isMethodDeclaration(node) ||
@@ -50,7 +50,7 @@ namespace ts {
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
-        if (isSetAccessor(node) || isGetAccessor(node)) {
+        if (isSetAccessorDeclaration(node) || isGetAccessorDeclaration(node)) {
             return getAccessorNameVisibilityError;
         }
         else if (isMethodSignature(node) || isMethodDeclaration(node)) {
@@ -126,7 +126,7 @@ namespace ts {
         if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
-        else if (isSetAccessor(node) || isGetAccessor(node)) {
+        else if (isSetAccessorDeclaration(node) || isGetAccessorDeclaration(node)) {
             return getAccessorDeclarationTypeVisibilityError;
         }
         else if (isConstructSignatureDeclaration(node) || isCallSignatureDeclaration(node) || isMethodDeclaration(node) || isMethodSignature(node) || isFunctionDeclaration(node) || isIndexSignatureDeclaration(node)) {
