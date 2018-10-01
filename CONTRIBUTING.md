@@ -47,12 +47,16 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
-## Some things in general
+## Tips
 
-As Typescript is a big codebase, so some might run into issues while cloning this repo.  Hence, it is advisable to use
-`git clone --depth=1 <remote-url>` to clone it faster.
+### Faster clones
 
-Run `jake build` after every change. If you want to test it locally in some another project then use `node <path-to-local-typescript-folder>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch`, use `node <path-to-local-typescript-folder>/TypeScript/built/local/tsc.js --watch`.
+The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using
+`git clone --depth=1` to save time.
+
+### Using local builds
+
+Run `jake build` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
 ## Contributing bug fixes
 
