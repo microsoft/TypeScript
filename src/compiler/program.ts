@@ -2024,10 +2024,12 @@ namespace ts {
             }
         }
 
-        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path): SourceFile {
+        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string): SourceFile {
             const redirect: SourceFile = Object.create(redirectTarget);
             redirect.fileName = fileName;
             redirect.path = path;
+            redirect.resolvedPath = resolvedPath;
+            redirect.originalFileName = originalFileName;
             redirect.redirectInfo = { redirectTarget, unredirected };
             Object.defineProperties(redirect, {
                 id: {
@@ -2118,7 +2120,7 @@ namespace ts {
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
-                    const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path); // TODO: GH#18217
+                    const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName); // TODO: GH#18217
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageName.set(path, packageId.name);
