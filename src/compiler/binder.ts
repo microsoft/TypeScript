@@ -2311,27 +2311,17 @@ namespace ts {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
-
-            if (node.parent.kind !== SyntaxKind.SourceFile) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
-                return;
+            const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
+                : !isExternalModule(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
+                : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
+                : undefined;
+            if (diag) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
             }
             else {
-                const parent = node.parent as SourceFile;
-
-                if (!isExternalModule(parent)) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
-                    return;
-                }
-
-                if (!parent.isDeclarationFile) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
-                    return;
-                }
+                file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
+                declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
-
-            file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
-            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
