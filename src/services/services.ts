@@ -1232,11 +1232,11 @@ namespace ts {
             }
 
             if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames);
+                compilerHost.resolveModuleNames = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames, redirectedReference);
             }
             if (host.resolveTypeReferenceDirectives) {
-                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
-                    return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile);
+                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference) => {
+                    return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile, redirectedReference);
                 };
             }
 

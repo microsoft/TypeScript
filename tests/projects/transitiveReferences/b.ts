@@ -1,2 +1,2 @@
-import {A} from './a';
+import {A} from '@ref/a';
 export const b = new A();

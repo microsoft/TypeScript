@@ -406,7 +406,7 @@ namespace ts {
         }
     }
 
-    function loadWithLocalCache<T>(names: string[], containingFile: string, loader: (name: string, containingFile: string) => T): T[] {
+    function loadWithLocalCache<T>(names: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
         if (names.length === 0) {
             return [];
         }
@@ -418,7 +418,7 @@ namespace ts {
                 result = cache.get(name)!;
             }
             else {
-                cache.set(name, result = loader(name, containingFile));
+                cache.set(name, result = loader(name, containingFile, redirectedReference));
             }
             resolutions.push(result);
         }
@@ -638,10 +638,10 @@ namespace ts {
         let _referencesArrayLiteralSyntax: ArrayLiteralExpression | null | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
-        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[]) => ResolvedModuleFull[];
+        let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames).map(resolved => {
+            resolveModuleNamesWorker = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.assertEachDefined(moduleNames), containingFile, reusedNames, redirectedReference).map(resolved => {
                 // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
                 if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
                     return resolved as ResolvedModuleFull;
@@ -653,17 +653,17 @@ namespace ts {
         }
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x));
-            const loader = (moduleName: string, containingFile: string) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache).resolvedModule!; // TODO: GH#18217
-            resolveModuleNamesWorker = (moduleNames, containingFile) => loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, loader);
+            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache, redirectedReference).resolvedModule!; // TODO: GH#18217
+            resolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
 
-        let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
+        let resolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference) => ResolvedTypeReferenceDirective[];
         if (host.resolveTypeReferenceDirectives) {
-            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile);
+            resolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.assertEachDefined(typeDirectiveNames), containingFile, redirectedReference);
         }
         else {
-            const loader = (typesRef: string, containingFile: string) => resolveTypeReferenceDirective(typesRef, containingFile, options, host).resolvedTypeReferenceDirective!; // TODO: GH#18217
-            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, loader);
+            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
+            resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.assertEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -760,12 +760,6 @@ namespace ts {
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
-        // Do not use our own command line for projectReferenceRedirects
-        if (projectReferenceRedirects) {
-            Debug.assert(!!options.configFilePath);
-            const path = toPath(options.configFilePath!);
-            projectReferenceRedirects.delete(path);
-        }
 
         program = {
             getRootFileNames: () => rootNames,
@@ -887,7 +881,7 @@ namespace ts {
             if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
-                return resolveModuleNamesWorker(moduleNames, containingFile);
+                return resolveModuleNamesWorker(moduleNames, containingFile, /*reusedNames*/ undefined, getProjectReferenceRedirectProject(file.originalFileName));
             }
 
             const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
@@ -967,7 +961,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames)
+                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames, getProjectReferenceRedirectProject(file.originalFileName))
                 : emptyArray;
 
             // Combine results of resolutions and predicted results
@@ -1248,7 +1242,7 @@ namespace ts {
                 if (resolveTypeReferenceDirectiveNamesWorker) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
                     const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
-                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath);
+                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getProjectReferenceRedirectProject(newSourceFile.originalFileName));
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                     if (resolutionsChanged) {
@@ -2219,16 +2213,35 @@ namespace ts {
 
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
+            const referencedProject = getProjectReferenceRedirectProject(fileName);
+            if (!referencedProject) {
+                return undefined;
+            }
+
+            const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
+            return out ?
+                changeExtension(out, Extension.Dts) :
+                getOutputDeclarationFileName(fileName, referencedProject.commandLine);
+        }
+
+        /**
+         * Get the referenced project if the file is input file from that reference project
+         */
+        function getProjectReferenceRedirectProject(fileName: string) {
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length) {
+                return undefined;
+            }
+
+            // If this file is input file of the referenced projec
             return forEachEntry(projectReferenceRedirects!, referencedProject => {
                 // not input file from the referenced project, ignore
-                if (!referencedProject || !contains(referencedProject.commandLine.fileNames, fileName, isSameFile)) {
+                if (!referencedProject ||
+                    options.configFilePath === referencedProject.commandLine.options.configFilePath ||
+                    !contains(referencedProject.commandLine.fileNames, fileName, isSameFile)) {
                     return undefined;
                 }
 
-                const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
-                return out ?
-                    changeExtension(out, Extension.Dts) :
-                    getOutputDeclarationFileName(fileName, referencedProject.commandLine);
+                return referencedProject;
             });
         }
 
@@ -2246,7 +2259,7 @@ namespace ts {
                 return;
             }
 
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName);
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName, getProjectReferenceRedirectProject(file.originalFileName));
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];

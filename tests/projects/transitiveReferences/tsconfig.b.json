@@ -1,1 +1,11 @@
-{"compilerOptions": {"composite": true}, "files": ["b.ts"], "references": [{"path": "tsconfig.a.json"}]}
+{
+    "compilerOptions": {
+        "composite": true,
+        "baseUrl": "./",
+        "paths": {
+            "@ref/*": [ "./*" ]
+        }
+    },
+    "files": [ "b.ts" ],
+    "references": [ { "path": "tsconfig.a.json" } ]
+}
