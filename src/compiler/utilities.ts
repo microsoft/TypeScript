@@ -8370,10 +8370,10 @@ namespace ts {
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
     }
 
-    export function getOrUpdate<T>(map: Map<T>, key: string, getValue: () => T): T {
+    export function getOrUpdate<T>(map: Map<T>, key: string, getDefault: () => T): T {
         const got = map.get(key);
         if (got === undefined) {
-            const value = getValue();
+            const value = getDefault();
             map.set(key, value);
             return value;
         }

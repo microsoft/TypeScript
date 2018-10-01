@@ -905,11 +905,8 @@ namespace ts {
                         ({ firstFile, secondFile, conflictingSymbols: createMap() }));
                     const conflictingSymbolInfo = getOrUpdate<DuplicateInfoForSymbol>(filesDuplicates.conflictingSymbols, symbolName, () =>
                         ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] }));
-                    for (const { locs, symbol } of [{ locs: conflictingSymbolInfo.firstFileLocations, symbol: source }, { locs: conflictingSymbolInfo.secondFileLocations, symbol: target }]) {
-                        for (const decl of symbol.declarations) {
-                            pushIfUnique(locs, (getExpandoInitializer(decl, /*isPrototypeAssignment*/ false) ? getNameOfExpando(decl) : getNameOfDeclaration(decl)) || decl);
-                        }
-                    }
+                    addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source);
+                    addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target);
                 }
                 else {
                     addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
@@ -917,6 +914,12 @@ namespace ts {
                 }
             }
             return target;
+
+            function addDuplicateLocations(locs: Node[], symbol: Symbol): void {
+                for (const decl of symbol.declarations) {
+                    pushIfUnique(locs, (getExpandoInitializer(decl, /*isPrototypeAssignment*/ false) ? getNameOfExpando(decl) : getNameOfDeclaration(decl)) || decl);
+                }
+            }
         }
 
         function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
@@ -28851,15 +28854,16 @@ namespace ts {
                 if (conflictingSymbols.size < 8) {
                     conflictingSymbols.forEach(({ isBlockScoped, firstFileLocations, secondFileLocations }, symbolName) => {
                         const message = isBlockScoped ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
-                        for (const { firstLocs, secondLocs } of [{ firstLocs: firstFileLocations, secondLocs: secondFileLocations }, { firstLocs: secondFileLocations, secondLocs: firstFileLocations }]) {
-                            for (const node of firstLocs) {
-                                addDuplicateDeclarationError(node, message, symbolName, secondLocs);
-                            }
+                        for (const node of firstFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, secondFileLocations);
+                        }
+                        for (const node of secondFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, firstFileLocations);
                         }
                     });
                 }
                 else {
-                    // Otheriwse issue top-level error since the files appear very identical in terms of what they appear
+                    // Otherwise issue top-level error since the files appear very identical in terms of what they contain
                     const list = arrayFrom(conflictingSymbols.keys()).join(", ");
                     diagnostics.add(addRelatedInfo(
                         createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
