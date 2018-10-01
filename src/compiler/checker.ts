@@ -465,7 +465,19 @@ namespace ts {
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const globals = createSymbolTable();
-        let amalgamatedDuplicates: Map<{ firstFile: SourceFile, secondFile: SourceFile, firstFileInstances: Map<{ instances: Node[], blockScoped: boolean }>, secondFileInstances: Map<{ instances: Node[], blockScoped: boolean }> }> | undefined;
+        interface DuplicateInfoForSymbol {
+            readonly firstFileLocations: Node[];
+            readonly secondFileLocations: Node[];
+            readonly isBlockScoped: boolean;
+        }
+        interface DuplicateInfoForFiles {
+            readonly firstFile: SourceFile;
+            readonly secondFile: SourceFile;
+            /** Key is symbol name. */
+            readonly conflictingSymbols: Map<DuplicateInfoForSymbol>;
+        }
+        /** Key is "/path/to/a.ts|/path/to/b.ts". */
+        let amalgamatedDuplicates: Map<DuplicateInfoForFiles> | undefined;
         const reverseMappedCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
         /**
@@ -886,50 +898,45 @@ namespace ts {
                         : Diagnostics.Duplicate_identifier_0;
                 const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
                 const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
+                const symbolName = symbolToString(source);
 
                 // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
                 if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
                     const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
                     const secondFile = firstFile === sourceSymbolFile ? targetSymbolFile : sourceSymbolFile;
-                    const cacheKey = `${firstFile.path}|${secondFile.path}`;
-                    const existing = amalgamatedDuplicates.get(cacheKey) || { firstFile, secondFile, firstFileInstances: createMap(), secondFileInstances: createMap() };
-                    const symbolName = symbolToString(source);
-                    const firstInstanceList = existing.firstFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
-                    const secondInstanceList = existing.secondFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
-
-                    forEach(source.declarations, node => {
-                        const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                        const targetList = sourceSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
-                        targetList.instances.push(errorNode);
-                    });
-                    forEach(target.declarations, node => {
-                        const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                        const targetList = targetSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
-                        targetList.instances.push(errorNode);
-                    });
-
-                    existing.firstFileInstances.set(symbolName, firstInstanceList);
-                    existing.secondFileInstances.set(symbolName, secondInstanceList);
-                    amalgamatedDuplicates.set(cacheKey, existing);
-                    return target;
+                    const filesDuplicates = getOrUpdate<DuplicateInfoForFiles>(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, () =>
+                        ({ firstFile, secondFile, conflictingSymbols: createMap() }));
+                    const conflictingSymbolInfo = getOrUpdate<DuplicateInfoForSymbol>(filesDuplicates.conflictingSymbols, symbolName, () =>
+                        ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] }));
+                    addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source);
+                    addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target);
                 }
-                const symbolName = symbolToString(source);
-                addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
-                addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
+                else {
+                    addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
+                    addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
+                }
             }
             return target;
+
+            function addDuplicateLocations(locs: Node[], symbol: Symbol): void {
+                for (const decl of symbol.declarations) {
+                    pushIfUnique(locs, (getExpandoInitializer(decl, /*isPrototypeAssignment*/ false) ? getNameOfExpando(decl) : getNameOfDeclaration(decl)) || decl);
+                }
+            }
         }
 
         function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
             forEach(target.declarations, node => {
                 const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations && source.declarations[0]);
+                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations);
             });
         }
 
-        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNode: Node | undefined) {
+        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNodes: ReadonlyArray<Node> | undefined) {
             const err = lookupOrIssueError(errorNode, message, symbolName);
-            if (relatedNode && length(err.relatedInformation) < 5) {
+            for (const relatedNode of relatedNodes || emptyArray) {
+                err.relatedInformation = err.relatedInformation || [];
+                if (length(err.relatedInformation) >= 5) continue;
                 addRelatedInfo(err, !length(err.relatedInformation) ? createDiagnosticForNode(relatedNode, Diagnostics._0_was_also_declared_here, symbolName) : createDiagnosticForNode(relatedNode, Diagnostics.and_here));
             }
         }
@@ -28901,38 +28908,33 @@ namespace ts {
                 }
             }
 
-            amalgamatedDuplicates.forEach(({ firstFile, secondFile, firstFileInstances, secondFileInstances }) => {
-                const conflictingKeys = arrayFrom(firstFileInstances.keys());
+            amalgamatedDuplicates.forEach(({ firstFile, secondFile, conflictingSymbols }) => {
                 // If not many things conflict, issue individual errors
-                if (conflictingKeys.length < 8) {
-                    addErrorsForDuplicates(firstFileInstances, secondFileInstances);
-                    addErrorsForDuplicates(secondFileInstances, firstFileInstances);
-                    return;
+                if (conflictingSymbols.size < 8) {
+                    conflictingSymbols.forEach(({ isBlockScoped, firstFileLocations, secondFileLocations }, symbolName) => {
+                        const message = isBlockScoped ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
+                        for (const node of firstFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, secondFileLocations);
+                        }
+                        for (const node of secondFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, firstFileLocations);
+                        }
+                    });
                 }
-                // Otheriwse issue top-level error since the files appear very identical in terms of what they appear
-                const list = conflictingKeys.join(", ");
-                diagnostics.add(addRelatedInfo(
-                    createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
-                    createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)
-                ));
-                diagnostics.add(addRelatedInfo(
-                    createDiagnosticForNode(secondFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
-                    createDiagnosticForNode(firstFile, Diagnostics.Conflicts_are_in_this_file)
-                ));
+                else {
+                    // Otherwise issue top-level error since the files appear very identical in terms of what they contain
+                    const list = arrayFrom(conflictingSymbols.keys()).join(", ");
+                    diagnostics.add(addRelatedInfo(
+                        createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                        createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)
+                    ));
+                    diagnostics.add(addRelatedInfo(
+                        createDiagnosticForNode(secondFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                        createDiagnosticForNode(firstFile, Diagnostics.Conflicts_are_in_this_file)
+                    ));
+                }
             });
             amalgamatedDuplicates = undefined;
-
-            function addErrorsForDuplicates(secondFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>, firstFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>) {
-                secondFileInstances.forEach((locations, symbolName) => {
-                    const firstFileEquivalent = firstFileInstances.get(symbolName)!;
-                    const message = locations.blockScoped
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                        : Diagnostics.Duplicate_identifier_0;
-                    locations.instances.forEach(node => {
-                        addDuplicateDeclarationError(node, message, symbolName, firstFileEquivalent.instances[0]);
-                    });
-                });
-            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
