@@ -4678,11 +4678,11 @@ namespace ts {
                 const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
                 const index = pattern.elements.indexOf(declaration);
                 if (declaration.dotDotDotToken) {
-                    // If the parent is a tuple type, the rest element has an array type with a union of the
+                    // If the parent is a tuple type, the rest element has a tuple type of the
                     // remaining tuple element types. Otherwise, the rest element has an array type with same
                     // element type as the parent type.
                     type = isTupleType(parentType) ?
-                        getArrayLiteralType((parentType.typeArguments || emptyArray).slice(index, getTypeReferenceArity(parentType))) :
+                        sliceTupleType(parentType, index) :
                         createArrayType(elementType);
                 }
                 else {
@@ -8723,6 +8723,20 @@ namespace ts {
                 links.resolvedType = createTupleType(elementTypes, minLength, !!restElement);
             }
             return links.resolvedType;
+        }
+
+        function sliceTupleType(type: TupleTypeReference, index: number) {
+            const tuple = type.target;
+            if (tuple.hasRestElement) {
+                // don't slice off rest element
+                index = Math.min(index, getTypeReferenceArity(type) - 1);
+            }
+            return createTupleType(
+                (type.typeArguments || emptyArray).slice(index),
+                Math.max(0, tuple.minLength - index),
+                tuple.hasRestElement,
+                tuple.associatedNames && tuple.associatedNames.slice(index),
+            );
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
@@ -21691,7 +21705,7 @@ namespace ts {
                         else {
                             checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
                             const type = isTupleType(sourceType) ?
-                                getArrayLiteralType((sourceType.typeArguments || emptyArray).slice(elementIndex, getTypeReferenceArity(sourceType))) :
+                                sliceTupleType(sourceType, elementIndex) :
                                 createArrayType(elementType);
                             return checkDestructuringAssignment(restExpression, type, checkMode);
                         }
