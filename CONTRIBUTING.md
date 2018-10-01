@@ -72,7 +72,7 @@ Your pull request should:
     * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
 * It is desirable, but not necessary, for the tests to pass at each commit
 * Have clear commit messages 
-    * e.g. "Refactor feature", "Fix issue", "Add tests for issue"
+    * e.g. "Minor refactor in goToTypeDefinition", "Fix iterated type in for-await-of", "Add test for preserveWatchOutput on command line"
 * Include adequate tests 
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
