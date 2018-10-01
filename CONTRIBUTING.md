@@ -47,6 +47,13 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
+## Some things in general
+
+As Typescript is a big codebase, so some might run into issues while cloning this repo.  Hence, it is advisable to use
+`git clone --depth=1 <remote-url>` to clone it faster.
+
+Run `jake build` after every change. If you want to test it locally in some another project then use `node <path-to-local-typescript-folder>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch`, use `node <path-to-local-typescript-folder>/TypeScript/built/local/tsc.js --watch`.
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
