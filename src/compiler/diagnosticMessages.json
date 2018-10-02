@@ -3898,7 +3898,14 @@
         "category": "Message",
         "code": 6502
     },
-
+    "Module '{0}' has no default export. Did you mean to use 'import {{1}} from \"{0}\"'instead?": {
+      "category": "Message",
+      "code": 6503
+    },
+    "Module '{0}' has no exported member '{1}'. Did you mean to use 'import {1} from \"{0}\"'instead?": {
+      "category": "Message",
+      "code": 6504
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

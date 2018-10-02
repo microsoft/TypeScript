@@ -1938,6 +1938,9 @@ namespace ts {
                         const moduleName = getFullyQualifiedName(moduleSymbol);
                         const declarationName = declarationNameToString(name);
                         const suggestion = getSuggestedSymbolForNonexistentModule(name, targetSymbol);
+                        const defaultSymbolMatch = moduleName.includes("default") ?
+                          symbolToString(resolveSymbol(moduleSymbol, dontResolveAlias)) === declarationName :
+                          false;
                         if (suggestion !== undefined) {
                             const suggestionName = symbolToString(suggestion);
                             const diagnostic = error(name, Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_2, moduleName, declarationName, suggestionName);
@@ -1945,6 +1948,13 @@ namespace ts {
                                 addRelatedInfo(diagnostic,
                                     createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
                                 );
+                            }
+
+                            if (defaultSymbolMatch) {
+                              error(name, Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
+                            }
+                            else {
+                              error(name, Diagnostics.Module_0_has_no_default_export_Did_you_mean_to_use_import_1_from_0_instead, getFullyQualifiedName(moduleSymbol), declarationNameToString(name));
                             }
                         }
                         else {

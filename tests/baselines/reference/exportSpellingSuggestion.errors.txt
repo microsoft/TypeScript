@@ -1,4 +1,5 @@
 tests/cases/conformance/es6/modules/b.ts(1,10): error TS2724: Module '"tests/cases/conformance/es6/modules/a"' has no exported member 'assertNevar'. Did you mean 'assertNever'?
+tests/cases/conformance/es6/modules/b.ts(1,10): message TS6503: Module '"tests/cases/conformance/es6/modules/a"' has no default export. Did you mean to use 'import {assertNevar} from ""tests/cases/conformance/es6/modules/a""'instead?
 
 
 ==== tests/cases/conformance/es6/modules/a.ts (0 errors) ====
@@ -6,9 +7,11 @@ tests/cases/conformance/es6/modules/b.ts(1,10): error TS2724: Module '"tests/cas
         throw new Error("Unexpected " + msg);
     }
     
-==== tests/cases/conformance/es6/modules/b.ts (1 errors) ====
+==== tests/cases/conformance/es6/modules/b.ts (2 errors) ====
     import { assertNevar } from "./a";
              ~~~~~~~~~~~
 !!! error TS2724: Module '"tests/cases/conformance/es6/modules/a"' has no exported member 'assertNevar'. Did you mean 'assertNever'?
 !!! related TS2728 tests/cases/conformance/es6/modules/a.ts:1:17: 'assertNever' is declared here.
+             ~~~~~~~~~~~
+!!! message TS6503: Module '"tests/cases/conformance/es6/modules/a"' has no default export. Did you mean to use 'import {assertNevar} from ""tests/cases/conformance/es6/modules/a""'instead?
     
