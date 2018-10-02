@@ -10,29 +10,20 @@ namespace ts.server.typingsInstaller {
     } = require("path");
 
     class FileLog implements Log {
-        private logEnabled = true;
-        private readonly logFile: string = "";
-
-        constructor(logFile: string | undefined) {
-            if (typeof logFile !== "string") {
-                this.logEnabled = false;
-            }
-            else {
-                this.logFile = logFile;
-            }
+        constructor(private logFile: string | undefined) {
         }
 
         isEnabled = () => {
-            return this.logEnabled;
+            return typeof this.logFile === "string";
         }
         writeLine = (text: string) => {
-            if (!this.logEnabled) return;
+            if (typeof this.logFile !== "string") return;
 
             try {
                 fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
-                this.logEnabled = false;
+                this.logFile = undefined;
             }
         }
     }
