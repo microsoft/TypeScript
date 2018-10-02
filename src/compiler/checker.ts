@@ -78,6 +78,7 @@ namespace ts {
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
+        const strictClassTypes = getStrictOptionValue(compilerOptions, "strictClassTypes");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
@@ -12035,6 +12036,9 @@ namespace ts {
                     // to X. Failing both of those we want to check if the aggregation of A and B's members structurally
                     // relates to X. Thus, we include intersection types on the source side here.
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
+                        if (strictClassTypes && (getObjectFlags(target) & ObjectFlags.Class) && !isTypeDerivedFrom(source, target)) {
+                            return Ternary.False;
+                        }
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !sourceIsPrimitive;
                         result = propertiesRelatedTo(source, target, reportStructuralErrors);

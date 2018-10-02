@@ -4431,6 +4431,7 @@ namespace ts {
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
         strictBindCallApply?: boolean;  // Always combine with strict property
+        strictClassTypes?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
         stripInternal?: boolean;

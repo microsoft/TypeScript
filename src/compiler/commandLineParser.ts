@@ -382,6 +382,14 @@ namespace ts {
             description: Diagnostics.Enable_strict_bind_call_and_apply_methods_on_functions
         },
         {
+            name: "strictClassTypes",
+            type: "boolean",
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_class_types
+        },
+        {
             name: "strictPropertyInitialization",
             type: "boolean",
             affectsSemanticDiagnostics: true,

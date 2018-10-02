@@ -1,0 +1,54 @@
+=== tests/cases/compiler/strictClassTypes.ts ===
+class A {}
+>A : Symbol(A, Decl(strictClassTypes.ts, 0, 0))
+
+class B extends A {}
+>B : Symbol(B, Decl(strictClassTypes.ts, 0, 10))
+>A : Symbol(A, Decl(strictClassTypes.ts, 0, 0))
+
+class C extends A {
+>C : Symbol(C, Decl(strictClassTypes.ts, 1, 20))
+>A : Symbol(A, Decl(strictClassTypes.ts, 0, 0))
+
+    x: number;
+>x : Symbol(C.x, Decl(strictClassTypes.ts, 2, 19))
+}
+interface I {
+>I : Symbol(I, Decl(strictClassTypes.ts, 4, 1))
+
+    x: number;
+>x : Symbol(I.x, Decl(strictClassTypes.ts, 5, 13))
+}
+
+declare let a: A;
+>a : Symbol(a, Decl(strictClassTypes.ts, 9, 11))
+>A : Symbol(A, Decl(strictClassTypes.ts, 0, 0))
+
+declare let b: B;
+>b : Symbol(b, Decl(strictClassTypes.ts, 10, 11))
+>B : Symbol(B, Decl(strictClassTypes.ts, 0, 10))
+
+declare let c: C;
+>c : Symbol(c, Decl(strictClassTypes.ts, 11, 11))
+>C : Symbol(C, Decl(strictClassTypes.ts, 1, 20))
+
+declare let i: I;
+>i : Symbol(i, Decl(strictClassTypes.ts, 12, 11))
+>I : Symbol(I, Decl(strictClassTypes.ts, 4, 1))
+
+a = b; // Ok
+>a : Symbol(a, Decl(strictClassTypes.ts, 9, 11))
+>b : Symbol(b, Decl(strictClassTypes.ts, 10, 11))
+
+b = a; // Error
+>b : Symbol(b, Decl(strictClassTypes.ts, 10, 11))
+>a : Symbol(a, Decl(strictClassTypes.ts, 9, 11))
+
+i = c; // Ok
+>i : Symbol(i, Decl(strictClassTypes.ts, 12, 11))
+>c : Symbol(c, Decl(strictClassTypes.ts, 11, 11))
+
+c = i; // Error
+>c : Symbol(c, Decl(strictClassTypes.ts, 11, 11))
+>i : Symbol(i, Decl(strictClassTypes.ts, 12, 11))
+

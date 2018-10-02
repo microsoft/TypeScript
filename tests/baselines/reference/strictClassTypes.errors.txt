@@ -1,0 +1,29 @@
+tests/cases/compiler/strictClassTypes.ts(16,1): error TS2322: Type 'A' is not assignable to type 'B'.
+tests/cases/compiler/strictClassTypes.ts(19,1): error TS2322: Type 'I' is not assignable to type 'C'.
+
+
+==== tests/cases/compiler/strictClassTypes.ts (2 errors) ====
+    class A {}
+    class B extends A {}
+    class C extends A {
+        x: number;
+    }
+    interface I {
+        x: number;
+    }
+    
+    declare let a: A;
+    declare let b: B;
+    declare let c: C;
+    declare let i: I;
+    
+    a = b; // Ok
+    b = a; // Error
+    ~
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+    
+    i = c; // Ok
+    c = i; // Error
+    ~
+!!! error TS2322: Type 'I' is not assignable to type 'C'.
+    

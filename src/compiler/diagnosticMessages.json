@@ -3763,6 +3763,10 @@
         "category": "Message",
         "code": 6214
     },
+    "Enable strict checking of class types.": {
+        "category": "Message",
+        "code": 6215
+    },
 
     "Projects to reference": {
         "category": "Message",

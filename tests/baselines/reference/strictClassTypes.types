@@ -1,0 +1,52 @@
+=== tests/cases/compiler/strictClassTypes.ts ===
+class A {}
+>A : A
+
+class B extends A {}
+>B : B
+>A : A
+
+class C extends A {
+>C : C
+>A : A
+
+    x: number;
+>x : number
+}
+interface I {
+    x: number;
+>x : number
+}
+
+declare let a: A;
+>a : A
+
+declare let b: B;
+>b : B
+
+declare let c: C;
+>c : C
+
+declare let i: I;
+>i : I
+
+a = b; // Ok
+>a = b : B
+>a : A
+>b : B
+
+b = a; // Error
+>b = a : A
+>b : B
+>a : A
+
+i = c; // Ok
+>i = c : C
+>i : I
+>c : C
+
+c = i; // Error
+>c = i : I
+>c : C
+>i : I
+

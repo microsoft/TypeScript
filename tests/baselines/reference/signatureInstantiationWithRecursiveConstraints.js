@@ -13,7 +13,6 @@ const myVar: Foo = new Bar();
 
 
 //// [signatureInstantiationWithRecursiveConstraints.js]
-"use strict";
 // Repro from #17148
 var Foo = /** @class */ (function () {
     function Foo() {

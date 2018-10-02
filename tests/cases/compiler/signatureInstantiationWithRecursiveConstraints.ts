@@ -1,5 +1,3 @@
-// @strict: true
-
 // Repro from #17148
 
 class Foo {
