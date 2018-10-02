@@ -583,14 +583,11 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
-                const projectReferences = this.program.getResolvedProjectReferences();
-                if (projectReferences) {
-                    for (const ref of projectReferences) {
-                        if (ref) {
-                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
-                        }
+                this.program.forEachResolvedProjectReference(ref => {
+                    if (ref) {
+                        this.detachScriptInfoFromProject(ref.sourceFile.fileName);
                     }
-                }
+                });
             }
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
@@ -925,12 +922,19 @@ namespace ts.server {
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
-                        if (this.program.getSourceFileByPath(f.path)) {
-                            continue;
+                        const newFile = this.program.getSourceFileByPath(f.resolvedPath);
+                        if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
+                            // new program does not contain this file - detach it from the project
+                            // - remove resolutions only if this is undirected file or doesnt have source file with the path in new program
+                            this.detachScriptInfoFromProject(f.fileName, f.path !== f.resolvedPath && !!this.program.getSourceFileByPath(f.path));
                         }
-                        // new program does not contain this file - detach it from the project
-                        this.detachScriptInfoFromProject(f.fileName);
                     }
+
+                    oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
+                        if (resolvedProjectReference && !this.program.getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+                            this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName);
+                        }
+                    });
                 }
 
                 // Update the missing file paths watcher
@@ -964,11 +968,13 @@ namespace ts.server {
             return hasNewProgram;
         }
 
-        private detachScriptInfoFromProject(uncheckedFileName: string) {
+        private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
             const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
             if (scriptInfoToDetach) {
                 scriptInfoToDetach.detachFromProject(this);
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                if (!noRemoveResolution) {
+                    this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                }
             }
         }
 
@@ -1400,9 +1406,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getResolvedProjectReferences() {
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
-            return program && program.getResolvedProjectReferences();
+            return program && program.forEachResolvedProjectReference(cb);
         }
 
         enablePlugins() {

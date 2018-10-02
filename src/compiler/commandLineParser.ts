@@ -1294,6 +1294,8 @@ namespace ts {
         const result = parseJsonText(configFileName, configFileText);
         const cwd = host.getCurrentDirectory();
         result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
+        result.resolvedPath = result.path;
+        result.originalFileName = result.fileName;
         return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 

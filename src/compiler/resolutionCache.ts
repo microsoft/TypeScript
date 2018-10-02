@@ -11,6 +11,7 @@ namespace ts {
 
         invalidateResolutionOfFile(filePath: Path): void;
         removeResolutionsOfFile(filePath: Path): void;
+        removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
         setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<ReadonlyArray<string>>): void;
         createHasInvalidatedResolution(forceAllFilesAsInvalidated?: boolean): HasInvalidatedResolution;
 
@@ -128,6 +129,7 @@ namespace ts {
             resolveModuleNames,
             getResolvedModuleWithFailedLookupLocationsFromCache,
             resolveTypeReferenceDirectives,
+            removeResolutionsFromProjectReferenceRedirects,
             removeResolutionsOfFile,
             invalidateResolutionOfFile,
             setFilesWithInvalidatedNonRelativeUnresolvedImports,
@@ -262,12 +264,20 @@ namespace ts {
             const resolvedModules: R[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
+
+            // All the resolutions in this file are invalidated if this file wasnt resolved using same redirect
+            const program = resolutionHost.getCurrentProgram();
+            const oldRedirect = program && program.getResolvedProjectReferenceToRedirect(containingFile);
+            const unmatchedRedirects = oldRedirect ?
+                !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
+                !!redirectedReference;
+
             const seenNamesInFile = createMap<true>();
             for (const name of names) {
                 let resolution = resolutionsInFile.get(name);
                 // Resolution is valid if it is present and not invalidated
                 if (!seenNamesInFile.has(name) &&
-                    allFilesHaveInvalidatedResolution || !resolution || resolution.isInvalidated ||
+                    allFilesHaveInvalidatedResolution || unmatchedRedirects || !resolution || resolution.isInvalidated ||
                     // If the name is unresolved import that was invalidated, recalculate
                     (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && !getResolutionWithResolvedFileName(resolution))) {
                     const existingResolution = resolution;
@@ -594,6 +604,20 @@ namespace ts {
                 resolutions.forEach(stopWatchFailedLookupLocationOfResolution);
                 cache.delete(filePath);
             }
+        }
+
+        function removeResolutionsFromProjectReferenceRedirects(filePath: Path) {
+            if (!fileExtensionIs(filePath, Extension.Json)) { return; }
+
+            const program = resolutionHost.getCurrentProgram();
+            if (!program) { return; }
+
+            // If this file is input file for the referenced project, get it
+            const resolvedProjectReference = program.getResolvedProjectReferenceByPath(filePath);
+            if (!resolvedProjectReference) { return; }
+
+            // filePath is for the projectReference and the containing file is from this project reference, invalidate the resolution
+            resolvedProjectReference.commandLine.fileNames.forEach(f => removeResolutionsOfFile(resolutionHost.toPath(f)));
         }
 
         function removeResolutionsOfFile(filePath: Path) {

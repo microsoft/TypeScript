@@ -5070,7 +5070,7 @@ namespace ts.projectSystem {
 
         function getFileNotFoundDiagnostic(configFile: File, relativeFileName: string): ConfigFileDiagnostic {
             const findString = `{"path":"./${relativeFileName}"}`;
-            const d = Diagnostics.File_0_does_not_exist;
+            const d = Diagnostics.File_0_not_found;
             const start = configFile.content.indexOf(findString);
             return {
                 fileName: configFile.path,

@@ -487,7 +487,7 @@ namespace ts {
 
         function sourceFileNotUptoDate(sourceFile: SourceFile) {
             return !sourceFileVersionUptoDate(sourceFile) ||
-                hasInvalidatedResolution(sourceFile.resolvedPath);
+                hasInvalidatedResolution(sourceFile.path);
         }
 
         function sourceFileVersionUptoDate(sourceFile: SourceFile) {
@@ -752,10 +752,18 @@ namespace ts {
         if (oldProgram && host.onReleaseOldSourceFile) {
             const oldSourceFiles = oldProgram.getSourceFiles();
             for (const oldSourceFile of oldSourceFiles) {
-                if (!getSourceFile(oldSourceFile.path) || shouldCreateNewSourceFile) {
-                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions());
+                const newFile = getSourceFileByPath(oldSourceFile.resolvedPath);
+                if (shouldCreateNewSourceFile || !newFile ||
+                    // old file wasnt redirect but new file is
+                    (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)) {
+                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
             }
+            oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
+                if (resolvedProjectReference && !getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+                    host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+                }
+            });
         }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -798,7 +806,10 @@ namespace ts {
             getResolvedModuleWithFailedLookupLocationsFromCache,
             getProjectReferences,
             getResolvedProjectReferences,
-            getProjectReferenceRedirect
+            getProjectReferenceRedirect,
+            getResolvedProjectReferenceToRedirect,
+            getResolvedProjectReferenceByPath,
+            forEachResolvedProjectReference
         };
 
         verifyCompilerOptions();
@@ -881,7 +892,7 @@ namespace ts {
             if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
-                return resolveModuleNamesWorker(moduleNames, containingFile, /*reusedNames*/ undefined, getProjectReferenceRedirectProject(file.originalFileName));
+                return resolveModuleNamesWorker(moduleNames, containingFile, /*reusedNames*/ undefined, getResolvedProjectReferenceToRedirect(file.originalFileName));
             }
 
             const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
@@ -961,7 +972,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames, getProjectReferenceRedirectProject(file.originalFileName))
+                ? resolveModuleNamesWorker(unknownModuleNames, containingFile, reusedNames, getResolvedProjectReferenceToRedirect(file.originalFileName))
                 : emptyArray;
 
             // Combine results of resolutions and predicted results
@@ -1021,46 +1032,28 @@ namespace ts {
             }
         }
 
-        function canReuseProjectReferences(
-            newProjectReferences: ReadonlyArray<ProjectReference> | undefined,
-            oldProjectReferences: ReadonlyArray<ProjectReference> | undefined,
-            oldResolvedReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined): boolean {
-            // If array of references is changed, we cant resue old program
-            if (!arrayIsEqualTo(oldProjectReferences!, newProjectReferences, projectReferenceIsEqualTo)) {
-                return false;
-            }
-
-            // Check the json files for the project references
-            if (newProjectReferences) {
-                // Resolved project referenced should be array if projectReferences provided are array
-                Debug.assert(!!oldResolvedReferences);
-                for (let i = 0; i < newProjectReferences.length; i++) {
-                    const oldRef = oldResolvedReferences![i];
-                    const newRef = parseProjectReferenceConfigFile(newProjectReferences[i]);
-                    if (oldRef) {
-                        if (!newRef || newRef.sourceFile !== oldRef.sourceFile) {
-                            // Resolved project reference has gone missing or changed
-                            return false;
-                        }
-
-                        // If the transitive references can be reused then only this reference can be reused
-                        if (!canReuseProjectReferences(newRef.commandLine.projectReferences, oldRef.commandLine.projectReferences, oldRef.references)) {
-                            return false;
-                        }
+        function canReuseProjectReferences(): boolean {
+            return !forEachProjectReference(
+                oldProgram!.getProjectReferences(),
+                oldProgram!.getResolvedProjectReferences(),
+                (oldResolvedRef, index, parent) => {
+                    const newRef = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+                    const newResolvedRef = parseProjectReferenceConfigFile(newRef);
+                    if (oldResolvedRef) {
+                        // Resolved project reference has gone missing or changed
+                        return !newResolvedRef || newResolvedRef.sourceFile !== oldResolvedRef.sourceFile;
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
-                        if (newRef !== undefined) {
-                            return false;
-                        }
+                        return newResolvedRef !== undefined;
                     }
+                },
+                (oldProjectReferences, parent) => {
+                    // If array of references is changed, we cant resue old program
+                    const newReferences = parent ? getResolvedProjectReferenceByPath(parent.sourceFile.path)!.commandLine.projectReferences : projectReferences;
+                    return !arrayIsEqualTo(oldProjectReferences, newReferences, projectReferenceIsEqualTo);
                 }
-            }
-            else {
-                // Resolved project referenced should be undefined if projectReferences is undefined
-                Debug.assert(!oldResolvedReferences);
-            }
-            return true;
+            );
         }
 
         function tryReuseStructureFromOldProgram(): StructureIsReused {
@@ -1088,7 +1081,7 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-            if (!canReuseProjectReferences(projectReferences, oldProgram.getProjectReferences(), oldProgram.getResolvedProjectReferences())) {
+            if (!canReuseProjectReferences()) {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
             resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
@@ -1240,7 +1233,7 @@ namespace ts {
                 if (resolveTypeReferenceDirectiveNamesWorker) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
                     const typesReferenceDirectives = map(newSourceFile.typeReferenceDirectives, ref => ref.fileName.toLocaleLowerCase());
-                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getProjectReferenceRedirectProject(newSourceFile.originalFileName));
+                    const resolutions = resolveTypeReferenceDirectiveNamesWorker(typesReferenceDirectives, newSourceFilePath, getResolvedProjectReferenceToRedirect(newSourceFile.originalFileName));
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                     if (resolutionsChanged) {
@@ -2215,7 +2208,7 @@ namespace ts {
 
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
-            const referencedProject = getProjectReferenceRedirectProject(fileName);
+            const referencedProject = getResolvedProjectReferenceToRedirect(fileName);
             if (!referencedProject) {
                 return undefined;
             }
@@ -2229,22 +2222,78 @@ namespace ts {
         /**
          * Get the referenced project if the file is input file from that reference project
          */
-        function getProjectReferenceRedirectProject(fileName: string) {
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length) {
-                return undefined;
-            }
-
-            // If this file is input file of the referenced projec
-            return forEachEntry(projectReferenceRedirects!, referencedProject => {
+        function getResolvedProjectReferenceToRedirect(fileName: string) {
+            return forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
                 // not input file from the referenced project, ignore
                 if (!referencedProject ||
-                    options.configFilePath === referencedProject.commandLine.options.configFilePath ||
+                    toPath(options.configFilePath!) === referenceProjectPath ||
                     !contains(referencedProject.commandLine.fileNames, fileName, isSameFile)) {
                     return undefined;
                 }
 
                 return referencedProject;
             });
+        }
+
+        function forEachResolvedProjectReference<T>(
+            cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined
+        ): T | undefined {
+            return forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
+                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+                const resolvedRefPath = toPath(resolveProjectReferencePath(ref));
+                return cb(resolvedRef, resolvedRefPath);
+            });
+        }
+
+        function forEachProjectReference<T>(
+            projectReferences: ReadonlyArray<ProjectReference> | undefined,
+            resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined,
+            cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
+            cbRef?: (projectReferences: ReadonlyArray<ProjectReference> | undefined, parent: ResolvedProjectReference | undefined) => T | undefined
+        ): T | undefined {
+            let seenResolvedRefs: ResolvedProjectReference[] | undefined;
+
+            return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined, cbResolvedRef, cbRef);
+
+            function worker(
+                projectReferences: ReadonlyArray<ProjectReference> | undefined,
+                resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined,
+                parent: ResolvedProjectReference | undefined,
+                cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, index: number, parent: ResolvedProjectReference | undefined) => T | undefined,
+                cbRef?: (projectReferences: ReadonlyArray<ProjectReference> | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
+            ): T | undefined {
+
+                // Visit project references first
+                if (cbRef) {
+                    const result = cbRef(projectReferences, parent);
+                    if (result) { return result; }
+                }
+
+                return forEach(resolvedProjectReferences, (resolvedRef, index) => {
+                    if (contains(seenResolvedRefs, resolvedRef)) {
+                        // ignore recursives
+                        return undefined;
+                    }
+
+                    const result = cbResolvedRef(resolvedRef, index, parent);
+                    if (result) {
+                        return result;
+                    }
+
+                    if (!resolvedRef) return undefined;
+
+                    (seenResolvedRefs || (seenResolvedRefs = [])).push(resolvedRef);
+                    return worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef, cbResolvedRef, cbRef);
+                });
+            }
+        }
+
+        function getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined {
+            if (!projectReferenceRedirects) {
+                return undefined;
+            }
+
+            return projectReferenceRedirects.get(projectReferencePath) || undefined;
         }
 
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
@@ -2261,7 +2310,7 @@ namespace ts {
                 return;
             }
 
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName, getProjectReferenceRedirectProject(file.originalFileName));
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeDirectives, file.originalFileName, getResolvedProjectReferenceToRedirect(file.originalFileName));
 
             for (let i = 0; i < typeDirectives.length; i++) {
                 const ref = file.typeReferenceDirectives[i];
@@ -2450,11 +2499,14 @@ namespace ts {
             // An absolute path pointing to the containing directory of the config file
             const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
             const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
+            addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             if (sourceFile === undefined) {
                 projectReferenceRedirects.set(sourceFilePath, false);
                 return undefined;
             }
             sourceFile.path = sourceFilePath;
+            sourceFile.resolvedPath = sourceFilePath;
+            sourceFile.originalFileName = refPath;
             const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
             projectReferenceRedirects.set(sourceFilePath, resolvedRef);
@@ -2506,12 +2558,13 @@ namespace ts {
                 }
             }
 
+            //TODO:: Errors on transitive references
             if (projectReferences) {
                 for (let i = 0; i < projectReferences.length; i++) {
                     const ref = projectReferences[i];
                     const resolvedRefOpts = resolvedProjectReferences![i] && resolvedProjectReferences![i]!.commandLine.options;
                     if (resolvedRefOpts === undefined) {
-                        createDiagnosticForReference(i, Diagnostics.File_0_does_not_exist, ref.path);
+                        createDiagnosticForReference(i, Diagnostics.File_0_not_found, ref.path);
                         continue;
                     }
                     if (!resolvedRefOpts.composite) {

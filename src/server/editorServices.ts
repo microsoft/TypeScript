@@ -871,15 +871,20 @@ namespace ts.server {
             if (!info) {
                 this.logger.msg(`Error: got watch notification for unknown file: ${fileName}`);
             }
-            else if (eventKind === FileWatcherEventKind.Deleted) {
-                // File was deleted
-                this.handleDeletedFile(info);
-            }
-            else if (!info.isScriptOpen()) {
-                // file has been changed which might affect the set of referenced files in projects that include
-                // this file and set of inferred projects
-                info.delayReloadNonMixedContentFile();
-                this.delayUpdateProjectGraphs(info.containingProjects);
+            else {
+                if (info.containingProjects) {
+                    info.containingProjects.forEach(project => project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(info.path));
+                }
+                if (eventKind === FileWatcherEventKind.Deleted) {
+                    // File was deleted
+                    this.handleDeletedFile(info);
+                }
+                else if (!info.isScriptOpen()) {
+                    // file has been changed which might affect the set of referenced files in projects that include
+                    // this file and set of inferred projects
+                    info.delayReloadNonMixedContentFile();
+                    this.delayUpdateProjectGraphs(info.containingProjects);
+                }
             }
         }
 
@@ -2434,17 +2439,14 @@ namespace ts.server {
                 }
                 else {
                     // If the configured project for project reference has more than zero references, keep it alive
-                    const resolvedProjectReferences = project.getResolvedProjectReferences();
-                    if (resolvedProjectReferences) {
-                        for (const ref of resolvedProjectReferences) {
-                            if (ref) {
-                                const refProject = this.configuredProjects.get(ref.sourceFile.path);
-                                if (refProject && refProject.hasOpenRef()) {
-                                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
-                                }
+                    project.forEachResolvedProjectReference(ref => {
+                        if (ref) {
+                            const refProject = this.configuredProjects.get(ref.sourceFile.path);
+                            if (refProject && refProject.hasOpenRef()) {
+                                toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
                             }
                         }
-                    }
+                    });
                 }
             });
 

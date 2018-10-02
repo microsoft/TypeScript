@@ -764,8 +764,8 @@ namespace ts {
             return !hostSourceFile || isFileMissingOnHost(hostSourceFile) ? undefined : hostSourceFile.version.toString();
         }
 
-        function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions) {
-            const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.path);
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
+            const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
             // If this is the source file thats in the cache and new program doesnt need it,
             // remove the cached entry.
             // Note we arent deleting entry if file became missing in new program or
@@ -779,8 +779,10 @@ namespace ts {
                     if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
                         (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
                     }
-                    sourceFilesCache.delete(oldSourceFile.path);
-                    resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
+                    sourceFilesCache.delete(oldSourceFile.resolvedPath);
+                    if (oldSourceFile.resolvedPath === oldSourceFile.path || !hasSourceFileByPath) {
+                        resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
+                    }
                 }
             }
         }
@@ -875,6 +877,7 @@ namespace ts {
             if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.get(path)) {
                 resolutionCache.invalidateResolutionOfFile(path);
             }
+            resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
             nextSourceFileVersion(path);
 
             // Update the program

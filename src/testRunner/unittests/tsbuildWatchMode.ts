@@ -543,8 +543,8 @@ export function gfoo() {
                     }
 
                     function verifyProgram(host: WatchedSystem, watch: () => BuilderProgram) {
-                        verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
                         checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
                         verifyDependencies(watch, aDts, [aDts]);
                         verifyDependencies(watch, bDts, [bDts, aDts]);
                         verifyDependencies(watch, refs.path, [refs.path]);
@@ -588,12 +588,74 @@ export function gfoo() {
                         checkOutputErrorsIncremental(host, emptyArray);
 
                         const nrefReplacer = (f: string) => f.replace("refs", "nrefs");
-                        verifyWatchesOfProject(host, expectedWatchedFiles.map(nrefReplacer), expectedWatchedDirectoriesRecursive.map(nrefReplacer));
                         checkProgramActualFiles(watch().getProgram(), expectedProgramFiles.map(nrefReplacer));
+                        verifyWatchesOfProject(host, expectedWatchedFiles.map(nrefReplacer), expectedWatchedDirectoriesRecursive.map(nrefReplacer));
                         verifyDependencies(watch, aDts, [aDts]);
                         verifyDependencies(watch, bDts, [bDts, aDts]);
                         verifyDependencies(watch, nrefs.path, [nrefs.path]);
                         verifyDependencies(watch, cTs.path, [cTs.path, nrefs.path, bDts]);
+
+                        // revert the update
+                        host.writeFile(cTsconfig.path, cTsconfig.content);
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyProgram(host, watch);
+                    });
+
+                    it("edit in referenced config file", () => {
+                        const { host, watch } = createSolutionAndWatchMode();
+
+                        const nrefs: File = {
+                            path: getFilePathInProject(project, "nrefs/a.d.ts"),
+                            content: host.readFile(aDts)!
+                        };
+                        const bTsConfigJson = JSON.parse(bTsconfig.content);
+                        host.ensureFileOrFolder(nrefs);
+                        bTsConfigJson.compilerOptions.paths = { "@ref/*": ["./nrefs/*"] };
+                        host.writeFile(bTsconfig.path, JSON.stringify(bTsConfigJson));
+
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+
+                        const expectedProgramFiles = [cTs.path, bDts, nrefs.path, refs.path, libFile.path];
+                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        verifyWatchesOfProject(host, expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path, aTsconfig.path).map(s => s.toLowerCase()), expectedWatchedDirectoriesRecursive.concat(getFilePathInProject(project, "nrefs").toLowerCase()));
+                        verifyDependencies(watch, nrefs.path, [nrefs.path]);
+                        verifyDependencies(watch, bDts, [bDts, nrefs.path]);
+                        verifyDependencies(watch, refs.path, [refs.path]);
+                        verifyDependencies(watch, cTs.path, [cTs.path, refs.path, bDts]);
+
+                        // revert the update
+                        host.writeFile(bTsconfig.path, bTsconfig.content);
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyProgram(host, watch);
+                    });
+
+                    it("deleting referenced config file", () => {
+                        const { host, watch } = createSolutionAndWatchMode();
+
+                        // Resolutions should change now
+                        // Should map to b.ts instead with options from our own config
+                        host.deleteFile(bTsconfig.path);
+
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, [
+                            "tsconfig.c.json(9,21): error TS6053: File '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.\n"
+                        ]);
+
+                        const expectedProgramFiles = [cTs.path, bTs.path, refs.path, libFile.path];
+                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        verifyWatchesOfProject(host, expectedProgramFiles.concat(cTsconfig.path, bTsconfig.path).map(s => s.toLowerCase()), expectedWatchedDirectoriesRecursive);
+                        verifyDependencies(watch, bTs.path, [bTs.path, refs.path]);
+                        verifyDependencies(watch, refs.path, [refs.path]);
+                        verifyDependencies(watch, cTs.path, [cTs.path, refs.path, bTs.path]);
+
+                        // revert the update
+                        host.writeFile(bTsconfig.path, bTsconfig.content);
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyProgram(host, watch);
                     });
                 });
             });
