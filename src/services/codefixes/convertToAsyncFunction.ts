@@ -410,7 +410,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, argName ? [argName.identifier] : emptyArray);
+                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, [argName.identifier]);
                 if (shouldReturn) {
                     return [createReturn(synthCall)];
                 }
