@@ -1104,7 +1104,7 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
@@ -1263,7 +1263,7 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
@@ -1690,7 +1690,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1959,7 +1959,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2228,7 +2228,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2496,7 +2496,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2765,7 +2765,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3034,7 +3034,7 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3303,7 +3303,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3571,7 +3571,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3841,7 +3841,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value

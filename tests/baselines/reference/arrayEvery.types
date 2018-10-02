@@ -1,0 +1,60 @@
+=== tests/cases/compiler/arrayEvery.ts ===
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : { name: string; }[]
+>[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]
+
+    { name: 'bar' },
+>{ name: 'bar' } : { name: string; }
+>name : string
+>'bar' : "bar"
+
+    { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+    { name: 'baz' }
+>{ name: 'baz' } : { name: string; }
+>name : string
+>'baz' : "baz"
+
+];
+const fizz = [
+>fizz : { name: string; }[]
+>[    { name: 'buzz' },    { name: 'fizzbuzz' }] : { name: string; }[]
+
+    { name: 'buzz' },
+>{ name: 'buzz' } : { name: string; }
+>name : string
+>'buzz' : "buzz"
+
+    { name: 'fizzbuzz' }
+>{ name: 'fizzbuzz' } : { name: string; }
+>name : string
+>'fizzbuzz' : "fizzbuzz"
+
+];
+
+foo.every(x => x.name);
+>foo.every(x => x.name) : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>x => x.name : (x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
+
+fizz.every(x => x.name);
+>fizz.every(x => x.name) : boolean
+>fizz.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>fizz : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>x => x.name : (x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
+
