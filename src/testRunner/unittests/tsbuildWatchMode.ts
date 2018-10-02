@@ -542,19 +542,13 @@ export function gfoo() {
                         return expectedFiles.map(file => [file, host.getModifiedTime(file)] as OutputFileStamp);
                     }
 
-                    function verifyWatches(host: WatchedSystem) {
-                        verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
-                    }
-
                     function verifyProgram(host: WatchedSystem, watch: () => BuilderProgram) {
-                        verifyWatches(host);
-
-                        verifyDependencies(watch, aDts, [aDts]);
-                        verifyDependencies(watch, refs.path, [refs.path]);
-                        verifyDependencies(watch, bDts, [bDts, aDts]);
-                        verifyDependencies(watch, cTs.path, [cTs.path, refs.path, bDts]);
-
+                        verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
                         checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        verifyDependencies(watch, aDts, [aDts]);
+                        verifyDependencies(watch, bDts, [bDts, aDts]);
+                        verifyDependencies(watch, refs.path, [refs.path]);
+                        verifyDependencies(watch, cTs.path, [cTs.path, refs.path, bDts]);
                     }
 
                     it("verifies dependencies and watches", () => {
@@ -576,6 +570,30 @@ export function gfoo() {
                         host.checkTimeoutQueueLengthAndRun(1);
                         checkOutputErrorsIncremental(host, emptyArray);
                         verifyProgram(host, watch);
+                    });
+
+                    it("edit on config file", () => {
+                        const { host, watch } = createSolutionAndWatchMode();
+
+                        const nrefs: File = {
+                            path: getFilePathInProject(project, "nrefs/a.d.ts"),
+                            content: refs.content
+                        };
+                        const cTsConfigJson = JSON.parse(cTsconfig.content);
+                        host.ensureFileOrFolder(nrefs);
+                        cTsConfigJson.compilerOptions.paths = { "@ref/*": ["./nrefs/*"] };
+                        host.writeFile(cTsconfig.path, JSON.stringify(cTsConfigJson));
+
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+
+                        const nrefReplacer = (f: string) => f.replace("refs", "nrefs");
+                        verifyWatchesOfProject(host, expectedWatchedFiles.map(nrefReplacer), expectedWatchedDirectoriesRecursive.map(nrefReplacer));
+                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles.map(nrefReplacer));
+                        verifyDependencies(watch, aDts, [aDts]);
+                        verifyDependencies(watch, bDts, [bDts, aDts]);
+                        verifyDependencies(watch, nrefs.path, [nrefs.path]);
+                        verifyDependencies(watch, cTs.path, [cTs.path, nrefs.path, bDts]);
                     });
                 });
             });
