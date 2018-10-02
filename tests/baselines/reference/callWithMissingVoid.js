@@ -35,6 +35,7 @@ new MyPromise<void>(resolve => resolve()); // no error
 new MyPromise<void | number>(resolve => resolve()); // no error
 new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
 new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cannot be omitted
+new MyPromise<never>(resolve => resolve()); // error, `never` arguments cannot be omitted
 
 
 // Multiple parameters
@@ -69,7 +70,7 @@ c(); // ok
 // Spread Parameters
 
 declare function call<TS extends unknown[]>(
-    handler: (...args: TS) => void,
+    handler: (...args: TS) => unknown,
     ...args: TS): void;
 
 call((x: number, y: number) => x + y) // error
@@ -111,6 +112,7 @@ new MyPromise(function (resolve) { return resolve(); }); // no error
 new MyPromise(function (resolve) { return resolve(); }); // no error
 new MyPromise(function (resolve) { return resolve(); }); // error, `any` arguments cannot be omitted
 new MyPromise(function (resolve) { return resolve(); }); // error, `unknown` arguments cannot be omitted
+new MyPromise(function (resolve) { return resolve(); }); // error, `never` arguments cannot be omitted
 // Multiple parameters
 function a(x, y, z) {
 }

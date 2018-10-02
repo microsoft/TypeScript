@@ -112,6 +112,14 @@ new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cann
 >resolve() : void
 >resolve : (value: unknown) => void
 
+new MyPromise<never>(resolve => resolve()); // error, `never` arguments cannot be omitted
+>new MyPromise<never>(resolve => resolve()) : MyPromise<never>
+>MyPromise : typeof MyPromise
+>resolve => resolve() : (resolve: (value: never) => void) => any
+>resolve : (value: never) => void
+>resolve() : void
+>resolve : (value: never) => void
+
 
 // Multiple parameters
 
@@ -216,10 +224,10 @@ c(); // ok
 // Spread Parameters
 
 declare function call<TS extends unknown[]>(
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 
-    handler: (...args: TS) => void,
->handler : (...args: TS) => void
+    handler: (...args: TS) => unknown,
+>handler : (...args: TS) => unknown
 >args : TS
 
     ...args: TS): void;
@@ -227,7 +235,7 @@ declare function call<TS extends unknown[]>(
 
 call((x: number, y: number) => x + y) // error
 >call((x: number, y: number) => x + y) : any
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number, y: number) => x + y : (x: number, y: number) => number
 >x : number
 >y : number
@@ -237,7 +245,7 @@ call((x: number, y: number) => x + y) // error
 
 call((x: number, y: number) => x + y, 4, 2) // ok
 >call((x: number, y: number) => x + y, 4, 2) : void
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number, y: number) => x + y : (x: number, y: number) => number
 >x : number
 >y : number
@@ -249,7 +257,7 @@ call((x: number, y: number) => x + y, 4, 2) // ok
 
 call((x: number, y: void) => x, 4, void 0) // ok
 >call((x: number, y: void) => x, 4, void 0) : void
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number, y: void) => x : (x: number, y: void) => number
 >x : number
 >y : void
@@ -259,8 +267,8 @@ call((x: number, y: void) => x, 4, void 0) // ok
 >0 : 0
 
 call((x: number, y: void) => x, 4) // ok
->call((x: number, y: void) => x, 4) : any
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call((x: number, y: void) => x, 4) : void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number, y: void) => x : (x: number, y: void) => number
 >x : number
 >y : void
@@ -268,24 +276,24 @@ call((x: number, y: void) => x, 4) // ok
 >4 : 4
 
 call((x: void, y: void) => 42) // ok
->call((x: void, y: void) => 42) : any
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call((x: void, y: void) => 42) : void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: void, y: void) => 42 : (x: void, y: void) => number
 >x : void
 >y : void
 >42 : 42
 
 call((x: number | void, y: number | void) => 42) // ok
->call((x: number | void, y: number | void) => 42) : any
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call((x: number | void, y: number | void) => 42) : void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
 >x : number | void
 >y : number | void
 >42 : 42
 
 call((x: number | void, y: number | void) => 42, 4) // ok
->call((x: number | void, y: number | void) => 42, 4) : any
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call((x: number | void, y: number | void) => 42, 4) : void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
 >x : number | void
 >y : number | void
@@ -294,7 +302,7 @@ call((x: number | void, y: number | void) => 42, 4) // ok
 
 call((x: number | void, y: number | void) => 42, 4, 2) // ok
 >call((x: number | void, y: number | void) => 42, 4, 2) : void
->call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
+>call : <TS extends unknown[]>(handler: (...args: TS) => unknown, ...args: TS) => void
 >(x: number | void, y: number | void) => 42 : (x: number | void, y: number | void) => number
 >x : number | void
 >y : number | void
