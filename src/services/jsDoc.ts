@@ -312,7 +312,7 @@ namespace ts.JsDoc {
         const preamble = "/**" + newLine + indentationStr + " * ";
         const result =
             preamble + newLine +
-            parameterDocComments(parameters, hasJavascriptFileExtension(sourceFile.fileName), indentationStr, newLine) +
+            parameterDocComments(parameters, hasJSFileExtension(sourceFile.fileName), indentationStr, newLine) +
             indentationStr + " */" +
             (tokenStart === position ? newLine + indentationStr : "");
 

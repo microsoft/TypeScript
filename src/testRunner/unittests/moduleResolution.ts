@@ -83,7 +83,7 @@ namespace ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTypescriptExtensions) {
+            for (const ext of supportedTSExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -96,7 +96,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTypescriptExtensions) {
+                for (const e of supportedTSExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -137,7 +137,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTypescriptExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions.length);
             }
         }
 
@@ -1104,12 +1104,16 @@ import b = require("./moduleB");
     });
 
     describe("Type reference directive resolution: ", () => {
-        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
-            const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
-            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { typeRoots: [typesRoot] }, host);
+        function testWorker(hasDirectoryExists: boolean, typesRoot: string | undefined, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            const host = createModuleResolutionHost(hasDirectoryExists, ...[initialFile, targetFile].concat(...otherFiles));
+            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, typesRoot ? { typeRoots: [typesRoot] } : {}, host);
             assert(result.resolvedTypeReferenceDirective!.resolvedFileName !== undefined, "expected type directive to be resolved");
             assert.equal(result.resolvedTypeReferenceDirective!.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
             assert.equal(result.resolvedTypeReferenceDirective!.primary, primary, "unexpected 'primary' value");
+        }
+
+        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            testWorker(/*hasDirectoryExists*/ false, typesRoot, typeDirective, primary, initialFile, targetFile, ...otherFiles);
         }
 
         it("Can be resolved from primary location", () => {
@@ -1194,7 +1198,7 @@ import b = require("./moduleB");
             const names = map(files, f => f.name);
             const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES2015)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => sourceFiles.has(fileName),
+                fileExists: fileName => sourceFiles.has(fileName),
                 getSourceFile: fileName => sourceFiles.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1219,7 +1223,7 @@ import b = require("./moduleB");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });
 
-        it ("Modules in the same .d.ts file are preferred to external files", () => {
+        it("Modules in the same .d.ts file are preferred to external files", () => {
             const f = {
                 name: "/a/b/c/c/app.d.ts",
                 content: `
@@ -1233,7 +1237,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1248,7 +1252,7 @@ import b = require("./moduleB");
             createProgram([f.name], {}, compilerHost);
         });
 
-        it ("Modules in .ts file are not checked in the same file", () => {
+        it("Modules in .ts file are not checked in the same file", () => {
             const f = {
                 name: "/a/b/c/c/app.ts",
                 content: `
@@ -1262,7 +1266,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1278,6 +1282,16 @@ import b = require("./moduleB");
                 }
             };
             createProgram([f.name], {}, compilerHost);
+        });
+        describe("can be resolved when typeReferenceDirective is relative and in a sibling folder", () => {
+            const initialFile = { name: "/root/src/background/app.ts" };
+            const targetFile = { name: "/root/src/typedefs/filesystem.d.ts" };
+            it("when host doesnt have directoryExists", () => {
+                testWorker(/*hasDirectoryExists*/ false, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", /*primary*/ false, initialFile, targetFile);
+            });
+            it("when host has directoryExists", () => {
+                testWorker(/*hasDirectoryExists*/ true, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", /*primary*/ false, initialFile, targetFile);
+            });
         });
     });
 }

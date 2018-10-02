@@ -284,7 +284,7 @@ declare namespace FourSlashInterface {
         docCommentTemplateAt(markerName: string | FourSlashInterface.Marker, expectedOffset: number, expectedText: string): void;
         noDocCommentTemplateAt(markerName: string | FourSlashInterface.Marker): void;
         rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void;
-        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: string, commands?: {}[] }): void;
+        codeFixAll(options: { fixId: string, fixAllDescription: string, newFileContent: NewFileContent, commands?: {}[] }): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: FormatCodeOptions): void;
         rangeIs(expectedText: string, includeWhiteSpace?: boolean): void;
         fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: FormatCodeOptions): void;
@@ -317,7 +317,7 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
+        renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
@@ -348,6 +348,8 @@ declare namespace FourSlashInterface {
             readonly preferences?: UserPreferences;
         }): void;
         noMoveToNewFile(): void;
+
+        generateTypes(...options: GenerateTypesOptions[]): void;
     }
     class edit {
         backspace(count?: number): void;
@@ -637,8 +639,22 @@ declare namespace FourSlashInterface {
         readonly text: string | undefined;
     }
 
+    interface GenerateTypesOptions {
+        readonly name?: string;
+        readonly value: unknown;
+        readonly output?: string | undefined;
+        readonly outputBaseline?: string;
+    }
+
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;
     type NewFileContent = string | { readonly [fileName: string]: string };
+
+    type RenameLocationsOptions = ReadonlyArray<RenameLocationOptions> | {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly ranges: ReadonlyArray<RenameLocationOptions>;
+    }
+    type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;

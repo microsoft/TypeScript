@@ -149,38 +149,40 @@ function f19() {
     var x = ([a, b] = [1, 2]);
 }
 
-function f20() {
+function f20(v: [number, number, number]) {
     var x: number;
     var y: number;
     var z: number;
-    var a: number[];
-    var a3: any[];
-    var [...a] = [1, 2, 3];
-    var [x, ...a] = [1, 2, 3];
-    var [x, y, ...a] = [1, 2, 3];
-    var [x, y, z, ...a3] = [1, 2, 3];
-    [...a] = [1, 2, 3];
-    [x, ...a] = [1, 2, 3];
-    [x, y, ...a] = [1, 2, 3];
-    [x, y, z, ...a3] = [1, 2, 3];
+    var a0: [];
+    var a1: [number];
+    var a2: [number, number];
+    var a3: [number, number, number];
+    var [...a3] = v;
+    var [x, ...a2] = v;
+    var [x, y, ...a1] = v;
+    var [x, y, z, ...a0] = v;
+    [...a3] = v;
+    [x, ...a2] = v;
+    [x, y, ...a1] = v;
+    [x, y, z, ...a0] = v;
 }
 
-function f21() {
+function f21(v: [number, string, boolean]) {
     var x: number;
     var y: string;
     var z: boolean;
-    var a0: (number | string | boolean)[];
-    var a1: (string | boolean)[];
-    var a2: boolean[];
-    var a3: any[];
-    var [...a0] = [1, "hello", true];
-    var [x, ...a1] = [1, "hello", true];
-    var [x, y, ...a2] = [1, "hello", true];
-    var [x, y, z, ...a3] = [1, "hello", true];
-    [...a0] = [1, "hello", true];
-    [x, ...a1] = [1, "hello", true];
-    [x, y, ...a2] = [1, "hello", true];
-    [x, y, z, ...a3] = [1, "hello", true];
+    var a0: [number, string, boolean];
+    var a1: [string, boolean];
+    var a2: [boolean];
+    var a3: [];
+    var [...a0] = v;
+    var [x, ...a1] = v;
+    var [x, y, ...a2] = v;
+    var [x, y, z, ...a3] = v;
+    [...a0] = v;
+    [x, ...a1] = v;
+    [x, y, ...a2] = v;
+    [x, y, z, ...a3] = v;
 }
 
 
@@ -320,24 +322,7 @@ function f19() {
     _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
     var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
 }
-function f20() {
-    var _a, _b, _c;
-    var x;
-    var y;
-    var z;
-    var a;
-    var a3;
-    var a = [1, 2, 3].slice(0);
-    var _d = [1, 2, 3], x = _d[0], a = _d.slice(1);
-    var _e = [1, 2, 3], x = _e[0], y = _e[1], a = _e.slice(2);
-    var _f = [1, 2, 3], x = _f[0], y = _f[1], z = _f[2], a3 = _f.slice(3);
-    a = [1, 2, 3].slice(0);
-    _a = [1, 2, 3], x = _a[0], a = _a.slice(1);
-    _b = [1, 2, 3], x = _b[0], y = _b[1], a = _b.slice(2);
-    _c = [1, 2, 3], x = _c[0], y = _c[1], z = _c[2], a3 = _c.slice(3);
-}
-function f21() {
-    var _a, _b, _c;
+function f20(v) {
     var x;
     var y;
     var z;
@@ -345,12 +330,29 @@ function f21() {
     var a1;
     var a2;
     var a3;
-    var a0 = [1, "hello", true].slice(0);
-    var _d = [1, "hello", true], x = _d[0], a1 = _d.slice(1);
-    var _e = [1, "hello", true], x = _e[0], y = _e[1], a2 = _e.slice(2);
-    var _f = [1, "hello", true], x = _f[0], y = _f[1], z = _f[2], a3 = _f.slice(3);
-    a0 = [1, "hello", true].slice(0);
-    _a = [1, "hello", true], x = _a[0], a1 = _a.slice(1);
-    _b = [1, "hello", true], x = _b[0], y = _b[1], a2 = _b.slice(2);
-    _c = [1, "hello", true], x = _c[0], y = _c[1], z = _c[2], a3 = _c.slice(3);
+    var a3 = v.slice(0);
+    var x = v[0], a2 = v.slice(1);
+    var x = v[0], y = v[1], a1 = v.slice(2);
+    var x = v[0], y = v[1], z = v[2], a0 = v.slice(3);
+    a3 = v.slice(0);
+    x = v[0], a2 = v.slice(1);
+    x = v[0], y = v[1], a1 = v.slice(2);
+    x = v[0], y = v[1], z = v[2], a0 = v.slice(3);
+}
+function f21(v) {
+    var x;
+    var y;
+    var z;
+    var a0;
+    var a1;
+    var a2;
+    var a3;
+    var a0 = v.slice(0);
+    var x = v[0], a1 = v.slice(1);
+    var x = v[0], y = v[1], a2 = v.slice(2);
+    var x = v[0], y = v[1], z = v[2], a3 = v.slice(3);
+    a0 = v.slice(0);
+    x = v[0], a1 = v.slice(1);
+    x = v[0], y = v[1], a2 = v.slice(2);
+    x = v[0], y = v[1], z = v[2], a3 = v.slice(3);
 }

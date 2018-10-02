@@ -1708,7 +1708,7 @@ namespace ts {
 
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause;
+        parent: HeritageClause | JSDocAugmentsTag;
         expression: LeftHandSideExpression;
     }
 
@@ -2551,7 +2551,18 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /** Resolved path can be different from path property,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case resolvedPath = path to output file
+         * path = input file's path
+         */
         /* @internal */ resolvedPath: Path;
+        /** Original file name that can be different from fileName,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case originalFileName = name of input file
+         * fileName = output file's name
+         */
+        /* @internal */ originalFileName: string;
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
@@ -2593,6 +2604,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator?: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
+        // JS identifier-declarations that are intended to merge with globals
+        /* @internal */ jsGlobalAugmentations?: SymbolTable;
 
         /* @internal */ identifiers: Map<string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
@@ -2815,7 +2828,9 @@ namespace ts {
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
-        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
     }
 
     /* @internal */
@@ -3034,8 +3049,8 @@ namespace ts {
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
-        /* @internal */ getFalseType(): Type;
-        /* @internal */ getTrueType(): Type;
+        /* @internal */ getFalseType(fresh?: boolean): Type;
+        /* @internal */ getTrueType(fresh?: boolean): Type;
         /* @internal */ getVoidType(): Type;
         /* @internal */ getUndefinedType(): Type;
         /* @internal */ getNullType(): Type;
@@ -3405,6 +3420,7 @@ namespace ts {
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
+        isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     }
 
     export const enum SymbolFlags {
@@ -3653,20 +3669,22 @@ namespace ts {
         EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00020000,  // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00040000,  // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithBodyScopedClassBinding     = 0x00080000,  // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00100000,  // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-        AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
-        ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
-        ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
+        ContainsCapturedBlockScopeBinding   = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00040000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding     = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00200000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
+        ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
     }
 
     /* @internal */
     export interface NodeLinks {
         flags: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
+        resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
@@ -3684,6 +3702,7 @@ namespace ts {
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
     export const enum TypeFlags {
@@ -3731,7 +3750,7 @@ namespace ts {
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | UniqueESSymbol,
+        StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -3801,6 +3820,15 @@ namespace ts {
     export interface IntrinsicType extends Type {
         intrinsicName: string;        // Name of intrinsic type
     }
+
+    /* @internal */
+    export interface FreshableIntrinsicType extends IntrinsicType {
+        freshType: IntrinsicType;     // Fresh version of type
+        regularType: IntrinsicType;   // Regular version of type
+    }
+
+    /* @internal */
+    export type FreshableType = LiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
@@ -4402,6 +4430,7 @@ namespace ts {
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
+        strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
         stripInternal?: boolean;
@@ -4516,7 +4545,6 @@ namespace ts {
     /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string> | undefined;
-        referencesSpecs: ReadonlyArray<ProjectReference> | undefined;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
@@ -4532,7 +4560,6 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
     }
@@ -4559,6 +4586,9 @@ namespace ts {
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
         strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
+        affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
+        affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
@@ -4954,7 +4984,7 @@ namespace ts {
     /* @internal */
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags: EmitFlags;                       // Flags that customize emit
+        flags: EmitFlags;                        // Flags that customize emit
         leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -5314,6 +5344,7 @@ namespace ts {
         /*@internal*/ inlineSourceMap?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
+        /*@internal*/ neverAsciiEscape?: boolean;
     }
 
     /* @internal */
@@ -5585,15 +5616,15 @@ namespace ts {
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */
-    export type PragmaPsuedoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
 
     /* @internal */
-    export type PragmaPsuedoMapEntry = {[K in keyof PragmaPsuedoMap]: {name: K, args: PragmaPsuedoMap[K]}}[keyof PragmaPsuedoMap];
+    export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
 
     /* @internal */
-    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
-        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]> {
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
     }
 
     /**
@@ -5602,10 +5633,10 @@ namespace ts {
      * in multiple places
      */
     /* @internal */
-    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]>, ReadonlyPragmaMap {
-        set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
-        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    export interface PragmaMap extends Map<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap {
+        set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
     }
 
     export interface UserPreferences {

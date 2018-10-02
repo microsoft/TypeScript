@@ -640,6 +640,7 @@ namespace ts {
         function bindChildrenWorker(node: Node): void {
             if (checkUnreachable(node)) {
                 bindEachChild(node);
+                bindJSDoc(node);
                 return;
             }
             switch (node.kind) {
@@ -2310,27 +2311,17 @@ namespace ts {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
-
-            if (node.parent.kind !== SyntaxKind.SourceFile) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
-                return;
+            const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
+                : !isExternalModule(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
+                : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
+                : undefined;
+            if (diag) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
             }
             else {
-                const parent = node.parent as SourceFile;
-
-                if (!isExternalModule(parent)) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
-                    return;
-                }
-
-                if (!parent.isDeclarationFile) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
-                    return;
-                }
+                file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
+                declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
-
-            file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
-            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
@@ -2465,7 +2456,7 @@ namespace ts {
             node.left.parent = node;
             node.right.parent = node;
             const lhs = node.left as PropertyAccessEntityNameExpression;
-            bindPropertyAssignment(lhs, lhs, /*isPrototypeProperty*/ false);
+            bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
         /**
@@ -2522,7 +2513,7 @@ namespace ts {
             const isToplevel = isBinaryExpression(propertyAccess.parent)
                 ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
                 : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
-            if (!isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace)) && isToplevel) {
+            if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
@@ -2532,7 +2523,9 @@ namespace ts {
                         return symbol;
                     }
                     else {
-                        return declareSymbol(parent ? parent.exports! : container.locals!, parent, id, flags, excludeFlags);
+                        const table = parent ? parent.exports! :
+                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                        return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
             }
@@ -2666,7 +2659,7 @@ namespace ts {
             }
 
             if (!isBindingPattern(node.name)) {
-                const isEnum = !!getJSDocEnumTag(node);
+                const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
                 const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
                 const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
                 if (isBlockOrCatchScoped(node)) {
@@ -2900,6 +2893,9 @@ namespace ts {
         const local = container.locals && container.locals.get(name);
         if (local) {
             return local.exportSymbol || local;
+        }
+        if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
+            return container.jsGlobalAugmentations.get(name);
         }
         return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
     }

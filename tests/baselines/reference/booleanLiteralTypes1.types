@@ -82,13 +82,13 @@ function f4(t: true, f: false) {
 >false : false
 
     var x1 = t && f;
->x1 : boolean
+>x1 : false
 >t && f : false
 >t : true
 >f : false
 
     var x2 = f && t;
->x2 : boolean
+>x2 : false
 >f && t : false
 >f : false
 >t : true
@@ -100,7 +100,7 @@ function f4(t: true, f: false) {
 >f : false
 
     var x4 = f || t;
->x4 : boolean
+>x4 : true
 >f || t : true
 >f : false
 >t : true

@@ -74,7 +74,7 @@ namespace ts {
         if (!resolved) {
             return undefined;
         }
-        Debug.assert(extensionIsTypeScript(resolved.extension));
+        Debug.assert(extensionIsTS(resolved.extension));
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
@@ -337,7 +337,14 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
                 }
-                const result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined);
+                let result: SearchResult<Resolved> | undefined;
+                if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+                    result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined);
+                }
+                else {
+                    const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
+                    result = toSearchResult(nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true));
+                }
                 const resolvedFile = resolvedTypeScriptOnly(result && result.value);
                 if (!resolvedFile && traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
@@ -381,8 +388,13 @@ namespace ts {
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
-                                // Return just the type directive names
-                                result.push(getBaseFileName(normalized));
+                                const baseFileName = getBaseFileName(normalized);
+
+                                // At this stage, skip results with leading dot.
+                                if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
+                                    // Return just the type directive names
+                                    result.push(baseFileName);
+                                }
                             }
                         }
                     }
@@ -778,13 +790,22 @@ namespace ts {
      * Throws an error if the module can't be resolved.
      */
     /* @internal */
-    export function resolveJavascriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
-        const { resolvedModule, failedLookupLocations } =
-            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+    export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+        const { resolvedModule, failedLookupLocations } = tryResolveJSModuleWorker(moduleName, initialDir, host);
         if (!resolvedModule) {
             throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
         return resolvedModule.resolvedFileName;
+    }
+
+    /* @internal */
+    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string | undefined {
+        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
+        return resolvedModule && resolvedModule.resolvedFileName;
+    }
+
+    function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
@@ -958,7 +979,7 @@ namespace ts {
 
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJavascriptFileExtension(candidate)) {
+        if (hasJSFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
@@ -1052,7 +1073,7 @@ namespace ts {
                     const jsPath = readPackageJsonMainField(packageJsonContent, packageDirectory, state);
                     if (typeof jsPath === "string" && jsPath.length > packageDirectory.length) {
                         const potentialSubModule = jsPath.substring(packageDirectory.length + 1);
-                        subModuleName = (forEach(supportedJavascriptExtensions, extension =>
+                        subModuleName = (forEach(supportedJSExtensions, extension =>
                             tryRemoveExtension(potentialSubModule, extension)) || potentialSubModule) + Extension.Dts;
                     }
                     else {

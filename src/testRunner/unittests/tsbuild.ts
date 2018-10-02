@@ -23,6 +23,42 @@ namespace ts {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
             });
+
+            it("builds correctly when outDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, outDir: "outDir" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/", "/logic/outDir/"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
+
+            it("builds correctly when declarationDir is specified", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/logic/tsconfig.json", JSON.stringify({
+                    compilerOptions: { composite: true, declaration: true, sourceMap: true, declarationDir: "out/decls" },
+                    references: [{ path: "../core" }]
+                }));
+
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/index.d.ts", "/logic/out/decls/index.d.ts"));
+                // Check for outputs. Not an exhaustive list
+                for (const output of expectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
         });
 
         describe("tsbuild - dry builds", () => {
@@ -199,7 +235,7 @@ namespace ts {
                 tick();
                 touch(fs, "/src/logic/index.ts");
                 // Because we haven't reset the build context, the builder should assume there's nothing to do right now
-                const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic")!);
+                const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic"));
                 assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
 
                 // Rebuild this project
@@ -210,10 +246,26 @@ namespace ts {
                 assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
 
+                // Does not build tests or core because there is no change in declaration file
+                tick();
+                builder.buildInvalidatedProject();
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+
+                // Rebuild this project
+                tick();
+                fs.writeFileSync("/src/logic/index.ts", `${fs.readFileSync("/src/logic/index.ts")}
+export class cNew {}`);
+                builder.invalidateProject("/src/logic");
+                builder.buildInvalidatedProject();
+                // The file should be updated
+                assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
+
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
                 builder.buildInvalidatedProject();
-                assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
         });
@@ -246,6 +298,82 @@ namespace ts {
 
             it("with resolveJsonModule and include and files", () => {
                 verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeAndFiles.json");
+            });
+        });
+
+        describe("tsbuild - lists files", () => {
+            it("listFiles", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { listFiles: true });
+                builder.buildAllProjects();
+                assert.deepEqual(host.traces, [
+                    ...getLibs(),
+                    "/src/core/anotherModule.ts",
+                    "/src/core/index.ts",
+                    "/src/core/some_decl.d.ts",
+                    ...getLibs(),
+                    ...getCoreOutputs(),
+                    "/src/logic/index.ts",
+                    ...getLibs(),
+                    ...getCoreOutputs(),
+                    "/src/logic/index.d.ts",
+                    "/src/tests/index.ts"
+                ]);
+
+                function getLibs() {
+                    return [
+                        "/lib/lib.d.ts",
+                        "/lib/lib.es5.d.ts",
+                        "/lib/lib.dom.d.ts",
+                        "/lib/lib.webworker.importscripts.d.ts",
+                        "/lib/lib.scripthost.d.ts"
+                    ];
+                }
+
+                function getCoreOutputs() {
+                    return [
+                        "/src/core/index.d.ts",
+                        "/src/core/anotherModule.d.ts"
+                    ];
+                }
+            });
+
+            it("listEmittedFiles", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { listEmittedFiles: true });
+                builder.buildAllProjects();
+                assert.deepEqual(host.traces, [
+                    "TSFILE: /src/core/anotherModule.js",
+                    "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/index.js",
+                    "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/logic/index.js",
+                    "TSFILE: /src/logic/index.js.map",
+                    "TSFILE: /src/logic/index.d.ts",
+                    "TSFILE: /src/tests/index.js",
+                    "TSFILE: /src/tests/index.d.ts",
+                ]);
+            });
+        });
+
+        describe("tsbuild - with rootDir of project reference in parentDirectory", () => {
+            const projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
+            const allExpectedOutputs = [
+                "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
+                "/src/dist/main/a.js", "/src/dist/main/a.d.ts",
+                "/src/dist/main/b.js", "/src/dist/main/b.d.ts"
+            ];
+            it("verify that it builds correctly", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
             });
         });
     }
@@ -377,7 +505,6 @@ namespace ts {
 
             const projFileNames = rootNames.map(getProjectFileName);
             const graph = builder.getBuildGraph(projFileNames);
-            if (graph === undefined) throw new Error("Graph shouldn't be undefined");
 
             assert.sameMembers(graph.buildQueue, expectedBuildSet.map(getProjectFileName));
 

@@ -37,7 +37,7 @@ tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wron
     doSomething(null as CtorOnly);
                 ~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
-!!! related TS6213 tests/cases/compiler/weakType.ts:17:13: Did you mean to use `new` with this expression?
+!!! related TS6213 tests/cases/compiler/weakType.ts:17:13: Did you mean to use 'new' with this expression?
     doSomething(12);
                 ~~
 !!! error TS2559: Type '12' has no properties in common with type 'Settings'.
