@@ -347,11 +347,11 @@ namespace ts.textChanges {
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode, isOptionalParameter?: boolean): void {
             if (isInJSFile(sourceFile) && topNode.kind !== SyntaxKind.PropertySignature) {
-                return this.tryInsertJSDocType(sourceFile, topNode, type);
+                return this.tryInsertJSDocType(sourceFile, topNode, type, isOptionalParameter);
             }
-            let node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
+            const node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
@@ -372,16 +372,24 @@ namespace ts.textChanges {
          * TODO: Might need to only disallow node from being a parameterdecl, propertydecl, propertysig
          * (or correctly handle parameterdecl by walking up and adding a param, at least)
          */
-        public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
+        public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode, isOptionalParameter: boolean | undefined): void {
             // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, the line before might be the wrong place, etc)
             // TODO: Parameter probably shouldn't need to manually unescape its text
             const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
             const commentText =
-                isParameter(node) && isIdentifier(node.name) ? ` @param {${printed}} ${unescapeLeadingUnderscores(node.name.escapedText)} ` :
-                isGetAccessorDeclaration(node) ? ` @return {${printed}}` :
+                isParameter(node) && isIdentifier(node.name) ? this.printJSDocParameter(printed, node.name, isOptionalParameter) :
+                isGetAccessorDeclaration(node) ? ` @return {${printed}} ` :
                 ` @type {${printed}} `;
             this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos + 1).line, node.pos, commentText, CommentKind.Jsdoc);
             // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
+        }
+
+        private printJSDocParameter(printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
+            let printName = unescapeLeadingUnderscores(name.escapedText);
+            if (isOptionalParameter) {
+                printName = `[${printName}]`;
+            }
+            return ` @param {${printed}} ${printName} `;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {

@@ -158,15 +158,16 @@ namespace ts.codefix {
         }
 
         const types = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-            containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined);
+
+            containingFunction.parameters.map(p => [isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined, /*isOptionalParameter*/ false] as [Type | undefined, boolean]);
         // We didn't actually find a set of type inference positions matching each parameter position
-        if (!types || containingFunction.parameters.length !== types.length) {
+        if (containingFunction.parameters.length !== types.length) {
             return;
         }
 
-        zipWith(containingFunction.parameters, types, (parameter, type) => {
+        zipWith<ParameterDeclaration, [Type | undefined, boolean], void>(containingFunction.parameters, types, (parameter, [type, isOptionalParameter]) => {
             if (!parameter.type && !parameter.initializer) {
-                annotate(changes, sourceFile, parameter, type, program);
+                annotate(changes, sourceFile, parameter, type, program, isOptionalParameter);
             }
         });
     }
@@ -180,9 +181,9 @@ namespace ts.codefix {
         }
     }
 
-    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
+    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program, isOptionalParameter?: boolean): void {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
+        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode, isOptionalParameter);
     }
 
     function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
@@ -210,7 +211,7 @@ namespace ts.codefix {
         return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ([Type | undefined, boolean])[] | undefined {
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionExpression:
@@ -253,7 +254,7 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ([Type | undefined, boolean])[] | undefined {
             if (references.length === 0) {
                 return undefined;
             }
@@ -269,11 +270,13 @@ namespace ts.codefix {
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
+            let isOptional = false;
             return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
                 const types: Type[] = [];
                 const isRest = isRestParameter(parameter);
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
+                        isOptional = isInJSFile(declaration);
                         continue;
                     }
 
@@ -287,10 +290,10 @@ namespace ts.codefix {
                     }
                 }
                 if (!types.length) {
-                    return undefined;
+                    return [undefined, false] as [undefined, boolean];
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return isRest ? checker.createArrayType(type) : type;
+                return [isRest ? checker.createArrayType(type) : type, isOptional] as [Type, boolean];
             });
         }
 

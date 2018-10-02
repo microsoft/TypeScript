@@ -2516,10 +2516,10 @@ Actual: ${stringify(fullActual)}`);
          * @param expectedContents The contents of the file after the fixes are applied.
          * @param fileName The file to check. If not supplied, the current open file is used.
          */
-        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
+        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            this.applyCodeActions(this.getCodeFixes(fileName));
+            this.applyCodeActions(this.getCodeFixes(fileName), index);
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
@@ -4386,6 +4386,10 @@ namespace FourSlashInterface {
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
+        }
+
+        public fileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
+            this.state.verifyFileAfterCodeFix(expectedContents, fileName, index);
         }
 
         public codeFixAll(options: VerifyCodeFixAllOptions): void {
