@@ -1731,7 +1731,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int8Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2000,7 +2000,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2269,7 +2269,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2537,7 +2537,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int16Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2806,7 +2806,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3075,7 +3075,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int32Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3344,7 +3344,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3612,7 +3612,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float32Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3882,7 +3882,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float64Array) => any, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.

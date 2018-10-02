@@ -1,0 +1,41 @@
+=== tests/cases/compiler/arrayFindIndex.ts ===
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+
+    { name: 'bar' },
+>name : Symbol(name, Decl(arrayFindIndex.ts, 2, 5))
+
+    { name: null },
+>name : Symbol(name, Decl(arrayFindIndex.ts, 3, 5))
+
+    { name: 'baz' }
+>name : Symbol(name, Decl(arrayFindIndex.ts, 4, 5))
+
+];
+const fizz = [
+>fizz : Symbol(fizz, Decl(arrayFindIndex.ts, 6, 5))
+
+    { name: null }
+>name : Symbol(name, Decl(arrayFindIndex.ts, 7, 5))
+
+];
+
+foo.findIndex(x => x.name);
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 10, 14))
+>x.name : Symbol(name, Decl(arrayFindIndex.ts, 2, 5))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 10, 14))
+>name : Symbol(name, Decl(arrayFindIndex.ts, 2, 5))
+
+fizz.findIndex(x => x.name);
+>fizz.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>fizz : Symbol(fizz, Decl(arrayFindIndex.ts, 6, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 11, 15))
+>x.name : Symbol(name, Decl(arrayFindIndex.ts, 7, 5))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 11, 15))
+>name : Symbol(name, Decl(arrayFindIndex.ts, 7, 5))
+

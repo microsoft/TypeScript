@@ -1,0 +1,55 @@
+=== tests/cases/compiler/arrayFindIndex.ts ===
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : { name: string; }[]
+>[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]
+
+    { name: 'bar' },
+>{ name: 'bar' } : { name: string; }
+>name : string
+>'bar' : "bar"
+
+    { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+    { name: 'baz' }
+>{ name: 'baz' } : { name: string; }
+>name : string
+>'baz' : "baz"
+
+];
+const fizz = [
+>fizz : { name: any; }[]
+>[    { name: null }] : { name: null; }[]
+
+    { name: null }
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+];
+
+foo.findIndex(x => x.name);
+>foo.findIndex(x => x.name) : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any) => number
+>x => x.name : (x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
+
+fizz.findIndex(x => x.name);
+>fizz.findIndex(x => x.name) : number
+>fizz.findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => any, thisArg?: any) => number
+>fizz : { name: any; }[]
+>findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => any, thisArg?: any) => number
+>x => x.name : (x: { name: any; }) => any
+>x : { name: any; }
+>x.name : any
+>x : { name: any; }
+>name : any
+
