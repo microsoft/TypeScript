@@ -315,6 +315,16 @@ namespace ts.textChanges {
             this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
         }
 
+        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            if (!before.modifiers) {
+                this.insertModifierBefore(sourceFile, modifier, before);
+                return;
+            }
+
+            const pos = before.modifiers.end;
+            this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { prefix: " " });
+        }
+
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
             const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
             const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
