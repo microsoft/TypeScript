@@ -19,6 +19,9 @@ xAny.f() // error, any still expects an argument
 declare const xUnknown: X<unknown>;
 xUnknown.f() // error, unknown still expects an argument
 
+declare const xNever: X<never>;
+xNever.f() // error, never still expects an argument
+
 
 // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
 
@@ -97,6 +100,7 @@ xUnion.f(42); // no error because f accepts number
 xUnion.f(); // no error because f accepts void
 xAny.f(); // error, any still expects an argument
 xUnknown.f(); // error, unknown still expects an argument
+xNever.f(); // error, never still expects an argument
 // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
 var MyPromise = /** @class */ (function () {
     function MyPromise(executor) {

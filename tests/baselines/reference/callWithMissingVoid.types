@@ -57,6 +57,15 @@ xUnknown.f() // error, unknown still expects an argument
 >xUnknown : X<unknown>
 >f : (t: unknown) => { a: unknown; }
 
+declare const xNever: X<never>;
+>xNever : X<never>
+
+xNever.f() // error, never still expects an argument
+>xNever.f() : { a: never; }
+>xNever.f : (t: never) => { a: never; }
+>xNever : X<never>
+>f : (t: never) => { a: never; }
+
 
 // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
 

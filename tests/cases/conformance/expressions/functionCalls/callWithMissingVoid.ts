@@ -20,6 +20,9 @@ xAny.f() // error, any still expects an argument
 declare const xUnknown: X<unknown>;
 xUnknown.f() // error, unknown still expects an argument
 
+declare const xNever: X<never>;
+xNever.f() // error, never still expects an argument
+
 
 // Promise has previously been updated to work without arguments, but to show this fixes the issue too.
 
