@@ -5,10 +5,10 @@
 // @noImplicitAny: true
 // @Filename: important.js
 
-/////** @typedef {{ [|p|] }} I */
+/////** @typedef {{ [|p |]}} I */
 /////** @type {I} */
 ////var i;
 ////i.p = 0;
 
 
-verify.rangeAfterCodeFix("p: number;", undefined, undefined, 1);
+verify.rangeAfterCodeFix("p: number", undefined, undefined, 1);

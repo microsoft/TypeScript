@@ -348,7 +348,7 @@ namespace ts.textChanges {
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
-            if (isInJSFile(sourceFile) && topNode.parent.kind !== SyntaxKind.PropertySignature) {
+            if (isInJSFile(sourceFile) && topNode.kind !== SyntaxKind.PropertySignature) {
                 return this.tryInsertJSDocType(sourceFile, topNode, type);
             }
             let node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
