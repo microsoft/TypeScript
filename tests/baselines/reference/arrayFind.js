@@ -11,6 +11,16 @@ const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBoolean
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
 
 
+
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+  { name: 'bar' },
+  { name: null },
+  { name: 'baz' }
+];
+
+foo.find(x => x.name);
+
 //// [arrayFind.js]
 // test fix for #18112, type guard predicates should narrow returned element
 function isNumber(x) {
@@ -20,3 +30,10 @@ var arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
 var foundNumber = arrayOfStringsNumbersAndBooleans.find(isNumber);
 var readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans;
 var readonlyFoundNumber = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+// Tests fix for #27496, predicates should not have to return booleans
+var foo = [
+    { name: 'bar' },
+    { name: null },
+    { name: 'baz' }
+];
+foo.find(function (x) { return x.name; });

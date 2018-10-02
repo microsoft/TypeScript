@@ -9,7 +9,7 @@ interface Array<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: T[]) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => any, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1

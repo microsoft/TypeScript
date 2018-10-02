@@ -24,9 +24,9 @@ const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true]
 const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
 >foundNumber : number
 >arrayOfStringsNumbersAndBooleans.find(isNumber) : number
->arrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => boolean, thisArg?: any): string | number | boolean; }
+>arrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => any, thisArg?: any): string | number | boolean; }
 >arrayOfStringsNumbersAndBooleans : (string | number | boolean)[]
->find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => boolean, thisArg?: any): string | number | boolean; }
+>find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => any, thisArg?: any): string | number | boolean; }
 >isNumber : (x: any) => x is number
 
 const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
@@ -41,4 +41,39 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 >readonlyArrayOfStringsNumbersAndBooleans : ReadonlyArray<string | number | boolean>
 >find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => boolean, thisArg?: any): string | number | boolean; }
 >isNumber : (x: any) => x is number
+
+
+
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : { name: string; }[]
+>[  { name: 'bar' },  { name: null },  { name: 'baz' }] : { name: string; }[]
+
+  { name: 'bar' },
+>{ name: 'bar' } : { name: string; }
+>name : string
+>'bar' : "bar"
+
+  { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+  { name: 'baz' }
+>{ name: 'baz' } : { name: string; }
+>name : string
+>'baz' : "baz"
+
+];
+
+foo.find(x => x.name);
+>foo.find(x => x.name) : { name: string; }
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any): { name: string; }; }
+>x => x.name : (this: void, x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
 

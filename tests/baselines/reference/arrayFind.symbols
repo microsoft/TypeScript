@@ -31,3 +31,29 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 >find : Symbol(ReadonlyArray.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >isNumber : Symbol(isNumber, Decl(arrayFind.ts, 0, 0))
 
+
+
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+
+  { name: 'bar' },
+>name : Symbol(name, Decl(arrayFind.ts, 15, 3))
+
+  { name: null },
+>name : Symbol(name, Decl(arrayFind.ts, 16, 3))
+
+  { name: 'baz' }
+>name : Symbol(name, Decl(arrayFind.ts, 17, 3))
+
+];
+
+foo.find(x => x.name);
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 20, 9))
+>x.name : Symbol(name, Decl(arrayFind.ts, 15, 3))
+>x : Symbol(x, Decl(arrayFind.ts, 20, 9))
+>name : Symbol(name, Decl(arrayFind.ts, 15, 3))
+

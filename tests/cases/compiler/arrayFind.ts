@@ -10,3 +10,14 @@ const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(is
 
 const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+
+
+
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+  { name: 'bar' },
+  { name: null },
+  { name: 'baz' }
+];
+
+foo.find(x => x.name);
