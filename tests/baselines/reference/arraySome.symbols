@@ -1,0 +1,44 @@
+=== tests/cases/compiler/arraySome.ts ===
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+
+    { name: 'bar' },
+>name : Symbol(name, Decl(arraySome.ts, 2, 5))
+
+    { name: null },
+>name : Symbol(name, Decl(arraySome.ts, 3, 5))
+
+    { name: 'baz' }
+>name : Symbol(name, Decl(arraySome.ts, 4, 5))
+
+];
+const fizz = [
+>fizz : Symbol(fizz, Decl(arraySome.ts, 6, 5))
+
+    { name: null },
+>name : Symbol(name, Decl(arraySome.ts, 7, 5))
+
+    { name: null }
+>name : Symbol(name, Decl(arraySome.ts, 8, 5))
+
+];
+
+foo.some(x => x.name);
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 11, 9))
+>x.name : Symbol(name, Decl(arraySome.ts, 2, 5))
+>x : Symbol(x, Decl(arraySome.ts, 11, 9))
+>name : Symbol(name, Decl(arraySome.ts, 2, 5))
+
+fizz.some(x => x.name);
+>fizz.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>fizz : Symbol(fizz, Decl(arraySome.ts, 6, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 12, 10))
+>x.name : Symbol(name, Decl(arraySome.ts, 7, 5))
+>x : Symbol(x, Decl(arraySome.ts, 12, 10))
+>name : Symbol(name, Decl(arraySome.ts, 7, 5))
+

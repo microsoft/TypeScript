@@ -1,0 +1,60 @@
+=== tests/cases/compiler/arraySome.ts ===
+// Tests fix for #27496, predicates should not have to return booleans
+const foo = [
+>foo : { name: string; }[]
+>[    { name: 'bar' },    { name: null },    { name: 'baz' }] : { name: string; }[]
+
+    { name: 'bar' },
+>{ name: 'bar' } : { name: string; }
+>name : string
+>'bar' : "bar"
+
+    { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+    { name: 'baz' }
+>{ name: 'baz' } : { name: string; }
+>name : string
+>'baz' : "baz"
+
+];
+const fizz = [
+>fizz : { name: any; }[]
+>[    { name: null },    { name: null }] : { name: null; }[]
+
+    { name: null },
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+    { name: null }
+>{ name: null } : { name: null; }
+>name : null
+>null : null
+
+];
+
+foo.some(x => x.name);
+>foo.some(x => x.name) : boolean
+>foo.some : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>some : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>x => x.name : (x: { name: string; }) => string
+>x : { name: string; }
+>x.name : string
+>x : { name: string; }
+>name : string
+
+fizz.some(x => x.name);
+>fizz.some(x => x.name) : boolean
+>fizz.some : (callbackfn: (value: { name: any; }, index: number, array: { name: any; }[]) => any, thisArg?: any) => boolean
+>fizz : { name: any; }[]
+>some : (callbackfn: (value: { name: any; }, index: number, array: { name: any; }[]) => any, thisArg?: any) => boolean
+>x => x.name : (x: { name: any; }) => any
+>x : { name: any; }
+>x.name : any
+>x : { name: any; }
+>name : any
+
