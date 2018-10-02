@@ -1095,7 +1095,6 @@ namespace ts {
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
-            const filePaths: Path[] = [];
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
@@ -1148,7 +1147,6 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
-                filePaths.push(newSourceFile.path);
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -1266,11 +1264,12 @@ namespace ts {
             missingFilePaths = oldProgram.getMissingFilePaths();
 
             // update fileName -> file mapping
-            for (let i = 0; i < newSourceFiles.length; i++) {
-                filesByName.set(filePaths[i], newSourceFiles[i]);
+            for (const newSourceFile of newSourceFiles) {
+                const filePath = newSourceFile.path;
+                addFileToFilesByName(newSourceFile, filePath, newSourceFile.resolvedPath);
                 // Set the file as found during node modules search if it was found that way in old progra,
-                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePaths[i])!)) {
-                    sourceFilesFoundSearchingNodeModules.set(filePaths[i], true);
+                if (oldProgram.isSourceFileFromExternalLibrary(oldProgram.getSourceFileByPath(filePath)!)) {
+                    sourceFilesFoundSearchingNodeModules.set(filePath, true);
                 }
             }
 
@@ -2113,7 +2112,7 @@ namespace ts {
                 return file;
             }
 
-            let redirectedPath: string | undefined;
+            let redirectedPath: Path | undefined;
             if (refFile) {
                 const redirect = getProjectReferenceRedirect(fileName);
                 if (redirect) {
@@ -2147,7 +2146,7 @@ namespace ts {
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName); // TODO: GH#18217
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
-                    filesByName.set(path, dupFile);
+                    addFileToFilesByName(dupFile, path, redirectedPath);
                     sourceFileToPackageName.set(path, packageId.name);
                     processingOtherFiles!.push(dupFile);
                     return dupFile;
@@ -2158,11 +2157,7 @@ namespace ts {
                     sourceFileToPackageName.set(path, packageId.name);
                 }
             }
-
-            filesByName.set(path, file);
-            if (redirectedPath) {
-                filesByName.set(redirectedPath, file);
-            }
+            addFileToFilesByName(file, path, redirectedPath);
 
             if (file) {
                 sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
@@ -2203,6 +2198,13 @@ namespace ts {
             }
 
             return file;
+        }
+
+        function addFileToFilesByName(file: SourceFile | undefined, path: Path, redirectedPath: Path | undefined) {
+            filesByName.set(path, file);
+            if (redirectedPath) {
+                filesByName.set(redirectedPath, file);
+            }
         }
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {

@@ -562,6 +562,21 @@ export function gfoo() {
                         const { host, watch } = createSolutionAndWatchMode();
                         verifyProgram(host, watch);
                     });
+
+                    it("non local edit updates the program and watch correctly", () => {
+                        const { host, watch, solutionBuilder } = createSolutionAndWatchMode();
+
+                        // edit
+                        host.writeFile(bTs.path, `${bTs.content}
+export function gfoo() {
+}`);
+                        solutionBuilder.invalidateProject(bTsconfig.path);
+                        solutionBuilder.buildInvalidatedProject();
+
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyProgram(host, watch);
+                    });
                 });
             });
         });
