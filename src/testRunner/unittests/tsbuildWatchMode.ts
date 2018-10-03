@@ -657,6 +657,29 @@ export function gfoo() {
                         checkOutputErrorsIncremental(host, emptyArray);
                         verifyProgram(host, watch);
                     });
+
+                    it("deleting transitively referenced config file", () => {
+                        const { host, watch } = createSolutionAndWatchMode();
+                        host.deleteFile(aTsconfig.path);
+
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, [
+                            "tsconfig.b.json(10,21): error TS6053: File '/user/username/projects/transitiveReferences/tsconfig.a.json' not found.\n"
+                        ]);
+
+                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles.map(s => s.replace(aDts, aTs.path)));
+                        verifyWatchesOfProject(host, expectedWatchedFiles.map(s => s.replace(aDts.toLowerCase(), aTs.path.toLocaleLowerCase())), expectedWatchedDirectoriesRecursive);
+                        verifyDependencies(watch, aTs.path, [aTs.path]);
+                        verifyDependencies(watch, bDts, [bDts, aTs.path]);
+                        verifyDependencies(watch, refs.path, [refs.path]);
+                        verifyDependencies(watch, cTs.path, [cTs.path, refs.path, bDts]);
+
+                        // revert the update
+                        host.writeFile(aTsconfig.path, aTsconfig.content);
+                        host.checkTimeoutQueueLengthAndRun(1);
+                        checkOutputErrorsIncremental(host, emptyArray);
+                        verifyProgram(host, watch);
+                    });
                 });
             });
         });

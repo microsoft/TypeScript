@@ -635,7 +635,6 @@ namespace ts {
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createMap<boolean>();
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | null | undefined;
-        let _referencesArrayLiteralSyntax: ArrayLiteralExpression | null | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
@@ -1084,7 +1083,9 @@ namespace ts {
             if (!canReuseProjectReferences()) {
                 return oldProgram.structureIsReused = StructureIsReused.Not;
             }
-            resolvedProjectReferences = oldProgram.getResolvedProjectReferences();
+            if (projectReferences) {
+                resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
+            }
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
@@ -1827,9 +1828,20 @@ namespace ts {
                 fileProcessingDiagnostics.getGlobalDiagnostics(),
                 concatenate(
                     programDiagnostics.getGlobalDiagnostics(),
-                    options.configFile ? programDiagnostics.getDiagnostics(options.configFile.fileName) : []
+                    getOptionsDiagnosticsOfConfigFile()
                 )
             ));
+        }
+
+        function getOptionsDiagnosticsOfConfigFile() {
+            if (!options.configFile) { return emptyArray; }
+            let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
+            forEachResolvedProjectReference(resolvedRef => {
+                if (resolvedRef) {
+                    diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
+                }
+            });
+            return diagnostics;
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -2558,31 +2570,7 @@ namespace ts {
                 }
             }
 
-            //TODO:: Errors on transitive references
-            if (projectReferences) {
-                for (let i = 0; i < projectReferences.length; i++) {
-                    const ref = projectReferences[i];
-                    const resolvedRefOpts = resolvedProjectReferences![i] && resolvedProjectReferences![i]!.commandLine.options;
-                    if (resolvedRefOpts === undefined) {
-                        createDiagnosticForReference(i, Diagnostics.File_0_not_found, ref.path);
-                        continue;
-                    }
-                    if (!resolvedRefOpts.composite) {
-                        createDiagnosticForReference(i, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
-                    }
-                    if (ref.prepend) {
-                        const out = resolvedRefOpts.outFile || resolvedRefOpts.out;
-                        if (out) {
-                            if (!host.fileExists(out)) {
-                                createDiagnosticForReference(i, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
-                            }
-                        }
-                        else {
-                            createDiagnosticForReference(i, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
-                        }
-                    }
-                }
-            }
+            verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
             if (options.composite) {
@@ -2800,6 +2788,32 @@ namespace ts {
             }
         }
 
+        function verifyProjectReferences() {
+            forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
+                const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
+                const parentFile = parent && parent.sourceFile as JsonSourceFile;
+                if (!resolvedRef) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.File_0_not_found, ref.path);
+                    return;
+                }
+                const options = resolvedRef.commandLine.options;
+                if (!options.composite) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                }
+                if (ref.prepend) {
+                    const out = options.outFile || options.out;
+                    if (out) {
+                        if (!host.fileExists(out)) {
+                            createDiagnosticForReference(parentFile, index, Diagnostics.Output_file_0_from_project_1_does_not_exist, out, ref.path);
+                        }
+                    }
+                    else {
+                        createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
+                    }
+                }
+            });
+        }
+
         function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0: string | number, arg1: string | number, arg2?: string | number) {
             let needCompilerDiagnostic = true;
             const pathsSyntax = getOptionPathsSyntax();
@@ -2856,10 +2870,11 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
-        function createDiagnosticForReference(index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
-            const referencesSyntax = getProjectReferencesSyntax();
+        function createDiagnosticForReference(sourceFile: JsonSourceFile | undefined, index: number, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) {
+            const referencesSyntax = firstDefined(getTsConfigPropArray(sourceFile || options.configFile, "references"),
+                property => isArrayLiteralExpression(property.initializer) ? property.initializer : undefined);
             if (referencesSyntax && referencesSyntax.elements.length > index) {
-                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(sourceFile || options.configFile!, referencesSyntax.elements[index], message, arg0, arg1));
             }
             else {
                 programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
@@ -2874,22 +2889,6 @@ namespace ts {
             if (needCompilerDiagnostic) {
                 programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
             }
-        }
-
-        function getProjectReferencesSyntax(): ArrayLiteralExpression | null {
-            if (_referencesArrayLiteralSyntax === undefined) {
-                _referencesArrayLiteralSyntax = null; // tslint:disable-line:no-null-keyword
-                if (options.configFile) {
-                    const jsonObjectLiteral = getTsConfigObjectLiteralExpression(options.configFile)!; // TODO: GH#18217
-                    for (const prop of getPropertyAssignment(jsonObjectLiteral, "references")) {
-                        if (isArrayLiteralExpression(prop.initializer)) {
-                            _referencesArrayLiteralSyntax = prop.initializer;
-                            break;
-                        }
-                    }
-                }
-            }
-            return _referencesArrayLiteralSyntax;
         }
 
         function getCompilerOptionsObjectLiteralSyntax() {
