@@ -11897,8 +11897,9 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // A type S is related to a type T[K] if S is related to C, where C is the base constraint of T[K]
-                    if (relation !== identityRelation) {
+                    // A type S is related to a type T[K], where T and K aren't both type variables, if S is related to C,
+                    // where C is the base constraint of T[K]
+                    if (relation !== identityRelation && !(isGenericObjectType((<IndexedAccessType>target).objectType) && isGenericIndexType((<IndexedAccessType>target).indexType))) {
                         const constraint = getBaseConstraintOfType(target);
                         if (constraint && constraint !== target) {
                             if (result = isRelatedTo(source, constraint, reportErrors)) {
