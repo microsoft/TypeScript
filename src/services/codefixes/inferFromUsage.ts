@@ -166,7 +166,7 @@ namespace ts.codefix {
         }
 
         zipWith<ParameterDeclaration, [Type | undefined, boolean], void>(containingFunction.parameters, types, (parameter, [type, isOptionalParameter]) => {
-            if (!parameter.type && !parameter.initializer) {
+            if (!(parameter.type || isInJSFile(parameter) && getJSDocType(parameter)) && !parameter.initializer) {
                 annotate(changes, sourceFile, parameter, type, program, isOptionalParameter);
             }
         });
@@ -293,7 +293,7 @@ namespace ts.codefix {
                     return [undefined, false] as [undefined, boolean];
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return [isRest ? checker.createArrayType(type) : type, isOptional] as [Type, boolean];
+                return [isRest ? checker.createArrayType(type) : type, isOptional && !isRest] as [Type, boolean];
             });
         }
 
