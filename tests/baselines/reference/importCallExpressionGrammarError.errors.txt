@@ -1,13 +1,11 @@
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(5,8): error TS1325: Specifier of dynamic import cannot be spread element.
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(7,17): error TS1325: Specifier of dynamic import cannot be spread element.
 tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(8,12): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,19): error TS1135: Argument expression expected.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,19): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(10,12): error TS1324: Dynamic import must have one specifier as an argument.
-tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(10,19): error TS2307: Cannot find module 'pathToModule'.
+tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,12): error TS1324: Dynamic import must have one specifier as an argument.
+tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(9,19): error TS2307: Cannot find module 'pathToModule'.
 
 
-==== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts (7 errors) ====
+==== tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts (5 errors) ====
     declare function getSpecifier(): string;
     declare var whatToLoad: boolean;
     
@@ -22,11 +20,6 @@ tests/cases/conformance/dynamicImport/importCallExpressionGrammarError.ts(10,19)
     const p2 = import();
                ~~~~~~~~
 !!! error TS1324: Dynamic import must have one specifier as an argument.
-    const p3 = import(,);
-                      
-!!! error TS1135: Argument expression expected.
-                      
-!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
     const p4 = import("pathToModule", "secondModule");
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1324: Dynamic import must have one specifier as an argument.

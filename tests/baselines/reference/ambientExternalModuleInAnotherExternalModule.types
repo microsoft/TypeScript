@@ -6,6 +6,8 @@ export = D;
 >D : D
 
 declare module "ext" {
+>"ext" : typeof "ext"
+
     export class C { }
 >C : C
 }

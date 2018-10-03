@@ -16,13 +16,11 @@ class C {
     M2() { }
     M3() {
         const newLocal = 1;
-
         let x = /*RENAME*/newLocal;
     }
 }
 // ==SCOPE::Extract to constant in global scope==
 const newLocal = 1;
-
 class C {
     M1() { }
     a = 1;

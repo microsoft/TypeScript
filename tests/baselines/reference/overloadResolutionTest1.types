@@ -21,7 +21,7 @@ var x1 = foo([{a:true}]); // works
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >[{a:true}] : { a: true; }[]
 >{a:true} : { a: true; }
->a : boolean
+>a : true
 >true : true
 
 var x11 = foo([{a:0}]); // works
@@ -82,7 +82,7 @@ var x3 = foo2({a:true}); // works
 >foo2({a:true}) : number
 >foo2 : { (bar: { a: number; }): string; (bar: { a: boolean; }): number; }
 >{a:true} : { a: true; }
->a : boolean
+>a : true
 >true : true
 
 var x4 = foo2({a:"s"}); // error

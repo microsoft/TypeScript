@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(104,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' has type 'E' at tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts 21:4, but here has type 'Object'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' has type 'E' at tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts 21:4, but here has type 'Object'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(104,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts(109,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts (2 errors) ====
@@ -108,11 +108,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
     
     var r4 = foo16(E.A);
         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' has type 'E' at tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts 21:4, but here has type 'Object'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.
     
     declare function foo17(x: {}): {};
     declare function foo17(x: E): E;
     
     var r4 = foo16(E.A);
         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' has type 'E' at tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignabilityInInheritance.ts 21:4, but here has type 'Object'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'.

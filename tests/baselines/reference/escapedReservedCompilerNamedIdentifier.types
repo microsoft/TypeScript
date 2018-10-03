@@ -9,6 +9,7 @@ var o = {
 >{    "__proto__": 0} : { "__proto__": number; }
 
     "__proto__": 0
+>"__proto__" : number
 >0 : 0
 
 };
@@ -43,6 +44,7 @@ var o2 = {
 >{    "___proto__": 0} : { "___proto__": number; }
 
     "___proto__": 0
+>"___proto__" : number
 >0 : 0
 
 };
@@ -77,6 +79,7 @@ var o4 = {
 >{    "_proto__": 0} : { "_proto__": number; }
 
     "_proto__": 0
+>"_proto__" : number
 >0 : 0
 
 };

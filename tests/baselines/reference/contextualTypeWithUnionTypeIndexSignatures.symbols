@@ -24,6 +24,7 @@ interface IWithNoNumberIndexSignature {
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
 
     0: string;
+>0 : Symbol(IWithNoNumberIndexSignature[0], Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 12, 39))
 }
 interface IWithStringIndexSignature1 {
 >IWithStringIndexSignature1 : Symbol(IWithStringIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 14, 1))
@@ -113,6 +114,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >x3 : Symbol(x3, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 51, 3))
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
+>1 : Symbol(1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 68))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 71))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 71))
 
@@ -120,6 +122,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }
 >x3 : Symbol(x3, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 51, 3))
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
+>0 : Symbol(0, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 68))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 71))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 71))
 
@@ -127,11 +130,13 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" 
 >x3 : Symbol(x3, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 51, 3))
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
+>0 : Symbol(0, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 51, 68))
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number
 >x4 : Symbol(x4, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 3))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
 >IWithNumberIndexSignature2 : Symbol(IWithNumberIndexSignature2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 23, 1))
+>1 : Symbol(1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 67))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 70))
 >a.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 70))
@@ -141,6 +146,7 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a };
 >x4 : Symbol(x4, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 3))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))
 >IWithNumberIndexSignature2 : Symbol(IWithNumberIndexSignature2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 23, 1))
+>1 : Symbol(1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 67))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 70))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 70))
 

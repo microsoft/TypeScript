@@ -65,6 +65,7 @@ var b: { [x: number]: Derived; } = { 0: <Derived>null };
 >x : number
 >Derived : Derived
 >{ 0: <Derived>null } : { 0: Derived; }
+>0 : Derived
 ><Derived>null : Derived
 >Derived : Derived
 >null : null

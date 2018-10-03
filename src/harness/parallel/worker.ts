@@ -2,7 +2,10 @@ namespace Harness.Parallel.Worker {
     let errors: ErrorInfo[] = [];
     let passing = 0;
 
-    type Executor = {name: string, callback: Function, kind: "suite" | "test"} | never;
+    type MochaCallback = (this: Mocha.ISuiteCallbackContext, done: MochaDone) => void;
+    type Callable = () => void;
+
+    type Executor = {name: string, callback: MochaCallback, kind: "suite" | "test"} | never;
 
     function resetShimHarnessAndExecute(runner: RunnerBase) {
         errors = [];
@@ -15,17 +18,17 @@ namespace Harness.Parallel.Worker {
     }
 
 
-    let beforeEachFunc: Function;
+    let beforeEachFunc: Callable;
     const namestack: string[] = [];
     let testList: Executor[] = [];
     function shimMochaHarness() {
         (global as any).before = undefined;
         (global as any).after = undefined;
         (global as any).beforeEach = undefined;
-        describe = ((name, callback) => {
+        (global as any).describe = ((name, callback) => {
             testList.push({ name, callback, kind: "suite" });
         }) as Mocha.IContextDefinition;
-        it = ((name, callback) => {
+        (global as any).it = ((name, callback) => {
             if (!testList) {
                 throw new Error("Tests must occur within a describe block");
             }
@@ -33,19 +36,36 @@ namespace Harness.Parallel.Worker {
         }) as Mocha.ITestDefinition;
     }
 
-    function executeSuiteCallback(name: string, callback: Function) {
+    function setTimeoutAndExecute(timeout: number | undefined, f: () => void) {
+        if (timeout !== undefined) {
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+            process.send(timeoutMsg);
+        }
+        f();
+        if (timeout !== undefined) {
+            // Reset timeout
+            const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+            process.send(timeoutMsg);
+        }
+    }
+
+    function executeSuiteCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ISuiteCallbackContext = {
             retries() { return this; },
             slow() { return this; },
-            timeout() { return this; },
+            timeout(n: number) {
+                timeout = n;
+                return this;
+            },
         };
         namestack.push(name);
-        let beforeFunc: Function;
-        (before as any) = (cb: Function) => beforeFunc = cb;
-        let afterFunc: Function;
-        (after as any) = (cb: Function) => afterFunc = cb;
+        let beforeFunc: Callable;
+        (before as any) = (cb: Callable) => beforeFunc = cb;
+        let afterFunc: Callable;
+        (after as any) = (cb: Callable) => afterFunc = cb;
         const savedBeforeEach = beforeEachFunc;
-        (beforeEach as any) = (cb: Function) => beforeEachFunc = cb;
+        (beforeEach as any) = (cb: Callable) => beforeEachFunc = cb;
         const savedTestList = testList;
 
         testList = [];
@@ -57,7 +77,9 @@ namespace Harness.Parallel.Worker {
             return cleanup();
         }
         try {
-            beforeFunc && beforeFunc();
+            if (beforeFunc) {
+                beforeFunc();
+            }
         }
         catch (e) {
             errors.push({ error: `Error executing before function: ${e.message}`, stack: e.stack, name: [...namestack] });
@@ -66,10 +88,15 @@ namespace Harness.Parallel.Worker {
         finally {
             beforeFunc = undefined;
         }
-        testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+
+        setTimeoutAndExecute(timeout, () => {
+            testList.forEach(({ name, callback, kind }) => executeCallback(name, callback, kind));
+        });
 
         try {
-            afterFunc && afterFunc();
+            if (afterFunc) {
+                afterFunc();
+            }
         }
         catch (e) {
             errors.push({ error: `Error executing after function: ${e.message}`, stack: e.stack, name: [...namestack] });
@@ -86,7 +113,7 @@ namespace Harness.Parallel.Worker {
         }
     }
 
-    function executeCallback(name: string, callback: Function, kind: "suite" | "test") {
+    function executeCallback(name: string, callback: MochaCallback, kind: "suite" | "test") {
         if (kind === "suite") {
             executeSuiteCallback(name, callback);
         }
@@ -95,10 +122,16 @@ namespace Harness.Parallel.Worker {
         }
     }
 
-    function executeTestCallback(name: string, callback: Function) {
+    function executeTestCallback(name: string, callback: MochaCallback) {
+        let timeout: number;
         const fakeContext: Mocha.ITestCallbackContext = {
             skip() { return this; },
-            timeout() { return this; },
+            timeout(n: number) {
+                timeout = n;
+                const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: timeout } };
+                process.send(timeoutMsg);
+                return this;
+            },
             retries() { return this; },
             slow() { return this; },
         };
@@ -124,6 +157,10 @@ namespace Harness.Parallel.Worker {
             }
             finally {
                 namestack.pop();
+                if (timeout !== undefined) {
+                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+                    process.send(timeoutMsg);
+                }
             }
             passing++;
         }
@@ -150,6 +187,10 @@ namespace Harness.Parallel.Worker {
             }
             finally {
                 namestack.pop();
+                if (timeout !== undefined) {
+                    const timeoutMsg: ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: "reset" } };
+                    process.send(timeoutMsg);
+                }
             }
             if (!completed) {
                 errors.push({ error: "Test completes asynchronously, which is unsupported by the parallel harness", stack: "", name: [...namestack] });
@@ -210,7 +251,7 @@ namespace Harness.Parallel.Worker {
         });
         if (!runUnitTests) {
             // ensure unit tests do not get run
-            describe = ts.noop as any;
+            (global as any).describe = ts.noop;
         }
         else {
             initialized = true;
@@ -234,7 +275,7 @@ namespace Harness.Parallel.Worker {
     }
 
     const unittest: "unittest" = "unittest";
-    let unitTests: {[name: string]: Function};
+    let unitTests: {[name: string]: MochaCallback};
     function collectUnitTestsIfNeeded() {
         if (!unitTests && testList.length) {
             unitTests = {};

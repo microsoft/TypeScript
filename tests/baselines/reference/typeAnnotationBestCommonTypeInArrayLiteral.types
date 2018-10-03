@@ -28,30 +28,38 @@ var menuData: IMenuItem[] = [
 >{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": string; "type": string; "link": string; "icon": string; }
 
         "id": "ourLogo",
+>"id" : string
 >"ourLogo" : "ourLogo"
 
         "type": "image",
+>"type" : string
 >"image" : "image"
 
         "link": "",
+>"link" : string
 >"" : ""
 
         "icon": "modules/menu/logo.svg"
+>"icon" : string
 >"modules/menu/logo.svg" : "modules/menu/logo.svg"
 
     }, {
 >{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { "id": string; "type": string; "link": string; "text": string; }
 
         "id": "productName",
+>"id" : string
 >"productName" : "productName"
 
         "type": "default",
+>"type" : string
 >"default" : "default"
 
         "link": "",
+>"link" : string
 >"" : ""
 
         "text": "Product Name"
+>"text" : string
 >"Product Name" : "Product Name"
     }
 ];

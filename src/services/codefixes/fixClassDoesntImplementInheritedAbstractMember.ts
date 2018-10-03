@@ -1,52 +1,52 @@
 /* @internal */
 namespace ts.codefix {
+    const errorCodes = [
+        Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
+        Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code,
+    ];
+    const fixId = "fixClassDoesntImplementInheritedAbstractMember";
     registerCodeFix({
-        errorCodes: [Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code],
-        getCodeActions: getActionForClassLikeMissingAbstractMember
+        errorCodes,
+        getCodeActions(context) {
+            const { program, sourceFile, span } = context;
+            const changes = textChanges.ChangeTracker.with(context, t =>
+                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t));
+            return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
+        },
+        fixIds: [fixId],
+        getAllCodeActions: context => {
+            const seenClassDeclarations = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                const classDeclaration = getClass(diag.file!, diag.start!);
+                if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
+                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes);
+                }
+            });
+        },
     });
 
-    registerCodeFix({
-        errorCodes: [Diagnostics.Non_abstract_class_expression_does_not_implement_inherited_abstract_member_0_from_class_1.code],
-        getCodeActions: getActionForClassLikeMissingAbstractMember
-    });
-
-    function getActionForClassLikeMissingAbstractMember(context: CodeFixContext): CodeAction[] | undefined {
-        const sourceFile = context.sourceFile;
-        const start = context.span.start;
-        // This is the identifier in the case of a class declaration
+    function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
+        // Token is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const checker = context.program.getTypeChecker();
+        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        return cast(token.parent, isClassLike);
+    }
 
-        if (isClassLike(token.parent)) {
-            const classDeclaration = token.parent as ClassLikeDeclaration;
+    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker): void {
+        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
+        const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
-            const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
-            const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
+        // Note that this is ultimately derived from a map indexed by symbol names,
+        // so duplicates cannot occur.
+        const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-            // Note that this is ultimately derived from a map indexed by symbol names,
-            // so duplicates cannot occur.
-            const extendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType);
-            const abstractAndNonPrivateExtendsSymbols = extendsSymbols.filter(symbolPointsToNonPrivateAndAbstractMember);
-
-            const newNodes = createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker);
-            const changes = newNodesToChanges(newNodes, getOpenBraceOfClassLike(classDeclaration, sourceFile), context);
-            if (changes && changes.length > 0) {
-                return [{
-                    description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
-                    changes
-                }];
-            }
-        }
-
-        return undefined;
-
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
-        const decls = symbol.getDeclarations();
-        Debug.assert(!!(decls && decls.length > 0));
-        const flags = getModifierFlags(decls[0]);
+        // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
+        // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
+        const flags = getModifierFlags(first(symbol.getDeclarations()));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

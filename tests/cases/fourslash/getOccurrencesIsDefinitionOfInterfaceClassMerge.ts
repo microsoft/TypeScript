@@ -13,7 +13,4 @@
 ////let i: [|Numbers|] = new [|Numbers|]();
 ////let x = i.f(i.p + i.m);
 
-const ranges = test.ranges();
-const [r0, r1, r2, r3, r4] = ranges;
-verify.referenceGroups([r0, r1, r2, r3], [{ definition: "class Numbers\ninterface Numbers", ranges }]);
-verify.referenceGroups(r4, [{ definition: "constructor Numbers(): Numbers", ranges }]);
+verify.singleReferenceGroup("class Numbers\ninterface Numbers");

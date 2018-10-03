@@ -3,6 +3,7 @@
 interface PromiseConstructor {
     new <T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T>;
     reject(reason: any): Promise<never>;
+    all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 }
 /* @internal */
 declare var Promise: PromiseConstructor;
@@ -59,7 +60,7 @@ namespace ts {
                 if (isAmbientModule(<ModuleDeclaration>node)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
-                else if (getModuleInstanceState(node) === ModuleInstanceState.Instantiated) {
+                else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else {
@@ -91,7 +92,7 @@ namespace ts {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
-            return getMeaningFromRightHandSideOfImportEquals(node);
+            return getMeaningFromRightHandSideOfImportEquals(node as Identifier);
         }
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
@@ -111,26 +112,19 @@ namespace ts {
         }
     }
 
-    function getMeaningFromRightHandSideOfImportEquals(node: Node) {
-        Debug.assert(node.kind === SyntaxKind.Identifier);
-
+    function getMeaningFromRightHandSideOfImportEquals(node: Node): SemanticMeaning {
         //     import a = |b|; // Namespace
         //     import a = |b.c|; // Value, type, namespace
         //     import a = |b.c|.d; // Namespace
-
-        if (node.parent.kind === SyntaxKind.QualifiedName &&
-            (<QualifiedName>node.parent).right === node &&
-            node.parent.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
-        }
-        return SemanticMeaning.Namespace;
+        const name = node.kind === SyntaxKind.QualifiedName ? node : isQualifiedName(node.parent) && node.parent.right === node ? node.parent : undefined;
+        return name && name.parent.kind === SyntaxKind.ImportEqualsDeclaration ? SemanticMeaning.All : SemanticMeaning.Namespace;
     }
 
     export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
-        return isInternalModuleImportEqualsDeclaration(node.parent) && (<ImportEqualsDeclaration>node.parent).moduleReference === node;
+        return isInternalModuleImportEqualsDeclaration(node.parent) && node.parent.moduleReference === node;
     }
 
     function isNamespaceReference(node: Node): boolean {
@@ -220,16 +214,12 @@ namespace ts {
         return undefined;
     }
 
-    export function isJumpStatementTarget(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            (node.parent.kind === SyntaxKind.BreakStatement || node.parent.kind === SyntaxKind.ContinueStatement) &&
-            (<BreakOrContinueStatement>node.parent).label === node;
-    }
+    export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
+        return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
+     }
 
-    function isLabelOfLabeledStatement(node: Node): boolean {
-        return node.kind === SyntaxKind.Identifier &&
-            node.parent.kind === SyntaxKind.LabeledStatement &&
-            (<LabeledStatement>node.parent).label === node;
+    export function isLabelOfLabeledStatement(node: Node): node is Identifier {
+        return node.kind === SyntaxKind.Identifier && isLabeledStatement(node.parent) && node.parent.label === node;
     }
 
     export function isLabelName(node: Node): boolean {
@@ -363,12 +353,14 @@ namespace ts {
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
                     case SpecialPropertyAssignmentKind.PrototypeProperty:
-                        return ScriptElementKind.memberFunctionElement; // instance method
+                        return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
                     case SpecialPropertyAssignmentKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
                     case SpecialPropertyAssignmentKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
+                    case SpecialPropertyAssignmentKind.Prototype:
+                        return ScriptElementKind.localClassElement;
                     default: {
                         assertTypeIsNever(kind);
                         return ScriptElementKind.unknown;
@@ -440,10 +432,11 @@ namespace ts {
      * Assumes `candidate.start <= position` holds.
      */
     export function positionBelongsToNode(candidate: Node, position: number, sourceFile: SourceFile): boolean {
+        Debug.assert(candidate.pos <= position);
         return position < candidate.end || !isCompletedNode(candidate, sourceFile);
     }
 
-    export function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
+    function isCompletedNode(n: Node, sourceFile: SourceFile): boolean {
         if (nodeIsMissing(n)) {
             return false;
         }
@@ -510,7 +503,7 @@ namespace ts {
 
             case SyntaxKind.ExpressionStatement:
                 return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
-                    hasChildOfKind(n, SyntaxKind.SemicolonToken);
+                    hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
@@ -538,11 +531,9 @@ namespace ts {
                 return isCompletedNode((<IterationStatement>n).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
-                const hasWhileKeyword = findChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile);
-                if (hasWhileKeyword) {
-                    return nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile);
-                }
-                return isCompletedNode((<DoStatement>n).statement, sourceFile);
+                return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
+                    ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
+                    : isCompletedNode((<DoStatement>n).statement, sourceFile);
 
             case SyntaxKind.TypeQuery:
                 return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
@@ -617,12 +608,12 @@ namespace ts {
         };
     }
 
-    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): boolean {
+    export function hasChildOfKind(n: Node, kind: SyntaxKind, sourceFile: SourceFile): boolean {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
-        return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
+    export function findChildOfKind<T extends Node>(n: Node, kind: T["kind"], sourceFile: SourceFileLike): T | undefined {
+        return find(n.getChildren(sourceFile), (c): c is T => c.kind === kind);
     }
 
     export function findContainingList(node: Node): SyntaxList | undefined {
@@ -630,13 +621,7 @@ namespace ts {
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
-        const syntaxList = forEach(node.parent.getChildren(), c => {
-            // find syntax list that covers the span of the node
-            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
-                return c;
-            }
-        });
-
+        const syntaxList = find(node.parent.getChildren(), (c): c is SyntaxList => isSyntaxList(c) && rangeContainsRange(c, node));
         // Either we didn't find an appropriate list, or the list must contain us.
         Debug.assert(!syntaxList || contains(syntaxList.getChildren(), node));
         return syntaxList;
@@ -761,23 +746,12 @@ namespace ts {
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
-        function findRightmostToken(n: Node): Node {
-            if (isToken(n)) {
+        function find(n: Node): Node | undefined {
+            if (isNonWhitespaceToken(n)) {
                 return n;
             }
 
-            const children = n.getChildren();
-            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-            return candidate && findRightmostToken(candidate);
-
-        }
-
-        function find(n: Node): Node {
-            if (isToken(n)) {
-                return n;
-            }
-
-            const children = n.getChildren();
+            const children = n.getChildren(sourceFile);
             for (let i = 0; i < children.length; i++) {
                 const child = children[i];
                 // Note that the span of a node's tokens is [node.getStart(...), node.end).
@@ -795,7 +769,7 @@ namespace ts {
                     if (lookInPreviousChild) {
                         // actual start of the node is past the position - previous token should be at the end of previous child
                         const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ i);
-                        return candidate && findRightmostToken(candidate);
+                        return candidate && findRightmostToken(candidate, sourceFile);
                     }
                     else {
                         // candidate should be in this node
@@ -812,29 +786,42 @@ namespace ts {
             // Namely we are skipping the check: 'position < node.end'
             if (children.length) {
                 const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
-                return candidate && findRightmostToken(candidate);
-            }
-        }
-
-        /**
-         * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
-         */
-        function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node {
-            for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
-                const child = children[i];
-
-                if (isWhiteSpaceOnlyJsxText(child)) {
-                    Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
-                }
-                else if (nodeHasTokens(children[i])) {
-                    return children[i];
-                }
+                return candidate && findRightmostToken(candidate, sourceFile);
             }
         }
     }
 
-    export function isInString(sourceFile: SourceFile, position: number): boolean {
-        const previousToken = findPrecedingToken(position, sourceFile);
+    function isNonWhitespaceToken(n: Node): boolean {
+        return isToken(n) && !isWhiteSpaceOnlyJsxText(n);
+    }
+
+    function findRightmostToken(n: Node, sourceFile: SourceFile): Node | undefined {
+        if (isNonWhitespaceToken(n)) {
+            return n;
+        }
+
+        const children = n.getChildren(sourceFile);
+        const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length);
+        return candidate && findRightmostToken(candidate, sourceFile);
+    }
+
+    /**
+     * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
+     */
+    function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number): Node | undefined {
+        for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
+            const child = children[i];
+
+            if (isWhiteSpaceOnlyJsxText(child)) {
+                Debug.assert(i > 0, "`JsxText` tokens should not be the first child of `JsxElement | JsxSelfClosingElement`");
+            }
+            else if (nodeHasTokens(children[i])) {
+                return children[i];
+            }
+        }
+    }
+
+    export function isInString(sourceFile: SourceFile, position: number, previousToken = findPrecedingToken(position, sourceFile)): boolean {
         if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
@@ -894,13 +881,121 @@ namespace ts {
         return false;
     }
 
-    export function isWhiteSpaceOnlyJsxText(node: Node): node is JsxText {
+    function isWhiteSpaceOnlyJsxText(node: Node): boolean {
         return isJsxText(node) && node.containsOnlyWhiteSpaces;
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
+    }
+
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
+        const tokenKind = token.kind;
+        let remainingMatchingTokens = 0;
+        while (true) {
+            token = findPrecedingToken(token.getFullStart(), sourceFile);
+            if (!token) {
+                return undefined;
+            }
+
+            if (token.kind === matchingTokenKind) {
+                if (remainingMatchingTokens === 0) {
+                    return token;
+                }
+
+                remainingMatchingTokens--;
+            }
+            else if (token.kind === tokenKind) {
+                remainingMatchingTokens++;
+            }
+        }
+    }
+
+    export function isPossiblyTypeArgumentPosition(token: Node, sourceFile: SourceFile) {
+        // This function determines if the node could be type argument position
+        // Since during editing, when type argument list is not complete,
+        // the tree could be of any shape depending on the tokens parsed before current node,
+        // scanning of the previous identifier followed by "<" before current node would give us better result
+        // Note that we also balance out the already provided type arguments, arrays, object literals while doing so
+        let remainingLessThanTokens = 0;
+        while (token) {
+            switch (token.kind) {
+                case SyntaxKind.LessThanToken:
+                    // Found the beginning of the generic argument expression
+                    token = findPrecedingToken(token.getFullStart(), sourceFile);
+                    const tokenIsIdentifier = token && isIdentifier(token);
+                    if (!remainingLessThanTokens || !tokenIsIdentifier) {
+                        return tokenIsIdentifier;
+                    }
+                    remainingLessThanTokens--;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 3;
+                    break;
+
+                case SyntaxKind.GreaterThanGreaterThanToken:
+                    remainingLessThanTokens = + 2;
+                    break;
+
+                case SyntaxKind.GreaterThanToken:
+                    remainingLessThanTokens++;
+                    break;
+
+                case SyntaxKind.CloseBraceToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBraceToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseParenToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenParenToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                case SyntaxKind.CloseBracketToken:
+                    // This can be object type, skip untill we find the matching open brace token
+                    // Skip untill the matching open brace token
+                    token = findPrecedingMatchingToken(token, SyntaxKind.OpenBracketToken, sourceFile);
+                    if (!token) return false;
+                    break;
+
+                // Valid tokens in a type name. Skip.
+                case SyntaxKind.CommaToken:
+                case SyntaxKind.EqualsGreaterThanToken:
+
+                case SyntaxKind.Identifier:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+
+                case SyntaxKind.TypeOfKeyword:
+                case SyntaxKind.ExtendsKeyword:
+                case SyntaxKind.KeyOfKeyword:
+                case SyntaxKind.DotToken:
+                case SyntaxKind.BarToken:
+                case SyntaxKind.QuestionToken:
+                case SyntaxKind.ColonToken:
+                    break;
+
+                default:
+                    if (isTypeNode(token)) {
+                        break;
+                    }
+
+                    // Invalid token in type
+                    return false;
+            }
+
+            token = findPrecedingToken(token.getFullStart(), sourceFile);
+        }
+
+        return false;
     }
 
     /**
@@ -1068,20 +1163,31 @@ namespace ts {
         return createTextSpanFromBounds(range.pos, range.end);
     }
 
+    export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
+        return createTextChange(createTextSpan(start, length), newText);
+    }
+
+    export function createTextChange(span: TextSpan, newText: string): TextChange {
+        return { span, newText };
+    }
+
+    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
+        SyntaxKind.AnyKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.KeyOfKeyword,
+        SyntaxKind.NeverKeyword,
+        SyntaxKind.NullKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.ObjectKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.SymbolKeyword,
+        SyntaxKind.VoidKeyword,
+        SyntaxKind.UndefinedKeyword,
+        SyntaxKind.UniqueKeyword,
+    ];
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.VoidKeyword:
-                return true;
-            default:
-                return false;
-        }
+        return contains(typeKeywords, kind);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
@@ -1097,6 +1203,28 @@ namespace ts {
             const id = getNodeId(node);
             return !seen[id] && (seen[id] = true);
         };
+    }
+
+    /** Add a value to a set, and return true if it wasn't already present. */
+    export function addToSeen(seen: Map<true>, key: string | number): boolean {
+        key = String(key);
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.set(key, true);
+        return true;
+    }
+
+    export function getSnapshotText(snap: IScriptSnapshot): string {
+        return snap.getText(0, snap.getLength());
+    }
+
+    export function repeatString(str: string, count: number): string {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += str;
+        }
+        return result;
     }
 }
 
@@ -1114,6 +1242,7 @@ namespace ts {
         let indent: number;
 
         resetWriter();
+        const unknownWrite = (text: string) => writeKind(text, SymbolDisplayPartKind.text);
         return {
             displayParts: () => displayParts,
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
@@ -1123,13 +1252,24 @@ namespace ts {
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
             writeProperty: text => writeKind(text, SymbolDisplayPartKind.propertyName),
+            writeLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeSymbol,
             writeLine,
+            write: unknownWrite,
+            writeTextOfNode: unknownWrite,
+            getText: () => "",
+            getTextPos: () => 0,
+            getColumn: () => 0,
+            getLine: () => 0,
+            isAtStartOfLine: () => false,
+            rawWrite: notImplemented,
+            getIndent: () => indent,
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
+            reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
         };
 
@@ -1227,14 +1367,17 @@ namespace ts {
     /**
      * The default is CRLF.
      */
-    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost) {
-        return host.getNewLine ? host.getNewLine() : carriageReturnLineFeed;
+    export function getNewLineOrDefaultFromHost(host: LanguageServiceHost | LanguageServiceShimHost, formatSettings?: FormatCodeSettings) {
+        return (formatSettings && formatSettings.newLineCharacter) ||
+            (host.getNewLine && host.getNewLine()) ||
+            carriageReturnLineFeed;
     }
 
     export function lineBreakPart() {
         return displayPart("\n", SymbolDisplayPartKind.lineBreak);
     }
 
+    /* @internal */
     export function mapToDisplayParts(writeDisplayParts: (writer: DisplayPartsSymbolWriter) => void): SymbolDisplayPart[] {
         try {
             writeDisplayParts(displayPartWriter);
@@ -1247,34 +1390,21 @@ namespace ts {
 
     export function typeToDisplayParts(typechecker: TypeChecker, type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
+            typechecker.writeType(type, enclosingDeclaration, flags | TypeFormatFlags.MultilineObjectLiterals, writer);
         });
     }
 
     export function symbolToDisplayParts(typeChecker: TypeChecker, symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): SymbolDisplayPart[] {
         return mapToDisplayParts(writer => {
-            typeChecker.getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning, flags);
+            typeChecker.writeSymbol(symbol, enclosingDeclaration, meaning, flags | SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope, writer);
         });
     }
 
     export function signatureToDisplayParts(typechecker: TypeChecker, signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags): SymbolDisplayPart[] {
-        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
+        flags |= TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | TypeFormatFlags.MultilineObjectLiterals | TypeFormatFlags.WriteTypeArgumentsOfSignature | TypeFormatFlags.OmitParameterModifiers;
         return mapToDisplayParts(writer => {
-            typechecker.getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags);
+            typechecker.writeSignature(signature, enclosingDeclaration, flags, /*signatureKind*/ undefined, writer);
         });
-    }
-
-    export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
-        // If this is an export or import specifier it could have been renamed using the 'as' syntax.
-        // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return getTextOfIdentifierOrLiteral(location);
-        }
-
-        // Try to get the local symbol if we're dealing with an 'export default'
-        // since that symbol has the "true" name.
-        const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
@@ -1290,10 +1420,14 @@ namespace ts {
      */
     export function stripQuotes(name: string) {
         const length = name.length;
-        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && isSingleOrDoubleQuote(name.charCodeAt(0))) {
+        if (length >= 2 && name.charCodeAt(0) === name.charCodeAt(length - 1) && startsWithQuote(name)) {
             return name.substring(1, length - 1);
         }
         return name;
+    }
+
+    export function startsWithQuote(name: string): boolean {
+        return isSingleOrDoubleQuote(name.charCodeAt(0));
     }
 
     export function scriptKindIs(fileName: string, host: LanguageServiceHost, ...scriptKinds: ScriptKind[]): boolean {
@@ -1314,37 +1448,6 @@ namespace ts {
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
         while (isWhiteSpaceLike(text.charCodeAt(position))) {
             position += 1;
-        }
-        return position;
-    }
-
-    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
-        // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile);
-    }
-
-    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
-    }
-
-    export function getSourceFileImportLocation(node: SourceFile) {
-        // For a source file, it is possible there are detached comments we should not skip
-        const text = node.text;
-        let ranges = getLeadingCommentRanges(text, 0);
-        if (!ranges) return 0;
-        let position = 0;
-        // However we should still skip a pinned comment at the top
-        if (ranges.length && ranges[0].kind === SyntaxKind.MultiLineCommentTrivia && isPinnedComment(text, ranges[0])) {
-            position = ranges[0].end + 1;
-            ranges = ranges.slice(1);
-        }
-        // As well as any triple slash references
-        for (const range of ranges) {
-            if (range.kind === SyntaxKind.SingleLineCommentTrivia && isRecognizedTripleSlashComment(node.text, range.pos, range.end)) {
-                position = range.end + 1;
-                continue;
-            }
-            break;
         }
         return position;
     }
@@ -1384,38 +1487,55 @@ namespace ts {
         return visited;
     }
 
+    export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone), nodes.hasTrailingComma);
+    }
+
     /**
      * Sets EmitFlags to suppress leading and trailing trivia on the node.
      */
     /* @internal */
     export function suppressLeadingAndTrailingTrivia(node: Node) {
-        Debug.assert(node !== undefined);
+        suppressLeadingTrivia(node);
+        suppressTrailingTrivia(node);
+    }
 
-        suppressLeading(node);
-        suppressTrailing(node);
+    /**
+     * Sets EmitFlags to suppress leading trivia on the node.
+     */
+    /* @internal */
+    export function suppressLeadingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+    }
 
-        function suppressLeading(node: Node) {
-            addEmitFlags(node, EmitFlags.NoLeadingComments);
+    /**
+     * Sets EmitFlags to suppress trailing trivia on the node.
+     */
+    /* @internal */
+    export function suppressTrailingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    }
 
-            const firstChild = forEachChild(node, child => child);
-            firstChild && suppressLeading(firstChild);
-        }
+    function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node) {
+        addEmitFlags(node, flag);
+        const child = getChild(node);
+        if (child) addEmitFlagsRecursively(child, flag, getChild);
+    }
 
-        function suppressTrailing(node: Node) {
-            addEmitFlags(node, EmitFlags.NoTrailingComments);
+    function getFirstChild(node: Node): Node | undefined {
+        return node.forEachChild(child => child);
+    }
 
-            let lastChild: Node = undefined;
-            forEachChild(
-                node,
-                child => (lastChild = child, undefined),
-                children => {
-                    // As an optimization, jump straight to the end of the list.
-                    if (children.length) {
-                        lastChild = last(children);
-                    }
-                    return undefined;
-                });
-            lastChild && suppressTrailing(lastChild);
-        }
+    function getLastChild(node: Node): Node | undefined {
+        let lastChild: Node | undefined;
+        node.forEachChild(
+            child => { lastChild = child; },
+            children => {
+                // As an optimization, jump straight to the end of the list.
+                if (children.length) {
+                    lastChild = last(children);
+                }
+            });
+        return lastChild;
     }
 }

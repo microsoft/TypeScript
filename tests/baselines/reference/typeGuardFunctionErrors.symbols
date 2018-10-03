@@ -34,6 +34,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : Symbol(hasTypeGuardTypeInsideTypeGuardType, Decl(typeGuardFunctionErrors.ts, 14, 1))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -224,16 +225,19 @@ assign3 = function(p1, p2, p3): p1 is A {
 // Type predicates in non-return type positions
 var b1: b is A;
 >b1 : Symbol(b1, Decl(typeGuardFunctionErrors.ts, 94, 3))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 94, 12))
 
 function b2(a: b is A) {};
 >b2 : Symbol(b2, Decl(typeGuardFunctionErrors.ts, 94, 15))
 >a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 95, 12))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 95, 16))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 95, 19))
 
 function b3(): A | b is A {
 >b3 : Symbol(b3, Decl(typeGuardFunctionErrors.ts, 95, 26))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -286,6 +290,7 @@ interface I2 {
 
     [index: number]: p1 is C;
 >index : Symbol(index, Decl(typeGuardFunctionErrors.ts, 118, 5))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 }
 
@@ -377,9 +382,11 @@ declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 
 type Foo = { 'a': string; }
 >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
 
 type Bar = { 'a': number; }
 >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
 
 interface NeedsFoo<T extends Foo> {
 >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))

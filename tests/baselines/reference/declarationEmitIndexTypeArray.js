@@ -21,5 +21,5 @@ var utilityFunctions = {
 //// [declarationEmitIndexTypeArray.d.ts]
 declare function doSomethingWithKeys<T>(...keys: (keyof T)[]): void;
 declare const utilityFunctions: {
-    doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void;
+    doSomethingWithKeys: typeof doSomethingWithKeys;
 };

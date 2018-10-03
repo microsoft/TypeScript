@@ -12,7 +12,7 @@ goTo.marker("1");
 verify.occurrencesAtPositionCount(2);
 
 goTo.marker("0");
-edit.insert("\r\n");
+edit.insert("\n");
 
 goTo.marker("1");
 verify.occurrencesAtPositionCount(2);

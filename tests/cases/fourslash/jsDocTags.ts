@@ -67,7 +67,7 @@ verify.currentSignatureHelpTagsAre([{name: "myjsdoctag", text:"this is a comment
 goTo.marker("11");
 verify.currentSignatureHelpTagsAre([{name: "mytag", text:"comment1 comment2"}])
 goTo.marker("12");
-verify.currentSignatureHelpTagsAre([{name: "mytag", text:""}])
+verify.currentSignatureHelpTagsAre([{name: "mytag"}])
 goTo.marker("13");
 verify.currentSignatureHelpTagsAre([{ name: "returns", text: "a value" }])
 

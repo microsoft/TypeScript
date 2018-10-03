@@ -13,8 +13,8 @@ namespace ts.projectSystem {
     describe("CompileOnSave affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: FileOrFolder[] }[]) {
             const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-            const actualResult = response.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
-            expectedFileList = expectedFileList.sort((list1, list2) => compareStrings(list1.projectFileName, list2.projectFileName));
+            const actualResult = response.sort((list1, list2) => compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
+            expectedFileList = expectedFileList.sort((list1, list2) => compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
 
             assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
 
@@ -304,6 +304,24 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
 
+            it("should return empty array if noEmit is set", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true,
+                        "compilerOptions": {
+                            "noEmit": true
+                        }
+                    }`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+                openFilesForSession([moduleFile1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            });
+
             it("should save when compileOnSave is enabled in base tsconfig.json", () => {
                 configFile = {
                     path: "/a/b/tsconfig.json",
@@ -499,7 +517,7 @@ namespace ts.projectSystem {
                 const lines = ["var x = 1;", "var y = 2;"];
                 const path = "/a/app";
                 const f = {
-                    path: path + ts.Extension.Ts,
+                    path: path + Extension.Ts,
                     content: lines.join(newLine)
                 };
                 const host = createServerHost([f], { newLine });
@@ -518,7 +536,7 @@ namespace ts.projectSystem {
                     arguments: { file: f.path }
                 };
                 session.executeCommand(emitFileRequest);
-                const emitOutput = host.readFile(path + ts.Extension.Js);
+                const emitOutput = host.readFile(path + Extension.Js);
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
         });

@@ -12,7 +12,7 @@ const obj1: { x: 2 } = {
 >{    x: 2} : { x: 2; }
 
     x: 2
->x : number
+>x : 2
 >2 : 2
 }
 const obj3: {y: true, overwrite: string } = {
@@ -23,7 +23,7 @@ const obj3: {y: true, overwrite: string } = {
 >{    y: true,    overwrite: "hi"} : { y: true; overwrite: string; }
 
     y: true,
->y : boolean
+>y : true
 >true : true
 
     overwrite: "hi"
@@ -86,12 +86,12 @@ let x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} />
 >x2 : JSX.Element
 ><OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
->x : number
+>x : 3
 >3 : 3
 >overwrite : string
 >obj1 : { x: 2; }
 >{y: true} : { y: true; }
->y : boolean
+>y : true
 >true : true
 
 let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} />
@@ -100,12 +100,12 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overw
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }
->x : number
+>x : 3
 >3 : 3
 >{y: true, x: 2, overwrite:"world"} : { y: true; x: 2; overwrite: string; }
->y : boolean
+>y : true
 >true : true
->x : number
+>x : 2
 >2 : 2
 >overwrite : string
 >"world" : "world"
@@ -115,13 +115,13 @@ let x4 = <OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} />
 ><OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >{x: 2} : { x: 2; }
->x : number
+>x : 2
 >2 : 2
 >{overwrite: "world"} : { overwrite: string; }
 >overwrite : string
 >"world" : "world"
 >{y: true} : { y: true; }
->y : boolean
+>y : true
 >true : true
 
 let x5 = <OverWriteAttr {...anyobj} />

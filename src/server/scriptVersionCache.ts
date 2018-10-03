@@ -257,7 +257,7 @@ namespace ts.server {
     export class ScriptVersionCache {
         private changes: TextChange[] = [];
         private readonly versions: LineIndexSnapshot[] = new Array<LineIndexSnapshot>(ScriptVersionCache.maxVersions);
-        private minVersion = 0;  // no versions earlier than min version will maintain change history
+        private minVersion = 0; // no versions earlier than min version will maintain change history
 
         private currentVersion = 0;
 
@@ -371,7 +371,7 @@ namespace ts.server {
         }
 
         getLength() {
-            return this.index.root.charCount();
+            return this.index.getLength();
         }
 
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
@@ -680,7 +680,7 @@ namespace ts.server {
 
             // Skipped all children
             const { leaf } = this.lineNumberToInfo(this.lineCount(), 0);
-            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf.charCount(), lineText: undefined };
+            return { oneBasedLine: this.lineCount(), zeroBasedColumn: leaf ? leaf.charCount() : 0, lineText: undefined };
         }
 
         /**
@@ -765,13 +765,13 @@ namespace ts.server {
                     for (let i = 0; i < splitNodeCount; i++) {
                         splitNodes[i] = new LineNode();
                     }
-                    let splitNode = <LineNode>splitNodes[0];
+                    let splitNode = splitNodes[0];
                     while (nodeIndex < nodeCount) {
                         splitNode.add(nodes[nodeIndex]);
                         nodeIndex++;
                         if (splitNode.children.length === lineCollectionCapacity) {
                             splitNodeIndex++;
-                            splitNode = <LineNode>splitNodes[splitNodeIndex];
+                            splitNode = splitNodes[splitNodeIndex];
                         }
                     }
                     for (let i = splitNodes.length - 1; i >= 0; i--) {
@@ -785,7 +785,7 @@ namespace ts.server {
                 }
                 this.updateCounts();
                 for (let i = 0; i < splitNodeCount; i++) {
-                    (<LineNode>splitNodes[i]).updateCounts();
+                    splitNodes[i].updateCounts();
                 }
                 return splitNodes;
             }

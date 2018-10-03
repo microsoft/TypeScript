@@ -1,5 +1,7 @@
 === tests/cases/compiler/cyclicModuleImport.ts ===
 declare module "SubModule" {
+>"SubModule" : typeof "SubModule"
+
     import MainModule = require('MainModule');
 >MainModule : typeof MainModule
 
@@ -22,6 +24,8 @@ declare module "SubModule" {
 >SubModule : SubModule
 }
 declare module "MainModule" {
+>"MainModule" : typeof "MainModule"
+
     import SubModule = require('SubModule');
 >SubModule : typeof SubModule
 

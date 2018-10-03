@@ -91,3 +91,4 @@ export declare class A {
 }
 //// [withImportDecl_1.d.ts]
 /// <reference path="withImportDecl_0.d.ts" />
+export {};

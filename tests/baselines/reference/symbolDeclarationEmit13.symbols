@@ -3,11 +3,13 @@ class C {
 >C : Symbol(C, Decl(symbolDeclarationEmit13.ts, 0, 0))
 
     get [Symbol.toPrimitive]() { return ""; }
+>[Symbol.toPrimitive] : Symbol(C[Symbol.toPrimitive], Decl(symbolDeclarationEmit13.ts, 0, 9))
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     set [Symbol.toStringTag](x) { }
+>[Symbol.toStringTag] : Symbol(C[Symbol.toStringTag], Decl(symbolDeclarationEmit13.ts, 1, 45))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

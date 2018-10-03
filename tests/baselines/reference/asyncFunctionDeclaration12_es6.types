@@ -2,7 +2,7 @@
 var v = async function await(): Promise<void> { }
 >v : () => any
 >async function : () => any
->await : () => Promise<void>
+>await : any
 >(): Promise<void> { } : () => Promise<void>
 >Promise : Promise<T>
 

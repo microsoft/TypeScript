@@ -8,6 +8,7 @@ type Nominal<Kind extends string, Type> = Type & {
 >Type : Type
 
     [Symbol.species]: Kind;
+>[Symbol.species] : Kind
 >Symbol.species : symbol
 >Symbol : SymbolConstructor
 >species : symbol
@@ -32,17 +33,17 @@ declare const b: Set<A>;
 const c1 = Array.from(a).concat(Array.from(b));
 >c1 : Nominal<"A", string>[]
 >Array.from(a).concat(Array.from(b)) : Nominal<"A", string>[]
->Array.from(a).concat : { (...items: ReadonlyArray<Nominal<"A", string>>[]): Nominal<"A", string>[]; (...items: (Nominal<"A", string> | ReadonlyArray<Nominal<"A", string>>)[]): Nominal<"A", string>[]; }
+>Array.from(a).concat : { (...items: ConcatArray<Nominal<"A", string>>[]): Nominal<"A", string>[]; (...items: (Nominal<"A", string> | ConcatArray<Nominal<"A", string>>)[]): Nominal<"A", string>[]; }
 >Array.from(a) : Nominal<"A", string>[]
->Array.from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array.from : { <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>from : { <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >a : Set<Nominal<"A", string>>
->concat : { (...items: ReadonlyArray<Nominal<"A", string>>[]): Nominal<"A", string>[]; (...items: (Nominal<"A", string> | ReadonlyArray<Nominal<"A", string>>)[]): Nominal<"A", string>[]; }
+>concat : { (...items: ConcatArray<Nominal<"A", string>>[]): Nominal<"A", string>[]; (...items: (Nominal<"A", string> | ConcatArray<Nominal<"A", string>>)[]): Nominal<"A", string>[]; }
 >Array.from(b) : Nominal<"A", string>[]
->Array.from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array.from : { <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T>(iterable: Iterable<T>): T[]; <T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>from : { <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >b : Set<Nominal<"A", string>>
 
 // Simpler repro

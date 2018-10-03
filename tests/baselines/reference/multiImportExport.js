@@ -67,3 +67,4 @@ export = Math;
 //// [Drawing.d.ts]
 export import Math = require('./Math/Math');
 //// [consumer.d.ts]
+export {};

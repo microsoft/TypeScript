@@ -59,7 +59,7 @@ let w = <Poisoned {...{x: 5, y: "2"}}/>;
 >{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number
 >5 : 5
->y : string
+>y : "2"
 >"2" : "2"
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
@@ -69,7 +69,7 @@ let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number
 >5 : 5
->y : string
+>y : "2"
 >"2" : "2"
 >X : string
 

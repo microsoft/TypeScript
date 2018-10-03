@@ -3,6 +3,7 @@ class Foo {
 >Foo : Foo
 
     [Symbol.isConcatSpreadable]() {
+>[Symbol.isConcatSpreadable] : () => number
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
@@ -17,6 +18,7 @@ class Bar extends Foo {
 >Foo : Foo
 
     [Symbol.isConcatSpreadable]() {
+>[Symbol.isConcatSpreadable] : () => number
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

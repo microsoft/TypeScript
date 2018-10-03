@@ -5,7 +5,7 @@ var a, b;
 
 for ({a, b} in []) { }
 >{a, b} : { a: any; b: any; }
->a : string
->b : string
+>a : any
+>b : any
 >[] : undefined[]
 

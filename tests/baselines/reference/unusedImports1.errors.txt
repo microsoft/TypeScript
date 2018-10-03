@@ -1,4 +1,4 @@
-tests/cases/compiler/file2.ts(1,9): error TS6133: 'Calculator' is declared but its value is never read.
+tests/cases/compiler/file2.ts(1,1): error TS6133: 'Calculator' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/file1.ts (0 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/file2.ts(1,9): error TS6133: 'Calculator' is declared but i
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     import {Calculator} from "./file1"
-            ~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'Calculator' is declared but its value is never read.

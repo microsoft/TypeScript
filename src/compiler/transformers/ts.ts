@@ -81,10 +81,16 @@ namespace ts {
         let classAliases: Identifier[];
 
         /**
-         * Keeps track of whether  we are within any containing namespaces when performing
+         * Keeps track of whether we are within any containing namespaces when performing
          * just-in-time substitution while printing an expression identifier.
          */
         let applicableSubstitutions: TypeScriptSubstitutionFlags;
+
+        /**
+         * Tracks what computed name expressions originating from elided names must be inlined
+         * at the next execution site, in document order
+         */
+        let pendingExpressions: Expression[] | undefined;
 
         return transformSourceFile;
 
@@ -236,13 +242,13 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    return visitImportDeclaration(<ImportDeclaration>node);
+                    return visitImportDeclaration(node);
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node);
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node);
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    return visitExportDeclaration(node);
                 default:
                     Debug.fail("Unhandled ellided statement");
             }
@@ -379,6 +385,7 @@ namespace ts {
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
+                case SyntaxKind.ConditionalType:
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.ThisType:
                 case SyntaxKind.TypeOperator:
@@ -395,9 +402,11 @@ namespace ts {
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
+                    return undefined;
 
                 case SyntaxKind.PropertyDeclaration:
-                    // TypeScript property declarations are elided.
+                    // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
+                    return visitPropertyDeclaration(node as PropertyDeclaration);
 
                 case SyntaxKind.NamespaceExportDeclaration:
                     // TypeScript namespace export declarations are elided.
@@ -584,6 +593,9 @@ namespace ts {
          * @param node The node to transform.
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+            const savedPendingExpressions = pendingExpressions;
+            pendingExpressions = undefined;
+
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const facts = getClassFacts(node, staticProperties);
 
@@ -597,6 +609,12 @@ namespace ts {
                 : createClassDeclarationHeadWithoutDecorators(node, name, facts);
 
             let statements: Statement[] = [classStatement];
+
+            // Write any pending expressions from elided or moved computed property names
+            if (some(pendingExpressions)) {
+                statements.push(createStatement(inlineExpressions(pendingExpressions)));
+            }
+            pendingExpressions = savedPendingExpressions;
 
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
             // it is safe to emit static property assignment after classDeclaration
@@ -856,6 +874,9 @@ namespace ts {
          * @param node The node to transform.
          */
         function visitClassExpression(node: ClassExpression): Expression {
+            const savedPendingExpressions = pendingExpressions;
+            pendingExpressions = undefined;
+
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
             const members = transformClassMembers(node, some(heritageClauses, c => c.token === SyntaxKind.ExtendsKeyword));
@@ -871,24 +892,31 @@ namespace ts {
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, node);
 
-            if (staticProperties.length > 0) {
+            if (some(staticProperties) || some(pendingExpressions)) {
                 const expressions: Expression[] = [];
-                const temp = createTempVariable(hoistVariableDeclaration);
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference) {
+                const isClassWithConstructorReference = resolver.getNodeCheckFlags(node) & NodeCheckFlags.ClassWithConstructorReference;
+                const temp = createTempVariable(hoistVariableDeclaration, !!isClassWithConstructorReference);
+                if (isClassWithConstructorReference) {
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
-                    classAliases[getOriginalNodeId(node)] = getSynthesizedClone(temp);
+                    const alias = getSynthesizedClone(temp);
+                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    classAliases[getOriginalNodeId(node)] = alias;
                 }
 
                 // To preserve the behavior of the old emitter, we explicitly indent
                 // the body of a class with static initializers.
                 setEmitFlags(classExpression, EmitFlags.Indented | getEmitFlags(classExpression));
                 expressions.push(startOnNewLine(createAssignment(temp, classExpression)));
+                // Add any pending expressions leftover from elided or relocated computed property names
+                addRange(expressions, map(pendingExpressions, startOnNewLine));
+                pendingExpressions = savedPendingExpressions;
                 addRange(expressions, generateInitializedPropertyExpressions(staticProperties, temp));
                 expressions.push(startOnNewLine(temp));
                 return inlineExpressions(expressions);
             }
 
+            pendingExpressions = savedPendingExpressions;
             return classExpression;
         }
 
@@ -1119,20 +1147,23 @@ namespace ts {
             setEmitFlags(localName, EmitFlags.NoComments);
 
             return startOnNewLine(
-                setTextRange(
-                    createStatement(
-                        createAssignment(
-                            setTextRange(
-                                createPropertyAccess(
-                                    createThis(),
-                                    propertyName
+                setEmitFlags(
+                    setTextRange(
+                        createStatement(
+                            createAssignment(
+                                setTextRange(
+                                    createPropertyAccess(
+                                        createThis(),
+                                        propertyName
+                                    ),
+                                    node.name
                                 ),
-                                node.name
-                            ),
-                            localName
-                        )
+                                localName
+                            )
+                        ),
+                        moveRangePos(node, -1)
                     ),
-                    moveRangePos(node, -1)
+                    EmitFlags.NoComments
                 )
             );
         }
@@ -1202,7 +1233,7 @@ namespace ts {
             const expressions: Expression[] = [];
             for (const property of properties) {
                 const expression = transformInitializedProperty(property, receiver);
-                expression.startsOnNewLine = true;
+                startOnNewLine(expression);
                 setSourceMapRange(expression, moveRangePastModifiers(property));
                 setCommentRange(expression, property);
                 expressions.push(expression);
@@ -1218,7 +1249,10 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformInitializedProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
-            const propertyName = visitPropertyNameOfClassElement(property);
+            // We generate a name here in order to reuse the value cached by the relocated computed name expression (which uses the same generated name)
+            const propertyName = isComputedPropertyName(property.name) && !isSimpleInlineableExpression(property.name.expression)
+                ? updateComputedPropertyName(property.name, getGeneratedNameForNode(property.name, !hasModifier(property, ModifierFlags.Static)))
+                : property.name;
             const initializer = visitNode(property.initializer, visitor, isExpression);
             const memberAccess = createMemberAccessForPropertyName(receiver, propertyName, /*location*/ propertyName);
 
@@ -1234,7 +1268,7 @@ namespace ts {
          *                 the class.
          */
         function getDecoratedClassElements(node: ClassExpression | ClassDeclaration, isStatic: boolean): ReadonlyArray<ClassElement> {
-            return filter(node.members, isStatic ? isStaticDecoratedClassElement : isInstanceDecoratedClassElement);
+            return filter(node.members, isStatic ? m => isStaticDecoratedClassElement(m, node) : m => isInstanceDecoratedClassElement(m, node));
         }
 
         /**
@@ -1243,8 +1277,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isStaticDecoratedClassElement(member: ClassElement) {
-            return isDecoratedClassElement(member, /*isStatic*/ true);
+        function isStaticDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
+            return isDecoratedClassElement(member, /*isStatic*/ true, parent);
         }
 
         /**
@@ -1253,8 +1287,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isInstanceDecoratedClassElement(member: ClassElement) {
-            return isDecoratedClassElement(member, /*isStatic*/ false);
+        function isInstanceDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
+            return isDecoratedClassElement(member, /*isStatic*/ false, parent);
         }
 
         /**
@@ -1263,8 +1297,8 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isDecoratedClassElement(member: ClassElement, isStatic: boolean) {
-            return nodeOrChildIsDecorated(member)
+        function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
+            return nodeOrChildIsDecorated(member, parent)
                 && isStatic === hasModifier(member, ModifierFlags.Static);
         }
 
@@ -1746,7 +1780,7 @@ namespace ts {
             return createArrayLiteral(expressions);
         }
 
-        function getParametersOfDecoratedDeclaration(node: FunctionLike, container: ClassLikeDeclaration) {
+        function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
                 const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
                 if (setAccessor) {
@@ -1979,7 +2013,7 @@ namespace ts {
                 case SyntaxKind.Identifier:
                     // Create a clone of the name with a new parent, and treat it as if it were
                     // a source tree node for the purposes of the checker.
-                    const name = getMutableClone(<Identifier>node);
+                    const name = getMutableClone(node);
                     name.flags &= ~NodeFlags.Synthesized;
                     name.original = undefined;
                     name.parent = getParseTreeNode(currentScope); // ensure the parent is set to a parse tree node.
@@ -1996,7 +2030,7 @@ namespace ts {
                     return name;
 
                 case SyntaxKind.QualifiedName:
-                    return serializeQualifiedNameAsExpression(<QualifiedName>node, useFallback);
+                    return serializeQualifiedNameAsExpression(node, useFallback);
             }
         }
 
@@ -2042,6 +2076,16 @@ namespace ts {
         }
 
         /**
+         * A simple inlinable expression is an expression which can be copied into multiple locations
+         * without risk of repeating any sideeffects and whose value could not possibly change between
+         * any such locations
+         */
+        function isSimpleInlineableExpression(expression: Expression) {
+            return !isIdentifier(expression) && isSimpleCopiableExpression(expression) ||
+                isWellKnownSymbolSyntactically(expression);
+        }
+
+        /**
          * Gets an expression that represents a property name. For a computed property, a
          * name is generated for the node.
          *
@@ -2050,15 +2094,35 @@ namespace ts {
         function getExpressionForPropertyName(member: ClassElement | EnumMember, generateNameForComputedPropertyName: boolean): Expression {
             const name = member.name;
             if (isComputedPropertyName(name)) {
-                return generateNameForComputedPropertyName
+                return generateNameForComputedPropertyName && !isSimpleInlineableExpression(name.expression)
                     ? getGeneratedNameForNode(name)
-                    : (<ComputedPropertyName>name).expression;
+                    : name.expression;
             }
             else if (isIdentifier(name)) {
                 return createLiteral(idText(name));
             }
             else {
                 return getSynthesizedClone(name);
+            }
+        }
+
+        /**
+         * If the name is a computed property, this function transforms it, then either returns an expression which caches the
+         * value of the result or the expression itself if the value is either unused or safe to inline into multiple locations
+         * @param shouldHoist Does the expression need to be reused? (ie, for an initializer or a decorator)
+         * @param omitSimple Should expressions with no observable side-effects be elided? (ie, the expression is not hoisted for a decorator or initializer and is a literal)
+         */
+        function getPropertyNameExpressionIfNeeded(name: PropertyName, shouldHoist: boolean, omitSimple: boolean): Expression {
+            if (isComputedPropertyName(name)) {
+                const expression = visitNode(name.expression, visitor, isExpression);
+                const innerExpression = skipPartiallyEmittedExpressions(expression);
+                const inlinable = isSimpleInlineableExpression(innerExpression);
+                if (!inlinable && shouldHoist) {
+                    const generatedName = getGeneratedNameForNode(name);
+                    hoistVariableDeclaration(generatedName);
+                    return createAssignment(generatedName, expression);
+                }
+                return (omitSimple && (inlinable || isIdentifier(innerExpression))) ? undefined : expression;
             }
         }
 
@@ -2071,15 +2135,14 @@ namespace ts {
          */
         function visitPropertyNameOfClassElement(member: ClassElement): PropertyName {
             const name = member.name;
-            if (isComputedPropertyName(name)) {
-                let expression = visitNode(name.expression, visitor, isExpression);
-                if (member.decorators) {
-                    const generatedName = getGeneratedNameForNode(name);
-                    hoistVariableDeclaration(generatedName);
-                    expression = createAssignment(generatedName, expression);
+            let expr = getPropertyNameExpressionIfNeeded(name, some(member.decorators), /*omitSimple*/ false);
+            if (expr) { // expr only exists if `name` is a computed property name
+                // Inline any pending expressions from previous elided or relocated computed property name expressions in order to preserve execution order
+                if (some(pendingExpressions)) {
+                    expr = inlineExpressions([...pendingExpressions, expr]);
+                    pendingExpressions.length = 0;
                 }
-
-                return updateComputedPropertyName(name, expression);
+                return updateComputedPropertyName(name as ComputedPropertyName, expr);
             }
             else {
                 return name;
@@ -2136,6 +2199,14 @@ namespace ts {
             return !nodeIsMissing(node.body);
         }
 
+        function visitPropertyDeclaration(node: PropertyDeclaration): undefined {
+            const expr = getPropertyNameExpressionIfNeeded(node.name, some(node.decorators) || !!node.initializer, /*omitSimple*/ true);
+            if (expr && !isSimpleInlineableExpression(expr)) {
+                (pendingExpressions || (pendingExpressions = [])).push(expr);
+            }
+            return undefined;
+        }
+
         function visitConstructor(node: ConstructorDeclaration) {
             if (!shouldEmitFunctionLikeDeclaration(node)) {
                 return undefined;
@@ -2156,7 +2227,7 @@ namespace ts {
          * This function will be called when one of the following conditions are met:
          * - The node is an overload
          * - The node is marked as abstract, public, private, protected, or readonly
-         * - The node has both a decorator and a computed property name
+         * - The node has a computed property name
          *
          * @param node The method node.
          */
@@ -2200,7 +2271,7 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node is marked as abstract, public, private, or protected
-         * - The node has both a decorator and a computed property name
+         * - The node has a computed property name
          *
          * @param node The get accessor node.
          */
@@ -2231,7 +2302,7 @@ namespace ts {
          *
          * This function will be called when one of the following conditions are met:
          * - The node is marked as abstract, public, private, or protected
-         * - The node has both a decorator and a computed property name
+         * - The node has a computed property name
          *
          * @param node The set accessor node.
          */
@@ -2893,7 +2964,7 @@ namespace ts {
             const body = node.body;
             if (body.kind === SyntaxKind.ModuleBlock) {
                 saveStateAndInvoke(body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
-                statementsLocation = (<ModuleBlock>body).statements;
+                statementsLocation = body.statements;
                 blockLocation = body;
             }
             else {
@@ -3479,9 +3550,7 @@ namespace ts {
                 return undefined;
             }
 
-            return isPropertyAccessExpression(node) || isElementAccessExpression(node)
-                ? resolver.getConstantValue(<PropertyAccessExpression | ElementAccessExpression>node)
-                : undefined;
+            return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
         }
     }
 

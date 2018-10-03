@@ -2,7 +2,7 @@
 class Employee {
     private _fullName: string;
 
-    set fullName(newName: string) {
+    private set fullName(newName: string) {
         this._fullName = newName;
     }
 }

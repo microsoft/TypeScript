@@ -8,7 +8,7 @@
 
 	for ({ s0 = 5 } of [{ s0: 1 }]) {
 >{ s0 = 5 } : { s0?: any; }
->s0 : { s0: number; }
+>s0 : any
 >[{ s0: 1 }] : { s0: number; }[]
 >{ s0: 1 } : { s0: number; }
 >s0 : number
@@ -24,7 +24,7 @@
 
 	for ({ s0:s0 = 5 } of [{ s0: 1 }]) {
 >{ s0:s0 = 5 } : { s0?: number; }
->s0 : { s0: number; }
+>s0 : number
 >s0 = 5 : 5
 >s0 : any
 >5 : 5
@@ -44,7 +44,7 @@
 
 	for ({ s1 = 5 } of [{}]) {
 >{ s1 = 5 } : { s1?: any; }
->s1 : {}
+>s1 : any
 >[{}] : {}[]
 >{} : {}
 	}
@@ -59,7 +59,7 @@
 
 	for ({ s1:s1 = 5 } of [{}]) {
 >{ s1:s1 = 5 } : { s1?: number; }
->s1 : {}
+>s1 : number
 >s1 = 5 : 5
 >s1 : any
 >5 : 5
@@ -77,7 +77,7 @@
 
 	for ({ s2 = 5 } of [{ s2: "" }]) {
 >{ s2 = 5 } : { s2?: any; }
->s2 : { s2: string; }
+>s2 : any
 >[{ s2: "" }] : { s2: string; }[]
 >{ s2: "" } : { s2: string; }
 >s2 : string
@@ -94,7 +94,7 @@
 
 	for ({ s2:s2 = 5 } of [{ s2: "" }]) {
 >{ s2:s2 = 5 } : { s2?: number; }
->s2 : { s2: string; }
+>s2 : number
 >s2 = 5 : 5
 >s2 : any
 >5 : 5
@@ -114,7 +114,7 @@
 
 	for ({ s3 = 5 } of [{ s3: "" }]) {
 >{ s3 = 5 } : { s3?: string; }
->s3 : { s3: string; }
+>s3 : string
 >[{ s3: "" }] : { s3: string; }[]
 >{ s3: "" } : { s3: string; }
 >s3 : string
@@ -131,7 +131,7 @@
 
 	for ({ s3:s3 = 5 } of [{ s3: "" }]) {
 >{ s3:s3 = 5 } : { s3?: number; }
->s3 : { s3: string; }
+>s3 : number
 >s3 = 5 : 5
 >s3 : string
 >5 : 5

@@ -16,20 +16,20 @@
  * @param {...number?[]!} k - (number[] | null)[]
  */
 function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
->f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number[] | null, e: (number | null)[], f: number[] | null, g: number[] | null, h: number[] | null, i: number[][], j: number[][] | null, k: (number[] | null)[]) => void
+>f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number | null | undefined, e: number | null | undefined, f: number | null | undefined, g: number | null | undefined, h: number | null | undefined, i: number[] | undefined, j: number[] | null | undefined, k: (number | null)[] | undefined) => void
 >x : number[]
 >y : number[]
 >z : number[]
 >a : (number | null)[]
 >b : number[] | null
 >c : number[] | null
->d : number[] | null
->e : (number | null)[]
->f : number[] | null
->g : number[] | null
->h : number[] | null
->i : number[][]
->j : number[][] | null
->k : (number[] | null)[]
+>d : number | null | undefined
+>e : number | null | undefined
+>f : number | null | undefined
+>g : number | null | undefined
+>h : number | null | undefined
+>i : number[] | undefined
+>j : number[] | null | undefined
+>k : (number | null)[] | undefined
 }
 

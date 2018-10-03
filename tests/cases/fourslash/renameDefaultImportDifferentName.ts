@@ -18,10 +18,10 @@ const ranges = test.ranges();
 const [C, B0, B1] = ranges;
 const bRanges = [B0, B1];
 const classes = { definition: "class C", ranges: [C] };
-const imports = { definition: "import B", ranges: [B0, B1] };
+const imports = { definition: "(alias) class B\nimport B", ranges: [B0, B1] };
 verify.referenceGroups(C, [classes, imports]);
-verify.referenceGroups(B0, [imports]);
-verify.referenceGroups(B1, [{ definition: "(alias) new B(): B\nimport B", ranges: bRanges }]);
+verify.singleReferenceGroup(imports.definition, [B0, B1]);
+
 
 verify.rangesAreRenameLocations([C]);
 verify.rangesAreRenameLocations(bRanges);

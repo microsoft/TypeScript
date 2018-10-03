@@ -17,6 +17,5 @@ var obj1: Obj1;
 >Obj1 : Symbol(Obj1, Decl(file.tsx, 2, 1))
 
 <obj1 x={10} />; // OK
->obj1 : Symbol(unknown)
 >x : Symbol(x, Decl(file.tsx, 8, 5))
 

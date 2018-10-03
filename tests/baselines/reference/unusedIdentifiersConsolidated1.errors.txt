@@ -10,11 +10,11 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(17,13): error TS6133: 'un
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(24,13): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(37,11): error TS6133: 'numberRegexp' is declared but its value is never read.
 tests/cases/compiler/unusedIdentifiersConsolidated1.ts(44,17): error TS6133: 'unUsedPrivateFunction' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(57,15): error TS6133: 'usedLocallyInterface2' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(64,11): error TS6133: 'dummy' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(67,15): error TS6133: 'unusedInterface' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(79,11): error TS6133: 'class3' is declared but its value is never read.
-tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6133: 'interface5' is declared but its value is never read.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(57,5): error TS6133: 'usedLocallyInterface2' is declared but its value is never read.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(64,5): error TS6133: 'dummy' is declared but its value is never read.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(67,5): error TS6133: 'unusedInterface' is declared but its value is never read.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(79,5): error TS6133: 'class3' is declared but its value is never read.
+tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,5): error TS6133: 'interface5' is declared but its value is never read.
 
 
 ==== tests/cases/compiler/unusedIdentifiersConsolidated1.ts (17 errors) ====
@@ -99,7 +99,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6133: 'in
         }
     
         interface usedLocallyInterface2 {
-                  ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'usedLocallyInterface2' is declared but its value is never read.
             someFunction(s1: string): void;
         }
@@ -108,12 +108,12 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6133: 'in
         }
     
         class dummy implements usedLocallyInterface {
-              ~~~~~
+        ~~~~~~~~~~~
 !!! error TS6133: 'dummy' is declared but its value is never read.
         }
     
         interface unusedInterface {
-                  ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'unusedInterface' is declared but its value is never read.
         }
     }
@@ -127,7 +127,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6133: 'in
         }
     
         class class3 {
-              ~~~~~~
+        ~~~~~~~~~~~~
 !!! error TS6133: 'class3' is declared but its value is never read.
         }
     
@@ -149,7 +149,7 @@ tests/cases/compiler/unusedIdentifiersConsolidated1.ts(99,15): error TS6133: 'in
         export let a: interface3;
     
         interface interface5 {
-                  ~~~~~~~~~~
+        ~~~~~~~~~~~~~~~~~~~~
 !!! error TS6133: 'interface5' is declared but its value is never read.
         }
     }

@@ -627,12 +627,14 @@ function notFirst(a: number, this: C): number { return this.n; }
 function modifiers(async this: C): number { return this.n; }
 >modifiers : Symbol(modifiers, Decl(thisTypeInFunctionsNegative.ts, 164, 64))
 > : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 167, 19))
->C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 167, 30))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 167, 24))
+>C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 
 function restParam(...this: C): number { return this.n; }
 >restParam : Symbol(restParam, Decl(thisTypeInFunctionsNegative.ts, 167, 60))
 > : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 168, 19))
->C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 168, 27))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 168, 22))
+>C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 
 function optional(this?: C): number { return this.n; }
 >optional : Symbol(optional, Decl(thisTypeInFunctionsNegative.ts, 168, 57))
@@ -644,17 +646,15 @@ function optional(this?: C): number { return this.n; }
 function decorated(@deco() this: C): number { return this.n; }
 >decorated : Symbol(decorated, Decl(thisTypeInFunctionsNegative.ts, 169, 54))
 > : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 170, 19))
->C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 170, 32))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 26))
+>C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 
 function initializer(this: C = new C()): number { return this.n; }
 >initializer : Symbol(initializer, Decl(thisTypeInFunctionsNegative.ts, 170, 62))
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 171, 21))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 > : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 171, 30))
->C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
->this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
->this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 171, 21))
->n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+>C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 171, 34))
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;

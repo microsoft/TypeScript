@@ -48,3 +48,33 @@ async function* f4() {
 >y : Symbol(y, Decl(file4.ts, 1, 15))
     }
 }
+=== tests/cases/conformance/emitter/esnext/forAwait/file5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+>f5 : Symbol(f5, Decl(file5.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file5.ts, 2, 7))
+
+    outer: for await (const x of y) {
+>x : Symbol(x, Decl(file5.ts, 3, 27))
+>y : Symbol(y, Decl(file5.ts, 2, 7))
+
+        continue outer;
+    }
+}
+=== tests/cases/conformance/emitter/esnext/forAwait/file6.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+>f6 : Symbol(f6, Decl(file6.ts, 0, 0))
+
+    let y: any;
+>y : Symbol(y, Decl(file6.ts, 2, 7))
+
+    outer: for await (const x of y) {
+>x : Symbol(x, Decl(file6.ts, 3, 27))
+>y : Symbol(y, Decl(file6.ts, 2, 7))
+
+        continue outer;
+    }
+}

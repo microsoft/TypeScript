@@ -3,4 +3,5 @@ var v = {
 >v : Symbol(v, Decl(parserComputedPropertyName41.ts, 0, 3))
 
     [0 in []]: true
+>[0 in []] : Symbol([0 in []], Decl(parserComputedPropertyName41.ts, 0, 9))
 }

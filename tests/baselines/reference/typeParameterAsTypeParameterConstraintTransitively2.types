@@ -67,7 +67,7 @@ foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: 2, z: true });
 >2 : 2
 >y : number
 >2 : 2
->z : boolean
+>z : true
 >true : true
 
 foo(a, b, a);
@@ -86,7 +86,7 @@ foo(a, { foo: 1, bar: '', hm: true }, b);
 >1 : 1
 >bar : string
 >'' : ""
->hm : boolean
+>hm : true
 >true : true
 >b : B
 

@@ -15,10 +15,10 @@
 
 
 goTo.marker("1");
-edit.insert("\r\n"); // edit will trigger formatting - should succeeed
+edit.insert("\n"); // edit will trigger formatting - should succeeed
 
 goTo.marker("2");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(0);
 verify.currentLineContentIs("3`;")
 

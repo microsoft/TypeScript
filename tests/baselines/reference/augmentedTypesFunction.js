@@ -79,4 +79,4 @@ function y5b() { }
 function y5c() { }
 // function then import, messes with other errors
 //function y6() { }
-//import y6 = require(''); 
+//import y6 = require('');

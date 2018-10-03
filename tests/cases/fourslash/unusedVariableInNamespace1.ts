@@ -6,6 +6,6 @@
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'a'.",
+    description: "Remove declaration for: 'a'",
     newRangeContent: "",
 });

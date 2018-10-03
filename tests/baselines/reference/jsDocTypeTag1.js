@@ -41,7 +41,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{String} "
+          "text": "{String}"
         }
       ]
     }
@@ -88,7 +88,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Number} "
+          "text": "{Number}"
         }
       ]
     }
@@ -135,7 +135,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Boolean} "
+          "text": "{Boolean}"
         }
       ]
     }
@@ -182,7 +182,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Void} "
+          "text": "{Void}"
         }
       ]
     }
@@ -229,7 +229,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Undefined} "
+          "text": "{Undefined}"
         }
       ]
     }
@@ -276,7 +276,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Null} "
+          "text": "{Null}"
         }
       ]
     }
@@ -331,7 +331,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Array} "
+          "text": "{Array}"
         }
       ]
     }
@@ -390,7 +390,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Promise} "
+          "text": "{Promise}"
         }
       ]
     }
@@ -437,7 +437,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Object} "
+          "text": "{Object}"
         }
       ]
     }
@@ -484,7 +484,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{Function} "
+          "text": "{Function}"
         }
       ]
     }
@@ -531,7 +531,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{*} "
+          "text": "{*}"
         }
       ]
     }
@@ -578,7 +578,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{?} "
+          "text": "{?}"
         }
       ]
     }
@@ -641,7 +641,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{String|Number} "
+          "text": "{String|Number}"
         }
       ]
     }

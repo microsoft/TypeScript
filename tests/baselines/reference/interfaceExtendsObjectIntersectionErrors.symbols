@@ -36,6 +36,7 @@ interface I3 extends T3 { length: string }
 interface I4 extends T4 { 0: number }
 >I4 : Symbol(I4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 8, 42))
 >T4 : Symbol(T4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 2, 19))
+>0 : Symbol(I4[0], Decl(interfaceExtendsObjectIntersectionErrors.ts, 9, 25))
 
 interface I5 extends T5 { c: number }
 >I5 : Symbol(I5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 9, 37))
@@ -75,6 +76,7 @@ class C4 extends Constructor<T4>() { 0: number }
 >C4 : Symbol(C4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 17, 53))
 >Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37), Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34))
 >T4 : Symbol(T4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 2, 19))
+>0 : Symbol(C4[0], Decl(interfaceExtendsObjectIntersectionErrors.ts, 18, 36))
 
 class C5 extends Constructor<T5>() { c: number }
 >C5 : Symbol(C5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 18, 48))

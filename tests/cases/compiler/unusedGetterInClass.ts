@@ -5,7 +5,9 @@
 class Employee {
     private _fullName: string;
 
-    get fullName(): string {
+    private get fullName(): string {
         return this._fullName;
     }
+    // Will not also error on the setter
+    private set fullName(_: string) {}
 }

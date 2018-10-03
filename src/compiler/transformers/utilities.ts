@@ -15,6 +15,32 @@ namespace ts {
         hasExportStarsToExportValues: boolean; // whether this module contains export*
     }
 
+    function getNamedImportCount(node: ImportDeclaration) {
+        if (!(node.importClause && node.importClause.namedBindings)) return 0;
+        const names = node.importClause.namedBindings;
+        if (!names) return 0;
+        if (!isNamedImports(names)) return 0;
+        return names.elements.length;
+    }
+
+    function containsDefaultReference(node: NamedImportBindings) {
+        if (!node) return false;
+        if (!isNamedImports(node)) return false;
+        return some(node.elements, isNamedDefaultReference);
+    }
+
+    function isNamedDefaultReference(e: ImportSpecifier) {
+        return e.propertyName && e.propertyName.escapedText === InternalSymbolName.Default;
+    }
+
+    export function getImportNeedsImportStarHelper(node: ImportDeclaration) {
+        return !!getNamespaceDeclarationNode(node) || (getNamedImportCount(node) > 1 && containsDefaultReference(node.importClause.namedBindings));
+    }
+
+    export function getImportNeedsImportDefaultHelper(node: ImportDeclaration) {
+        return isDefaultImport(node) || (getNamedImportCount(node) === 1 && containsDefaultReference(node.importClause.namedBindings));
+    }
+
     export function collectExternalModuleInfo(sourceFile: SourceFile, resolver: EmitResolver, compilerOptions: CompilerOptions): ExternalModuleInfo {
         const externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[] = [];
         const exportSpecifiers = createMultiMap<ExportSpecifier>();
@@ -22,8 +48,9 @@ namespace ts {
         const uniqueExports = createMap<boolean>();
         let exportedNames: Identifier[];
         let hasExportDefault = false;
-        let exportEquals: ExportAssignment = undefined;
+        let exportEquals: ExportAssignment;
         let hasExportStarsToExportValues = false;
+        let hasImportStarOrImportDefault = false;
 
         for (const node of sourceFile.statements) {
             switch (node.kind) {
@@ -33,6 +60,7 @@ namespace ts {
                     // import * as x from "mod"
                     // import { x, y } from "mod"
                     externalImports.push(<ImportDeclaration>node);
+                    hasImportStarOrImportDefault = hasImportStarOrImportDefault || getImportNeedsImportStarHelper(<ImportDeclaration>node) || getImportNeedsImportDefaultHelper(<ImportDeclaration>node);
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -135,7 +163,7 @@ namespace ts {
             }
         }
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues);
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues, hasImportStarOrImportDefault);
         const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
@@ -143,6 +171,7 @@ namespace ts {
             createLiteral(externalHelpersModuleNameText));
 
         if (externalHelpersImportDeclaration) {
+            addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
             externalImports.unshift(externalHelpersImportDeclaration);
         }
 
@@ -185,9 +214,8 @@ namespace ts {
      *  - this is mostly subjective beyond the requirement that the expression not be sideeffecting
      */
     export function isSimpleCopiableExpression(expression: Expression) {
-        return expression.kind === SyntaxKind.StringLiteral ||
+        return isStringLiteralLike(expression) ||
             expression.kind === SyntaxKind.NumericLiteral ||
-            expression.kind === SyntaxKind.NoSubstitutionTemplateLiteral ||
             isKeyword(expression.kind) ||
             isIdentifier(expression);
     }

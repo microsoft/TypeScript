@@ -5,7 +5,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(23,25): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(24,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(28,28): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(29,22): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(58,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' has type 'string | 1' at tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts 55:16, but here has type 'string'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(58,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | 1', but here has type 'string'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,10): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
@@ -99,7 +99,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
         var x: number;
         var y: string;
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' has type 'string | 1' at tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts 55:16, but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | 1', but here has type 'string'.
     }
     
     function f8() {

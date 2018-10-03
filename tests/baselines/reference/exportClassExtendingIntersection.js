@@ -119,3 +119,4 @@ export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }
 //// [Main.d.ts]
+export {};

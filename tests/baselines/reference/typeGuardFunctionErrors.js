@@ -253,10 +253,8 @@ assign3 = function (p1, p2, p3) {
     return true;
 };
 // Type predicates in non-return type positions
-var b1 = is, A;
-function b2(a, A) {
-    if (a === void 0) { a = is; }
-}
+var b1, is, A;
+function b2(a, is, A) { }
 ;
 is;
 A;

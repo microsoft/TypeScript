@@ -1,0 +1,23 @@
+=== tests/cases/conformance/salsa/a.js ===
+// #24131
+const a = {};
+>a : { [x: string]: any; d: typeof (Anonymous function); }
+>{} : { [x: string]: any; d: typeof (Anonymous function); }
+
+a.d = function() {};
+>a.d = function() {} : typeof (Anonymous function)
+>a.d : typeof (Anonymous function)
+>a : { [x: string]: any; d: typeof (Anonymous function); }
+>d : typeof (Anonymous function)
+>function() {} : typeof (Anonymous function)
+
+=== tests/cases/conformance/salsa/b.js ===
+a.d.prototype = {};
+>a.d.prototype = {} : { [x: string]: any; }
+>a.d.prototype : { [x: string]: any; }
+>a.d : typeof (Anonymous function)
+>a : { [x: string]: any; d: typeof (Anonymous function); }
+>d : typeof (Anonymous function)
+>prototype : { [x: string]: any; }
+>{} : { [x: string]: any; }
+

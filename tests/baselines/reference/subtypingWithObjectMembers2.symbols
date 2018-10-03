@@ -47,9 +47,11 @@ module NotOptional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 19, 5))
 
         1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers2.ts, 21, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
 
         2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers2.ts, 22, 16))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
     }
 
@@ -58,18 +60,22 @@ module NotOptional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 19, 5))
 
         1: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers2.ts, 26, 29))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
 
         2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers2.ts, 27, 19))
     }
 
     interface A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 29, 5))
 
         '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers2.ts, 31, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
 
         '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 32, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
     }
 
@@ -78,9 +84,11 @@ module NotOptional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 29, 5))
 
         '1': Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers2.ts, 36, 29))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
 
         '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 37, 21))
     }
 }
 
@@ -116,9 +124,11 @@ module Optional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 52, 5))
 
         1?: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers2.ts, 54, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
 
         2.0?: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers2.ts, 55, 17))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
     }
 
@@ -127,18 +137,22 @@ module Optional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers2.ts, 52, 5))
 
         1?: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers2.ts, 59, 29))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
 
         2?: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers2.ts, 60, 20))
     }
 
     interface A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 62, 5))
 
         '1'?: Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers2.ts, 64, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
 
         '2.0'?: Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers2.ts, 65, 19))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers2.ts, 0, 0))
     }
 
@@ -147,8 +161,10 @@ module Optional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers2.ts, 62, 5))
 
         '1'?: Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers2.ts, 69, 29))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers2.ts, 2, 1))
 
         '2.0'?: string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers2.ts, 70, 22))
     }
 }

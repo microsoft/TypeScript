@@ -1,0 +1,87 @@
+=== tests/cases/conformance/salsa/mod.js ===
+exports.n = {};
+>exports.n = {} : typeof __object
+>exports.n : typeof __object
+>exports : typeof "tests/cases/conformance/salsa/mod"
+>n : typeof __object
+>{} : typeof __object
+
+exports.n.K = function () {
+>exports.n.K = function () {    this.x = 10;} : () => void
+>exports.n.K : () => void
+>exports.n : typeof __object
+>exports : typeof "tests/cases/conformance/salsa/mod"
+>n : typeof __object
+>K : () => void
+>function () {    this.x = 10;} : () => void
+
+    this.x = 10;
+>this.x = 10 : 10
+>this.x : any
+>this : typeof __object
+>x : any
+>10 : 10
+}
+exports.Classic = class {
+>exports.Classic = class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
+>exports.Classic : typeof (Anonymous class)
+>exports : typeof "tests/cases/conformance/salsa/mod"
+>Classic : typeof (Anonymous class)
+>class {    constructor() {        this.p = 1    }} : typeof (Anonymous class)
+
+    constructor() {
+        this.p = 1
+>this.p = 1 : 1
+>this.p : number
+>this : this
+>p : number
+>1 : 1
+    }
+}
+
+=== tests/cases/conformance/salsa/use.js ===
+import * as s from './mod'
+>s : typeof s
+
+var k = new s.n.K()
+>k : { x: number; }
+>new s.n.K() : { x: number; }
+>s.n.K : () => void
+>s.n : typeof __object
+>s : typeof s
+>n : typeof __object
+>K : () => void
+
+k.x
+>k.x : number
+>k : { x: number; }
+>x : number
+
+var classic = new s.Classic()
+>classic : (Anonymous class)
+>new s.Classic() : (Anonymous class)
+>s.Classic : typeof (Anonymous class)
+>s : typeof s
+>Classic : typeof (Anonymous class)
+
+
+/** @param {s.n.K} c
+    @param {s.Classic} classic */
+function f(c, classic) {
+>f : (c: { x: number; }, classic: (Anonymous class)) => void
+>c : { x: number; }
+>classic : (Anonymous class)
+
+    c.x
+>c.x : number
+>c : { x: number; }
+>x : number
+
+    classic.p
+>classic.p : number
+>classic : (Anonymous class)
+>p : number
+}
+
+
+

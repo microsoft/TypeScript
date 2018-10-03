@@ -5,7 +5,7 @@
 ////}
 
 verify.codeFix({
-    description: "Change '*' to 'any'.",
+    description: "Change '*' to 'any'",
     errorCode: 8020,
     index: 0,
     newRangeContent: "any",

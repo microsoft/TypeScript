@@ -8,13 +8,16 @@ var x = {
 >{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : { [x: string]: number | (() => void); }
 
     [s]: 0,
+>[s] : number
 >s : SymbolConstructor
 >0 : 0
 
     [s]() { },
+>[s] : () => void
 >s : SymbolConstructor
 
     get [s]() {
+>[s] : number
 >s : SymbolConstructor
 
         return 0;

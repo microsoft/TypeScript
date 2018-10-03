@@ -3,14 +3,8 @@
 
 /* @internal */
 namespace ts.refactor.extractSymbol {
-    const extractSymbol: Refactor = {
-        name: "Extract Symbol",
-        description: getLocaleSpecificMessage(Diagnostics.Extract_symbol),
-        getAvailableActions,
-        getEditsForAction,
-    };
-
-    registerRefactor(extractSymbol);
+    const refactorName = "Extract Symbol";
+    registerRefactor(refactorName, { getAvailableActions, getEditsForAction });
 
     /**
      * Compute the associated code actions
@@ -77,7 +71,7 @@ namespace ts.refactor.extractSymbol {
 
         if (functionActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_function),
                 actions: functionActions
             });
@@ -85,7 +79,7 @@ namespace ts.refactor.extractSymbol {
 
         if (constantActions.length) {
             infos.push({
-                name: extractSymbol.name,
+                name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
                 actions: constantActions
             });
@@ -229,7 +223,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
             const statements: Statement[] = [];
-            for (const statement of (<BlockLike>start.parent).statements) {
+            for (const statement of start.parent.statements) {
                 if (statement === start || statements.length) {
                     const errors = checkNode(statement);
                     if (errors) {
@@ -241,6 +235,16 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
             }
+
+            if (!statements.length) {
+                // https://github.com/Microsoft/TypeScript/issues/20559
+                // Ranges like [|case 1: break;|] will fail to populate `statements` because
+                // they will never find `start` in `start.parent.statements`.
+                // Consider: We could support ranges like [|case 1:|] by refining them to just
+                // the expression.
+                return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+            }
+
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
         }
 
@@ -270,7 +274,7 @@ namespace ts.refactor.extractSymbol {
             }
             else if (isVariableStatement(node)) {
                 let numInitializers = 0;
-                let lastInitializer: Expression | undefined = undefined;
+                let lastInitializer: Expression | undefined;
                 for (const declaration of node.declarationList.declarations) {
                     if (declaration.initializer) {
                         numInitializers++;
@@ -331,6 +335,13 @@ namespace ts.refactor.extractSymbol {
                 Continue = 1 << 1,
                 Return = 1 << 2
             }
+
+            // We believe it's true because the node is from the (unmodified) tree.
+            Debug.assert(nodeToCheck.pos <= nodeToCheck.end, "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
+            // For understanding how skipTrivia functioned:
+            Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809");
+
             if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }
@@ -394,7 +405,7 @@ namespace ts.refactor.extractSymbol {
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ClassDeclaration:
-                            if (node.parent.kind === SyntaxKind.SourceFile && (node.parent as ts.SourceFile).externalModuleIndicator === undefined) {
+                            if (isSourceFile(node.parent) && node.parent.externalModuleIndicator === undefined) {
                                 // You cannot extract global declarations
                                 (errors || (errors = [])).push(createDiagnosticForNode(node, Messages.functionWillNotBeVisibleInTheNewScope));
                             }
@@ -658,11 +669,10 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.Constructor:
                 return "constructor";
             case SyntaxKind.FunctionExpression:
-                return scope.name
-                    ? `function expression '${scope.name.text}'`
-                    : "anonymous function expression";
             case SyntaxKind.FunctionDeclaration:
-                return `function '${scope.name.text}'`;
+                return scope.name
+                    ? `function '${scope.name.text}'`
+                    : "anonymous function";
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
@@ -677,7 +687,7 @@ namespace ts.refactor.extractSymbol {
     }
     function getDescriptionForClassLikeDeclaration(scope: ClassLikeDeclaration): string {
         return scope.kind === SyntaxKind.ClassDeclaration
-            ? `class '${scope.name.text}'`
+            ? scope.name ? `class '${scope.name.text}'` : "anonymous class declaration"
             : scope.name ? `class expression '${scope.name.text}'` : "anonymous class expression";
     }
     function getDescriptionForModuleLikeDeclaration(scope: SourceFile | ModuleBlock): string | SpecialScope {
@@ -720,12 +730,12 @@ namespace ts.refactor.extractSymbol {
 
         const functionName = createIdentifier(functionNameText);
 
-        let returnType: TypeNode = undefined;
+        let returnType: TypeNode;
         const parameters: ParameterDeclaration[] = [];
         const callArguments: Identifier[] = [];
         let writes: UsageEntry[];
         usagesInScope.forEach((usage, name) => {
-            let typeNode: TypeNode = undefined;
+            let typeNode: TypeNode;
             if (!isJS) {
                 let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
                 // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
@@ -811,13 +821,10 @@ namespace ts.refactor.extractSymbol {
         const minInsertionPos = (isReadonlyArray(range.range) ? last(range.range) : range.range).end;
         const nodeToInsertBefore = getNodeToInsertFunctionBefore(minInsertionPos, scope);
         if (nodeToInsertBefore) {
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newFunction, /*blankLineBetween*/ true);
         }
         else {
-            changeTracker.insertNodeBefore(context.file, scope.getLastToken(), newFunction, {
-                prefix: isLineBreak(file.text.charCodeAt(scope.getLastToken().pos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter,
-                suffix: context.newLineCharacter
-            });
+            changeTracker.insertNodeAtEndOfScope(context.file, scope, newFunction);
         }
 
         const newNodes: Node[] = [];
@@ -960,10 +967,12 @@ namespace ts.refactor.extractSymbol {
             }
         }
 
-        const replacementRange = isReadonlyArray(range.range)
-            ? { pos: first(range.range).getStart(), end: last(range.range).end }
-            : { pos: range.range.getStart(), end: range.range.end };
-        changeTracker.replaceRangeWithNodes(context.file, replacementRange, newNodes, { nodeSeparator: context.newLineCharacter });
+        if (isReadonlyArray(range.range)) {
+            changeTracker.replaceNodeRangeWithNodes(context.file, first(range.range), last(range.range), newNodes);
+        }
+        else {
+            changeTracker.replaceNodeWithNodes(context.file, range.range, newNodes);
+        }
 
         const edits = changeTracker.getChanges();
         const renameRange = isReadonlyArray(range.range) ? first(range.range) : range.range;
@@ -1006,7 +1015,7 @@ namespace ts.refactor.extractSymbol {
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file.text);
         const isJS = isInJavaScriptFile(scope);
 
-        const variableType = isJS
+        const variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node), scope, NodeBuilderFlags.NoTruncation);
 
@@ -1041,10 +1050,10 @@ namespace ts.refactor.extractSymbol {
             // Declare
             const maxInsertionPos = node.pos;
             const nodeToInsertBefore = getNodeToInsertPropertyBefore(maxInsertionPos, scope);
-            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, { suffix: context.newLineCharacter + context.newLineCharacter });
+            changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariable, /*blankLineBetween*/ true);
 
             // Consume
-            changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+            changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
         }
         else {
             const newVariableDeclaration = createVariableDeclaration(localNameText, variableType, initializer);
@@ -1056,12 +1065,12 @@ namespace ts.refactor.extractSymbol {
             const oldVariableDeclaration = getContainingVariableDeclarationIfInList(node, scope);
             if (oldVariableDeclaration) {
                 // Declare
-                // CONSIDER: could detect that each is on a separate line
-                changeTracker.insertNodeAt(context.file, oldVariableDeclaration.getStart(), newVariableDeclaration, { suffix: ", " });
+                // CONSIDER: could detect that each is on a separate line (See `extractConstant_VariableList_MultipleLines` in `extractConstants.ts`)
+                changeTracker.insertNodeBefore(context.file, oldVariableDeclaration, newVariableDeclaration);
 
                 // Consume
                 const localReference = createIdentifier(localNameText);
-                changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
             }
             else if (node.parent.kind === SyntaxKind.ExpressionStatement && scope === findAncestor(node, isScope)) {
                 // If the parent is an expression statement and the target scope is the immediately enclosing one,
@@ -1069,7 +1078,7 @@ namespace ts.refactor.extractSymbol {
                 const newVariableStatement = createVariableStatement(
                     /*modifiers*/ undefined,
                     createVariableDeclarationList([newVariableDeclaration], NodeFlags.Const));
-                changeTracker.replaceRange(context.file, { pos: node.parent.getStart(), end: node.parent.end }, newVariableStatement);
+                changeTracker.replaceNode(context.file, node.parent, newVariableStatement, textChanges.useNonAdjustedPositions);
             }
             else {
                 const newVariableStatement = createVariableStatement(
@@ -1079,27 +1088,20 @@ namespace ts.refactor.extractSymbol {
                 // Declare
                 const nodeToInsertBefore = getNodeToInsertConstantBefore(node, scope);
                 if (nodeToInsertBefore.pos === 0) {
-                    // If we're at the beginning of the file, we need to take care not to insert before header comments
-                    // (e.g. copyright, triple-slash references).  Fortunately, this problem has already been solved
-                    // for imports.
-                    const insertionPos = getSourceFileImportLocation(file);
-                    changeTracker.insertNodeAt(context.file, insertionPos, newVariableStatement, {
-                        prefix: insertionPos === 0 ? undefined : context.newLineCharacter,
-                        suffix: isLineBreak(file.text.charCodeAt(insertionPos)) ? context.newLineCharacter : context.newLineCharacter + context.newLineCharacter
-                    });
+                    changeTracker.insertNodeAtTopOfFile(context.file, newVariableStatement, /*blankLineBetween*/ false);
                 }
                 else {
-                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, { suffix: context.newLineCharacter + context.newLineCharacter });
+                    changeTracker.insertNodeBefore(context.file, nodeToInsertBefore, newVariableStatement, /*blankLineBetween*/ false);
                 }
 
                 // Consume
                 if (node.parent.kind === SyntaxKind.ExpressionStatement) {
                     // If the parent is an expression statement, delete it.
-                    changeTracker.deleteRange(context.file, { pos: node.parent.getStart(), end: node.parent.end });
+                    changeTracker.deleteNode(context.file, node.parent, textChanges.useNonAdjustedPositions);
                 }
                 else {
                     const localReference = createIdentifier(localNameText);
-                    changeTracker.replaceRange(context.file, { pos: node.getStart(), end: node.end }, localReference);
+                    changeTracker.replaceNode(context.file, node, localReference, textChanges.useNonAdjustedPositions);
                 }
             }
         }
@@ -1112,7 +1114,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getContainingVariableDeclarationIfInList(node: Node, scope: Scope) {
-        let prevNode = undefined;
+        let prevNode;
         while (node !== undefined && node !== scope) {
             if (isVariableDeclaration(node) &&
                 node.initializer === prevNode &&
@@ -1159,7 +1161,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getFirstDeclaration(type: Type): Declaration | undefined {
-        let firstDeclaration = undefined;
+        let firstDeclaration;
 
         const symbol = type.symbol;
         if (symbol && symbol.declarations) {
@@ -1177,30 +1179,11 @@ namespace ts.refactor.extractSymbol {
         {type: type1, declaration: declaration1}: {type: Type, declaration?: Declaration},
         {type: type2, declaration: declaration2}: {type: Type, declaration?: Declaration}) {
 
-        if (declaration1) {
-            if (declaration2) {
-                const positionDiff = declaration1.pos - declaration2.pos;
-                if (positionDiff !== 0) {
-                    return positionDiff;
-                }
-            }
-            else {
-                return 1; // Sort undeclared type parameters to the front.
-            }
-        }
-        else if (declaration2) {
-            return -1; // Sort undeclared type parameters to the front.
-        }
-
-        const name1 = type1.symbol ? type1.symbol.getName() : "";
-        const name2 = type2.symbol ? type2.symbol.getName() : "";
-        const nameDiff = compareStrings(name1, name2);
-        if (nameDiff !== 0) {
-            return nameDiff;
-        }
-
-        // IDs are guaranteed to be unique, so this ensures a total ordering.
-        return type1.id - type2.id;
+        return compareProperties(declaration1, declaration2, "pos", compareValues)
+            || compareStringsCaseSensitive(
+                type1.symbol ? type1.symbol.getName() : "",
+                type2.symbol ? type2.symbol.getName() : "")
+            || compareValues(type1.id, type2.id);
     }
 
     function getCalledExpression(scope: Node, range: TargetRange, functionNameText: string): Expression {
@@ -1305,16 +1288,16 @@ namespace ts.refactor.extractSymbol {
      * If `scope` contains a function after `minPos`, then return the first such function.
      * Otherwise, return `undefined`.
      */
-    function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Node | undefined {
+    function getNodeToInsertFunctionBefore(minPos: number, scope: Scope): Statement | ClassElement | undefined {
         return find<Statement | ClassElement>(getStatementsOrClassElements(scope), child =>
             child.pos >= minPos && isFunctionLikeDeclaration(child) && !isConstructorDeclaration(child));
     }
 
-    function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): Node {
+    function getNodeToInsertPropertyBefore(maxPos: number, scope: ClassLikeDeclaration): ClassElement {
         const members = scope.members;
         Debug.assert(members.length > 0); // There must be at least one child, since we extracted from one.
 
-        let prevMember: ClassElement | undefined = undefined;
+        let prevMember: ClassElement | undefined;
         let allProperties = true;
         for (const member of members) {
             if (member.pos > maxPos) {
@@ -1336,10 +1319,10 @@ namespace ts.refactor.extractSymbol {
         return prevMember;
     }
 
-    function getNodeToInsertConstantBefore(node: Node, scope: Scope): Node {
+    function getNodeToInsertConstantBefore(node: Node, scope: Scope): Statement {
         Debug.assert(!isClassLike(scope));
 
-        let prevScope: Scope | undefined = undefined;
+        let prevScope: Scope | undefined;
         for (let curr = node; curr !== scope; curr = curr.parent) {
             if (isScope(curr)) {
                 prevScope = curr;
@@ -1348,13 +1331,20 @@ namespace ts.refactor.extractSymbol {
 
         for (let curr = (prevScope || node).parent; ; curr = curr.parent) {
             if (isBlockLike(curr)) {
-                let prevStatement = undefined;
+                let prevStatement;
                 for (const statement of curr.statements) {
                     if (statement.pos > node.pos) {
                         break;
                     }
                     prevStatement = statement;
                 }
+
+                if (!prevStatement && isCaseClause(curr)) {
+                    // We must have been in the expression of the case clause.
+                    Debug.assert(isSwitchStatement(curr.parent.parent));
+                    return curr.parent.parent;
+                }
+
                 // There must be at least one statement since we started in one.
                 Debug.assert(prevStatement !== undefined);
                 return prevStatement;
@@ -1368,7 +1358,7 @@ namespace ts.refactor.extractSymbol {
     }
 
     function getPropertyAssignmentsForWritesAndVariableDeclarations(
-        exposedVariableDeclarations: ReadonlyArray<ts.VariableDeclaration>,
+        exposedVariableDeclarations: ReadonlyArray<VariableDeclaration>,
         writes: ReadonlyArray<UsageEntry>) {
 
         const variableAssignments = map(exposedVariableDeclarations, v => createShorthandPropertyAssignment(v.symbol.name));
@@ -1442,7 +1432,7 @@ namespace ts.refactor.extractSymbol {
         const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];
         const exposedVariableSymbolSet = createMap<true>(); // Key is symbol ID
         const exposedVariableDeclarations: VariableDeclaration[] = [];
-        let firstExposedNonVariableDeclaration: NamedDeclaration | undefined = undefined;
+        let firstExposedNonVariableDeclaration: NamedDeclaration | undefined;
 
         const expression = !isReadonlyArray(targetRange.range)
             ? targetRange.range
@@ -1450,7 +1440,7 @@ namespace ts.refactor.extractSymbol {
                 ? (targetRange.range[0] as ExpressionStatement).expression
                 : undefined;
 
-        let expressionDiagnostic: Diagnostic | undefined = undefined;
+        let expressionDiagnostic: Diagnostic | undefined;
         if (expression === undefined) {
             const statements = targetRange.range as ReadonlyArray<Statement>;
             const start = first(statements).getStart();
@@ -1486,7 +1476,7 @@ namespace ts.refactor.extractSymbol {
         }
 
         const seenUsages = createMap<Usage>();
-        const target = isReadonlyArray(targetRange.range) ? createBlock(<Statement[]>targetRange.range) : targetRange.range;
+        const target = isReadonlyArray(targetRange.range) ? createBlock(targetRange.range) : targetRange.range;
 
         const unmodifiedNode = isReadonlyArray(targetRange.range) ? first(targetRange.range) : targetRange.range;
         const inGenericContext = isInGenericContext(unmodifiedNode);
@@ -1552,7 +1542,7 @@ namespace ts.refactor.extractSymbol {
             }
 
             let hasWrite = false;
-            let readonlyClassPropertyWrite: Declaration | undefined = undefined;
+            let readonlyClassPropertyWrite: Declaration | undefined;
             usagesPerScope[i].usages.forEach(value => {
                 if (value.usage === Usage.Write) {
                     hasWrite = true;
@@ -1691,15 +1681,16 @@ namespace ts.refactor.extractSymbol {
                 // if we get here this means that we are trying to handle 'write' and 'read' was already processed
                 // walk scopes and update existing records.
                 for (const perScope of usagesPerScope) {
-                    const prevEntry = perScope.usages.get(identifier.text as string);
+                    const prevEntry = perScope.usages.get(identifier.text);
                     if (prevEntry) {
-                        perScope.usages.set(identifier.text as string, { usage, symbol, node: identifier });
+                        perScope.usages.set(identifier.text, { usage, symbol, node: identifier });
                     }
                 }
                 return symbolId;
             }
             // find first declaration in this file
-            const declInFile = find(symbol.getDeclarations(), d => d.getSourceFile() === sourceFile);
+            const decls = symbol.getDeclarations();
+            const declInFile = decls && find(decls, d => d.getSourceFile() === sourceFile);
             if (!declInFile) {
                 return undefined;
             }
@@ -1720,7 +1711,7 @@ namespace ts.refactor.extractSymbol {
             }
             for (let i = 0; i < scopes.length; i++) {
                 const scope = scopes[i];
-                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags);
+                const resolvedSymbol = checker.resolveName(symbol.name, scope, symbol.flags, /*excludeGlobals*/ false);
                 if (resolvedSymbol === symbol) {
                     continue;
                 }
@@ -1739,7 +1730,7 @@ namespace ts.refactor.extractSymbol {
                         }
                     }
                     else {
-                        usagesPerScope[i].usages.set(identifier.text as string, { usage, symbol, node: identifier });
+                        usagesPerScope[i].usages.set(identifier.text, { usage, symbol, node: identifier });
                     }
                 }
             }
@@ -1792,7 +1783,8 @@ namespace ts.refactor.extractSymbol {
             if (!symbol) {
                 return undefined;
             }
-            if (symbol.getDeclarations().some(d => d.parent === scopeDecl)) {
+            const decls = symbol.getDeclarations();
+            if (decls && decls.some(d => d.parent === scopeDecl)) {
                 return createIdentifier(symbol.name);
             }
             const prefix = tryReplaceWithQualifiedNameOrPropertyAccess(symbol.parent, scopeDecl, isTypeNode);

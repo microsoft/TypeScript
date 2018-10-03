@@ -6,7 +6,7 @@ interface Foo {
 }
 
 class A<P extends Partial<Foo>> {
-    props: Readonly<P>
+    constructor(public props: Readonly<P>) {}
     doSomething() {
         this.props.foo && this.props.foo()
     }
@@ -19,7 +19,7 @@ interface Banana {
 }
 
 class Monkey<T extends Banana | undefined> {
-    a: T;
+    constructor(public a: T) {}
     render() {
         if (this.a) {
             this.a.color;
@@ -96,7 +96,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var A = /** @class */ (function () {
-    function A() {
+    function A(props) {
+        this.props = props;
     }
     A.prototype.doSomething = function () {
         this.props.foo && this.props.foo();
@@ -104,7 +105,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 var Monkey = /** @class */ (function () {
-    function Monkey() {
+    function Monkey(a) {
+        this.a = a;
     }
     Monkey.prototype.render = function () {
         if (this.a) {

@@ -163,7 +163,7 @@ class ProjectRunner extends RunnerBase {
             }
 
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
-                let sourceFile: ts.SourceFile = undefined;
+                let sourceFile: ts.SourceFile;
                 if (fileName === Harness.Compiler.defaultLibFileName) {
                     sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
                 }
@@ -186,7 +186,7 @@ class ProjectRunner extends RunnerBase {
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
                     useCaseSensitiveFileNames: () => Harness.IO.useCaseSensitiveFileNames(),
                     getNewLine: () => Harness.IO.newLine(),
-                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName ||  getSourceFileText(fileName) !== undefined,
+                    fileExists: fileName => fileName === Harness.Compiler.defaultLibFileName || getSourceFileText(fileName) !== undefined,
                     readFile: fileName => Harness.IO.readFile(fileName),
                     getDirectories: path => Harness.IO.getDirectories(path)
                 };
@@ -294,7 +294,7 @@ class ProjectRunner extends RunnerBase {
             }
 
             function getSourceFileText(fileName: string): string {
-                let text: string = undefined;
+                let text: string;
                 try {
                     text = Harness.IO.readFile(getFileNameInTheProjectTest(fileName));
                 }
@@ -370,7 +370,7 @@ class ProjectRunner extends RunnerBase {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
-                    let emitOutputFilePathWithoutExtension: string = undefined;
+                    let emitOutputFilePathWithoutExtension: string;
                     if (compilerOptions.outDir) {
                         let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program.getCurrentDirectory());
                         sourceFilePath = sourceFilePath.replace(compilerResult.program.getCommonSourceDirectory(), "");
@@ -396,7 +396,7 @@ class ProjectRunner extends RunnerBase {
             });
 
             // Dont allow config files since we are compiling existing source options
-            return compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, getInputFiles, getSourceFileText, writeFile, compilerResult.compilerOptions);
+            return compileProjectFiles(compilerResult.moduleKind, compilerResult.configFileSourceFiles, getInputFiles, getSourceFileText, /*writeFile*/ ts.noop, compilerResult.compilerOptions);
 
             function findOutputDtsFile(fileName: string) {
                 return ts.forEach(compilerResult.outputFiles, outputFile => outputFile.emittedFileName === fileName ? outputFile : undefined);
@@ -415,9 +415,6 @@ class ProjectRunner extends RunnerBase {
                     }
                 }
                 return undefined;
-            }
-
-            function writeFile() {
             }
         }
 

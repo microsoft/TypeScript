@@ -78,7 +78,7 @@ let x: A = {
 >{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
 
     kind: "A",
->kind : string
+>kind : "A"
 >"A" : "A"
 
     a: 100,

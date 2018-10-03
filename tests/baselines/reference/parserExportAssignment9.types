@@ -3,12 +3,12 @@ namespace Foo {
 >Foo : typeof Foo
 
   export default foo;
->foo : No type information available!
+>foo : any
 }
 
 module Bar {
 >Bar : typeof Bar
 
   export default bar;
->bar : No type information available!
+>bar : any
 }

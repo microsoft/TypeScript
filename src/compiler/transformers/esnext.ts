@@ -148,18 +148,18 @@ namespace ts {
         }
 
         function visitLabeledStatement(node: LabeledStatement) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+            if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
                 if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
                     return visitForOfStatement(<ForOfStatement>statement, node);
                 }
-                return restoreEnclosingLabel(visitEachChild(node, visitor, context), node);
+                return restoreEnclosingLabel(visitEachChild(statement, visitor, context), node);
             }
             return visitEachChild(node, visitor, context);
         }
 
         function chunkObjectLiteralElements(elements: ReadonlyArray<ObjectLiteralElementLike>): Expression[] {
-            let chunkObject: ObjectLiteralElementLike[];
+            let chunkObject: ObjectLiteralElementLike[] | undefined;
             const objects: Expression[] = [];
             for (const e of elements) {
                 if (e.kind === SyntaxKind.SpreadAssignment) {
@@ -167,20 +167,13 @@ namespace ts {
                         objects.push(createObjectLiteral(chunkObject));
                         chunkObject = undefined;
                     }
-                    const target = (e as SpreadAssignment).expression;
+                    const target = e.expression;
                     objects.push(visitNode(target, visitor, isExpression));
                 }
                 else {
-                    if (!chunkObject) {
-                        chunkObject = [];
-                    }
-                    if (e.kind === SyntaxKind.PropertyAssignment) {
-                        const p = e as PropertyAssignment;
-                        chunkObject.push(createPropertyAssignment(p.name, visitNode(p.initializer, visitor, isExpression)));
-                    }
-                    else {
-                        chunkObject.push(visitNode(e, visitor, isObjectLiteralElementLike));
-                    }
+                    chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
+                        ? createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
+                        : visitNode(e, visitor, isObjectLiteralElementLike));
                 }
             }
             if (chunkObject) {
@@ -310,6 +303,11 @@ namespace ts {
                     addRange(statements, node.statement.statements);
                     bodyLocation = node.statement;
                     statementsLocation = node.statement.statements;
+                }
+                else if (node.statement) {
+                    append(statements, node.statement);
+                    bodyLocation = node.statement;
+                    statementsLocation = node.statement;
                 }
                 return updateForOf(
                     node,
@@ -968,7 +966,7 @@ namespace ts {
         name: "typescript:asyncValues",
         scoped: false,
         text: `
-            var __asyncValues = (this && this.__asyncIterator) || function (o) {
+            var __asyncValues = (this && this.__asyncValues) || function (o) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
                 var m = o[Symbol.asyncIterator];
                 return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();

@@ -81,9 +81,12 @@ interface Indexed {
 var b10: Indexed = { 0: { }, '1': { } }; // ok
 >b10 : Symbol(b10, Decl(objectLiteralExcessProperties.ts, 30, 3))
 >Indexed : Symbol(Indexed, Decl(objectLiteralExcessProperties.ts, 24, 51))
+>0 : Symbol(0, Decl(objectLiteralExcessProperties.ts, 30, 20))
+>'1' : Symbol('1', Decl(objectLiteralExcessProperties.ts, 30, 28))
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 >b11 : Symbol(b11, Decl(objectLiteralExcessProperties.ts, 32, 3))
 >Indexed : Symbol(Indexed, Decl(objectLiteralExcessProperties.ts, 24, 51))
+>0 : Symbol(0, Decl(objectLiteralExcessProperties.ts, 32, 20))
 >colour : Symbol(colour, Decl(objectLiteralExcessProperties.ts, 32, 25))
 

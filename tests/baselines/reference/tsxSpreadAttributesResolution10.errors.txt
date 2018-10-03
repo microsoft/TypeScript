@@ -2,10 +2,10 @@ tests/cases/conformance/jsx/file.tsx(19,14): error TS2322: Type '{ x: 3; }' is n
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
       Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(20,15): error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
-  Type '{ x: "Hi"; }' is not assignable to type 'OptionProp'.
+tests/cases/conformance/jsx/file.tsx(20,15): error TS2322: Type '{ x: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+  Type '{ x: string; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
-      Type '"Hi"' is not assignable to type '2'.
+      Type 'string' is not assignable to type '2'.
 tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
@@ -43,10 +43,10 @@ tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: true; }' i
 !!! error TS2322:       Type '3' is not assignable to type '2'.
     let y1 = <Opt {...obj1} x="Hi"/>;
                   ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{ x: "Hi"; }' is not assignable to type 'OptionProp'.
+!!! error TS2322: Type '{ x: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{ x: string; }' is not assignable to type 'OptionProp'.
 !!! error TS2322:     Types of property 'x' are incompatible.
-!!! error TS2322:       Type '"Hi"' is not assignable to type '2'.
+!!! error TS2322:       Type 'string' is not assignable to type '2'.
     let y2 = <Opt {...obj1} x={3}/>;
                   ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.

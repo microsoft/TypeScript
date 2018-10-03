@@ -100,3 +100,38 @@ const x4 = f4(fo, fs);  // Func<string>
 >fo : (x: Object) => void
 >fs : (x: string) => void
 
+declare const never: never;
+>never : never
+
+const x10 = f2(never, fo, fs);  // string
+>x10 : string
+>f2(never, fo, fs) : string
+>f2 : <T>(obj: T, f1: (x: T) => void, f2: (x: T) => void) => T
+>never : never
+>fo : (x: Object) => void
+>fs : (x: string) => void
+
+const x11 = f3(never, fo, fx);  // "def"
+>x11 : "def"
+>f3(never, fo, fx) : "def"
+>f3 : <T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void) => T
+>never : never
+>fo : (x: Object) => void
+>fx : (f: (x: "def") => void) => void
+
+// Repro from #21112
+
+declare function foo<T>(a: ReadonlyArray<T>): T;
+>foo : <T>(a: ReadonlyArray<T>) => T
+>T : T
+>a : ReadonlyArray<T>
+>ReadonlyArray : ReadonlyArray<T>
+>T : T
+>T : T
+
+let x = foo([]);  // never
+>x : never
+>foo([]) : never
+>foo : <T>(a: ReadonlyArray<T>) => T
+>[] : never[]
+

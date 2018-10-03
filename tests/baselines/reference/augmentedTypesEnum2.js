@@ -41,4 +41,4 @@ var e2 = /** @class */ (function () {
     return e2;
 }());
 //enum then enum - covered
-//enum then import - covered 
+//enum then import - covered

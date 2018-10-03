@@ -91,6 +91,8 @@ import * as Math2d from 'math2d';
 
 // Augment the module
 declare module 'math2d' {
+>'math2d' : Symbol(Math2d, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
+
 	// Add a method to the class
 	interface Vector {
 >Vector : Symbol(Vector, Decl(index.d.ts, 8, 2), Decl(math2d-augment.d.ts, 2, 25))

@@ -24,6 +24,7 @@ interface A2 {
 >x : number
 
     'a': number; //error
+>'a' : number
 }
 
 
@@ -35,6 +36,7 @@ interface A2 {
 >length : number
 
     1: { length: number }; // error
+>1 : { length: number; }
 >length : number
 }
 

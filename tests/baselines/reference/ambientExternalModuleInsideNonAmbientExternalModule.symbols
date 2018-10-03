@@ -1,3 +1,4 @@
 === tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbientExternalModule.ts ===
 export declare module "M" { }
-No type information for this code.
+>"M" : Symbol("M", Decl(ambientExternalModuleInsideNonAmbientExternalModule.ts, 0, 0))
+

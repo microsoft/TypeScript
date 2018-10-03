@@ -3,6 +3,7 @@ class StringIterator {
 >StringIterator : StringIterator
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

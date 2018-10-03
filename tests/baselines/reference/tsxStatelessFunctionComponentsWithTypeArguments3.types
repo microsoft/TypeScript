@@ -15,6 +15,7 @@ declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": bo
 >b : U
 >U : U
 >a : string
+>"ignore-prop" : boolean
 >JSX : any
 >Element : JSX.Element
 
@@ -130,8 +131,8 @@ function createLink(func: (a: number)=>void) {
 >o1 : JSX.Element
 ><Link func={(a:number, b:string)=>{}} /> : JSX.Element
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
->func : (a: number, b: string) => any
->(a:number, b:string)=>{} : (a: number, b: string) => any
+>func : (a: number, b: string) => void
+>(a:number, b:string)=>{} : (a: number, b: string) => void
 >a : number
 >b : string
 }

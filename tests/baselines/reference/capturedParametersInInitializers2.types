@@ -17,6 +17,7 @@ function foo2(y = class {[x] = x}, x = 1) {
 >foo2 : (y?: typeof (Anonymous class), x?: number) => void
 >y : typeof (Anonymous class)
 >class {[x] = x} : typeof (Anonymous class)
+>[x] : number
 >x : number
 >x : number
 >x : number

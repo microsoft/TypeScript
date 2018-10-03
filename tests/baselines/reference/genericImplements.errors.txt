@@ -1,7 +1,6 @@
-tests/cases/compiler/genericImplements.ts(8,7): error TS2420: Class 'X' incorrectly implements interface 'I'.
-  Types of property 'f' are incompatible.
-    Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
-      Type 'B' is not assignable to type 'T'.
+tests/cases/compiler/genericImplements.ts(9,5): error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
+  Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
+    Type 'B' is not assignable to type 'T'.
 
 
 ==== tests/cases/compiler/genericImplements.ts (1 errors) ====
@@ -13,12 +12,11 @@ tests/cases/compiler/genericImplements.ts(8,7): error TS2420: Class 'X' incorrec
     
     // OK
     class X implements I {  
-          ~
-!!! error TS2420: Class 'X' incorrectly implements interface 'I'.
-!!! error TS2420:   Types of property 'f' are incompatible.
-!!! error TS2420:     Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
-!!! error TS2420:       Type 'B' is not assignable to type 'T'.
         f<T extends B>(): T { return undefined; }
+        ~
+!!! error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
+!!! error TS2416:   Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
+!!! error TS2416:     Type 'B' is not assignable to type 'T'.
     } // { f: () => { b; } }
     
     // OK

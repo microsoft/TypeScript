@@ -52,8 +52,7 @@ namespace ts.server {
         private getLineMap(fileName: string): number[] {
             let lineMap = this.lineMaps.get(fileName);
             if (!lineMap) {
-                const scriptSnapshot = this.host.getScriptSnapshot(fileName);
-                lineMap = computeLineStarts(scriptSnapshot.getText(0, scriptSnapshot.getLength()));
+                lineMap = computeLineStarts(getSnapshotText(this.host.getScriptSnapshot(fileName)));
                 this.lineMaps.set(fileName, lineMap);
             }
             return lineMap;
@@ -72,11 +71,11 @@ namespace ts.server {
             };
         }
 
-        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): ts.TextChange {
+        private convertCodeEditsToTextChange(fileName: string, codeEdit: protocol.CodeEdit): TextChange {
             return { span: this.decodeSpan(codeEdit, fileName), newText: codeEdit.newText };
         }
 
-        private processRequest<T extends protocol.Request>(command: string, args?: any): T {
+        private processRequest<T extends protocol.Request>(command: string, args?: T["arguments"]): T {
             const request: protocol.Request = {
                 seq: this.sequence,
                 type: "request",
@@ -180,14 +179,15 @@ namespace ts.server {
                 isGlobalCompletion: false,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
-                entries: response.body.map(entry => {
-
+                entries: response.body.map<CompletionEntry>(entry => {
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
-                        return { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName) };
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, isRecommended } = entry;
+                        // TODO: GH#241
+                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, isRecommended };
+                        return res;
                     }
 
-                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
                 })
             };
         }
@@ -199,7 +199,7 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionDetailsResponse>(request);
             Debug.assert(response.body.length === 1, "Unexpected length of completion details response body.");
 
-            const convertedCodeActions = map(response.body[0].codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            const convertedCodeActions = map(response.body[0].codeActions, ({ description, changes }) => ({ description, changes: this.convertChanges(changes, fileName) }));
             return { ...response.body[0], codeActions: convertedCodeActions };
         }
 
@@ -229,7 +229,7 @@ namespace ts.server {
             }));
         }
 
-        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForRange(file: string, start: number, end: number, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatRequestArgs = this.createFileLocationRequestArgsWithEndLineAndOffset(file, start, end);
 
 
@@ -240,11 +240,11 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeEditsToTextChange(file, entry));
         }
 
-        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions): TextChange[] {
             return this.getFormattingEditsForRange(fileName, 0, this.host.getScriptSnapshot(fileName).getLength(), options);
         }
 
-        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): ts.TextChange[] {
+        getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, _options: FormatCodeOptions): TextChange[] {
             const args: protocol.FormatOnKeyRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), key };
 
             // TODO: handle FormatCodeOptions
@@ -343,41 +343,31 @@ namespace ts.server {
         }
 
         getSyntacticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SyntacticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
-
-            const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest>(CommandNames.SyntacticDiagnosticsSync, args);
-            const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse>(request);
-
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, file));
+            return this.getDiagnostics(file, CommandNames.SyntacticDiagnosticsSync);
         }
-
         getSemanticDiagnostics(file: string): Diagnostic[] {
-            const args: protocol.SemanticDiagnosticsSyncRequestArgs = { file, includeLinePosition: true };
-
-            const request = this.processRequest<protocol.SemanticDiagnosticsSyncRequest>(CommandNames.SemanticDiagnosticsSync, args);
-            const response = this.processResponse<protocol.SemanticDiagnosticsSyncResponse>(request);
-
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => this.convertDiagnostic(entry, file));
+            return this.getDiagnostics(file, CommandNames.SemanticDiagnosticsSync);
+        }
+        getSuggestionDiagnostics(file: string): Diagnostic[] {
+            return this.getDiagnostics(file, CommandNames.SuggestionDiagnosticsSync);
         }
 
-        convertDiagnostic(entry: protocol.DiagnosticWithLinePosition, _fileName: string): Diagnostic {
-            let category: DiagnosticCategory;
-            for (const id in DiagnosticCategory) {
-                if (isString(id) && entry.category === id.toLowerCase()) {
-                    category = (<any>DiagnosticCategory)[id];
-                }
-            }
+        private getDiagnostics(file: string, command: CommandNames) {
+            const request = this.processRequest<protocol.SyntacticDiagnosticsSyncRequest | protocol.SemanticDiagnosticsSyncRequest | protocol.SuggestionDiagnosticsSyncRequest>(command, { file, includeLinePosition: true });
+            const response = this.processResponse<protocol.SyntacticDiagnosticsSyncResponse | protocol.SemanticDiagnosticsSyncResponse | protocol.SuggestionDiagnosticsSyncResponse>(request);
 
-            Debug.assert(category !== undefined, "convertDiagnostic: category should not be undefined");
-
-            return {
-                file: undefined,
-                start: entry.start,
-                length: entry.length,
-                messageText: entry.message,
-                category,
-                code: entry.code
-            };
+            return (<protocol.DiagnosticWithLinePosition[]>response.body).map(entry => {
+                const category = firstDefined(Object.keys(DiagnosticCategory), id =>
+                    isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
+                return {
+                    file: undefined,
+                    start: entry.start,
+                    length: entry.length,
+                    messageText: entry.message,
+                    category: Debug.assertDefined(category, "convertDiagnostic: category should not be undefined"),
+                    code: entry.code
+                };
+            });
         }
 
         getCompilerOptionsDiagnostics(): Diagnostic[] {
@@ -532,8 +522,16 @@ namespace ts.server {
             }));
         }
 
-        getOutliningSpans(_fileName: string): OutliningSpan[] {
-            return notImplemented();
+        getOutliningSpans(file: string): OutliningSpan[] {
+            const request = this.processRequest<protocol.OutliningSpansRequest>(CommandNames.GetOutliningSpans, { file });
+            const response = this.processResponse<protocol.OutliningSpansResponse>(request);
+
+            return response.body.map<OutliningSpan>(item => ({
+                textSpan: this.decodeSpan(item.textSpan, file),
+                hintSpan: this.decodeSpan(item.hintSpan, file),
+                bannerText: item.bannerText,
+                autoCollapse: item.autoCollapse
+            }));
         }
 
         getTodoComments(_fileName: string, _descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -552,14 +550,16 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+        getCodeFixesAtPosition(file: string, start: number, end: number, errorCodes: ReadonlyArray<number>): ReadonlyArray<CodeFixAction> {
             const args: protocol.CodeFixRequestArgs = { ...this.createFileRangeRequestArgs(file, start, end), errorCodes };
 
             const request = this.processRequest<protocol.CodeFixRequest>(CommandNames.GetCodeFixes, args);
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
-            return response.body.map(entry => this.convertCodeActions(entry, file));
+            return response.body.map(({ description, changes, fixId }) => ({ description, changes: this.convertChanges(changes, file), fixId }));
         }
+
+        getCombinedCodeFix = notImplemented;
 
         applyCodeActionCommand = notImplemented;
 
@@ -615,7 +615,7 @@ namespace ts.server {
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
 
             const renameFilename: string | undefined = response.body.renameFilename;
-            let renameLocation: number | undefined = undefined;
+            let renameLocation: number | undefined;
             if (renameFilename !== undefined) {
                 renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
             }
@@ -625,6 +625,10 @@ namespace ts.server {
                 renameFilename,
                 renameLocation
             };
+        }
+
+        organizeImports(_scope: OrganizeImportsScope, _formatOptions: FormatCodeSettings): ReadonlyArray<FileTextChanges> {
+            return notImplemented();
         }
 
         private convertCodeEditsToTextChanges(edits: protocol.FileCodeEdits[]): FileTextChanges[] {
@@ -637,17 +641,14 @@ namespace ts.server {
             });
         }
 
-        convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
-            return {
-                description: entry.description,
-                changes: entry.changes.map(change => ({
-                    fileName: change.fileName,
-                    textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
-                }))
-            };
+        private convertChanges(changes: protocol.FileCodeEdits[], fileName: string): FileTextChanges[] {
+            return changes.map(change => ({
+                fileName: change.fileName,
+                textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+            }));
         }
 
-        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): ts.TextChange {
+        convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
             return {
                 span: this.decodeSpan(change, fileName),
                 newText: change.newText ? change.newText : ""

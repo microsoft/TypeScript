@@ -46,7 +46,7 @@ type Overlapping =
     | { b: 3, third: string }
 let over: Overlapping
 
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" }
 over = { a: 1, b: 1, first: "ok", third: "error" }
 
@@ -55,6 +55,25 @@ declare let t0: { a: any, b: any } | { d: any, e: any }
 declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
 let t2 = { ...t1 }
 t0 = t2
+
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+type BN = { b: string }
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+const abab: AB = {
+    kind: "A",
+    n: {
+        a: "a",
+        b: "b", // excess -- kind: "A"
+    }
+}
+const abac: AB = {
+    kind: "A",
+    n: {
+        a: "a",
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+    }
+}
 
 
 //// [excessPropertyCheckWithUnions.js]
@@ -84,8 +103,22 @@ amb = { tag: "A", y: 12, extra: 12 };
 amb = { tag: "A" };
 amb = { tag: "A", z: true };
 var over;
-// these two are not reported because there are two discriminant properties
+// these two are still errors despite their doubled up discriminants
 over = { a: 1, b: 1, first: "ok", second: "error" };
 over = { a: 1, b: 1, first: "ok", third: "error" };
 var t2 = __assign({}, t1);
 t0 = t2;
+var abab = {
+    kind: "A",
+    n: {
+        a: "a",
+        b: "b"
+    }
+};
+var abac = {
+    kind: "A",
+    n: {
+        a: "a",
+        c: "c"
+    }
+};

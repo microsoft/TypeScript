@@ -3,16 +3,19 @@ var i = {
 >i : Symbol(i, Decl(symbolProperty18.ts, 0, 3))
 
     [Symbol.iterator]: 0,
+>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty18.ts, 0, 9))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     [Symbol.toStringTag]() { return "" },
+>[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty18.ts, 1, 25))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     set [Symbol.toPrimitive](p: boolean) { }
+>[Symbol.toPrimitive] : Symbol([Symbol.toPrimitive], Decl(symbolProperty18.ts, 2, 41))
 >Symbol.toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >toPrimitive : Symbol(SymbolConstructor.toPrimitive, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

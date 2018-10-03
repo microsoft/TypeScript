@@ -1,0 +1,61 @@
+=== tests/cases/conformance/salsa/use.js ===
+var ex = require('./ex')
+>ex : typeof "tests/cases/conformance/salsa/ex"
+>require('./ex') : typeof "tests/cases/conformance/salsa/ex"
+>require : any
+>'./ex' : "./ex"
+
+// values work
+var crunch = new ex.Crunch(1);
+>crunch : Crunch
+>new ex.Crunch(1) : Crunch
+>ex.Crunch : typeof Crunch
+>ex : typeof "tests/cases/conformance/salsa/ex"
+>Crunch : typeof Crunch
+>1 : 1
+
+crunch.n
+>crunch.n : number
+>crunch : Crunch
+>n : number
+
+
+// types work
+/**
+ * @param {ex.Greatest} greatest
+ * @param {ex.Crunch} wrap
+ */
+function f(greatest, wrap) {
+>f : (greatest: { day: 1; }, wrap: Crunch) => void
+>greatest : { day: 1; }
+>wrap : Crunch
+
+    greatest.day
+>greatest.day : 1
+>greatest : { day: 1; }
+>day : 1
+
+    wrap.n
+>wrap.n : number
+>wrap : Crunch
+>n : number
+}
+
+=== tests/cases/conformance/salsa/ex.d.ts ===
+export type Greatest = { day: 1 }
+>Greatest : Greatest
+>day : 1
+
+export class Crunch {
+>Crunch : Crunch
+
+    n: number
+>n : number
+
+    m(): number
+>m : () => number
+
+    constructor(n: number)
+>n : number
+}
+

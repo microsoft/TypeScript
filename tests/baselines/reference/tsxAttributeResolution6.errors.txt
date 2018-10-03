@@ -1,9 +1,9 @@
 tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type '{ s: true; }' is not assignable to type '{ n?: boolean; s?: string; }'.
   Types of property 's' are incompatible.
     Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type '{ n: "true"; }' is not assignable to type '{ n?: boolean; s?: string; }'.
+tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type '{ n: string; }' is not assignable to type '{ n?: boolean; s?: string; }'.
   Types of property 'n' are incompatible.
-    Type '"true"' is not assignable to type 'boolean'.
+    Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(12,1): error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
   Property 'n' is missing in type '{}'.
 
@@ -25,9 +25,9 @@ tests/cases/conformance/jsx/file.tsx(12,1): error TS2322: Type '{}' is not assig
 !!! error TS2322:     Type 'true' is not assignable to type 'string'.
     <test1 n='true' />;
            ~~~~~~~~
-!!! error TS2322: Type '{ n: "true"; }' is not assignable to type '{ n?: boolean; s?: string; }'.
+!!! error TS2322: Type '{ n: string; }' is not assignable to type '{ n?: boolean; s?: string; }'.
 !!! error TS2322:   Types of property 'n' are incompatible.
-!!! error TS2322:     Type '"true"' is not assignable to type 'boolean'.
+!!! error TS2322:     Type 'string' is not assignable to type 'boolean'.
     <test2 />;
     ~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.

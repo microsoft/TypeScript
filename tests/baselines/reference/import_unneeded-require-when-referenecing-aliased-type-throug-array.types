@@ -17,6 +17,8 @@ var p = testData[0].name;
  
 === tests/cases/compiler/b.ts ===
 declare module "ITest" {
+>"ITest" : typeof "ITest"
+
     interface Name {
 >Name : Name
 

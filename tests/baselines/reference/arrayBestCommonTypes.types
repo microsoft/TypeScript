@@ -257,13 +257,13 @@ module EmptyTypes {
 >base : base
 >[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
 >{ x: true, y: new derived() } : { x: true; y: derived; }
->x : boolean
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
 >{ x: false, y: new base() } : { x: false; y: base; }
->x : boolean
+>x : false
 >false : false
 >y : base
 >new base() : base
@@ -660,13 +660,13 @@ module NonEmptyTypes {
 >base : base
 >[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
 >{ x: true, y: new derived() } : { x: true; y: derived; }
->x : boolean
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
 >{ x: false, y: new base() } : { x: false; y: base; }
->x : boolean
+>x : false
 >false : false
 >y : base
 >new base() : base

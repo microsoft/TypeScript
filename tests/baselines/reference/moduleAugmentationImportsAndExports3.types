@@ -37,6 +37,8 @@ namespace N {
 }
 
 declare module "./f1" {
+>"./f1" : typeof "tests/cases/compiler/f1"
+
     import {B} from "./f2";
 >B : any
 

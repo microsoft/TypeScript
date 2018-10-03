@@ -17,10 +17,12 @@ function f<T, U extends string>() {
 >{        [t]: 0,        [u]: 1    } : { [x: string]: number; }
 
         [t]: 0,
+>[t] : number
 >t : T
 >0 : 0
 
         [u]: 1
+>[u] : number
 >u : U
 >1 : 1
 

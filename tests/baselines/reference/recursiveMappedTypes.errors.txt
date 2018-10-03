@@ -1,25 +1,34 @@
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(3,6): error TS2456: Type alias 'Recurse' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(4,11): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(8,11): error TS2313: Type parameter 'K' has a circular constraint.
 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS2313: Type parameter 'K' has a circular constraint.
 
 
-==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (3 errors) ====
+==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (6 errors) ====
     // Recursive mapped types simply appear empty
     
     type Recurse = {
          ~~~~~~~
 !!! error TS2456: Type alias 'Recurse' circularly references itself.
         [K in keyof Recurse]: Recurse[K]
+              ~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'K' has a circular constraint.
     }
     
     type Recurse1 = {
          ~~~~~~~~
 !!! error TS2456: Type alias 'Recurse1' circularly references itself.
         [K in keyof Recurse2]: Recurse2[K]
+              ~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'K' has a circular constraint.
     }
     
     type Recurse2 = {
          ~~~~~~~~
 !!! error TS2456: Type alias 'Recurse2' circularly references itself.
         [K in keyof Recurse1]: Recurse1[K]
+              ~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'K' has a circular constraint.
     }

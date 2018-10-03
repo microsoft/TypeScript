@@ -35,6 +35,5 @@ verify.referenceGroups([r5, r7], [
 verify.referenceGroups(r6, [
     { definition: "(method) class1.doStuff(): void", ranges: [r0] },
     { definition: "(method) interface1.doStuff(): void", ranges: [r2] },
-    { definition: "(method) class2.doStuff(): void", ranges: [r4] },
-    { definition: "(method) class2.doStuff(): void", ranges: [r6] }
+    { definition: "(method) class2.doStuff(): void", ranges: [r4, r6] },
 ]);

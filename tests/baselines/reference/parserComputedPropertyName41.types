@@ -4,6 +4,7 @@ var v = {
 >{    [0 in []]: true} : { [x: string]: boolean; }
 
     [0 in []]: true
+>[0 in []] : boolean
 >0 in [] : boolean
 >0 : 0
 >[] : undefined[]

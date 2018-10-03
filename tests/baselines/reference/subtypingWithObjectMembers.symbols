@@ -43,9 +43,11 @@ class A2 {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 14, 1))
 
     1: Base; 
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers.ts, 16, 10))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 
     2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers.ts, 17, 12))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 }
 
@@ -54,18 +56,22 @@ class B2 extends A2 {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 14, 1))
 
     1: Derived; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers.ts, 21, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
 
     2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers.ts, 22, 15))
 }
 
 class A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 24, 1))
 
     '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers.ts, 26, 10))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 
     '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers.ts, 27, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 }
 
@@ -74,9 +80,11 @@ class B3 extends A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 24, 1))
 
     '1': Derived; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers.ts, 31, 21))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers.ts, 0, 27))
 
     '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers.ts, 32, 17))
 }
 
 module TwoLevels {
@@ -110,9 +118,11 @@ module TwoLevels {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 45, 5))
 
         1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers.ts, 47, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 
         2.0: Base;
+>2.0 : Symbol(A2[2.0], Decl(subtypingWithObjectMembers.ts, 48, 16))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
     }
 
@@ -121,18 +131,22 @@ module TwoLevels {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers.ts, 45, 5))
 
         1: Derived2; // ok
+>1 : Symbol(B2[1], Decl(subtypingWithObjectMembers.ts, 52, 25))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
 
         2: string; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers.ts, 53, 20))
     }
 
     class A3 {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 55, 5))
 
         '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers.ts, 57, 14))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
 
         '2.0': Base;
+>'2.0' : Symbol(A3['2.0'], Decl(subtypingWithObjectMembers.ts, 58, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers.ts, 0, 0))
     }
 
@@ -141,8 +155,10 @@ module TwoLevels {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers.ts, 55, 5))
 
         '1': Derived2; // ok
+>'1' : Symbol(B3['1'], Decl(subtypingWithObjectMembers.ts, 62, 25))
 >Derived2 : Symbol(Derived2, Decl(subtypingWithObjectMembers.ts, 1, 43))
 
         '2.0': string; // error
+>'2.0' : Symbol(B3['2.0'], Decl(subtypingWithObjectMembers.ts, 63, 22))
     }
 }

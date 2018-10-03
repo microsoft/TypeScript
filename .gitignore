@@ -39,7 +39,7 @@ scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
-scripts/configureNightly.js
+scripts/configurePrerelease.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
@@ -58,6 +58,7 @@ internal/
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
 yarn.lock
+yarn-error.log
 .parallelperf.*
 tests/cases/user/*/package-lock.json
 tests/cases/user/*/node_modules/
@@ -67,3 +68,4 @@ tests/cases/user/*/**/*.d.ts
 !tests/cases/user/zone.js/
 !tests/cases/user/bignumber.js/
 !tests/cases/user/discord.js/
+tests/baselines/reference/dt

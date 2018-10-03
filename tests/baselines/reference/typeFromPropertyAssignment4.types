@@ -1,0 +1,67 @@
+=== tests/cases/conformance/salsa/def.js ===
+var Outer = {};
+>Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
+>{} : { [x: string]: any; Inner: typeof (Anonymous class); }
+
+=== tests/cases/conformance/salsa/a.js ===
+Outer.Inner = class {
+>Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+>Outer.Inner : typeof (Anonymous class)
+>Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
+>Inner : typeof (Anonymous class)
+>class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof (Anonymous class)
+
+    constructor() {
+        /** @type {number} */
+        this.y = 12
+>this.y = 12 : 12
+>this.y : number
+>this : this
+>y : number
+>12 : 12
+    }
+}
+
+/** @type {Outer.Inner} */
+var local
+>local : (Anonymous class)
+
+local.y
+>local.y : number
+>local : (Anonymous class)
+>y : number
+
+var inner = new Outer.Inner()
+>inner : (Anonymous class)
+>new Outer.Inner() : (Anonymous class)
+>Outer.Inner : typeof (Anonymous class)
+>Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
+>Inner : typeof (Anonymous class)
+
+inner.y
+>inner.y : number
+>inner : (Anonymous class)
+>y : number
+
+=== tests/cases/conformance/salsa/b.js ===
+/** @type {Outer.Inner} */
+var x
+>x : (Anonymous class)
+
+x.y
+>x.y : number
+>x : (Anonymous class)
+>y : number
+
+var z = new Outer.Inner()
+>z : (Anonymous class)
+>new Outer.Inner() : (Anonymous class)
+>Outer.Inner : typeof (Anonymous class)
+>Outer : { [x: string]: any; Inner: typeof (Anonymous class); }
+>Inner : typeof (Anonymous class)
+
+z.y
+>z.y : number
+>z : (Anonymous class)
+>y : number
+

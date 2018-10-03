@@ -1,0 +1,20 @@
+[submodule "tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter"]
+	path = tests/cases/user/TypeScript-React-Starter/TypeScript-React-Starter
+	url = https://github.com/Microsoft/TypeScript-React-Starter
+	ignore = all
+[submodule "tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter"]
+	path = tests/cases/user/TypeScript-Node-Starter/TypeScript-Node-Starter
+	url = https://github.com/Microsoft/TypeScript-Node-Starter.git
+	ignore = all
+[submodule "tests/cases/user/TypeScript-React-Native-Starter/TypeScript-React-Native-Starter"]
+	path = tests/cases/user/TypeScript-React-Native-Starter/TypeScript-React-Native-Starter
+	url = https://github.com/Microsoft/TypeScript-React-Native-Starter.git
+	ignore = all
+[submodule "tests/cases/user/TypeScript-Vue-Starter/TypeScript-Vue-Starter"]
+	path = tests/cases/user/TypeScript-Vue-Starter/TypeScript-Vue-Starter
+	url = https://github.com/Microsoft/TypeScript-Vue-Starter.git
+	ignore = all
+[submodule "tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter"]
+	path = tests/cases/user/TypeScript-WeChat-Starter/TypeScript-WeChat-Starter
+	url = https://github.com/Microsoft/TypeScript-WeChat-Starter.git
+	ignore = all

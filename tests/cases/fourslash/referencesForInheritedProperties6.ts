@@ -16,12 +16,7 @@
 const ranges = test.rangesByText();
 const [m0, m1, m2] = ranges.get("doStuff");
 verify.referenceGroups(m0, [{ definition: "(method) class1.doStuff(): void", ranges: [m0, m1, m2] }]);
-verify.referenceGroups(m1, [
+verify.referenceGroups([m1, m2], [
     { definition: "(method) class1.doStuff(): void", ranges: [m0] },
     { definition: "(method) class2.doStuff(): void", ranges: [m1, m2] }
-]);
-verify.referenceGroups(m2, [
-    { definition: "(method) class1.doStuff(): void", ranges: [m0] },
-    { definition: "(method) class2.doStuff(): void", ranges: [m1] },
-    { definition: "(method) class2.doStuff(): void", ranges: [m2] }
 ]);

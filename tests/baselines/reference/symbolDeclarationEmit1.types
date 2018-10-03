@@ -3,6 +3,7 @@ class C {
 >C : C
 
     [Symbol.toPrimitive]: number;
+>[Symbol.toPrimitive] : number
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

@@ -262,6 +262,25 @@ namespace N { // Force this test to be TS-only
         y = [#|this.x|];
     }
 }`);
+
+        // TODO (https://github.com/Microsoft/TypeScript/issues/20727): the extracted constant should have a type annotation.
+        testExtractConstant("extractConstant_ContextualType", `
+interface I { a: 1 | 2 | 3 }
+let i: I = [#|{ a: 1 }|];
+`);
+
+        testExtractConstant("extractConstant_ContextualType_Lambda", `
+const myObj: { member(x: number, y: string): void } = {
+    member: [#|(x, y) => x + y|],
+}
+`);
+
+        testExtractConstant("extractConstant_CaseClauseExpression", `
+switch (1) {
+    case [#|1|]:
+        break;
+}
+`);
     });
 
     function testExtractConstant(caption: string, text: string) {

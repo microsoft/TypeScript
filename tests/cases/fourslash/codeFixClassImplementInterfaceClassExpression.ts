@@ -1,10 +1,14 @@
 /// <reference path='fourslash.ts' />
 
 
-//// interface I { x: number; }
-////
-//// new class implements I {[|  |]};
+////interface I { x: number; }
+////new class implements I {};
 
-verify.rangeAfterCodeFix(`
-x: number;
-`);
+verify.codeFix({
+    description: "Implement interface 'I'",
+    newFileContent:
+`interface I { x: number; }
+new class implements I {
+    x: number;
+};`,
+});

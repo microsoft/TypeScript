@@ -1,0 +1,62 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = {};
+>Outer : { [x: string]: any; Inner: () => void; }
+>{} : { [x: string]: any; Inner: () => void; }
+
+Outer.Inner = function () {}
+>Outer.Inner = function () {} : () => void
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+>function () {} : () => void
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype = {    x: 1,    m() { }} : { [x: string]: any; x: number; m(): void; }
+>Outer.Inner.prototype : any
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+>prototype : any
+>{    x: 1,    m() { }} : { [x: string]: any; x: number; m(): void; }
+
+    x: 1,
+>x : number
+>1 : 1
+
+    m() { }
+>m : () => void
+}
+
+/** @type {Outer.Inner} */
+var inner
+>inner : { [x: string]: any; x: number; m(): void; }
+
+inner.x
+>inner.x : number
+>inner : { [x: string]: any; x: number; m(): void; }
+>x : number
+
+inner.m()
+>inner.m() : void
+>inner.m : () => void
+>inner : { [x: string]: any; x: number; m(): void; }
+>m : () => void
+
+var inno = new Outer.Inner()
+>inno : { [x: string]: any; x: number; m(): void; }
+>new Outer.Inner() : { [x: string]: any; x: number; m(): void; }
+>Outer.Inner : () => void
+>Outer : { [x: string]: any; Inner: () => void; }
+>Inner : () => void
+
+inno.x
+>inno.x : number
+>inno : { [x: string]: any; x: number; m(): void; }
+>x : number
+
+inno.m()
+>inno.m() : void
+>inno.m : () => void
+>inno : { [x: string]: any; x: number; m(): void; }
+>m : () => void
+

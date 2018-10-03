@@ -2,36 +2,66 @@
 
 // @lib: es2017
 
-//// /** asdf */
-//// interface I {
-////     1;
-////     2;
-////     3;
-////     4;
-////     5;
-////     6;
-////     7;
-////     8;
-////     9;
-////     10;
-////     11;
-////     12;
-////     13;
-////     14;
-////     15;
-////     16;
-////     17;
-////     18;
-////     19;
-////     20;
-////     21;
-////     22;
-////     /** a nice safe prime */
-////     23;
-//// }
-//// class C implements I {[| |]}
+/////** asdf */
+////interface I {
+////    1;
+////    2;
+////    3;
+////    4;
+////    5;
+////    6;
+////    7;
+////    8;
+////    9;
+////    10;
+////    11;
+////    12;
+////    13;
+////    14;
+////    15;
+////    16;
+////    17;
+////    18;
+////    19;
+////    20;
+////    21;
+////    22;
+////    /** a nice safe prime */
+////    23;
+////}
+////class C implements I {}
 
-verify.rangeAfterCodeFix(`
+verify.codeFix({
+    description: "Implement interface 'I'",
+    newFileContent:
+`/** asdf */
+interface I {
+    1;
+    2;
+    3;
+    4;
+    5;
+    6;
+    7;
+    8;
+    9;
+    10;
+    11;
+    12;
+    13;
+    14;
+    15;
+    16;
+    17;
+    18;
+    19;
+    20;
+    21;
+    22;
+    /** a nice safe prime */
+    23;
+}
+class C implements I {
     1: any;
     2: any;
     3: any;
@@ -54,5 +84,7 @@ verify.rangeAfterCodeFix(`
     20: any;
     21: any;
     22: any;
+    /** a nice safe prime */
     23: any;
-`);
+}`,
+});

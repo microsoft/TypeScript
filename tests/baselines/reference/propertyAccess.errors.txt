@@ -4,7 +4,7 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(45,14): err
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(80,19): error TS2538: Type '{ name: string; }' cannot be used as an index type.
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(117,18): error TS2538: Type '{ name: string; }' cannot be used as an index type.
 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(140,22): error TS2538: Type '{ name: string; }' cannot be used as an index type.
-tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' has type 'A | B' at tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts 147:4, but here has type 'A'.
+tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'A | B', but here has type 'A'.
 
 
 ==== tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts (6 errors) ====
@@ -169,5 +169,5 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     var x3 = bothIndex[stringOrNumber];
     var x3: A;
         ~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' has type 'A | B' at tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts 147:4, but here has type 'A'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x3' must be of type 'A | B', but here has type 'A'.
     

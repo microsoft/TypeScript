@@ -9,7 +9,9 @@ class C {
 class C {
     constructor() {
         // No ASI
-        this[e] = 0[e2]();
+        this[_a] = 0[e2]();
     }
 }
+_a = e;
 { }
+var _a;

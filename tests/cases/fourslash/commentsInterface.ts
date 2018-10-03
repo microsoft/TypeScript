@@ -113,7 +113,7 @@ goTo.marker('16');
 verify.currentSignatureHelpDocCommentIs("new method");
 verify.currentParameterHelpArgumentDocCommentIs("param");
 verify.quickInfos({
-    "16q": ["var i2_i: new i2(i: i1) => any", "new method"],
+    "16q": ["var i2_i: i2\nnew (i: i1) => any", "new method"],
 
     17: "var i2_i_nc_x: number",
     18: "(property) i2.nc_x: number",
@@ -133,7 +133,7 @@ verify.quickInfos({
 goTo.marker('24');
 verify.currentSignatureHelpDocCommentIs("this is call signature");
 verify.currentParameterHelpArgumentDocCommentIs("paramhelp a");
-verify.quickInfoAt("24q", "var i2_i: i2(a: number, b: number) => number", "this is call signature");
+verify.quickInfoAt("24q", "var i2_i: i2\n(a: number, b: number) => number", "this is call signature");
 
 goTo.marker('25');
 verify.currentSignatureHelpDocCommentIs("this is call signature");

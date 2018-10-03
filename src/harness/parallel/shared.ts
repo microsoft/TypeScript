@@ -10,5 +10,6 @@ namespace Harness.Parallel {
     export type ErrorInfo = ParallelErrorMessage["payload"] & { name: string[] };
     export type ParallelResultMessage = { type: "result", payload: { passing: number, errors: ErrorInfo[], duration: number, runner: TestRunnerKind | "unittest", file: string } } | never;
     export type ParallelBatchProgressMessage = { type: "progress", payload: ParallelResultMessage["payload"] } | never;
-    export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage;
+    export type ParallelTimeoutChangeMessage = { type: "timeout", payload: { duration: number | "reset" } } | never;
+    export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
 }

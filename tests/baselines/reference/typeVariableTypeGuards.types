@@ -14,7 +14,7 @@ class A<P extends Partial<Foo>> {
 >Partial : Partial<T>
 >Foo : Foo
 
-    props: Readonly<P>
+    constructor(public props: Readonly<P>) {}
 >props : Readonly<P>
 >Readonly : Readonly<T>
 >P : P
@@ -52,7 +52,7 @@ class Monkey<T extends Banana | undefined> {
 >T : T
 >Banana : Banana
 
-    a: T;
+    constructor(public a: T) {}
 >a : T
 >T : T
 

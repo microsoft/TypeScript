@@ -18,21 +18,29 @@ x.foo().x;
 
 === tests/cases/compiler/O.d.ts ===
 declare module "Observable" {
+>"Observable" : typeof "Observable"
+
     class Observable {}
 >Observable : Observable
 }
 
 declare module "M" {
+>"M" : typeof "M"
+
     class Cls { x: number }
 >Cls : Cls
 >x : number
 }
 
 declare module "Map" {
+>"Map" : typeof "Map"
+
     import { Cls } from "M";
 >Cls : typeof Cls
 
     module "Observable" {
+>"Observable" : typeof "Observable"
+
         interface Observable {
 >Observable : Observable
 

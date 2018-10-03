@@ -1,0 +1,32 @@
+tests/cases/conformance/salsa/use.js(1,10): error TS2304: Cannot find name 'require'.
+
+
+==== tests/cases/conformance/salsa/use.js (1 errors) ====
+    var ex = require('./ex')
+             ~~~~~~~
+!!! error TS2304: Cannot find name 'require'.
+    
+    // values work
+    var crunch = new ex.Crunch(1);
+    crunch.n
+    
+    
+    // types work
+    /**
+     * @param {ex.Crunch} wrap
+     */
+    function f(wrap) {
+        wrap.n
+    }
+    
+==== tests/cases/conformance/salsa/ex.js (0 errors) ====
+    export class Crunch {
+        /** @param {number} n */
+        constructor(n) {
+            this.n = n
+        }
+        m() {
+            return this.n
+        }
+    }
+    

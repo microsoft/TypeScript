@@ -11,9 +11,11 @@ class C {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     1: Date;
+>1 : Symbol(C[1], Decl(indexersInClassType.ts, 2, 24))
 >Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     'a': {}
+>'a' : Symbol(C['a'], Decl(indexersInClassType.ts, 3, 12))
 
     fn() {
 >fn : Symbol(C.fn, Decl(indexersInClassType.ts, 4, 11))

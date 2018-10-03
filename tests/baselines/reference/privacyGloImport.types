@@ -230,6 +230,8 @@ module glo_M1_public {
 }
 
 declare module "glo_M2_public" {
+>"glo_M2_public" : typeof "glo_M2_public"
+
     export function f1();
 >f1 : () => any
 
@@ -246,6 +248,8 @@ declare module "glo_M2_public" {
 }
 
 declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : typeof "use_glo_M1_public"
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : typeof use_glo_M1_public
 >glo_M1_public : typeof use_glo_M1_public
@@ -329,6 +333,8 @@ declare module "use_glo_M1_public" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : typeof "anotherParseError"
+
     module m2 {
 >m2 : any
 

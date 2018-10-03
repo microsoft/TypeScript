@@ -6,5 +6,4 @@
 ////var f = function () { return new/**/; }
 
 goTo.marker();
-verify.completionListCount(115);
 verify.completionListContains('new');

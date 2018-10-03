@@ -1,0 +1,26 @@
+=== tests/cases/compiler/jsxHasLiteralType.tsx ===
+import * as React from "react";
+>React : typeof React
+
+interface Props {
+>Props : Props
+
+    x?: "a" | "b";
+>x : "a" | "b" | undefined
+}
+class MyComponent<P extends Props = Props> extends React.Component<P, {}> {}
+>MyComponent : MyComponent<P>
+>P : P
+>Props : Props
+>Props : Props
+>React.Component : React.Component<P, {}>
+>React : typeof React
+>Component : typeof React.Component
+>P : P
+
+const m = <MyComponent x="a"/>
+>m : JSX.Element
+><MyComponent x="a"/> : JSX.Element
+>MyComponent : typeof MyComponent
+>x : "a"
+

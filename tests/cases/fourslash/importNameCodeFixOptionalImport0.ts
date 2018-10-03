@@ -12,9 +12,9 @@
 
 verify.importFixAtPosition([
 `import * as ns from "./foo";
-import { foo } from "./foo";
-foo();`,
+ns.foo();`,
 
 `import * as ns from "./foo";
-ns.foo();`,
+import { foo } from "./foo";
+foo();`,
 ]);

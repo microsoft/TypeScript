@@ -39,7 +39,7 @@ function getProps(): AnimalInfo {
     // this may be from server or whatever ...
     return { type: 'Cat', subType: 'Large' };
 >{ type: 'Cat', subType: 'Large' } : { type: "Cat"; subType: string; }
->type : string
+>type : "Cat"
 >'Cat' : "Cat"
 >subType : string
 >'Large' : "Large"
@@ -61,7 +61,7 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 >props2 : AnimalInfo
 >AnimalInfo : AnimalInfo
 >{ type: 'Cat', subType: 'Large' } : { type: "Cat"; subType: string; }
->type : string
+>type : "Cat"
 >'Cat' : "Cat"
 >subType : string
 >'Large' : "Large"

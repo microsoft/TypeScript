@@ -13,6 +13,8 @@ declare module Express {
 }
 
 declare module "express" {
+>"express" : typeof "express"
+
     function e(): e.Express;
 >e : typeof e
 >e : any
@@ -167,6 +169,8 @@ import * as e from "express";
 >e : typeof e
 
 declare module "express" {
+>"express" : typeof e
+
     interface Request {
 >Request : Request
 

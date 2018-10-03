@@ -6,7 +6,7 @@ namespace ts {
         describe("TypeExpressions", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
-                    const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
+                    const typeAndDiagnostics = parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                     Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -16,7 +16,7 @@ namespace ts {
 
             function parsesIncorrectly(name: string, content: string) {
                 it(name, () => {
-                    const type = ts.parseJSDocTypeExpressionForTests(content);
+                    const type = parseJSDocTypeExpressionForTests(content);
                     assert.isTrue(!type || type.diagnostics.length > 0);
                 });
             }
@@ -309,21 +309,21 @@ namespace ts {
         });
         describe("getFirstToken", () => {
             it("gets jsdoc", () => {
-                const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                const root = createSourceFile("foo.ts", "/** comment */var a = true;", ScriptTarget.ES5, /*setParentNodes*/ true);
                 assert.isDefined(root);
-                assert.equal(root.kind, ts.SyntaxKind.SourceFile);
+                assert.equal(root.kind, SyntaxKind.SourceFile);
                 const first = root.getFirstToken();
                 assert.isDefined(first);
-                assert.equal(first.kind, ts.SyntaxKind.VarKeyword);
+                assert.equal(first.kind, SyntaxKind.VarKeyword);
             });
         });
         describe("getLastToken", () => {
             it("gets jsdoc", () => {
-                const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                const root = createSourceFile("foo.ts", "var a = true;/** comment */", ScriptTarget.ES5, /*setParentNodes*/ true);
                 assert.isDefined(root);
                 const last = root.getLastToken();
                 assert.isDefined(last);
-                assert.equal(last.kind, ts.SyntaxKind.EndOfFileToken);
+                assert.equal(last.kind, SyntaxKind.EndOfFileToken);
             });
         });
     });

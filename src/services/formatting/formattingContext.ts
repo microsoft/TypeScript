@@ -1,7 +1,14 @@
-/// <reference path="references.ts"/>
-
 /* @internal */
 namespace ts.formatting {
+    export const enum FormattingRequestKind {
+        FormatDocument,
+        FormatSelection,
+        FormatOnEnter,
+        FormatOnSemicolon,
+        FormatOnOpeningCurlyBrace,
+        FormatOnClosingCurlyBrace
+    }
+
     export class FormattingContext {
         public currentTokenSpan: TextRangeWithKind;
         public nextTokenSpan: TextRangeWithKind;
@@ -15,7 +22,7 @@ namespace ts.formatting {
         private contextNodeBlockIsOnOneLine: boolean;
         private nextNodeBlockIsOnOneLine: boolean;
 
-        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: ts.FormatCodeSettings) {
+        constructor(public readonly sourceFile: SourceFileLike, public formattingRequestKind: FormattingRequestKind, public options: FormatCodeSettings) {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {

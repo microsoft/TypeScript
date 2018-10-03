@@ -42,12 +42,12 @@ namespace Utils {
 
         getDirectory(name: string): VirtualDirectory {
             const entry = this.getFileSystemEntry(name);
-            return entry.isDirectory() ? <VirtualDirectory>entry : undefined;
+            return entry.isDirectory() ? entry : undefined;
         }
 
         getFile(name: string): VirtualFile {
             const entry = this.getFileSystemEntry(name);
-            return entry.isFile() ? <VirtualFile>entry : undefined;
+            return entry.isFile() ? entry : undefined;
         }
     }
 
@@ -66,7 +66,7 @@ namespace Utils {
                 return directory;
             }
             else if (entry.isDirectory()) {
-                return <VirtualDirectory>entry;
+                return entry;
             }
             else {
                 return undefined;
@@ -149,7 +149,7 @@ namespace Utils {
                     return undefined;
                 }
                 else if (entry.isDirectory()) {
-                    directory = <VirtualDirectory>entry;
+                    directory = entry;
                 }
                 else {
                     return entry;
@@ -162,15 +162,14 @@ namespace Utils {
         /**
          * Reads the directory at the given path and retrieves a list of file names and a list
          * of directory names within it. Suitable for use with ts.matchFiles()
-         * @param path  The path to the directory to be read
+         * @param path The path to the directory to be read
          */
         getAccessibleFileSystemEntries(path: string) {
             const entry = this.traversePath(path);
             if (entry && entry.isDirectory()) {
-                const directory = <VirtualDirectory>entry;
                 return {
-                    files: ts.map(directory.getFiles(), f => f.name),
-                    directories: ts.map(directory.getDirectories(), d => d.name)
+                    files: ts.map(entry.getFiles(), f => f.name),
+                    directories: ts.map(entry.getDirectories(), d => d.name)
                 };
             }
             return { files: [], directories: [] };

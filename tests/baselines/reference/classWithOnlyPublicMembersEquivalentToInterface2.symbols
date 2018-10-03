@@ -27,6 +27,7 @@ class C {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
+>0 : Symbol(C[0], Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 8, 24))
 
     public static foo: string; // doesn't effect equivalence
 >foo : Symbol(C.foo, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 9, 14))
@@ -54,6 +55,7 @@ interface I {
 >Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     0: number;
+>0 : Symbol(I[0], Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 19, 24))
 }
 
 var c: C;

@@ -5,9 +5,11 @@ var y = {
 >{    "stringLiteral",    42,    get e,    set f,    this,    super,    var,    class,    typeof} : { "stringLiteral": any; 42: any; readonly e: void; f: any; this: any; super: any; var: any; class: any; typeof: any; }
 
     "stringLiteral",
+>"stringLiteral" : any
 > : any
 
     42,
+>42 : any
 > : any
 
     get e,

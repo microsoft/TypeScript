@@ -11,4 +11,4 @@
 verify.numberOfErrorsInCurrentFile(0);
 goTo.marker("1");
 edit.insert("(");
-verify.numberOfErrorsInCurrentFile(2);
+verify.numberOfErrorsInCurrentFile(3);

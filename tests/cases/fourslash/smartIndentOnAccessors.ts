@@ -17,7 +17,7 @@
 
 
 goTo.marker("0");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(8);
 goTo.marker("1");
 verify.currentLineContentIs("        b,");
@@ -26,7 +26,7 @@ verify.currentLineContentIs("                 //comment");
 goTo.marker("3");
 verify.currentLineContentIs("        c");
 goTo.marker("4");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.indentationIs(8);
 goTo.marker("5");
 verify.currentLineContentIs("        b,");

@@ -1,6 +1,5 @@
 /* @internal */
 namespace ts.JsDoc {
-    const singleLineTemplate = { newText: "/** */", caretOffset: 3 };
     const jsDocTagNames = [
         "augments",
         "author",
@@ -20,6 +19,7 @@ namespace ts.JsDoc {
         "fileOverview",
         "function",
         "ignore",
+        "inheritDoc",
         "inner",
         "lends",
         "link",
@@ -37,6 +37,7 @@ namespace ts.JsDoc {
         "see",
         "since",
         "static",
+        "template",
         "throws",
         "type",
         "typedef",
@@ -52,18 +53,28 @@ namespace ts.JsDoc {
         // Eg. const a: Array<string> | Array<number>; a.length
         // The property length will have two declarations of property length coming
         // from Array<T> - Array<string> and Array<number>
-        const documentationComment = <SymbolDisplayPart[]>[];
+        const documentationComment: SymbolDisplayPart[] = [];
         forEachUnique(declarations, declaration => {
-            forEach(getAllJSDocs(declaration), doc => {
-                if (doc.comment) {
-                    if (documentationComment.length) {
-                        documentationComment.push(lineBreakPart());
-                    }
-                    documentationComment.push(textPart(doc.comment));
+            for (const { comment } of getCommentHavingNodes(declaration)) {
+                if (comment === undefined) continue;
+                if (documentationComment.length) {
+                    documentationComment.push(lineBreakPart());
                 }
-            });
+                documentationComment.push(textPart(comment));
+            }
         });
         return documentationComment;
+    }
+
+    function getCommentHavingNodes(declaration: Declaration): ReadonlyArray<JSDoc | JSDocTag> {
+        switch (declaration.kind) {
+            case SyntaxKind.JSDocPropertyTag:
+                return [declaration as JSDocPropertyTag];
+            case SyntaxKind.JSDocTypedefTag:
+                return [(declaration as JSDocTypedefTag).parent];
+            default:
+                return getJSDocCommentsAndTags(declaration);
+        }
     }
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[]): JSDocTagInfo[] {
@@ -77,7 +88,7 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getCommentText(tag: JSDocTag): string {
+    function getCommentText(tag: JSDocTag): string | undefined {
         const { comment } = tag;
         switch (tag.kind) {
             case SyntaxKind.JSDocAugmentsTag:
@@ -96,11 +107,15 @@ namespace ts.JsDoc {
         }
 
         function withNode(node: Node) {
-            return `${node.getText()} ${comment}`;
+            return addComment(node.getText());
         }
 
         function withList(list: NodeArray<Node>): string {
-            return `${list.map(x => x.getText())} ${comment}`;
+            return addComment(list.map(x => x.getText()).join(", "));
+        }
+
+        function addComment(s: string) {
+            return comment === undefined ? s : `${s} ${comment}`;
         }
     }
 
@@ -112,7 +127,7 @@ namespace ts.JsDoc {
     function forEachUnique<T, U>(array: T[], callback: (element: T, index: number) => U): U {
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                if (indexOf(array, array[i]) === i) {
+                if (array.indexOf(array[i]) === i) {
                     const result = callback(array[i], i);
                     if (result) {
                         return result;
@@ -124,7 +139,7 @@ namespace ts.JsDoc {
     }
 
     export function getJSDocTagNameCompletions(): CompletionEntry[] {
-        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
@@ -137,7 +152,7 @@ namespace ts.JsDoc {
     export const getJSDocTagNameCompletionDetails = getJSDocTagCompletionDetails;
 
     export function getJSDocTagCompletions(): CompletionEntry[] {
-        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = map(jsDocTagNames, tagName => {
             return {
                 name: `@${tagName}`,
                 kind: ScriptElementKind.keyword,
@@ -166,7 +181,7 @@ namespace ts.JsDoc {
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
         const fn = jsdoc.parent;
-        if (!ts.isFunctionLike(fn)) return [];
+        if (!isFunctionLike(fn)) return [];
 
         return mapDefined(fn.parameters, param => {
             if (!isIdentifier(param.name)) return undefined;
@@ -196,9 +211,16 @@ namespace ts.JsDoc {
     /**
      * Checks if position points to a valid position to add JSDoc comments, and if so,
      * returns the appropriate template. Otherwise returns an empty string.
-     * Invalid positions are
-     *      - within comments, strings (including template literals and regex), and JSXText
-     *      - within a token
+     * Valid positions are
+     *      - outside of comments, statements, and expressions, and
+     *      - preceding a:
+     *          - function/constructor/method declaration
+     *          - class declarations
+     *          - variable statements
+     *          - namespace declarations
+     *          - interface declarations
+     *          - method signatures
+     *          - type alias declarations
      *
      * Hosts should ideally check that:
      * - The line is all whitespace up to 'position' before performing the insertion.
@@ -224,19 +246,17 @@ namespace ts.JsDoc {
 
         const commentOwnerInfo = getCommentOwnerInfo(tokenAtPos);
         if (!commentOwnerInfo) {
-            // if climbing the tree did not find a declaration with parameters, complete to a single line comment
-            return singleLineTemplate;
+            return undefined;
         }
         const { commentOwner, parameters } = commentOwnerInfo;
-
-        if (commentOwner.kind === SyntaxKind.JsxText) {
+        if (commentOwner.getStart() < position) {
             return undefined;
         }
 
-        if (commentOwner.getStart() < position || parameters.length === 0) {
-            // if climbing the tree found a declaration with parameters but the request was made inside it
-            // or if there are no parameters, complete to a single line comment
-            return singleLineTemplate;
+        if (!parameters || parameters.length === 0) {
+            // if there are no parameters, just complete to a single line JSDoc comment
+            const singleLineResult = "/** */";
+            return { newText: singleLineResult, caretOffset: 3 };
         }
 
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
@@ -246,11 +266,17 @@ namespace ts.JsDoc {
         const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
-        const docParams = parameters.map(({name}, i) => {
-            const nameText = isIdentifier(name) ? name.text : `param${i}`;
-            const type = isJavaScriptFile ? "{any} " : "";
-            return `${indentationStr} * @param ${type}${nameText}${newLine}`;
-        }).join("");
+        let docParams = "";
+        for (let i = 0; i < parameters.length; i++) {
+            const currentName = parameters[i].name;
+            const paramName = currentName.kind === SyntaxKind.Identifier ? currentName.escapedText : "param" + i;
+            if (isJavaScriptFile) {
+                docParams += `${indentationStr} * @param {any} ${paramName}${newLine}`;
+            }
+            else {
+                docParams += `${indentationStr} * @param ${paramName}${newLine}`;
+            }
+        }
 
         // A doc comment consists of the following
         // * The opening comment line
@@ -272,7 +298,7 @@ namespace ts.JsDoc {
 
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
-        readonly parameters: ReadonlyArray<ParameterDeclaration>;
+        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         for (let commentOwner = tokenAtPos; commentOwner; commentOwner = commentOwner.parent) {
@@ -284,29 +310,38 @@ namespace ts.JsDoc {
                     const { parameters } = commentOwner as FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | MethodSignature;
                     return { commentOwner, parameters };
 
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.PropertySignature:
+                case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.EnumMember:
+                case SyntaxKind.TypeAliasDeclaration:
+                    return { commentOwner };
+
                 case SyntaxKind.VariableStatement: {
                     const varStatement = <VariableStatement>commentOwner;
                     const varDeclarations = varStatement.declarationList.declarations;
                     const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
                         ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
                         : undefined;
-                    return parameters ? { commentOwner, parameters } : undefined;
+                    return { commentOwner, parameters };
                 }
 
                 case SyntaxKind.SourceFile:
                     return undefined;
 
+                case SyntaxKind.ModuleDeclaration:
+                    // If in walking up the tree, we hit a a nested namespace declaration,
+                    // then we must be somewhere within a dotted namespace name; however we don't
+                    // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
+                    return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
+
                 case SyntaxKind.BinaryExpression: {
                     const be = commentOwner as BinaryExpression;
-                    if (getSpecialPropertyAssignmentKind(be) === ts.SpecialPropertyAssignmentKind.None) {
+                    if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
                         return undefined;
                     }
                     const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;
-                    return { commentOwner, parameters };
-                }
-
-                case SyntaxKind.JsxText: {
-                    const parameters: ReadonlyArray<ParameterDeclaration> = emptyArray;
                     return { commentOwner, parameters };
                 }
             }

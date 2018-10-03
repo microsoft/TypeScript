@@ -278,7 +278,7 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -298,8 +298,8 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "m", "pos": 123, "end": 124 },
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "m", pos: 123, end: 124 },
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -319,8 +319,8 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "m", "pos": 123, "end": 124 },
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "m", pos: 123, end: 124 },
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -340,7 +340,7 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -360,7 +360,7 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -379,7 +379,7 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "../Observable", "pos": 28, "end": 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 }
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -400,8 +400,8 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "m2", "pos": 65, "end": 67 },
-                    { "fileName": "augmentation", "pos": 102, "end": 114 }
+                    { fileName: "m2", pos: 65, end: 67 },
+                    { fileName: "augmentation", pos: 102, end: 114 }
                 ],
                 ambientExternalModules: ["m1"],
                 isLibFile: false
@@ -424,8 +424,8 @@ describe("PreProcessFile:", () => {
                 referencedFiles: [],
                 typeReferenceDirectives: [],
                 importedFiles: [
-                    { "fileName": "m2", "pos": 127, "end": 129 },
-                    { "fileName": "augmentation", "pos": 164, "end": 176 }
+                    { fileName: "m2", pos: 127, end: 129 },
+                    { fileName: "augmentation", pos: 164, end: 176 }
                 ],
                 ambientExternalModules: ["m1"],
                 isLibFile: false
@@ -442,12 +442,12 @@ describe("PreProcessFile:", () => {
             /*detectJavaScriptImports*/ false,
             {
                 referencedFiles: [
-                    { "pos": 34, "end": 35, "fileName": "a" },
-                    { "pos": 112, "end": 114, "fileName": "a2" }
+                    { pos: 34, end: 35, fileName: "a" },
+                    { pos: 112, end: 114, fileName: "a2" }
                 ],
                 typeReferenceDirectives: [
-                    { "pos": 73, "end": 75, "fileName": "a1" },
-                    { "pos": 152, "end": 154, "fileName": "a3" }
+                    { pos: 73, end: 75, fileName: "a1" },
+                    { pos: 152, end: 154, fileName: "a3" }
                 ],
                 importedFiles: [],
                 ambientExternalModules: undefined,

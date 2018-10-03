@@ -1,5 +1,8 @@
 /// <reference path="fourslash.ts" />
 
+// @AllowSyntheticDefaultImports: false
+// @Module: es2015
+
 // @Filename: a/f1.ts
 //// [|export function test() { };
 //// bar1/*0*/.bar;|]

@@ -17,7 +17,9 @@ interface JQuery {
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : Symbol(jq, Decl(indexer.ts, 8, 3))
 >JQuery : Symbol(JQuery, Decl(indexer.ts, 2, 1))
+>0 : Symbol(0, Decl(indexer.ts, 8, 15))
 >id : Symbol(id, Decl(indexer.ts, 8, 20))
+>1 : Symbol(1, Decl(indexer.ts, 8, 32))
 >id : Symbol(id, Decl(indexer.ts, 8, 37))
 
 jq[0].id;

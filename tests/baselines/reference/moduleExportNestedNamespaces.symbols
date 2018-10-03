@@ -1,0 +1,67 @@
+=== tests/cases/conformance/salsa/mod.js ===
+module.exports.n = {};
+>module.exports : Symbol(n, Decl(mod.js, 0, 0))
+>n : Symbol(n, Decl(mod.js, 0, 0))
+
+module.exports.n.K = function C() {
+>module.exports.n : Symbol(K, Decl(mod.js, 0, 22))
+>K : Symbol(K, Decl(mod.js, 0, 22))
+>C : Symbol(C, Decl(mod.js, 1, 20))
+
+    this.x = 10;
+>x : Symbol(C.x, Decl(mod.js, 1, 35))
+}
+module.exports.Classic = class {
+>module.exports : Symbol(Classic, Decl(mod.js, 3, 1))
+>Classic : Symbol(Classic, Decl(mod.js, 3, 1))
+
+    constructor() {
+        this.p = 1
+>this.p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+>this : Symbol((Anonymous class), Decl(mod.js, 4, 24))
+>p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+    }
+}
+
+=== tests/cases/conformance/salsa/use.js ===
+import * as s from './mod'
+>s : Symbol(s, Decl(use.js, 0, 6))
+
+var k = new s.n.K()
+>k : Symbol(k, Decl(use.js, 2, 3))
+>s.n.K : Symbol(K, Decl(mod.js, 0, 22))
+>s.n : Symbol(s.n, Decl(mod.js, 0, 0))
+>s : Symbol(s, Decl(use.js, 0, 6))
+>n : Symbol(s.n, Decl(mod.js, 0, 0))
+>K : Symbol(K, Decl(mod.js, 0, 22))
+
+k.x
+>k.x : Symbol(C.x, Decl(mod.js, 1, 35))
+>k : Symbol(k, Decl(use.js, 2, 3))
+>x : Symbol(C.x, Decl(mod.js, 1, 35))
+
+var classic = new s.Classic()
+>classic : Symbol(classic, Decl(use.js, 4, 3))
+>s.Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
+>s : Symbol(s, Decl(use.js, 0, 6))
+>Classic : Symbol(s.Classic, Decl(mod.js, 3, 1))
+
+
+/** @param {s.n.K} c
+    @param {s.Classic} classic */
+function f(c, classic) {
+>f : Symbol(f, Decl(use.js, 4, 29))
+>c : Symbol(c, Decl(use.js, 9, 11))
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+
+    c.x
+>c.x : Symbol(C.x, Decl(mod.js, 1, 35))
+>c : Symbol(c, Decl(use.js, 9, 11))
+>x : Symbol(C.x, Decl(mod.js, 1, 35))
+
+    classic.p
+>classic.p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+>classic : Symbol(classic, Decl(use.js, 9, 13))
+>p : Symbol((Anonymous class).p, Decl(mod.js, 5, 19))
+}
+

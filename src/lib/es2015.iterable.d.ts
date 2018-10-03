@@ -52,7 +52,7 @@ interface ArrayConstructor {
      * Creates an array from an iterable object.
      * @param iterable An iterable object to convert to an array.
      */
-    from<T>(iterable: Iterable<T>): T[];
+    from<T>(iterable: Iterable<T> | ArrayLike<T>): T[];
 
     /**
      * Creates an array from an iterable object.
@@ -60,7 +60,7 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 }
 
 interface ReadonlyArray<T> {
@@ -180,7 +180,7 @@ interface SetConstructor {
     new <T>(iterable: Iterable<T>): Set<T>;
 }
 
-interface WeakSet<T> { }
+interface WeakSet<T extends object> { }
 
 interface WeakSetConstructor {
     new <T extends object>(iterable: Iterable<T>): WeakSet<T>;

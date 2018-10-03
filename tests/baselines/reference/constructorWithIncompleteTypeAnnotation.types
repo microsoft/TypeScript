@@ -1,5 +1,7 @@
 === tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
 declare module "fs" {
+>"fs" : typeof "fs"
+
     export class File {
 >File : File
 
@@ -19,7 +21,7 @@ declare module "fs" {
 
 import fs = module("fs");
 >fs : any
->module : No type information available!
+>module : any
 >("fs") : "fs"
 >"fs" : "fs"
 
@@ -74,8 +76,8 @@ module TypeScriptAllInOne {
 >4 : 4
 
                 if (retValue != 0) {
->if : (retValue?: boolean) => any
->retValue : boolean
+>if : (retValue: any) => any
+>retValue : any
 >!= 0 : boolean
 > : any
 >0 : 0
@@ -89,7 +91,7 @@ module TypeScriptAllInOne {
 
 
                 retValue = bfs.TYPES();
->retValue : boolean
+>retValue : any
 >bfs.TYPES() : any
 >bfs.TYPES : any
 >bfs : any
@@ -97,7 +99,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1 && 
@@ -108,7 +110,7 @@ module TypeScriptAllInOne {
 
                 retValue = bfs.OPERATOR ' );
 >retValue = bfs.OPERATOR : any
->retValue : boolean
+>retValue : any
 >bfs.OPERATOR : any
 >bfs : any
 >OPERATOR : any
@@ -116,7 +118,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1;
@@ -124,7 +126,6 @@ module TypeScriptAllInOne {
                 }
             }
             catch (e) {
->catch : (e: any) => void
 >e : any
 
                 console.log(e);
@@ -250,6 +251,7 @@ module TypeScriptAllInOne {
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
 >{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
+>"var" : number
 >number = 42 : 42
 >number : number
 >42 : 42
@@ -476,9 +478,9 @@ module TypeScriptAllInOne {
             for (var x in { x: 0, y: 1 }) {
 >x : string
 >{ x: 0, y: 1 } : { x: number; y: number; }
->x : string
+>x : number
 >0 : 0
->y : string
+>y : number
 >1 : 1
 
              ! 

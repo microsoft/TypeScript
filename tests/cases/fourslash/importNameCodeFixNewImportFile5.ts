@@ -9,7 +9,7 @@
 //// declare var x: MyStatic;
 //// export = x;
 
-verify.importFixAtPosition([
+-verify.importFixAtPosition([
 `import { bar } from "./foo";
 
 bar();`

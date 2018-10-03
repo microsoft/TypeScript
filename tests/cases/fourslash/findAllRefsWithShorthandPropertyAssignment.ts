@@ -13,7 +13,4 @@ verify.referenceGroups(r1, [
     { definition: "(property) name: string", ranges: [r1, r4] }
 ]);
 verify.singleReferenceGroup("(property) name: string", [r2]);
-verify.referenceGroups(r4, [
-    { definition: "(property) name: string", ranges: [r1] },
-    { definition: "(property) name: string", ranges: [r4] },
-]);
+verify.referenceGroups(r4, [{ definition: "(property) name: string", ranges: [r1, r4] }]);

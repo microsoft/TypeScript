@@ -38,6 +38,7 @@
         "emitter.ts",
         "watchUtilities.ts",
         "program.ts",
+        "builderState.ts",
         "builder.ts",
         "resolutionCache.ts",
         "watch.ts",

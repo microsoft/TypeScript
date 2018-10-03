@@ -4,9 +4,9 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "2.7";
+    export const versionMajorMinor = "2.8";
     /** The version of the TypeScript compiler release */
-    export const version = `${versionMajorMinor}.0`;
+    export const version = `${versionMajorMinor}.4`;
 }
 
 namespace ts {
@@ -16,15 +16,18 @@ namespace ts {
         // Update: We also consider a path like `C:\foo.ts` "relative" because we do not search for it in `node_modules` or treat it as an ambient module.
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
+
+    export function sortAndDeduplicateDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): Diagnostic[] {
+        return sortAndDeduplicate(diagnostics, compareDiagnostics);
+    }
 }
 
 /* @internal */
 namespace ts {
-
-    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
-    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
-    // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
-    export const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
+    export const emptyArray: never[] = [] as never[];
+    export function closeFileWatcher(watcher: FileWatcher) {
+        watcher.close();
+    }
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
@@ -74,13 +77,13 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new<T>(): Map<T> } | undefined;
+    declare const Map: { new <T>(): Map<T> } | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new<T>(): Map<T> } {
+    function shimMap(): { new <T>(): Map<T> } {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
             private data: MapLike<T>;
@@ -103,7 +106,7 @@ namespace ts {
             }
         }
 
-        return class<T> implements Map<T> {
+        return class <T> implements Map<T> {
             private data = createDictionaryObject<T>();
             public size = 0;
 
@@ -165,12 +168,6 @@ namespace ts {
         return <Path>getCanonicalFileName(nonCanonicalizedPath);
     }
 
-    export const enum Comparison {
-        LessThan    = -1,
-        EqualTo     = 0,
-        GreaterThan = 1
-    }
-
     export function length(array: ReadonlyArray<any>) {
         return array ? array.length : 0;
     }
@@ -194,6 +191,10 @@ namespace ts {
 
     /** Like `forEach`, but suitable for use with numbers and strings (which may be falsy). */
     export function firstDefined<T, U>(array: ReadonlyArray<T> | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
+        if (array === undefined) {
+            return undefined;
+        }
+
         for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result !== undefined) {
@@ -201,6 +202,19 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return undefined;
+            }
+            const result = callback(value);
+            if (result !== undefined) {
+                return result;
+            }
+        }
     }
 
     /**
@@ -227,11 +241,25 @@ namespace ts {
 
     export function zipWith<T, U, V>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>, callback: (a: T, b: U, index: number) => V): V[] {
         const result: V[] = [];
-        Debug.assert(arrayA.length === arrayB.length);
+        Debug.assertEqual(arrayA.length, arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             result.push(callback(arrayA[i], arrayB[i], i));
         }
         return result;
+    }
+
+    export function zipToIterator<T, U>(arrayA: ReadonlyArray<T>, arrayB: ReadonlyArray<U>): Iterator<[T, U]> {
+        Debug.assertEqual(arrayA.length, arrayB.length);
+        let i = 0;
+        return {
+            next() {
+                if (i === arrayA.length) {
+                    return { value: undefined as never, done: true };
+                }
+                i++;
+                return { value: [arrayA[i - 1], arrayB[i - 1]], done: false };
+            }
+        };
     }
 
     export function zipToMap<T>(keys: ReadonlyArray<string>, values: ReadonlyArray<T>): Map<T> {
@@ -273,6 +301,8 @@ namespace ts {
         return undefined;
     }
 
+    export function findLast<T, U extends T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => element is U): U | undefined;
+    export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined;
     export function findLast<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = array.length - 1; i >= 0; i--) {
             const value = array[i];
@@ -307,10 +337,10 @@ namespace ts {
         Debug.fail();
     }
 
-    export function contains<T>(array: ReadonlyArray<T>, value: T): boolean {
+    export function contains<T>(array: ReadonlyArray<T>, value: T, equalityComparer: EqualityComparer<T> = equateValues): boolean {
         if (array) {
             for (const v of array) {
-                if (v === value) {
+                if (equalityComparer(v, value)) {
                     return true;
                 }
             }
@@ -318,15 +348,8 @@ namespace ts {
         return false;
     }
 
-    export function indexOf<T>(array: ReadonlyArray<T>, value: T): number {
-        if (array) {
-            for (let i = 0; i < array.length; i++) {
-                if (array[i] === value) {
-                    return i;
-                }
-            }
-        }
-        return -1;
+    export function arraysEqual<T>(a: ReadonlyArray<T>, b: ReadonlyArray<T>, equalityComparer: EqualityComparer<T> = equateValues): boolean {
+        return a.length === b.length && a.every((x, i) => equalityComparer(x, b[i]));
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: ReadonlyArray<number>, start?: number): number {
@@ -406,27 +429,35 @@ namespace ts {
         return result;
     }
 
+
+    export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
+        return {
+            next() {
+                const iterRes = iter.next();
+                return iterRes.done ? iterRes : { value: mapFn(iterRes.value), done: false };
+            }
+        };
+    }
+
     // Maps from T to T and avoids allocation if all elements map to themselves
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[];
     export function sameMap<T>(array: ReadonlyArray<T>, f: (x: T, i: number) => T): ReadonlyArray<T>;
     export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
-        let result: T[];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                if (result) {
-                    result.push(f(array[i], i));
-                }
-                else {
-                    const item = array[i];
-                    const mapped = f(item, i);
-                    if (item !== mapped) {
-                        result = array.slice(0, i);
-                        result.push(mapped);
+                const item = array[i];
+                const mapped = f(item, i);
+                if (item !== mapped) {
+                    const result = array.slice(0, i);
+                    result.push(mapped);
+                    for (i++; i < array.length; i++) {
+                        result.push(f(array[i], i));
                     }
+                    return result;
                 }
             }
         }
-        return result || array;
+        return array;
     }
 
     /**
@@ -478,22 +509,32 @@ namespace ts {
         return result;
     }
 
-    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U | U[] | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapfn(value);
-            if (res) {
-                if (isArray(res)) {
-                    result.push(...res);
-                }
-                else {
-                    result.push(res);
-                }
-            }
+    export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | Iterator<U> | undefined): Iterator<U> {
+        const first = iter.next();
+        if (first.done) {
+            return emptyIterator;
         }
-        return result;
+        let currentIter = getIterator(first.value);
+        return {
+            next() {
+                while (true) {
+                    const currentRes = currentIter.next();
+                    if (!currentRes.done) {
+                        return currentRes;
+                    }
+                    const iterRes = iter.next();
+                    if (iterRes.done) {
+                        return iterRes;
+                    }
+                    currentIter = getIterator(iterRes.value);
+                }
+            },
+        };
+
+        function getIterator(x: T): Iterator<U> {
+            const res = mapfn(x);
+            return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+        }
     }
 
     /**
@@ -527,12 +568,23 @@ namespace ts {
         return result || array;
     }
 
+    export function mapAllOrFail<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
+        const result: U[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const mapped = mapFn(array[i], i);
+            if (mapped === undefined) {
+                return undefined;
+            }
+            result.push(mapped);
+        }
+        return result;
+    }
+
     export function mapDefined<T, U>(array: ReadonlyArray<T> | undefined, mapFn: (x: T, i: number) => U | undefined): U[] {
         const result: U[] = [];
         if (array) {
             for (let i = 0; i < array.length; i++) {
-                const item = array[i];
-                const mapped = mapFn(item, i);
+                const mapped = mapFn(array[i], i);
                 if (mapped !== undefined) {
                     result.push(mapped);
                 }
@@ -541,17 +593,34 @@ namespace ts {
         return result;
     }
 
-    export function mapDefinedIter<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): U[] {
-        const result: U[] = [];
-        while (true) {
-            const { value, done } = iter.next();
-            if (done) break;
-            const res = mapFn(value);
-            if (res !== undefined) {
-                result.push(res);
+    export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
+        return {
+            next() {
+                while (true) {
+                    const res = iter.next();
+                    if (res.done) {
+                        return res;
+                    }
+                    const value = mapFn(res.value);
+                    if (value !== undefined) {
+                        return { value, done: false };
+                    }
+                }
             }
-        }
-        return result;
+        };
+    }
+
+    export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
+
+    export function singleIterator<T>(value: T): Iterator<T> {
+        let done = false;
+        return {
+            next() {
+                const wasDone = done;
+                done = true;
+                return wasDone ? { value: undefined as never, done: true } : { value, done: false };
+            }
+        };
     }
 
     /**
@@ -655,24 +724,97 @@ namespace ts {
         return [...array1, ...array2];
     }
 
-    // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
-    export function deduplicate<T>(array: ReadonlyArray<T>, areEqual?: (a: T, b: T) => boolean): T[] {
-        let result: T[];
-        if (array) {
-            result = [];
-            loop: for (const item of array) {
-                for (const res of result) {
-                    if (areEqual ? areEqual(res, item) : res === item) {
-                        continue loop;
-                    }
-                }
-                result.push(item);
+    function deduplicateRelational<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer: Comparer<T>) {
+        // Perform a stable sort of the array. This ensures the first entry in a list of
+        // duplicates remains the first entry in the result.
+        const indices = array.map((_, i) => i);
+        stableSortIndices(array, indices, comparer);
+
+        let last = array[indices[0]];
+        const deduplicated: number[] = [indices[0]];
+        for (let i = 1; i < indices.length; i++) {
+            const index = indices[i];
+            const item = array[index];
+            if (!equalityComparer(last, item)) {
+                deduplicated.push(index);
+                last = item;
             }
+        }
+
+        // restore original order
+        deduplicated.sort();
+        return deduplicated.map(i => array[i]);
+    }
+
+    function deduplicateEquality<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>) {
+        const result: T[] = [];
+        for (const item of array) {
+            pushIfUnique(result, item, equalityComparer);
         }
         return result;
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
+    /**
+     * Deduplicates an unsorted array.
+     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param comparer An optional `Comparer` used to sort entries before comparison, though the
+     * result will remain in the original order in `array`.
+     */
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return !array ? undefined :
+            array.length === 0 ? [] :
+            array.length === 1 ? array.slice() :
+            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+            deduplicateEquality(array, equalityComparer);
+    }
+
+    /**
+     * Deduplicates an array that has already been sorted.
+     */
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>) {
+        if (!array) return undefined;
+        if (array.length === 0) return [];
+
+        let last = array[0];
+        const deduplicated: T[] = [last];
+        for (let i = 1; i < array.length; i++) {
+            const next = array[i];
+            switch (comparer(next, last)) {
+                // equality comparison
+                case true:
+
+                // relational comparison
+                case Comparison.EqualTo:
+                    continue;
+
+                case Comparison.LessThan:
+                    // If `array` is sorted, `next` should **never** be less than `last`.
+                    return Debug.fail("Array is unsorted.");
+            }
+
+            deduplicated.push(last = next);
+        }
+
+        return deduplicated;
+    }
+
+    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
+        if (array.length === 0) {
+            array.push(insert);
+            return;
+        }
+
+        const insertIndex = binarySearch(array, insert, identity, compare);
+        if (insertIndex < 0) {
+            array.splice(~insertIndex, 0, insert);
+        }
+    }
+
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
+        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
+    }
+
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -682,8 +824,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; i++) {
-            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
-            if (!equals) {
+            if (!equalityComparer(array1[i], array2[i])) {
                 return false;
             }
         }
@@ -734,22 +875,44 @@ namespace ts {
     }
 
     /**
-     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * Gets the relative complement of `arrayA` with respect to `arrayB`, returning the elements that
      * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
      * based on the provided comparer.
      */
-    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T> = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: Comparer<T>): T[] | undefined {
         if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
         const result: T[] = [];
-        outer: for (; offsetB < arrayB.length; offsetB++) {
-            inner: for (; offsetA < arrayA.length; offsetA++) {
+        loopB: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
+            if (offsetB > 0) {
+                // Ensure `arrayB` is properly sorted.
+                Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
+            }
+
+            loopA: for (const startA = offsetA; offsetA < arrayA.length; offsetA++) {
+                if (offsetA > startA) {
+                    // Ensure `arrayA` is properly sorted. We only need to perform this check if
+                    // `offsetA` has changed since we entered the loop.
+                    Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
+                }
+
                 switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
-                    case Comparison.LessThan: break inner;
-                    case Comparison.EqualTo: continue outer;
-                    case Comparison.GreaterThan: continue inner;
+                    case Comparison.LessThan:
+                        // If B is less than A, B does not exist in arrayA. Add B to the result and
+                        // move to the next element in arrayB without changing the current position
+                        // in arrayA.
+                        result.push(arrayB[offsetB]);
+                        continue loopB;
+                    case Comparison.EqualTo:
+                        // If B is equal to A, B exists in arrayA. Move to the next element in
+                        // arrayB without adding B to the result or changing the current position
+                        // in arrayA.
+                        continue loopB;
+                    case Comparison.GreaterThan:
+                        // If B is greater than A, we need to keep looking for B in arrayA. Move to
+                        // the next element in arrayA and recheck.
+                        continue loopA;
                 }
             }
-            result.push(arrayB[offsetB]);
         }
         return result;
     }
@@ -757,7 +920,7 @@ namespace ts {
     export function sum<T extends Record<K, number>, K extends string>(array: ReadonlyArray<T>, prop: K): number {
         let result = 0;
         for (const v of array) {
-            // Note: we need the following type assertion because of GH #17069
+            // TODO: Remove the following type assertion once the fix for #17069 is merged
             result += v[prop] as number;
         }
         return result;
@@ -802,8 +965,7 @@ namespace ts {
         start = start === undefined ? 0 : toOffset(from, start);
         end = end === undefined ? from.length : toOffset(from, end);
         for (let i = start; i < end && i < from.length; i++) {
-            const v = from[i];
-            if (v !== undefined) {
+            if (from[i] !== undefined) {
                 to.push(from[i]);
             }
         }
@@ -813,8 +975,8 @@ namespace ts {
     /**
      * @return Whether the value was added.
      */
-    export function pushIfUnique<T>(array: T[], toAdd: T): boolean {
-        if (contains(array, toAdd)) {
+    export function pushIfUnique<T>(array: T[], toAdd: T, equalityComparer?: EqualityComparer<T>): boolean {
+        if (contains(array, toAdd, equalityComparer)) {
             return false;
         }
         else {
@@ -826,9 +988,9 @@ namespace ts {
     /**
      * Unlike `pushIfUnique`, this can take `undefined` as an input, and returns a new array.
      */
-    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T): T[] {
+    export function appendIfUnique<T>(array: T[] | undefined, toAdd: T, equalityComparer?: EqualityComparer<T>): T[] {
         if (array) {
-            pushIfUnique(array, toAdd);
+            pushIfUnique(array, toAdd, equalityComparer);
             return array;
         }
         else {
@@ -836,14 +998,55 @@ namespace ts {
         }
     }
 
+    function stableSortIndices<T>(array: ReadonlyArray<T>, indices: number[], comparer: Comparer<T>) {
+        // sort indices by value then position
+        indices.sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y));
+    }
+
+    /**
+     * Returns a new sorted array.
+     */
+    export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+        return array.slice().sort(comparer);
+    }
+
+    export function best<T>(iter: Iterator<T>, isBetter: (a: T, b: T) => boolean): T | undefined {
+        const x = iter.next();
+        if (x.done) {
+            return undefined;
+        }
+        let best = x.value;
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) {
+                return best;
+            }
+            if (isBetter(value, best)) {
+                best = value;
+            }
+        }
+    }
+
+    export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = 0;
+        return { next: () => {
+            if (i === array.length) {
+                return { value: undefined as never, done: true };
+            }
+            else {
+                i++;
+                return { value: array[i - 1], done: false };
+            }
+        }};
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T> = compareValues) {
-        return array
-            .map((_, i) => i) // create array of indices
-            .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
-            .map(i => array[i]); // get sorted array
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+        const indices = array.map((_, i) => i);
+        stableSortIndices(array, indices, comparer);
+        return indices.map(i => array[i]);
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -921,38 +1124,37 @@ namespace ts {
         return result;
     }
 
-    export type Comparer<T> = (a: T, b: T) => Comparison;
-
     /**
-     * Performs a binary search, finding the index at which 'value' occurs in 'array'.
+     * Performs a binary search, finding the index at which `value` occurs in `array`.
      * If no such index is found, returns the 2's-complement of first index at which
-     * number[index] exceeds number.
+     * `array[index]` exceeds `value`.
      * @param array A sorted array whose first element must be no larger than number
-     * @param number The value to be searched for in the array.
+     * @param value The value to be searched for in the array.
+     * @param keySelector A callback used to select the search key from `value` and each element of
+     * `array`.
+     * @param keyComparer A callback used to compare two keys in a sorted array.
+     * @param offset An offset into `array` at which to start the search.
      */
-    export function binarySearch<T>(array: ReadonlyArray<T>, value: T, comparer?: Comparer<T>, offset?: number): number {
+    export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
         if (!array || array.length === 0) {
             return -1;
         }
 
         let low = offset || 0;
         let high = array.length - 1;
-        comparer = comparer !== undefined
-            ? comparer
-            : (v1, v2) => (v1 < v2 ? -1 : (v1 > v2 ? 1 : 0));
-
+        const key = keySelector(value);
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
-            const midValue = array[middle];
-
-            if (comparer(midValue, value) === 0) {
-                return middle;
-            }
-            else if (comparer(midValue, value) > 0) {
-                high = middle - 1;
-            }
-            else {
-                low = middle + 1;
+            const midKey = keySelector(array[middle]);
+            switch (keyComparer(midKey, key)) {
+                case Comparison.LessThan:
+                    low = middle + 1;
+                    break;
+                case Comparison.EqualTo:
+                    return middle;
+                case Comparison.GreaterThan:
+                    high = middle - 1;
+                    break;
             }
         }
 
@@ -1104,13 +1306,13 @@ namespace ts {
      * @param left A map-like whose properties should be compared.
      * @param right A map-like whose properties should be compared.
      */
-    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
+    export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer: EqualityComparer<T> = equateValues) {
         if (left === right) return true;
         if (!left || !right) return false;
         for (const key in left) {
             if (hasOwnProperty.call(left, key)) {
                 if (!hasOwnProperty.call(right, key) === undefined) return false;
-                if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+                if (!equalityComparer(left[key], right[key])) return false;
             }
         }
 
@@ -1135,18 +1337,20 @@ namespace ts {
      */
     export function arrayToMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => string): Map<T>;
     export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): Map<U>;
-    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
+    export function arrayToMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result.set(makeKey(value), makeValue ? makeValue(value) : value);
+            result.set(makeKey(value), makeValue(value));
         }
         return result;
     }
 
-    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[] {
-        const result: T[] = [];
+    export function arrayToNumericMap<T>(array: ReadonlyArray<T>, makeKey: (value: T) => number): T[];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => U): U[];
+    export function arrayToNumericMap<T, U>(array: ReadonlyArray<T>, makeKey: (value: T) => number, makeValue: (value: T) => T | U = identity): (T | U)[] {
+        const result: (T | U)[] = [];
         for (const value of array) {
-            result[makeKey(value)] = value;
+            result[makeKey(value)] = makeValue(value);
         }
         return result;
     }
@@ -1162,9 +1366,24 @@ namespace ts {
         return arrayToMap<any, true>(array, makeKey || (s => s), () => true);
     }
 
+    export function arrayToMultiMap<T>(values: ReadonlyArray<T>, makeKey: (value: T) => string): MultiMap<T>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => U): MultiMap<U>;
+    export function arrayToMultiMap<T, U>(values: ReadonlyArray<T>, makeKey: (value: T) => string, makeValue: (value: T) => T | U = identity): MultiMap<T | U> {
+        const result = createMultiMap<T | U>();
+        for (const value of values) {
+            result.add(makeKey(value), makeValue(value));
+        }
+        return result;
+    }
+
+    export function group<T>(values: ReadonlyArray<T>, getGroupId: (value: T) => string): ReadonlyArray<ReadonlyArray<T>> {
+        return arrayFrom(arrayToMultiMap(values, getGroupId).values());
+    }
+
     export function cloneMap(map: SymbolTable): SymbolTable;
     export function cloneMap<T>(map: ReadonlyMap<T>): Map<T>;
-    export function cloneMap<T>(map: ReadonlyMap<T> | SymbolTable): Map<T> | SymbolTable {
+    export function cloneMap<T>(map: ReadonlyUnderscoreEscapedMap<T>): UnderscoreEscapedMap<T>;
+    export function cloneMap<T>(map: ReadonlyMap<T> | ReadonlyUnderscoreEscapedMap<T> | SymbolTable): Map<T> | UnderscoreEscapedMap<T> | SymbolTable {
         const clone = createMap<T>();
         copyEntries(map as Map<T>, clone);
         return clone;
@@ -1226,7 +1445,6 @@ namespace ts {
             this.set(key, values = [value]);
         }
         return values;
-
     }
     function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
         const values = this.get(key);
@@ -1241,8 +1459,14 @@ namespace ts {
     /**
      * Tests whether a value is an array.
      */
-    export function isArray(value: any): value is ReadonlyArray<any> {
+    export function isArray(value: any): value is ReadonlyArray<{}> {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    export function toArray<T>(value: T | T[]): T[];
+    export function toArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>;
+    export function toArray<T>(value: T | T[]): T[] {
+        return isArray(value) ? value : [value];
     }
 
     /**
@@ -1258,11 +1482,17 @@ namespace ts {
 
     export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
         if (value !== undefined && test(value)) return value;
-        Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+
+        if (value && typeof (value as any).kind === "number") {
+            Debug.fail(`Invalid cast. The supplied ${Debug.showSyntaxKind(value as any as Node)} did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
+        else {
+            Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
+        }
     }
 
     /** Does nothing. */
-    export function noop(): void { }
+    export function noop(_?: {} | null | undefined): void { } // tslint:disable-line no-empty
 
     /** Do nothing and return false */
     export function returnFalse(): false { return false; }
@@ -1272,6 +1502,9 @@ namespace ts {
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
+
+    /** Returns lower case string */
+    export function toLowerCase(x: string) { return x.toLowerCase(); }
 
     /** Throws an error because a function is not implemented. */
     export function notImplemented(): never {
@@ -1361,7 +1594,7 @@ namespace ts {
         return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
     }
 
-    export let localizedDiagnosticMessages: MapLike<string> = undefined;
+    export let localizedDiagnosticMessages: MapLike<string>;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
@@ -1463,37 +1696,210 @@ namespace ts {
         return headChain;
     }
 
-    export function compareValues<T>(a: T, b: T): Comparison {
-        if (a === b) return Comparison.EqualTo;
-        if (a === undefined) return Comparison.LessThan;
-        if (b === undefined) return Comparison.GreaterThan;
-        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
+    export function equateValues<T>(a: T, b: T) {
+        return a === b;
     }
 
-    export function compareStrings(a: string, b: string, ignoreCase?: boolean): Comparison {
+    /**
+     * Compare the equality of two strings using a case-sensitive ordinal comparison.
+     *
+     * Case-sensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point after applying `toUpperCase` to each string. We always map both
+     * strings to their upper-case form as some unicode characters do not properly round-trip to
+     * lowercase (such as `ẞ` (German sharp capital s)).
+     */
+    export function equateStringsCaseInsensitive(a: string, b: string) {
+        return a === b
+            || a !== undefined
+            && b !== undefined
+            && a.toUpperCase() === b.toUpperCase();
+    }
+
+    /**
+     * Compare the equality of two strings using a case-sensitive ordinal comparison.
+     *
+     * Case-sensitive comparisons compare both strings one code-point at a time using the
+     * integer value of each code-point.
+     */
+    export function equateStringsCaseSensitive(a: string, b: string) {
+        return equateValues(a, b);
+    }
+
+    function compareComparableValues(a: string, b: string): Comparison;
+    function compareComparableValues(a: number, b: number): Comparison;
+    function compareComparableValues(a: string | number, b: string | number) {
+        return a === b ? Comparison.EqualTo :
+            a === undefined ? Comparison.LessThan :
+            b === undefined ? Comparison.GreaterThan :
+            a < b ? Comparison.LessThan :
+            Comparison.GreaterThan;
+    }
+
+    /**
+     * Compare two numeric values for their order relative to each other.
+     * To compare strings, use any of the `compareStrings` functions.
+     */
+    export function compareValues(a: number, b: number) {
+        return compareComparableValues(a, b);
+    }
+
+    /**
+     * Compare two strings using a case-insensitive ordinal comparison.
+     *
+     * Ordinal comparisons are based on the difference between the unicode code points of both
+     * strings. Characters with multiple unicode representations are considered unequal. Ordinal
+     * comparisons provide predictable ordering, but place "a" after "B".
+     *
+     * Case-insensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point after applying `toUpperCase` to each string. We always map both
+     * strings to their upper-case form as some unicode characters do not properly round-trip to
+     * lowercase (such as `ẞ` (German sharp capital s)).
+     */
+    export function compareStringsCaseInsensitive(a: string, b: string) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
-        if (ignoreCase) {
-            // Checking if "collator exists indicates that Intl is available.
-            // We still have to check if "collator.compare" is correct. If it is not, use "String.localeComapre"
-            if (collator) {
-                const result = localeCompareIsCorrect ?
-                    collator.compare(a, b) :
-                    a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });  // accent means a ≠ b, a ≠ á, a = A
-                return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
-            }
+        a = a.toUpperCase();
+        b = b.toUpperCase();
+        return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+    }
 
-            a = a.toUpperCase();
-            b = b.toUpperCase();
+    /**
+     * Compare two strings using a case-sensitive ordinal comparison.
+     *
+     * Ordinal comparisons are based on the difference between the unicode code points of both
+     * strings. Characters with multiple unicode representations are considered unequal. Ordinal
+     * comparisons provide predictable ordering, but place "a" after "B".
+     *
+     * Case-sensitive comparisons compare both strings one code-point at a time using the integer
+     * value of each code-point.
+     */
+    export function compareStringsCaseSensitive(a: string, b: string) {
+        return compareComparableValues(a, b);
+    }
+
+    /**
+     * Creates a string comparer for use with string collation in the UI.
+     */
+    const createUIStringComparer = (() => {
+        let defaultComparer: Comparer<string> | undefined;
+        let enUSComparer: Comparer<string> | undefined;
+
+        const stringComparerFactory = getStringComparerFactory();
+        return createStringComparer;
+
+        function compareWithCallback(a: string | undefined, b: string | undefined, comparer: (a: string, b: string) => number) {
             if (a === b) return Comparison.EqualTo;
+            if (a === undefined) return Comparison.LessThan;
+            if (b === undefined) return Comparison.GreaterThan;
+            const value = comparer(a, b);
+            return value < 0 ? Comparison.LessThan : value > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
         }
 
-        return a < b ? Comparison.LessThan : Comparison.GreaterThan;
+        function createIntlCollatorStringComparer(locale: string | undefined): Comparer<string> {
+            // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
+            // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
+            const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant" }).compare;
+            return (a, b) => compareWithCallback(a, b, comparer);
+        }
+
+        function createLocaleCompareStringComparer(locale: string | undefined): Comparer<string> {
+            // if the locale is not the default locale (`undefined`), use the fallback comparer.
+            if (locale !== undefined) return createFallbackStringComparer();
+
+            return (a, b) => compareWithCallback(a, b, compareStrings);
+
+            function compareStrings(a: string, b: string) {
+                return a.localeCompare(b);
+            }
+        }
+
+        function createFallbackStringComparer(): Comparer<string> {
+            // An ordinal comparison puts "A" after "b", but for the UI we want "A" before "b".
+            // We first sort case insensitively.  So "Aaa" will come before "baa".
+            // Then we sort case sensitively, so "aaa" will come before "Aaa".
+            //
+            // For case insensitive comparisons we always map both strings to their
+            // upper-case form as some unicode characters do not properly round-trip to
+            // lowercase (such as `ẞ` (German sharp capital s)).
+            return (a, b) => compareWithCallback(a, b, compareDictionaryOrder);
+
+            function compareDictionaryOrder(a: string, b: string) {
+                return compareStrings(a.toUpperCase(), b.toUpperCase()) || compareStrings(a, b);
+            }
+
+            function compareStrings(a: string, b: string) {
+                return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+            }
+        }
+
+        function getStringComparerFactory() {
+            // If the host supports Intl, we use it for comparisons using the default locale.
+            if (typeof Intl === "object" && typeof Intl.Collator === "function") {
+                return createIntlCollatorStringComparer;
+            }
+
+            // If the host does not support Intl, we fall back to localeCompare.
+            // localeCompare in Node v0.10 is just an ordinal comparison, so don't use it.
+            if (typeof String.prototype.localeCompare === "function" &&
+                typeof String.prototype.toLocaleUpperCase === "function" &&
+                "a".localeCompare("B") < 0) {
+                return createLocaleCompareStringComparer;
+            }
+
+            // Otherwise, fall back to ordinal comparison:
+            return createFallbackStringComparer;
+        }
+
+        function createStringComparer(locale: string | undefined) {
+            // Hold onto common string comparers. This avoids constantly reallocating comparers during
+            // tests.
+            if (locale === undefined) {
+                return defaultComparer || (defaultComparer = stringComparerFactory(locale));
+            }
+            else if (locale === "en-US") {
+                return enUSComparer || (enUSComparer = stringComparerFactory(locale));
+            }
+            else {
+                return stringComparerFactory(locale);
+            }
+        }
+    })();
+
+    let uiComparerCaseSensitive: Comparer<string> | undefined;
+    let uiLocale: string | undefined;
+
+    export function getUILocale() {
+        return uiLocale;
     }
 
-    export function compareStringsCaseInsensitive(a: string, b: string) {
-        return compareStrings(a, b, /*ignoreCase*/ true);
+    export function setUILocale(value: string) {
+        if (uiLocale !== value) {
+            uiLocale = value;
+            uiComparerCaseSensitive = undefined;
+        }
+    }
+
+    /**
+     * Compare two strings in a using the case-sensitive sort behavior of the UI locale.
+     *
+     * Ordering is not predictable between different host locales, but is best for displaying
+     * ordered data for UI presentation. Characters with multiple unicode representations may
+     * be considered equal.
+     *
+     * Case-sensitive comparisons compare strings that differ in base characters, or
+     * accents/diacritic marks, or case as unequal.
+     */
+    export function compareStringsCaseSensitiveUI(a: string, b: string) {
+        const comparer = uiComparerCaseSensitive || (uiComparerCaseSensitive = createUIStringComparer(uiLocale));
+        return comparer(a, b);
+    }
+
+    export function compareProperties<T, K extends keyof T>(a: T, b: T, key: K, comparer: Comparer<T[K]>) {
+        return a === b ? Comparison.EqualTo :
+            a === undefined ? Comparison.LessThan :
+            b === undefined ? Comparison.GreaterThan :
+            comparer(a[key], b[key]);
     }
 
     function getDiagnosticFileName(diagnostic: Diagnostic): string {
@@ -1501,12 +1907,17 @@ namespace ts {
     }
 
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
-        return compareValues(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
+        return compareStringsCaseSensitive(getDiagnosticFileName(d1), getDiagnosticFileName(d2)) ||
             compareValues(d1.start, d2.start) ||
             compareValues(d1.length, d2.length) ||
             compareValues(d1.code, d2.code) ||
             compareMessageText(d1.messageText, d2.messageText) ||
             Comparison.EqualTo;
+    }
+
+    /** True is greater than false. */
+    export function compareBooleans(a: boolean, b: boolean): Comparison {
+        return compareValues(a ? 1 : 0, b ? 1 : 0);
     }
 
     function compareMessageText(text1: string | DiagnosticMessageChain, text2: string | DiagnosticMessageChain): Comparison {
@@ -1515,7 +1926,7 @@ namespace ts {
             const string1 = isString(text1) ? text1 : text1.messageText;
             const string2 = isString(text2) ? text2 : text2.messageText;
 
-            const res = compareValues(string1, string2);
+            const res = compareStringsCaseSensitive(string1, string2);
             if (res) {
                 return res;
             }
@@ -1531,29 +1942,6 @@ namespace ts {
 
         // We still have one chain remaining.  The shorter chain should come first.
         return text1 ? Comparison.GreaterThan : Comparison.LessThan;
-    }
-
-    export function sortAndDeduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
-        return deduplicateSortedDiagnostics(diagnostics.sort(compareDiagnostics));
-    }
-
-    export function deduplicateSortedDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
-        if (diagnostics.length < 2) {
-            return diagnostics;
-        }
-
-        const newDiagnostics = [diagnostics[0]];
-        let previousDiagnostic = diagnostics[0];
-        for (let i = 1; i < diagnostics.length; i++) {
-            const currentDiagnostic = diagnostics[i];
-            const isDupe = compareDiagnostics(currentDiagnostic, previousDiagnostic) === Comparison.EqualTo;
-            if (!isDupe) {
-                newDiagnostics.push(currentDiagnostic);
-                previousDiagnostic = currentDiagnostic;
-            }
-        }
-
-        return newDiagnostics;
     }
 
     export function normalizeSlashes(path: string): string {
@@ -1573,7 +1961,7 @@ namespace ts {
             return p2 + 1;
         }
         if (path.charCodeAt(1) === CharacterCodes.colon) {
-            if (path.charCodeAt(2) === CharacterCodes.slash) return 3;
+            if (path.charCodeAt(2) === CharacterCodes.slash || path.charCodeAt(2) === CharacterCodes.backslash) return 3;
         }
         // Per RFC 1738 'file' URI schema has the shape file://<host>/<path>
         // if <host> is omitted then it is assumed that host value is 'localhost',
@@ -1660,11 +2048,6 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(path);
     }
 
-    /** @deprecated Use `!isExternalModuleNameRelative(moduleName)` instead. */
-    export function moduleHasNonRelativeName(moduleName: string): boolean {
-        return !isExternalModuleNameRelative(moduleName);
-    }
-
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
@@ -1683,7 +2066,16 @@ namespace ts {
         return moduleResolution;
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "alwaysStrict";
+    export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
+        const moduleKind = getEmitModuleKind(compilerOptions);
+        return compilerOptions.allowSyntheticDefaultImports !== undefined
+            ? compilerOptions.allowSyntheticDefaultImports
+            : compilerOptions.esModuleInterop
+                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
+                : moduleKind === ModuleKind.System;
+    }
+
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? compilerOptions.strict : compilerOptions[flag];
@@ -1744,7 +2136,7 @@ namespace ts {
 
     function getNormalizedPathComponentsOfUrl(url: string) {
         // Get root length of http://www.website.com/folder1/folder2/
-        // In this example the root is:  http://www.website.com/
+        // In this example the root is: http://www.website.com/
         // normalized path components should be ["http://www.website.com/", "folder1", "folder2"]
 
         const urlLength = url.length;
@@ -1777,7 +2169,7 @@ namespace ts {
         }
         else {
             // Can't find the host assume the rest of the string as component
-            // but make sure we append "/"  to it as root is not joined using "/"
+            // but make sure we append "/" to it as root is not joined using "/"
             // eg. if url passed in was http://website.com we want to use root as [http://website.com/]
             // so that other path manipulations will be correct and it can be merged with relative paths correctly
             return [url + directorySeparator];
@@ -1793,12 +2185,12 @@ namespace ts {
         }
     }
 
-    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: (fileName: string) => string, isAbsolutePathAnUrl: boolean) {
+    export function getRelativePathToDirectoryOrUrl(directoryPathOrUrl: string, relativeOrAbsolutePath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, isAbsolutePathAnUrl: boolean) {
         const pathComponents = getNormalizedPathOrUrlComponents(relativeOrAbsolutePath, currentDirectory);
         const directoryComponents = getNormalizedPathOrUrlComponents(directoryPathOrUrl, currentDirectory);
         if (directoryComponents.length > 1 && lastOrUndefined(directoryComponents) === "") {
             // If the directory path given was of type test/cases/ then we really need components of directory to be only till its name
-            // that is  ["test", "cases", ""] needs to be actually ["test", "cases"]
+            // that is ["test", "cases", ""] needs to be actually ["test", "cases"]
             directoryComponents.pop();
         }
 
@@ -1866,6 +2258,8 @@ namespace ts {
      * Adds a trailing directory separator to a path, if it does not already have one.
      * @param path The path.
      */
+    export function ensureTrailingDirectorySeparator(path: Path): Path;
+    export function ensureTrailingDirectorySeparator(path: string): string;
     export function ensureTrailingDirectorySeparator(path: string) {
         if (path.charAt(path.length - 1) !== directorySeparator) {
             return path + directorySeparator;
@@ -1883,8 +2277,9 @@ namespace ts {
         const aComponents = getNormalizedPathComponents(a, currentDirectory);
         const bComponents = getNormalizedPathComponents(b, currentDirectory);
         const sharedLength = Math.min(aComponents.length, bComponents.length);
+        const comparer = ignoreCase ? compareStringsCaseInsensitive : compareStringsCaseSensitive;
         for (let i = 0; i < sharedLength; i++) {
-            const result = compareStrings(aComponents[i], bComponents[i], ignoreCase);
+            const result = comparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return result;
             }
@@ -1905,9 +2300,9 @@ namespace ts {
             return false;
         }
 
+        const equalityComparer = ignoreCase ? equateStringsCaseInsensitive : equateStringsCaseSensitive;
         for (let i = 0; i < parentComponents.length; i++) {
-            const result = compareStrings(parentComponents[i], childComponents[i], ignoreCase);
-            if (result !== Comparison.EqualTo) {
+            if (!equalityComparer(parentComponents[i], childComponents[i])) {
                 return false;
             }
         }
@@ -1926,6 +2321,10 @@ namespace ts {
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    }
+
+    export function removeSuffix(str: string, suffix: string): string {
+        return endsWith(str, suffix) ? str.slice(0, str.length - suffix.length) : str;
     }
 
     export function stringContains(str: string, substring: string): boolean {
@@ -2035,7 +2434,6 @@ namespace ts {
 
     function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", { singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter }: WildcardMatcher): string | undefined {
         let subpattern = "";
-        let hasRecursiveDirectoryWildcard = false;
         let hasWrittenComponent = false;
         const components = getNormalizedPathComponents(spec, basePath);
         const lastComponent = lastOrUndefined(components);
@@ -2054,12 +2452,7 @@ namespace ts {
         let optionalCount = 0;
         for (let component of components) {
             if (component === "**") {
-                if (hasRecursiveDirectoryWildcard) {
-                    return undefined;
-                }
-
                 subpattern += doubleAsteriskRegexFragment;
-                hasRecursiveDirectoryWildcard = true;
             }
             else {
                 if (usage === "directories") {
@@ -2163,7 +2556,6 @@ namespace ts {
         // If there are no "includes", then just put everything in results[0].
         const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
 
-        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
         }
@@ -2171,10 +2563,9 @@ namespace ts {
         return flatten<string>(results);
 
         function visitDirectory(path: string, absolutePath: string, depth: number | undefined) {
-            let { files, directories } = getFileSystemEntries(path);
-            files = files.slice().sort(comparer);
+            const { files, directories } = getFileSystemEntries(path);
 
-            for (const current of files) {
+            for (const current of sort(files, compareStringsCaseSensitive)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
@@ -2197,8 +2588,7 @@ namespace ts {
                 }
             }
 
-            directories = directories.slice().sort(comparer);
-            for (const current of directories) {
+            for (const current of sort(directories, compareStringsCaseSensitive)) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
                 if ((!includeDirectoryRegex || includeDirectoryRegex.test(absoluteName)) &&
@@ -2228,12 +2618,12 @@ namespace ts {
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
-            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive);
+            includeBasePaths.sort(useCaseSensitiveFileNames ? compareStringsCaseSensitive : compareStringsCaseInsensitive);
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
             for (const includeBasePath of includeBasePaths) {
-                if (ts.every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                if (every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
                     basePaths.push(includeBasePath);
                 }
             }
@@ -2295,7 +2685,11 @@ namespace ts {
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        return deduplicate([...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)]);
+        return deduplicate(
+            [...allSupportedExtensions, ...extraFileExtensions.map(e => e.extension)],
+            equateStringsCaseSensitive,
+            compareStringsCaseSensitive
+        );
     }
 
     export function hasJavaScriptFileExtension(fileName: string) {
@@ -2392,6 +2786,17 @@ namespace ts {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
+    /**
+     * Takes a string like "jquery-min.4.2.3" and returns "jquery"
+     */
+    export function removeMinAndVersionNumbers(fileName: string) {
+        // Match a "." or "-" followed by a version number or 'min' at the end of the name
+        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+
+        // The "min" or version may both be present, in either order, so try applying the above twice.
+        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+    }
+
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
@@ -2407,6 +2812,10 @@ namespace ts {
         this.flags = flags;
         this.escapedName = name;
         this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = undefined;
+        this.mergeId = undefined;
+        this.parent = undefined;
     }
 
     function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
@@ -2416,14 +2825,13 @@ namespace ts {
         }
     }
 
-    function Signature() {
-    }
+    function Signature() {} // tslint:disable-line no-empty
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
-        this.id = 0;
-        this.kind = kind;
         this.pos = pos;
         this.end = end;
+        this.kind = kind;
+        this.id = 0;
         this.flags = NodeFlags.None;
         this.modifierFlagsCache = ModifierFlags.None;
         this.transformFlags = TransformFlags.None;
@@ -2455,6 +2863,12 @@ namespace ts {
         VeryAggressive = 3,
     }
 
+    /**
+     * Safer version of `Function` which should not be called.
+     * Every function should be assignable to this, but this should not be assignable to every function.
+     */
+    export type AnyFunction = (...args: never[]) => void;
+
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
         export let isDebugging = false;
@@ -2463,7 +2877,7 @@ namespace ts {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: Function): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): void {
             if (!expression) {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
@@ -2497,7 +2911,7 @@ namespace ts {
             }
         }
 
-        export function fail(message?: string, stackCrawlMark?: Function): never {
+        export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
@@ -2506,11 +2920,23 @@ namespace ts {
             throw e;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: Function): never {
+        export function assertDefined<T>(value: T | null | undefined, message?: string): T {
+            assert(value !== undefined && value !== null, message);
+            return value;
+        }
+
+        export function assertEachDefined<T, A extends ReadonlyArray<T>>(value: A, message: string): A {
+            for (const v of value) {
+                assertDefined(v, message);
+            }
+            return value;
+        }
+
+        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
         }
 
-        export function getFunctionName(func: Function) {
+        export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }
@@ -2522,6 +2948,27 @@ namespace ts {
                 const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
                 return match ? match[1] : "";
             }
+        }
+
+        export function showSymbol(symbol: Symbol): string {
+            const symbolFlags = (ts as any).SymbolFlags;
+            return `{ flags: ${symbolFlags ? showFlags(symbol.flags, symbolFlags) : symbol.flags}; declarations: ${map(symbol.declarations, showSyntaxKind)} }`;
+        }
+
+        function showFlags(flags: number, flagsEnum: { [flag: number]: string }): string {
+            const out = [];
+            for (let pow = 0; pow <= 30; pow++) {
+                const n = 1 << pow;
+                if (flags & n) {
+                    out.push(flagsEnum[n]);
+                }
+            }
+            return out.join("|");
+        }
+
+        export function showSyntaxKind(node: Node): string {
+            const syntaxKind = (ts as any).SyntaxKind;
+            return syntaxKind ? syntaxKind[node.kind] : node.kind.toString();
         }
     }
 
@@ -2566,10 +3013,9 @@ namespace ts {
         }
     }
 
-    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
-        return useCaseSensitiveFileNames
-            ? ((fileName) => fileName)
-            : ((fileName) => fileName.toLowerCase());
+    export type GetCanonicalFileName = (fileName: string) => string;
+    export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): GetCanonicalFileName {
+        return useCaseSensitiveFileNames ? identity : toLowerCase;
     }
 
     /**
@@ -2593,7 +3039,7 @@ namespace ts {
         return findBestPatternMatch(patterns, _ => _, candidate);
     }
 
-    export function patternText({prefix, suffix}: Pattern): string {
+    export function patternText({ prefix, suffix }: Pattern): string {
         return `${prefix}*${suffix}`;
     }
 
@@ -2603,12 +3049,12 @@ namespace ts {
      */
     export function matchedText(pattern: Pattern, candidate: string): string {
         Debug.assert(isPatternMatch(pattern, candidate));
-        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+        return candidate.substring(pattern.prefix.length, candidate.length - pattern.suffix.length);
     }
 
     /** Return the object corresponding to the best pattern to match `candidate`. */
     export function findBestPatternMatch<T>(values: ReadonlyArray<T>, getPattern: (value: T) => Pattern, candidate: string): T | undefined {
-        let matchedValue: T | undefined = undefined;
+        let matchedValue: T | undefined;
         // use length of prefix as betterness criteria
         let longestMatchPrefixLength = -1;
 
@@ -2623,7 +3069,7 @@ namespace ts {
         return matchedValue;
     }
 
-    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+    function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&
             startsWith(candidate, prefix) &&
             endsWith(candidate, suffix);
@@ -2688,214 +3134,50 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void { }
-
-    export interface FileAndDirectoryExistence {
-        fileExists: boolean;
-        directoryExists: boolean;
+    export function or<T>(f: (arg: T) => boolean, g: (arg: T) => boolean) {
+        return (arg: T) => f(arg) || g(arg);
     }
 
-    export interface CachedDirectoryStructureHost extends DirectoryStructureHost {
-        /** Returns the queried result for the file exists and directory exists if at all it was done */
-        addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path): FileAndDirectoryExistence | undefined;
-        addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind): void;
-        clearCache(): void;
+    export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
+
+    export const emptyFileSystemEntries: FileSystemEntries = {
+        files: emptyArray,
+        directories: emptyArray
+    };
+
+    export function singleElementArray<T>(t: T | undefined): T[] | undefined {
+        return t === undefined ? undefined : [t];
     }
 
-    interface MutableFileSystemEntries {
-        readonly files: string[];
-        readonly directories: string[];
-    }
-
-    export function createCachedDirectoryStructureHost(host: DirectoryStructureHost): CachedDirectoryStructureHost {
-        const cachedReadDirectoryResult = createMap<MutableFileSystemEntries>();
-        const getCurrentDirectory = memoize(() => host.getCurrentDirectory());
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-        return {
-            useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
-            newLine: host.newLine,
-            readFile: (path, encoding) => host.readFile(path, encoding),
-            write: s => host.write(s),
-            writeFile,
-            fileExists,
-            directoryExists,
-            createDirectory,
-            getCurrentDirectory,
-            getDirectories,
-            readDirectory,
-            addOrDeleteFileOrDirectory,
-            addOrDeleteFile,
-            clearCache,
-            exit: code => host.exit(code)
-        };
-
-        function toPath(fileName: string) {
-            return ts.toPath(fileName, getCurrentDirectory(), getCanonicalFileName);
-        }
-
-        function getCachedFileSystemEntries(rootDirPath: Path): MutableFileSystemEntries | undefined {
-            return cachedReadDirectoryResult.get(rootDirPath);
-        }
-
-        function getCachedFileSystemEntriesForBaseDir(path: Path): MutableFileSystemEntries | undefined {
-            return getCachedFileSystemEntries(getDirectoryPath(path));
-        }
-
-        function getBaseNameOfFileName(fileName: string) {
-            return getBaseFileName(normalizePath(fileName));
-        }
-
-        function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-            const resultFromHost: MutableFileSystemEntries = {
-                files: map(host.readDirectory(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories(rootDir) || []
-            };
-
-            cachedReadDirectoryResult.set(rootDirPath, resultFromHost);
-            return resultFromHost;
-        }
-
-        /**
-         * If the readDirectory result was already cached, it returns that
-         * Otherwise gets result from host and caches it.
-         * The host request is done under try catch block to avoid caching incorrect result
-         */
-        function tryReadDirectory(rootDir: string, rootDirPath: Path): MutableFileSystemEntries | undefined {
-            const cachedResult = getCachedFileSystemEntries(rootDirPath);
-            if (cachedResult) {
-                return cachedResult;
+    export function enumerateInsertsAndDeletes<T, U>(newItems: ReadonlyArray<T>, oldItems: ReadonlyArray<U>, comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
+        unchanged = unchanged || noop;
+        let newIndex = 0;
+        let oldIndex = 0;
+        const newLen = newItems.length;
+        const oldLen = oldItems.length;
+        while (newIndex < newLen && oldIndex < oldLen) {
+            const newItem = newItems[newIndex];
+            const oldItem = oldItems[oldIndex];
+            const compareResult = comparer(newItem, oldItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(newItem);
+                newIndex++;
             }
-
-            try {
-                return createCachedFileSystemEntries(rootDir, rootDirPath);
-            }
-            catch (_e) {
-                // If there is exception to read directories, dont cache the result and direct the calls to host
-                Debug.assert(!cachedReadDirectoryResult.has(rootDirPath));
-                return undefined;
-            }
-        }
-
-        function fileNameEqual(name1: string, name2: string) {
-            return getCanonicalFileName(name1) === getCanonicalFileName(name2);
-        }
-
-        function hasEntry(entries: ReadonlyArray<string>, name: string) {
-            return some(entries, file => fileNameEqual(file, name));
-        }
-
-        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
-            if (hasEntry(entries, baseName)) {
-                if (!isValid) {
-                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
-                }
-            }
-            else if (isValid) {
-                return entries.push(baseName);
-            }
-        }
-
-        function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            const path = toPath(fileName);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            if (result) {
-                updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
-            }
-            return host.writeFile(fileName, data, writeByteOrderMark);
-        }
-
-        function fileExists(fileName: string): boolean {
-            const path = toPath(fileName);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
-                host.fileExists(fileName);
-        }
-
-        function directoryExists(dirPath: string): boolean {
-            const path = toPath(dirPath);
-            return cachedReadDirectoryResult.has(path) || host.directoryExists(dirPath);
-        }
-
-        function createDirectory(dirPath: string) {
-            const path = toPath(dirPath);
-            const result = getCachedFileSystemEntriesForBaseDir(path);
-            const baseFileName = getBaseNameOfFileName(dirPath);
-            if (result) {
-                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
-            }
-            host.createDirectory(dirPath);
-        }
-
-        function getDirectories(rootDir: string): string[] {
-            const rootDirPath = toPath(rootDir);
-            const result = tryReadDirectory(rootDir, rootDirPath);
-            if (result) {
-                return result.directories.slice();
-            }
-            return host.getDirectories(rootDir);
-        }
-
-        function readDirectory(rootDir: string, extensions?: ReadonlyArray<string>, excludes?: ReadonlyArray<string>, includes?: ReadonlyArray<string>, depth?: number): string[] {
-            const rootDirPath = toPath(rootDir);
-            const result = tryReadDirectory(rootDir, rootDirPath);
-            if (result) {
-                return matchFiles(rootDir, extensions, excludes, includes, host.useCaseSensitiveFileNames, getCurrentDirectory(), depth, getFileSystemEntries);
-            }
-            return host.readDirectory(rootDir, extensions, excludes, includes, depth);
-
-            function getFileSystemEntries(dir: string) {
-                const path = toPath(dir);
-                if (path === rootDirPath) {
-                    return result;
-                }
-                return getCachedFileSystemEntries(path) || createCachedFileSystemEntries(dir, path);
-            }
-        }
-
-        function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
-            const existingResult = getCachedFileSystemEntries(fileOrDirectoryPath);
-            if (existingResult) {
-                // This was a folder already present, remove it if this doesnt exist any more
-                if (!host.directoryExists(fileOrDirectory)) {
-                    cachedReadDirectoryResult.delete(fileOrDirectoryPath);
-                }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(oldItem);
+                oldIndex++;
             }
             else {
-                // This was earlier a file (hence not in cached directory contents)
-                // or we never cached the directory containing it
-                const parentResult = getCachedFileSystemEntriesForBaseDir(fileOrDirectoryPath);
-                if (parentResult) {
-                    const baseName = getBaseNameOfFileName(fileOrDirectory);
-                    if (parentResult) {
-                        const fsQueryResult: FileAndDirectoryExistence = {
-                            fileExists: host.fileExists(fileOrDirectoryPath),
-                            directoryExists: host.directoryExists(fileOrDirectoryPath)
-                        };
-                        updateFilesOfFileSystemEntry(parentResult, baseName, fsQueryResult.fileExists);
-                        updateFileSystemEntry(parentResult.directories, baseName, fsQueryResult.directoryExists);
-                        return fsQueryResult;
-                    }
-                }
+                unchanged(oldItem, newItem);
+                newIndex++;
+                oldIndex++;
             }
         }
-
-        function addOrDeleteFile(fileName: string, filePath: Path, eventKind: FileWatcherEventKind) {
-            if (eventKind === FileWatcherEventKind.Changed) {
-                return;
-            }
-
-            const parentResult = getCachedFileSystemEntriesForBaseDir(filePath);
-            if (parentResult) {
-                updateFilesOfFileSystemEntry(parentResult, getBaseNameOfFileName(fileName), eventKind === FileWatcherEventKind.Created);
-            }
+        while (newIndex < newLen) {
+            inserted(newItems[newIndex++]);
         }
-
-        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
-            updateFileSystemEntry(parentResult.files, baseName, fileExists);
-        }
-
-        function clearCache() {
-            cachedReadDirectoryResult.clear();
+        while (oldIndex < oldLen) {
+            deleted(oldItems[oldIndex++]);
         }
     }
 }

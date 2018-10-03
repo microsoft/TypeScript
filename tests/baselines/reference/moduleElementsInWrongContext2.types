@@ -17,6 +17,7 @@ function blah () {
 >K : any
 
     declare module "ambient" {
+>"ambient" : typeof "ambient"
 
     }
 

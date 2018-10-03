@@ -336,7 +336,7 @@ namespace ts {
             // Only if all words have some sort of match is the pattern considered matched.
 
             const subWordTextChunks = segment.subWordTextChunks;
-            let matches: PatternMatch[] = undefined;
+            let matches: PatternMatch[];
 
             for (const subWordTextChunk of subWordTextChunks) {
                 // Try to match the candidate with this word
@@ -393,8 +393,8 @@ namespace ts {
 
             let currentCandidate = 0;
             let currentChunkSpan = 0;
-            let firstMatch: number = undefined;
-            let contiguous: boolean = undefined;
+            let firstMatch: number;
+            let contiguous: boolean;
 
             while (true) {
                 // Let's consider our termination cases

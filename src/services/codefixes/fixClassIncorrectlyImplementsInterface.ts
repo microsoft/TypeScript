@@ -1,64 +1,68 @@
 /* @internal */
 namespace ts.codefix {
+    const errorCodes = [Diagnostics.Class_0_incorrectly_implements_interface_1.code,
+                        Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code];
+    const fixId = "fixClassIncorrectlyImplementsInterface"; // TODO: share a group with fixClassDoesntImplementInheritedAbstractMember?
     registerCodeFix({
-        errorCodes: [Diagnostics.Class_0_incorrectly_implements_interface_1.code],
-        getCodeActions: getActionForClassLikeIncorrectImplementsInterface
+        errorCodes,
+        getCodeActions(context) {
+            const { program, sourceFile, span } = context;
+            const classDeclaration = getClass(sourceFile, span.start);
+            const checker = program.getTypeChecker();
+            return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getClassImplementsHeritageClauseElements(classDeclaration), implementedTypeNode => {
+                const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(checker, implementedTypeNode, sourceFile, classDeclaration, t));
+                if (changes.length === 0) return undefined;
+                const description = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
+                return { description, changes, fixId };
+            });
+        },
+        fixIds: [fixId],
+        getAllCodeActions(context) {
+            const seenClassDeclarations = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                const classDeclaration = getClass(diag.file!, diag.start!);
+                if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
+                    for (const implementedTypeNode of getClassImplementsHeritageClauseElements(classDeclaration)) {
+                        addMissingDeclarations(context.program.getTypeChecker(), implementedTypeNode, diag.file!, classDeclaration, changes);
+                    }
+                }
+            });
+        },
     });
 
-    function getActionForClassLikeIncorrectImplementsInterface(context: CodeFixContext): CodeAction[] | undefined {
-        const sourceFile = context.sourceFile;
-        const start = context.span.start;
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
-        const checker = context.program.getTypeChecker();
+    function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
+        return Debug.assertDefined(getContainingClass(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false)));
+    }
 
-        const classDeclaration = getContainingClass(token);
-        if (!classDeclaration) {
-            return undefined;
+    function addMissingDeclarations(
+        checker: TypeChecker,
+        implementedTypeNode: ExpressionWithTypeArguments,
+        sourceFile: SourceFile,
+        classDeclaration: ClassLikeDeclaration,
+        changeTracker: textChanges.ChangeTracker
+    ): void {
+        // Note that this is ultimately derived from a map indexed by symbol names,
+        // so duplicates cannot occur.
+        const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
+        const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
+        const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
+
+        const classType = checker.getTypeAtLocation(classDeclaration);
+
+        if (!checker.getIndexTypeOfType(classType, IndexKind.Number)) {
+            createMissingIndexSignatureDeclaration(implementedType, IndexKind.Number);
+        }
+        if (!checker.getIndexTypeOfType(classType, IndexKind.String)) {
+            createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
         }
 
-        const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
-        const classType = checker.getTypeAtLocation(classDeclaration) as InterfaceType;
-        const implementedTypeNodes = getClassImplementsHeritageClauseElements(classDeclaration);
+        createMissingMemberNodes(classDeclaration, nonPrivateMembers, checker, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
 
-        const hasNumericIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.Number);
-        const hasStringIndexSignature = !!checker.getIndexTypeOfType(classType, IndexKind.String);
-
-        const result: CodeAction[] = [];
-        for (const implementedTypeNode of implementedTypeNodes) {
-            // Note that this is ultimately derived from a map indexed by symbol names,
-            // so duplicates cannot occur.
-            const implementedType = checker.getTypeAtLocation(implementedTypeNode) as InterfaceType;
-            const implementedTypeSymbols = checker.getPropertiesOfType(implementedType);
-            const nonPrivateMembers = implementedTypeSymbols.filter(symbol => !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private));
-
-            let newNodes: Node[] = [];
-            createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.Number, hasNumericIndexSignature, newNodes);
-            createAndAddMissingIndexSignatureDeclaration(implementedType, IndexKind.String, hasStringIndexSignature, newNodes);
-            newNodes = newNodes.concat(createMissingMemberNodes(classDeclaration, nonPrivateMembers, checker));
-            const message = formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Implement_interface_0), [implementedTypeNode.getText()]);
-            if (newNodes.length > 0) {
-                pushAction(result, newNodes, message);
-            }
-        }
-
-        return result;
-
-        function createAndAddMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind, hasIndexSigOfKind: boolean, newNodes: Node[]): void {
-            if (hasIndexSigOfKind) {
-                return;
-            }
-
+        function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
-
-            if (!indexInfoOfKind) {
-                return;
+            if (indexInfoOfKind) {
+                changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration));
             }
-            const newIndexSignatureDeclaration = checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration);
-            newNodes.push(newIndexSignatureDeclaration);
-        }
-
-        function pushAction(result: CodeAction[], newNodes: Node[], description: string): void {
-            result.push({ description, changes: newNodesToChanges(newNodes, openBrace, context) });
         }
     }
 }

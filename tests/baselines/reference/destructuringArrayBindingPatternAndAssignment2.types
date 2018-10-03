@@ -4,7 +4,7 @@
 var [[a0], [[a1]]] = []         // Error
 >a0 : any
 >a1 : any
->[] : [any, any]
+>[] : [undefined, undefined]
 
 var [[a2], [[a3]]] = undefined  // Error
 >a2 : any
@@ -18,7 +18,7 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >b0 : number
 >b1 : boolean
 >b2 : string
->[1, 2, "string"] : [number, 2, string]
+>[1, 2, "string"] : [number, number, string]
 >1 : 1
 >2 : 2
 >"string" : "string"
@@ -29,6 +29,7 @@ interface J extends Array<Number> {
 >Number : Number
 
     2: number;
+>2 : number
 }
 
 function bar(): J {
@@ -89,6 +90,7 @@ function foo(idx: number): F {
 >{        2: true    } : { 2: true; }
 
         2: true
+>2 : true
 >true : true
     }
 }

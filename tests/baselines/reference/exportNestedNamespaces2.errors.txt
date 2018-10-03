@@ -1,0 +1,40 @@
+tests/cases/conformance/salsa/first.js(1,1): error TS2539: Cannot assign to '"tests/cases/conformance/salsa/first"' because it is not a variable.
+tests/cases/conformance/salsa/first.js(1,11): error TS2304: Cannot find name 'require'.
+tests/cases/conformance/salsa/first.js(2,9): error TS2339: Property 'formatters' does not exist on type 'typeof "tests/cases/conformance/salsa/first"'.
+tests/cases/conformance/salsa/second.js(1,1): error TS2539: Cannot assign to '"tests/cases/conformance/salsa/second"' because it is not a variable.
+tests/cases/conformance/salsa/second.js(1,11): error TS2304: Cannot find name 'require'.
+tests/cases/conformance/salsa/second.js(2,9): error TS2339: Property 'formatters' does not exist on type 'typeof "tests/cases/conformance/salsa/second"'.
+
+
+==== tests/cases/conformance/salsa/mod.js (0 errors) ====
+    // Based on a pattern from adonis
+    exports.formatters = {}
+==== tests/cases/conformance/salsa/first.js (3 errors) ====
+    exports = require('./mod')
+    ~~~~~~~
+!!! error TS2539: Cannot assign to '"tests/cases/conformance/salsa/first"' because it is not a variable.
+              ~~~~~~~
+!!! error TS2304: Cannot find name 'require'.
+    exports.formatters.j = function (v) {
+            ~~~~~~~~~~
+!!! error TS2339: Property 'formatters' does not exist on type 'typeof "tests/cases/conformance/salsa/first"'.
+        return v
+    }
+==== tests/cases/conformance/salsa/second.js (3 errors) ====
+    exports = require('./mod')
+    ~~~~~~~
+!!! error TS2539: Cannot assign to '"tests/cases/conformance/salsa/second"' because it is not a variable.
+              ~~~~~~~
+!!! error TS2304: Cannot find name 'require'.
+    exports.formatters.o = function (v) {
+            ~~~~~~~~~~
+!!! error TS2339: Property 'formatters' does not exist on type 'typeof "tests/cases/conformance/salsa/second"'.
+        return v
+    }
+    
+==== tests/cases/conformance/salsa/use.js (0 errors) ====
+    import * as debug from './mod'
+    
+    debug.formatters.j
+    var one = debug.formatters.o(1)
+    

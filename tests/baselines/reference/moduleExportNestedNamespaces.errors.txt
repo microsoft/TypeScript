@@ -1,0 +1,37 @@
+tests/cases/conformance/salsa/mod.js(1,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/salsa/mod.js(2,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/salsa/mod.js(5,1): error TS2304: Cannot find name 'module'.
+
+
+==== tests/cases/conformance/salsa/mod.js (3 errors) ====
+    module.exports.n = {};
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+    module.exports.n.K = function C() {
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+        this.x = 10;
+    }
+    module.exports.Classic = class {
+    ~~~~~~
+!!! error TS2304: Cannot find name 'module'.
+        constructor() {
+            this.p = 1
+        }
+    }
+    
+==== tests/cases/conformance/salsa/use.js (0 errors) ====
+    import * as s from './mod'
+    
+    var k = new s.n.K()
+    k.x
+    var classic = new s.Classic()
+    
+    
+    /** @param {s.n.K} c
+        @param {s.Classic} classic */
+    function f(c, classic) {
+        c.x
+        classic.p
+    }
+    

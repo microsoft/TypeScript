@@ -3,11 +3,11 @@ class C {
 >C : C
 
     a(): number { return 0; } // error: duplicate identifier
->a : number
+>a : () => number
 >0 : 0
 
     a: number;
->a : number
+>a : () => number
 }
 class K {
 >K : K

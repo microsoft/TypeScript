@@ -57,7 +57,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -148,7 +148,7 @@ namespace ts {
             // Create an updated SourceFile:
             //
             //     define(moduleName?, ["module1", "module2"], function ...
-            return updateSourceFileNode(node,
+            const updated = updateSourceFileNode(node,
                 setTextRange(
                     createNodeArray([
                         createStatement(
@@ -192,6 +192,9 @@ namespace ts {
                     /*location*/ node.statements
                 )
             );
+
+            addEmitHelpers(updated, context.readEmitHelpers());
+            return updated;
         }
 
         /**
@@ -296,7 +299,7 @@ namespace ts {
             //      }
             //  })(function ...)
 
-            return updateSourceFileNode(
+            const updated = updateSourceFileNode(
                 node,
                 setTextRange(
                     createNodeArray([
@@ -328,6 +331,9 @@ namespace ts {
                     /*location*/ node.statements
                 )
             );
+
+            addEmitHelpers(updated, context.readEmitHelpers());
+            return updated;
         }
 
         /**
@@ -385,6 +391,18 @@ namespace ts {
             return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
         }
 
+        function getAMDImportExpressionForImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
+            if (isImportEqualsDeclaration(node) || isExportDeclaration(node) || !getExternalModuleNameLiteral(node, currentSourceFile, host, resolver, compilerOptions)) {
+                return undefined;
+            }
+            const name = getLocalNameForExternalImport(node, currentSourceFile);
+            const expr = getHelperExpressionForImport(node, name);
+            if (expr === name) {
+                return undefined;
+            }
+            return createStatement(createAssignment(name, expr));
+        }
+
         /**
          * Transforms a SourceFile into an AMD or UMD module body.
          *
@@ -402,6 +420,9 @@ namespace ts {
 
             // Visit each statement of the module body.
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
+            if (moduleKind === ModuleKind.AMD) {
+                addRange(statements, mapDefined(currentModuleInfo.externalImports, getAMDImportExpressionForImport));
+            }
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
 
             // Append the 'export =' statement if provided.
@@ -512,7 +533,7 @@ namespace ts {
             }
 
             if (isImportCall(node)) {
-                return visitImportCallExpression(<ImportCall>node);
+                return visitImportCallExpression(node);
             }
             else {
                 return visitEachChild(node, importCallExpressionVisitor, context);
@@ -617,7 +638,12 @@ namespace ts {
                 }
             }
 
-            return createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+            const promise = createNew(createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
+            if (compilerOptions.esModuleInterop) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(createPropertyAccess(promise, createIdentifier("then")), /*typeArguments*/ undefined, [getHelperName("__importStar")]);
+            }
+            return promise;
         }
 
         function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
@@ -627,7 +653,11 @@ namespace ts {
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            const requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            let requireCall = createCall(createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            if (compilerOptions.esModuleInterop) {
+                context.requestEmitHelper(importStarHelper);
+                requireCall = createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [requireCall]);
+            }
 
             let func: FunctionExpression | ArrowFunction;
             if (languageVersion >= ScriptTarget.ES2015) {
@@ -660,6 +690,21 @@ namespace ts {
             return createCall(createPropertyAccess(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
         }
 
+        function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
+            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+                return innerExpr;
+            }
+            if (getImportNeedsImportStarHelper(node)) {
+                context.requestEmitHelper(importStarHelper);
+                return createCall(getHelperName("__importStar"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            if (getImportNeedsImportDefaultHelper(node)) {
+                context.requestEmitHelper(importDefaultHelper);
+                return createCall(getHelperName("__importDefault"), /*typeArguments*/ undefined, [innerExpr]);
+            }
+            return innerExpr;
+        }
+
         /**
          * Visits an ImportDeclaration node.
          *
@@ -681,7 +726,7 @@ namespace ts {
                             createVariableDeclaration(
                                 getSynthesizedClone(namespaceDeclaration.name),
                                 /*type*/ undefined,
-                                createRequireCall(node)
+                                getHelperExpressionForImport(node, createRequireCall(node))
                             )
                         );
                     }
@@ -694,7 +739,7 @@ namespace ts {
                             createVariableDeclaration(
                                 getGeneratedNameForNode(node),
                                 /*type*/ undefined,
-                                createRequireCall(node)
+                                getHelperExpressionForImport(node, createRequireCall(node))
                             )
                         );
 
@@ -1670,5 +1715,29 @@ namespace ts {
         scoped: true,
         text: `
             var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
+    };
+
+    // emit helper for `import * as Name from "foo"`
+    const importStarHelper: EmitHelper = {
+        name: "typescript:commonjsimportstar",
+        scoped: false,
+        text: `
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};`
+    };
+
+    // emit helper for `import Name from "foo"`
+    const importDefaultHelper: EmitHelper = {
+        name: "typescript:commonjsimportdefault",
+        scoped: false,
+        text: `
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};`
     };
 }

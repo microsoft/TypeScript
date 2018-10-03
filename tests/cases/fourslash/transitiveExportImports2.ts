@@ -20,8 +20,8 @@ const bRanges = [B0, B1];
 const cRanges = [B2];
 
 const aGroup = { definition: "namespace A", ranges: aRanges };
-const bGroup = { definition: "import B = A", ranges: bRanges };
-const cGroup = { definition: "import B", ranges: cRanges };
+const bGroup = { definition: "(alias) namespace B\nimport B = A", ranges: bRanges };
+const cGroup = { definition: "(alias) namespace B\nimport B", ranges: cRanges };
 
 verify.referenceGroups(aRanges, [aGroup, bGroup, cGroup]);
 verify.referenceGroups(bRanges, [bGroup, cGroup]);

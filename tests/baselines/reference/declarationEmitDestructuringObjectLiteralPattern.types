@@ -100,7 +100,7 @@ function f15() {
 >{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }
 >a4 : string
 >b4 : number
->c4 : true
+>c4 : boolean
 }
 var { a4, b4, c4 } = f15();
 >a4 : string

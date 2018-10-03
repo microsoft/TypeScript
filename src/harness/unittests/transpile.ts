@@ -24,7 +24,7 @@ namespace ts {
 
                 if (transpileOptions.compilerOptions.newLine === undefined) {
                     // use \r\n as default new line
-                    transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                    transpileOptions.compilerOptions.newLine = NewLineKind.CarriageReturnLineFeed;
                 }
 
                 transpileOptions.compilerOptions.sourceMap = true;
@@ -85,7 +85,7 @@ namespace ts {
                 }
 
                 it("Correct output for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, Extension.Js), () => {
                         if (transpileResult.outputText) {
                             return transpileResult.outputText;
                         }
@@ -149,21 +149,21 @@ var x = 0;`, {
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.System, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - AMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.AMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Rename dependencies - UMD",
             `import {foo} from "SomeName";\n` +
             `declare function use(a: any);\n` +
             `use(foo);`, {
-                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { "SomeName": "SomeOtherName" } }
+                options: { compilerOptions: { module: ModuleKind.UMD, newLine: NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } }
             });
 
         transpilesCorrectly("Transpile with emit decorators and emit metadata",

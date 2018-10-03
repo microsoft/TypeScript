@@ -1,5 +1,7 @@
 === tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts ===
 declare module "m" {
+>"m" : typeof "m"
+
     module x {
 >x : any
 

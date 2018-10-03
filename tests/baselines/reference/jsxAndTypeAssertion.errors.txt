@@ -10,13 +10,11 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(14,45): error TS1005: '}' ex
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,2): error TS17008: JSX element 'foo' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,8): error TS17008: JSX element 'foo' has no corresponding closing tag.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,13): error TS17008: JSX element 'foo' has no corresponding closing tag.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(18,83): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: ':' expected.
 tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '</' expected.
-tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '}' expected.
 
 
-==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (16 errors) ====
+==== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx (14 errors) ====
     declare var createElement: any;
     
     class foo {}
@@ -59,8 +57,6 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '}' exp
 !!! error TS17008: JSX element 'foo' has no corresponding closing tag.
                 ~~~
 !!! error TS17008: JSX element 'foo' has no corresponding closing tag.
-                                                                                      
-!!! error TS1109: Expression expected.
     
         
     
@@ -68,5 +64,3 @@ tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx(21,1): error TS1005: '}' exp
 !!! error TS1005: ':' expected.
     
 !!! error TS1005: '</' expected.
-    
-!!! error TS1005: '}' expected.

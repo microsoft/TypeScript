@@ -40,7 +40,7 @@ const obj1: OptionProp = {
 >{    x: 2} : { x: 2; }
 
     x: 2
->x : number
+>x : 2
 >2 : 2
 }
 
@@ -73,6 +73,6 @@ let y3 = <Opt x={2} />;
 >y3 : JSX.Element
 ><Opt x={2} /> : JSX.Element
 >Opt : typeof Opt
->x : number
+>x : 2
 >2 : 2
 

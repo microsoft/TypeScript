@@ -12,7 +12,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,33): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(121,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' has type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }' at tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts 119:4, but here has type '{}'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(121,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
@@ -163,7 +163,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 !!! error TS2304: Cannot find name 'window'.
     var a9e: {};
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' has type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }' at tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts 119:4, but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                            ~~~~~~
 !!! error TS2304: Cannot find name 'window'.

@@ -11,4 +11,8 @@
 ////var a: [|alias|].Bar; // namespace
 ////[|alias|].call(this); // value
 
-verify.singleReferenceGroup("import alias = ATest");
+verify.singleReferenceGroup([
+    "(alias) namespace alias",
+    "(alias) function alias(): void",
+    "import alias = ATest"
+].join("\n"));

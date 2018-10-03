@@ -15,5 +15,5 @@ verify.referenceGroups(r1, [
 ]);
 verify.referenceGroups(r2, [
     { definition: "(property) T.a: number", ranges: [r0, r1] },
-    { definition: "(property) a: boolean", ranges: [r2] }
+    { definition: "(property) a: true", ranges: [r2] }
 ]);

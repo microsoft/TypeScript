@@ -30,8 +30,7 @@ verify.referenceGroups(hasAOrB, [
     { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB, x] }
 ]);
 verify.referenceGroups(x, [
-    { definition: "(property) a: number", ranges: [one] },
+    { definition: "(property) a: number", ranges: [one, x] },
     { definition: "(property) Base.a: string", ranges: [base] },
     { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
-    { definition: "(property) a: string | number", ranges: [x] }
 ]);

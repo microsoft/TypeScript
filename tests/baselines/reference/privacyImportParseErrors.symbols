@@ -45,6 +45,8 @@ export module m1 {
     }
 
     export declare module "m1_M3_public" {
+>"m1_M3_public" : Symbol("m1_M3_public", Decl(privacyImportParseErrors.ts, 19, 5))
+
         export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 21, 42))
 
@@ -61,6 +63,8 @@ export module m1 {
     }
 
     declare module "m1_M4_private" {
+>"m1_M4_private" : Symbol("m1_M4_private", Decl(privacyImportParseErrors.ts, 27, 5))
+
         export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 29, 36))
 
@@ -312,6 +316,8 @@ module m2 {
     }
 
     export declare module "m2_M3_public" {
+>"m2_M3_public" : Symbol("m2_M3_public", Decl(privacyImportParseErrors.ts, 103, 5))
+
         export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 105, 42))
 
@@ -328,6 +334,8 @@ module m2 {
     }
 
     declare module "m2_M4_private" {
+>"m2_M4_private" : Symbol("m2_M4_private", Decl(privacyImportParseErrors.ts, 111, 5))
+
         export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 113, 36))
 
@@ -556,6 +564,8 @@ export module glo_M1_public {
 }
 
 export declare module "glo_M2_public" {
+>"glo_M2_public" : Symbol("glo_M2_public", Decl(privacyImportParseErrors.ts, 177, 1))
+
     export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 179, 39))
 
@@ -593,6 +603,8 @@ export module glo_M3_private {
 }
 
 export declare module "glo_M4_private" {
+>"glo_M4_private" : Symbol("glo_M4_private", Decl(privacyImportParseErrors.ts, 195, 1))
+
     export function f1();
 >f1 : Symbol(f1, Decl(privacyImportParseErrors.ts, 197, 40))
 
@@ -801,6 +813,8 @@ export import glo_im4_public = require("glo_M4_private");
 
 
 export declare module "use_glo_M1_public" {
+>"use_glo_M1_public" : Symbol("use_glo_M1_public", Decl(privacyImportParseErrors.ts, 251, 57))
+
     import use_glo_M1_public = glo_M1_public;
 >use_glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 254, 43))
 >glo_M1_public : Symbol(use_glo_M1_public, Decl(privacyImportParseErrors.ts, 167, 1))
@@ -887,6 +901,8 @@ export declare module "use_glo_M1_public" {
 
 
 declare module "use_glo_M3_private" {
+>"use_glo_M3_private" : Symbol("use_glo_M3_private", Decl(privacyImportParseErrors.ts, 280, 1))
+
     import use_glo_M3_private = glo_M3_private;
 >use_glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 283, 37))
 >glo_M3_private : Symbol(use_glo_M3_private, Decl(privacyImportParseErrors.ts, 185, 1))
@@ -972,10 +988,13 @@ declare module "use_glo_M3_private" {
 }
 
 declare module "anotherParseError" {
+>"anotherParseError" : Symbol("anotherParseError", Decl(privacyImportParseErrors.ts, 309, 1))
+
     module m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
 
         declare module "abc" {
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 312, 15))
         }
     }
 
@@ -983,17 +1002,22 @@ declare module "anotherParseError" {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 311, 36), Decl(privacyImportParseErrors.ts, 315, 5))
 
         module "abc2" {
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 317, 15))
         }
     }
     module "abc3" {
+>"abc3" : Symbol("abc3", Decl(privacyImportParseErrors.ts, 320, 5))
     }
 }
 
 declare export module "anotherParseError2" {
+>"anotherParseError2" : Symbol("anotherParseError2", Decl(privacyImportParseErrors.ts, 323, 1))
+
     module m2 {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
 
         declare module "abc" {
+>"abc" : Symbol("abc", Decl(privacyImportParseErrors.ts, 326, 15))
         }
     }
 
@@ -1001,9 +1025,11 @@ declare export module "anotherParseError2" {
 >m2 : Symbol(m2, Decl(privacyImportParseErrors.ts, 325, 44), Decl(privacyImportParseErrors.ts, 329, 5))
 
         module "abc2" {
+>"abc2" : Symbol("abc2", Decl(privacyImportParseErrors.ts, 331, 15))
         }
     }
     module "abc3" {
+>"abc3" : Symbol("abc3", Decl(privacyImportParseErrors.ts, 334, 5))
     }
 }
 

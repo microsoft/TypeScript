@@ -17,6 +17,5 @@ const x = /*[#|*/2 + 1/*|]*/;
 "strict";
 
 const newLocal = 2 + 1;
-
 const x = /*RENAME*/newLocal;
         

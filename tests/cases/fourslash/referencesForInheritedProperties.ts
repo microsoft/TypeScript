@@ -28,14 +28,8 @@ verify.referenceGroups(r1, [
     { definition: "(method) interface1.doStuff(): void", ranges: [r0] },
     { definition: "(method) interface2.doStuff(): void", ranges: [r1, r2, r3] }
 ]);
-verify.referenceGroups(r2, [
+verify.referenceGroups([r2, r3], [
     { definition: "(method) interface1.doStuff(): void", ranges: [r0] },
     { definition: "(method) interface2.doStuff(): void", ranges: [r1] },
     { definition: "(method) class1.doStuff(): void", ranges: [r2, r3] }
-]);
-verify.referenceGroups(r3, [
-    { definition: "(method) interface1.doStuff(): void", ranges: [r0] },
-    { definition: "(method) interface2.doStuff(): void", ranges: [r1] },
-    { definition: "(method) class1.doStuff(): void", ranges: [r2] },
-    { definition: "(method) class1.doStuff(): void", ranges: [r3] }
 ]);

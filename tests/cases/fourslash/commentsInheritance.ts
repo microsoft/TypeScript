@@ -263,20 +263,20 @@ verify.quickInfos({
 });
 
 goTo.marker('6');
-verify.completionListContains("i1_p1", "(property) c1.i1_p1: number", "");
-verify.completionListContains("i1_f1", "(method) c1.i1_f1(): void", "");
+verify.completionListContains("i1_p1", "(property) c1.i1_p1: number", "i1_p1");
+verify.completionListContains("i1_f1", "(method) c1.i1_f1(): void", "i1_f1");
 verify.completionListContains("i1_l1", "(property) c1.i1_l1: () => void", "");
 verify.completionListContains("i1_nc_p1", "(property) c1.i1_nc_p1: number", "");
 verify.completionListContains("i1_nc_f1", "(method) c1.i1_nc_f1(): void", "");
 verify.completionListContains("i1_nc_l1", "(property) c1.i1_nc_l1: () => void", "");
 verify.completionListContains("p1", "(property) c1.p1: number", "c1_p1");
 verify.completionListContains("f1", "(method) c1.f1(): void", "c1_f1");
-verify.completionListContains("l1", "(property) c1.l1: () => void", "");
+verify.completionListContains("l1", "(property) c1.l1: () => void", "c1_l1");
 verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "c1_nc_p1");
 verify.completionListContains("nc_f1", "(method) c1.nc_f1(): void", "c1_nc_f1");
-verify.completionListContains("nc_l1", "(property) c1.nc_l1: () => void", "");
+verify.completionListContains("nc_l1", "(property) c1.nc_l1: () => void", "c1_nc_l1");
 goTo.marker('7');
-verify.currentSignatureHelpDocCommentIs("");
+verify.currentSignatureHelpDocCommentIs("i1_f1");
 goTo.marker('8');
 verify.currentSignatureHelpDocCommentIs("");
 goTo.marker('9');
@@ -288,20 +288,20 @@ verify.currentSignatureHelpDocCommentIs("");
 goTo.marker('l8');
 verify.currentSignatureHelpDocCommentIs("");
 goTo.marker('l9');
-verify.currentSignatureHelpDocCommentIs("");
+verify.currentSignatureHelpDocCommentIs("c1_l1");
 goTo.marker('l10');
-verify.currentSignatureHelpDocCommentIs("");
+verify.currentSignatureHelpDocCommentIs("c1_nc_l1");
 
 verify.quickInfos({
     "6iq": "var c1_i: c1",
-    "7q": "(method) c1.i1_f1(): void",
+    "7q": ["(method) c1.i1_f1(): void", "i1_f1"],
     "8q": "(method) c1.i1_nc_f1(): void",
     "9q": ["(method) c1.f1(): void", "c1_f1"],
     "10q": ["(method) c1.nc_f1(): void", "c1_nc_f1"],
     l7q: "(property) c1.i1_l1: () => void",
     l8q: "(property) c1.i1_nc_l1: () => void",
-    l9q: "(property) c1.l1: () => void",
-    l10q: "(property) c1.nc_l1: () => void"
+    l9q: ["(property) c1.l1: () => void", "c1_l1"],
+    l10q: ["(property) c1.nc_l1: () => void", "c1_nc_l1"],
 });
 
 goTo.marker('11');
@@ -515,7 +515,7 @@ verify.quickInfos({
     "39q": ["(method) i2.f1(): void", "i2 f1"],
     "40q": "(method) i2.nc_f1(): void",
     "l37q": "(property) i2.i2_l1: () => void",
-    "l38q": "(property) i2.i2_nc_l1: () => void", 
+    "l38q": "(property) i2.i2_nc_l1: () => void",
     "l39q": "(property) i2.l1: () => void",
     "l40q": "(property) i2.nc_l1: () => void",
 });

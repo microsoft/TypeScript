@@ -4,6 +4,6 @@
 ////[|class C<T extends string , U> extends I<T>|]{}
 
 verify.codeFix({
-    description: "Change 'extends' to 'implements'.",
+    description: "Change 'extends' to 'implements'",
     newRangeContent: "class C<T extends string , U> implements I<T>",
 });

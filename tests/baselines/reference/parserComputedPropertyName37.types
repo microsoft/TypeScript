@@ -4,6 +4,7 @@ var v = {
 >{    [public]: 0} : { [x: number]: number; }
 
     [public]: 0
+>[public] : number
 >public : any
 >0 : 0
 

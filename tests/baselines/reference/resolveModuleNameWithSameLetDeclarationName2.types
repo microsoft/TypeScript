@@ -1,5 +1,7 @@
 === tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts ===
 declare module "punycode" {
+>"punycode" : typeof "punycode"
+
     interface ucs2 {
 >ucs2 : ucs2
 

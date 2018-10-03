@@ -2,6 +2,6 @@
 var v = function * yield() { }
 >v : () => any
 >function * : () => any
->yield : () => void
+>yield : any
 >() { } : () => void
 

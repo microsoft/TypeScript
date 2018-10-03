@@ -13,14 +13,14 @@ verify.currentSignatureHelpIs("f(): any");
 verify.currentSignatureParameterCountIs(0);
 verify.signatureHelpArgumentCountIs(0);
 
-edit.insert(", ");
+edit.insert("x, ");
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
 verify.currentSignatureParameterCountIs(2);
 verify.currentParameterHelpArgumentNameIs("b");
 verify.currentParameterSpanIs("b: boolean");
 
-edit.insert(", ");
+edit.insert("x, ");
 verify.signatureHelpCountIs(4);
 verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
 verify.currentSignatureParameterCountIs(2);

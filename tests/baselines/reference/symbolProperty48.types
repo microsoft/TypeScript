@@ -9,6 +9,7 @@ module M {
 >C : C
 
         [Symbol.iterator]() { }
+>[Symbol.iterator] : () => void
 >Symbol.iterator : any
 >Symbol : any
 >iterator : any

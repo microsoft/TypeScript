@@ -9,7 +9,7 @@
 ////}
 
 verify.codeFix({
-    description: `Remove declaration for: 'function1'.`,
+    description: `Remove declaration for: 'function1'`,
     newFileContent: `class greeter {
     public function2() {
     }

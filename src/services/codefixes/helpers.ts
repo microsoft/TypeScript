@@ -1,69 +1,32 @@
 /* @internal */
 namespace ts.codefix {
-
-    export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
-        const sourceFile = context.sourceFile;
-
-        const changeTracker = textChanges.ChangeTracker.fromContext(context);
-
-        for (const newNode of newNodes) {
-            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
-        }
-
-        const changes = changeTracker.getChanges();
-        if (!some(changes)) {
-            return changes;
-        }
-
-        Debug.assert(changes.length === 1);
-        const consolidatedChanges: FileTextChanges[] = [{
-            fileName: changes[0].fileName,
-            textChanges: [{
-                span: changes[0].textChanges[0].span,
-                newText: changes[0].textChanges.reduce((prev, cur) => prev + cur.newText, "")
-            }]
-
-        }];
-        return consolidatedChanges;
-    }
-
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.escapedName));
-
-        let newNodes: Node[] = [];
-        for (const symbol of missingMembers) {
-            const newNode = createNewNodeForMemberSymbol(symbol, classDeclaration, checker);
-            if (newNode) {
-                if (Array.isArray(newNode)) {
-                    newNodes = newNodes.concat(newNode);
-                }
-                else {
-                    newNodes.push(newNode);
-                }
+        for (const symbol of possiblyMissingSymbols) {
+            if (!classMembers.has(symbol.escapedName)) {
+                addNewNodeForMemberSymbol(symbol, classDeclaration, checker, out);
             }
         }
-        return newNodes;
     }
 
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function createNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Node[] | Node | undefined {
+    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, out: (node: Node) => void): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
         }
 
-        const declaration = declarations[0] as Declaration;
+        const declaration = declarations[0];
         // Clone name to remove leading trivia.
-        const name = getSynthesizedClone(getNameOfDeclaration(declaration)) as PropertyName;
+        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration)) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -75,14 +38,14 @@ namespace ts.codefix {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const typeNode = checker.typeToTypeNode(type, enclosingDeclaration);
-                const property = createProperty(
+                out(createProperty(
                     /*decorators*/undefined,
                     modifiers,
                     name,
                     optional ? createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
-                    /*initializer*/ undefined);
-                return property;
+                    /*initializer*/ undefined));
+                break;
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
                 // The signature for the implementation appears as an entry in `signatures` iff
@@ -94,81 +57,71 @@ namespace ts.codefix {
                 // correspondence of declarations and signatures.
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
                 if (!some(signatures)) {
-                    return undefined;
+                    break;
                 }
 
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
                     const signature = signatures[0];
-                    return signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody());
+                    break;
                 }
 
-                const signatureDeclarations: MethodDeclaration[] = [];
                 for (const signature of signatures) {
-                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
-                    if (methodDeclaration) {
-                        signatureDeclarations.push(methodDeclaration);
-                    }
+                    // Need to ensure nodes are fresh each time so they can have different positions.
+                    outputMethod(signature, getSynthesizedDeepClones(modifiers), getSynthesizedDeepClone(name));
                 }
 
                 if (declarations.length > signatures.length) {
                     const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
-                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
-                    if (methodDeclaration) {
-                        signatureDeclarations.push(methodDeclaration);
-                    }
+                    outputMethod(signature, modifiers, name, createStubbedMethodBody());
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, optional, modifiers);
-                    signatureDeclarations.push(methodImplementingSignatures);
+                    out(createMethodImplementingSignatures(signatures, name, optional, modifiers));
                 }
-                return signatureDeclarations;
-            default:
-                return undefined;
+                break;
         }
 
-        function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
-            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
-            if (signatureDeclaration) {
-                signatureDeclaration.decorators = undefined;
-                signatureDeclaration.modifiers = modifiers;
-                signatureDeclaration.name = name;
-                signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                signatureDeclaration.body = body;
-            }
-            return signatureDeclaration;
+        function outputMethod(signature: Signature, modifiers: NodeArray<Modifier>, name: PropertyName, body?: Block): void {
+            const method = signatureToMethodDeclaration(checker, signature, enclosingDeclaration, modifiers, name, optional, body);
+            if (method) out(method);
         }
     }
 
-    export function createMethodFromCallExpression(callExpression: CallExpression, methodName: string, includeTypeScriptSyntax: boolean, makeStatic: boolean): MethodDeclaration {
-        const parameters = createDummyParameters(callExpression.arguments.length, /*names*/ undefined, /*minArgumentCount*/ undefined, includeTypeScriptSyntax);
-
-        let typeParameters: TypeParameterDeclaration[];
-        if (includeTypeScriptSyntax) {
-            const typeArgCount = length(callExpression.typeArguments);
-            for (let i = 0; i < typeArgCount; i++) {
-                const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
-                const typeParameter = createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined);
-                (typeParameters ? typeParameters : typeParameters = []).push(typeParameter);
-            }
+    function signatureToMethodDeclaration(checker: TypeChecker, signature: Signature, enclosingDeclaration: ClassLikeDeclaration, modifiers: NodeArray<Modifier>, name: PropertyName, optional: boolean, body: Block | undefined) {
+        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
+        if (!signatureDeclaration) {
+            return undefined;
         }
 
-        const newMethod = createMethod(
+        signatureDeclaration.decorators = undefined;
+        signatureDeclaration.modifiers = modifiers;
+        signatureDeclaration.name = name;
+        signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+        signatureDeclaration.body = body;
+        return signatureDeclaration;
+    }
+
+    function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined): NodeArray<T> | undefined {
+        return nodes && createNodeArray(nodes.map(getSynthesizedDeepClone));
+    }
+
+    export function createMethodFromCallExpression({ typeArguments, arguments: args }: CallExpression, methodName: string, inJs: boolean, makeStatic: boolean): MethodDeclaration {
+        return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
             /*asteriskToken*/ undefined,
             methodName,
             /*questionToken*/ undefined,
-            typeParameters,
-            parameters,
-            /*type*/ includeTypeScriptSyntax ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
-            createStubbedMethodBody()
-        );
-        return newMethod;
+            /*typeParameters*/ inJs ? undefined : map(typeArguments, (_, i) =>
+                createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`)),
+            /*parameters*/ createDummyParameters(args.length, /*names*/ undefined, /*minArgumentCount*/ undefined, inJs),
+            /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
+            createStubbedMethodBody());
     }
 
-    function createDummyParameters(argCount: number,  names: string[] | undefined, minArgumentCount: number | undefined, addAnyType: boolean) {
+    function createDummyParameters(argCount: number, names: string[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
             const newParameter = createParameter(
@@ -177,11 +130,10 @@ namespace ts.codefix {
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ addAnyType ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
+                /*type*/ inJs ? undefined : createKeywordTypeNode(SyntaxKind.AnyKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
-
         return parameters;
     }
 
@@ -205,7 +157,7 @@ namespace ts.codefix {
         const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
         const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.name);
 
-        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
+        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
             const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
@@ -229,7 +181,7 @@ namespace ts.codefix {
             /*returnType*/ undefined);
     }
 
-    export function createStubbedMethod(
+    function createStubbedMethod(
         modifiers: ReadonlyArray<Modifier>,
         name: PropertyName,
         optional: boolean,
@@ -258,7 +210,7 @@ namespace ts.codefix {
             /*multiline*/ true);
     }
 
-    function createVisibilityModifier(flags: ModifierFlags) {
+    function createVisibilityModifier(flags: ModifierFlags): Modifier | undefined {
         if (flags & ModifierFlags.Public) {
             return createToken(SyntaxKind.PublicKeyword);
         }

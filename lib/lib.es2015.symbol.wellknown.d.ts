@@ -138,7 +138,7 @@ interface Set<T> {
     readonly [Symbol.toStringTag]: "Set";
 }
 
-interface WeakSet<T> {
+interface WeakSet<T extends object> {
     readonly [Symbol.toStringTag]: "WeakSet";
 }
 
@@ -170,7 +170,7 @@ interface Promise<T> {
 }
 
 interface PromiseConstructor {
-    readonly [Symbol.species]: Function;
+    readonly [Symbol.species]: PromiseConstructor;
 }
 
 interface RegExp {
@@ -222,7 +222,7 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    [Symbol.species](): RegExpConstructor;
+    readonly [Symbol.species]: RegExpConstructor;
 }
 
 interface String {
@@ -302,4 +302,17 @@ interface Float32Array {
 
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
+}
+
+interface ArrayConstructor {
+    readonly [Symbol.species]: ArrayConstructor;
+}
+interface MapConstructor {
+    readonly [Symbol.species]: MapConstructor;
+}
+interface SetConstructor {
+    readonly [Symbol.species]: SetConstructor;
+}
+interface ArrayBufferConstructor {
+    readonly [Symbol.species]: ArrayBufferConstructor;
 }

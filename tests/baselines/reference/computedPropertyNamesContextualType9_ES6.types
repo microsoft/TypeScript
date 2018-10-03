@@ -12,14 +12,16 @@ interface I {
 var o: I = {
 >o : I
 >I : I
->{    [+"foo"]: "",    [+"bar"]: 0} : { [x: number]: "" | 0; }
+>{    [+"foo"]: "",    [+"bar"]: 0} : { [x: number]: string | number; }
 
     [+"foo"]: "",
+>[+"foo"] : string
 >+"foo" : number
 >"foo" : "foo"
 >"" : ""
 
     [+"bar"]: 0
+>[+"bar"] : number
 >+"bar" : number
 >"bar" : "bar"
 >0 : 0

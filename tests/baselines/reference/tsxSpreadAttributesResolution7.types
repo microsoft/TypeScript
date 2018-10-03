@@ -37,7 +37,7 @@ const textPropsFalse: TextProps = {
 >{    editable: false} : { editable: false; }
 
     editable: false
->editable : boolean
+>editable : false
 >false : false
 
 };
@@ -54,7 +54,7 @@ const textPropsTrue: TextProps = {
 >{    editable: true,    onEdit: () => {}} : { editable: true; onEdit: () => void; }
 
     editable: true,
->editable : boolean
+>editable : true
 >true : true
 
     onEdit: () => {}

@@ -1,5 +1,7 @@
 === tests/cases/compiler/module_augmentUninstantiatedModule.ts ===
 declare module "foo" {
+>"foo" : typeof "foo"
+
    namespace M {}
 >M : any
 
@@ -11,5 +13,8 @@ declare module "foo" {
 }
 
 declare module "bar" {
+>"bar" : typeof "bar"
+
     module "foo" {}
+>"foo" : any
 }

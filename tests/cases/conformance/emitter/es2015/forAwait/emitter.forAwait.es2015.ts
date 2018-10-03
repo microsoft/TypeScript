@@ -24,3 +24,19 @@ async function* f4() {
     for await (x of y) {
     }
 }
+// @filename: file5.ts
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+    let y: any;
+    outer: for await (const x of y) {
+        continue outer;
+    }
+}
+// @filename: file6.ts
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+    let y: any;
+    outer: for await (const x of y) {
+        continue outer;
+    }
+}

@@ -47,3 +47,4 @@ export declare var a: number;
 export declare var x: number;
 export declare var m: number;
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_1.d.ts]
+export {};

@@ -2,18 +2,18 @@
 
 // @allowNonTsExtensions: true
 // @Filename: test123.js
-//// var bar = 10, /*1*/foo = function() { };
-//// /*2*/foo.prototype.instanceMethod1 = function() { return "this is name"; };
-//// /*3*/foo.prototype.instanceMethod2 = () => { return "this is name"; };
-//// /*4*/foo.prototype.instanceProp1 = "hello";
-//// /*5*/foo.prototype.instanceProp2 = undefined;
-//// /*6*/foo.staticProp = "world";
-//// /*7*/foo.staticMethod1 = function() { return "this is static name"; };
-//// /*8*/foo.staticMethod2 = () => "this is static name";
+////var bar = 10, foo = function() { };
+////foo.prototype.instanceMethod1 = function() { return "this is name"; };
+////foo.prototype.instanceMethod2 = () => { return "this is name"; };
+////foo.prototype.instanceProp1 = "hello";
+////foo.prototype.instanceProp2 = undefined;
+////foo.staticProp = "world";
+////foo.staticMethod1 = function() { return "this is static name"; };
+////foo.staticMethod2 = () => "this is static name";
 
-
-['1', '2', '3', '4', '5', '6', '7', '8'].forEach(m => verify.applicableRefactorAvailableAtMarker(m));
-verify.fileAfterApplyingRefactorAtMarker('7',
+verify.codeFix({
+    description: "Convert function to an ES2015 class",
+    newFileContent:
 `var bar = 10;
 class foo {
     constructor() { }
@@ -25,4 +25,5 @@ class foo {
 foo.prototype.instanceProp1 = "hello";
 foo.prototype.instanceProp2 = undefined;
 foo.staticProp = "world";
-`, 'Convert to ES2015 class', 'convert');
+`,
+});

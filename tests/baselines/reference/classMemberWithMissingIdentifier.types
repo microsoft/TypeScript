@@ -3,6 +3,5 @@ class C {
 >C : C
 
     public {};
-> : {}
->{} : {}
+> : any
 }

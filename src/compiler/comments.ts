@@ -260,7 +260,7 @@ namespace ts {
             }
         }
 
-        function emitLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
@@ -274,7 +274,7 @@ namespace ts {
             if (hasTrailingNewLine) {
                 writer.writeLine();
             }
-            else {
+            else if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 writer.write(" ");
             }
         }

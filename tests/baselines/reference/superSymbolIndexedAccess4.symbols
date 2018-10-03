@@ -9,6 +9,7 @@ class Bar {
 >Bar : Symbol(Bar, Decl(superSymbolIndexedAccess4.ts, 0, 35))
 
     [symbol]() {
+>[symbol] : Symbol(Bar[symbol], Decl(superSymbolIndexedAccess4.ts, 2, 11))
 >symbol : Symbol(symbol, Decl(superSymbolIndexedAccess4.ts, 0, 3))
 
         return super[symbol]();

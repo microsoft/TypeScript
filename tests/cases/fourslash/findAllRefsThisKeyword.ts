@@ -32,8 +32,4 @@ verify.referenceGroups(g0, [{ definition: "(parameter) this: any", ranges: [g0, 
 verify.referenceGroups(g1, [{ definition: "this: any", ranges: [g0, g1] }]);
 verify.singleReferenceGroup("this: typeof C", [x, y]);
 verify.singleReferenceGroup("this: this", [constructor, method]);
-verify.referenceGroups(propDef, [{ definition: "(property) this: number", ranges: [propDef, propUse] }]);
-verify.referenceGroups(propUse, [
-    { definition: "(property) this: number", ranges: [propDef] },
-    { definition: "(property) this: number", ranges: [propUse] },
-]);
+verify.singleReferenceGroup("(property) this: number", [propDef, propUse]);

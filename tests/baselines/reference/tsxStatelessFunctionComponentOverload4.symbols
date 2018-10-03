@@ -77,6 +77,7 @@ const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribu
 declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
 >j : Symbol(j, Decl(file.tsx, 20, 33))
+>"extra-data" : Symbol("extra-data", Decl(file.tsx, 20, 37))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 

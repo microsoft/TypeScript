@@ -19,13 +19,9 @@ prefix("a", ...ns)
 rest("d", ...ns)
 
 
-// this covers the arguments case
+// extra arguments
 normal("g", ...ns)
-normal("h", ...mixed)
-normal("i", ...tuple)
 thunk(...ns)
-thunk(...mixed)
-thunk(...tuple)
 
 // bad
 all(...mixed)
@@ -47,13 +43,9 @@ weird.apply(void 0, mixed);
 weird.apply(void 0, tuple);
 prefix.apply(void 0, ["a"].concat(ns));
 rest.apply(void 0, ["d"].concat(ns));
-// this covers the arguments case
+// extra arguments
 normal.apply(void 0, ["g"].concat(ns));
-normal.apply(void 0, ["h"].concat(mixed));
-normal.apply(void 0, ["i"].concat(tuple));
 thunk.apply(void 0, ns);
-thunk.apply(void 0, mixed);
-thunk.apply(void 0, tuple);
 // bad
 all.apply(void 0, mixed);
 all.apply(void 0, tuple);

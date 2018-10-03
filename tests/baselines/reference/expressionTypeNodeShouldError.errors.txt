@@ -1,5 +1,5 @@
 tests/cases/compiler/base.d.ts(1,23): error TS1005: ',' expected.
-tests/cases/compiler/base.d.ts(1,34): error TS1005: '=' expected.
+tests/cases/compiler/base.d.ts(1,34): error TS1005: ',' expected.
 tests/cases/compiler/boolean.ts(7,23): error TS1005: ',' expected.
 tests/cases/compiler/boolean.ts(7,24): error TS1134: Variable declaration expected.
 tests/cases/compiler/boolean.ts(11,16): error TS2304: Cannot find name 'document'.
@@ -19,7 +19,7 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
                           ~
 !!! error TS1005: ',' expected.
                                      ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
     
 ==== tests/cases/compiler/string.ts (4 errors) ====
     interface String {

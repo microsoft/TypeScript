@@ -47,7 +47,7 @@ verify.completionListIsGlobal(true);
 goTo.marker("6");
 verify.completionListIsGlobal(false);
 goTo.marker("7");
-verify.completionListIsGlobal(false);
+verify.completionListIsGlobal(true);
 goTo.marker("8");
 verify.completionListIsGlobal(false);
 goTo.marker("9");

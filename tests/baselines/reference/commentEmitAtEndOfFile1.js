@@ -18,4 +18,4 @@ var foo;
 (function (foo) {
     function bar() { }
 })(foo || (foo = {}));
-// test #4 
+// test #4

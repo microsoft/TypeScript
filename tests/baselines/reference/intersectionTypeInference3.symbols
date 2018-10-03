@@ -8,6 +8,7 @@ type Nominal<Kind extends string, Type> = Type & {
 >Type : Symbol(Type, Decl(intersectionTypeInference3.ts, 2, 33))
 
     [Symbol.species]: Kind;
+>[Symbol.species] : Symbol([Symbol.species], Decl(intersectionTypeInference3.ts, 2, 50))
 >Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
 >species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

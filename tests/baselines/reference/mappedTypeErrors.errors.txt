@@ -16,10 +16,10 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(37,24): error TS2344: T
       Type 'T' is not assignable to type '"visible"'.
         Type 'string | number' is not assignable to type '"visible"'.
           Type 'string' is not assignable to type '"visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ readonly [P in keyof T]: T[P]; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 64:8, but here has type '{ [P in keyof T]: T[P][]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(75,45): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
   Property 'y' is missing in type '{ x: number; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(77,59): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
@@ -138,20 +138,20 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
         var x: { [P in keyof T]: T[P] };
         var x: { [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]?: T[P] | undefined; }'.
         var x: { readonly [P in keyof T]: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ readonly [P in keyof T]: T[P]; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]: T[P]; }'.
         var x: { readonly [P in keyof T]?: T[P] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 57:8, but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
     }
     
     function f12<T>() {
         var x: { [P in keyof T]: T[P] };
         var x: { [P in keyof T]: T[P][] };  // Error
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type '{ [P in keyof T]: T[P]; }' at tests/cases/conformance/types/mapped/mappedTypeErrors.ts 64:8, but here has type '{ [P in keyof T]: T[P][]; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
     }
     
     // Check that inferences to mapped types are secondary

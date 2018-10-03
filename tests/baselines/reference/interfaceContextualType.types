@@ -41,7 +41,7 @@ class Bug {
 >values : IMap
 >'comments' : "comments"
 >{ italic: true } : { italic: true; }
->italic : boolean
+>italic : true
 >true : true
     }
     shouldBeOK() {
@@ -57,7 +57,7 @@ class Bug {
             comments: { italic: true }
 >comments : { italic: true; }
 >{ italic: true } : { italic: true; }
->italic : boolean
+>italic : true
 >true : true
 
         };

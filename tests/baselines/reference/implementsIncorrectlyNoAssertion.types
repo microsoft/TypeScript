@@ -1,0 +1,29 @@
+=== tests/cases/compiler/implementsIncorrectlyNoAssertion.ts ===
+declare class Foo {
+>Foo : Foo
+
+    x: string;
+>x : string
+}
+declare class Bar {
+>Bar : Bar
+
+    y: string;
+>y : string
+}
+type Wrapper = Foo & Bar;
+>Wrapper : Wrapper
+>Foo : Foo
+>Bar : Bar
+
+class Baz implements Wrapper {
+>Baz : Baz
+>Wrapper : Wrapper
+
+    x: number;
+>x : number
+
+    y: string;
+>y : string
+}
+

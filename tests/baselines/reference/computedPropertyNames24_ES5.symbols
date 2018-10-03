@@ -13,4 +13,5 @@ class C extends Base {
 >Base : Symbol(Base, Decl(computedPropertyNames24_ES5.ts, 0, 0))
 
     [super.bar()]() { }
+>[super.bar()] : Symbol(C[super.bar()], Decl(computedPropertyNames24_ES5.ts, 5, 22))
 }

@@ -12,6 +12,7 @@ function f<T extends number>() {
 >v : Symbol(v, Decl(typeParameterExtendsPrimitive.ts, 3, 7))
 
         [t]: 0
+>[t] : Symbol([t], Decl(typeParameterExtendsPrimitive.ts, 3, 13))
 >t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
     }
     return t + t;

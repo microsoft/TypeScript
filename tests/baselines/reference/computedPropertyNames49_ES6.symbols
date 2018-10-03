@@ -6,12 +6,18 @@ var x = {
 >p1 : Symbol(p1, Decl(computedPropertyNames49_ES6.ts, 0, 9))
 
     get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 1, 11))
+
         throw 10;
     },
     get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 4, 6))
+
         return 10;
     },
     set [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames49_ES6.ts, 7, 6))
+
         // just throw
         throw 10;
     },

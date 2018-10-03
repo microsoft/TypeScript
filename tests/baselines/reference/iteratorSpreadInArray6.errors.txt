@@ -1,10 +1,9 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,14): error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | ReadonlyArray<number>'.
-  Type 'symbol[]' is not assignable to type 'ReadonlyArray<number>'.
-    Types of property 'concat' are incompatible.
-      Type '{ (...items: ReadonlyArray<symbol>[]): symbol[]; (...items: (symbol | ReadonlyArray<symbol>)[]): symbol[]; }' is not assignable to type '{ (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }'.
-        Types of parameters 'items' and 'items' are incompatible.
-          Type 'ReadonlyArray<number>' is not assignable to type 'ReadonlyArray<symbol>'.
-            Type 'number' is not assignable to type 'symbol'.
+tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,14): error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | ConcatArray<number>'.
+  Type 'symbol[]' is not assignable to type 'ConcatArray<number>'.
+    Types of property 'slice' are incompatible.
+      Type '(start?: number, end?: number) => symbol[]' is not assignable to type '(start?: number, end?: number) => number[]'.
+        Type 'symbol[]' is not assignable to type 'number[]'.
+          Type 'symbol' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts (1 errors) ====
@@ -24,10 +23,9 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,14): error TS234
     var array: number[] = [0, 1];
     array.concat([...new SymbolIterator]);
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | ReadonlyArray<number>'.
-!!! error TS2345:   Type 'symbol[]' is not assignable to type 'ReadonlyArray<number>'.
-!!! error TS2345:     Types of property 'concat' are incompatible.
-!!! error TS2345:       Type '{ (...items: ReadonlyArray<symbol>[]): symbol[]; (...items: (symbol | ReadonlyArray<symbol>)[]): symbol[]; }' is not assignable to type '{ (...items: ReadonlyArray<number>[]): number[]; (...items: (number | ReadonlyArray<number>)[]): number[]; }'.
-!!! error TS2345:         Types of parameters 'items' and 'items' are incompatible.
-!!! error TS2345:           Type 'ReadonlyArray<number>' is not assignable to type 'ReadonlyArray<symbol>'.
-!!! error TS2345:             Type 'number' is not assignable to type 'symbol'.
+!!! error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | ConcatArray<number>'.
+!!! error TS2345:   Type 'symbol[]' is not assignable to type 'ConcatArray<number>'.
+!!! error TS2345:     Types of property 'slice' are incompatible.
+!!! error TS2345:       Type '(start?: number, end?: number) => symbol[]' is not assignable to type '(start?: number, end?: number) => number[]'.
+!!! error TS2345:         Type 'symbol[]' is not assignable to type 'number[]'.
+!!! error TS2345:           Type 'symbol' is not assignable to type 'number'.

@@ -10,6 +10,8 @@ let a: x.A; // should not work
 
 === tests/cases/compiler/file1.d.ts ===
 declare module "file1" {
+>"file1" : typeof "file1"
+
     function foo(): void;
 >foo : () => void
 
@@ -24,6 +26,8 @@ import x = require("file1");
 
 // should error since './file1' does not have namespace meaning
 declare module "file1" {
+>"file1" : any
+
     interface A { a }
 >A : A
 >a : any

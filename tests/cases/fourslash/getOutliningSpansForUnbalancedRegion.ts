@@ -7,5 +7,4 @@
 ////
 ////// #endregion matched|]
 
-debugger;
 verify.outliningSpansInCurrentFile(test.ranges());

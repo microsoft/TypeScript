@@ -3,5 +3,6 @@ class C {
 >C : C
 
    public [e]
+>[e] : any
 >e : any
 }

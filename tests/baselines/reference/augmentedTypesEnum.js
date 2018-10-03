@@ -100,4 +100,4 @@ var e6b;
 })(e6b || (e6b = {})); // should be error
 // enum then import, messes with error reporting
 //enum e7 { One }
-//import e7 = require(''); // should be error 
+//import e7 = require(''); // should be error

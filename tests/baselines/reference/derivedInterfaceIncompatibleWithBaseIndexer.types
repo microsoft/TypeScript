@@ -17,6 +17,7 @@ interface Derived extends Base {
 >Base : Base
 
     1: { y: number } // error
+>1 : { y: number; }
 >y : number
 }
 
@@ -25,6 +26,7 @@ interface Derived2 extends Base {
 >Base : Base
 
     '1': { y: number } // error
+>'1' : { y: number; }
 >y : number
 }
 
@@ -52,6 +54,7 @@ interface Derived5 extends Base {
 >Base : Base
 
     1: { x: number } // error
+>1 : { x: number; }
 >x : number
 }
 
@@ -60,5 +63,6 @@ interface Derived5 extends Base {
 >Base : Base
 
     '1': { x: number } // error
+>'1' : { x: number; }
 >x : number
 }

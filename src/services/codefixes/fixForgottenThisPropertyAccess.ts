@@ -1,20 +1,35 @@
 /* @internal */
 namespace ts.codefix {
+    const fixId = "forgottenThisPropertyAccess";
+    const errorCodes = [Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code];
     registerCodeFix({
-        errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code],
-        getCodeActions: (context: CodeFixContext) => {
-            const sourceFile = context.sourceFile;
-            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
-            if (token.kind !== SyntaxKind.Identifier) {
+        errorCodes,
+        getCodeActions(context) {
+            const { sourceFile } = context;
+            const token = getNode(sourceFile, context.span.start);
+            if (!token) {
                 return undefined;
             }
-            const changeTracker = textChanges.ChangeTracker.fromContext(context);
-            changeTracker.replaceNode(sourceFile, token, createPropertyAccess(createThis(), <Identifier>token));
-
-            return [{
-                description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable),
-                changes: changeTracker.getChanges()
-            }];
-        }
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, token));
+            return [{ description: getLocaleSpecificMessage(Diagnostics.Add_this_to_unresolved_variable), changes, fixId }];
+        },
+        fixIds: [fixId],
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
+            doChange(changes, context.sourceFile, getNode(diag.file, diag.start!));
+        }),
     });
+
+    function getNode(sourceFile: SourceFile, pos: number): Identifier | undefined {
+        const node = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        return isIdentifier(node) ? node : undefined;
+    }
+
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier | undefined): void {
+        if (!token) {
+            return;
+        }
+        // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
+        suppressLeadingAndTrailingTrivia(token);
+        changes.replaceNode(sourceFile, token, createPropertyAccess(createThis(), token), textChanges.useNonAdjustedPositions);
+    }
 }

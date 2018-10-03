@@ -41,7 +41,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{string} "
+          "text": "{string}"
         }
       ]
     }
@@ -88,7 +88,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{number} "
+          "text": "{number}"
         }
       ]
     }
@@ -135,7 +135,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{boolean} "
+          "text": "{boolean}"
         }
       ]
     }
@@ -182,7 +182,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{void} "
+          "text": "{void}"
         }
       ]
     }
@@ -229,7 +229,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{undefined} "
+          "text": "{undefined}"
         }
       ]
     }
@@ -276,7 +276,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{null} "
+          "text": "{null}"
         }
       ]
     }
@@ -331,7 +331,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{array} "
+          "text": "{array}"
         }
       ]
     }
@@ -390,7 +390,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{promise} "
+          "text": "{promise}"
         }
       ]
     }
@@ -437,7 +437,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{?number} "
+          "text": "{?number}"
         }
       ]
     }
@@ -484,7 +484,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{function} "
+          "text": "{function}"
         }
       ]
     }
@@ -567,7 +567,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{function (number): number} "
+          "text": "{function (number): number}"
         }
       ]
     }
@@ -630,7 +630,7 @@
       "tags": [
         {
           "name": "type",
-          "text": "{string | number} "
+          "text": "{string | number}"
         }
       ]
     }

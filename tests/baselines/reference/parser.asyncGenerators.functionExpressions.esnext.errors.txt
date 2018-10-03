@@ -2,7 +2,7 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterIn
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitMissingValueIsError.ts(2,10): error TS1109: Expression expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsError.ts(1,29): error TS1005: '(' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsError.ts(1,29): error TS2451: Cannot redeclare block-scoped variable 'await'.
-tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsError.ts(1,34): error TS1005: '=' expected.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsError.ts(1,34): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitNameIsError.ts(1,37): error TS1005: '=>' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(1,30): error TS1138: Parameter declaration expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(1,30): error TS2451: Cannot redeclare block-scoped variable 'await'.
@@ -20,7 +20,7 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpr
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInParameterInitializerIsError.ts(1,34): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsError.ts(1,29): error TS1005: '(' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsError.ts(1,29): error TS2451: Cannot redeclare block-scoped variable 'yield'.
-tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsError.ts(1,34): error TS1005: '=' expected.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsError.ts(1,34): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldNameIsError.ts(1,37): error TS1005: '=>' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(1,30): error TS1138: Parameter declaration expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(1,30): error TS2451: Cannot redeclare block-scoped variable 'yield'.
@@ -38,7 +38,7 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingVa
                                 ~~~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'await'.
                                      ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
                                         ~
 !!! error TS1005: '=>' expected.
     };
@@ -49,7 +49,7 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingVa
                                 ~~~~~
 !!! error TS2451: Cannot redeclare block-scoped variable 'yield'.
                                      ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
                                         ~
 !!! error TS1005: '=>' expected.
     };

@@ -38,7 +38,10 @@ interface tup {
 >tup : Symbol(tup, Decl(arrayLiterals3.ts, 23, 67))
 
     0: number[]|string[];
+>0 : Symbol(tup[0], Decl(arrayLiterals3.ts, 25, 15))
+
     1: number[]|string[];
+>1 : Symbol(tup[1], Decl(arrayLiterals3.ts, 26, 25))
 }
 interface myArray extends Array<Number> { }
 >myArray : Symbol(myArray, Decl(arrayLiterals3.ts, 28, 1))

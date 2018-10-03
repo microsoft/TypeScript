@@ -9,6 +9,8 @@ namespace Harness.Parallel.Host {
         on(event: "error", listener: (err: Error) => void): this;
         on(event: "exit", listener: (code: number, signal: string) => void): this;
         on(event: "message", listener: (message: ParallelClientMessage) => void): this;
+        kill(signal?: string): void;
+        currentTasks?: {file: string}[]; // Custom monkeypatch onto child process handle
     }
 
     interface ProgressBarsOptions {
@@ -31,7 +33,7 @@ namespace Harness.Parallel.Host {
         return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;
     }
     function readSavedPerfData(target?: string): {[testHash: string]: number} {
-        const perfDataContents = Harness.IO.readFile(perfdataFileName(target));
+        const perfDataContents = IO.readFile(perfdataFileName(target));
         if (perfDataContents) {
             return JSON.parse(perfDataContents);
         }
@@ -77,18 +79,18 @@ namespace Harness.Parallel.Host {
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         const { statSync }: { statSync(path: string): { size: number }; } = require("fs");
+        const path: { join: (...args: string[]) => string } = require("path");
         for (const runner of runners) {
-            const files = runner.enumerateTestFiles();
-            for (const file of files) {
+            for (const file of runner.enumerateTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {
-                        size = statSync(file).size;
+                        size = statSync(path.join(runner.workingDirectory, file)).size;
                     }
                     catch {
                         // May be a directory
                         try {
-                            size = Harness.IO.listFiles(file, /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
+                            size = IO.listFiles(path.join(runner.workingDirectory, file), /.*/g, { recursive: true }).reduce((acc, elem) => acc + statSync(elem).size, 0);
                         }
                         catch {
                             // Unknown test kind, just return 0 and let the historical analysis take over after one run
@@ -134,13 +136,26 @@ namespace Harness.Parallel.Host {
         const newPerfData: {[testHash: string]: number} = {};
 
         const workers: ChildProcessPartial[] = [];
+        const defaultTimeout = globalTimeout !== undefined
+            ? globalTimeout
+            : mocha && mocha.suite && mocha.suite._timeout
+                ? mocha.suite._timeout
+                : 20000; // 20 seconds
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: Harness.lightMode, listenForWork: true, runUnitTests };
+            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
-            Harness.IO.writeFile(configPath, JSON.stringify(config));
+            IO.writeFile(configPath, JSON.stringify(config));
             const child = fork(__filename, [`--config="${configPath}"`]);
+            let currentTimeout = defaultTimeout;
+            const killChild = () => {
+                child.kill();
+                console.error(`Worker exceeded ${currentTimeout}ms timeout ${child.currentTasks && child.currentTasks.length ? `while running test '${child.currentTasks[0].file}'.` : `during test setup.`}`);
+                return process.exit(2);
+            };
+            let timer = setTimeout(killChild, currentTimeout);
+            const timeoutStack: number[] = [];
             child.on("error", err => {
                 console.error("Unexpected error in child process:");
                 console.error(err);
@@ -160,8 +175,25 @@ namespace Harness.Parallel.Host {
         Stack: ${data.payload.stack}`);
                         return process.exit(2);
                     }
+                    case "timeout": {
+                        clearTimeout(timer);
+                        if (data.payload.duration === "reset") {
+                            currentTimeout = timeoutStack.pop() || defaultTimeout;
+                        }
+                        else {
+                            timeoutStack.push(currentTimeout);
+                            currentTimeout = data.payload.duration;
+                        }
+                        timer = setTimeout(killChild, currentTimeout); // Reset timeout on timeout update, for when a timeout changes while a suite is executing
+                        break;
+                    }
                     case "progress":
                     case "result": {
+                        clearTimeout(timer);
+                        timer = setTimeout(killChild, currentTimeout);
+                        if (child.currentTasks) {
+                            child.currentTasks.shift();
+                        }
                         totalPassing += data.payload.passing;
                         if (data.payload.errors.length) {
                             errorResults = errorResults.concat(data.payload.errors);
@@ -195,6 +227,7 @@ namespace Harness.Parallel.Host {
                             while (tasks.length && taskList.reduce((p, c) => p + c.size, 0) < chunkSize) {
                                 taskList.push(tasks.pop());
                             }
+                            child.currentTasks = taskList;
                             if (taskList.length === 1) {
                                 child.send({ type: "test", payload: taskList[0] });
                             }
@@ -208,8 +241,8 @@ namespace Harness.Parallel.Host {
             workers.push(child);
         }
 
-        // It's only really worth doing an initial batching if there are a ton of files to go through
-        if (totalFiles > 1000) {
+        // It's only really worth doing an initial batching if there are a ton of files to go through (and they have estimates)
+        if (totalFiles > 1000 && batchSize > 0) {
             console.log("Batching initial test lists...");
             const batches: { runner: TestRunnerKind | "unittest", file: string, size: number }[][] = new Array(batchCount);
             const doneBatching = new Array(batchCount);
@@ -252,18 +285,22 @@ namespace Harness.Parallel.Host {
             for (const worker of workers) {
                 const payload = batches.pop();
                 if (payload) {
+                    worker.currentTasks = payload;
                     worker.send({ type: "batch", payload });
                 }
                 else { // Out of batches, send off just one test
                     const payload = tasks.pop();
                     ts.Debug.assert(!!payload); // The reserve kept above should ensure there is always an initial task available, even in suboptimal scenarios
+                    worker.currentTasks = [payload];
                     worker.send({ type: "test", payload });
                 }
             }
         }
         else {
             for (let i = 0; i < workerCount; i++) {
-                workers[i].send({ type: "test", payload: tasks.pop() });
+                const task = tasks.pop();
+                workers[i].currentTasks = [task];
+                workers[i].send({ type: "test", payload: task });
             }
         }
 
@@ -327,7 +364,7 @@ namespace Harness.Parallel.Host {
                 reporter.epilogue();
             }
 
-            Harness.IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
+            IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4)); // tslint:disable-line:no-null-keyword
 
             process.exit(errorResults.length);
         }
@@ -347,7 +384,7 @@ namespace Harness.Parallel.Host {
             };
         }
 
-        describe = ts.noop as any; // Disable unit tests
+        (global as any).describe = ts.noop as any; // Disable unit tests
 
         return;
     }

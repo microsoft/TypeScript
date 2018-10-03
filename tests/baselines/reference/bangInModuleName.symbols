@@ -6,9 +6,12 @@ import * as http from 'intern/dojo/node!http';
 
 === tests/cases/compiler/a.d.ts ===
 declare module "http" {
+>"http" : Symbol("http", Decl(a.d.ts, 0, 0))
 }
 
 declare module 'intern/dojo/node!http' {
+>'intern/dojo/node!http' : Symbol('intern/dojo/node!http', Decl(a.d.ts, 1, 1))
+
     import http = require('http');
 >http : Symbol(http, Decl(a.d.ts, 3, 40))
 

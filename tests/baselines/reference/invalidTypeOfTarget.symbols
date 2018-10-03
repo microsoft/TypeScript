@@ -19,6 +19,7 @@ var x6: typeof null;
 
 var x7: typeof function f() { };
 >x7 : Symbol(x7, Decl(invalidTypeOfTarget.ts, 6, 3))
+>f : Symbol(f, Decl(invalidTypeOfTarget.ts, 6, 23))
 
 var x8: typeof /123/;
 >x8 : Symbol(x8, Decl(invalidTypeOfTarget.ts, 7, 3))

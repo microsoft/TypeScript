@@ -1,0 +1,36 @@
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,25): error TS2450: Enum 'Enum' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(2,30): error TS2448: Block-scoped variable 'A' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(3,31): error TS2448: Block-scoped variable 'ObjLiteral' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(3,42): error TS2448: Block-scoped variable 'A' used before its declaration.
+tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts(4,40): error TS2448: Block-scoped variable 'A' used before its declaration.
+
+
+==== tests/cases/compiler/classStaticInitializersUsePropertiesBeforeDeclaration.ts (5 errors) ====
+    class Foo {
+        static enumMember = Enum.A;
+                            ~~~~
+!!! error TS2450: Enum 'Enum' used before its declaration.
+                                 ~
+!!! error TS2448: Block-scoped variable 'A' used before its declaration.
+        static objLiteralMember = ObjLiteral.A;
+                                  ~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'ObjLiteral' used before its declaration.
+                                             ~
+!!! error TS2448: Block-scoped variable 'A' used before its declaration.
+        static namespaceMember = Namespace.A;
+                                           ~
+!!! error TS2448: Block-scoped variable 'A' used before its declaration.
+    }
+    
+    enum Enum {
+        A
+    }
+    
+    const ObjLiteral = {
+        A: 0
+    };
+    
+    namespace Namespace {
+        export let A = 0
+    }
+    

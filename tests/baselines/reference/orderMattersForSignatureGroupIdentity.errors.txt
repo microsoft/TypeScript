@@ -1,6 +1,6 @@
 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(19,5): error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
-tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' has type 'A' at tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts 20:4, but here has type 'C'.
+tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(22,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
 
@@ -32,7 +32,7 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     var w: A;
     var w: C;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' has type 'A' at tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts 20:4, but here has type 'C'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'w' must be of type 'A', but here has type 'C'.
     
     w({ s: "", n: 0 }).toLowerCase();
         ~~~~~

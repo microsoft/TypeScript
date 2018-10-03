@@ -16,45 +16,48 @@ namespace ts {
             const printsCorrectly = makePrintsCorrectly("printsFileCorrectly");
             // Avoid eagerly creating the sourceFile so that `createSourceFile` doesn't run unless one of these tests is run.
             let sourceFile: SourceFile;
-            before(() => sourceFile = createSourceFile("source.ts", `
-                interface A<T> {
-                    // comment1
-                    readonly prop?: T;
+            before(() => {
+                sourceFile = createSourceFile("source.ts", `
+                    interface A<T> {
+                        // comment1
+                        readonly prop?: T;
 
-                    // comment2
-                    method(): void;
+                        // comment2
+                        method(): void;
 
-                    // comment3
-                    new <T>(): A<T>;
+                        // comment3
+                        new <T>(): A<T>;
 
-                    // comment4
-                    <T>(): A<T>;
-                }
+                        // comment4
+                        <T>(): A<T>;
+                    }
 
-                // comment5
-                type B = number | string | object;
-                type C = A<number> & { x: string; }; // comment6
+                    // comment5
+                    type B = number | string | object;
+                    type C = A<number> & { x: string; }; // comment6
 
-                // comment7
-                enum E1 {
-                    // comment8
-                    first
-                }
+                    // comment7
+                    enum E1 {
+                        // comment8
+                        first
+                    }
 
-                const enum E2 {
-                    second
-                }
+                    const enum E2 {
+                        second
+                    }
 
-                // comment9
-                console.log(1 + 2);
+                    // comment9
+                    console.log(1 + 2);
 
-                // comment10
-                function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
-            `, ScriptTarget.ES2015));
+                    // comment10
+                    function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
+                `, ScriptTarget.ES2015);
+            });
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
             // github #14948
+            // tslint:disable-next-line no-invalid-template-strings
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
 
             // github #18071
@@ -64,20 +67,22 @@ namespace ts {
         describe("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
             let bundle: Bundle;
-            before(() => bundle = createBundle([
-                createSourceFile("a.ts", `
-                    /*! [a.ts] */
+            before(() => {
+                bundle = createBundle([
+                    createSourceFile("a.ts", `
+                        /*! [a.ts] */
 
-                    // comment0
-                    const a = 1;
-                `, ScriptTarget.ES2015),
-                createSourceFile("b.ts", `
-                    /*! [b.ts] */
+                        // comment0
+                        const a = 1;
+                    `, ScriptTarget.ES2015),
+                    createSourceFile("b.ts", `
+                        /*! [b.ts] */
 
-                    // comment1
-                    const b = 2;
-                `, ScriptTarget.ES2015)
-            ]));
+                        // comment1
+                        const b = 2;
+                    `, ScriptTarget.ES2015)
+                ]);
+            });
             printsCorrectly("default", {}, printer => printer.printBundle(bundle));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printBundle(bundle));
         });

@@ -4,6 +4,7 @@ const expect: typeof _chai.expect = _chai.expect;
 
 namespace ts.server {
     let lastWrittenToHost: string;
+    const noopFileWatcher: FileWatcher = { close: noop };
     const mockHost: ServerHost = {
         args: [],
         newLine: "\n",
@@ -26,6 +27,8 @@ namespace ts.server {
         setImmediate: () => 0,
         clearImmediate: noop,
         createHash: Harness.mockHash,
+        watchFile: () => noopFileWatcher,
+        watchDirectory: () => noopFileWatcher
     };
 
     class TestSession extends Session {
@@ -39,7 +42,7 @@ namespace ts.server {
         let lastSent: protocol.Message;
 
         function createSession(): TestSession {
-            const opts: server.SessionOptions = {
+            const opts: SessionOptions = {
                 host: mockHost,
                 cancellationToken: nullCancellationToken,
                 useSingleInferredProject: false,
@@ -54,7 +57,7 @@ namespace ts.server {
         }
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -170,6 +173,17 @@ namespace ts.server {
                         allowNonTsExtensions: true // injected by tsserver
                     });
             });
+
+            it("Status request gives ts.version", () => {
+                const req: protocol.StatusRequest = {
+                    command: CommandNames.Status,
+                    seq: 0,
+                    type: "request"
+                };
+
+                const expected: protocol.StatusResponseBody = { version };
+                assert.deepEqual(session.executeCommand(req).response, expected);
+            });
         });
 
         describe("onMessage", () => {
@@ -200,6 +214,7 @@ namespace ts.server {
                 CommandNames.GeterrForProject,
                 CommandNames.SemanticDiagnosticsSync,
                 CommandNames.SyntacticDiagnosticsSync,
+                CommandNames.SuggestionDiagnosticsSync,
                 CommandNames.NavBar,
                 CommandNames.NavBarFull,
                 CommandNames.Navto,
@@ -221,6 +236,7 @@ namespace ts.server {
                 CommandNames.Saveto,
                 CommandNames.SignatureHelp,
                 CommandNames.SignatureHelpFull,
+                CommandNames.Status,
                 CommandNames.TypeDefinition,
                 CommandNames.ProjectInfo,
                 CommandNames.ReloadProjects,
@@ -245,6 +261,8 @@ namespace ts.server {
                 CommandNames.GetApplicableRefactors,
                 CommandNames.GetEditsForRefactor,
                 CommandNames.GetEditsForRefactorFull,
+                CommandNames.OrganizeImports,
+                CommandNames.OrganizeImportsFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -310,14 +328,14 @@ namespace ts.server {
 
         describe("send", () => {
             it("is an overrideable handle which sends protocol messages over the wire", () => {
-                const msg: server.protocol.Request = { seq: 0, type: "request", command: "" };
+                const msg: protocol.Request = { seq: 0, type: "request", command: "" };
                 const strmsg = JSON.stringify(msg);
                 const len = 1 + Utils.byteLength(strmsg, "utf8");
                 const resultMsg = `Content-Length: ${len}\r\n\r\n${strmsg}\n`;
 
                 session.send = Session.prototype.send;
                 assert(session.send);
-                expect(session.send(msg)).to.not.exist;
+                expect(session.send(msg)).to.not.exist; // tslint:disable-line no-unused-expression
                 expect(lastWrittenToHost).to.equal(resultMsg);
             });
         });
@@ -328,7 +346,7 @@ namespace ts.server {
                     item: false
                 };
                 const command = "newhandle";
-                const result: ts.server.HandlerResponse = {
+                const result: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -345,7 +363,7 @@ namespace ts.server {
                 const respBody = {
                     item: false
                 };
-                const resp: ts.server.HandlerResponse = {
+                const resp: HandlerResponse = {
                     response: respBody,
                     responseRequired: true
                 };
@@ -402,7 +420,7 @@ namespace ts.server {
     describe("exceptions", () => {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
-        let oldPrepare: Function;
+        let oldPrepare: AnyFunction;
         before(() => {
             oldPrepare = (Error as any).prepareStackTrace;
             delete (Error as any).prepareStackTrace;
@@ -524,14 +542,14 @@ namespace ts.server {
             });
         });
         it("has access to the project service", () => {
-            class ServiceSession extends TestSession {
+            // tslint:disable-next-line no-unused-expression
+            new class extends TestSession {
                 constructor() {
                     super();
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            }
-            new ServiceSession();
+            }();
         });
     });
 
@@ -692,7 +710,7 @@ namespace ts.server {
             const text = `// blank line\nconst x = 0;`;
             const renameLocationInOldText = text.indexOf("0");
             const fileName = "/a.ts";
-            const edits: ts.FileTextChanges = {
+            const edits: FileTextChanges = {
                 fileName,
                 textChanges: [
                     {

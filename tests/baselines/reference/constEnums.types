@@ -103,6 +103,12 @@ const enum Enum1 {
 >E : Enum1
 >1 : 1
 
+    PQ = E ** 2,
+>PQ : Enum1
+>E ** 2 : number
+>E : Enum1
+>2 : 2
+
     Q = -D,
 >Q : Enum1
 >-D : number
@@ -477,6 +483,11 @@ function foo(x: Enum1) {
 >Enum1.P : Enum1
 >Enum1 : typeof Enum1
 >P : Enum1
+
+        case Enum1.PQ:
+>Enum1.PQ : Enum1
+>Enum1 : typeof Enum1
+>PQ : Enum1
 
         case Enum1.Q:
 >Enum1.Q : Enum1

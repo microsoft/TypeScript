@@ -46,14 +46,14 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
-        b: "browser",
-        d: "debug", "debug-brk": "debug",
-        i: "inspect", "inspect-brk": "inspect",
-        t: "tests", test: "tests",
-        r: "reporter",
-        c: "colors", color: "colors",
-        f: "files", file: "files",
-        w: "workers",
+        "b": "browser",
+        "d": "debug", "debug-brk": "debug",
+        "i": "inspect", "inspect-brk": "inspect",
+        "t": "tests", "test": "tests",
+        "ru": "runners", "runner": "runners",
+        "r": "reporter",
+        "c": "colors", "color": "colors",
+        "w": "workers",
     },
     default: {
         soft: false,
@@ -64,15 +64,16 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         browser: process.env.browser || process.env.b || "IE",
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
+        runners: process.env.runners || process.env.runner || process.env.ru,
         light: process.env.light === undefined || process.env.light !== "false",
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
-        files: process.env.f || process.env.file || process.env.files || "",
         workers: process.env.workerCount || os.cpus().length,
     }
 });
 
-function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
+const noop = () => {}; // tslint:disable-line no-empty
+function exec(cmd: string, args: string[], complete: () => void = noop, error: (e: any, status: number) => void = noop) {
     console.log(`${cmd} ${args.join(" ")}`);
     // TODO (weswig): Update child_process types to add windowsVerbatimArguments to the type definition
     const subshellFlag = isWin ? "/c" : "-c";
@@ -136,13 +137,22 @@ const es2017LibrarySource = [
     "es2017.sharedmemory.d.ts",
     "es2017.string.d.ts",
     "es2017.intl.d.ts",
+    "es2017.typedarrays.d.ts",
 ];
 
 const es2017LibrarySourceMap = es2017LibrarySource.map(source =>
     ({ target: "lib." + source, sources: ["header.d.ts", source] }));
 
+const es2018LibrarySource = [
+    "es2018.regexp.d.ts",
+    "es2018.promise.d.ts"
+];
+const es2018LibrarySourceMap = es2018LibrarySource.map(source =>
+    ({ target: "lib." + source, sources: ["header.d.ts", source] }));
+
 const esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
+    "esnext.asynciterable.d.ts",
+    "esnext.array.d.ts"
 ];
 
 const esnextLibrarySourceMap = esnextLibrarySource.map(source =>
@@ -162,6 +172,7 @@ const librarySourceMap = [
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
     { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
+    { target: "lib.es2018.d.ts", sources: ["header.d.ts", "es2018.d.ts"] },
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
@@ -169,8 +180,9 @@ const librarySourceMap = [
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
+    { target: "lib.es2018.full.d.ts", sources: ["header.d.ts", "es2018.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
+].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, es2018LibrarySourceMap, esnextLibrarySourceMap);
 
 const libraryTargets = librarySourceMap.map(f =>
     path.join(builtLocalDirectory, f.target));
@@ -516,7 +528,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile, typesMapJson], (do
     const serverLibraryProject = tsc.createProject("src/server/tsconfig.library.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ true));
     const {js, dts}: { js: NodeJS.ReadableStream, dts: NodeJS.ReadableStream } = serverLibraryProject.src()
         .pipe(sourcemaps.init())
-        .pipe(newer(tsserverLibraryFile))
+        .pipe(newer(<any>{ dest: tsserverLibraryFile, extra: ["src/compiler/**/*.ts", "src/services/**/*.ts"] }))
         .pipe(serverLibraryProject());
 
     return merge2([
@@ -648,6 +660,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const debug = cmdLineOptions.debug;
         const inspect = cmdLineOptions.inspect;
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const stackTraceLimit = cmdLineOptions.stackTraceLimit;
         const testConfigFile = "test.config";
@@ -668,12 +681,12 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             workerCount = cmdLineOptions.workers;
         }
 
-        if (tests || light || taskConfigsFolder) {
-            writeTestConfigFile(tests, light, taskConfigsFolder, workerCount, stackTraceLimit);
-        }
-
         if (tests && tests.toLocaleLowerCase() === "rwc") {
             testTimeout = 400000;
+        }
+
+        if (tests || runners || light || testTimeout || taskConfigsFolder) {
+            writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout);
         }
 
         const colors = cmdLineOptions.colors;
@@ -860,8 +873,17 @@ function cleanTestDirs(done: (e?: any) => void) {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string) {
-    const testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light, workerCount, stackTraceLimit, taskConfigsFolder, noColor: !cmdLineOptions.colors });
+function writeTestConfigFile(tests: string, runners: string, light: boolean, taskConfigsFolder?: string, workerCount?: number, stackTraceLimit?: string, timeout?: number) {
+    const testConfigContents = JSON.stringify({
+        test: tests ? [tests] : undefined,
+        runner: runners ? runners.split(",") : undefined,
+        light,
+        workerCount,
+        stackTraceLimit,
+        taskConfigsFolder,
+        noColor: !cmdLineOptions.colors,
+        timeout,
+    });
     console.log("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);
 }
@@ -872,13 +894,14 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
         if (err) { console.error(err); done(err); process.exit(1); }
         host = "node";
         const tests = cmdLineOptions.tests;
+        const runners = cmdLineOptions.runners;
         const light = cmdLineOptions.light;
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
             fs.unlinkSync(testConfigFile);
         }
-        if (tests || light) {
-            writeTestConfigFile(tests, light);
+        if (tests || runners || light) {
+            writeTestConfigFile(tests, runners, light);
         }
 
         const args = [nodeServerOutFile];
@@ -1029,7 +1052,7 @@ gulp.task("update-sublime", "Updates the sublime plugin's tsserver", ["local", s
 });
 
 gulp.task("build-rules", "Compiles tslint rules to js", () => {
-    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", "lib": ["es6"] }, /*useBuiltCompiler*/ false);
+    const settings: tsc.Settings = getCompilerSettings({ module: "commonjs", lib: ["es6"] }, /*useBuiltCompiler*/ false);
     const dest = path.join(builtLocalDirectory, "tslint");
     return gulp.src("scripts/tslint/**/*.ts")
         .pipe(newer({
@@ -1089,13 +1112,11 @@ function spawnLintWorker(files: {path: string}[], callback: (failures: number) =
 
 gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: --f[iles]=regex", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    const fileMatcher = cmdLineOptions.files;
-    const files = fileMatcher
-        ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/generateLocalizedDiagnosticMessages.ts' 'scripts/tslint/**/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.d.ts'";
-    const cmd = `node node_modules/tslint/bin/tslint ${files} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
-    console.log("Linting: " + cmd);
-    child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    for (const project of ["scripts/tslint/tsconfig.json", "src/tsconfig-base.json"]) {
+        const cmd = `node node_modules/tslint/bin/tslint --project ${project} --formatters-dir ./built/local/tslint/formatters --format autolinkableStylish`;
+        console.log("Linting: " + cmd);
+        child_process.execSync(cmd, { stdio: [0, 1, 2] });
+    }
     if (fold.isTravis()) console.log(fold.end("lint"));
 });
 
