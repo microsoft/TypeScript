@@ -212,13 +212,7 @@ namespace ts.OutliningElementsCollector {
             return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
         }
 
-        function spanForNode(
-            hintSpanNode: Node,
-            autoCollapse = false,
-            useFullStart = true,
-            open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken | SyntaxKind.OpenParenToken = SyntaxKind.OpenBraceToken,
-            close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken,
-        ): OutliningSpan | undefined {
+        function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken, close: SyntaxKind = open === SyntaxKind.OpenBraceToken ? SyntaxKind.CloseBraceToken : SyntaxKind.CloseBracketToken): OutliningSpan | undefined {
             const openToken = findChildOfKind(n, open, sourceFile);
             const closeToken = findChildOfKind(n, close, sourceFile);
             return openToken && closeToken && spanBetweenTokens(openToken, closeToken, hintSpanNode, sourceFile, autoCollapse, useFullStart);
