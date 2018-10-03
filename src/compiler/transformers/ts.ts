@@ -1960,7 +1960,7 @@ namespace ts {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
-                // If there exists union that is not void 0 expression, check if the the common type is identifier.
+                // If there exists union that is not void 0 expression, check if the common type is identifier.
                 // anything more complex and we will just default to Object
                 else if (serializedUnion) {
                     // Different types
