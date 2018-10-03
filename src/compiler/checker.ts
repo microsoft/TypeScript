@@ -19130,8 +19130,18 @@ namespace ts {
             }
 
             // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = argCount >= getMinArgumentCount(signature);
-            return callIsIncomplete || hasEnoughArguments;
+            const minArgs = getMinArgumentCount(signature);
+            if (callIsIncomplete || argCount >= minArgs) {
+                return true;
+            }
+            const acceptsVoid = (t: Type): boolean => !!(t.flags & TypeFlags.Void);
+            for (let i = argCount; i < minArgs; i++) {
+                const type = getTypeAtPosition(signature, i);
+                if (filterType(type, acceptsVoid).flags & TypeFlags.Never) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
