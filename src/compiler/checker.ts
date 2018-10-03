@@ -19076,6 +19076,10 @@ namespace ts {
             return findIndex(args, isSpreadArgument);
         }
 
+        function acceptsVoid(t: Type): boolean {
+            return !!(t.flags & TypeFlags.Void);
+        }
+
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
             if (isJsxOpeningLikeElement(node)) {
                 // The arity check will be done in "checkApplicableSignatureForJsxOpeningLikeElement".
@@ -19130,8 +19134,17 @@ namespace ts {
             }
 
             // If the call is incomplete, we should skip the lower bound check.
-            const hasEnoughArguments = argCount >= getMinArgumentCount(signature);
-            return callIsIncomplete || hasEnoughArguments;
+            const minArgs = getMinArgumentCount(signature);
+            if (callIsIncomplete || argCount >= minArgs) {
+                return true;
+            }
+            for (let i = argCount; i < minArgs; i++) {
+                const type = getTypeAtPosition(signature, i);
+                if (filterType(type, acceptsVoid).flags & TypeFlags.Never) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
