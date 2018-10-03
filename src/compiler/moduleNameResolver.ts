@@ -1039,7 +1039,7 @@ namespace ts {
         const packageInfo = considerPackageJson ? getPackageJsonInfo(candidate, "", onlyRecordFailures, state) : undefined;
         const packageId = packageInfo && packageInfo.packageId;
         const packageJsonContent = packageInfo && packageInfo.packageJsonContent;
-        const versionPaths = packageJsonContent && readPackageJsonTypesVersionPaths(packageJsonContent, state);
+        const versionPaths = packageInfo && packageInfo.versionPaths;
         return withPackageId(packageId, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
