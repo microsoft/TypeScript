@@ -22,7 +22,7 @@ else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
-const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
+let host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
 const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
 
@@ -34,6 +34,7 @@ const TaskNames = {
     local: "local",
     runtests: "runtests",
     runtestsParallel: "runtests-parallel",
+    runtestsBrowser: "runtests-browser",
     buildRules: "build-rules",
     clean: "clean",
     lib: "lib",
@@ -113,6 +114,7 @@ const ConfigFileFor = {
     all: "src",
     typescriptServices: "built/local/typescriptServices.tsconfig.json",
     tsserverLibrary: "built/local/tsserverlibrary.tsconfig.json",
+    webTestServer: "tests/webTestServer.tsconfig.json"
 };
 
 const ExpectedLKGFiles = [
@@ -159,6 +161,13 @@ task(TaskNames.runtests, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
     });
+}, { async: true });
+
+desc("Runs the tests using the built run.js file like 'jake runtests'. Syntax is jake runtests-browser. Additional optional parameters tests=[regex], browser=[chrome|IE]");
+task(TaskNames.runtestsBrowser, RunTestsPrereqs, function () {
+  tsbuild([ConfigFileFor.webTestServer], true, () => {
+        runBrowserTests();
+  });
 }, { async: true });
 
 desc("Generates a diagnostic file in TypeScript based on an input JSON file");
@@ -642,6 +651,27 @@ function runConsoleTests(defaultReporter, runInParallel) {
             jake.rmRf(path.join(Paths.baselines.local, "projectOutput/"));
         }
     }
+}
+
+function runBrowserTests() {
+    cleanTestDirs();
+    host = "node";
+    var browser = process.env.browser || process.env.b ||  (os.platform() === "win32" ? "edge" : "chrome");
+    var runners = process.env.runners || process.env.runner || process.env.ru;
+    var tests = process.env.test || process.env.tests || process.env.t;
+    var light = process.env.light || false;
+    var testConfigFile = 'test.config';
+    if (fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+    if (tests || runners || light) {
+        writeTestConfigFile(tests, runners, light);
+    }
+
+    tests = tests ? tests : '';
+    var cmd = host + " tests/webTestServer.js " + browser + " " + JSON.stringify(tests);
+    console.log(cmd);
+    exec(cmd);
 }
 
 // used to pass data from jake command line directly to run.js
