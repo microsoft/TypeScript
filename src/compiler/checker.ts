@@ -5578,7 +5578,7 @@ namespace ts {
         // A type is a mixin constructor if it has a single construct signature taking no type parameters and a single
         // rest parameter of type any[].
         function isMixinConstructorType(type: Type) {
-            const signatures = getSignaturesOfType(type, SignatureKind.Construct);
+            const signatures = getEffectiveConstructSignatures(type);
             if (signatures.length === 1) {
                 const s = signatures[0];
                 return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
@@ -5604,10 +5604,7 @@ namespace ts {
         function getConstructorsForTypeArguments(type: Type, typeArgumentNodes: ReadonlyArray<TypeNode> | undefined, location: Node): ReadonlyArray<Signature> {
             const typeArgCount = length(typeArgumentNodes);
             const isJavascript = isInJSFile(location);
-            if (isJSConstructorType(type) && !typeArgCount) {
-                return getSignaturesOfType(type, SignatureKind.Call);
-            }
-            return filter(getSignaturesOfType(type, SignatureKind.Construct),
+            return filter(getEffectiveConstructSignatures(type),
                 sig => (isJavascript || typeArgCount >= getMinTypeArgumentCount(sig.typeParameters)) && typeArgCount <= length(sig.typeParameters));
         }
 
@@ -6485,7 +6482,7 @@ namespace ts {
 
         function getDefaultConstructSignatures(classType: InterfaceType): Signature[] {
             const baseConstructorType = getBaseConstructorTypeOfClass(classType);
-            const baseSignatures = getSignaturesOfType(baseConstructorType, SignatureKind.Construct);
+            const baseSignatures = getEffectiveConstructSignatures(baseConstructorType);
             if (baseSignatures.length === 0) {
                 return [createSignature(undefined, classType.localTypeParameters, undefined, emptyArray, classType, /*resolvedTypePredicate*/ undefined, 0, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false)]; // TODO: GH#18217
             }
@@ -6622,7 +6619,7 @@ namespace ts {
                     mixedTypes.push(type);
                 }
                 else if (isMixinConstructorType(types[i])) {
-                    mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
+                    mixedTypes.push(getEffectiveConstructSignatureReturnType(getEffectiveConstructSignatures(types[i])[0]));
                 }
             }
             return getIntersectionType(mixedTypes);
@@ -6645,11 +6642,11 @@ namespace ts {
                 // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
                 // 'new(s: string) => A & B'.
                 if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
-                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
+                    let signatures = getEffectiveConstructSignatures(t);
                     if (signatures.length && mixinCount > 0) {
                         signatures = map(signatures, s => {
                             const clone = cloneSignature(s);
-                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
+                            clone.resolvedReturnType = includeMixinType(getEffectiveConstructSignatureReturnType(s), types, i);
                             return clone;
                         });
                     }
@@ -14739,6 +14736,23 @@ namespace ts {
             diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
         }
 
+        function getEffectiveConstructSignatures(type: Type) {
+            let signatures = getSignaturesOfType(type, SignatureKind.Construct);
+            if (signatures.length === 0) {
+                signatures = filter(getSignaturesOfType(type, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
+            }
+            return signatures;
+        }
+
+        function getEffectiveConstructSignatureReturnType(signature: Signature): Type {
+            // Note on undefined-assertions:
+            // 1. isJSConstructor asserts that signature.declaration is defined.
+            // 2. getJSClassType always returns a type if isJSConstructor is true.
+            return isJSConstructor(signature.declaration) ?
+                getJSClassType(getSymbolOfNode(signature.declaration!))! :
+                getReturnTypeOfSignature(signature);
+        }
+
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let flowDepth = 0;
@@ -15391,12 +15405,9 @@ namespace ts {
                 }
 
                 if (!targetType) {
-                    let constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
-                    if (constructSignatures.length === 0) {
-                        constructSignatures = filter(getSignaturesOfType(rightType, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
-                    }
+                    const constructSignatures = getEffectiveConstructSignatures(rightType);
                     targetType = constructSignatures.length ?
-                        getUnionType(map(constructSignatures, signature => isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) || getReturnTypeOfSignature(getErasedSignature(signature)))) :
+                        getUnionType(map(constructSignatures, signature => getEffectiveConstructSignatureReturnType(getErasedSignature(signature)))) :
                         emptyObjectType;
                 }
 
@@ -19965,12 +19976,12 @@ namespace ts {
             // Function interface, since they have none by default. This is a bit of a leap of faith
             // that the user will not add any.
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
 
             // TS 1.0 Spec: 4.12
             // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
             // types are provided for the argument expressions, and the result is always of type Any.
-            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, numConstructSignatures)) {
                 // The unknownType indicates that an error already occurred (and was reported).  No
                 // need to report another error in this case.
                 if (funcType !== errorType && node.typeArguments) {
@@ -19982,7 +19993,7 @@ namespace ts {
             // TypeScript employs overload resolution in typed function calls in order to support functions
             // with multiple call signatures.
             if (!callSignatures.length) {
-                if (constructSignatures.length) {
+                if (numConstructSignatures) {
                     error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
                 }
                 else {
@@ -20198,9 +20209,9 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
 
-            if (isUntypedFunctionCall(tagType, apparentType, callSignatures.length, constructSignatures.length)) {
+            if (isUntypedFunctionCall(tagType, apparentType, callSignatures.length, numConstructSignatures)) {
                 return resolveUntypedCall(node);
             }
 
@@ -20248,8 +20259,8 @@ namespace ts {
             }
 
             const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
-            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, constructSignatures.length)) {
+            const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
+            if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, numConstructSignatures)) {
                 return resolveUntypedCall(node);
             }
 
@@ -26129,7 +26140,7 @@ namespace ts {
         }
 
         function checkBaseTypeAccessibility(type: Type, node: ExpressionWithTypeArguments) {
-            const signatures = getSignaturesOfType(type, SignatureKind.Construct);
+            const signatures = getEffectiveConstructSignatures(type);
             if (signatures.length) {
                 const declaration = signatures[0].declaration;
                 if (declaration && hasModifier(declaration, ModifierFlags.Private)) {
