@@ -1,13 +1,13 @@
 /*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved. 
+Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0  
- 
+License at http://www.apache.org/licenses/LICENSE-2.0
+
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE, 
-MERCHANTABLITY OR NON-INFRINGEMENT. 
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
  
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
@@ -4349,7 +4349,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      */
     elementFromPoint(x: number, y: number): Element | null;
     elementsFromPoint(x: number, y: number): Element[];
-    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | null, type: number, result: XPathResult | null): XPathResult;
+    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | XPathNSResolverAsMethod | null, type: number, result: XPathResult | null): XPathResult;
     /**
      * Executes a command on the current document, current selection, or the given range.
      * @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
@@ -16772,7 +16772,7 @@ declare var XMLSerializer: {
 interface XPathEvaluator {
     createExpression(expression: string, resolver: XPathNSResolver): XPathExpression;
     createNSResolver(nodeResolver?: Node): XPathNSResolver;
-    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | null, type: number, result: XPathResult | null): XPathResult;
+    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | XPathNSResolverAsMethod | null, type: number, result: XPathResult | null): XPathResult;
 }
 
 declare var XPathEvaluator: {
@@ -16790,8 +16790,10 @@ declare var XPathExpression: {
 };
 
 interface XPathNSResolver {
-    lookupNamespaceURI(prefix: string): string;
+    lookupNamespaceURI(prefix: string): string | null;
 }
+
+type XPathNSResolverAsMethod = (prefix: string) => string | null;
 
 declare var XPathNSResolver: {
     prototype: XPathNSResolver;
