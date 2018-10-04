@@ -15391,9 +15391,12 @@ namespace ts {
                 }
 
                 if (!targetType) {
-                    const constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
-                    targetType = constructSignatures && constructSignatures.length ?
-                        getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature)))) :
+                    let constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
+                    if (constructSignatures.length === 0) {
+                        constructSignatures = filter(getSignaturesOfType(rightType, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
+                    }
+                    targetType = constructSignatures.length ?
+                        getUnionType(map(constructSignatures, signature => isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) || getReturnTypeOfSignature(getErasedSignature(signature)))) :
                         emptyObjectType;
                 }
 
