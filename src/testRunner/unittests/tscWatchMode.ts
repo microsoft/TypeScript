@@ -12,11 +12,11 @@ namespace ts.tscWatch {
     export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
     export import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
-    export function checkProgramActualFiles(program: Program, expectedFiles: string[]) {
+    export function checkProgramActualFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }
 
-    export function checkProgramRootFiles(program: Program, expectedFiles: string[]) {
+    export function checkProgramRootFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 

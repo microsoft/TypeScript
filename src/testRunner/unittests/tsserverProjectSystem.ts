@@ -392,11 +392,11 @@ namespace ts.projectSystem {
         return values.next().value;
     }
 
-    export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
+    export function checkProjectActualFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+    function checkProjectRootFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
