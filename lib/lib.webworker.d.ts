@@ -2222,7 +2222,7 @@ declare var ReadableStreamReader: {
 interface Request extends Body {
     /**
      * Returns the cache mode associated with request, which is a string indicating
-     * how the the request will interact with the browser's cache when fetching.
+     * how the request will interact with the browser's cache when fetching.
      */
     readonly cache: RequestCache;
     /**

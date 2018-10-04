@@ -11730,7 +11730,7 @@ namespace ts {
                         else if (variance === Variance.Bivariant) {
                             // In the bivariant case we first compare contravariantly without reporting
                             // errors. Then, if that doesn't succeed, we compare covariantly with error
-                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // reporting. Thus, error elaboration will be based on the covariant check,
                             // which is generally easier to reason about.
                             related = isRelatedTo(t, s, /*reportErrors*/ false);
                             if (!related) {
@@ -13046,7 +13046,7 @@ namespace ts {
         }
 
         /**
-         * If the the provided object literal is subject to the excess properties check,
+         * If the provided object literal is subject to the excess properties check,
          * create a new that is exempt. Recursively mark object literal members as exempt.
          * Leave signatures alone since they are not subject to the check.
          */
