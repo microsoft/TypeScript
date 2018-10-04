@@ -20,4 +20,9 @@ const foo = [
   { name: 'baz' }
 ];
 
+foo.find(x => {});
+foo.find(x => "");
+foo.find(x => { return; });
+foo.find(x => { return null; });
+foo.find(x => { return undefined; });
 foo.find(x => x.name);

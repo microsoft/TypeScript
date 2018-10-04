@@ -10,5 +10,10 @@ const fizz = [
     { name: null }
 ];
 
+foo.findIndex(x => {});
+foo.findIndex(x => "");
+foo.findIndex(x => { return; });
+foo.findIndex(x => { return null; });
+foo.findIndex(x => { return undefined; });
 foo.findIndex(x => x.name);
 fizz.findIndex(x => x.name);

@@ -31,11 +31,54 @@ const fizz = [
 
 ];
 
+foo.findIndex(x => {});
+>foo.findIndex(x => {}) : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>x => {} : (x: { name: string; }) => void
+>x : { name: string; }
+
+foo.findIndex(x => "");
+>foo.findIndex(x => "") : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>x => "" : (x: { name: string; }) => string
+>x : { name: string; }
+>"" : ""
+
+foo.findIndex(x => { return; });
+>foo.findIndex(x => { return; }) : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>x => { return; } : (x: { name: string; }) => void
+>x : { name: string; }
+
+foo.findIndex(x => { return null; });
+>foo.findIndex(x => { return null; }) : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>x => { return null; } : (x: { name: string; }) => any
+>x : { name: string; }
+>null : null
+
+foo.findIndex(x => { return undefined; });
+>foo.findIndex(x => { return undefined; }) : number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>foo : { name: string; }[]
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
+>x => { return undefined; } : (x: { name: string; }) => any
+>x : { name: string; }
+>undefined : undefined
+
 foo.findIndex(x => x.name);
 >foo.findIndex(x => x.name) : number
->foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any) => number
+>foo.findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
 >foo : { name: string; }[]
->findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any) => number
+>findIndex : (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any) => number
 >x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string
@@ -44,9 +87,9 @@ foo.findIndex(x => x.name);
 
 fizz.findIndex(x => x.name);
 >fizz.findIndex(x => x.name) : number
->fizz.findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => any, thisArg?: any) => number
+>fizz.findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => {}, thisArg?: any) => number
 >fizz : { name: any; }[]
->findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => any, thisArg?: any) => number
+>findIndex : (predicate: (value: { name: any; }, index: number, obj: { name: any; }[]) => {}, thisArg?: any) => number
 >x => x.name : (x: { name: any; }) => any
 >x : { name: any; }
 >x.name : any

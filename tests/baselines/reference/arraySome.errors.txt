@@ -1,0 +1,31 @@
+tests/cases/compiler/arraySome.ts(12,10): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+tests/cases/compiler/arraySome.ts(14,10): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/arraySome.ts (2 errors) ====
+    // Tests fix for #27496, predicates should not have to return booleans
+    const foo = [
+        { name: 'bar' },
+        { name: null },
+        { name: 'baz' }
+    ];
+    const fizz = [
+        { name: null },
+        { name: null }
+    ];
+    
+    foo.some(x => {});
+             ~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.some(x => "");
+    foo.some(x => { return; });
+             ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.some(x => { return null; });
+    foo.some(x => { return undefined; });
+    foo.some(x => x.name);
+    fizz.some(x => x.name);

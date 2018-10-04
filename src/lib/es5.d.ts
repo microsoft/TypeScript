@@ -1104,13 +1104,13 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => {} | null | undefined, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => {} | null | undefined, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1263,13 +1263,13 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: T, index: number, array: T[]) => {} | null | undefined, thisArg?: any): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: T, index: number, array: T[]) => {} | null | undefined, thisArg?: any): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
@@ -1690,7 +1690,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int8Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1720,7 +1720,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Int8Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int8Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -1731,7 +1731,7 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int8Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int8Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1857,7 +1857,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Int8Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -1959,7 +1959,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint8Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1989,7 +1989,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Uint8Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint8Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2000,7 +2000,7 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2126,7 +2126,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Uint8Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -2228,7 +2228,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2258,7 +2258,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2269,7 +2269,7 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2395,7 +2395,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -2496,7 +2496,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int16Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2526,7 +2526,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Int16Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int16Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2537,7 +2537,7 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int16Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int16Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2662,7 +2662,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Int16Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -2765,7 +2765,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint16Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2795,7 +2795,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Uint16Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint16Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2806,7 +2806,7 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2932,7 +2932,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Uint16Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -3034,7 +3034,7 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Int32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3064,7 +3064,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Int32Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int32Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3075,7 +3075,7 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Int32Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int32Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3201,7 +3201,7 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Int32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -3303,7 +3303,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Uint32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3333,7 +3333,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Uint32Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint32Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3344,7 +3344,7 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3469,7 +3469,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Uint32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -3571,7 +3571,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Float32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3601,7 +3601,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Float32Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Float32Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3612,7 +3612,7 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Float32Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float32Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3738,7 +3738,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Float32Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.
@@ -3841,7 +3841,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): boolean;
+    every(callbackfn: (value: number, index: number, array: Float64Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3871,7 +3871,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Float64Array) => any, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Float64Array) => {} | null | undefined, thisArg?: any): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3882,7 +3882,7 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Float64Array) => any, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float64Array) => {} | null | undefined, thisArg?: any): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -4008,7 +4008,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): boolean;
+    some(callbackfn: (value: number, index: number, array: Float64Array) => {} | null | undefined, thisArg?: any): boolean;
 
     /**
       * Sorts an array.

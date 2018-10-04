@@ -19,6 +19,11 @@ const foo = [
   { name: 'baz' }
 ];
 
+foo.find(x => {});
+foo.find(x => "");
+foo.find(x => { return; });
+foo.find(x => { return null; });
+foo.find(x => { return undefined; });
 foo.find(x => x.name);
 
 //// [arrayFind.js]
@@ -36,4 +41,9 @@ var foo = [
     { name: null },
     { name: 'baz' }
 ];
+foo.find(function (x) { });
+foo.find(function (x) { return ""; });
+foo.find(function (x) { return; });
+foo.find(function (x) { return null; });
+foo.find(function (x) { return undefined; });
 foo.find(function (x) { return x.name; });

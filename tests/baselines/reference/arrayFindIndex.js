@@ -9,6 +9,11 @@ const fizz = [
     { name: null }
 ];
 
+foo.findIndex(x => {});
+foo.findIndex(x => "");
+foo.findIndex(x => { return; });
+foo.findIndex(x => { return null; });
+foo.findIndex(x => { return undefined; });
 foo.findIndex(x => x.name);
 fizz.findIndex(x => x.name);
 
@@ -22,5 +27,10 @@ var foo = [
 var fizz = [
     { name: null }
 ];
+foo.findIndex(function (x) { });
+foo.findIndex(function (x) { return ""; });
+foo.findIndex(function (x) { return; });
+foo.findIndex(function (x) { return null; });
+foo.findIndex(function (x) { return undefined; });
 foo.findIndex(function (x) { return x.name; });
 fizz.findIndex(function (x) { return x.name; });

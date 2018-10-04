@@ -24,21 +24,52 @@ const fizz = [
 
 ];
 
-foo.some(x => x.name);
+foo.some(x => {});
 >foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
 >some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(arraySome.ts, 11, 9))
+
+foo.some(x => "");
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 12, 9))
+
+foo.some(x => { return; });
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 13, 9))
+
+foo.some(x => { return null; });
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 14, 9))
+
+foo.some(x => { return undefined; });
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 15, 9))
+>undefined : Symbol(undefined)
+
+foo.some(x => x.name);
+>foo.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arraySome.ts, 1, 5))
+>some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arraySome.ts, 16, 9))
 >x.name : Symbol(name, Decl(arraySome.ts, 2, 5))
->x : Symbol(x, Decl(arraySome.ts, 11, 9))
+>x : Symbol(x, Decl(arraySome.ts, 16, 9))
 >name : Symbol(name, Decl(arraySome.ts, 2, 5))
 
 fizz.some(x => x.name);
 >fizz.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
 >fizz : Symbol(fizz, Decl(arraySome.ts, 6, 5))
 >some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(arraySome.ts, 12, 10))
+>x : Symbol(x, Decl(arraySome.ts, 17, 10))
 >x.name : Symbol(name, Decl(arraySome.ts, 7, 5))
->x : Symbol(x, Decl(arraySome.ts, 12, 10))
+>x : Symbol(x, Decl(arraySome.ts, 17, 10))
 >name : Symbol(name, Decl(arraySome.ts, 7, 5))
 

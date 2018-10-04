@@ -1,0 +1,31 @@
+tests/cases/compiler/arrayEvery.ts(12,11): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+tests/cases/compiler/arrayEvery.ts(14,11): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/arrayEvery.ts (2 errors) ====
+    // Tests fix for #27496, predicates should not have to return booleans
+    const foo = [
+        { name: 'bar' },
+        { name: null },
+        { name: 'baz' }
+    ];
+    const fizz = [
+        { name: 'buzz' },
+        { name: 'fizzbuzz' }
+    ];
+    
+    foo.every(x => {});
+              ~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.every(x => "");
+    foo.every(x => { return; });
+              ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, array: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.every(x => { return null; });
+    foo.every(x => { return undefined; });
+    foo.every(x => x.name);
+    fizz.every(x => x.name);

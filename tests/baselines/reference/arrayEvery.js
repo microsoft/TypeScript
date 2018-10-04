@@ -10,6 +10,11 @@ const fizz = [
     { name: 'fizzbuzz' }
 ];
 
+foo.every(x => {});
+foo.every(x => "");
+foo.every(x => { return; });
+foo.every(x => { return null; });
+foo.every(x => { return undefined; });
 foo.every(x => x.name);
 fizz.every(x => x.name);
 
@@ -24,5 +29,10 @@ var fizz = [
     { name: 'buzz' },
     { name: 'fizzbuzz' }
 ];
+foo.every(function (x) { });
+foo.every(function (x) { return ""; });
+foo.every(function (x) { return; });
+foo.every(function (x) { return null; });
+foo.every(function (x) { return undefined; });
 foo.every(function (x) { return x.name; });
 fizz.every(function (x) { return x.name; });

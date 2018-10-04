@@ -36,11 +36,54 @@ const fizz = [
 
 ];
 
+foo.every(x => {});
+>foo.every(x => {}) : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>x => {} : (x: { name: string; }) => void
+>x : { name: string; }
+
+foo.every(x => "");
+>foo.every(x => "") : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>x => "" : (x: { name: string; }) => string
+>x : { name: string; }
+>"" : ""
+
+foo.every(x => { return; });
+>foo.every(x => { return; }) : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>x => { return; } : (x: { name: string; }) => void
+>x : { name: string; }
+
+foo.every(x => { return null; });
+>foo.every(x => { return null; }) : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>x => { return null; } : (x: { name: string; }) => any
+>x : { name: string; }
+>null : null
+
+foo.every(x => { return undefined; });
+>foo.every(x => { return undefined; }) : boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>foo : { name: string; }[]
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
+>x => { return undefined; } : (x: { name: string; }) => any
+>x : { name: string; }
+>undefined : undefined
+
 foo.every(x => x.name);
 >foo.every(x => x.name) : boolean
->foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>foo.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
 >foo : { name: string; }[]
->every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
 >x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string
@@ -49,9 +92,9 @@ foo.every(x => x.name);
 
 fizz.every(x => x.name);
 >fizz.every(x => x.name) : boolean
->fizz.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>fizz.every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
 >fizz : { name: string; }[]
->every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => boolean
+>every : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => {}, thisArg?: any) => boolean
 >x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string

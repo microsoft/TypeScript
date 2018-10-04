@@ -9,5 +9,10 @@ const fizz = [
     { name: null }
 ];
 
+foo.some(x => {});
+foo.some(x => "");
+foo.some(x => { return; });
+foo.some(x => { return null; });
+foo.some(x => { return undefined; });
 foo.some(x => x.name);
 fizz.some(x => x.name);

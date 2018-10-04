@@ -9,7 +9,7 @@ interface Array<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: T[]) => any, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: T[]) => {} | null | undefined, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -20,7 +20,7 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: T[]) => any, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: T[]) => {} | null | undefined, thisArg?: any): number;
 
     /**
      * Returns the this object after filling the section identified by start and end with value
@@ -324,7 +324,7 @@ interface ReadonlyArray<T> {
      * predicate. If it is not provided, undefined is used instead.
      */
     find<S extends T>(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg?: any): T | undefined;
+    find(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => {} | null | undefined, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -335,7 +335,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => any, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, obj: ReadonlyArray<T>) => {} | null | undefined, thisArg?: any): number;
 }
 
 interface RegExp {

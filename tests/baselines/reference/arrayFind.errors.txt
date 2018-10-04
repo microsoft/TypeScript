@@ -1,0 +1,39 @@
+tests/cases/compiler/arrayFind.ts(21,10): error TS2345: Argument of type '(this: void, x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+tests/cases/compiler/arrayFind.ts(23,10): error TS2345: Argument of type '(this: void, x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/arrayFind.ts (2 errors) ====
+    // test fix for #18112, type guard predicates should narrow returned element
+    function isNumber(x: any): x is number {
+      return typeof x === "number";
+    }
+    
+    const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
+    const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
+    
+    const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
+    const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+    
+    
+    
+    // Tests fix for #27496, predicates should not have to return booleans
+    const foo = [
+      { name: 'bar' },
+      { name: null },
+      { name: 'baz' }
+    ];
+    
+    foo.find(x => {});
+             ~~~~~~~
+!!! error TS2345: Argument of type '(this: void, x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.find(x => "");
+    foo.find(x => { return; });
+             ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(this: void, x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.find(x => { return null; });
+    foo.find(x => { return undefined; });
+    foo.find(x => x.name);

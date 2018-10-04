@@ -10,6 +10,11 @@ const fizz = [
     { name: null }
 ];
 
+foo.some(x => {});
+foo.some(x => "");
+foo.some(x => { return; });
+foo.some(x => { return null; });
+foo.some(x => { return undefined; });
 foo.some(x => x.name);
 fizz.some(x => x.name);
 
@@ -24,5 +29,10 @@ var fizz = [
     { name: null },
     { name: null }
 ];
+foo.some(function (x) { });
+foo.some(function (x) { return ""; });
+foo.some(function (x) { return; });
+foo.some(function (x) { return null; });
+foo.some(function (x) { return undefined; });
 foo.some(function (x) { return x.name; });
 fizz.some(function (x) { return x.name; });

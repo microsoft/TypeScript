@@ -24,9 +24,9 @@ const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true]
 const foundNumber: number | undefined = arrayOfStringsNumbersAndBooleans.find(isNumber);
 >foundNumber : number
 >arrayOfStringsNumbersAndBooleans.find(isNumber) : number
->arrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => any, thisArg?: any): string | number | boolean; }
+>arrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => {}, thisArg?: any): string | number | boolean; }
 >arrayOfStringsNumbersAndBooleans : (string | number | boolean)[]
->find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => any, thisArg?: any): string | number | boolean; }
+>find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: (string | number | boolean)[]) => {}, thisArg?: any): string | number | boolean; }
 >isNumber : (x: any) => x is number
 
 const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean>;
@@ -37,9 +37,9 @@ const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBoolean
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
 >readonlyFoundNumber : number
 >readonlyArrayOfStringsNumbersAndBooleans.find(isNumber) : number
->readonlyArrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => boolean, thisArg?: any): string | number | boolean; }
+>readonlyArrayOfStringsNumbersAndBooleans.find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => {}, thisArg?: any): string | number | boolean; }
 >readonlyArrayOfStringsNumbersAndBooleans : ReadonlyArray<string | number | boolean>
->find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => boolean, thisArg?: any): string | number | boolean; }
+>find : { <S extends string | number | boolean>(predicate: (this: void, value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => value is S, thisArg?: any): S; (predicate: (value: string | number | boolean, index: number, obj: ReadonlyArray<string | number | boolean>) => {}, thisArg?: any): string | number | boolean; }
 >isNumber : (x: any) => x is number
 
 
@@ -66,11 +66,54 @@ const foo = [
 
 ];
 
+foo.find(x => {});
+>foo.find(x => {}) : any
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>x => {} : (this: void, x: { name: string; }) => void
+>x : { name: string; }
+
+foo.find(x => "");
+>foo.find(x => "") : { name: string; }
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>x => "" : (this: void, x: { name: string; }) => string
+>x : { name: string; }
+>"" : ""
+
+foo.find(x => { return; });
+>foo.find(x => { return; }) : any
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>x => { return; } : (this: void, x: { name: string; }) => void
+>x : { name: string; }
+
+foo.find(x => { return null; });
+>foo.find(x => { return null; }) : { name: string; }
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>x => { return null; } : (this: void, x: { name: string; }) => any
+>x : { name: string; }
+>null : null
+
+foo.find(x => { return undefined; });
+>foo.find(x => { return undefined; }) : { name: string; }
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>foo : { name: string; }[]
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
+>x => { return undefined; } : (this: void, x: { name: string; }) => any
+>x : { name: string; }
+>undefined : undefined
+
 foo.find(x => x.name);
 >foo.find(x => x.name) : { name: string; }
->foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any): { name: string; }; }
+>foo.find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
 >foo : { name: string; }[]
->find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => any, thisArg?: any): { name: string; }; }
+>find : { <S extends { name: string; }>(predicate: (this: void, value: { name: string; }, index: number, obj: { name: string; }[]) => value is S, thisArg?: any): S; (predicate: (value: { name: string; }, index: number, obj: { name: string; }[]) => {}, thisArg?: any): { name: string; }; }
 >x => x.name : (this: void, x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string

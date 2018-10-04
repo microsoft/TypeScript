@@ -24,21 +24,52 @@ const fizz = [
 
 ];
 
-foo.every(x => x.name);
+foo.every(x => {});
 >foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
 >every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(arrayEvery.ts, 11, 10))
+
+foo.every(x => "");
+>foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 12, 10))
+
+foo.every(x => { return; });
+>foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 13, 10))
+
+foo.every(x => { return null; });
+>foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 14, 10))
+
+foo.every(x => { return undefined; });
+>foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 15, 10))
+>undefined : Symbol(undefined)
+
+foo.every(x => x.name);
+>foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayEvery.ts, 1, 5))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(arrayEvery.ts, 16, 10))
 >x.name : Symbol(name, Decl(arrayEvery.ts, 2, 5))
->x : Symbol(x, Decl(arrayEvery.ts, 11, 10))
+>x : Symbol(x, Decl(arrayEvery.ts, 16, 10))
 >name : Symbol(name, Decl(arrayEvery.ts, 2, 5))
 
 fizz.every(x => x.name);
 >fizz.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
 >fizz : Symbol(fizz, Decl(arrayEvery.ts, 6, 5))
 >every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(arrayEvery.ts, 12, 11))
+>x : Symbol(x, Decl(arrayEvery.ts, 17, 11))
 >x.name : Symbol(name, Decl(arrayEvery.ts, 7, 5))
->x : Symbol(x, Decl(arrayEvery.ts, 12, 11))
+>x : Symbol(x, Decl(arrayEvery.ts, 17, 11))
 >name : Symbol(name, Decl(arrayEvery.ts, 7, 5))
 

@@ -9,5 +9,10 @@ const fizz = [
     { name: 'fizzbuzz' }
 ];
 
+foo.every(x => {});
+foo.every(x => "");
+foo.every(x => { return; });
+foo.every(x => { return null; });
+foo.every(x => { return undefined; });
 foo.every(x => x.name);
 fizz.every(x => x.name);

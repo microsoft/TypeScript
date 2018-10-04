@@ -21,21 +21,52 @@ const fizz = [
 
 ];
 
-foo.findIndex(x => x.name);
+foo.findIndex(x => {});
 >foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
 >foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
 >findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
 >x : Symbol(x, Decl(arrayFindIndex.ts, 10, 14))
+
+foo.findIndex(x => "");
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 11, 14))
+
+foo.findIndex(x => { return; });
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 12, 14))
+
+foo.findIndex(x => { return null; });
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 13, 14))
+
+foo.findIndex(x => { return undefined; });
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 14, 14))
+>undefined : Symbol(undefined)
+
+foo.findIndex(x => x.name);
+>foo.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFindIndex.ts, 1, 5))
+>findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 15, 14))
 >x.name : Symbol(name, Decl(arrayFindIndex.ts, 2, 5))
->x : Symbol(x, Decl(arrayFindIndex.ts, 10, 14))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 15, 14))
 >name : Symbol(name, Decl(arrayFindIndex.ts, 2, 5))
 
 fizz.findIndex(x => x.name);
 >fizz.findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
 >fizz : Symbol(fizz, Decl(arrayFindIndex.ts, 6, 5))
 >findIndex : Symbol(Array.findIndex, Decl(lib.es2015.core.d.ts, --, --))
->x : Symbol(x, Decl(arrayFindIndex.ts, 11, 15))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 16, 15))
 >x.name : Symbol(name, Decl(arrayFindIndex.ts, 7, 5))
->x : Symbol(x, Decl(arrayFindIndex.ts, 11, 15))
+>x : Symbol(x, Decl(arrayFindIndex.ts, 16, 15))
 >name : Symbol(name, Decl(arrayFindIndex.ts, 7, 5))
 

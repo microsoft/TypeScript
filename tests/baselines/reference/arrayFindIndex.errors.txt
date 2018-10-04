@@ -1,0 +1,30 @@
+tests/cases/compiler/arrayFindIndex.ts(11,15): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+tests/cases/compiler/arrayFindIndex.ts(13,15): error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+  Type 'void' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/arrayFindIndex.ts (2 errors) ====
+    // Tests fix for #27496, predicates should not have to return booleans
+    const foo = [
+        { name: 'bar' },
+        { name: null },
+        { name: 'baz' }
+    ];
+    const fizz = [
+        { name: null }
+    ];
+    
+    foo.findIndex(x => {});
+                  ~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.findIndex(x => "");
+    foo.findIndex(x => { return; });
+                  ~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: { name: string; }) => void' is not assignable to parameter of type '(value: { name: string; }, index: number, obj: { name: string; }[]) => {}'.
+!!! error TS2345:   Type 'void' is not assignable to type '{}'.
+    foo.findIndex(x => { return null; });
+    foo.findIndex(x => { return undefined; });
+    foo.findIndex(x => x.name);
+    fizz.findIndex(x => x.name);

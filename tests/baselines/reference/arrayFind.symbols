@@ -48,12 +48,43 @@ const foo = [
 
 ];
 
-foo.find(x => x.name);
+foo.find(x => {});
 >foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
 >find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >x : Symbol(x, Decl(arrayFind.ts, 20, 9))
+
+foo.find(x => "");
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 21, 9))
+
+foo.find(x => { return; });
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 22, 9))
+
+foo.find(x => { return null; });
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 23, 9))
+
+foo.find(x => { return undefined; });
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 24, 9))
+>undefined : Symbol(undefined)
+
+foo.find(x => x.name);
+>foo.find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>foo : Symbol(foo, Decl(arrayFind.ts, 14, 5))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>x : Symbol(x, Decl(arrayFind.ts, 25, 9))
 >x.name : Symbol(name, Decl(arrayFind.ts, 15, 3))
->x : Symbol(x, Decl(arrayFind.ts, 20, 9))
+>x : Symbol(x, Decl(arrayFind.ts, 25, 9))
 >name : Symbol(name, Decl(arrayFind.ts, 15, 3))
 
