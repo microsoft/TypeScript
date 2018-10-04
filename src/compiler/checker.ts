@@ -5180,7 +5180,7 @@ namespace ts {
                 return type;
             }
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                return checkExpression((<ExportAssignment>declaration).expression);
+                return widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
 
             // Handle variable, parameter or property
@@ -10616,9 +10616,9 @@ namespace ts {
         function isTypeDerivedFrom(source: Type, target: Type): boolean {
             return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
                 target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
-                source.flags & TypeFlags.Primitive && !(target.flags & TypeFlags.Primitive) ? false :
                 source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || emptyObjectType, target) :
-                target === globalObjectType || target === globalFunctionType ? isTypeSubtypeOf(source, target) :
+                target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+                target === globalFunctionType ? isFunctionObjectType(source as ObjectType) :
                 hasBaseType(source, getTargetType(target));
             }
 
@@ -15371,7 +15371,7 @@ namespace ts {
 
                 // Check that right operand is a function type with a prototype property
                 const rightType = getTypeOfExpression(expr.right);
-                if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
+                if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
                     return type;
                 }
 
@@ -15391,9 +15391,12 @@ namespace ts {
                 }
 
                 if (!targetType) {
-                    const constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
-                    targetType = constructSignatures && constructSignatures.length ?
-                        getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature)))) :
+                    let constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
+                    if (constructSignatures.length === 0) {
+                        constructSignatures = filter(getSignaturesOfType(rightType, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
+                    }
+                    targetType = constructSignatures.length ?
+                        getUnionType(map(constructSignatures, signature => isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) || getReturnTypeOfSignature(getErasedSignature(signature)))) :
                         emptyObjectType;
                 }
 
