@@ -780,7 +780,7 @@ namespace ts {
                         (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
                     }
                     sourceFilesCache.delete(oldSourceFile.resolvedPath);
-                    if (oldSourceFile.resolvedPath === oldSourceFile.path || !hasSourceFileByPath) {
+                    if (!hasSourceFileByPath) {
                         resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
                     }
                 }

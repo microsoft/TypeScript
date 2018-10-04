@@ -925,8 +925,8 @@ namespace ts.server {
                         const newFile = this.program.getSourceFileByPath(f.resolvedPath);
                         if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
                             // new program does not contain this file - detach it from the project
-                            // - remove resolutions only if this is undirected file or doesnt have source file with the path in new program
-                            this.detachScriptInfoFromProject(f.fileName, f.path !== f.resolvedPath && !!this.program.getSourceFileByPath(f.path));
+                            // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
+                            this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path));
                         }
                     }
 
