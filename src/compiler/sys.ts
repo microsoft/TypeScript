@@ -796,11 +796,10 @@ namespace ts {
                         dirName,
                         (_eventName: string, relativeFileName) => {
                             // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                            const fileName = !isString(relativeFileName)
-                                ? undefined! // TODO: GH#18217
-                                : getNormalizedAbsolutePath(relativeFileName, dirName);
+                            if (!isString(relativeFileName)) { return; }
+                            const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                             // Some applications save a working file via rename operations
-                            const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
+                            const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
                             if (callbacks) {
                                 for (const fileCallback of callbacks) {
                                     fileCallback(fileName, FileWatcherEventKind.Changed);
