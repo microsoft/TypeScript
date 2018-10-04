@@ -3265,7 +3265,7 @@ namespace ts {
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {
             const moduleKind = getEmitModuleKind(options);
-            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
+            const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             return filter(host.getSourceFiles(), sourceFile =>
                 (moduleEmitEnabled || !isExternalModule(sourceFile)) && sourceFileMayBeEmitted(sourceFile, options, isSourceFileFromExternalLibrary));
@@ -8360,5 +8360,17 @@ namespace ts {
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
+    }
+
+    export function getOrUpdate<T>(map: Map<T>, key: string, getDefault: () => T): T {
+        const got = map.get(key);
+        if (got === undefined) {
+            const value = getDefault();
+            map.set(key, value);
+            return value;
+        }
+        else {
+            return got;
+        }
     }
 }

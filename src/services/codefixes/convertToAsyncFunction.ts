@@ -68,7 +68,7 @@ namespace ts.codefix {
         }
 
         // add the async keyword
-        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
+        changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
         function startTransformation(node: CallExpression, nodeToReplace: Node) {
             const newNodes = transformExpression(node, transformer, node);
@@ -410,7 +410,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, argName ? [argName.identifier] : emptyArray);
+                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, [argName.identifier]);
                 if (shouldReturn) {
                     return [createReturn(synthCall)];
                 }

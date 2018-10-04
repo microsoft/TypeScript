@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.ts ===
+export class A { } // module
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+var x = 0; // global
+>x : Symbol(x, Decl(b.ts, 0, 3))
+

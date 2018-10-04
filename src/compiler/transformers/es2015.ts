@@ -3729,7 +3729,7 @@ namespace ts {
         function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
-            if (node.transformFlags & TransformFlags.ContainsSpread ||
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread ||
                 node.expression.kind === SyntaxKind.SuperKeyword ||
                 isSuperProperty(skipOuterExpressions(node.expression))) {
 
@@ -3739,7 +3739,7 @@ namespace ts {
                 }
 
                 let resultingCall: CallExpression | BinaryExpression;
-                if (node.transformFlags & TransformFlags.ContainsSpread) {
+                if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
                     // [source]
                     //      f(...a, b)
                     //      x.m(...a, b)
@@ -3802,7 +3802,7 @@ namespace ts {
          * @param node A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-            if (node.transformFlags & TransformFlags.ContainsSpread) {
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
                 // We are here because we contain a SpreadElementExpression.
                 // [source]
                 //      new C(...a)
@@ -4376,7 +4376,7 @@ namespace ts {
                         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
                         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
                     return extendStatics(d, b);
-                }
+                };
 
                 return function (d, b) {
                     extendStatics(d, b);

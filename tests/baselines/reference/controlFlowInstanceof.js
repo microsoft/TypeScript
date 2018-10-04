@@ -97,6 +97,16 @@ function goo(x: X) {
     x;
 }
 
+// Repro from #27282
+
+declare const x: (() => void)|null;
+declare const ctor: Function;
+
+if (x instanceof ctor) {
+    x();
+}
+
+
 //// [controlFlowInstanceof.js]
 // Repros from #10167
 function f1(s) {
@@ -180,4 +190,7 @@ function goo(x) {
         x.y;
     }
     x;
+}
+if (x instanceof ctor) {
+    x();
 }

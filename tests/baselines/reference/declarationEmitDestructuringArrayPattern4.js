@@ -22,10 +22,10 @@ var _f = [1, "hello", true], x19 = _f[0], y19 = _f[1], z19 = _f[2], a13 = _f.sli
 
 //// [declarationEmitDestructuringArrayPattern4.d.ts]
 declare var a5: number[];
-declare var x14: number, a6: number[];
-declare var x15: number, y15: number, a7: number[];
-declare var x16: number, y16: number, z16: number, a8: any[];
+declare var x14: number, a6: [number, number];
+declare var x15: number, y15: number, a7: [number];
+declare var x16: number, y16: number, z16: number, a8: [];
 declare var a9: (string | number | boolean)[];
-declare var x17: number, a10: (string | boolean)[];
-declare var x18: number, y18: string, a12: boolean[];
-declare var x19: number, y19: string, z19: boolean, a13: any[];
+declare var x17: number, a10: [string, boolean];
+declare var x18: number, y18: string, a12: [boolean];
+declare var x19: number, y19: string, z19: boolean, a13: [];
