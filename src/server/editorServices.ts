@@ -470,7 +470,7 @@ namespace ts.server {
 
         private pendingProjectUpdates = createMap<Project>();
         /* @internal */
-        pendingEnsureProjectForOpenFiles: boolean | undefined;
+        pendingEnsureProjectForOpenFiles = false;
 
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;

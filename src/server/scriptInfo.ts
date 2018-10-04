@@ -248,7 +248,7 @@ namespace ts.server {
         private realpath: Path | undefined;
 
         /*@internal*/
-        cacheSourceFile!: DocumentRegistrySourceFileCache; // TODO: GH#18217
+        cacheSourceFile: DocumentRegistrySourceFileCache | undefined;
 
         /*@internal*/
         mTime?: number;

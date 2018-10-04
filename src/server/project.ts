@@ -895,8 +895,8 @@ namespace ts.server {
         }
 
         /* @internal */
-        getCurrentProgram() {
-            return Debug.assertDefined(this.program);
+        getCurrentProgram(): Program | undefined {
+            return this.program;
         }
 
         protected removeExistingTypings(include: string[]): string[] {
@@ -1325,7 +1325,7 @@ namespace ts.server {
         configFileSpecs: ConfigFileSpecs | undefined;
 
         /*@internal*/
-        canConfigFileJsonReportNoInputFiles: boolean | undefined;
+        canConfigFileJsonReportNoInputFiles = false;
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
@@ -1544,7 +1544,7 @@ namespace ts.server {
 
         /*@internal*/
         updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
-            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, Debug.assertDefined(this.canConfigFileJsonReportNoInputFiles));
+            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

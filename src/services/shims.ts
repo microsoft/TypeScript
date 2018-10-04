@@ -485,7 +485,7 @@ namespace ts {
 
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
 
-        public directoryExists: ((directoryName: string) => boolean);
+        public directoryExists: (directoryName: string) => boolean;
         public realpath: (path: string) => string;
         public useCaseSensitiveFileNames: boolean;
 
