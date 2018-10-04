@@ -5685,7 +5685,9 @@ namespace ts {
             const baseTypeNode = getBaseTypeNodeOfClass(type)!;
             const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             let baseType: Type;
-            const originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
+            const originalBaseType = isJSConstructorType(baseConstructorType) ? baseConstructorType :
+                baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) :
+                undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
                 areAllOuterTypeParametersApplied(originalBaseType!)) {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
@@ -5696,8 +5698,8 @@ namespace ts {
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
             }
-            else if (isJSConstructorType(baseConstructorType) && !baseTypeNode.typeArguments) {
-                baseType = getJSClassType(baseConstructorType.symbol) || anyType;
+            else if (isJSConstructorType(baseConstructorType)) {
+                baseType = !baseTypeNode.typeArguments && getJSClassType(baseConstructorType.symbol) || anyType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
