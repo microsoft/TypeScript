@@ -104,7 +104,7 @@ To run all tests, invoke the `runtests-parallel` target using jake:
 jake runtests-parallel
 ```
 
-This run will all tests; to run only a specific subset of tests, use:
+This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
 jake runtests tests=<regex>
