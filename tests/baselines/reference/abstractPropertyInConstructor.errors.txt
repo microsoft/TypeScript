@@ -1,9 +1,11 @@
 tests/cases/compiler/abstractPropertyInConstructor.ts(4,24): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(7,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstract property 'cb' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(25,18): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+tests/cases/compiler/abstractPropertyInConstructor.ts(39,22): error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
 
 
-==== tests/cases/compiler/abstractPropertyInConstructor.ts (3 errors) ====
+==== tests/cases/compiler/abstractPropertyInConstructor.ts (5 errors) ====
     abstract class AbstractClass {
         constructor(str: string, other: AbstractClass) {
             this.method(parseInt(str));
@@ -34,8 +36,45 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(9,14): error TS2715: Abstr
     
         abstract method(num: number): void;
     
+        other = this.prop;
+                     ~~~~
+!!! error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+        fn = () => this.prop;
+    
         method2() {
             this.prop = this.prop + "!";
+        }
+    }
+    
+    abstract class DerivedAbstractClass extends AbstractClass {
+        cb = (s: string) => {};
+    
+        constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
+            super(str, other);
+            // there is no implementation of 'prop' in any base class
+            this.cb(this.prop.toLowerCase());
+                         ~~~~
+!!! error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
+    
+            this.method(1);
+    
+            // OK, references are to another instance
+            other.cb(other.prop);
+            yetAnother.cb(yetAnother.prop);
+        }
+    }
+    
+    class Implementation extends DerivedAbstractClass {
+        prop = "";
+        cb = (s: string) => {};
+    
+        constructor(str: string, other: AbstractClass, yetAnother: DerivedAbstractClass) {
+            super(str, other, yetAnother);
+            this.cb(this.prop);
+        }
+    
+        method(n: number) {
+            this.cb(this.prop + n);
         }
     }
     

@@ -1,11 +1,6 @@
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
-  Types of property 'concat' are incompatible.
-    Type '{ <U>(...items: (ConcatArray<A> | ConcatArray<U>)[]): (A | U)[]; (...items: (A | ConcatArray<A>)[]): A[]; }' is not assignable to type '{ <U>(...items: (ConcatArray<B> | ConcatArray<U>)[]): (B | U)[]; (...items: (B | ConcatArray<B>)[]): B[]; }'.
-      Types of parameters 'items' and 'items' are incompatible.
-        Type 'B | ConcatArray<B>' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
-          Type 'B' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
-            Type 'B' is not assignable to type 'ConcatArray<A>'.
-              Property 'length' is missing in type 'B'.
+  Type 'A' is not assignable to type 'B'.
+    Property 'b' is missing in type 'A'.
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'ReadonlyArray<B>'.
   Types of property 'concat' are incompatible.
     Type '{ <U>(...items: (ConcatArray<A> | ConcatArray<U>)[]): (A | U)[]; (...items: (A | ConcatArray<A>)[]): A[]; }' is not assignable to type '{ <U>(...items: (ConcatArray<B> | ConcatArray<U>)[]): (B | U)[]; (...items: (B | ConcatArray<B>)[]): B[]; }'.
@@ -13,6 +8,7 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
         Type 'B | ConcatArray<B>' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
           Type 'B' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
             Type 'B' is not assignable to type 'ConcatArray<A>'.
+              Property 'length' is missing in type 'B'.
 
 
 ==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
@@ -31,13 +27,8 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
     rrb = ara; // error: 'A' is not assignable to 'B'
     ~~~
 !!! error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
-!!! error TS2322:   Types of property 'concat' are incompatible.
-!!! error TS2322:     Type '{ <U>(...items: (ConcatArray<A> | ConcatArray<U>)[]): (A | U)[]; (...items: (A | ConcatArray<A>)[]): A[]; }' is not assignable to type '{ <U>(...items: (ConcatArray<B> | ConcatArray<U>)[]): (B | U)[]; (...items: (B | ConcatArray<B>)[]): B[]; }'.
-!!! error TS2322:       Types of parameters 'items' and 'items' are incompatible.
-!!! error TS2322:         Type 'B | ConcatArray<B>' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
-!!! error TS2322:           Type 'B' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
-!!! error TS2322:             Type 'B' is not assignable to type 'ConcatArray<A>'.
-!!! error TS2322:               Property 'length' is missing in type 'B'.
+!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+!!! error TS2322:     Property 'b' is missing in type 'A'.
     
     rra = cra;
     rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
@@ -51,4 +42,5 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
 !!! error TS2322:         Type 'B | ConcatArray<B>' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
 !!! error TS2322:           Type 'B' is not assignable to type 'ConcatArray<any> | ConcatArray<A>'.
 !!! error TS2322:             Type 'B' is not assignable to type 'ConcatArray<A>'.
+!!! error TS2322:               Property 'length' is missing in type 'B'.
     

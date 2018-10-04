@@ -169,6 +169,7 @@ async function forOfStatement17() {
 
     for ({ x = a } of await y) { z; }
 >x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 71, 10))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
 >y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
 >z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
 }
@@ -178,6 +179,7 @@ async function forOfStatement18() {
 
     for ({ x = a } of y) { await z; }
 >x : Symbol(x, Decl(es5-asyncFunctionForOfStatements.ts, 75, 10))
+>a : Symbol(a, Decl(es5-asyncFunctionForOfStatements.ts, 0, 20))
 >y : Symbol(y, Decl(es5-asyncFunctionForOfStatements.ts, 0, 14))
 >z : Symbol(z, Decl(es5-asyncFunctionForOfStatements.ts, 0, 17))
 }

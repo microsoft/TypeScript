@@ -14,7 +14,6 @@ export class C2 {
 >m : () => void
 }
 export namespace C2 { }
->C2 : typeof C2
 
 
 // merged with a namespace, multiple overloads
@@ -31,7 +30,6 @@ class C3 {
 >a : any
 }
 namespace C3 { }
->C3 : typeof C3
 
 // static methods, multiple overloads
 class C4 {
@@ -62,7 +60,6 @@ class C6 {
 >m : () => void
 }
 namespace C6 {
->C6 : typeof C6
 }
 
 // merged with namespace, static methods, multiple overloads
@@ -77,7 +74,6 @@ class C7 {
 >m : { (a: any): void; (): void; }
 }
 namespace C7 {
->C7 : typeof C7
 }
 
 // merged with namespace, static methods, duplicate declarations

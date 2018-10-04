@@ -120,6 +120,7 @@ namespace ts.server {
         };
     }
 
+    /*@internal*/
     export interface ProjectOptions {
         configHasExtendsProperty: boolean;
         /**
@@ -128,16 +129,6 @@ namespace ts.server {
         configHasFilesProperty: boolean;
         configHasIncludeProperty: boolean;
         configHasExcludeProperty: boolean;
-
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
-        /**
-         * these fields can be present in the project file
-         */
-        files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
-        compilerOptions?: CompilerOptions;
-        typeAcquisition?: TypeAcquisition;
-        compileOnSave?: boolean;
     }
 
     export function isInferredProjectName(name: string) {
@@ -255,14 +246,16 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
+    const indentStr = "\n    ";
+
     /* @internal */
     export function indent(str: string): string {
-        return "\n    " + str;
+        return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
     /* @internal */
     export function stringifyIndented(json: {}): string {
-        return "\n    " + JSON.stringify(json);
+        return indentStr + JSON.stringify(json);
     }
 }

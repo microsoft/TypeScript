@@ -1,4 +1,5 @@
 // @target: es6
+// @strictNullChecks: true
 
 // Repros from #10167
 
@@ -96,4 +97,13 @@ function goo(x: X) {
         x.y;
     }
     x;
+}
+
+// Repro from #27282
+
+declare const x: (() => void)|null;
+declare const ctor: Function;
+
+if (x instanceof ctor) {
+    x();
 }

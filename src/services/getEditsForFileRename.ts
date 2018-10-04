@@ -6,7 +6,7 @@ namespace ts {
         newFileOrDirPath: string,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
+        _preferences: UserPreferences,
         sourceMapper: SourceMapper,
     ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
@@ -15,7 +15,7 @@ namespace ts {
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
             updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
-            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
+            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
     }
 
@@ -122,7 +122,6 @@ namespace ts {
         newToOld: PathUpdater,
         host: LanguageServiceHost,
         getCanonicalFileName: GetCanonicalFileName,
-        preferences: UserPreferences,
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
@@ -156,7 +155,7 @@ namespace ts {
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, program.redirectTargetsMap, importLiteral.text)
                         : undefined;
                 });
         }
@@ -197,20 +196,28 @@ namespace ts {
     }
 
     function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
-        return resolved && (
-            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
+        // Search through all locations looking for a moved file, and only then test already existing files.
+        // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
+        return tryEach(tryGetNewFile) || tryEach(tryGetOldFile);
 
-        function getIfExists(oldLocation: string): ToImport | undefined {
-            const newLocation = oldToNew(oldLocation);
+        function tryEach(cb: (oldFileName: string) => ToImport | undefined): ToImport | undefined {
+            return resolved && (
+                (resolved.resolvedModule && cb(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, cb));
+        }
 
-            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
-                ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
-                : undefined;
+        function tryGetNewFile(oldFileName: string): ToImport | undefined {
+            const newFileName = oldToNew(oldFileName);
+            return newFileName !== undefined && host.fileExists!(newFileName) ? { newFileName, updated: true } : undefined; // TODO: GH#18217
+        }
+
+        function tryGetOldFile(oldFileName: string): ToImport | undefined {
+            const newFileName = oldToNew(oldFileName);
+            return host.fileExists!(oldFileName) ? newFileName !== undefined ? { newFileName, updated: true } : { newFileName: oldFileName, updated: false } : undefined; // TODO: GH#18217
         }
     }
 
     function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
-        for (const ref of sourceFile.referencedFiles) {
+        for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
             const updated = updateRef(ref.fileName);
             if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
         }
@@ -222,7 +229,7 @@ namespace ts {
     }
 
     function createStringRange(node: StringLiteralLike, sourceFile: SourceFileLike): TextRange {
-        return createTextRange(node.getStart(sourceFile) + 1, node.end - 1);
+        return createRange(node.getStart(sourceFile) + 1, node.end - 1);
     }
 
     function forEachProperty(objectLiteral: Expression, cb: (property: PropertyAssignment, propertyName: string) => void) {

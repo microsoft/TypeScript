@@ -300,23 +300,16 @@ type S2 = {
     b: string;
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -650,6 +643,20 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
     return d[k2];
 }
 
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -658,7 +665,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -872,23 +879,16 @@ var C1 = /** @class */ (function () {
     };
     return C1;
 }());
-function f90(x1, x2, x3, x4) {
+function f90(x1, x2, x3) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 function f91(x, y, z) {
     var a;
@@ -1078,6 +1078,15 @@ function ff2(dd, k1, k2) {
     var d = dd[k1];
     return d[k2];
 }
+// Repro from #26409
+var cf1 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
+var cf2 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1217,7 +1226,7 @@ declare type S2 = {
     a: string;
     b: string;
 };
-declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
 declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {
@@ -1413,3 +1422,7 @@ declare type DictDict<V extends string, T extends string> = {
 };
 declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
 declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare const cf1: <T extends { [P in K]: string; } & {
+    cool: string;
+}, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;

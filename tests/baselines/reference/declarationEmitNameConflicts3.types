@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     export interface D { }
->D : D
-
     export module D {
 >D : typeof D
 
@@ -43,12 +41,11 @@ module M.P {
 >D : D
 
         f
->f : D
+>f : D.f
     }
     export var v: M.D; // ok
 >v : M.D
 >M : any
->D : M.D
 
     export var w = M.D.f; // error, should be typeof M.D.f
 >w : () => void

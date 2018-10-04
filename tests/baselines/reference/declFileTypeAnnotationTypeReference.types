@@ -10,18 +10,15 @@ module m {
     }
     export class g<T> {
 >g : g<T>
->T : T
     }
 }
 class g<T> {
 >g : g<T>
->T : T
 }
 
 // Just the name
 function foo(): c {
 >foo : () => c
->c : c
 
     return new c();
 >new c() : c
@@ -39,7 +36,6 @@ function foo2() {
 function foo3(): m.c {
 >foo3 : () => m.c
 >m : any
->c : m.c
 
     return new m.c();
 >new m.c() : m.c
@@ -60,7 +56,6 @@ function foo4() {
 // Just the name with type arguments
 function foo5(): g<string> {
 >foo5 : () => g<string>
->g : g<T>
 
     return new g<string>();
 >new g<string>() : g<string>
@@ -78,7 +73,6 @@ function foo6() {
 function foo7(): m.g<number> {
 >foo7 : () => m.g<number>
 >m : any
->g : m.g<T>
 
     return new m.g<number>();
 >new m.g<number>() : m.g<number>

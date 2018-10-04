@@ -1,14 +1,11 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithCallAndConstructSignature.ts ===
 interface Foo {
->Foo : Foo
-
     (): number;
     new (): any;
 }
 
 var f: Foo;
 >f : Foo
->Foo : Foo
 
 var r = f();
 >r : number

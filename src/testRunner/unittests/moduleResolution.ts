@@ -1,14 +1,21 @@
 namespace ts {
-    export function checkResolvedModule(expected: ResolvedModuleFull | undefined, actual: ResolvedModuleFull): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
-                assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
+    export function checkResolvedModule(actual: ResolvedModuleFull | undefined, expected: ResolvedModuleFull | undefined): boolean {
+        if (!expected) {
+            if (actual) {
+                assert.fail(actual, expected, "expected resolved module to be undefined");
+                return false;
             }
             return true;
         }
-        return false;
+        else if (!actual) {
+            assert.fail(actual, expected, "expected resolved module to be defined");
+            return false;
+        }
+
+        assert.isTrue(actual.resolvedFileName === expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
+        assert.isTrue(actual.extension === expected.extension, `'ext': expected '${actual.extension}' to be equal to '${expected.extension}'`);
+        assert.isTrue(actual.isExternalLibraryImport === expected.isExternalLibraryImport, `'isExternalLibraryImport': expected '${actual.isExternalLibraryImport}' to be equal to '${expected.isExternalLibraryImport}'`);
+        return true;
     }
 
     export function checkResolvedModuleWithFailedLookupLocations(actual: ResolvedModuleWithFailedLookupLocations, expectedResolvedModule: ResolvedModuleFull, expectedFailedLookupLocations: string[]): void {
@@ -76,7 +83,7 @@ namespace ts {
     describe("Node module resolution - relative paths", () => {
 
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTypeScriptExtensions) {
+            for (const ext of supportedTSExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -89,7 +96,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTypeScriptExtensions) {
+                for (const e of supportedTSExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -130,7 +137,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTypeScriptExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions.length);
             }
         }
 
@@ -194,6 +201,88 @@ namespace ts {
     });
 
     describe("Node module resolution - non-relative paths", () => {
+        it("computes correct commonPrefix for moduleName cache", () => {
+            const resolutionCache = createModuleResolutionCache("/", (f) => f);
+            let cache = resolutionCache.getOrCreateCacheForModuleName("a");
+            cache.set("/sub", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/sub/node_modules/a/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/sub"));
+            assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("b");
+            cache.set("/sub/dir/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/sub/directory/node_modules/b/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/sub/dir/foo"));
+            assert.isDefined(cache.get("/sub/dir"));
+            assert.isDefined(cache.get("/sub"));
+            assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("c");
+            cache.set("/foo/bar", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/bar/node_modules/c/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo/bar"));
+            assert.isDefined(cache.get("/foo"));
+            assert.isDefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("d");
+            cache.set("/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "/foo/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo"));
+            assert.isUndefined(cache.get("/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("e");
+            cache.set("c:/foo", {
+                resolvedModule: {
+                    originalPath: undefined,
+                    resolvedFileName: "d:/bar/node_modules/e/index.ts",
+                    isExternalLibraryImport: true,
+                    extension: Extension.Ts,
+                },
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("c:/foo"));
+            assert.isDefined(cache.get("c:/"));
+            assert.isUndefined(cache.get("d:/"));
+
+            cache = resolutionCache.getOrCreateCacheForModuleName("f");
+            cache.set("/foo/bar/baz", {
+                resolvedModule: undefined,
+                failedLookupLocations: [],
+            });
+            assert.isDefined(cache.get("/foo/bar/baz"));
+            assert.isDefined(cache.get("/foo/bar"));
+            assert.isDefined(cache.get("/foo"));
+            assert.isDefined(cache.get("/"));
+        });
+
         it("load module as file - ts files not loaded", () => {
             test(/*hasDirectoryExists*/ false);
             test(/*hasDirectoryExists*/ true);
@@ -314,13 +403,58 @@ namespace ts {
         function testPreserveSymlinks(preserveSymlinks: boolean) {
             it(`preserveSymlinks: ${preserveSymlinks}`, () => {
                 const realFileName = "/linked/index.d.ts";
-                const symlinkFileName = "/app/node_modulex/linked/index.d.ts";
-                const host = createModuleResolutionHost(/*hasDirectoryExists*/ true, { name: realFileName, symlinks: [symlinkFileName] });
+                const symlinkFileName = "/app/node_modules/linked/index.d.ts";
+                const host = createModuleResolutionHost(
+                    /*hasDirectoryExists*/ true,
+                    { name: realFileName, symlinks: [symlinkFileName] },
+                    { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
+                );
                 const resolution = nodeModuleNameResolver("linked", "/app/app.ts", { preserveSymlinks }, host);
                 const resolvedFileName = preserveSymlinks ? symlinkFileName : realFileName;
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(resolvedFileName, /*isExternalLibraryImport*/ true));
             });
         }
+
+        it("uses originalPath for caching", () => {
+            const host = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                {
+                    name: "/modules/a.ts",
+                    symlinks: ["/sub/node_modules/a/index.ts"],
+                },
+                {
+                    name: "/sub/node_modules/a/package.json",
+                    content: '{"version": "0.0.0", "main": "./index"}'
+                }
+            );
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
+            const cache = createModuleResolutionCache("/", (f) => f);
+            let resolution = resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
+            resolution = resolveModuleName("a", "/sub/foo.ts", compilerOptions, host, cache);
+            checkResolvedModule(resolution.resolvedModule, createResolvedModule("/modules/a.ts", /*isExternalLibraryImport*/ true));
+
+            resolution = resolveModuleName("a", "/foo.ts", compilerOptions, host, cache);
+            assert.isUndefined(resolution.resolvedModule, "lookup in parent directory doesn't hit the cache");
+        });
+
+        it("preserves originalPath on cache hit", () => {
+            const host = createModuleResolutionHost(
+                /*hasDirectoryExists*/ true,
+                { name: "/linked/index.d.ts", symlinks: ["/app/node_modules/linked/index.d.ts"] },
+                { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
+            );
+            const cache = createModuleResolutionCache("/", (f) => f);
+            const compilerOptions: CompilerOptions = { moduleResolution: ModuleResolutionKind.NodeJs };
+            checkResolution(resolveModuleName("linked", "/app/src/app.ts", compilerOptions, host, cache));
+            checkResolution(resolveModuleName("linked", "/app/lib/main.ts", compilerOptions, host, cache));
+
+            function checkResolution(resolution: ResolvedModuleWithFailedLookupLocations) {
+                checkResolvedModule(resolution.resolvedModule, createResolvedModule("/linked/index.d.ts", /*isExternalLibraryImport*/ true));
+                assert.strictEqual(resolution.resolvedModule!.originalPath, "/app/node_modules/linked/index.d.ts");
+            }
+        });
     });
 
     describe("Module resolution - relative imports", () => {
@@ -970,12 +1104,16 @@ import b = require("./moduleB");
     });
 
     describe("Type reference directive resolution: ", () => {
-        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
-            const host = createModuleResolutionHost(/*hasDirectoryExists*/ false, ...[initialFile, targetFile].concat(...otherFiles));
-            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, { typeRoots: [typesRoot] }, host);
+        function testWorker(hasDirectoryExists: boolean, typesRoot: string | undefined, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            const host = createModuleResolutionHost(hasDirectoryExists, ...[initialFile, targetFile].concat(...otherFiles));
+            const result = resolveTypeReferenceDirective(typeDirective, initialFile.name, typesRoot ? { typeRoots: [typesRoot] } : {}, host);
             assert(result.resolvedTypeReferenceDirective!.resolvedFileName !== undefined, "expected type directive to be resolved");
             assert.equal(result.resolvedTypeReferenceDirective!.resolvedFileName, targetFile.name, "unexpected result of type reference resolution");
             assert.equal(result.resolvedTypeReferenceDirective!.primary, primary, "unexpected 'primary' value");
+        }
+
+        function test(typesRoot: string, typeDirective: string, primary: boolean, initialFile: File, targetFile: File, ...otherFiles: File[]) {
+            testWorker(/*hasDirectoryExists*/ false, typesRoot, typeDirective, primary, initialFile, targetFile, ...otherFiles);
         }
 
         it("Can be resolved from primary location", () => {
@@ -1060,7 +1198,7 @@ import b = require("./moduleB");
             const names = map(files, f => f.name);
             const sourceFiles = arrayToMap(map(files, f => createSourceFile(f.name, f.content, ScriptTarget.ES2015)), f => f.fileName);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => sourceFiles.has(fileName),
+                fileExists: fileName => sourceFiles.has(fileName),
                 getSourceFile: fileName => sourceFiles.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1085,7 +1223,7 @@ import b = require("./moduleB");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
         });
 
-        it ("Modules in the same .d.ts file are preferred to external files", () => {
+        it("Modules in the same .d.ts file are preferred to external files", () => {
             const f = {
                 name: "/a/b/c/c/app.d.ts",
                 content: `
@@ -1099,7 +1237,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1114,7 +1252,7 @@ import b = require("./moduleB");
             createProgram([f.name], {}, compilerHost);
         });
 
-        it ("Modules in .ts file are not checked in the same file", () => {
+        it("Modules in .ts file are not checked in the same file", () => {
             const f = {
                 name: "/a/b/c/c/app.ts",
                 content: `
@@ -1128,7 +1266,7 @@ import b = require("./moduleB");
             };
             const file = createSourceFile(f.name, f.content, ScriptTarget.ES2015);
             const compilerHost: CompilerHost = {
-                fileExists : fileName => fileName === file.fileName,
+                fileExists: fileName => fileName === file.fileName,
                 getSourceFile: fileName => fileName === file.fileName ? file : undefined,
                 getDefaultLibFileName: () => "lib.d.ts",
                 writeFile: notImplemented,
@@ -1144,6 +1282,16 @@ import b = require("./moduleB");
                 }
             };
             createProgram([f.name], {}, compilerHost);
+        });
+        describe("can be resolved when typeReferenceDirective is relative and in a sibling folder", () => {
+            const initialFile = { name: "/root/src/background/app.ts" };
+            const targetFile = { name: "/root/src/typedefs/filesystem.d.ts" };
+            it("when host doesnt have directoryExists", () => {
+                testWorker(/*hasDirectoryExists*/ false, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", /*primary*/ false, initialFile, targetFile);
+            });
+            it("when host has directoryExists", () => {
+                testWorker(/*hasDirectoryExists*/ true, /*typesRoot*/ undefined, /*typeDirective*/ "../typedefs/filesystem", /*primary*/ false, initialFile, targetFile);
+            });
         });
     });
 }

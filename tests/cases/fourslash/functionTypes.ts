@@ -21,4 +21,10 @@
 ////l./*7*/prototype = Object.prototype;
 
 verify.noErrors();
-verify.completionsAt(test.markerNames(), ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('1', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('2', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('3', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('4', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('5', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('6', ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completionsAt('7', ["prototype", "apply", "call", "bind", "toString", "length", "arguments", "caller" ]);

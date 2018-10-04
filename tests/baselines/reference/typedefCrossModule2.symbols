@@ -14,9 +14,7 @@ var bb;
 
 var bbb = new mod.Baz();
 >bbb : Symbol(bbb, Decl(use.js, 5, 3))
->mod.Baz : Symbol(Baz)
 >mod : Symbol(mod, Decl(use.js, 0, 3))
->Baz : Symbol(Baz)
 
 === tests/cases/conformance/jsdoc/mod1.js ===
 // error
@@ -33,6 +31,7 @@ exports.Bar = class { }
 
 /** @typedef {number} Baz */
 module.exports = {
+>module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 
@@ -54,6 +53,7 @@ exports.Quid = 2;
 
 /** @typedef {number} Quack */
 module.exports = {
+>module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 >exports : Symbol(export=, Decl(mod1.js, 6, 23), Decl(mod1.js, 19, 17))
 

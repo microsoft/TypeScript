@@ -13,7 +13,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function updateReportDiagnostic(options: CompilerOptions) {
+    function updateReportDiagnostic(options?: CompilerOptions) {
         if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -23,8 +23,8 @@ namespace ts {
         return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
     }
 
-    function shouldBePretty(options: CompilerOptions) {
-        if (typeof options.pretty === "undefined") {
+    function shouldBePretty(options?: CompilerOptions) {
+        if (!options || typeof options.pretty === "undefined") {
             return defaultIsPretty();
         }
         return options.pretty;
@@ -53,22 +53,10 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const reportDiag = createDiagnosticReporter(sys, defaultIsPretty());
-            const report = (message: DiagnosticMessage, ...args: string[]) => reportDiag(createCompilerDiagnostic(message, ...args));
-            const buildHost: BuildHost = {
-                error: report,
-                verbose: report,
-                message: report,
-                errorDiagnostic: d => reportDiag(d)
-            };
-            const result = performBuild(args.slice(1), createCompilerHost({}), buildHost, sys);
-            // undefined = in watch mode, do not exit
-            if (result !== undefined) {
-                return sys.exit(result);
-            }
-            else {
-                return;
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
             }
         }
 
@@ -172,6 +160,49 @@ namespace ts {
         }
     }
 
+    function performBuild(args: string[]) {
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
+        if (errors.length > 0) {
+            errors.forEach(reportDiagnostic);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+
+        if (buildOptions.help) {
+            printVersion();
+            printHelp(buildOpts, "--build ");
+            return sys.exit(ExitStatus.Success);
+        }
+
+        // Update to pretty if host supports it
+        updateReportDiagnostic();
+        if (projects.length === 0) {
+            printVersion();
+            printHelp(buildOpts, "--build ");
+            return sys.exit(ExitStatus.Success);
+        }
+
+        if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
+            reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+        if (buildOptions.watch) {
+            reportWatchModeWithoutSysSupport();
+        }
+
+        // TODO: change this to host if watch => watchHost otherwiue without wathc
+        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
+        if (buildOptions.clean) {
+            return sys.exit(builder.cleanAllProjects());
+        }
+
+        if (buildOptions.watch) {
+            builder.buildAllProjects();
+            return builder.startWatching();
+        }
+
+        return sys.exit(builder.buildAllProjects());
+    }
+
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
         enableStatistics(options);
@@ -191,12 +222,12 @@ namespace ts {
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
         const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
                 enableStatistics(options);
             }
-            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
@@ -205,7 +236,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(options: CompilerOptions) {
+    function createWatchStatusReporter(options?: CompilerOptions) {
         return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 

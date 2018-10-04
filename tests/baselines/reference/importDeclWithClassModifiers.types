@@ -1,9 +1,6 @@
 === tests/cases/compiler/importDeclWithClassModifiers.ts ===
 module x {
->x : any
-
     interface c {
->c : c
     }
 }
 export public import a = x.c;
@@ -23,5 +20,4 @@ export static import c = x.c;
 
 var b: a;
 >b : any
->a : any
 

@@ -9,7 +9,6 @@ var a: any = x;
 
 var b: Object = x;
 >b : Object
->Object : Object
 >x : string
 
 var c: string = x;
@@ -18,6 +17,5 @@ var c: string = x;
 
 var d: String = x;
 >d : String
->String : String
 >x : string
 

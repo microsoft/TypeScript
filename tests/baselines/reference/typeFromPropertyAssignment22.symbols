@@ -28,14 +28,14 @@ Installer.prototype.loadArgMetadata = function (next) {
     }
 }
 var i = new Installer()
->i : Symbol(i, Decl(npm-install.js, 10, 3))
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
 >Installer : Symbol(Installer, Decl(npm-install.js, 0, 0))
 
 i.newProperty = i.args // ok, number ==> number | undefined
 >i.newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
->i : Symbol(i, Decl(npm-install.js, 10, 3))
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
 >newProperty : Symbol(Installer.newProperty, Decl(npm-install.js, 6, 24))
 >i.args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
->i : Symbol(i, Decl(npm-install.js, 10, 3))
+>i : Symbol(i, Decl(npm-install.js, 10, 3), Decl(npm-install.js, 10, 23))
 >args : Symbol(Installer.args, Decl(npm-install.js, 0, 23), Decl(npm-install.js, 5, 15))
 

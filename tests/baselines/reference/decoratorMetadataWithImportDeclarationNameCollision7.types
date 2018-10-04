@@ -27,12 +27,10 @@ class MyClass {
     db: db.db; //error
 >db : any
 >db : any
->db : No type information available!
 
     constructor(db: db.db) { // error
 >db : any
 >db : any
->db : No type information available!
 
         this.db = db;
 >this.db = db : any

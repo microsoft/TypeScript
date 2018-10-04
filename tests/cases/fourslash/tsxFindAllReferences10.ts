@@ -15,7 +15,7 @@
 ////     className?: string;
 //// }
 //// interface ButtonProps extends ClickableProps {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;
+////     [|{| "isDefinition": true |}onClick|](event?: React.MouseEvent<HTMLButtonElement>): void;
 //// }
 //// interface LinkProps extends ClickableProps {
 ////     goTo: string;

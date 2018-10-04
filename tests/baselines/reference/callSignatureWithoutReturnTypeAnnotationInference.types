@@ -44,9 +44,7 @@ var r3 = foo3();
 
 function foo4<T>(x: T) {
 >foo4 : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -132,8 +130,6 @@ var r8 = foo8(1);
 >1 : 1
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
@@ -143,7 +139,6 @@ function foo9(x: number) {
 
     var i: I;
 >i : I
->I : I
 
     return i;    
 >i : I
@@ -166,7 +161,6 @@ function foo10(x: number) {
 
     var c: C;
 >c : C
->C : C
 
     return c;
 >c : C
@@ -201,14 +195,10 @@ var r11 = foo11();
 
 // merged declarations
 interface I2 {
->I2 : I2
-
     x: number;
 >x : number
 }
 interface I2 {
->I2 : I2
-
     y: number;
 >y : number
 }
@@ -217,7 +207,6 @@ function foo12() {
 
     var i2: I2;
 >i2 : I2
->I2 : I2
 
     return i2;
 >i2 : I2
@@ -276,7 +265,7 @@ var r14 = foo14();
 
 enum e1 { A }
 >e1 : e1
->A : e1
+>A : e1.A
 
 module e1 { export var y = 1; }
 >e1 : typeof e1

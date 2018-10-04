@@ -1,11 +1,11 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// interface C extends D {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propD|]: number;
+////     [|{| "isDefinition": true |}propD|]: number;
 //// }
 //// interface D extends C {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propD|]: string;
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propC|]: number;
+////     [|{| "isDefinition": true |}propD|]: string;
+////     [|{| "isDefinition": true |}propC|]: number;
 //// }
 //// var d: D;
 //// d.[|propD|];

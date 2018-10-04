@@ -1,44 +1,34 @@
 === tests/cases/compiler/functionSignatureAssignmentCompat1.ts ===
 interface ParserFunc {
->ParserFunc : ParserFunc
-
     (eventEmitter: number, buffer: string): void;
 >eventEmitter : number
 >buffer : string
 }
 interface Parsers {
->Parsers : Parsers
-
     raw: ParserFunc;
 >raw : ParserFunc
->ParserFunc : ParserFunc
 
     readline(delimiter?: string): ParserFunc;
 >readline : (delimiter?: string) => ParserFunc
 >delimiter : string
->ParserFunc : ParserFunc
 }
 var parsers: Parsers;
 >parsers : Parsers
->Parsers : Parsers
 
 var c: ParserFunc = parsers.raw; // ok!
 >c : ParserFunc
->ParserFunc : ParserFunc
 >parsers.raw : ParserFunc
 >parsers : Parsers
 >raw : ParserFunc
 
 var d: ParserFunc = parsers.readline; // not ok
 >d : ParserFunc
->ParserFunc : ParserFunc
 >parsers.readline : (delimiter?: string) => ParserFunc
 >parsers : Parsers
 >readline : (delimiter?: string) => ParserFunc
 
 var e: ParserFunc = parsers.readline(); // ok
 >e : ParserFunc
->ParserFunc : ParserFunc
 >parsers.readline() : ParserFunc
 >parsers.readline : (delimiter?: string) => ParserFunc
 >parsers : Parsers

@@ -20,7 +20,7 @@ namespace ts {
         const newLineCharacter = getNewLineCharacter(printerOptions);
 
         function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): formatting.FormatContext {
-            return formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...testFormatOptions, placeOpenBraceOnNewLineForFunctions: true } : testFormatOptions);
+            return formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : testFormatSettings);
         }
 
         // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.
@@ -47,17 +47,15 @@ namespace ts {
 
         function runSingleFileTest(caption: string, placeOpenBraceOnNewLineForFunctions: boolean, text: string, validateNodes: boolean, testBlock: (sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker) => void) {
             it(caption, () => {
-                Harness.Baseline.runBaseline(`textChanges/${caption}.js`, () => {
-                    const sourceFile = createSourceFile("source.ts", text, ScriptTarget.ES2015, /*setParentNodes*/ true);
-                    const rulesProvider = getRuleProvider(placeOpenBraceOnNewLineForFunctions);
-                    const changeTracker = new textChanges.ChangeTracker(newLineCharacter, rulesProvider);
-                    testBlock(sourceFile, changeTracker);
-                    const changes = changeTracker.getChanges(validateNodes ? verifyPositions : undefined);
-                    assert.equal(changes.length, 1);
-                    assert.equal(changes[0].fileName, sourceFile.fileName);
-                    const modified = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-                    return `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`;
-                });
+                const sourceFile = createSourceFile("source.ts", text, ScriptTarget.ES2015, /*setParentNodes*/ true);
+                const rulesProvider = getRuleProvider(placeOpenBraceOnNewLineForFunctions);
+                const changeTracker = new textChanges.ChangeTracker(newLineCharacter, rulesProvider);
+                testBlock(sourceFile, changeTracker);
+                const changes = changeTracker.getChanges(validateNodes ? verifyPositions : undefined);
+                assert.equal(changes.length, 1);
+                assert.equal(changes[0].fileName, sourceFile.fileName);
+                const modified = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+                Harness.Baseline.runBaseline(`textChanges/${caption}.js`, `===ORIGINAL===${newLineCharacter}${text}${newLineCharacter}===MODIFIED===${newLineCharacter}${modified}`);
             });
         }
 

@@ -96,6 +96,11 @@ namespace ts {
                         include: null,
                         files: ["../main.ts"]
                     }),
+                    "dev/configs/fifth.json": JSON.stringify({
+                        extends: "./fourth",
+                        include: ["../tests/utils.ts"],
+                        files: []
+                    }),
                     "dev/extends.json": JSON.stringify({ extends: 42 }),
                     "dev/extends2.json": JSON.stringify({ extends: "configs/base" }),
                     "dev/main.ts": "",
@@ -244,6 +249,29 @@ namespace ts {
                 }, [
                     combinePaths(basePath, "main.ts")
                 ]);
+
+                testSuccess("can overwrite top-level files using extended []", "configs/fifth.json", {
+                    allowJs: true,
+                    noImplicitAny: true,
+                    strictNullChecks: true,
+                    module: ModuleKind.System
+                }, [
+                    combinePaths(basePath, "tests/utils.ts")
+                ]);
+
+                it("adds extendedSourceFiles only once", () => {
+                    const sourceFile = readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
+                    const dir = combinePaths(basePath, "configs");
+                    const expected = [
+                        combinePaths(dir, "third.json"),
+                        combinePaths(dir, "second.json"),
+                        combinePaths(dir, "base.json"),
+                    ];
+                    parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                    parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                });
             });
         });
     });

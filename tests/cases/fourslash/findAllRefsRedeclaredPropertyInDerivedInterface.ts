@@ -3,10 +3,10 @@
 // @noLib: true
 
 ////interface A {
-////    readonly [|{| "isWriteAccess": true, "isDefinition": true |}x|]: number | string;
+////    readonly [|{| "isDefinition": true |}x|]: number | string;
 ////}
 ////interface B extends A {
-////    readonly [|{| "isWriteAccess": true, "isDefinition": true |}x|]: number;
+////    readonly [|{| "isDefinition": true |}x|]: number;
 ////}
 ////const a: A = { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: 0 };
 ////const b: B = { [|{| "isWriteAccess": true, "isDefinition": true |}x|]: 0 };

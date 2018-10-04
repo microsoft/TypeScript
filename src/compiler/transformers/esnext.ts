@@ -210,7 +210,7 @@ namespace ts {
         }
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            if (node.transformFlags & TransformFlags.ContainsObjectSpread) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // spread elements emit like so:
                 // non-spread elements are chunked together into object literals, and then all are passed to __assign:
                 //     { a, ...o, b } => __assign({a}, o, {b});
@@ -250,7 +250,7 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringAssignment(
                     node,
                     visitor,
@@ -276,7 +276,7 @@ namespace ts {
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
-            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringBinding(
                     node,
                     visitor,
@@ -307,7 +307,7 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
-            if (node.initializer.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 node = transformForOfStatementWithObjectRest(node);
             }
             if (node.awaitModifier) {
@@ -499,7 +499,7 @@ namespace ts {
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
-            if (node.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
                 return updateParameter(
@@ -716,7 +716,7 @@ namespace ts {
 
         function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
             for (const parameter of node.parameters) {
-                if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
+                if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     const temp = getGeneratedNameForNode(parameter);
                     const declarations = flattenDestructuringBinding(
                         parameter,

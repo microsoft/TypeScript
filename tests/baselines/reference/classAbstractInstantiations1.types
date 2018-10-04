@@ -33,15 +33,12 @@ new C;
 
 var a : A;
 >a : A
->A : A
 
 var b : B;
 >b : B
->B : B
 
 var c : C;
 >c : C
->C : C
 
 a = new B;
 >a = new B : B

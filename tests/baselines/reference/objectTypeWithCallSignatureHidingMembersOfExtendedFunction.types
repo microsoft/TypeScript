@@ -3,19 +3,14 @@
 // no errors expected below 
 
 interface Function {
->Function : Function
-
     data: number;
 >data : number
 
     [x: string]: Object;
 >x : string
->Object : Object
 }
 
 interface I {
->I : I
-
     (): void;
     apply(a: any, b?: any): void;
 >apply : (a: any, b?: any) => void
@@ -30,7 +25,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 var r1: (a: any, b?: any) => void = i.apply;
 >r1 : (a: any, b?: any) => void
@@ -61,8 +55,8 @@ var r1d = i.data;
 >data : number
 
 var r1e = i['hm']; // should be Object
->r1e : any
->i['hm'] : any
+>r1e : error
+>i['hm'] : error
 >i : I
 >'hm' : "hm"
 
@@ -110,8 +104,8 @@ var r2d = x.data;
 >data : number
 
 var r2e = x['hm']; // should be Object
->r2e : any
->x['hm'] : any
+>r2e : error
+>x['hm'] : error
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >'hm' : "hm"
 

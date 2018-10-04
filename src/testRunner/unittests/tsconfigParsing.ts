@@ -61,6 +61,19 @@ namespace ts {
             }
         }
 
+        function assertParseFileDiagnosticsExclusion(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedExcludedDiagnosticCode: number) {
+            {
+                const parsed = getParsedCommandJson(jsonText, configFileName, basePath, allFileList);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.findIndex(e => e.code === expectedExcludedDiagnosticCode) === -1, `Expected error code ${expectedExcludedDiagnosticCode} to not be in ${JSON.stringify(parsed.errors)}`);
+            }
+            {
+                const parsed = getParsedCommandJsonNode(jsonText, configFileName, basePath, allFileList);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.findIndex(e => e.code === expectedExcludedDiagnosticCode) === -1, `Expected error code ${expectedExcludedDiagnosticCode} to not be in ${JSON.stringify(parsed.errors)}`);
+            }
+        }
+
         it("returns empty config for file with only whitespaces", () => {
             assertParseResult("", { config : {} });
             assertParseResult(" ", { config : {} });
@@ -280,6 +293,30 @@ namespace ts {
                 Diagnostics.The_files_list_in_config_file_0_is_empty.code);
         });
 
+        it("generates errors for empty files list when no references are provided", () => {
+            const content = `{
+                "files": [],
+                "references": []
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        });
+
+        it("does not generate errors for empty files list when one or more references are provided", () => {
+            const content = `{
+                "files": [],
+                "references": [{ "path": "/apath" }]
+            }`;
+            assertParseFileDiagnosticsExclusion(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        });
+
         it("generates errors for directory with no .ts files", () => {
             const content = `{
             }`;
@@ -330,6 +367,19 @@ namespace ts {
                 ["/apath/a.ts"],
                 Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
                 /*noLocation*/ true);
+        });
+
+
+        it("generates errors for when invalid comment type present in tsconfig", () => {
+            const jsonText = `{
+              "compilerOptions": {
+                ## this comment does cause issues
+                "types" : [
+                ]
+              }
+            }`;
+            const parsed = getParsedCommandJsonNode(jsonText, "/apath/tsconfig.json", "tests/cases/unittests", ["/apath/a.ts"]);
+            assert.isTrue(parsed.errors.length >= 0);
         });
     });
 }

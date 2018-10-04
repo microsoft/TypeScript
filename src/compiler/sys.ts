@@ -317,16 +317,20 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
-            const eventKind = oldTime === 0
-                ? FileWatcherEventKind.Created
-                : newTime === 0
-                    ? FileWatcherEventKind.Deleted
-                    : FileWatcherEventKind.Changed;
-            watchedFile.callback(watchedFile.fileName, eventKind);
+            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime));
             return true;
         }
 
         return false;
+    }
+
+    /*@internal*/
+    export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+        return oldTime === 0
+            ? FileWatcherEventKind.Created
+            : newTime === 0
+                ? FileWatcherEventKind.Deleted
+                : FileWatcherEventKind.Changed;
     }
 
     /*@internal*/
@@ -482,7 +486,7 @@ namespace ts {
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
-        getModifiedTime?(path: string): Date;
+        getModifiedTime?(path: string): Date | undefined;
         setModifiedTime?(path: string, time: Date): void;
         deleteFile?(path: string): void;
         /**
@@ -756,8 +760,7 @@ namespace ts {
                     if (recursive) {
                         return watchDirectoryRecursively(directoryName, callback);
                     }
-                    watchDirectory(directoryName, callback);
-                    return undefined!; // TODO: GH#18217
+                    return watchDirectory(directoryName, callback);
                 };
             }
 

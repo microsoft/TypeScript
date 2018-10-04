@@ -42,12 +42,11 @@ enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 
 var g: E = x;
 >g : E
->E : E
 >x : any
 
 var g2 = E.A;
@@ -70,19 +69,15 @@ class C {
 
 var h: C = x;
 >h : C
->C : C
 >x : any
 
 interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 
 var i: I = x;
 >i : I
->I : I
 >x : any
 
 var j: { (): string } = x;
@@ -91,9 +86,7 @@ var j: { (): string } = x;
 
 var j2: { <T>(x: T): string } = x;
 >j2 : <T>(x: T) => string
->T : T
 >x : T
->T : T
 >x : any
 
 module M {
@@ -111,9 +104,7 @@ M = x;
 
 function k<T>(a: T) {
 >k : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     a = x;
 >a = x : any

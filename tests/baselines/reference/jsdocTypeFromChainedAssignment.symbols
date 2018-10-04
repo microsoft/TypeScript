@@ -45,17 +45,17 @@ A.s = A.t = function g(m) {
 >this : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1))
 }
 var a = new A()
->a : Symbol(a, Decl(a.js, 13, 3))
+>a : Symbol(a, Decl(a.js, 13, 3), Decl(a.js, 17, 22))
 >A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1))
 
 a.y('no') // error
 >a.y : Symbol(A.y, Decl(a.js, 4, 1))
->a : Symbol(a, Decl(a.js, 13, 3))
+>a : Symbol(a, Decl(a.js, 13, 3), Decl(a.js, 17, 22))
 >y : Symbol(A.y, Decl(a.js, 4, 1))
 
 a.z('not really') // error
 >a.z : Symbol(A.z, Decl(a.js, 6, 15))
->a : Symbol(a, Decl(a.js, 13, 3))
+>a : Symbol(a, Decl(a.js, 13, 3), Decl(a.js, 17, 22))
 >z : Symbol(A.z, Decl(a.js, 6, 15))
 
 A.s('still no') // error
@@ -70,6 +70,6 @@ A.t('not here either') // error
 
 a.first = 10 // error: '10' isn't assignable to '1'
 >a.first : Symbol(A.first, Decl(a.js, 1, 14))
->a : Symbol(a, Decl(a.js, 13, 3))
+>a : Symbol(a, Decl(a.js, 13, 3), Decl(a.js, 17, 22))
 >first : Symbol(A.first, Decl(a.js, 1, 14))
 

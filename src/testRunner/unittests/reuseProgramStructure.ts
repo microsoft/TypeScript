@@ -104,7 +104,7 @@ namespace ts {
         return file;
     }
 
-    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts): TestCompilerHost {
+    export function createTestCompilerHost(texts: ReadonlyArray<NamedSourceText>, target: ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
                 let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
@@ -117,55 +117,47 @@ namespace ts {
             }
             return createSourceFileWithText(t.name, t.text, target);
         });
+        const useCaseSensitiveFileNames = sys && sys.useCaseSensitiveFileNames;
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         const trace: string[] = [];
-
-        return {
+        const result: TestCompilerHost = {
             trace: s => trace.push(s),
             getTrace: () => trace,
-            getSourceFile(fileName): SourceFile {
-                return files.get(fileName)!;
-            },
-            getDefaultLibFileName(): string {
-                return "lib.d.ts";
-            },
+            getSourceFile: fileName => files.get(fileName),
+            getDefaultLibFileName: () => "lib.d.ts",
             writeFile: notImplemented,
-            getCurrentDirectory(): string {
-                return "";
-            },
-            getDirectories(): string[] {
-                return [];
-            },
-            getCanonicalFileName(fileName): string {
-                return sys && sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-            },
-            useCaseSensitiveFileNames(): boolean {
-                return sys && sys.useCaseSensitiveFileNames;
-            },
-            getNewLine(): string {
-                return sys ? sys.newLine : newLine;
-            },
+            getCurrentDirectory: () => "",
+            getDirectories: () => [],
+            getCanonicalFileName,
+            useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
+            getNewLine: () => sys ? sys.newLine : newLine,
             fileExists: fileName => files.has(fileName),
             readFile: fileName => {
                 const file = files.get(fileName);
                 return file && file.text;
             },
         };
+        if (useGetSourceFileByPath) {
+            const filesByPath = mapEntries(files, (fileName, file) => [toPath(fileName, "", getCanonicalFileName), file]);
+            result.getSourceFileByPath = (_fileName, path) => filesByPath.get(path);
+        }
+        return result;
     }
 
-    export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions): ProgramWithSourceTexts {
-        const host = createTestCompilerHost(texts, options.target!);
+    export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions, useGetSourceFileByPath?: boolean): ProgramWithSourceTexts {
+        const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
         program.sourceTexts = texts;
         program.host = host;
         return program;
     }
 
-    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+    export function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: ReadonlyArray<string>, options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[], useGetSourceFileByPath?: boolean) {
         if (!newTexts) {
             newTexts = oldProgram.sourceTexts!.slice(0);
         }
         updater(newTexts);
-        const host = createTestCompilerHost(newTexts, options.target!, oldProgram);
+        const host = createTestCompilerHost(newTexts, options.target!, oldProgram, useGetSourceFileByPath);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
         program.sourceTexts = newTexts;
         program.host = host;
@@ -177,15 +169,10 @@ namespace ts {
         file.text = file.text.updateProgram(newProgramText);
     }
 
-    function checkResolvedTypeDirective(expected: ResolvedTypeReferenceDirective, actual: ResolvedTypeReferenceDirective): boolean {
-        if (!expected === !actual) {
-            if (expected) {
-                assert.equal(expected.resolvedFileName, actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.equal(expected.primary, actual.primary, `'primary': expected '${expected.primary}' to be equal to '${actual.primary}'`);
-            }
-            return true;
-        }
-        return false;
+    function checkResolvedTypeDirective(actual: ResolvedTypeReferenceDirective, expected: ResolvedTypeReferenceDirective) {
+        assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
+        assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
+        return true;
     }
 
     function checkCache<T>(caption: string, program: Program, fileName: string, expectedContent: Map<T> | undefined, getCache: (f: SourceFile) => Map<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
@@ -310,10 +297,10 @@ namespace ts {
             assert.equal(program1.structureIsReused, StructureIsReused.Not);
         });
 
-        it("fails if rootdir changes", () => {
+        it("succeeds if rootdir changes", () => {
             const program1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
             updateProgram(program1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.equal(program1.structureIsReused, StructureIsReused.Not);
+            assert.equal(program1.structureIsReused, StructureIsReused.Completely);
         });
 
         it("fails if config path changes", () => {
@@ -397,6 +384,30 @@ namespace ts {
                 files[0].text = files[0].text.updateProgram('import * as aa from "a";');
             });
             assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+        });
+
+        it("works with updated SourceFiles", () => {
+            // adapted repro from https://github.com/Microsoft/TypeScript/issues/26166
+            const files = [
+                { name: "/a.ts", text: SourceText.New("", "", 'import * as a from "a";a;') },
+                { name: "/types/zzz/index.d.ts", text: SourceText.New("", "", 'declare module "a" { }') },
+            ];
+            const host = createTestCompilerHost(files, target);
+            const options: CompilerOptions = { target, typeRoots: ["/types"] };
+            const program1 = createProgram(["/a.ts"], options, host);
+            let sourceFile = program1.getSourceFile("/a.ts")!;
+            assert.isDefined(sourceFile, "'/a.ts' is included in the program");
+            sourceFile = updateSourceFile(sourceFile, "'use strict';" + sourceFile.text, { newLength: "'use strict';".length, span: { start: 0, length: 0 } });
+            assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are updated");
+            const updateHost: TestCompilerHost = {
+                ...host,
+                getSourceFile(fileName) {
+                    return fileName === sourceFile.fileName ? sourceFile : program1.getSourceFile(fileName);
+                }
+            };
+            const program2 = createProgram(["/a.ts"], options, updateHost, program1);
+            assert.isDefined(program2.getSourceFile("/a.ts")!.resolvedModules!.get("a"), "'a' is not an unresolved module after re-use");
+            assert.strictEqual(sourceFile.statements[2].getSourceFile(), sourceFile, "parent pointers are not altered");
         });
 
         it("resolved type directives cache follows type directives", () => {
@@ -790,7 +801,7 @@ namespace ts {
             const root = "/a.ts";
             const compilerOptions = { target, moduleResolution: ModuleResolutionKind.NodeJs };
 
-            function createRedirectProgram(options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
+            function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
                 const files: NamedSourceText[] = [
                     {
                         name: "/node_modules/a/index.d.ts",
@@ -822,55 +833,64 @@ namespace ts {
                     },
                 ];
 
-                return newProgram(files, [root], compilerOptions);
+                return newProgram(files, [root], compilerOptions, useGetSourceFileByPath);
             }
 
-            function updateRedirectProgram(program: ProgramWithSourceTexts, updater: (files: NamedSourceText[]) => void): ProgramWithSourceTexts {
-                return updateProgram(program, [root], compilerOptions, updater);
+            function updateRedirectProgram(program: ProgramWithSourceTexts, updater: (files: NamedSourceText[]) => void, useGetSourceFileByPath: boolean): ProgramWithSourceTexts {
+                return updateProgram(program, [root], compilerOptions, updater, /*newTexts*/ undefined, useGetSourceFileByPath);
             }
 
-            it("No changes -> redirect not broken", () => {
-                const program1 = createRedirectProgram();
+            function verifyRedirects(useGetSourceFileByPath: boolean) {
+                it("No changes -> redirect not broken", () => {
+                    const program1 = createRedirectProgram(useGetSourceFileByPath);
 
-                const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, root, "const x = 1;");
+                    const program2 = updateRedirectProgram(program1, files => {
+                        updateProgramText(files, root, "const x = 1;");
+                    }, useGetSourceFileByPath);
+                    assert.equal(program1.structureIsReused, StructureIsReused.Completely);
+                    assert.lengthOf(program2.getSemanticDiagnostics(), 0);
                 });
-                assert.equal(program1.structureIsReused, StructureIsReused.Completely);
-                assert.lengthOf(program2.getSemanticDiagnostics(), 0);
+
+                it("Target changes -> redirect broken", () => {
+                    const program1 = createRedirectProgram(useGetSourceFileByPath);
+                    assert.lengthOf(program1.getSemanticDiagnostics(), 0);
+
+                    const program2 = updateRedirectProgram(program1, files => {
+                        updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
+                        updateProgramText(files, axPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
+                    }, useGetSourceFileByPath);
+                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.lengthOf(program2.getSemanticDiagnostics(), 1);
+                });
+
+                it("Underlying changes -> redirect broken", () => {
+                    const program1 = createRedirectProgram(useGetSourceFileByPath);
+
+                    const program2 = updateRedirectProgram(program1, files => {
+                        updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
+                        updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
+                    }, useGetSourceFileByPath);
+                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.lengthOf(program2.getSemanticDiagnostics(), 1);
+                });
+
+                it("Previously duplicate packages -> program structure not reused", () => {
+                    const program1 = createRedirectProgram(useGetSourceFileByPath, { bVersion: "1.2.4", bText: "export = class X { private x: number; }" });
+
+                    const program2 = updateRedirectProgram(program1, files => {
+                        updateProgramText(files, bxIndex, "export default class X { private x: number; }");
+                        updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
+                    }, useGetSourceFileByPath);
+                    assert.equal(program1.structureIsReused, StructureIsReused.Not);
+                    assert.deepEqual(program2.getSemanticDiagnostics(), []);
+                });
+            }
+
+            describe("when host implements getSourceFile", () => {
+                verifyRedirects(/*useGetSourceFileByPath*/ false);
             });
-
-            it("Target changes -> redirect broken", () => {
-                const program1 = createRedirectProgram();
-                assert.lengthOf(program1.getSemanticDiagnostics(), 0);
-
-                const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, axIndex, "export default class X { private x: number; private y: number; }");
-                    updateProgramText(files, axPackage, JSON.stringify('{ name: "x", version: "1.2.4" }'));
-                });
-                assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.lengthOf(program2.getSemanticDiagnostics(), 1);
-            });
-
-            it("Underlying changes -> redirect broken", () => {
-                const program1 = createRedirectProgram();
-
-                const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, bxIndex, "export default class X { private x: number; private y: number; }");
-                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.4" }));
-                });
-                assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.lengthOf(program2.getSemanticDiagnostics(), 1);
-            });
-
-            it("Previously duplicate packages -> program structure not reused", () => {
-                const program1 = createRedirectProgram({ bVersion: "1.2.4", bText: "export = class X { private x: number; }" });
-
-                const program2 = updateRedirectProgram(program1, files => {
-                    updateProgramText(files, bxIndex, "export default class X { private x: number; }");
-                    updateProgramText(files, bxPackage, JSON.stringify({ name: "x", version: "1.2.3" }));
-                });
-                assert.equal(program1.structureIsReused, StructureIsReused.Not);
-                assert.deepEqual(program2.getSemanticDiagnostics(), []);
+            describe("when host implements getSourceFileByPath", () => {
+                verifyRedirects(/*useGetSourceFileByPath*/ true);
             });
         });
     });
@@ -895,7 +915,8 @@ namespace ts {
                 program, newRootFileNames, newOptions,
                 path => program.getSourceFileByPath(path)!.version, /*fileExists*/ returnFalse,
                 /*hasInvalidatedResolution*/ returnFalse,
-                /*hasChangedAutomaticTypeDirectiveNames*/ false
+                /*hasChangedAutomaticTypeDirectiveNames*/ false,
+                /*projectReferences*/ undefined
             );
             assert.isTrue(actual);
         }

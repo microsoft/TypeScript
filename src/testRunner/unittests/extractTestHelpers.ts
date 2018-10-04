@@ -64,29 +64,8 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export const testFormatOptions: FormatCodeSettings = {
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter,
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceBeforeFunctionParenthesis: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-    };
 
-    const notImplementedHost: LanguageServiceHost = {
+    export const notImplementedHost: LanguageServiceHost = {
         getCompilationSettings: notImplemented,
         getScriptFileNames: notImplemented,
         getScriptVersion: notImplemented,
@@ -123,7 +102,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions),
+                formatContext: formatting.getFormatContext(testFormatSettings),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
@@ -131,23 +110,21 @@ namespace ts {
             const infos = refactor.extractSymbol.getAvailableActions(context)!;
             const actions = find(infos, info => info.description === description.message)!.actions;
 
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, () => {
-                const data: string[] = [];
-                data.push(`// ==ORIGINAL==`);
-                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-                for (const action of actions) {
-                    const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
-                    assert.lengthOf(edits, 1);
-                    data.push(`// ==SCOPE::${action.description}==`);
-                    const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
-                    const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
-                    data.push(newTextWithRename);
+            const data: string[] = [];
+            data.push(`// ==ORIGINAL==`);
+            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+            for (const action of actions) {
+                const { renameLocation, edits } = refactor.extractSymbol.getEditsForAction(context, action.name)!;
+                assert.lengthOf(edits, 1);
+                data.push(`// ==SCOPE::${action.description}==`);
+                const newText = textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+                const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
+                data.push(newTextWithRename);
 
-                    const diagProgram = makeProgram({ path, content: newText }, includeLib);
-                    assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-                }
-                return data.join(newLineCharacter);
-            });
+                const diagProgram = makeProgram({ path, content: newText }, includeLib);
+                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+            }
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
         }
 
         function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
@@ -187,7 +164,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions),
+                formatContext: formatting.getFormatContext(testFormatSettings),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));

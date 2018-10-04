@@ -13,19 +13,15 @@ type T4 = [number?, string?, boolean?];
 
 type L1 = T1["length"];
 >L1 : 3
->T1 : [number, string, boolean]
 
 type L2 = T2["length"];
 >L2 : 3 | 2
->T2 : [number, string, (boolean | undefined)?]
 
 type L3 = T3["length"];
 >L3 : 3 | 2 | 1
->T3 : [number, (string | undefined)?, (boolean | undefined)?]
 
 type L4 = T4["length"];
 >L4 : 0 | 3 | 2 | 1
->T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 
 type T5 = [number, string?, boolean];  // Error
 >T5 : [number, string | undefined, boolean]
@@ -33,13 +29,9 @@ type T5 = [number, string?, boolean];  // Error
 function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >f1 : (t1: [number, string, boolean], t2: [number, string, (boolean | undefined)?], t3: [number, (string | undefined)?, (boolean | undefined)?], t4: [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]) => void
 >t1 : [number, string, boolean]
->T1 : [number, string, boolean]
 >t2 : [number, string, (boolean | undefined)?]
->T2 : [number, string, (boolean | undefined)?]
 >t3 : [number, (string | undefined)?, (boolean | undefined)?]
->T3 : [number, (string | undefined)?, (boolean | undefined)?]
 >t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 
     t1 = t1;
 >t1 = t1 : [number, string, boolean]
@@ -124,15 +116,12 @@ function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 
 let t2: T2;
 >t2 : [number, string, (boolean | undefined)?]
->T2 : [number, string, (boolean | undefined)?]
 
 let t3: T3;
 >t3 : [number, (string | undefined)?, (boolean | undefined)?]
->T3 : [number, (string | undefined)?, (boolean | undefined)?]
 
 let t4: T4;
 >t4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
->T4 : [(number | undefined)?, (string | undefined)?, (boolean | undefined)?]
 
 t2 = [42, "hello"];
 >t2 = [42, "hello"] : [number, string]

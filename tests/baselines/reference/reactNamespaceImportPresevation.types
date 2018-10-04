@@ -17,7 +17,7 @@ declare var foo: any;
 >foo : any
 
 <foo data/>;
-><foo data/> : any
+><foo data/> : error
 >foo : any
 >data : true
 

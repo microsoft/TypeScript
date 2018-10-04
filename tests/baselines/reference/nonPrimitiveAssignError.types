@@ -76,17 +76,14 @@ s = a; // expect error
 
 var numObj: Number = 123;
 >numObj : Number
->Number : Number
 >123 : 123
 
 var boolObj: Boolean = true;
 >boolObj : Boolean
->Boolean : Boolean
 >true : true
 
 var strObj: String = "string";
 >strObj : String
->String : String
 >"string" : "string"
 
 a = numObj; // ok

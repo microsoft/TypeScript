@@ -121,10 +121,6 @@ namespace ts {
         const buckets = createMap<Map<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
-        function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
-        }
-
         function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): Map<DocumentRegistryEntry> {
             let bucket = buckets.get(key);
             if (!bucket && createIfMissing) {
@@ -184,7 +180,7 @@ namespace ts {
 
             const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
             let entry = bucket.get(path);
-            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target;
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
             if (!entry && externalCache) {
                 const sourceFile = externalCache.getDocument(key, path);
                 if (sourceFile) {
@@ -199,7 +195,7 @@ namespace ts {
 
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget!, version, /*setNodeParents*/ false, scriptKind); // TODO: GH#18217
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
                 if (externalCache) {
                     externalCache.setDocument(key, path, sourceFile);
                 }
@@ -272,5 +268,9 @@ namespace ts {
             reportStats,
             getKeyForCompilationSettings
         };
+    }
+
+    function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
+        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
     }
 }

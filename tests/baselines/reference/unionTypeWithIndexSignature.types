@@ -10,7 +10,6 @@ type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
 
 declare var u: Two
 >u : Two
->Two : Two
 
 u.foo = 'bye'
 >u.foo = 'bye' : "bye"
@@ -34,7 +33,6 @@ type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean 
 
 declare var v: Three
 >v : Three
->Three : Three
 
 v.foo = false
 >v.foo = false : false
@@ -53,7 +51,6 @@ type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boo
 
 declare var m: Missing
 >m : Missing
->Missing : Missing
 
 m.foo = 'hi'
 >m.foo = 'hi' : "hi"
@@ -74,7 +71,6 @@ type RO = { foo: number } | { readonly [s: string]: string }
 
 declare var ro: RO
 >ro : RO
->RO : RO
 
 ro.foo = 'not allowed'
 >ro.foo = 'not allowed' : "not allowed"
@@ -90,7 +86,6 @@ type Num = { '0': string } | { [n: number]: number }
 
 declare var num: Num
 >num : Num
->Num : Num
 
 num[0] = 1
 >num[0] = 1 : 1
@@ -101,7 +96,7 @@ num[0] = 1
 
 num['0'] = 'ok'
 >num['0'] = 'ok' : "ok"
->num['0'] : string | number
+>num['0'] : number
 >num : Num
 >'0' : "0"
 >'ok' : "ok"
@@ -122,7 +117,6 @@ type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, 
 
 declare var both: Both
 >both : Both
->Both : Both
 
 both['s'] = 'ok'
 >both['s'] = 'ok' : "ok"

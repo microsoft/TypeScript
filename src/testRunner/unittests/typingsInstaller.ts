@@ -146,8 +146,10 @@ namespace ts.projectSystem {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
             const expectedWatchedDirectoriesRecursive = createMap<number>();
-            expectedWatchedDirectoriesRecursive.set("/a/b", 2); // TypingInstaller and wild card
+            expectedWatchedDirectoriesRecursive.set("/a/b", 1); // wild card
             expectedWatchedDirectoriesRecursive.set("/a/b/node_modules/@types", 1); // type root watch
+            expectedWatchedDirectoriesRecursive.set("/a/b/node_modules", 1); // TypingInstaller
+            expectedWatchedDirectoriesRecursive.set("/a/b/bower_components", 1); // TypingInstaller
             checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
@@ -428,7 +430,6 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-
             checkProjectActualFiles(p, [jqueryJs.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
@@ -844,9 +845,7 @@ namespace ts.projectSystem {
 
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
 
-            const watchedRecursiveDirectoriesExpected = createMap<number>();
-            watchedRecursiveDirectoriesExpected.set("/", 2); // wild card + type installer
-            checkWatchedDirectoriesDetailed(host, watchedRecursiveDirectoriesExpected, /*recursive*/ true);
+            checkWatchedDirectoriesDetailed(host, ["/", "/node_modules", "/bower_components"], 1, /*recursive*/ true);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -1323,7 +1322,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: Semver.parse("1.3.0") } });
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
             const registry = createTypesRegistry("node");
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry);
@@ -1345,7 +1344,7 @@ namespace ts.projectSystem {
                 content: ""
             };
             const host = createServerHost([f, node]);
-            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: Semver.parse("1.3.0") } });
+            const cache = createMapFromTemplate<JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new Version("1.3.0") } });
             const logger = trackingLogger();
             const result = JsTyping.discoverTypings(host, logger.log, [f.path], getDirectoryPath(<Path>f.path), emptySafeList, cache, { enable: true }, ["fs", "bar"], emptyMap);
             assert.deepEqual(logger.finish(), [
@@ -1402,8 +1401,8 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([app]);
             const cache = createMapFromTemplate<JsTyping.CachedTyping>({
-                node: { typingLocation: node.path, version: Semver.parse("1.3.0") },
-                commander: { typingLocation: commander.path, version: Semver.parse("1.0.0") }
+                node: { typingLocation: node.path, version: new Version("1.3.0") },
+                commander: { typingLocation: commander.path, version: new Version("1.0.0") }
             });
             const registry = createTypesRegistry("node", "commander");
             const logger = trackingLogger();
@@ -1428,7 +1427,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([app]);
             const cache = createMapFromTemplate<JsTyping.CachedTyping>({
-                node: { typingLocation: node.path, version: Semver.parse("1.0.0") }
+                node: { typingLocation: node.path, version: new Version("1.0.0") }
             });
             const registry = createTypesRegistry("node");
             registry.delete(`ts${versionMajorMinor}`);
@@ -1459,8 +1458,8 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([app]);
             const cache = createMapFromTemplate<JsTyping.CachedTyping>({
-                node: { typingLocation: node.path, version: Semver.parse("1.3.0-next.0") },
-                commander: { typingLocation: commander.path, version: Semver.parse("1.3.0-next.0") }
+                node: { typingLocation: node.path, version: new Version("1.3.0-next.0") },
+                commander: { typingLocation: commander.path, version: new Version("1.3.0-next.0") }
             });
             const registry = createTypesRegistry("node", "commander");
             registry.get("node")![`ts${versionMajorMinor}`] = "1.3.0-next.1";

@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.1";
+    export const versionMajorMinor = "3.2";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -65,6 +65,7 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const emptyArray: never[] = [] as never[];
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
@@ -789,11 +790,8 @@ namespace ts {
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
-    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[];
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer?: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined;
-    export function deduplicate<T>(array: ReadonlyArray<T> | undefined, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] | undefined {
-        return !array ? undefined :
-            array.length === 0 ? [] :
+    export function deduplicate<T>(array: ReadonlyArray<T>, equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
+        return array.length === 0 ? [] :
             array.length === 1 ? array.slice() :
             comparer ? deduplicateRelational(array, equalityComparer, comparer) :
             deduplicateEquality(array, equalityComparer);
@@ -802,10 +800,7 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[];
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined;
-    function deduplicateSorted<T>(array: ReadonlyArray<T> | undefined, comparer: EqualityComparer<T> | Comparer<T>): T[] | undefined {
-        if (!array) return undefined;
+    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
         if (array.length === 0) return [];
 
         let last = array[0];
@@ -847,7 +842,7 @@ namespace ts {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -857,7 +852,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; i++) {
-            if (!equalityComparer(array1[i], array2[i])) {
+            if (!equalityComparer(array1[i], array2[i], i)) {
                 return false;
             }
         }
@@ -1272,7 +1267,7 @@ namespace ts {
         if (!left || !right) return false;
         for (const key in left) {
             if (hasOwnProperty.call(left, key)) {
-                if (!hasOwnProperty.call(right, key) === undefined) return false;
+                if (!hasOwnProperty.call(right, key)) return false;
                 if (!equalityComparer(left[key], right[key])) return false;
             }
         }
@@ -1414,8 +1409,11 @@ namespace ts {
     /**
      * Tests whether a value is string
      */
-    export function isString(text: any): text is string {
+    export function isString(text: unknown): text is string {
         return typeof text === "string";
+    }
+    export function isNumber(x: unknown): x is number {
+        return typeof x === "number";
     }
 
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
@@ -1539,6 +1537,7 @@ namespace ts {
      * Every function should be assignable to this, but this should not be assignable to every function.
      */
     export type AnyFunction = (...args: never[]) => void;
+    export type AnyConstructor = new (...args: unknown[]) => unknown;
 
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
@@ -2093,7 +2092,7 @@ namespace ts {
         return arg => f(arg) || g(arg);
     }
 
-    export function assertTypeIsNever(_: never): void { } // tslint:disable-line no-empty
+    export function assertType<T>(_: T): void { } // tslint:disable-line no-empty
 
     export function singleElementArray<T>(t: T | undefined): T[] | undefined {
         return t === undefined ? undefined : [t];
@@ -2129,5 +2128,9 @@ namespace ts {
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
         }
+    }
+
+    export function fill<T>(length: number, cb: (index: number) => T): T[] {
+        return new Array(length).fill(0).map((_, i) => cb(i));
     }
 }

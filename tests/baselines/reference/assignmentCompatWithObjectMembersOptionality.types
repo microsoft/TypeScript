@@ -20,20 +20,15 @@ module TargetHasOptional {
 
     // targets
     interface C {
->C : C
-
         opt?: Base
 >opt : Base
->Base : Base
     }
     var c: C;
 >c : C
->C : C
 
     var a: { opt?: Base; }
 >a : { opt?: Base; }
 >opt : Base
->Base : Base
 
     var b: typeof a = { opt: new Base() }
 >b : { opt?: Base; }
@@ -45,37 +40,25 @@ module TargetHasOptional {
 
     // sources
     interface D {
->D : D
-
         opt: Base;
 >opt : Base
->Base : Base
     }
     interface E {
->E : E
-
         opt: Derived;
 >opt : Derived
->Derived : Derived
     }
     interface F {
->F : F
-
         opt?: Derived;
 >opt : Derived
->Derived : Derived
     }
     var d: D;
 >d : D
->D : D
 
     var e: E;
 >e : E
->E : E
 
     var f: F;
 >f : F
->F : F
 
     // all ok
     c = d;
@@ -149,20 +132,15 @@ module SourceHasOptional {
 
     // targets
     interface C {
->C : C
-
         opt: Base
 >opt : Base
->Base : Base
     }
     var c: C;
 >c : C
->C : C
 
     var a: { opt: Base; }
 >a : { opt: Base; }
 >opt : Base
->Base : Base
 
     var b = { opt: new Base() }
 >b : { opt: Base; }
@@ -173,37 +151,25 @@ module SourceHasOptional {
 
     // sources
     interface D {
->D : D
-
         opt?: Base;
 >opt : Base
->Base : Base
     }
     interface E {
->E : E
-
         opt?: Derived;
 >opt : Derived
->Derived : Derived
     }
     interface F {
->F : F
-
         opt: Derived;
 >opt : Derived
->Derived : Derived
     }
     var d: D;
 >d : D
->D : D
 
     var e: E;
 >e : E
->E : E
 
     var f: F;
 >f : F
->F : F
 
     c = d; // error
 >c = d : D

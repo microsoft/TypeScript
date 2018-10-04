@@ -42,7 +42,6 @@ var func2: {
     (s: string, t: any): RegExp;
 >s : string
 >t : any
->RegExp : RegExp
 
     (s: any, t: any): string;
 >s : any

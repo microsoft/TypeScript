@@ -835,7 +835,7 @@
         "category": "Error",
         "code": 1253
     },
-    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
     },
@@ -982,6 +982,30 @@
     "The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.": {
         "category": "Error",
         "code": 1343
+    },
+    "'A label is not allowed here.": {
+        "category": "Error",
+        "code": 1344
+    },
+    "An expression of type 'void' cannot be tested for truthiness": {
+        "category": "Error",
+        "code": 1345
+    },
+    "This parameter is not allowed with 'use strict' directive.": {
+        "category": "Error",
+        "code": 1346
+    },
+    "'use strict' directive cannot be used with non-simple parameter list.": {
+        "category": "Error",
+        "code": 1347
+    },
+    "Non-simple parameter declared here.": {
+        "category": "Error",
+        "code": 1348
+    },
+    "'use strict' directive used here.": {
+        "category": "Error",
+        "code": 1349
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1192,7 +1216,7 @@
         "category": "Error",
         "code": 2351
     },
-    "Type '{0}' cannot be converted to type '{1}'.": {
+    "Conversion of type '{0}' to type '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.": {
         "category": "Error",
         "code": 2352
     },
@@ -1956,10 +1980,6 @@
         "category": "Error",
         "code": 2549
     },
-    "Generic type instantiation is excessively deep and possibly infinite.": {
-        "category": "Error",
-        "code": 2550
-    },
     "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
@@ -2059,6 +2079,42 @@
     "No overload expects {0} arguments, but overloads do exist that expect either {1} or {2} arguments.": {
         "category": "Error",
         "code": 2575
+    },
+    "Property '{0}' is a static member of type '{1}'": {
+        "category": "Error",
+        "code": 2576
+    },
+    "Return type annotation circularly references itself.": {
+        "category": "Error",
+        "code": 2577
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+        "category": "Error",
+        "code": 2580
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+        "category": "Error",
+        "code": 2581
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+        "category": "Error",
+        "code": 2582
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2583
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2584
+    },
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2585
+    },
+    "Enum type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2586
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2412,6 +2468,26 @@
     "Property '{0}' is used before its initialization.": {
         "category": "Error",
         "code": 2729
+    },
+    "An arrow function cannot have a 'this' parameter.": {
+        "category": "Error",
+        "code": 2730
+    },
+    "Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.": {
+        "category": "Error",
+        "code": 2731
+    },
+    "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
+        "category": "Error",
+        "code": 2732
+    },
+    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+        "category": "Error",
+        "code": 2733
+    },
+    "It is highly likely that you are missing a semicolon.": {
+        "category": "Error",
+        "code": 2734
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2868,9 +2944,17 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
+    },
+    "Unknown build option '{0}'.": {
+        "category": "Error",
+        "code": 5072
+    },
+    "Build option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5073
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -3245,7 +3329,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -3639,6 +3723,46 @@
         "category": "Message",
         "code": 6204
     },
+    "All type parameters are unused": {
+        "category": "Error",
+        "code": 6205
+    },
+    "'package.json' has a 'typesVersions' field with version-specific path mappings.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.": {
+        "category": "Message",
+        "code": 6208
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
+    },
+    "An argument for '{0}' was not provided.": {
+        "category": "Message",
+        "code": 6210
+    },
+    "An argument matching this binding pattern was not provided.": {
+        "category": "Message",
+        "code": 6211
+    },
+    "Did you mean to call this expression?": {
+        "category": "Message",
+        "code": 6212
+    },
+    "Did you mean to use 'new' with this expression?": {
+        "category": "Message",
+        "code": 6213
+    },
+    "Enable strict 'bind', 'call', and 'apply' methods on functions.": {
+        "category": "Message",
+        "code": 6214
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3761,10 +3885,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -3773,6 +3893,10 @@
     "The expected type comes from this index signature.": {
         "category": "Message",
         "code": 6501
+    },
+    "The expected type comes from the return type of this signature.": {
+        "category": "Message",
+        "code": 6502
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -3881,7 +4005,7 @@
         "category": "Error",
         "code": 7034
     },
-    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "Try `npm install @types/{1}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
     },
@@ -3901,9 +4025,17 @@
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{0}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
         "category": "Error",
         "code": 7040
+    },
+    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+        "category": "Error",
+        "code": 7041
+    },
+    "Module '{0}' was resolved to '{1}', but '--resolveJsonModule' is not used.": {
+        "category": "Error",
+        "code": 7042
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -4024,6 +4156,10 @@
     "The type of a function declaration must match the function's signature.": {
         "category": "Error",
         "code": 8030
+    },
+    "You cannot rename a module via a global import.": {
+        "category": "Error",
+        "code": 8031
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4147,7 +4283,10 @@
         "category": "Suggestion",
         "code": 80005
     },
-
+    "This may be converted to an async function.": {
+        "category": "Suggestion",
+        "code": 80006
+    },
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
@@ -4187,6 +4326,14 @@
     "Remove variable statement": {
         "category": "Message",
         "code": 90010
+    },
+    "Remove template tag": {
+        "category": "Message",
+        "code": 90011
+    },
+    "Remove type parameters": {
+        "category": "Message",
+        "code": 90012
     },
     "Import '{0}' from module \"{1}\"": {
         "category": "Message",
@@ -4255,6 +4402,22 @@
     "Add async modifier to containing function": {
         "category": "Message",
         "code": 90029
+    },
+    "Replace 'infer {0}' with 'unknown'": {
+        "category": "Message",
+        "code": 90030
+    },
+    "Replace all unused 'infer' with 'unknown'": {
+        "category": "Message",
+        "code": 90031
+    },
+    "Import default '{0}' from module \"{1}\"": {
+        "category": "Message",
+        "code": 90032
+    },
+    "Add default import '{0}' to existing import declaration from \"{1}\"": {
+        "category": "Message",
+        "code": 90033
     },
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -4496,6 +4659,7 @@
         "category": "Message",
         "code": 95062
     },
+
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4503,5 +4667,21 @@
     "Add all missing imports": {
         "category": "Message",
         "code": 95064
+    },
+    "Convert to async function": {
+        "category": "Message",
+        "code": 95065
+    },
+    "Convert all to async functions": {
+        "category": "Message",
+        "code": 95066
+    },
+    "Generate types for '{0}'": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Generate types for all packages without types": {
+        "category": "Message",
+        "code": 95068
     }
 }

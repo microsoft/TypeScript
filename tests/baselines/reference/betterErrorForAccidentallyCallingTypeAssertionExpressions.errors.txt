@@ -1,0 +1,39 @@
+tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts(3,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts(5,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts(7,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts(10,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts(13,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+
+
+==== tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts (5 errors) ====
+    declare function foo(): string;
+    
+    foo()(1 as number).toString();
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+    
+    foo()   (1 as number).toString();
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+    
+    foo()
+    ~~~~~
+    (1 as number).toString();
+    ~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts:7:1: It is highly likely that you are missing a semicolon.
+    
+    foo()   
+    ~~~~~~~~
+        (1 as number).toString();
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts:10:1: It is highly likely that you are missing a semicolon.
+    
+    foo()   
+    ~~~~~~~~
+        (<number>1).toString();
+    ~~~~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts:13:1: It is highly likely that you are missing a semicolon.
+    

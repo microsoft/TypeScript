@@ -21,12 +21,10 @@ class D {
 
 class E<T> {
 >E : E<T>
->T : T
 
     foo(x: T);
 >foo : (x: T) => any
 >x : T
->T : T
 
     static foo(x: number); // error
 >foo : (x: number) => any
@@ -35,7 +33,6 @@ class E<T> {
 
 class F<T> {
 >F : F<T>
->T : T
 
     static foo(x: number);
 >foo : (x: number) => any
@@ -44,5 +41,4 @@ class F<T> {
     foo(x: T); // error    
 >foo : (x: T) => any
 >x : T
->T : T
 }

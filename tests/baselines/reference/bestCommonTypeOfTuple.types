@@ -16,11 +16,11 @@ function f3(x: number): boolean { return true; }
 
 enum E1 { one }
 >E1 : E1
->one : E1
+>one : E1.one
 
 enum E2 { two }
 >E2 : E2
->two : E2
+>two : E2.two
 
 
 var t1: [(x: number) => string, (x: number) => number];
@@ -30,16 +30,12 @@ var t1: [(x: number) => string, (x: number) => number];
 
 var t2: [E1, E2];
 >t2 : [E1, E2]
->E1 : E1
->E2 : E2
 
 var t3: [number, any];
 >t3 : [number, any]
 
 var t4: [E1, E2, number];
 >t4 : [E1, E2, number]
->E1 : E1
->E2 : E2
 
 // no error
 t1 = [f1, f2];
@@ -50,9 +46,9 @@ t1 = [f1, f2];
 >f2 : (x: number) => number
 
 t2 = [E1.one, E2.two];
->t2 = [E1.one, E2.two] : [E1, E2]
+>t2 = [E1.one, E2.two] : [E1.one, E2.two]
 >t2 : [E1, E2]
->[E1.one, E2.two] : [E1, E2]
+>[E1.one, E2.two] : [E1.one, E2.two]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1
@@ -68,9 +64,9 @@ t3 = [5, undefined];
 >undefined : undefined
 
 t4 = [E1.one, E2.two, 20];
->t4 = [E1.one, E2.two, 20] : [E1, E2, number]
+>t4 = [E1.one, E2.two, 20] : [E1.one, E2.two, number]
 >t4 : [E1, E2, number]
->[E1.one, E2.two, 20] : [E1, E2, number]
+>[E1.one, E2.two, 20] : [E1.one, E2.two, number]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1

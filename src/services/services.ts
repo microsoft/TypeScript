@@ -541,6 +541,7 @@ namespace ts {
         public fileName: string;
         public path: Path;
         public resolvedPath: Path;
+        public originalFileName: string;
         public text: string;
         public scriptSnapshot: IScriptSnapshot;
         public lineMap: ReadonlyArray<number>;
@@ -760,7 +761,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.BinaryExpression:
-                        if (getSpecialPropertyAssignmentKind(node as BinaryExpression) !== SpecialPropertyAssignmentKind.None) {
+                        if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
                             addDeclaration(node as BinaryExpression);
                         }
                     // falls through
@@ -1175,9 +1176,10 @@ namespace ts {
             const rootFileNames = hostCache.getRootFileNames();
 
             const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const projectReferences = hostCache.getProjectReferences();
 
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames)) {
+            if (isProgramUptoDate(program, rootFileNames, hostCache.compilationSettings(), path => hostCache!.getVersion(path), fileExists, hasInvalidatedResolution, !!host.hasChangedAutomaticTypeDirectiveNames, projectReferences)) {
                 return;
             }
 
@@ -1217,6 +1219,10 @@ namespace ts {
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
                 },
+                readDirectory(path, extensions, exclude, include, depth) {
+                    Debug.assertDefined(host.readDirectory, "'LanguageServiceHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                    return host.readDirectory!(path, extensions, exclude, include, depth);
+                },
                 onReleaseOldSourceFile,
                 hasInvalidatedResolution,
                 hasChangedAutomaticTypeDirectiveNames: host.hasChangedAutomaticTypeDirectiveNames
@@ -1240,7 +1246,7 @@ namespace ts {
                 options: newSettings,
                 host: compilerHost,
                 oldProgram: program,
-                projectReferences: hostCache.getProjectReferences()
+                projectReferences
             };
             program = createProgram(options);
 
@@ -1377,7 +1383,7 @@ namespace ts {
             // Therefore only get diagnostics for given file.
 
             const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
-            if (!program.getCompilerOptions().declaration) {
+            if (!getEmitDeclarations(program.getCompilerOptions())) {
                 return semanticDiagnostics.slice();
             }
 
@@ -1448,32 +1454,15 @@ namespace ts {
             const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-                // Try getting just type at this position and show
-                switch (node.kind) {
-                    case SyntaxKind.Identifier:
-                        if (isLabelName(node)) {
-                            // Type here will be 'any', avoid displaying this.
-                            return undefined;
-                        }
-                        // falls through
-                    case SyntaxKind.PropertyAccessExpression:
-                    case SyntaxKind.QualifiedName:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.ThisType:
-                    case SyntaxKind.SuperKeyword:
-                        // For the identifiers/this/super etc get the type at position
-                        const type = typeChecker.getTypeAtLocation(node);
-                        return type && {
-                            kind: ScriptElementKind.unknown,
-                            kindModifiers: ScriptElementKindModifier.none,
-                            textSpan: createTextSpanFromNode(node, sourceFile),
-                            displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
-                            documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
-                            tags: type.symbol ? type.symbol.getJsDocTags() : undefined
-                        };
-                }
-
-                return undefined;
+                const type = shouldGetType(sourceFile, node, position) ? typeChecker.getTypeAtLocation(node) : undefined;
+                return type && {
+                    kind: ScriptElementKind.unknown,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    textSpan: createTextSpanFromNode(node, sourceFile),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
+                    documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
+                    tags: type.symbol ? type.symbol.getJsDocTags() : undefined
+                };
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
@@ -1489,17 +1478,21 @@ namespace ts {
             };
         }
 
-        function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
-            if ((isIdentifier(node) || isStringLiteral(node))
-                && isPropertyAssignment(node.parent)
-                && node.parent.name === node) {
-                const type = checker.getContextualType(node.parent.parent);
-                const property = type && checker.getPropertyOfType(type, getTextOfIdentifierOrLiteral(node));
-                if (property) {
-                    return property;
-                }
+        function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    return !isLabelName(node);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.QualifiedName:
+                    // Don't return quickInfo if inside the comment in `a/**/.b`
+                    return !isInComment(sourceFile, position);
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.ThisType:
+                case SyntaxKind.SuperKeyword:
+                    return true;
+                default:
+                    return false;
             }
-            return checker.getSymbolAtLocation(node);
         }
 
         /// Goto definition
@@ -1551,20 +1544,20 @@ namespace ts {
             const node = getTouchingPropertyName(sourceFile, position);
             if (isIdentifier(node) && isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) {
                 const { openingElement, closingElement } = node.parent.parent;
-                return [openingElement, closingElement].map((node): RenameLocation => ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
+                return [openingElement, closingElement].map((node): RenameLocation =>
+                    ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                const refs = getReferences(node, position, { findInStrings, findInComments, isForRename: true });
-                return refs && refs.map(({ fileName, textSpan }): RenameLocation => ({ fileName, textSpan }));
+                return getReferencesWorker(node, position, { findInStrings, findInComments, isForRename: true }, FindAllReferences.toRenameLocation);
             }
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferences(getTouchingPropertyName(getValidSourceFile(fileName), position), position);
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, {}, FindAllReferences.toReferenceEntry);
         }
 
-        function getReferences(node: Node, position: number, options?: FindAllReferences.Options): ReferenceEntry[] | undefined {
+        function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
             synchronizeHostData();
 
             // Exclude default library when renaming as commonly user don't want to change that file.
@@ -1572,7 +1565,7 @@ namespace ts {
                 ? program.getSourceFiles().filter(sourceFile => !program.isSourceFileDefaultLibrary(sourceFile))
                 : program.getSourceFiles();
 
-            return FindAllReferences.findReferencedEntries(program, cancellationToken, sourceFiles, node, position, options);
+            return FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, sourceFiles, node, position, options, cb);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined {
@@ -1816,25 +1809,36 @@ namespace ts {
             return ts.getEditsForFileRename(getProgram()!, oldFilePath, newFilePath, host, formatting.getFormatContext(formatOptions), preferences, sourceMapper);
         }
 
-        function applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        function applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+        function applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+        function applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrUndefined?: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
-            const action = typeof fileName === "string" ? actionOrUndefined! : fileName as CodeActionCommand[];
-            return isArray(action) ? Promise.all(action.map(applySingleCodeActionCommand)) : applySingleCodeActionCommand(action);
+        function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
+            const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
+            const formatSettings = typeof fileName !== "string" ? actionOrFormatSettingsOrUndefined as FormatCodeSettings : undefined;
+            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a, formatSettings))) : applySingleCodeActionCommand(action, formatSettings);
         }
 
-        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand, formatSettings: FormatCodeSettings | undefined): Promise<ApplyCodeActionCommandResult> {
+            const getPath = (path: string): Path => toPath(path, currentDirectory, getCanonicalFileName);
             switch (action.type) {
                 case "install package":
                     return host.installPackage
-                        ? host.installPackage({ fileName: toPath(action.file, currentDirectory, getCanonicalFileName), packageName: action.packageName })
+                        ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
                         : Promise.reject("Host does not implement `installPackage`");
+                case "generate types": {
+                    const { fileToGenerateTypesFor, outputFileName } = action;
+                    if (!host.inspectValue) return Promise.reject("Host does not implement `installPackage`");
+                    const valueInfoPromise = host.inspectValue({ fileNameToRequire: fileToGenerateTypesFor });
+                    return valueInfoPromise.then(valueInfo => {
+                        const fullOut = getPath(outputFileName);
+                        host.writeFile!(fullOut, valueInfoToDeclarationFileText(valueInfo, formatSettings || testFormatSettings)); // TODO: GH#18217
+                        return { successMessage: `Wrote types to '${fullOut}'` };
+                    });
+                }
                 default:
-                    return Debug.fail();
-                    // TODO: Debug.assertNever(action); will only work if there is more than one type.
+                    return Debug.assertNever(action);
             }
         }
 
@@ -2155,7 +2159,7 @@ namespace ts {
     function initializeNameTable(sourceFile: SourceFile): void {
         const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
         sourceFile.forEachChild(function walk(node) {
-            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteral(node) && literalIsName(node)) {
+            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
@@ -2175,7 +2179,7 @@ namespace ts {
      * then we want 'something' to be in the name table.  Similarly, if we have
      * "a['propname']" then we want to store "propname" in the name table.
      */
-    function literalIsName(node: StringLiteral | NumericLiteral): boolean {
+    function literalIsName(node: StringLiteralLike | NumericLiteral): boolean {
         return isDeclarationName(node) ||
             node.parent.kind === SyntaxKind.ExternalModuleReference ||
             isArgumentOfElementAccessExpression(node) ||
@@ -2187,52 +2191,60 @@ namespace ts {
      */
     /* @internal */
     export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
+        const element = getContainingObjectLiteralElementWorker(node);
+        return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
+    }
+    function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
                 if (node.parent.kind === SyntaxKind.ComputedPropertyName) {
-                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent as ObjectLiteralElementWithName : undefined;
+                    return isObjectLiteralElement(node.parent.parent) ? node.parent.parent : undefined;
                 }
             // falls through
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
                     (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
-                    node.parent.name === node ? node.parent as ObjectLiteralElementWithName : undefined;
+                    node.parent.name === node ? node.parent : undefined;
         }
         return undefined;
     }
-    /* @internal */
-    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName };
 
     /* @internal */
-    export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
-        const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
-        const contextualType = typeChecker.getContextualType(objectLiteral)!; // TODO: GH#18217
-        return getPropertySymbolsFromType(contextualType, node.name!)!; // TODO: GH#18217
-    }
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
 
-    /* @internal */
-    export function getPropertySymbolsFromType(type: Type, propName: PropertyName) {
-        const name = unescapeLeadingUnderscores(getTextOfPropertyName(propName));
-        if (name && type) {
-            const result: Symbol[] = [];
-            const symbol = type.getProperty(name);
-            if (type.flags & TypeFlags.Union) {
-                forEach((<UnionType>type).types, t => {
-                    const symbol = t.getProperty(name);
-                    if (symbol) {
-                        result.push(symbol);
-                    }
-                });
-                return result;
-            }
-
-            if (symbol) {
-                result.push(symbol);
-                return result;
+    function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
+        const object = getContainingObjectLiteralElement(node);
+        if (object) {
+            const contextualType = checker.getContextualType(object.parent);
+            const properties = contextualType && getPropertySymbolsFromContextualType(object, checker, contextualType, /*unionSymbolOk*/ false);
+            if (properties && properties.length === 1) {
+                return first(properties);
             }
         }
-        return undefined;
+        return checker.getSymbolAtLocation(node);
+    }
+
+    /** Gets all symbols for one property. Does not get symbols for every property. */
+    /* @internal */
+    export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): ReadonlyArray<Symbol> {
+        const name = getNameFromPropertyName(node.name);
+        if (!name) return emptyArray;
+        if (!contextualType.isUnion()) {
+            const symbol = contextualType.getProperty(name);
+            return symbol ? [symbol] : emptyArray;
+        }
+
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => isObjectLiteralExpression(node.parent) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
+            const symbol = contextualType.getProperty(name);
+            if (symbol) return [symbol];
+        }
+        if (discriminatedPropertySymbols.length === 0) {
+            // Bad discriminant -- do again without discriminating
+            return mapDefined(contextualType.types, t => t.getProperty(name));
+        }
+        return discriminatedPropertySymbols;
     }
 
     function isArgumentOfElementAccessExpression(node: Node) {

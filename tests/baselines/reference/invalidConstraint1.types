@@ -1,10 +1,7 @@
 === tests/cases/compiler/invalidConstraint1.ts ===
 function f<T, U extends { a: T }>() {
 >f : <T, U extends { a: T; }>() => any
->T : T
->U : U
 >a : T
->T : T
 
     return undefined;
 >undefined : undefined

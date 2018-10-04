@@ -4,12 +4,10 @@ type T = "" | "foo";
 
 let x: T = undefined;
 >x : T
->T : T
 >undefined : undefined
 
 let y: T = undefined;
 >y : T
->T : T
 >undefined : undefined
 
 if (x === "") {

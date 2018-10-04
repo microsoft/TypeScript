@@ -24,8 +24,6 @@ class D {
 }
 
 interface I {
->I : I
-
     new (x);
 >x : any
 

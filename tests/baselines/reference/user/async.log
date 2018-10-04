@@ -51,6 +51,7 @@ node_modules/async/autoInject.js(160,28): error TS2695: Left side of comma opera
 node_modules/async/autoInject.js(164,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(168,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/cargo.js(62,12): error TS2304: Cannot find name 'AsyncFunction'.
+node_modules/async/cargo.js(67,14): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 node_modules/async/cargo.js(67,20): error TS1005: '}' expected.
 node_modules/async/cargo.js(92,11): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -91,8 +92,6 @@ node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(257,56): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
-node_modules/async/dist/async.js(480,35): error TS2538: Type 'true' cannot be used as an index type.
-node_modules/async/dist/async.js(480,59): error TS2538: Type 'true' cannot be used as an index type.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
@@ -125,11 +124,11 @@ node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Funct
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,21): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2425,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
-  Property 'exports' is missing in type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }'.
+node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
+  Property 'exports' is missing in type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }'.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'push' is missing in type 'IArguments'.
+  Property 'pop' is missing in type 'IArguments'.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
@@ -160,7 +159,7 @@ node_modules/async/dist/async.js(3848,23): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,24): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(3848,25): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(4059,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(4095,5): error TS2322: Type '{ [x: string]: any; _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; ... 10 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
+node_modules/async/dist/async.js(4095,5): error TS2322: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
 node_modules/async/dist/async.js(4117,20): error TS1005: '}' expected.
 node_modules/async/dist/async.js(4128,7): error TS2339: Property 'push' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4133,11): error TS2339: Property 'started' does not exist on type 'NodeModule'.
@@ -522,8 +521,6 @@ node_modules/async/internal/filter.js(64,29): error TS2695: Left side of comma o
 node_modules/async/internal/filter.js(66,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/filter.js(72,19): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/filter.js(73,27): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/getIterator.js(8,35): error TS2538: Type 'true' cannot be used as an index type.
-node_modules/async/internal/getIterator.js(8,59): error TS2538: Type 'true' cannot be used as an index type.
 node_modules/async/internal/initialParams.js(9,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/iterator.js(41,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/iterator.js(51,10): error TS2695: Left side of comma operator is unused and has no side effects.

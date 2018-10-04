@@ -3,11 +3,9 @@ function foo() {}
 >foo : typeof foo
 
 module foo {
->foo : typeof foo
-
     const enum E { X }
 >E : E
->X : E
+>X : E.X
 }
 
 export = foo

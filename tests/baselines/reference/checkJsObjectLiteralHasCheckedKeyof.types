@@ -1,0 +1,28 @@
+=== tests/cases/compiler/file.js ===
+// @ts-check
+const obj = {
+>obj : { x: number; y: number; }
+>{    x: 1,    y: 2} : { x: number; y: number; }
+
+    x: 1,
+>x : number
+>1 : 1
+
+    y: 2
+>y : number
+>2 : 2
+
+};
+
+/**
+ * @type {keyof typeof obj}
+ */
+let selected = "x";
+>selected : "x" | "y"
+>"x" : "x"
+
+selected = "z"; // should fail
+>selected = "z" : "z"
+>selected : "x" | "y"
+>"z" : "z"
+

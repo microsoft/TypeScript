@@ -1,24 +1,17 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTagsES6.ts ===
 interface I {
->I : I
-
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
 >stringParts : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >rest : boolean[]
->I : I
 
     g: I;
 >g : I
->I : I
 
     h: I;
 >h : I
->I : I
 
     member: I;
 >member : I
->I : I
 
     thisIsNotATag(x: string): void
 >thisIsNotATag : (x: string) => void
@@ -26,12 +19,10 @@ interface I {
 
     [x: number]: I;
 >x : number
->I : I
 }
 
 var f: I;
 >f : I
->I : I
 
 f `abc`
 >f `abc` : I

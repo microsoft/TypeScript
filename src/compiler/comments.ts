@@ -72,11 +72,13 @@ namespace ts {
                     const savedContainerEnd = containerEnd;
                     const savedDeclarationListContainerEnd = declarationListContainerEnd;
 
-                    if (!skipLeadingComments) {
+                    if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
+                        // Advance the container position of comments get emitted or if they've been disabled explicitly using NoLeadingComments.
                         containerPos = pos;
                     }
 
-                    if (!skipTrailingComments) {
+                    if (!skipTrailingComments || (end >= 0 && (emitFlags & EmitFlags.NoTrailingComments) !== 0)) {
+                        // As above.
                         containerEnd = end;
 
                         // To avoid invalid comment emit in a down-level binding pattern, we
@@ -218,7 +220,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.mark("beginEmitBodyWithDetachedCommetns");
+                performance.mark("beginEmitBodyWithDetachedComments");
             }
 
             if (!skipTrailingComments) {
@@ -229,7 +231,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
+                performance.measure("commentTime", "beginEmitBodyWithDetachedComments");
             }
         }
 

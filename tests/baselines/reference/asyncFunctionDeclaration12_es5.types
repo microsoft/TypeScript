@@ -4,5 +4,4 @@ var v = async function await(): Promise<void> { }
 >async function : () => any
 >await : any
 >(): Promise<void> { } : () => Promise<void>
->Promise : Promise<T>
 

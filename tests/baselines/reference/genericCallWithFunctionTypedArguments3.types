@@ -13,16 +13,11 @@ var a: {
 
 function foo4<T, U>(cb: (x: T) => U) {
 >foo4 : <T, U>(cb: (x: T) => U) => U
->T : T
->U : U
 >cb : (x: T) => U
 >x : T
->T : T
->U : U
 
     var u: U;
 >u : U
->U : U
 
     return u;
 >u : U
@@ -38,14 +33,10 @@ var b: {
 >b : { <T>(x: boolean): T; <T>(x: T): any; }
 
     <T>(x: boolean): T;
->T : T
 >x : boolean
->T : T
 
     <T>(x: T): any;
->T : T
 >x : T
->T : T
 }
 
 var r2 = foo4(b); // T is {} (candidates boolean and {}), U is any (candidates any and {})

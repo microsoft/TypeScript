@@ -26,7 +26,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, program, span: { start }, errorCode, cancellationToken } = context;
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 return undefined; // TODO: GH#20113
             }
 
@@ -196,7 +196,7 @@ namespace ts.codefix {
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
         // Position shouldn't matter since token is not a SourceFile.
         return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
-            entry.type === "node" ? tryCast(entry.node, isIdentifier) : undefined);
+            entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
     function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type | undefined {
@@ -501,7 +501,7 @@ namespace ts.codefix {
                 return;
             }
             else {
-                const indexType = checker.getTypeAtLocation(parent);
+                const indexType = checker.getTypeAtLocation(parent.argumentExpression);
                 const indexUsageContext = {};
                 inferTypeFromContext(parent, checker, indexUsageContext);
                 if (indexType.flags & TypeFlags.NumberLike) {
@@ -534,17 +534,19 @@ namespace ts.codefix {
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
                 return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!);
             }
-            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.numberIndexContext || usageContext.stringIndexContext) {
+            else if (usageContext.numberIndexContext) {
+                return checker.createArrayType(recur(usageContext.numberIndexContext));
+            }
+            else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
                 let stringIndexInfo: IndexInfo | undefined;
-                let numberIndexInfo: IndexInfo | undefined;
 
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = getTypeFromUsageContext(context, checker) || checker.getAnyType();
+                        symbol.type = recur(context);
                         members.set(name, symbol);
                     });
                 }
@@ -561,18 +563,18 @@ namespace ts.codefix {
                     }
                 }
 
-                if (usageContext.numberIndexContext) {
-                    numberIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.numberIndexContext, checker)!, /*isReadonly*/ false); // TODO: GH#18217
-                }
-
                 if (usageContext.stringIndexContext) {
-                    stringIndexInfo = checker.createIndexInfo(getTypeFromUsageContext(usageContext.stringIndexContext, checker)!, /*isReadonly*/ false);
+                    stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext), /*isReadonly*/ false);
                 }
 
-                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo); // TODO: GH#18217
+                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
             }
             else {
                 return undefined;
+            }
+
+            function recur(innerContext: UsageContext): Type {
+                return getTypeFromUsageContext(innerContext, checker) || checker.getAnyType();
             }
         }
 

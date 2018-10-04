@@ -11,8 +11,8 @@ declare var __foot: any;
 >__foot : any
 
 const thing = <__foot />;
->thing : any
-><__foot /> : any
+>thing : error
+><__foot /> : error
 >__foot : any
 
 export {}

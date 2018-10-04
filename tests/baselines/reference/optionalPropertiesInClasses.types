@@ -1,7 +1,5 @@
 === tests/cases/compiler/optionalPropertiesInClasses.ts ===
 interface ifoo {
->ifoo : ifoo
-
 	x?:number;
 >x : number
 
@@ -11,7 +9,6 @@ interface ifoo {
 
 class C1 implements ifoo {
 >C1 : C1
->ifoo : ifoo
 
 	public y:number;
 >y : number
@@ -19,7 +16,6 @@ class C1 implements ifoo {
 
 class C2 implements ifoo { // ERROR - still need 'y'
 >C2 : C2
->ifoo : ifoo
 
 	public x:number;
 >x : number
@@ -27,7 +23,6 @@ class C2 implements ifoo { // ERROR - still need 'y'
 
 class C3 implements ifoo {
 >C3 : C3
->ifoo : ifoo
 
 	public x:number;
 >x : number

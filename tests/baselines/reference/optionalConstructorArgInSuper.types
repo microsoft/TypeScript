@@ -20,7 +20,6 @@ var d = new Derived(); // bug caused an error here, couldn't select overload
 
 var d2: Derived;
 >d2 : Derived
->Derived : Derived
 
 d2.foo(); 
 >d2.foo() : void

@@ -12,13 +12,9 @@ var v3: string = v2; // Not assignment compatible
 >v2 : number
 
 interface I<T> { x: T; }
->I : I<T>
->T : T
 >x : T
->T : T
 
 interface J { }
->J : J
 
 var numberJ: typeof J; //Error, cannot reference type in typeof
 >numberJ : any
@@ -26,12 +22,10 @@ var numberJ: typeof J; //Error, cannot reference type in typeof
 
 var numberI: I<typeof v2>;
 >numberI : I<number>
->I : I<T>
 >v2 : number
 
 var fun: () => I<number>;
 >fun : () => I<number>
->I : I<T>
 
 numberI = fun();
 >numberI = fun() : I<number>

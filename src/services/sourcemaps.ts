@@ -8,6 +8,7 @@ namespace ts {
     export interface SourceMapper {
         toLineColumnOffset(fileName: string, position: number): LineAndCharacter;
         tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
+        tryGetGeneratedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined;
         clearCache(): void;
     }
 
@@ -19,7 +20,7 @@ namespace ts {
         getProgram: () => Program,
     ): SourceMapper {
         let sourcemappedFileCache: SourceFileLikeCache;
-        return { tryGetOriginalLocation, toLineColumnOffset, clearCache };
+        return { tryGetOriginalLocation, tryGetGeneratedLocation, toLineColumnOffset, clearCache };
 
         function scanForSourcemapURL(fileName: string) {
             const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
@@ -96,10 +97,24 @@ namespace ts {
         function tryGetOriginalLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
             if (!isDeclarationFileName(info.fileName)) return undefined;
 
-            const file = getProgram().getSourceFile(info.fileName) || sourcemappedFileCache.get(toPath(info.fileName, currentDirectory, getCanonicalFileName));
+            const file = getFile(info.fileName);
             if (!file) return undefined;
             const newLoc = getSourceMapper(info.fileName, file).getOriginalPosition(info);
             return newLoc === info ? undefined : tryGetOriginalLocation(newLoc) || newLoc;
+        }
+
+        function tryGetGeneratedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
+            const program = getProgram();
+            const declarationPath = getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            if (declarationPath === undefined) return undefined;
+            const declarationFile = getFile(declarationPath);
+            if (!declarationFile) return undefined;
+            const newLoc = getSourceMapper(declarationPath, declarationFile).getGeneratedPosition(info);
+            return newLoc === info ? undefined : newLoc;
+        }
+
+        function getFile(fileName: string): SourceFileLike | undefined {
+            return getProgram().getSourceFile(fileName) || sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {

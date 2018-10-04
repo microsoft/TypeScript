@@ -5,8 +5,6 @@ class C { }
 >C : C
 
 interface I { }
->I : I
-
 enum E { }
 >E : E
 
@@ -15,30 +13,23 @@ type T = { };
 
 var v1: C<string>;
 >v1 : any
->C : C
 
 var v2: I<string>;
 >v2 : any
->I : I
 
 var v3: E<string>;
 >v3 : any
->E : E
 
 var v4: T<string>;
 >v4 : any
->T : T
 
 function f<U>() {
 >f : <U>() => void
->U : U
 
     class C { }
 >C : C
 
     interface I { }
->I : I
-
     enum E { }
 >E : E
 
@@ -47,22 +38,17 @@ function f<U>() {
 
     var v1: C<string>;
 >v1 : any
->C : C
 
     var v2: I<string>;
 >v2 : any
->I : I
 
     var v3: E<string>;
 >v3 : any
->E : E
 
     var v4: T<string>;
 >v4 : any
->T : {}
 
     var v5: U<string>;
 >v5 : any
->U : U
 }
 

@@ -31,17 +31,14 @@ var e: {
     readonly A: E1.A;
 >A : E1.A
 >E1 : any
->A : E1.A
 
     readonly B: E1.B;
 >B : E1.B
 >E1 : any
->B : E1.B
 
     readonly C: E1.C;
 >C : E1.C
 >E1 : any
->C : E1.C
 
     readonly [n: number]: string;
 >n : number
@@ -144,7 +141,7 @@ enum E7 {
 
     A = 'foo'['foo']
 >A : E7
->'foo'['foo'] : any
+>'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
 }
@@ -155,7 +152,7 @@ enum E8 {
 
     B = 'foo'['foo']
 >B : E8
->'foo'['foo'] : any
+>'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
 }
@@ -165,10 +162,10 @@ enum E9 {
 >E9 : E9
 
     A,
->A : E9
+>A : E9.A
 
     B = A
->B : E9
+>B : E9.A
 >A : E9
 }
 

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface I {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}property1|]: number;
+////    [|{| "isDefinition": true |}property1|]: number;
 ////    property2: string;
 ////}
 ////
