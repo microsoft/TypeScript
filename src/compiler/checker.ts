@@ -15392,7 +15392,7 @@ namespace ts {
 
                 if (!targetType) {
                     let constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
-                    if(constructSignatures.length === 0) {
+                    if (constructSignatures.length === 0) {
                         constructSignatures = filter(getSignaturesOfType(rightType, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
                     }
                     targetType = constructSignatures.length ?
